@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Cours Sésame & SAJ — Ouvrages Juridiques</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b3e;
+    --navy-deep: #070f24;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: #f5e6c0;
+    --cream: #fdfaf4;
+    --text: #1a1a2e;
+    --text-muted: #6b6b8a;
+    --white: #ffffff;
+    --border: rgba(201,168,76,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--navy-deep);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 2px solid var(--gold);
+    padding: 0 2rem;
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+  }
+
+  .logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .logo-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+  }
+
+  .logo-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  nav {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  nav a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.7rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  nav a:hover {
+    color: var(--gold);
+    background: rgba(201,168,76,0.1);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--navy-deep);
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
+  }
+
+  .hero-ornament {
+    color: var(--gold);
+    font-size: 1.5rem;
+    letter-spacing: 0.5em;
+    opacity: 0.5;
+    margin-bottom: 1.5rem;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+    animation: fadeDown 0.9s ease both 0.1s;
+  }
+
+  .hero h1 span {
+    color: var(--gold);
+  }
+
+  .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 2rem;
+    animation: fadeDown 1s ease both 0.2s;
+  }
+
+  .hero-badges {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeDown 1s ease both 0.3s;
+  }
+
+  .badge {
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-light);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* ===== SEARCH ===== */
+  .search-bar {
+    background: var(--navy);
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 2rem;
+    position: sticky;
+    top: 70px;
+    z-index: 900;
+  }
+
+  .search-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .search-inner input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 4px;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-inner input::placeholder { color: rgba(255,255,255,0.3); }
+  .search-inner input:focus { border-color: var(--gold); }
+
+  .search-icon {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 0.9rem;
+  }
+
+  /* ===== CATALOGUE SECTION ===== */
+  .section-label {
+    text-align: center;
+    padding: 3.5rem 2rem 0.5rem;
+  }
+
+  .section-label h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--navy);
+  }
+
+  .section-label p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  .gold-rule {
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 0.75rem auto 0;
+  }
+
+  /* ===== CONCOURS TABS ===== */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    max-width: 1200px;
+    margin: 2rem auto 0;
+    padding: 0 2rem;
+    justify-content: center;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.5rem 1.1rem;
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover, .tab-btn.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--gold);
+  }
+
+  /* ===== GRID ===== */
+  .catalogue-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 2rem auto 4rem;
+    padding: 0 2rem;
+  }
+
+  /* ===== CARD ===== */
+  .card {
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s, box-shadow 0.25s;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(13,27,62,0.12);
+  }
+
+  .card-cover {
+    background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%);
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+  }
+
+  .card-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+  }
+
+  .card-cover-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--gold) 0, var(--gold) 1px,
+      transparent 0, transparent 50%
+    );
+    background-size: 12px 12px;
+  }
+
+  .card-cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--white);
+    text-align: center;
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-cover-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .card-body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .card-concours {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--navy);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .card-niveau {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .card-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  .card-price span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    display: block;
+  }
+
+  .btn-commander {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    padding: 0.55rem 1rem;
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .btn-commander:hover {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(7,15,36,0.85);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--white);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 480px;
+    overflow: hidden;
+    animation: modalIn 0.3s ease;
+  }
+
+  .modal-header {
+    background: var(--navy-deep);
+    padding: 1.5rem 1.75rem;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .modal-header h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .modal-header p {
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .modal-body {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .field label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .field input, .field select, .field textarea {
+    width: 100%;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    border-radius: 4px;
+    padding: 0.65rem 0.85rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--navy);
+  }
+
+  .field textarea { resize: vertical; min-height: 70px; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .modal-ouvrage-info {
+    background: var(--navy-deep);
+    border-radius: 4px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-ouvrage-info .title-mini {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 0.85rem;
+  }
+
+  .modal-ouvrage-info .price-mini {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 1rem;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .modal-footer {
+    padding: 1.25rem 1.75rem;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+
+  .btn-cancel {
+    background: transparent;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    color: var(--text-muted);
+    padding: 0.6rem 1.2rem;
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-cancel:hover { border-color: var(--text-muted); color: var(--text); }
+
+  .btn-whatsapp {
+    background: #25D366;
+    color: var(--white);
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-whatsapp:hover { background: #1ebe5d; }
+
+  /* ===== CONTACT STRIP ===== */
+  .contact-strip {
+    background: var(--navy);
+    border-top: 2px solid var(--gold);
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .contact-strip h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-strip p {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.78rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-wa-direct {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #25D366;
+    color: var(--white);
+    text-decoration: none;
+    padding: 0.85rem 2rem;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 0.2s;
+  }
+
+  .btn-wa-direct:hover { background: #1ebe5d; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--navy-deep);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+
+  footer p {
+    color: rgba(255,255,255,0.25);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+  }
+
+  footer strong { color: var(--gold); font-weight: 600; }
+
+  /* ===== NO RESULTS ===== */
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+
+  /* ===== CARD ACTIONS ===== */
+  .card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: flex-end;
+  }
+
+  .btn-wa-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(37,211,102,0.1);
+    border: 1px solid rgba(37,211,102,0.35);
+    color: #1a9e52;
+    text-decoration: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-wa-card:hover {
+    background: #25D366;
+    color: var(--white);
+    border-color: #25D366;
+  }
+
+  /* ===== CONTACT NUMERO ===== */
+  .contact-numero {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .contact-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    font-weight: 600;
+  }
+
+  .contact-num-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--gold);
+    text-decoration: none;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s;
+  }
+
+  .contact-num-display:hover { opacity: 0.8; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .header-inner { flex-direction: column; height: auto; padding: 0.75rem 0; gap: 0.5rem; }
+    nav { gap: 0.2rem; }
+    .field-row { grid-template-columns: 1fr; }
+    .search-bar { top: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-main">Les Cours Sésame & SAJ</span>
+      <span class="logo-sub">Préparation aux concours juridiques — Côte d'Ivoire</span>
+    </div>
+    <nav>
+      <a href="#catalogue">Catalogue</a>
+      <a href="#infj">INFJ</a>
+      <a href="#ena">ENA</a>
+      <a href="#police">Police</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-ornament">⸻ ✦ ⸻</div>
+  <h1>Vos ouvrages de référence<br>pour <span>réussir vos concours</span></h1>
+  <p class="hero-tagline">Des publications juridiques d'excellence pour les candidats exigeants</p>
+  <div class="hero-badges">
+    <span class="badge">INFJ Magistrature</span>
+    <span class="badge">ENA</span>
+    <span class="badge">Police Nationale</span>
+    <span class="badge">Greffe</span>
+    <span class="badge">Pénitentiaire</span>
+    <span class="badge">EPPJEJ</span>
+    <span class="badge">Fonction Publique</span>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <div class="search-inner">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Rechercher un ouvrage, un concours, une matière..." oninput="filterCatalogue()">
+  </div>
+</div>
+
+<!-- CATALOGUE -->
+<section id="catalogue">
+  <div class="section-label">
+    <h2>Notre Catalogue</h2>
+    <p>Commandez directement via WhatsApp</p>
+    <span class="gold-rule"></span>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" id="tabContainer">
+    <button class="tab-btn active" onclick="filterByTab('tous', this)">Tous</button>
+    <button class="tab-btn" onclick="filterByTab('infj', this)" id="tab-infj">INFJ</button>
+    <button class="tab-btn" onclick="filterByTab('ena', this)" id="tab-ena">ENA</button>
+    <button class="tab-btn" onclick="filterByTab('penitentiaire', this)" id="tab-penitentiaire">Pénitentiaire</button>
+    <button class="tab-btn" onclick="filterByTab('greffe', this)" id="tab-greffe">Greffe</button>
+    <button class="tab-btn" onclick="filterByTab('eppjej', this)" id="tab-eppjej">EPPJEJ</button>
+  </div>
+
+  <!-- GRID -->
+  <div class="catalogue-grid" id="catalogueGrid">
+    <!-- Les cartes sont générées par JS -->
+  </div>
+</section>
+
+<!-- SECTION INFJ -->
+<div id="infj"></div>
+<!-- SECTION ENA -->
+<div id="ena"></div>
+<!-- SECTION POLICE -->
+<div id="police"></div>
+
+<!-- CONTACT STRIP -->
+<section id="contact" class="contact-strip">
+  <h3>Une question ? Besoin de conseils ?</h3>
+  <p>Notre équipe vous répond directement sur WhatsApp</p>
+  <div class="contact-numero">
+    <span class="contact-label">Notre numéro WhatsApp</span>
+    <a href="https://wa.me/2250160860537" target="_blank" class="contact-num-display">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
+      +225 01 60 86 05 37
+    </a>
+  </div>
+  <a href="https://wa.me/2250160860537" target="_blank" class="btn-wa-direct">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
+    Ouvrir WhatsApp
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2025 <strong>Les Cours Sésame & SAJ</strong> — Tous droits réservés — Abidjan, Côte d'Ivoire</p>
+</footer>
+
+<!-- MODAL COMMANDE -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Passer une commande</h3>
+      <p id="modalConcours">Ouvrage sélectionné</p>
+    </div>
+    <div class="modal-body">
+      <div class="modal-ouvrage-info">
+        <span class="title-mini" id="modalTitle">—</span>
+        <span class="price-mini" id="modalPrice">—</span>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Prénom</label>
+          <input type="text" id="fieldPrenom" placeholder="Votre prénom">
+        </div>
+        <div class="field">
+          <label>Nom</label>
+          <input type="text" id="fieldNom" placeholder="Votre nom">
+        </div>
+      </div>
+      <div class="field">
+        <label>Numéro de téléphone</label>
+        <input type="tel" id="fieldTel" placeholder="Ex. 07XXXXXXXX">
+      </div>
+      <div class="field">
+        <label>Ville / Localité</label>
+        <input type="text" id="fieldVille" placeholder="Abidjan, Bouaké...">
+      </div>
+      <div class="field">
+        <label>Quantité</label>
+        <input type="number" id="fieldQte" value="1" min="1" max="99">
+      </div>
+      <div class="field">
+        <label>Message complémentaire (facultatif)</label>
+        <textarea id="fieldMsg" placeholder="Précisions supplémentaires..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-whatsapp" onclick="envoyerWhatsApp()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
+        Envoyer sur WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== CATALOGUE DATA =====
+// Structure : { titre, concours, categorie, niveau, prix }
+// Tu pourras ajouter tes ouvrages ici avec la même structure
+
+const WHATSAPP_NUMBER = "2250160860537";
+
+const ouvrages = [
+
+  // ---- INFJ MAGISTRATURE ----
+  {
+    titre: "Le Guide Méthodologique Magistrature — Édition 2026",
+    concours: "INFJ Magistrature",
+    categorie: "infj",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "⚖️"
+  },
+  {
+    titre: "Le Résumé de SOG aux Concours Administratifs",
+    concours: "INFJ Magistrature",
+    categorie: "infj",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📝"
+  },
+  {
+    titre: "Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs",
+    concours: "INFJ Magistrature",
+    categorie: "infj",
+    niveau: "CS / CMS / CM",
+    prix: "15 000",
+    icone: "📚"
+  },
+  {
+    titre: "Le Sésame de Droit Pénal aux Concours Administratifs",
+    concours: "INFJ Magistrature",
+    categorie: "infj",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "🔒"
+  },
+  {
+    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
+    concours: "INFJ Magistrature",
+    categorie: "infj",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "🏛️"
+  },
+
+  // ---- INFJ GREFFE ----
+  {
+    titre: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026",
+    concours: "INFJ Greffe",
+    categorie: "greffe",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📋"
+  },
+  {
+    titre: "Le Guide Méthodologique INFJ — Édition 2026",
+    concours: "INFJ Greffe",
+    categorie: "greffe",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📖"
+  },
+  {
+    titre: "Le Résumé d'Organisation Judiciaire aux Concours Administratifs",
+    concours: "INFJ Greffe",
+    categorie: "greffe",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "🏛️"
+  },
+  {
+    titre: "Le Résumé de SOG aux Concours Administratifs",
+    concours: "INFJ Greffe",
+    categorie: "greffe",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📝"
+  },
+  {
+    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
+    concours: "INFJ Greffe",
+    categorie: "greffe",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📜"
+  },
+  {
+    titre: "Le Résumé d'OPEAJ aux Concours Administratifs",
+    concours: "INFJ Greffe",
+    categorie: "greffe",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "⚙️"
+  },
+  {
+    titre: "Le Résumé d'Informatique aux Concours Administratifs",
+    concours: "INFJ Greffe",
+    categorie: "greffe",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "💻"
+  },
+
+  // ---- INFJ PÉNITENTIAIRE ----
+  {
+    titre: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026",
+    concours: "INFJ Pénitentiaire",
+    categorie: "penitentiaire",
+    niveau: "CS / CMS / CM / Agents d'encadrement",
+    prix: "10 000",
+    icone: "📋"
+  },
+  {
+    titre: "Le Résumé d'Organisation Judiciaire aux Concours Administratifs",
+    concours: "INFJ Pénitentiaire",
+    categorie: "penitentiaire",
+    niveau: "CS / CMS / CM / Agents d'encadrement",
+    prix: "10 000",
+    icone: "🏛️"
+  },
+  {
+    titre: "Le Résumé des Droits de l'Enfant aux Concours Administratifs",
+    concours: "INFJ Pénitentiaire",
+    categorie: "penitentiaire",
+    niveau: "CS / CMS / CM / Agents d'encadrement",
+    prix: "10 000",
+    icone: "👶"
+  },
+  {
+    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
+    concours: "INFJ Pénitentiaire",
+    categorie: "penitentiaire",
+    niveau: "CS / CMS / CM / Agents d'encadrement",
+    prix: "10 000",
+    icone: "📜"
+  },
+  {
+    titre: "Le Résumé de SOG aux Concours Administratifs",
+    concours: "INFJ Pénitentiaire",
+    categorie: "penitentiaire",
+    niveau: "CS / CMS / CM / Agents d'encadrement",
+    prix: "10 000",
+    icone: "📝"
+  },
+  {
+    titre: "Le Résumé d'Informatique aux Concours Administratifs",
+    concours: "INFJ Pénitentiaire",
+    categorie: "penitentiaire",
+    niveau: "CS / CMS / CM / Agents d'encadrement",
+    prix: "10 000",
+    icone: "💻"
+  },
+  {
+    titre: "Le Résumé d'OPEAJ aux Concours Administratifs",
+    concours: "INFJ Pénitentiaire",
+    categorie: "penitentiaire",
+    niveau: "CS / CMS / CM / Agents d'encadrement",
+    prix: "10 000",
+    icone: "⚙️"
+  },
+
+  // ---- INFJ EPPJEJ ----
+  {
+    titre: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026",
+    concours: "INFJ EPPJEJ",
+    categorie: "eppjej",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📋"
+  },
+  {
+    titre: "Le Résumé d'Organisation Judiciaire aux Concours Administratifs",
+    concours: "INFJ EPPJEJ",
+    categorie: "eppjej",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "🏛️"
+  },
+  {
+    titre: "Le Résumé des Droits de l'Enfant aux Concours Administratifs",
+    concours: "INFJ EPPJEJ",
+    categorie: "eppjej",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "👶"
+  },
+  {
+    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
+    concours: "INFJ EPPJEJ",
+    categorie: "eppjej",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📜"
+  },
+  {
+    titre: "Le Résumé de SOG aux Concours Administratifs",
+    concours: "INFJ EPPJEJ",
+    categorie: "eppjej",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📝"
+  },
+  {
+    titre: "Le Résumé d'Informatique aux Concours Administratifs",
+    concours: "INFJ EPPJEJ",
+    categorie: "eppjej",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "💻"
+  },
+  {
+    titre: "Le Résumé d'OPEAJ aux Concours Administratifs",
+    concours: "INFJ EPPJEJ",
+    categorie: "eppjej",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "⚙️"
+  },
+
+  // ---- ENA ----
+  {
+    titre: "La Logique aux Concours Administratifs",
+    concours: "ENA",
+    categorie: "ena",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "🧠"
+  },
+  {
+    titre: "Le Résumé d'Aptitude Verbale aux Concours Administratifs",
+    concours: "ENA",
+    categorie: "ena",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "💬"
+  },
+  {
+    titre: "Le Résumé de SOG aux Concours Administratifs",
+    concours: "ENA",
+    categorie: "ena",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📝"
+  },
+  {
+    titre: "Les Annales des Anciens Sujets Corrigés de SOG",
+    concours: "ENA",
+    categorie: "ena",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📚"
+  },
+  {
+    titre: "Le Résumé de PECOS aux Concours Administratifs",
+    concours: "ENA",
+    categorie: "ena",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "📊"
+  },
+  {
+    titre: "Le Résumé de Note de Synthèse aux Concours Administratifs",
+    concours: "ENA",
+    categorie: "ena",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "✍️"
+  },
+  {
+    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
+    concours: "ENA",
+    categorie: "ena",
+    niveau: "CS / CMS / CM",
+    prix: "10 000",
+    icone: "🏛️"
+  },
+];
+
+// ===== STATE =====
+let activeTab = "tous";
+let searchQuery = "";
+let modalData = null;
+
+// ===== RENDER =====
+function renderCatalogue() {
+  const grid = document.getElementById("catalogueGrid");
+  let filtered = ouvrages;
+
+  if (activeTab !== "tous") {
+    filtered = filtered.filter(o => o.categorie === activeTab);
+  }
+
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(o =>
+      o.titre.toLowerCase().includes(q) ||
+      o.concours.toLowerCase().includes(q) ||
+      o.niveau.toLowerCase().includes(q)
+    );
+  }
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="no-results">Aucun ouvrage trouvé pour cette recherche.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((o, i) => {
+    const waMsg = encodeURIComponent(
+      "Bonjour Les Cours Sésame & SAJ,\n\n" +
+      "Je souhaite commander l'ouvrage suivant :\n\n" +
+      "📚 " + o.titre + "\n" +
+      "📂 " + o.concours + "\n" +
+      "📊 " + o.niveau + "\n" +
+      "💰 " + o.prix + " FCFA\n\n" +
+      "Merci de me confirmer la disponibilité."
+    );
+    const waLink = "https://wa.me/2250160860537?text=" + waMsg;
+    const safeO = JSON.stringify(o).replace(/'/g, "&#39;");
+    return `
+    <div class="card" style="animation-delay:${i * 0.05}s">
+      <div class="card-cover">
+        <div class="card-cover-pattern"></div>
+        <div class="card-cover-title">
+          <span class="card-cover-icon">${o.icone}</span>
+          ${o.titre}
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-concours">${o.concours}</div>
+        <div class="card-title">${o.titre}</div>
+        <div class="card-niveau">${o.niveau}</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-price">
+          ${o.prix}
+          <span>FCFA</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn-commander" onclick='openModal(${safeO})'>
+            🛒 Commander
+          </button>
+          <a class="btn-wa-card" href="${waLink}" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
+            WhatsApp direct
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+  }).join("");
+}
+
+// ===== FILTERS =====
+function filterByTab(cat, btn) {
+  activeTab = cat;
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderCatalogue();
+}
+
+function filterCatalogue() {
+  searchQuery = document.getElementById("searchInput").value;
+  renderCatalogue();
+}
+
+// ===== MODAL =====
+function openModal(ouvrage) {
+  modalData = ouvrage;
+  document.getElementById("modalTitle").textContent = ouvrage.titre;
+  document.getElementById("modalPrice").textContent = ouvrage.prix + " FCFA";
+  document.getElementById("modalConcours").textContent = ouvrage.concours + " — " + ouvrage.niveau;
+  document.getElementById("fieldPrenom").value = "";
+  document.getElementById("fieldNom").value = "";
+  document.getElementById("fieldTel").value = "";
+  document.getElementById("fieldVille").value = "";
+  document.getElementById("fieldQte").value = "1";
+  document.getElementById("fieldMsg").value = "";
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("modalOverlay").classList.remove("open");
+}
+
+function closeModalOnOverlay(e) {
+  if (e.target === document.getElementById("modalOverlay")) closeModal();
+}
+
+// ===== WHATSAPP =====
+function envoyerWhatsApp() {
+  const prenom = document.getElementById("fieldPrenom").value.trim();
+  const nom = document.getElementById("fieldNom").value.trim();
+  const tel = document.getElementById("fieldTel").value.trim();
+  const ville = document.getElementById("fieldVille").value.trim();
+  const qte = document.getElementById("fieldQte").value.trim();
+  const msg = document.getElementById("fieldMsg").value.trim();
+
+  if (!prenom || !nom || !tel || !ville) {
+    alert("Veuillez remplir tous les champs obligatoires.");
+    return;
+  }
+
+  const message = [
+    "Bonjour Les Cours Sésame & SAJ,",
+    "",
+    "Je souhaite passer une commande :",
+    "",
+    `📚 Ouvrage : ${modalData.titre}`,
+    `📂 Concours : ${modalData.concours}`,
+    `📊 Niveau : ${modalData.niveau}`,
+    `💰 Prix : ${modalData.prix} FCFA`,
+    `🔢 Quantité : ${qte}`,
+    "",
+    "Mes coordonnées :",
+    `👤 Nom : ${prenom} ${nom}`,
+    `📞 Téléphone : ${tel}`,
+    `📍 Ville : ${ville}`,
+    msg ? `\n💬 Message : ${msg}` : "",
+    "",
+    "Merci !"
+  ].filter(l => l !== null).join("\n");
+
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+  closeModal();
+}
+
+// ===== INIT =====
+renderCatalogue();
+</script>
+
+</body>
+</html>
