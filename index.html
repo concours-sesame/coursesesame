@@ -4,1305 +4,721 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Les Cours Sésame & SAJ — Ouvrages Juridiques</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,500;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #0d1b3e;
-    --navy-deep: #070f24;
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --gold-pale: #f5e6c0;
-    --cream: #fdfaf4;
-    --text: #1a1a2e;
-    --text-muted: #6b6b8a;
-    --white: #ffffff;
-    --border: rgba(201,168,76,0.25);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    overflow-x: hidden;
-  }
-
-  /* ===== HEADER ===== */
-  header {
-    background: var(--navy-deep);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 2px solid var(--gold);
-    padding: 0 2rem;
-  }
-
-  .header-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 70px;
-  }
-
-  .logo {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-
-  .logo-main {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    color: var(--gold);
-    letter-spacing: 0.02em;
-  }
-
-  .logo-sub {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.55rem;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-  }
-
-  nav {
-    display: flex;
-    gap: 0.3rem;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-
-  nav a {
-    color: rgba(255,255,255,0.75);
-    text-decoration: none;
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.4rem 0.7rem;
-    border-radius: 2px;
-    transition: all 0.2s;
-  }
-
-  nav a:hover {
-    color: var(--gold);
-    background: rgba(201,168,76,0.1);
-  }
-
-  /* ===== HERO ===== */
-  .hero {
-    background: var(--navy-deep);
-    position: relative;
-    overflow: hidden;
-    padding: 5rem 2rem 4rem;
-    text-align: center;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 40% at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
-  }
-
-  .hero-ornament {
-    color: var(--gold);
-    font-size: 1.5rem;
-    letter-spacing: 0.5em;
-    opacity: 0.5;
-    margin-bottom: 1.5rem;
-    animation: fadeDown 0.8s ease both;
-  }
-
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    color: var(--white);
-    line-height: 1.15;
-    margin-bottom: 0.5rem;
-    animation: fadeDown 0.9s ease both 0.1s;
-  }
-
-  .hero h1 span {
-    color: var(--gold);
-  }
-
-  .hero-tagline {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.15rem;
-    color: rgba(255,255,255,0.55);
-    margin-bottom: 2rem;
-    animation: fadeDown 1s ease both 0.2s;
-  }
-
-  .hero-badges {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    animation: fadeDown 1s ease both 0.3s;
-  }
-
-  .badge {
-    background: rgba(201,168,76,0.12);
-    border: 1px solid rgba(201,168,76,0.3);
-    color: var(--gold-light);
-    padding: 0.4rem 1rem;
-    border-radius: 50px;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-
-  /* ===== SEARCH ===== */
-  .search-bar {
-    background: var(--navy);
-    border-bottom: 1px solid var(--border);
-    padding: 1.25rem 2rem;
-    position: sticky;
-    top: 70px;
-    z-index: 900;
-  }
-
-  .search-inner {
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-  }
-
-  .search-inner input {
-    width: 100%;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 4px;
-    padding: 0.75rem 1rem 0.75rem 2.75rem;
-    color: var(--white);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.8rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .search-inner input::placeholder { color: rgba(255,255,255,0.3); }
-  .search-inner input:focus { border-color: var(--gold); }
-
-  .search-icon {
-    position: absolute;
-    left: 0.9rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--gold);
-    font-size: 0.9rem;
-  }
-
-  /* ===== CATALOGUE SECTION ===== */
-  .section-label {
-    text-align: center;
-    padding: 3.5rem 2rem 0.5rem;
-  }
-
-  .section-label h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    color: var(--navy);
-  }
-
-  .section-label p {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-top: 0.3rem;
-  }
-
-  .gold-rule {
-    display: block;
-    width: 60px;
-    height: 2px;
-    background: var(--gold);
-    margin: 0.75rem auto 0;
-  }
-
-  /* ===== CONCOURS TABS ===== */
-  .tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    max-width: 1200px;
-    margin: 2rem auto 0;
-    padding: 0 2rem;
-    justify-content: center;
-  }
-
-  .tab-btn {
-    background: transparent;
-    border: 1.5px solid var(--border);
-    color: var(--text-muted);
-    padding: 0.5rem 1.1rem;
-    border-radius: 3px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .tab-btn:hover, .tab-btn.active {
-    background: var(--navy);
-    border-color: var(--navy);
-    color: var(--gold);
-  }
-
-  /* ===== GRID ===== */
-  .catalogue-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.5rem;
-    max-width: 1200px;
-    margin: 2rem auto 4rem;
-    padding: 0 2rem;
-  }
-
-  /* ===== CARD ===== */
-  .card {
-    background: var(--white);
-    border: 1px solid rgba(0,0,0,0.07);
-    border-radius: 6px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.25s, box-shadow 0.25s;
-    animation: fadeUp 0.5s ease both;
-  }
-
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(13,27,62,0.12);
-  }
-
-  .card-cover {
-    background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%);
-    height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    padding: 1.5rem;
-  }
-
-  .card-cover::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--gold);
-  }
-
-  .card-cover-pattern {
-    position: absolute;
-    inset: 0;
-    opacity: 0.04;
-    background-image: repeating-linear-gradient(
-      45deg,
-      var(--gold) 0, var(--gold) 1px,
-      transparent 0, transparent 50%
-    );
-    background-size: 12px 12px;
-  }
-
-  .card-cover-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.95rem;
-    color: var(--white);
-    text-align: center;
-    line-height: 1.4;
-    position: relative;
-    z-index: 1;
-  }
-
-  .card-cover-icon {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-    display: block;
-  }
-
-  .card-body {
-    padding: 1.25rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .card-concours {
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.95rem;
-    color: var(--navy);
-    line-height: 1.4;
-    flex: 1;
-  }
-
-  .card-niveau {
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    letter-spacing: 0.05em;
-  }
-
-  .card-footer {
-    padding: 1rem 1.25rem;
-    border-top: 1px solid rgba(0,0,0,0.06);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .card-price {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    color: var(--navy);
-    font-weight: 700;
-  }
-
-  .card-price span {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    font-weight: 400;
-    display: block;
-  }
-
-  .btn-commander {
-    background: var(--navy);
-    color: var(--white);
-    border: none;
-    padding: 0.55rem 1rem;
-    border-radius: 3px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .btn-commander:hover {
-    background: var(--gold);
-    color: var(--navy);
-  }
-
-  /* ===== MODAL ===== */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(7,15,36,0.85);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    backdrop-filter: blur(4px);
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--white);
-    border-radius: 8px;
-    width: 100%;
-    max-width: 480px;
-    overflow: hidden;
-    animation: modalIn 0.3s ease;
-  }
-
-  .modal-header {
-    background: var(--navy-deep);
-    padding: 1.5rem 1.75rem;
-    border-bottom: 2px solid var(--gold);
-  }
-
-  .modal-header h3 {
-    font-family: 'Playfair Display', serif;
-    color: var(--white);
-    font-size: 1.1rem;
-    margin-bottom: 0.2rem;
-  }
-
-  .modal-header p {
-    color: var(--gold);
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-
-  .modal-body {
-    padding: 1.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .field label {
-    display: block;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 0.4rem;
-  }
-
-  .field input, .field select, .field textarea {
-    width: 100%;
-    border: 1.5px solid rgba(0,0,0,0.12);
-    border-radius: 4px;
-    padding: 0.65rem 0.85rem;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.82rem;
-    color: var(--text);
-    background: var(--cream);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: var(--navy);
-  }
-
-  .field textarea { resize: vertical; min-height: 70px; }
-
-  .field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-  }
-
-  .modal-ouvrage-info {
-    background: var(--navy-deep);
-    border-radius: 4px;
-    padding: 0.85rem 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .modal-ouvrage-info .title-mini {
-    font-family: 'Playfair Display', serif;
-    color: var(--white);
-    font-size: 0.85rem;
-  }
-
-  .modal-ouvrage-info .price-mini {
-    color: var(--gold);
-    font-weight: 700;
-    font-size: 1rem;
-    font-family: 'Playfair Display', serif;
-  }
-
-  .modal-footer {
-    padding: 1.25rem 1.75rem;
-    border-top: 1px solid rgba(0,0,0,0.07);
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-  }
-
-  .btn-cancel {
-    background: transparent;
-    border: 1.5px solid rgba(0,0,0,0.12);
-    color: var(--text-muted);
-    padding: 0.6rem 1.2rem;
-    border-radius: 3px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-cancel:hover { border-color: var(--text-muted); color: var(--text); }
-
-  .btn-whatsapp {
-    background: #25D366;
-    color: var(--white);
-    border: none;
-    padding: 0.6rem 1.4rem;
-    border-radius: 3px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .btn-whatsapp:hover { background: #1ebe5d; }
-
-  /* ===== CONTACT STRIP ===== */
-  .contact-strip {
-    background: var(--navy);
-    border-top: 2px solid var(--gold);
-    padding: 2.5rem 2rem;
-    text-align: center;
-  }
-
-  .contact-strip h3 {
-    font-family: 'Playfair Display', serif;
-    color: var(--white);
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .contact-strip p {
-    color: rgba(255,255,255,0.5);
-    font-size: 0.78rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .btn-wa-direct {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    background: #25D366;
-    color: var(--white);
-    text-decoration: none;
-    padding: 0.85rem 2rem;
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 0.82rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: background 0.2s;
-  }
-
-  .btn-wa-direct:hover { background: #1ebe5d; }
-
-  /* ===== FOOTER ===== */
-  footer {
-    background: var(--navy-deep);
-    padding: 1.5rem 2rem;
-    text-align: center;
-    border-top: 1px solid rgba(201,168,76,0.15);
-  }
-
-  footer p {
-    color: rgba(255,255,255,0.25);
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-  }
-
-  footer strong { color: var(--gold); font-weight: 600; }
-
-  /* ===== NO RESULTS ===== */
-  .no-results {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 3rem;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-  }
-
-  /* ===== ANIMATIONS ===== */
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.95) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-
-  /* ===== CARD ACTIONS ===== */
-  .card-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    align-items: flex-end;
-  }
-
-  .btn-wa-card {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    background: rgba(37,211,102,0.1);
-    border: 1px solid rgba(37,211,102,0.35);
-    color: #1a9e52;
-    text-decoration: none;
-    padding: 0.35rem 0.75rem;
-    border-radius: 3px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-
-  .btn-wa-card:hover {
-    background: #25D366;
-    color: var(--white);
-    border-color: #25D366;
-  }
-
-  /* ===== CONTACT NUMERO ===== */
-  .contact-numero {
-    margin-bottom: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .contact-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
-    font-weight: 600;
-  }
-
-  .contact-num-display {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    color: var(--gold);
-    text-decoration: none;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    transition: opacity 0.2s;
-  }
-
-  .contact-num-display:hover { opacity: 0.8; }
-
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 640px) {
-    .header-inner { flex-direction: column; height: auto; padding: 0.75rem 0; gap: 0.5rem; }
-    nav { gap: 0.2rem; }
-    .field-row { grid-template-columns: 1fr; }
-    .search-bar { top: 100px; }
-  }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --white:#ffffff;--cream:#faf8f4;--cream2:#f5f1ea;--cream3:#eee8dd;
+  --gold:#b8923f;--gold-bright:#d4a843;--gold-rich:#9a7a2e;--gold-pale:#f5ecd7;
+  --gold-ghost:rgba(184,146,63,0.07);--gold-glow:rgba(184,146,63,0.15);
+  --gold-neon:rgba(212,168,67,0.6);--gold-neon2:rgba(212,168,67,0.3);
+  --text:#2c2416;--text2:#5a4e3c;--text3:#8c7e6a;
+  --green:#25d366;--green-soft:rgba(37,211,102,0.08);--green-border:rgba(37,211,102,0.2);
+  --shadow-sm:0 1px 3px rgba(44,36,22,0.04);--shadow-md:0 4px 20px rgba(44,36,22,0.07);
+  --shadow-lg:0 12px 40px rgba(44,36,22,0.1);--shadow-xl:0 24px 60px rgba(44,36,22,0.12);
+  --radius:14px;--radius-sm:10px;--radius-xs:7px;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Nunito Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;line-height:1.65}
+::-webkit-scrollbar{width:7px}
+::-webkit-scrollbar-track{background:var(--cream)}
+::-webkit-scrollbar-thumb{background:var(--cream3);border-radius:9px}
+
+/* CUSTOM CURSOR */
+.cursor-dot{position:fixed;top:0;left:0;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transition:transform .1s;mix-blend-mode:normal;box-shadow:0 0 12px var(--gold-neon)}
+.cursor-ring{position:fixed;top:0;left:0;width:36px;height:36px;border:1.5px solid var(--gold-neon2);border-radius:50%;pointer-events:none;z-index:99998;transition:transform .15s ease-out,width .2s,height .2s,border-color .2s}
+.cursor-trail{position:fixed;width:4px;height:4px;background:var(--gold-bright);border-radius:50%;pointer-events:none;z-index:99997;opacity:0.5}
+@media(max-width:768px){.cursor-dot,.cursor-ring,.cursor-trail{display:none!important}}
+
+/* PROGRESS BAR */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-bright),var(--gold));z-index:10000;width:0%;transition:width .05s;box-shadow:0 0 8px var(--gold-neon)}
+
+/* HEADER */
+.header{position:fixed;top:3px;left:0;right:0;z-index:999;background:rgba(250,248,244,0.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(184,146,63,0.1);transition:all .35s}
+.header.scrolled{background:rgba(250,248,244,0.97);box-shadow:var(--shadow-sm)}
+.header-inner{max-width:1260px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:72px}
+.logo{display:flex;align-items:center;gap:.8rem;text-decoration:none}
+.logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--gold-bright),var(--gold-rich));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--white);font-weight:700;box-shadow:0 3px 12px rgba(184,146,63,0.3)}
+.logo-text{display:flex;flex-direction:column}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--text);line-height:1.15}
+.logo-desc{font-size:.58rem;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.nav{display:flex;gap:.15rem;align-items:center}
+.nav a{color:var(--text2);text-decoration:none;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.5rem .8rem;border-radius:var(--radius-xs);transition:all .2s}
+.nav a:hover{color:var(--gold);background:var(--gold-ghost)}
+.nav-cta{background:var(--gold)!important;color:var(--white)!important;padding:.5rem 1.1rem!important;margin-left:.4rem;border-radius:var(--radius-xs)!important;animation:glowPulseBtn 3s ease-in-out infinite}
+@keyframes glowPulseBtn{0%,100%{box-shadow:0 0 5px var(--gold-neon2)}50%{box-shadow:0 0 18px var(--gold-neon),0 0 30px var(--gold-neon2)}}
+.cart-indicator{position:relative;cursor:pointer;background:none;border:none;padding:.5rem;margin-left:.25rem}
+.cart-indicator svg{width:22px;height:22px;stroke:var(--text2);fill:none;stroke-width:1.8;transition:stroke .2s}
+.cart-indicator:hover svg{stroke:var(--gold)}
+.cart-badge{position:absolute;top:2px;right:2px;background:var(--gold);color:var(--white);width:17px;height:17px;border-radius:50%;font-size:.58rem;font-weight:800;display:flex;align-items:center;justify-content:center;transform:scale(0);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.cart-badge.show{transform:scale(1)}
+.menu-btn{display:none;background:none;border:none;color:var(--text2);cursor:pointer;padding:.5rem}
+
+/* PROMO BANNER */
+.promo-banner{background:linear-gradient(90deg,var(--gold),var(--gold-bright),var(--gold));background-size:200% 100%;animation:shimmer 4s ease infinite;text-align:center;padding:.55rem 1rem;font-size:.72rem;font-weight:700;color:var(--white);letter-spacing:.04em;position:relative;cursor:pointer}
+.promo-close{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:1rem}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:7rem 2rem 4rem;background:var(--white)}
+.hero-deco{position:absolute;top:-15%;right:-10%;width:55%;height:130%;background:linear-gradient(160deg,var(--gold-pale) 0%,rgba(245,236,215,0) 70%);border-radius:0 0 0 40%;pointer-events:none}
+/* GEOMETRIC GRID */
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(184,146,63,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(184,146,63,0.04) 1px,transparent 1px);background-size:60px 60px;animation:gridMove 20s linear infinite;pointer-events:none}
+@keyframes gridMove{0%{background-position:0 0}100%{background-position:60px 60px}}
+/* PARTICLES CANVAS */
+#particlesCanvas{position:absolute;inset:0;pointer-events:none;z-index:1}
+.hero-inner{max-width:1260px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;position:relative;z-index:2}
+.hero-content{animation:slideUp .8s ease both}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold-ghost);border:1px solid rgba(184,146,63,0.15);padding:.4rem 1rem;border-radius:50px;font-size:.65rem;font-weight:700;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.5rem}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4.5vw,3.6rem);line-height:1.12;color:var(--text);font-weight:700;margin-bottom:1rem;min-height:4.5em}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.typewriter-cursor{display:inline-block;width:2px;height:1em;background:var(--gold);margin-left:2px;animation:blink 1s step-end infinite;vertical-align:text-bottom}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hero-sub{font-size:1rem;color:var(--text2);max-width:460px;margin-bottom:2rem;line-height:1.7}
+.hero-ctas{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.btn{display:inline-flex;align-items:center;gap:.55rem;padding:.8rem 1.8rem;border-radius:var(--radius-sm);font-family:'Nunito Sans',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:all .3s}
+.btn-gold{background:var(--gold);color:var(--white);animation:glowPulseBtn 3s ease-in-out infinite}
+.btn-gold:hover{background:var(--gold-bright);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--cream3)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.hero-stats{display:flex;gap:2.5rem}
+.stat-box{padding:.75rem 0;border-left:2px solid var(--gold-pale);padding-left:1rem}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--gold);line-height:1}
+.stat-label{font-size:.62rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;font-weight:600}
+.hero-visual{position:relative;animation:slideUp .9s ease both .15s}
+.hero-card-stack{position:relative;height:420px}
+.hero-float-card{position:absolute;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-lg);border:1px solid var(--cream3);padding:1.5rem;transition:transform .4s,box-shadow .4s}
+.hero-float-card:nth-child(1){top:0;left:10%;width:260px;transform:rotate(-3deg);z-index:3}
+.hero-float-card:nth-child(2){top:60px;right:5%;width:240px;transform:rotate(2deg);z-index:2}
+.hero-float-card:nth-child(3){bottom:20px;left:20%;width:220px;transform:rotate(-1deg);z-index:1}
+.hero-float-card:hover{transform:rotate(0deg) scale(1.03)!important;z-index:10;box-shadow:0 0 30px var(--gold-neon2),var(--shadow-xl)}
+.hfc-icon{font-size:2rem;margin-bottom:.5rem}
+.hfc-title{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:.4rem}
+.hfc-badge{display:inline-block;background:var(--gold-ghost);color:var(--gold);padding:.2rem .6rem;border-radius:50px;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS WITH PARALLAX */
+.parallax-section{position:relative;will-change:transform}
+
+/* SECTION HEAD */
+.section-head{text-align:center;padding:5rem 2rem 2rem}
+.overline{font-size:.62rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
+.section-head h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,3.5vw,2.4rem);color:var(--text);font-weight:700;margin-bottom:.5rem}
+.section-head p{font-size:.88rem;color:var(--text3);max-width:480px;margin:0 auto}
+.gold-line{width:40px;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-bright));margin:1rem auto 0;border-radius:9px}
+
+/* FILTER ZONE */
+.filter-zone{position:sticky;top:75px;z-index:800;background:rgba(250,248,244,0.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(184,146,63,0.08);padding:1rem 2rem}
+.filter-inner{max-width:1260px;margin:0 auto;display:flex;flex-direction:column;gap:.75rem;align-items:center}
+.filter-row{display:flex;gap:.75rem;align-items:center;width:100%;max-width:660px;flex-wrap:wrap;justify-content:center}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-wrap svg{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
+.search-wrap input{width:100%;background:var(--white);border:1.5px solid var(--cream3);border-radius:var(--radius);padding:.75rem 1rem .75rem 2.6rem;font-family:'Nunito Sans',sans-serif;font-size:.8rem;color:var(--text);outline:none;transition:all .25s}
+.search-wrap input::placeholder{color:var(--text3)}
+.search-wrap input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-ghost),0 0 15px var(--gold-neon2)}
+.controls{display:flex;gap:.5rem;align-items:center}
+.sort-select{background:var(--white);border:1.5px solid var(--cream3);border-radius:var(--radius-xs);padding:.55rem .75rem;font-family:'Nunito Sans',sans-serif;font-size:.7rem;font-weight:600;color:var(--text2);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238c7e6a' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .6rem center;padding-right:2rem}
+.view-toggle{display:flex;border:1.5px solid var(--cream3);border-radius:var(--radius-xs);overflow:hidden}
+.view-btn{background:var(--white);border:none;padding:.5rem .65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.view-btn svg{width:16px;height:16px;stroke:var(--text3);fill:none;stroke-width:2}
+.view-btn.active{background:var(--gold-ghost)}
+.view-btn.active svg{stroke:var(--gold)}
+.view-btn:not(:last-child){border-right:1px solid var(--cream3)}
+.tabs{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center}
+.tab{background:var(--white);border:1.5px solid var(--cream3);color:var(--text3);padding:.42rem .95rem;border-radius:50px;font-family:'Nunito Sans',sans-serif;font-size:.67rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.tab:hover{border-color:var(--gold-pale);color:var(--gold)}
+.tab.active{background:var(--gold);border-color:var(--gold);color:var(--white);box-shadow:0 0 12px var(--gold-neon2)}
+
+/* CATALOGUE */
+.catalogue{max-width:1260px;margin:0 auto;padding:1.5rem 2rem 4rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.15rem}
+.grid.list-view{grid-template-columns:1fr}
+.grid.list-view .card{flex-direction:row;align-items:stretch}
+.grid.list-view .card-top{width:200px;min-height:auto;flex-shrink:0;border-radius:var(--radius) 0 0 var(--radius)}
+.grid.list-view .card-body{flex:1;padding:1rem 1.25rem}
+.grid.list-view .card-foot{border-top:none;border-left:1px solid var(--cream3);padding:1rem;flex-direction:column;justify-content:center;min-width:170px}
+.no-results{grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--text3);font-size:.9rem}
+
+/* CARD with NEON HALO */
+.card{background:var(--white);border:1px solid var(--cream3);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:all .4s cubic-bezier(.25,.46,.45,.94);position:relative}
+.card::before{content:'';position:absolute;inset:-1px;border-radius:var(--radius);background:linear-gradient(135deg,transparent 30%,var(--gold-neon2) 50%,transparent 70%);opacity:0;transition:opacity .4s;z-index:0;pointer-events:none}
+.card:hover::before{opacity:1}
+.card:hover{transform:translateY(-6px);box-shadow:0 0 25px var(--gold-neon2),0 12px 40px rgba(44,36,22,0.1);border-color:var(--gold-bright)}
+.card>*{position:relative;z-index:1}
+.card-top{position:relative;padding:1.75rem 1.5rem 1.25rem;background:linear-gradient(150deg,var(--cream2) 0%,var(--white) 100%);min-height:130px;display:flex;flex-direction:column;justify-content:flex-end}
+.card-top-deco{position:absolute;top:-10px;right:-10px;width:90px;height:90px;background:radial-gradient(circle,var(--gold-ghost),transparent 70%);pointer-events:none}
+.card-top-icon{font-size:1.8rem;margin-bottom:.6rem}
+.card-top-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--text);font-weight:700;line-height:1.35;position:relative;z-index:2}
+.card-top-bar{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-pale),transparent)}
+.card-body{padding:1rem 1.5rem;flex:1;display:flex;flex-direction:column;gap:.4rem}
+/* HOLOGRAPHIC BADGE */
+.card-badge{display:inline-flex;align-self:flex-start;padding:.2rem .65rem;border-radius:50px;font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:linear-gradient(135deg,rgba(184,146,63,0.1),rgba(212,168,67,0.15),rgba(154,122,46,0.1));color:var(--gold);position:relative;overflow:hidden}
+.card-badge::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);animation:holoShine 3s ease-in-out infinite}
+@keyframes holoShine{0%{left:-100%}50%{left:150%}100%{left:150%}}
+.card-level{font-size:.65rem;color:var(--text3);font-weight:600}
+.card-desc{font-size:.7rem;color:var(--text2);line-height:1.55;margin-top:.2rem}
+.card-foot{padding:.85rem 1.5rem;border-top:1px solid var(--cream3);display:flex;align-items:center;justify-content:space-between;gap:.6rem}
+.card-price{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--gold);font-weight:700;display:flex;align-items:baseline;gap:.3rem}
+.card-price small{font-family:'Nunito Sans',sans-serif;font-size:.58rem;color:var(--text3);font-weight:500}
+.card-btns{display:flex;gap:.4rem;align-items:center}
+.btn-add-cart{background:var(--gold);color:var(--white);border:none;padding:.5rem .9rem;border-radius:var(--radius-xs);font-family:'Nunito Sans',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:.35rem;animation:glowPulseBtn 3s ease-in-out infinite}
+.btn-add-cart:hover{background:var(--gold-bright);transform:translateY(-1px)}
+.btn-add-cart.added{background:var(--green);animation:none;box-shadow:none;pointer-events:none}
+.btn-wa-sm{width:34px;height:34px;border-radius:var(--radius-xs);background:var(--green-soft);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .25s;flex-shrink:0}
+.btn-wa-sm svg{width:15px;height:15px;fill:var(--green)}
+.btn-wa-sm:hover{background:var(--green);border-color:var(--green)}
+.btn-wa-sm:hover svg{fill:var(--white)}
+
+/* CART DRAWER */
+.cart-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(44,36,22,0.3);backdrop-filter:blur(4px)}
+.cart-overlay.open{display:block}
+.cart-drawer{position:fixed;top:0;right:-420px;width:400px;max-width:90vw;height:100vh;background:var(--white);z-index:2001;box-shadow:-10px 0 40px rgba(44,36,22,0.12);display:flex;flex-direction:column;transition:right .4s cubic-bezier(.25,.46,.45,.94)}
+.cart-drawer.open{right:0}
+.cart-head{padding:1.5rem;border-bottom:1px solid var(--cream3);display:flex;align-items:center;justify-content:space-between}
+.cart-head h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--text)}
+.cart-close{background:none;border:none;cursor:pointer;padding:.5rem;color:var(--text3)}
+.cart-body{flex:1;overflow-y:auto;padding:1rem 1.5rem}
+.cart-empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-size:.85rem}
+.cart-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--cream2);align-items:flex-start}
+.cart-item-info{flex:1}
+.cart-item-title{font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:.2rem}
+.cart-item-meta{font-size:.62rem;color:var(--text3);margin-bottom:.35rem}
+.cart-item-price{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--gold);font-weight:700}
+.cart-item-remove{background:none;border:none;cursor:pointer;color:var(--text3);padding:.25rem;font-size:.75rem;flex-shrink:0;margin-top:.2rem}
+.cart-item-remove:hover{color:#c0392b}
+.cart-promo{background:var(--gold-ghost);border:1px dashed var(--gold-pale);border-radius:var(--radius-sm);padding:.75rem 1rem;margin:1rem 0;font-size:.72rem;color:var(--gold-rich);font-weight:600;text-align:center;display:none}
+.cart-promo.show{display:block}
+.cart-foot{padding:1.25rem 1.5rem;border-top:1px solid var(--cream3);background:var(--cream)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+.cart-total-label{font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
+.cart-total-amount{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold)}
+.cart-total-discount{font-size:.7rem;color:var(--green);font-weight:700;text-align:right;margin-bottom:.5rem;display:none}
+.btn-cart-wa{width:100%;display:flex;align-items:center;justify-content:center;gap:.6rem;background:var(--green);color:var(--white);border:none;padding:.85rem;border-radius:var(--radius-sm);font-family:'Nunito Sans',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.btn-cart-wa:hover{background:#1ebe5d;transform:translateY(-1px)}
+.btn-cart-wa svg{width:17px;height:17px;fill:currentColor}
+.btn-cart-wa:disabled{opacity:.5;pointer-events:none}
+
+/* TESTIMONIALS */
+.testimonials{background:var(--white);border-top:1px solid var(--cream3);border-bottom:1px solid var(--cream3);padding:4rem 2rem;overflow:hidden}
+.testimonials-track{display:flex;gap:1.5rem;animation:scrollT 30s linear infinite;width:max-content}
+.testimonials-track:hover{animation-play-state:paused}
+@keyframes scrollT{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.testimonial{flex-shrink:0;width:320px;background:var(--cream);border:1px solid var(--cream3);border-radius:var(--radius);padding:1.5rem}
+.testimonial-stars{color:var(--gold);font-size:.8rem;margin-bottom:.6rem;letter-spacing:.15em}
+.testimonial-text{font-size:.82rem;color:var(--text2);line-height:1.7;margin-bottom:1rem;font-style:italic}
+.testimonial-author{display:flex;align-items:center;gap:.6rem}
+.testimonial-avatar{width:36px;height:36px;border-radius:50%;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:.8rem;font-weight:700;color:var(--gold)}
+.testimonial-name{font-size:.72rem;font-weight:700;color:var(--text)}
+.testimonial-role{font-size:.6rem;color:var(--text3)}
+
+/* TRUST */
+.trust{padding:4rem 2rem;background:var(--cream)}
+.trust-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;text-align:center}
+.trust-icon{font-size:1.5rem;margin-bottom:.5rem}
+.trust-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.25rem}
+.trust-desc{font-size:.72rem;color:var(--text3);line-height:1.6}
+
+/* FAQ */
+.faq{padding:2rem 2rem 5rem;max-width:760px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--cream3)}
+.faq-q{width:100%;background:none;border:none;padding:1.25rem 0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:1rem}
+.faq-q span{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--text);line-height:1.35}
+.faq-q svg{flex-shrink:0;width:20px;height:20px;stroke:var(--text3);fill:none;stroke-width:2;transition:transform .3s}
+.faq-item.open .faq-q svg{transform:rotate(45deg);stroke:var(--gold)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.25,.46,.45,.94)}
+.faq-a-inner{padding:0 0 1.25rem;font-size:.82rem;color:var(--text2);line-height:1.7}
+
+/* ABOUT */
+.about-section{padding:5rem 2rem;background:var(--white);border-top:1px solid var(--cream3);border-bottom:1px solid var(--cream3)}
+.about-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.about-text{animation:slideUp .8s ease both}
+.about-text .overline{text-align:left}
+.about-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3vw,2.1rem);color:var(--text);font-weight:700;margin-bottom:1rem;text-align:left}
+.about-text p{font-size:.82rem;color:var(--text2);line-height:1.75;margin-bottom:.75rem}
+.about-highlight{background:var(--gold-ghost);border-left:3px solid var(--gold);padding:.75rem 1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:1rem 0;font-size:.78rem;color:var(--text);line-height:1.65;font-weight:500}
+.about-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.about-stat{background:var(--cream);border:1px solid var(--cream3);border-radius:var(--radius);padding:1.5rem;text-align:center;position:relative;overflow:hidden;transition:all .35s}
+.about-stat::before{content:'';position:absolute;inset:-1px;border-radius:var(--radius);background:linear-gradient(135deg,transparent 30%,var(--gold-neon2) 50%,transparent 70%);opacity:0;transition:opacity .4s;z-index:0;pointer-events:none}
+.about-stat:hover::before{opacity:1}
+.about-stat:hover{transform:translateY(-3px);box-shadow:0 0 20px var(--gold-neon2)}
+.about-stat>*{position:relative;z-index:1}
+.about-stat-icon{font-size:1.6rem;margin-bottom:.4rem}
+.about-stat-num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--gold);line-height:1}
+.about-stat-label{font-size:.6rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:.25rem;font-weight:700}
+.badges-section{padding:3rem 2rem;background:var(--cream)}
+.badges-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem}
+.badge-card{background:var(--white);border:1px solid var(--cream3);border-radius:var(--radius);padding:1.25rem;display:flex;align-items:flex-start;gap:.85rem;transition:all .3s;position:relative;overflow:hidden}
+.badge-card::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left .6s}
+.badge-card:hover::after{left:150%}
+.badge-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.badge-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.badge-icon.gold{background:linear-gradient(135deg,var(--gold-pale),rgba(184,146,63,0.15))}
+.badge-icon.green{background:rgba(37,211,102,0.08)}
+.badge-icon.blue{background:rgba(59,130,246,0.08)}
+.badge-icon.purple{background:rgba(139,92,246,0.08)}
+.badge-info h4{font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:.2rem}
+.badge-info p{font-size:.68rem;color:var(--text3);line-height:1.55}
+@media(max-width:900px){.about-inner{grid-template-columns:1fr}.about-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.about-stats{grid-template-columns:1fr}}
+
+/* METHODO & SUJETS */
+.methodo-grid{max-width:1260px;margin:0 auto;padding:0 2rem 4rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.25rem}
+.methodo-card{background:var(--white);border:1px solid var(--cream3);border-radius:var(--radius);overflow:hidden;transition:all .35s;position:relative}
+.methodo-card::before{content:'';position:absolute;inset:-1px;border-radius:var(--radius);background:linear-gradient(135deg,transparent 30%,var(--gold-neon2) 50%,transparent 70%);opacity:0;transition:opacity .4s;z-index:0;pointer-events:none}
+.methodo-card:hover::before{opacity:1}
+.methodo-card:hover{transform:translateY(-4px);box-shadow:0 0 20px var(--gold-neon2),var(--shadow-lg)}
+.methodo-card>*{position:relative;z-index:1}
+.methodo-card-head{padding:1.25rem 1.5rem;background:linear-gradient(135deg,var(--cream2),var(--white));border-bottom:2px solid var(--gold-pale);display:flex;align-items:center;gap:1rem}
+.methodo-card-icon{font-size:2rem;flex-shrink:0}
+.methodo-card-head h3{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--text);line-height:1.3}
+.methodo-card-head .mc-badge{display:inline-block;background:linear-gradient(135deg,rgba(184,146,63,0.1),rgba(212,168,67,0.15));color:var(--gold);padding:.15rem .6rem;border-radius:50px;font-size:.55rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-top:.25rem;overflow:hidden;position:relative}
+.methodo-card-head .mc-badge::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);animation:holoShine 3s ease-in-out infinite}
+.methodo-card-body{padding:1.25rem 1.5rem}
+.methodo-card-body h4{font-family:'Cormorant Garamond',serif;font-size:.85rem;font-weight:700;color:var(--gold);margin-bottom:.5rem}
+.methodo-card-body p,.methodo-card-body li{font-size:.75rem;color:var(--text2);line-height:1.65}
+.methodo-card-body ul{padding-left:1.2rem;margin:.35rem 0}
+.methodo-card-body li{margin-bottom:.25rem}
+.methodo-epreuves{max-width:1260px;margin:0 auto;padding:0 2rem 4rem}
+.epreuve-tabs{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem}
+.ep-tab{background:var(--white);border:1.5px solid var(--cream3);color:var(--text3);padding:.42rem .95rem;border-radius:50px;font-family:'Nunito Sans',sans-serif;font-size:.67rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.ep-tab:hover{border-color:var(--gold-pale);color:var(--gold)}
+.ep-tab.active{background:var(--gold);border-color:var(--gold);color:var(--white);box-shadow:0 0 12px var(--gold-neon2)}
+.epreuve-content{display:none;background:var(--white);border:1px solid var(--cream3);border-radius:var(--radius);padding:1.5rem 2rem}
+.epreuve-content.active{display:block}
+.epreuve-content h4{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.epreuve-content p{font-size:.78rem;color:var(--text2);line-height:1.7;margin-bottom:.5rem}
+.epreuve-content .ep-steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin:.75rem 0}
+.ep-step{background:var(--cream);border-radius:var(--radius-sm);padding:.75rem;border-left:3px solid var(--gold)}
+.ep-step strong{font-size:.7rem;color:var(--gold);display:block;margin-bottom:.2rem}
+.ep-step span{font-size:.68rem;color:var(--text2);line-height:1.5}
+.sujets-container{max-width:1260px;margin:0 auto;padding:0 2rem 4rem}
+.sujet-tabs{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem}
+.sj-tab{background:var(--white);border:1.5px solid var(--cream3);color:var(--text3);padding:.42rem .95rem;border-radius:50px;font-family:'Nunito Sans',sans-serif;font-size:.67rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.sj-tab:hover{border-color:var(--gold-pale);color:var(--gold)}
+.sj-tab.active{background:var(--gold);border-color:var(--gold);color:var(--white);box-shadow:0 0 12px var(--gold-neon2)}
+.sujet-panel{display:none;background:var(--white);border:1px solid var(--cream3);border-radius:var(--radius);overflow:hidden}
+.sujet-panel.active{display:block}
+.sujet-header{padding:1.25rem 1.75rem;background:linear-gradient(135deg,var(--cream2),var(--white));border-bottom:2px solid var(--gold-pale)}
+.sujet-header h4{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.sujet-header .sj-meta{font-size:.65rem;color:var(--text3);font-weight:600}
+.sujet-enonce{padding:1.25rem 1.75rem;border-bottom:1px solid var(--cream3);background:var(--gold-ghost)}
+.sujet-enonce p{font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--text);font-weight:600;font-style:italic;line-height:1.6}
+.sujet-corrige{padding:1.25rem 1.75rem}
+.sujet-corrige h5{font-family:'Cormorant Garamond',serif;font-size:.88rem;font-weight:700;color:var(--gold);margin:1rem 0 .5rem}
+.sujet-corrige h5:first-child{margin-top:0}
+.sujet-corrige p{font-size:.75rem;color:var(--text2);line-height:1.7;margin-bottom:.5rem;text-align:justify}
+.sujet-corrige .plan-item{background:var(--cream);border-left:3px solid var(--gold);border-radius:0 var(--radius-xs) var(--radius-xs) 0;padding:.5rem .85rem;margin:.35rem 0;font-size:.72rem;color:var(--text2);line-height:1.55}
+.sujet-cta{padding:1rem 1.75rem;background:var(--cream);border-top:1px solid var(--cream3);text-align:center}
+.sujet-cta p{font-size:.72rem;color:var(--text3);margin-bottom:.5rem}
+.sujet-cta a{display:inline-flex;align-items:center;gap:.4rem;background:var(--gold);color:var(--white);padding:.5rem 1.2rem;border-radius:var(--radius-xs);font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;transition:all .25s;animation:glowPulseBtn 3s ease-in-out infinite}
+.sujet-cta a:hover{background:var(--gold-bright);transform:translateY(-1px)}
+
+/* CTA */
+.cta-section{position:relative;overflow:hidden;padding:5rem 2rem;text-align:center;background:linear-gradient(150deg,var(--gold-pale) 0%,var(--cream) 50%,var(--white) 100%)}
+.cta-content{position:relative;z-index:2;max-width:550px;margin:0 auto}
+.cta-content h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3vw,2.1rem);color:var(--text);font-weight:700;margin-bottom:.6rem}
+.cta-content p{color:var(--text3);font-size:.85rem;margin-bottom:1.75rem}
+.cta-phone{display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:1.75rem}
+.cta-phone-num{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold);text-decoration:none;font-weight:700}
+.btn-wa-big{display:inline-flex;align-items:center;gap:.6rem;background:var(--green);color:var(--white);padding:.9rem 2.5rem;border-radius:var(--radius-sm);font-family:'Nunito Sans',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;transition:all .3s;box-shadow:0 4px 20px rgba(37,211,102,0.2)}
+.btn-wa-big:hover{background:#1ebe5d;transform:translateY(-2px)}
+.btn-wa-big svg{width:18px;height:18px;fill:currentColor}
+
+/* FOOTER */
+.footer{background:var(--white);border-top:1px solid var(--cream3);padding:2rem;text-align:center}
+.footer p{font-size:.65rem;color:var(--text3)}
+.footer strong{color:var(--gold)}
+
+/* FLOATING WA */
+.wa-float{position:fixed;bottom:1.5rem;right:1.5rem;z-index:900;width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.35);text-decoration:none;transition:all .3s;animation:floatPulse 3s ease-in-out infinite}
+.wa-float:hover{transform:scale(1.1)}
+.wa-float svg{width:28px;height:28px;fill:var(--white)}
+@keyframes floatPulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.35)}50%{box-shadow:0 4px 20px rgba(37,211,102,0.35),0 0 0 8px rgba(37,211,102,0.1)}}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:2500;background:rgba(44,36,22,0.4);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border:1px solid var(--cream3);border-radius:var(--radius);width:100%;max-width:500px;overflow:hidden;animation:modalPop .3s ease;box-shadow:var(--shadow-xl)}
+@keyframes modalPop{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-head{padding:1.5rem 1.75rem;background:var(--cream);border-bottom:2px solid var(--gold)}
+.modal-head h3{font-family:'Cormorant Garamond',serif;color:var(--text);font-size:1.2rem;font-weight:700;margin-bottom:.1rem}
+.modal-head p{color:var(--gold);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.modal-info2{margin:1.25rem 1.75rem 0;padding:.85rem 1rem;background:var(--cream);border-radius:var(--radius-sm);border:1px solid var(--cream3);display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.modal-info2 .m-title{font-family:'Cormorant Garamond',serif;color:var(--text);font-size:.82rem;font-weight:700;line-height:1.3;flex:1}
+.modal-info2 .m-price{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.05rem;font-weight:700;white-space:nowrap}
+.modal-body{padding:1.25rem 1.75rem;display:flex;flex-direction:column;gap:.8rem}
+.field label{display:block;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:.3rem}
+.field input,.field textarea{width:100%;background:var(--cream);border:1.5px solid var(--cream3);border-radius:var(--radius-xs);padding:.65rem .85rem;font-family:'Nunito Sans',sans-serif;font-size:.8rem;color:var(--text);outline:none;transition:all .2s}
+.field input:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-ghost)}
+.field textarea{resize:vertical;min-height:55px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.modal-foot{padding:1.25rem 1.75rem;border-top:1px solid var(--cream3);display:flex;gap:.75rem;justify-content:flex-end}
+.btn-cancel{background:transparent;border:1.5px solid var(--cream3);color:var(--text3);padding:.55rem 1.1rem;border-radius:var(--radius-xs);font-family:'Nunito Sans',sans-serif;font-size:.7rem;font-weight:600;cursor:pointer}
+.btn-whatsapp{background:var(--green);color:var(--white);border:none;padding:.55rem 1.3rem;border-radius:var(--radius-xs);font-family:'Nunito Sans',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:.45rem}
+.btn-whatsapp svg{width:14px;height:14px;fill:currentColor}
+
+/* REVEAL with FADE SLIDE */
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.25,.46,.45,.94)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;text-align:center}.hero-sub{margin-left:auto;margin-right:auto}.hero-ctas{justify-content:center}.hero-stats{justify-content:center}.hero-visual{display:none}}
+@media(max-width:768px){.header-inner{padding:0 1rem;height:60px}.nav{display:none}.nav.open{display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:rgba(250,248,244,0.98);border-bottom:1px solid var(--cream3);padding:.75rem;gap:.15rem}.nav.open a{padding:.7rem 1rem}.menu-btn{display:block}.filter-zone{top:63px;padding:.65rem 1rem}.filter-row{flex-direction:column;gap:.5rem}.controls{width:100%;justify-content:center}.grid{grid-template-columns:1fr;gap:1rem}.grid.list-view .card{flex-direction:column}.grid.list-view .card-top{width:100%;border-radius:var(--radius) var(--radius) 0 0}.grid.list-view .card-foot{border-left:none;border-top:1px solid var(--cream3);flex-direction:row;min-width:auto}.catalogue{padding:1rem 1rem 4rem}.field-row{grid-template-columns:1fr}.hero{min-height:auto;padding:7rem 1.5rem 3rem}.cart-drawer{width:100%;max-width:100%}.promo-banner{font-size:.65rem;padding:.5rem 2.5rem}}
+@media(max-width:400px){.hero-stats{gap:1rem}.card-foot{flex-direction:column;align-items:flex-start;gap:.5rem}.card-btns{width:100%}.btn-add-cart{flex:1;justify-content:center}}
 </style>
 </head>
 <body>
 
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scrollProgress"></div>
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner" id="promoBanner" onclick="document.getElementById('catalogue').scrollIntoView({behavior:'smooth'})">
+  🎁 Offre spéciale : -10% pour toute commande de 3 ouvrages ou plus !
+  <button class="promo-close" onclick="event.stopPropagation();this.parentElement.style.display='none'">✕</button>
+</div>
+
 <!-- HEADER -->
-<header>
+<header class="header" id="siteHeader">
   <div class="header-inner">
-    <div class="logo">
-      <span class="logo-main">Les Cours Sésame & SAJ</span>
-      <span class="logo-sub">Préparation aux concours juridiques — Côte d'Ivoire</span>
-    </div>
-    <nav>
-      <a href="#catalogue">Catalogue</a>
-      <a href="#infj">INFJ</a>
-      <a href="#ena">ENA</a>
-      <a href="#police">Police</a>
-      <a href="#contact">Contact</a>
+    <a href="#" class="logo"><div class="logo-icon">CS</div><div class="logo-text"><span class="logo-name">Les Cours Sésame & SAJ</span><span class="logo-desc">Concours juridiques, Côte d'Ivoire</span></div></a>
+    <button class="menu-btn" onclick="document.querySelector('.nav').classList.toggle('open')" aria-label="Menu"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    <nav class="nav">
+      <a href="#catalogue">Catalogue</a><a href="#methodologie">Méthodo</a><a href="#sujets-corriges">Sujets</a><a href="#about">À propos</a><a href="#temoignages">Avis</a><a href="#faq-section">FAQ</a><a href="#contact">Contact</a>
+      <button class="cart-indicator" onclick="toggleCart()" title="Mon panier"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg><span class="cart-badge" id="cartBadge">0</span></button>
+      <a href="https://wa.me/2250160860537" target="_blank" class="nav-cta">WhatsApp</a>
     </nav>
   </div>
 </header>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-ornament">⸻ ✦ ⸻</div>
-  <h1>Vos ouvrages de référence<br>pour <span>réussir vos concours</span></h1>
-  <p class="hero-tagline">Des publications juridiques d'excellence pour les candidats exigeants</p>
-  <div class="hero-badges">
-    <span class="badge">INFJ Magistrature</span>
-    <span class="badge">ENA</span>
-    <span class="badge">Police Nationale</span>
-    <span class="badge">Greffe</span>
-    <span class="badge">Pénitentiaire</span>
-    <span class="badge">EPPJEJ</span>
-    <span class="badge">Fonction Publique</span>
+  <div class="hero-deco"></div>
+  <div class="hero-grid"></div>
+  <canvas id="particlesCanvas"></canvas>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Session 2026</div>
+      <h1 id="heroTitle"></h1>
+      <p class="hero-sub">Des ouvrages de référence conçus par des experts pour les candidats ambitieux aux concours administratifs et juridiques de Côte d'Ivoire</p>
+      <div class="hero-ctas">
+        <a href="#catalogue" class="btn btn-gold">Voir le catalogue</a>
+        <a href="https://wa.me/2250160860537" target="_blank" class="btn btn-outline"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--green)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg> Nous contacter</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-box"><div class="stat-num" data-count="40">0</div><div class="stat-label">Ouvrages</div></div>
+        <div class="stat-box"><div class="stat-num" data-count="6">0</div><div class="stat-label">Concours</div></div>
+        <div class="stat-box"><div class="stat-num" data-count="2026">0</div><div class="stat-label">Édition</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="hero-float-card"><div class="hfc-icon">⚖️</div><div class="hfc-title">Le Guide Méthodologique Magistrature</div><div class="hfc-badge">INFJ Magistrature</div></div>
+        <div class="hero-float-card"><div class="hfc-icon">🧠</div><div class="hfc-title">La Logique aux Concours Administratifs</div><div class="hfc-badge">ENA</div></div>
+        <div class="hero-float-card"><div class="hfc-icon">📝</div><div class="hfc-title">Le Résumé de SOG aux Concours</div><div class="hfc-badge">Tous concours</div></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- SEARCH -->
-<div class="search-bar">
-  <div class="search-inner">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Rechercher un ouvrage, un concours, une matière..." oninput="filterCatalogue()">
-  </div>
+<section id="catalogue" class="parallax-section"><div class="section-head reveal"><div class="overline">Notre collection</div><h2>Catalogue des ouvrages</h2><p>Ajoutez vos ouvrages au panier et commandez en un clic via WhatsApp</p><div class="gold-line"></div></div></section>
+
+<div class="filter-zone"><div class="filter-inner"><div class="filter-row"><div class="search-wrap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="searchInput" placeholder="Rechercher un ouvrage, un concours..." oninput="filterCatalogue()"></div><div class="controls"><select class="sort-select" id="sortSelect" onchange="filterCatalogue()"><option value="default">Trier par</option><option value="price-asc">Prix croissant</option><option value="price-desc">Prix décroissant</option><option value="alpha">A → Z</option></select><div class="view-toggle"><button class="view-btn active" onclick="setView('grid',this)" title="Grille"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button><button class="view-btn" onclick="setView('list',this)" title="Liste"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></button></div></div></div><div class="tabs"><button class="tab active" onclick="filterByTab('tous',this)">Tous</button><button class="tab" onclick="filterByTab('infj',this)">Magistrature</button><button class="tab" onclick="filterByTab('greffe',this)">Greffe</button><button class="tab" onclick="filterByTab('penitentiaire',this)">Pénitentiaire</button><button class="tab" onclick="filterByTab('eppjej',this)">EPPJEJ</button><button class="tab" onclick="filterByTab('ena',this)">ENA</button></div></div></div>
+<div class="catalogue"><div class="grid" id="catalogueGrid"></div></div>
+
+<!-- METHODOLOGIE -->
+<section id="methodologie" class="parallax-section">
+<div class="section-head reveal"><div class="overline">Approche pédagogique</div><h2>Méthodologie par concours</h2><p>Un aperçu des épreuves et de la méthode que nos ouvrages vous enseignent</p><div class="gold-line"></div></div>
+<div class="methodo-grid" id="methodoGrid"></div>
+<div class="section-head reveal" style="padding-top:2rem"><h2 style="font-size:clamp(1.3rem,2.5vw,1.8rem)">Fiches méthodo par épreuve</h2><p>Cliquez sur une épreuve pour voir la méthode</p></div>
+<div class="methodo-epreuves"><div class="epreuve-tabs" id="epreuveTabs"></div><div id="epreuveContents"></div></div>
+</section>
+
+<!-- SUJETS CORRIGES -->
+<section id="sujets-corriges" class="parallax-section">
+<div class="section-head reveal"><div class="overline">Extraits de nos ouvrages</div><h2>Sujets corrigés</h2><p>Un sujet complet par concours pour découvrir la qualité de nos corrections</p><div class="gold-line"></div></div>
+<div class="sujets-container"><div class="sujet-tabs" id="sujetTabs"></div><div id="sujetPanels"></div></div>
+</section>
+
+<section id="temoignages" class="testimonials parallax-section"><div class="section-head reveal" style="padding-top:0;padding-bottom:2rem"><div class="overline">Ils nous font confiance</div><h2>Avis de nos étudiants</h2><div class="gold-line"></div></div><div class="testimonials-track" id="testimonialsTrack"></div></section>
+
+<!-- QUI SOMMES-NOUS -->
+<section id="about" class="about-section parallax-section">
+<div class="about-inner">
+<div class="about-text reveal">
+<div class="overline">Qui sommes-nous</div>
+<h2>Les Cours Sésame & SAJ</h2>
+<p>Fondés à Abidjan, Les Cours Sésame et SAJ (Savoirs & Atouts Judiciaires) sont nés d'un constat partagé par des anciens lauréats des concours de l'INFJ et de l'ENA. Trop de candidats talentueux échouaient, non par manque d'intelligence, mais par manque d'outils adaptés au contexte ivoirien.</p>
+<p>Notre équipe pédagogique rassemble des magistrats, des greffiers, des administrateurs civils et des enseignants universitaires, tous passés par les concours qu'ils préparent aujourd'hui. Chaque ouvrage est rédigé avec une exigence simple : offrir le niveau de qualité que nous aurions voulu avoir entre les mains le jour de notre propre concours.</p>
+<div class="about-highlight">Notre mission : démocratiser l'accès à une préparation juridique d'excellence, à des tarifs accessibles, pour que chaque candidat ivoirien puisse concourir à armes égales.</div>
+<p>Tous nos ouvrages sont actualisés au droit ivoirien en vigueur, révisés chaque année pour intégrer les dernières réformes législatives et les tendances récentes des jurys de concours.</p>
 </div>
-
-<!-- CATALOGUE -->
-<section id="catalogue">
-  <div class="section-label">
-    <h2>Notre Catalogue</h2>
-    <p>Commandez directement via WhatsApp</p>
-    <span class="gold-rule"></span>
-  </div>
-
-  <!-- TABS -->
-  <div class="tabs" id="tabContainer">
-    <button class="tab-btn active" onclick="filterByTab('tous', this)">Tous</button>
-    <button class="tab-btn" onclick="filterByTab('infj', this)" id="tab-infj">INFJ</button>
-    <button class="tab-btn" onclick="filterByTab('ena', this)" id="tab-ena">ENA</button>
-    <button class="tab-btn" onclick="filterByTab('penitentiaire', this)" id="tab-penitentiaire">Pénitentiaire</button>
-    <button class="tab-btn" onclick="filterByTab('greffe', this)" id="tab-greffe">Greffe</button>
-    <button class="tab-btn" onclick="filterByTab('eppjej', this)" id="tab-eppjej">EPPJEJ</button>
-  </div>
-
-  <!-- GRID -->
-  <div class="catalogue-grid" id="catalogueGrid">
-    <!-- Les cartes sont générées par JS -->
-  </div>
-</section>
-
-<!-- SECTION INFJ -->
-<div id="infj"></div>
-<!-- SECTION ENA -->
-<div id="ena"></div>
-<!-- SECTION POLICE -->
-<div id="police"></div>
-
-<!-- CONTACT STRIP -->
-<section id="contact" class="contact-strip">
-  <h3>Une question ? Besoin de conseils ?</h3>
-  <p>Notre équipe vous répond directement sur WhatsApp</p>
-  <div class="contact-numero">
-    <span class="contact-label">Notre numéro WhatsApp</span>
-    <a href="https://wa.me/2250160860537" target="_blank" class="contact-num-display">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
-      +225 01 60 86 05 37
-    </a>
-  </div>
-  <a href="https://wa.me/2250160860537" target="_blank" class="btn-wa-direct">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
-    Ouvrir WhatsApp
-  </a>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <p>&copy; 2025 <strong>Les Cours Sésame & SAJ</strong> — Tous droits réservés — Abidjan, Côte d'Ivoire</p>
-</footer>
-
-<!-- MODAL COMMANDE -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Passer une commande</h3>
-      <p id="modalConcours">Ouvrage sélectionné</p>
-    </div>
-    <div class="modal-body">
-      <div class="modal-ouvrage-info">
-        <span class="title-mini" id="modalTitle">—</span>
-        <span class="price-mini" id="modalPrice">—</span>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Prénom</label>
-          <input type="text" id="fieldPrenom" placeholder="Votre prénom">
-        </div>
-        <div class="field">
-          <label>Nom</label>
-          <input type="text" id="fieldNom" placeholder="Votre nom">
-        </div>
-      </div>
-      <div class="field">
-        <label>Numéro de téléphone</label>
-        <input type="tel" id="fieldTel" placeholder="Ex. 07XXXXXXXX">
-      </div>
-      <div class="field">
-        <label>Ville / Localité</label>
-        <input type="text" id="fieldVille" placeholder="Abidjan, Bouaké...">
-      </div>
-      <div class="field">
-        <label>Quantité</label>
-        <input type="number" id="fieldQte" value="1" min="1" max="99">
-      </div>
-      <div class="field">
-        <label>Message complémentaire (facultatif)</label>
-        <textarea id="fieldMsg" placeholder="Précisions supplémentaires..."></textarea>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
-      <button class="btn-whatsapp" onclick="envoyerWhatsApp()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
-        Envoyer sur WhatsApp
-      </button>
-    </div>
-  </div>
+<div class="about-stats reveal">
+<div class="about-stat"><div class="about-stat-icon">🎓</div><div class="about-stat-num">500+</div><div class="about-stat-label">Candidats accompagnés</div></div>
+<div class="about-stat"><div class="about-stat-icon">📚</div><div class="about-stat-num">35</div><div class="about-stat-label">Ouvrages au catalogue</div></div>
+<div class="about-stat"><div class="about-stat-icon">⚖️</div><div class="about-stat-num">6</div><div class="about-stat-label">Concours couverts</div></div>
+<div class="about-stat"><div class="about-stat-icon">✍️</div><div class="about-stat-num">10+</div><div class="about-stat-label">Formateurs experts</div></div>
 </div>
+</div>
+</section>
+
+<!-- BADGES DE CONFIANCE -->
+<section class="badges-section parallax-section">
+<div class="badges-inner">
+<div class="badge-card reveal"><div class="badge-icon gold">🏅</div><div class="badge-info"><h4>Édition 2026 actualisée</h4><p>Références législatives et jurisprudentielles mises à jour au droit ivoirien en vigueur</p></div></div>
+<div class="badge-card reveal"><div class="badge-icon green">💳</div><div class="badge-info"><h4>Paiement Mobile Money</h4><p>Orange Money, MTN MoMo, Wave et Moov Money acceptés en toute sécurité</p></div></div>
+<div class="badge-card reveal"><div class="badge-icon blue">🚚</div><div class="badge-info"><h4>Livraison toute la CI</h4><p>Abidjan sous 24 à 48h, autres villes sous 3 à 5 jours ouvrables</p></div></div>
+<div class="badge-card reveal"><div class="badge-icon purple">👨‍⚖️</div><div class="badge-info"><h4>Rédigé par des lauréats</h4><p>Anciens admis aux concours INFJ, ENA et Barreau de Côte d'Ivoire</p></div></div>
+<div class="badge-card reveal"><div class="badge-icon gold">📞</div><div class="badge-info"><h4>Support WhatsApp réactif</h4><p>Conseils personnalisés pour choisir les ouvrages adaptés à votre concours</p></div></div>
+<div class="badge-card reveal"><div class="badge-icon green">🔄</div><div class="badge-info"><h4>Remise -10% dès 3 ouvrages</h4><p>Commandez plusieurs ouvrages et bénéficiez automatiquement de la réduction</p></div></div>
+</div>
+</section>
+
+<section class="trust parallax-section"><div class="trust-inner"><div class="trust-item reveal"><div class="trust-icon">📚</div><div class="trust-title">Contenu actualisé</div><div class="trust-desc">Tous nos ouvrages sont mis à jour pour la session 2026</div></div><div class="trust-item reveal"><div class="trust-icon">🎯</div><div class="trust-title">Ciblé par concours</div><div class="trust-desc">Chaque ouvrage cible les épreuves spécifiques de votre concours</div></div><div class="trust-item reveal"><div class="trust-icon">🚚</div><div class="trust-title">Livraison rapide</div><div class="trust-desc">Commandez via WhatsApp et recevez vos ouvrages rapidement</div></div><div class="trust-item reveal"><div class="trust-icon">💬</div><div class="trust-title">Accompagnement</div><div class="trust-desc">Notre équipe vous conseille pour choisir les bons ouvrages</div></div></div></section>
+
+<section id="faq-section" class="parallax-section"><div class="section-head reveal"><div class="overline">Questions fréquentes</div><h2>Besoin d'informations ?</h2><div class="gold-line"></div></div><div class="faq" id="faqContainer"></div></section>
+
+<section id="contact" class="cta-section"><div class="cta-content reveal"><div class="overline">Contact</div><h2>Prêt à commander ?</h2><p>Notre équipe est disponible sur WhatsApp pour répondre à vos questions et traiter vos commandes</p><div class="cta-phone"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><a href="https://wa.me/2250160860537" target="_blank" class="cta-phone-num">+225 01 60 86 05 37</a></div><a href="https://wa.me/2250160860537" target="_blank" class="btn-wa-big"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg> Ouvrir WhatsApp</a></div></section>
+
+<footer class="footer"><p>&copy; 2026 <strong>Les Cours Sésame & SAJ</strong> Tous droits réservés, Abidjan, Côte d'Ivoire</p></footer>
+
+<a href="https://wa.me/2250160860537" target="_blank" class="wa-float" title="Discuter sur WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg></a>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer"><div class="cart-head"><h3>Mon panier</h3><button class="cart-close" onclick="toggleCart()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="cart-body" id="cartBody"><div class="cart-empty">Votre panier est vide</div></div><div class="cart-promo" id="cartPromo">🎁 Bravo ! Vous bénéficiez de la remise de 10% !</div><div class="cart-foot"><div class="cart-total-discount" id="cartDiscount"></div><div class="cart-total"><span class="cart-total-label">Total</span><span class="cart-total-amount" id="cartTotal">0 FCFA</span></div><button class="btn-cart-wa" id="cartWaBtn" onclick="sendCartWhatsApp()" disabled><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg> Commander via WhatsApp</button></div></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)"><div class="modal"><div class="modal-head"><h3>Commande rapide</h3><p id="modalConcours"></p></div><div class="modal-info2"><span class="m-title" id="modalTitle"></span><span class="m-price" id="modalPrice"></span></div><div class="modal-body"><div class="field-row"><div class="field"><label>Prénom</label><input type="text" id="fieldPrenom" placeholder="Votre prénom"></div><div class="field"><label>Nom</label><input type="text" id="fieldNom" placeholder="Votre nom"></div></div><div class="field"><label>Téléphone</label><input type="tel" id="fieldTel" placeholder="07XXXXXXXX"></div><div class="field"><label>Ville</label><input type="text" id="fieldVille" placeholder="Abidjan, Bouaké..."></div><div class="field"><label>Quantité</label><input type="number" id="fieldQte" value="1" min="1" max="99"></div><div class="field"><label>Message (facultatif)</label><textarea id="fieldMsg" placeholder="Précisions..."></textarea></div></div><div class="modal-foot"><button class="btn-cancel" onclick="closeModal()">Annuler</button><button class="btn-whatsapp" onclick="envoyerWhatsApp()"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg> Envoyer sur WhatsApp</button></div></div></div>
 
 <script>
-// ===== CATALOGUE DATA =====
-// Structure : { titre, concours, categorie, niveau, prix }
-// Tu pourras ajouter tes ouvrages ici avec la même structure
-
-const WHATSAPP_NUMBER = "2250160860537";
-
-const ouvrages = [
-
-  // ---- INFJ MAGISTRATURE ----
-  {
-    titre: "Le Guide Méthodologique Magistrature — Édition 2026",
-    concours: "INFJ Magistrature",
-    categorie: "infj",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "⚖️"
-  },
-  {
-    titre: "Le Résumé de SOG aux Concours Administratifs",
-    concours: "INFJ Magistrature",
-    categorie: "infj",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📝"
-  },
-  {
-    titre: "Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs",
-    concours: "INFJ Magistrature",
-    categorie: "infj",
-    niveau: "CS / CMS / CM",
-    prix: "15 000",
-    icone: "📚"
-  },
-  {
-    titre: "Le Sésame de Droit Pénal aux Concours Administratifs",
-    concours: "INFJ Magistrature",
-    categorie: "infj",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "🔒"
-  },
-  {
-    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
-    concours: "INFJ Magistrature",
-    categorie: "infj",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "🏛️"
-  },
-
-  // ---- INFJ GREFFE ----
-  {
-    titre: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026",
-    concours: "INFJ Greffe",
-    categorie: "greffe",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📋"
-  },
-  {
-    titre: "Le Guide Méthodologique INFJ — Édition 2026",
-    concours: "INFJ Greffe",
-    categorie: "greffe",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📖"
-  },
-  {
-    titre: "Le Résumé d'Organisation Judiciaire aux Concours Administratifs",
-    concours: "INFJ Greffe",
-    categorie: "greffe",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "🏛️"
-  },
-  {
-    titre: "Le Résumé de SOG aux Concours Administratifs",
-    concours: "INFJ Greffe",
-    categorie: "greffe",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📝"
-  },
-  {
-    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
-    concours: "INFJ Greffe",
-    categorie: "greffe",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📜"
-  },
-  {
-    titre: "Le Résumé d'OPEAJ aux Concours Administratifs",
-    concours: "INFJ Greffe",
-    categorie: "greffe",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "⚙️"
-  },
-  {
-    titre: "Le Résumé d'Informatique aux Concours Administratifs",
-    concours: "INFJ Greffe",
-    categorie: "greffe",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "💻"
-  },
-
-  // ---- INFJ PÉNITENTIAIRE ----
-  {
-    titre: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026",
-    concours: "INFJ Pénitentiaire",
-    categorie: "penitentiaire",
-    niveau: "CS / CMS / CM / Agents d'encadrement",
-    prix: "10 000",
-    icone: "📋"
-  },
-  {
-    titre: "Le Résumé d'Organisation Judiciaire aux Concours Administratifs",
-    concours: "INFJ Pénitentiaire",
-    categorie: "penitentiaire",
-    niveau: "CS / CMS / CM / Agents d'encadrement",
-    prix: "10 000",
-    icone: "🏛️"
-  },
-  {
-    titre: "Le Résumé des Droits de l'Enfant aux Concours Administratifs",
-    concours: "INFJ Pénitentiaire",
-    categorie: "penitentiaire",
-    niveau: "CS / CMS / CM / Agents d'encadrement",
-    prix: "10 000",
-    icone: "👶"
-  },
-  {
-    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
-    concours: "INFJ Pénitentiaire",
-    categorie: "penitentiaire",
-    niveau: "CS / CMS / CM / Agents d'encadrement",
-    prix: "10 000",
-    icone: "📜"
-  },
-  {
-    titre: "Le Résumé de SOG aux Concours Administratifs",
-    concours: "INFJ Pénitentiaire",
-    categorie: "penitentiaire",
-    niveau: "CS / CMS / CM / Agents d'encadrement",
-    prix: "10 000",
-    icone: "📝"
-  },
-  {
-    titre: "Le Résumé d'Informatique aux Concours Administratifs",
-    concours: "INFJ Pénitentiaire",
-    categorie: "penitentiaire",
-    niveau: "CS / CMS / CM / Agents d'encadrement",
-    prix: "10 000",
-    icone: "💻"
-  },
-  {
-    titre: "Le Résumé d'OPEAJ aux Concours Administratifs",
-    concours: "INFJ Pénitentiaire",
-    categorie: "penitentiaire",
-    niveau: "CS / CMS / CM / Agents d'encadrement",
-    prix: "10 000",
-    icone: "⚙️"
-  },
-
-  // ---- INFJ EPPJEJ ----
-  {
-    titre: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026",
-    concours: "INFJ EPPJEJ",
-    categorie: "eppjej",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📋"
-  },
-  {
-    titre: "Le Résumé d'Organisation Judiciaire aux Concours Administratifs",
-    concours: "INFJ EPPJEJ",
-    categorie: "eppjej",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "🏛️"
-  },
-  {
-    titre: "Le Résumé des Droits de l'Enfant aux Concours Administratifs",
-    concours: "INFJ EPPJEJ",
-    categorie: "eppjej",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "👶"
-  },
-  {
-    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
-    concours: "INFJ EPPJEJ",
-    categorie: "eppjej",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📜"
-  },
-  {
-    titre: "Le Résumé de SOG aux Concours Administratifs",
-    concours: "INFJ EPPJEJ",
-    categorie: "eppjej",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📝"
-  },
-  {
-    titre: "Le Résumé d'Informatique aux Concours Administratifs",
-    concours: "INFJ EPPJEJ",
-    categorie: "eppjej",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "💻"
-  },
-  {
-    titre: "Le Résumé d'OPEAJ aux Concours Administratifs",
-    concours: "INFJ EPPJEJ",
-    categorie: "eppjej",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "⚙️"
-  },
-
-  // ---- ENA ----
-  {
-    titre: "La Logique aux Concours Administratifs",
-    concours: "ENA",
-    categorie: "ena",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "🧠"
-  },
-  {
-    titre: "Le Résumé d'Aptitude Verbale aux Concours Administratifs",
-    concours: "ENA",
-    categorie: "ena",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "💬"
-  },
-  {
-    titre: "Le Résumé de SOG aux Concours Administratifs",
-    concours: "ENA",
-    categorie: "ena",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📝"
-  },
-  {
-    titre: "Les Annales des Anciens Sujets Corrigés de SOG",
-    concours: "ENA",
-    categorie: "ena",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📚"
-  },
-  {
-    titre: "Le Résumé de PECOS aux Concours Administratifs",
-    concours: "ENA",
-    categorie: "ena",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "📊"
-  },
-  {
-    titre: "Le Résumé de Note de Synthèse aux Concours Administratifs",
-    concours: "ENA",
-    categorie: "ena",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "✍️"
-  },
-  {
-    titre: "Le Résumé de Droit Administratif aux Concours Administratifs",
-    concours: "ENA",
-    categorie: "ena",
-    niveau: "CS / CMS / CM",
-    prix: "10 000",
-    icone: "🏛️"
-  },
+const WA="2250160860537";
+const ouvrages=[
+{titre:"Le Guide Méthodologique Magistrature — Édition 2026",desc:"Toutes les méthodes pour réussir le cas pratique, la dissertation et le commentaire d'arrêt au concours de Magistrature. Structuration, argumentation et rédaction expliquées pas à pas.",concours:"INFJ Magistrature",categorie:"infj",niveau:"CS / CMS / CM",prix:"10 000",icone:"⚖️"},
+{titre:"Le Résumé de SOG aux Concours Administratifs",desc:"Synthèse complète des thèmes de culture générale les plus fréquents aux concours. Fiches structurées, arguments clés et exemples d'actualité pour construire des dissertations solides.",concours:"INFJ Magistrature",categorie:"infj",niveau:"CS / CMS / CM",prix:"10 000",icone:"📝"},
+{titre:"Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs",desc:"Recueil des sujets de SOG tombés aux sessions précédentes, intégralement corrigés et commentés. L'outil indispensable pour comprendre les attentes des correcteurs.",concours:"INFJ Magistrature",categorie:"infj",niveau:"CS / CMS / CM",prix:"15 000",icone:"📚"},
+{titre:"Le Sésame de Droit Pénal aux Concours Administratifs",desc:"Cours complet de droit pénal général et spécial adapté aux concours. Code pénal 2019, procédure pénale, infractions clés et méthodologie du cas pratique pénal.",concours:"INFJ Magistrature",categorie:"infj",niveau:"CS / CMS / CM",prix:"10 000",icone:"🔒"},
+{titre:"Le Résumé de Droit Administratif aux Concours Administratifs",desc:"Les fondamentaux du droit administratif ivoirien en fiches. Organisation administrative, actes administratifs, contentieux administratif et jurisprudences essentielles.",concours:"INFJ Magistrature",categorie:"infj",niveau:"CS / CMS / CM",prix:"10 000",icone:"🏛️"},
+{titre:"Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026",desc:"Compilation des sujets des sessions passées pour toutes les épreuves du concours de Greffe, avec corrigés détaillés et conseils méthodologiques.",concours:"INFJ Greffe",categorie:"greffe",niveau:"CS / CMS / CM",prix:"10 000",icone:"📋"},
+{titre:"Le Guide Méthodologique INFJ — Édition 2026",desc:"Guide pratique des méthodes de rédaction pour chaque type d'épreuve aux concours INFJ. Plans types, erreurs à éviter et stratégies de gestion du temps.",concours:"INFJ Greffe",categorie:"greffe",niveau:"CS / CMS / CM",prix:"10 000",icone:"📖"},
+{titre:"Le Résumé d'Organisation Judiciaire aux Concours Administratifs",desc:"Présentation synthétique de l'appareil judiciaire ivoirien. Juridictions de droit commun, juridictions spécialisées, compétences et composition des tribunaux.",concours:"INFJ Greffe",categorie:"greffe",niveau:"CS / CMS / CM",prix:"10 000",icone:"🏛️"},
+{titre:"Le Résumé de SOG aux Concours Administratifs",desc:"Synthèse des grands thèmes de culture générale pour les concours de Greffe. Fiches thématiques, plans de dissertation et références essentielles.",concours:"INFJ Greffe",categorie:"greffe",niveau:"CS / CMS / CM",prix:"10 000",icone:"📝"},
+{titre:"Le Résumé des Droits de l'Enfant aux Concours Administratifs",desc:"Cours condensé sur la protection juridique de l'enfant en droit ivoirien et international. Conventions, lois nationales et mécanismes de protection.",concours:"INFJ Greffe",categorie:"greffe",niveau:"CS / CMS / CM",prix:"10 000",icone:"👶"},
+{titre:"Le Résumé de Droit Administratif aux Concours Administratifs",desc:"Fiches de droit administratif adaptées au concours de Greffe. Notions essentielles, jurisprudences de référence et exercices d'application.",concours:"INFJ Greffe",categorie:"greffe",niveau:"CS / CMS / CM",prix:"10 000",icone:"📜"},
+{titre:"Le Résumé d'Informatique aux Concours Administratifs",desc:"L'essentiel de l'informatique générale pour les épreuves des concours. Matériel, logiciels, réseaux, sécurité et bureautique traités de façon accessible.",concours:"INFJ Greffe",categorie:"greffe",niveau:"CS / CMS / CM",prix:"10 000",icone:"💻"},
+{titre:"Le Résumé d'OPEAJ aux Concours Administratifs",desc:"Synthèse sur l'Organisation, le Personnel et les Établissements de l'Administration Judiciaire. Statuts, organigrammes et fonctionnement des services.",concours:"INFJ Greffe",categorie:"greffe",niveau:"CS / CMS / CM",prix:"10 000",icone:"⚙️"},
+{titre:"Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026",desc:"Sujets corrigés des sessions antérieures pour le concours Pénitentiaire. Corrigés complets, grilles d'évaluation et conseils de rédaction.",concours:"INFJ Pénitentiaire",categorie:"penitentiaire",niveau:"CS / CMS / CM / Agents d'encadrement",prix:"10 000",icone:"📋"},
+{titre:"Le Guide Méthodologique INFJ — Édition 2026",desc:"Méthodologie complète pour aborder chaque épreuve du concours Pénitentiaire. De la lecture du sujet à la rédaction finale, chaque étape est détaillée.",concours:"INFJ Pénitentiaire",categorie:"penitentiaire",niveau:"CS / CMS / CM / Agents d'encadrement",prix:"10 000",icone:"📖"},
+{titre:"Le Résumé d'Organisation Judiciaire aux Concours Administratifs",desc:"L'organisation des juridictions ivoiriennes expliquée simplement. Tribunaux, cours d'appel, Cour suprême et juridictions spécialisées.",concours:"INFJ Pénitentiaire",categorie:"penitentiaire",niveau:"CS / CMS / CM / Agents d'encadrement",prix:"10 000",icone:"🏛️"},
+{titre:"Le Résumé des Droits de l'Enfant aux Concours Administratifs",desc:"Protection de l'enfance en droit ivoirien et conventions internationales. Autorité parentale, minorité, adoption et mécanismes de sauvegarde.",concours:"INFJ Pénitentiaire",categorie:"penitentiaire",niveau:"CS / CMS / CM / Agents d'encadrement",prix:"10 000",icone:"👶"},
+{titre:"Le Résumé de Droit Administratif aux Concours Administratifs",desc:"Notions fondamentales de droit administratif pour le concours Pénitentiaire. Service public, police administrative et responsabilité de l'État.",concours:"INFJ Pénitentiaire",categorie:"penitentiaire",niveau:"CS / CMS / CM / Agents d'encadrement",prix:"10 000",icone:"📜"},
+{titre:"Le Résumé de SOG aux Concours Administratifs",desc:"Culture générale ciblée pour le concours Pénitentiaire. Thèmes de société, enjeux contemporains et méthodologie de la dissertation de SOG.",concours:"INFJ Pénitentiaire",categorie:"penitentiaire",niveau:"CS / CMS / CM / Agents d'encadrement",prix:"10 000",icone:"📝"},
+{titre:"Le Résumé d'Informatique aux Concours Administratifs",desc:"Bases de l'informatique pour les épreuves du concours Pénitentiaire. Systèmes, internet, cybersécurité et outils bureautiques.",concours:"INFJ Pénitentiaire",categorie:"penitentiaire",niveau:"CS / CMS / CM / Agents d'encadrement",prix:"10 000",icone:"💻"},
+{titre:"Le Résumé d'OPEAJ aux Concours Administratifs",desc:"Fonctionnement de l'administration pénitentiaire et judiciaire. Organigrammes, statuts du personnel et établissements pénitentiaires.",concours:"INFJ Pénitentiaire",categorie:"penitentiaire",niveau:"CS / CMS / CM / Agents d'encadrement",prix:"10 000",icone:"⚙️"},
+{titre:"Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026",desc:"Sujets corrigés des sessions précédentes pour le concours EPPJEJ. Corrigés commentés pour chaque matière avec rappels méthodologiques.",concours:"INFJ EPPJEJ",categorie:"eppjej",niveau:"CS / CMS / CM",prix:"10 000",icone:"📋"},
+{titre:"Le Résumé d'Organisation Judiciaire aux Concours Administratifs",desc:"Synthèse de l'organisation judiciaire ivoirienne adaptée au programme EPPJEJ. Juridictions pour mineurs et tribunaux de droit commun.",concours:"INFJ EPPJEJ",categorie:"eppjej",niveau:"CS / CMS / CM",prix:"10 000",icone:"🏛️"},
+{titre:"Le Résumé des Droits de l'Enfant aux Concours Administratifs",desc:"Ouvrage central pour le concours EPPJEJ. Protection judiciaire de la jeunesse, droits fondamentaux de l'enfant et cadre juridique complet.",concours:"INFJ EPPJEJ",categorie:"eppjej",niveau:"CS / CMS / CM",prix:"10 000",icone:"👶"},
+{titre:"Le Résumé de Droit Administratif aux Concours Administratifs",desc:"Droit administratif synthétisé pour le programme EPPJEJ. Actes administratifs, légalité, contentieux et organisation de l'administration.",concours:"INFJ EPPJEJ",categorie:"eppjej",niveau:"CS / CMS / CM",prix:"10 000",icone:"📜"},
+{titre:"Le Résumé de SOG aux Concours Administratifs",desc:"Fiches de culture générale orientées EPPJEJ. Thèmes sociaux, éducation, jeunesse et enjeux contemporains traités avec rigueur.",concours:"INFJ EPPJEJ",categorie:"eppjej",niveau:"CS / CMS / CM",prix:"10 000",icone:"📝"},
+{titre:"Le Résumé d'Informatique aux Concours Administratifs",desc:"Informatique générale pour le programme EPPJEJ. Connaissances essentielles en matériel, logiciel, internet et sécurité numérique.",concours:"INFJ EPPJEJ",categorie:"eppjej",niveau:"CS / CMS / CM",prix:"10 000",icone:"💻"},
+{titre:"Le Résumé d'OPEAJ aux Concours Administratifs",desc:"Administration judiciaire et établissements de protection de l'enfance. Structures, missions et personnels de la justice pour mineurs.",concours:"INFJ EPPJEJ",categorie:"eppjej",niveau:"CS / CMS / CM",prix:"10 000",icone:"⚙️"},
+{titre:"La Logique aux Concours Administratifs",desc:"Entraînement complet aux tests de logique et de raisonnement. Séries numériques, analogies, syllogismes et exercices chronométrés avec corrigés.",concours:"ENA",categorie:"ena",niveau:"CS / CMS / CM",prix:"10 000",icone:"🧠"},
+{titre:"Le Résumé d'Aptitude Verbale aux Concours Administratifs",desc:"Préparation aux épreuves de compréhension et d'expression verbale. Vocabulaire, synonymes, antonymes, textes à trous et exercices de rédaction.",concours:"ENA",categorie:"ena",niveau:"CS / CMS / CM",prix:"10 000",icone:"💬"},
+{titre:"Le Résumé de SOG aux Concours Administratifs",desc:"Culture générale adaptée au programme de l'ENA. Thèmes politiques, économiques et sociaux avec plans de dissertation prêts à l'emploi.",concours:"ENA",categorie:"ena",niveau:"CS / CMS / CM",prix:"10 000",icone:"📝"},
+{titre:"Les Annales des Anciens Sujets Corrigés de SOG",desc:"Sujets de SOG des sessions précédentes corrigés et analysés pour le concours de l'ENA. Comprendre les attentes et affiner sa méthode.",concours:"ENA",categorie:"ena",niveau:"CS / CMS / CM",prix:"15 000",icone:"📚"},
+{titre:"Le Résumé de PECOS aux Concours Administratifs",desc:"Problèmes Économiques, Commerciaux et Sociaux synthétisés pour l'ENA. Données chiffrées, analyses et enjeux économiques contemporains.",concours:"ENA",categorie:"ena",niveau:"CS / CMS / CM",prix:"10 000",icone:"📊"},
+{titre:"Le Résumé de Note de Synthèse aux Concours Administratifs",desc:"Méthodologie complète de la note de synthèse. Lecture rapide du dossier, plan, rédaction neutre et entraînements avec corrigés détaillés.",concours:"ENA",categorie:"ena",niveau:"CS / CMS / CM",prix:"10 000",icone:"✍️"},
+{titre:"Le Résumé de Droit Administratif aux Concours Administratifs",desc:"Fiches de droit administratif orientées ENA. Principes généraux, contentieux administratif et grandes décisions jurisprudentielles.",concours:"ENA",categorie:"ena",niveau:"CS / CMS / CM",prix:"10 000",icone:"🏛️"}
 ];
 
-// ===== STATE =====
-let activeTab = "tous";
-let searchQuery = "";
-let modalData = null;
+const testimonials=[
+{text:"Grâce aux ouvrages Sésame, j'ai décroché le concours de Magistrature du premier coup. Les annales corrigées m'ont été indispensables.",author:"Kouadio A.",role:"Admis Magistrature 2025",initials:"KA"},
+{text:"Les résumés sont clairs, précis et vont droit à l'essentiel. Un gain de temps énorme dans mes révisions pour l'ENA.",author:"Bamba S.",role:"Candidate ENA",initials:"BS"},
+{text:"Le Guide Méthodologique m'a permis de comprendre exactement ce qu'on attend dans un cas pratique. Je recommande à 100%.",author:"Touré M.",role:"Admise Greffe CS 2025",initials:"TM"},
+{text:"J'ai commandé 5 ouvrages via WhatsApp, la livraison a été rapide et le service client très réactif.",author:"Yao K.",role:"Candidat Pénitentiaire",initials:"YK"},
+{text:"Les annales corrigées de SOG sont une mine d'or. On comprend la logique des correcteurs et on progresse vite.",author:"Diallo F.",role:"Admis ENA CM 2025",initials:"DF"},
+{text:"Le Sésame de Droit Pénal est exceptionnel. Complet, structuré, et parfaitement adapté au concours de Magistrature.",author:"N'Guessan C.",role:"Candidate Magistrature",initials:"NC"}
+];
 
-// ===== RENDER =====
-function renderCatalogue() {
-  const grid = document.getElementById("catalogueGrid");
-  let filtered = ouvrages;
+const faqData=[
+{q:"Comment passer une commande ?",a:"Vous pouvez ajouter vos ouvrages au panier puis envoyer votre commande via WhatsApp, ou cliquer directement sur le bouton WhatsApp de chaque ouvrage. Notre équipe vous confirmera la disponibilité et les modalités de livraison."},
+{q:"Quels sont les modes de paiement acceptés ?",a:"Nous acceptons les paiements par Mobile Money (Orange Money, MTN Money, Wave) et en espèces à la livraison pour Abidjan. Pour les autres villes, le paiement se fait avant expédition."},
+{q:"Livrez-vous en dehors d'Abidjan ?",a:"Oui, nous livrons dans toute la Côte d'Ivoire. Pour Abidjan, la livraison se fait sous 24 à 48 heures. Pour les autres villes, comptez 3 à 5 jours ouvrables via transporteur."},
+{q:"Les ouvrages sont-ils à jour pour la session 2026 ?",a:"Absolument. Tous nos ouvrages sont révisés et mis à jour chaque année pour correspondre aux programmes et aux tendances des concours les plus récents."},
+{q:"Proposez-vous une remise pour les commandes groupées ?",a:"Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10% sur le total de votre commande."},
+{q:"Puis-je consulter un extrait avant d'acheter ?",a:"Contactez-nous sur WhatsApp et nous vous enverrons un aperçu du sommaire et de quelques pages de l'ouvrage qui vous intéresse."}
+];
 
-  if (activeTab !== "tous") {
-    filtered = filtered.filter(o => o.categorie === activeTab);
-  }
+let activeTab="tous",searchQuery="",currentView="grid",cart=[],modalData=null;
+function parsePrice(p){return parseInt(p.replace(/\s/g,""),10)}
+function formatPrice(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")}
+const waSvg='<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/>';
 
-  if (searchQuery.trim()) {
-    const q = searchQuery.toLowerCase();
-    filtered = filtered.filter(o =>
-      o.titre.toLowerCase().includes(q) ||
-      o.concours.toLowerCase().includes(q) ||
-      o.niveau.toLowerCase().includes(q)
-    );
-  }
+function renderCatalogue(){
+  const grid=document.getElementById("catalogueGrid");
+  let f=ouvrages.slice();
+  if(activeTab!=="tous")f=f.filter(o=>o.categorie===activeTab);
+  if(searchQuery.trim()){const q=searchQuery.toLowerCase();f=f.filter(o=>o.titre.toLowerCase().includes(q)||o.concours.toLowerCase().includes(q)||o.desc.toLowerCase().includes(q))}
+  const s=document.getElementById("sortSelect").value;
+  if(s==="price-asc")f.sort((a,b)=>parsePrice(a.prix)-parsePrice(b.prix));
+  else if(s==="price-desc")f.sort((a,b)=>parsePrice(b.prix)-parsePrice(a.prix));
+  else if(s==="alpha")f.sort((a,b)=>a.titre.localeCompare(b.titre));
+  if(!f.length){grid.innerHTML='<div class="no-results">Aucun ouvrage trouvé pour cette recherche.</div>';return}
+  grid.innerHTML=f.map((o,i)=>{
+    const inCart=cart.some(c=>c.titre===o.titre&&c.concours===o.concours);
+    const waMsg=encodeURIComponent("Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite commander :\n📚 "+o.titre+"\n📂 "+o.concours+"\n📊 "+o.niveau+"\n💰 "+o.prix+" FCFA\n\nMerci !");
+    const idx=ouvrages.indexOf(o);
+    return`<div class="card" style="animation-delay:${i*0.03}s"><div class="card-top"><div class="card-top-deco"></div><div class="card-top-icon">${o.icone}</div><div class="card-top-title">${o.titre}</div><div class="card-top-bar"></div></div><div class="card-body"><span class="card-badge">${o.concours}</span><span class="card-level">${o.niveau}</span><p class="card-desc">${o.desc}</p></div><div class="card-foot"><div class="card-price">${o.prix} <small>FCFA</small></div><div class="card-btns"><button class="btn-add-cart ${inCart?'added':''}" onclick="addToCartByIdx(${idx},this)">${inCart?'✓ Ajouté':'+ Panier'}</button><a class="btn-wa-sm" href="https://wa.me/${WA}?text=${waMsg}" target="_blank" title="WhatsApp direct"><svg viewBox="0 0 24 24">${waSvg}</svg></a></div></div></div>`}).join("")}
 
-  if (filtered.length === 0) {
-    grid.innerHTML = `<div class="no-results">Aucun ouvrage trouvé pour cette recherche.</div>`;
-    return;
-  }
+function filterByTab(c,b){activeTab=c;document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));b.classList.add("active");renderCatalogue()}
+function filterCatalogue(){searchQuery=document.getElementById("searchInput").value;renderCatalogue()}
+function setView(m,b){currentView=m;document.querySelectorAll(".view-btn").forEach(v=>v.classList.remove("active"));b.classList.add("active");document.getElementById("catalogueGrid").classList.toggle("list-view",m==="list")}
+function addToCartByIdx(idx,btn){const o=ouvrages[idx];if(cart.some(c=>c.titre===o.titre&&c.concours===o.concours))return;cart.push(o);btn.classList.add("added");btn.textContent="✓ Ajouté";updateCartUI()}
+function removeFromCart(i){cart.splice(i,1);updateCartUI();renderCatalogue()}
+function updateCartUI(){
+  const badge=document.getElementById("cartBadge");badge.textContent=cart.length;badge.classList.toggle("show",cart.length>0);
+  const body=document.getElementById("cartBody");
+  if(!cart.length){body.innerHTML='<div class="cart-empty">Votre panier est vide</div>'}
+  else{body.innerHTML=cart.map((o,i)=>`<div class="cart-item"><div class="cart-item-info"><div class="cart-item-title">${o.titre}</div><div class="cart-item-meta">${o.concours}</div><div class="cart-item-price">${o.prix} FCFA</div></div><button class="cart-item-remove" onclick="removeFromCart(${i})">✕</button></div>`).join("")}
+  const total=cart.reduce((s,o)=>s+parsePrice(o.prix),0);const hasPromo=cart.length>=3;const discount=hasPromo?Math.round(total*0.1):0;const finalTotal=total-discount;
+  document.getElementById("cartPromo").classList.toggle("show",hasPromo);
+  const dEl=document.getElementById("cartDiscount");if(hasPromo){dEl.style.display="block";dEl.textContent="Remise 10% : -"+formatPrice(discount)+" FCFA"}else{dEl.style.display="none"}
+  document.getElementById("cartTotal").textContent=formatPrice(finalTotal)+" FCFA";document.getElementById("cartWaBtn").disabled=cart.length===0}
+function toggleCart(){document.getElementById("cartOverlay").classList.toggle("open");document.getElementById("cartDrawer").classList.toggle("open")}
+function sendCartWhatsApp(){
+  const total=cart.reduce((s,o)=>s+parsePrice(o.prix),0);const hasPromo=cart.length>=3;const discount=hasPromo?Math.round(total*0.1):0;const finalTotal=total-discount;
+  let msg="Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite commander les ouvrages suivants :\n\n";
+  cart.forEach((o,i)=>{msg+=`${i+1}. ${o.titre}\n   ${o.concours} — ${o.prix} FCFA\n\n`});
+  if(hasPromo)msg+=`🎁 Remise 10% (3+ ouvrages) : -${formatPrice(discount)} FCFA\n`;
+  msg+=`\n💰 Total : ${formatPrice(finalTotal)} FCFA\n\nMerci !`;
+  window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(msg),"_blank")}
+function closeModal(){document.getElementById("modalOverlay").classList.remove("open")}
+function closeModalOnOverlay(e){if(e.target===document.getElementById("modalOverlay"))closeModal()}
+function envoyerWhatsApp(){
+  const p=document.getElementById("fieldPrenom").value.trim(),n=document.getElementById("fieldNom").value.trim(),t=document.getElementById("fieldTel").value.trim(),v=document.getElementById("fieldVille").value.trim(),q=document.getElementById("fieldQte").value.trim(),m=document.getElementById("fieldMsg").value.trim();
+  if(!p||!n||!t||!v){alert("Veuillez remplir tous les champs obligatoires.");return}
+  const msg=["Bonjour Les Cours Sésame & SAJ,","","Je souhaite passer une commande :","",`📚 ${modalData.titre}`,`📂 ${modalData.concours}`,`📊 ${modalData.niveau}`,`💰 ${modalData.prix} FCFA`,`🔢 Quantité : ${q}`,"","Mes coordonnées :",`👤 ${p} ${n}`,`📞 ${t}`,`📍 ${v}`,m?`\n💬 ${m}`:"","","Merci !"].filter(l=>l!==null).join("\n");
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,"_blank");closeModal()}
 
-  grid.innerHTML = filtered.map((o, i) => {
-    const waMsg = encodeURIComponent(
-      "Bonjour Les Cours Sésame & SAJ,\n\n" +
-      "Je souhaite commander l'ouvrage suivant :\n\n" +
-      "📚 " + o.titre + "\n" +
-      "📂 " + o.concours + "\n" +
-      "📊 " + o.niveau + "\n" +
-      "💰 " + o.prix + " FCFA\n\n" +
-      "Merci de me confirmer la disponibilité."
-    );
-    const waLink = "https://wa.me/2250160860537?text=" + waMsg;
-    const safeO = JSON.stringify(o).replace(/'/g, "&#39;");
-    return `
-    <div class="card" style="animation-delay:${i * 0.05}s">
-      <div class="card-cover">
-        <div class="card-cover-pattern"></div>
-        <div class="card-cover-title">
-          <span class="card-cover-icon">${o.icone}</span>
-          ${o.titre}
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-concours">${o.concours}</div>
-        <div class="card-title">${o.titre}</div>
-        <div class="card-niveau">${o.niveau}</div>
-      </div>
-      <div class="card-footer">
-        <div class="card-price">
-          ${o.prix}
-          <span>FCFA</span>
-        </div>
-        <div class="card-actions">
-          <button class="btn-commander" onclick='openModal(${safeO})'>
-            🛒 Commander
-          </button>
-          <a class="btn-wa-card" href="${waLink}" target="_blank">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.528 5.845L.057 23.804l6.102-1.599A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.878 9.878 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.641-.235-.374A9.867 9.867 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
-            WhatsApp direct
-          </a>
-        </div>
-      </div>
-    </div>
-  `;
-  }).join("");
-}
+function renderTestimonials(){const track=document.getElementById("testimonialsTrack");const items=[...testimonials,...testimonials];track.innerHTML=items.map(t=>`<div class="testimonial"><div class="testimonial-stars">★★★★★</div><div class="testimonial-text">"${t.text}"</div><div class="testimonial-author"><div class="testimonial-avatar">${t.initials}</div><div><div class="testimonial-name">${t.author}</div><div class="testimonial-role">${t.role}</div></div></div></div>`).join("")}
+function renderFAQ(){document.getElementById("faqContainer").innerHTML=faqData.map((f,i)=>`<div class="faq-item" id="faq${i}"><button class="faq-q" onclick="toggleFaq(${i})"><span>${f.q}</span><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><div class="faq-a-inner">${f.a}</div></div></div>`).join("")}
+function toggleFaq(i){const item=document.getElementById("faq"+i);const isOpen=item.classList.contains("open");document.querySelectorAll(".faq-item").forEach(el=>{el.classList.remove("open");el.querySelector(".faq-a").style.maxHeight=null});if(!isOpen){item.classList.add("open");item.querySelector(".faq-a").style.maxHeight=item.querySelector(".faq-a").scrollHeight+"px"}}
 
-// ===== FILTERS =====
-function filterByTab(cat, btn) {
-  activeTab = cat;
-  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  renderCatalogue();
-}
+// TYPEWRITER
+function typeWriter(){
+  const el=document.getElementById("heroTitle");
+  const html='Préparez vos concours avec <em>excellence</em>';
+  const plain='Préparez vos concours avec excellence';
+  let i=0;el.innerHTML='<span class="typewriter-cursor"></span>';
+  function type(){
+    if(i<=plain.length){
+      let display=plain.substring(0,i);
+      const emStart=plain.indexOf('excellence');
+      if(i>emStart){display=plain.substring(0,emStart)+'<em>'+plain.substring(emStart,i)+'</em>'}
+      el.innerHTML=display+'<span class="typewriter-cursor"></span>';
+      i++;setTimeout(type,50)}
+    else{setTimeout(()=>{el.innerHTML=html},500)}
+  }type()}
 
-function filterCatalogue() {
-  searchQuery = document.getElementById("searchInput").value;
-  renderCatalogue();
-}
+// PARTICLES
+function initParticles(){
+  const canvas=document.getElementById("particlesCanvas");const ctx=canvas.getContext("2d");
+  let w,h;function resize(){w=canvas.width=canvas.parentElement.offsetWidth;h=canvas.height=canvas.parentElement.offsetHeight}
+  resize();window.addEventListener("resize",resize);
+  const particles=[];for(let i=0;i<40;i++){particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.3,dy:(Math.random()-0.5)*0.3,o:Math.random()*0.4+0.1})}
+  function draw(){ctx.clearRect(0,0,w,h);particles.forEach(p=>{p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>w)p.dx*=-1;if(p.y<0||p.y>h)p.dy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(184,146,63,${p.o})`;ctx.fill()});requestAnimationFrame(draw)}
+  draw()}
 
-// ===== MODAL =====
-function openModal(ouvrage) {
-  modalData = ouvrage;
-  document.getElementById("modalTitle").textContent = ouvrage.titre;
-  document.getElementById("modalPrice").textContent = ouvrage.prix + " FCFA";
-  document.getElementById("modalConcours").textContent = ouvrage.concours + " — " + ouvrage.niveau;
-  document.getElementById("fieldPrenom").value = "";
-  document.getElementById("fieldNom").value = "";
-  document.getElementById("fieldTel").value = "";
-  document.getElementById("fieldVille").value = "";
-  document.getElementById("fieldQte").value = "1";
-  document.getElementById("fieldMsg").value = "";
-  document.getElementById("modalOverlay").classList.add("open");
-}
+// COUNTER ANIMATION
+function animateCounters(){document.querySelectorAll("[data-count]").forEach(el=>{const target=parseInt(el.dataset.count);const duration=1500;const start=performance.now();function tick(now){const progress=Math.min((now-start)/duration,1);const eased=1-Math.pow(1-progress,3);el.textContent=Math.round(eased*target);if(progress<1)requestAnimationFrame(tick);else el.textContent=target+(target<100?"+":"")}requestAnimationFrame(tick)})}
 
-function closeModal() {
-  document.getElementById("modalOverlay").classList.remove("open");
-}
+// CUSTOM CURSOR
+function initCursor(){
+  const dot=document.getElementById("cursorDot"),ring=document.getElementById("cursorRing");
+  if(!dot||!ring||window.innerWidth<768)return;
+  let mx=0,my=0,rx=0,ry=0;
+  const trails=[];for(let i=0;i<5;i++){const t=document.createElement("div");t.className="cursor-trail";t.style.opacity=0;document.body.appendChild(t);trails.push({el:t,x:0,y:0})}
+  document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;dot.style.transform=`translate(${mx-4}px,${my-4}px)`});
+  function animRing(){rx+=(mx-rx)*0.15;ry+=(my-ry)*0.15;ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;
+    trails.forEach((t,i)=>{const prev=i===0?{x:rx,y:ry}:trails[i-1];t.x+=(prev.x-t.x)*0.3;t.y+=(prev.y-t.y)*0.3;t.el.style.transform=`translate(${t.x-2}px,${t.y-2}px)`;t.el.style.opacity=0.3-i*0.06});
+    requestAnimationFrame(animRing)}animRing();
+  document.querySelectorAll("a,button,.card").forEach(el=>{el.addEventListener("mouseenter",()=>{ring.style.width="50px";ring.style.height="50px";ring.style.borderColor="var(--gold-neon)"});el.addEventListener("mouseleave",()=>{ring.style.width="36px";ring.style.height="36px";ring.style.borderColor="var(--gold-neon2)"})})}
 
-function closeModalOnOverlay(e) {
-  if (e.target === document.getElementById("modalOverlay")) closeModal();
-}
+// SCROLL PROGRESS BAR
+function initScrollProgress(){window.addEventListener("scroll",()=>{const h=document.documentElement.scrollHeight-window.innerHeight;const p=(window.scrollY/h)*100;document.getElementById("scrollProgress").style.width=p+"%"})}
 
-// ===== WHATSAPP =====
-function envoyerWhatsApp() {
-  const prenom = document.getElementById("fieldPrenom").value.trim();
-  const nom = document.getElementById("fieldNom").value.trim();
-  const tel = document.getElementById("fieldTel").value.trim();
-  const ville = document.getElementById("fieldVille").value.trim();
-  const qte = document.getElementById("fieldQte").value.trim();
-  const msg = document.getElementById("fieldMsg").value.trim();
+// PARALLAX
+function initParallax(){const sections=document.querySelectorAll(".parallax-section");window.addEventListener("scroll",()=>{sections.forEach(s=>{const rect=s.getBoundingClientRect();const speed=0.05;const yPos=rect.top*speed;s.style.transform=`translateY(${yPos}px)`})})}
 
-  if (!prenom || !nom || !tel || !ville) {
-    alert("Veuillez remplir tous les champs obligatoires.");
-    return;
-  }
+// HEADER SCROLL
+window.addEventListener("scroll",()=>{document.getElementById("siteHeader").classList.toggle("scrolled",window.scrollY>50)});
 
-  const message = [
-    "Bonjour Les Cours Sésame & SAJ,",
-    "",
-    "Je souhaite passer une commande :",
-    "",
-    `📚 Ouvrage : ${modalData.titre}`,
-    `📂 Concours : ${modalData.concours}`,
-    `📊 Niveau : ${modalData.niveau}`,
-    `💰 Prix : ${modalData.prix} FCFA`,
-    `🔢 Quantité : ${qte}`,
-    "",
-    "Mes coordonnées :",
-    `👤 Nom : ${prenom} ${nom}`,
-    `📞 Téléphone : ${tel}`,
-    `📍 Ville : ${ville}`,
-    msg ? `\n💬 Message : ${msg}` : "",
-    "",
-    "Merci !"
-  ].filter(l => l !== null).join("\n");
+// REVEAL
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target)}})},{threshold:0.12});
+const cObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animateCounters();cObs.unobserve(e.target)}})},{threshold:0.5});
+document.querySelectorAll(".nav a").forEach(a=>a.addEventListener("click",()=>document.querySelector(".nav").classList.remove("open")));
 
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank");
-  closeModal();
-}
+// INIT — données déclarées ci-dessous, appel ici
+renderCatalogue();renderTestimonials();renderFAQ();updateCartUI();
+typeWriter();initParticles();initCursor();initScrollProgress();initParallax();
+// Methodo et sujets seront initialisés après leurs données, en bas
 
-// ===== INIT =====
-renderCatalogue();
+// METHODOLOGIE DATA
+const methodoData=[
+{concours:"INFJ Magistrature",icon:"⚖️",epreuves:"Cas pratique, Dissertation juridique, Commentaire d'arrêt, Commentaire d'article, SOG",conseil:"Le concours de Magistrature exige une maîtrise parfaite de la méthodologie juridique. Chaque épreuve obéit à des règles de structuration précises. Le jury sanctionne les copies qui ne respectent pas le formalisme attendu. Nos ouvrages décortiquent chaque type d'épreuve avec des plans-types, des exemples concrets et des conseils de rédaction éprouvés."},
+{concours:"INFJ Greffe",icon:"📋",epreuves:"Organisation Judiciaire, Droit Administratif, SOG, OPEAJ, Informatique, Droits de l'Enfant",conseil:"Les concours de Greffe (CS, CMS, CM) comportent des épreuves variées qui testent la culture juridique et générale du candidat. La méthodologie des questions-réponses et de la dissertation sont les deux formats principaux. L'épreuve d'Organisation Judiciaire requiert une connaissance précise de l'appareil judiciaire ivoirien et de ses réformes récentes."},
+{concours:"INFJ Pénitentiaire",icon:"🔒",epreuves:"Organisation Judiciaire, Droit Administratif, SOG, OPEAJ, Informatique, Étude de texte (Agents d'encadrement)",conseil:"Le concours Pénitentiaire reprend une structure proche du Greffe, avec en plus l'épreuve de droit pénitentiaire pour les niveaux supérieurs et l'étude de texte pour les Agents d'encadrement. L'étude de texte comporte quatre parties distinctes (compréhension, vocabulaire, résumé, production écrite) et représente 43% des points du concours."},
+{concours:"INFJ EPPJEJ",icon:"👶",epreuves:"Droits de l'Enfant, Organisation Judiciaire, Droit Administratif, SOG, OPEAJ, Informatique",conseil:"Le concours EPPJEJ (Protection Judiciaire de l'Enfance et de la Jeunesse) accorde une place centrale aux droits de l'enfant. La connaissance des conventions internationales, de la loi sur la minorité et des mécanismes de protection est indispensable. La justice des mineurs et le rôle du juge des enfants sont des thèmes récurrents."},
+{concours:"ENA",icon:"🧠",epreuves:"SOG, PECOS, Note de synthèse, Logique, Aptitude verbale, Droit Administratif",conseil:"Le concours de l'ENA se distingue par ses épreuves de logique, d'aptitude verbale et de PECOS. L'épreuve de PECOS (Problèmes Économiques et Sociaux) exige la maîtrise de trois familles de sujets (analytique, discussion, comparaison) avec des plans-types spécifiques. La note de synthèse impose une lecture rapide et une rédaction neutre et structurée."}
+];
+
+function renderMethodo(){
+document.getElementById("methodoGrid").innerHTML=methodoData.map(m=>`<div class="methodo-card reveal"><div class="methodo-card-head"><div class="methodo-card-icon">${m.icon}</div><div><h3>${m.concours}</h3><div class="mc-badge">${m.epreuves.split(",").length} épreuves</div></div></div><div class="methodo-card-body"><h4>Épreuves principales</h4><ul>${m.epreuves.split(",").map(e=>"<li>"+e.trim()+"</li>").join("")}</ul><p style="margin-top:.6rem">${m.conseil}</p></div></div>`).join("")}
+
+const epreuvesData=[
+{nom:"Dissertation juridique",contenu:"<p>La dissertation juridique est l'exercice roi des concours. Elle exige une problématique claire, un plan en deux parties et deux sous-parties, et une argumentation juridiquement fondée.</p><div class='ep-steps'><div class='ep-step'><strong>Étape 1</strong><span>Analyse du sujet et identification des termes clés</span></div><div class='ep-step'><strong>Étape 2</strong><span>Formulation de la problématique juridique</span></div><div class='ep-step'><strong>Étape 3</strong><span>Élaboration du plan détaillé (I/II avec A/B)</span></div><div class='ep-step'><strong>Étape 4</strong><span>Rédaction de l'introduction (accroche, définitions, problématique, annonce du plan)</span></div><div class='ep-step'><strong>Étape 5</strong><span>Développement avec chapeaux, transitions et conclusions partielles</span></div><div class='ep-step'><strong>Étape 6</strong><span>Conclusion (bilan + ouverture)</span></div></div>"},
+{nom:"Cas pratique",contenu:"<p>Le cas pratique simule une situation juridique concrète que le candidat doit résoudre en appliquant les règles de droit pertinentes. La méthode DPS (Droit, Problème, Solution) est la structure attendue.</p><div class='ep-steps'><div class='ep-step'><strong>Qualifier les faits</strong><span>Identifier les parties, les actes et les événements juridiquement pertinents</span></div><div class='ep-step'><strong>Identifier le problème</strong><span>Formuler la question de droit soulevée par les faits</span></div><div class='ep-step'><strong>Énoncer la règle</strong><span>Citer les textes de loi, la jurisprudence et les principes applicables</span></div><div class='ep-step'><strong>Appliquer aux faits</strong><span>Confronter la règle aux faits de l'espèce pour dégager la solution</span></div></div>"},
+{nom:"Commentaire d'arrêt / d'article",contenu:"<p>Le commentaire d'arrêt ou d'article exige d'expliquer, d'analyser et d'apprécier une décision de justice ou un texte législatif. Le plan doit épouser la structure du texte commenté.</p><div class='ep-steps'><div class='ep-step'><strong>Fiche d'arrêt</strong><span>Faits, procédure, prétentions, problème de droit, solution</span></div><div class='ep-step'><strong>Plan thématique</strong><span>Deux parties reflétant les apports principaux du texte</span></div><div class='ep-step'><strong>Analyse critique</strong><span>Portée, limites, comparaison avec la jurisprudence antérieure ou le droit ivoirien</span></div></div>"},
+{nom:"SOG (Sujet d'Ordre Général)",contenu:"<p>Le SOG est une dissertation de culture générale, coefficient 4, durée 4 heures. Il existe 5 types de sujets, chacun avec un plan spécifique.</p><div class='ep-steps'><div class='ep-step'><strong>Type 1 — Dialectique</strong><span>Thèse / Antithèse / Synthèse (consigne d'avis sur une seule information)</span></div><div class='ep-step'><strong>Type 2 — Inventaire</strong><span>Plan thématique en 3 parties (Justifiez, Montrez comment)</span></div><div class='ep-step'><strong>Type 3 — Commentaire-discussion</strong><span>Plan mixte dialectique (plusieurs unités de sens)</span></div><div class='ep-step'><strong>Type 4 — Étude de notion</strong><span>Explication / Illustration / Commentaire (un seul terme)</span></div><div class='ep-step'><strong>Type 5 — Confrontation</strong><span>Plan comparatif dialectique (deux termes opposés)</span></div></div><p>Le barème officiel accorde 2 points à la charte graphique, 4 à la compréhension, 4 au plan, 4 à l'argumentation, 3 à la culture générale et 3 à la maîtrise du français.</p>"},
+{nom:"PECOS",contenu:"<p>L'épreuve de Problèmes Économiques et Sociaux au concours de l'ENA repose sur trois familles de sujets avec des plans-types précis.</p><div class='ep-steps'><div class='ep-step'><strong>Famille A — Analytique</strong><span>Analyse de A puis incidence sur B. Variantes selon la structure du sujet.</span></div><div class='ep-step'><strong>Famille B — Discussion</strong><span>Justification de la position dominante puis limites objectives. Balancement circonspect.</span></div><div class='ep-step'><strong>Famille C — Comparaison</strong><span>Similitudes puis différences. Comparaison tranchée ou larvée.</span></div></div><p>La structure du paragraphe déductif est obligatoire. Chaque paragraphe suit le schéma Macro-connecteur, Idée générale, Explication 1, Explication 2, Exemple chiffré, Conclusion, Transition.</p>"},
+{nom:"Note de synthèse",contenu:"<p>La note de synthèse consiste à extraire l'essentiel d'un dossier documentaire volumineux et à le restituer de façon neutre, ordonnée et concise.</p><div class='ep-steps'><div class='ep-step'><strong>Lecture du dossier</strong><span>Repérer les documents, leur nature et leurs idées principales (45 min)</span></div><div class='ep-step'><strong>Élaboration du plan</strong><span>Regrouper les idées par thèmes en 2 parties (15 min)</span></div><div class='ep-step'><strong>Rédaction neutre</strong><span>Aucune opinion personnelle, pas de citation directe, style administratif (2h)</span></div></div>"},
+{nom:"Étude de texte",contenu:"<p>L'épreuve d'étude de texte au concours des Agents d'Encadrement Pénitentiaire (coefficient 3, 3 heures, niveau BEPC) comporte quatre parties distinctes valant chacune 5 points.</p><div class='ep-steps'><div class='ep-step'><strong>Partie 1 — Compréhension</strong><span>Questions sur le sens global du texte, les idées principales et la structure argumentative</span></div><div class='ep-step'><strong>Partie 2 — Vocabulaire</strong><span>Définition de mots en contexte, synonymes, antonymes, familles de mots</span></div><div class='ep-step'><strong>Partie 3 — Résumé</strong><span>Réduire le texte au quart de sa longueur en respectant l'ordre des idées</span></div><div class='ep-step'><strong>Partie 4 — Production écrite</strong><span>Rédiger un texte argumentatif en lien avec le thème du texte support</span></div></div>"}
+];
+
+function renderEpreuves(){
+const tabs=document.getElementById("epreuveTabs");const contents=document.getElementById("epreuveContents");
+tabs.innerHTML=epreuvesData.map((e,i)=>`<button class="ep-tab${i===0?' active':''}" onclick="switchEpreuve(${i},this)">${e.nom}</button>`).join("");
+contents.innerHTML=epreuvesData.map((e,i)=>`<div class="epreuve-content${i===0?' active':''}" id="ep${i}"><h4>${e.nom}</h4>${e.contenu}</div>`).join("")}
+function switchEpreuve(i,btn){document.querySelectorAll(".ep-tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");document.querySelectorAll(".epreuve-content").forEach(c=>c.classList.remove("active"));document.getElementById("ep"+i).classList.add("active")}
+
+// SUJETS CORRIGES DATA
+const sujetsData=[
+{concours:"Magistrature",titre:"Commentaire de l'article 52 de la loi n°2019-570 relative au mariage",meta:"INFJ Magistrature — Droit Civil de la famille — Commentaire d'article",enonce:"Commentez l'article 52 de la loi n°2019-570 du 26 juin 2019 relative au mariage, qui dispose que les époux contribuent aux charges du ménage à proportion de leurs facultés respectives.",corrige:`<h5>Introduction</h5><p>La vie commune que le mariage institue n'est pas seulement une union de personnes. Elle est aussi une mise en commun d'efforts et de ressources en vue de faire face aux besoins quotidiens du ménage. C'est précisément l'objet de l'article 52 de la loi n°2019-570 du 26 juin 2019 relative au mariage que d'organiser cette contribution et d'en garantir l'effectivité. Il convient d'examiner le principe de la contribution proportionnelle aux charges du ménage (I), avant d'étudier les mécanismes judiciaires assurant la garantie de son exécution (II).</p><h5>I. Le principe de la contribution proportionnelle aux charges communes</h5><div class="plan-item"><strong>A. Une obligation commune et équitable pesant sur chaque époux</strong> — L'article 52 dispose que les époux contribuent aux charges du ménage à proportion de leurs facultés respectives. Le critère retenu n'est pas l'égalité arithmétique mais la proportionnalité aux facultés de chacun. Cette conception solidariste rompt avec les législations antérieures qui faisaient peser l'essentiel des charges sur le mari.</div><div class="plan-item"><strong>B. La reconnaissance du travail au foyer comme mode d'exécution équivalent</strong> — Le texte consacre deux modes d'exécution juridiquement équivalents. L'activité au foyer est reconnue comme une contribution aux charges du ménage au même titre que l'apport de ressources pécuniaires. Cette disposition confère une valeur économique au travail domestique.</div><h5>II. Les mécanismes judiciaires garantissant l'exécution de la contribution</h5><div class="plan-item"><strong>A. La procédure d'urgence par ordonnance présidentielle</strong> — En cas de défaillance d'un époux, l'autre peut obtenir par ordonnance du président du tribunal du lieu de résidence l'autorisation de procéder à la saisie des revenus. Cette procédure rapide garantit la célérité de la protection accordée à l'époux créancier.</div><div class="plan-item"><strong>B. La saisie des revenus du conjoint défaillant dans la limite des besoins du ménage</strong> — La mesure porte sur une part proportionnée aux besoins du ménage, préservant un minimum de ressources pour le conjoint saisi. Les revenus visés sont larges, incluant salaires, rémunérations et produit du travail.</div>`},
+{concours:"Greffe",titre:"Le Tribunal pour Enfants et le principe de l'opportunité des poursuites",meta:"INFJ Greffe — Organisation Judiciaire — Session 2025 — Questions-réponses",enonce:"1) Quelles sont la composition et les attributions du Tribunal pour Enfants ? 2) Qu'est-ce que le principe de l'opportunité des poursuites et quelle autorité judiciaire est investie du pouvoir d'exercer des poursuites ?",corrige:`<h5>Question 1 — Le Tribunal pour Enfants</h5><p>Le Tribunal pour Enfants constitue une juridiction pénale spécialisée au sein de l'ordre judiciaire ivoirien, exclusivement compétente pour juger les mineurs de moins de dix-huit ans conformément à l'article 794 du Code de Procédure Pénale.</p><p>Sa composition, définie par l'article 821 du CPP, réunit trois catégories d'intervenants. Le juge des enfants, magistrat professionnel du siège, préside les audiences. Deux assesseurs titulaires, citoyens ivoiriens de plus de trente ans nommés pour quatre ans par arrêté ministériel, sont choisis pour leur compétence en matière d'enfance. Un greffier du tribunal de première instance garantit le respect des formes procédurales.</p><p>Le Tribunal pour Enfants est compétent en premier ressort pour tous les délits et contraventions de cinquième classe. Il dispose d'un arsenal de mesures variées, depuis l'admonestation et la remise aux parents (articles 824 à 828 CPP) jusqu'aux sanctions pénales adaptées aux mineurs de plus de treize ans (article 827 CPP). Il statue également sur l'action civile accessoirement jointe (article 805 CPP).</p><h5>Question 2 — L'opportunité des poursuites</h5><p>Le principe de l'opportunité des poursuites, consacré par l'article 51 du Code de Procédure Pénale, confère au ministère public un pouvoir discrétionnaire d'appréciation quant à l'opportunité d'engager ou non des poursuites pénales. L'autorité investie de ce pouvoir exclusif est le Procureur de la République et ses substituts au niveau du Tribunal de Première Instance. Ce pouvoir s'exerce sous la direction hiérarchique du Garde des Sceaux ministre de la Justice et sous l'autorité du Procureur Général près la Cour d'Appel.</p>`},
+{concours:"Pénitentiaire",titre:"Le pouvoir discrétionnaire de l'administration",meta:"INFJ Pénitentiaire — Droit Administratif — Concours des Attachés — Questions-réponses",enonce:"Le pouvoir discrétionnaire est-il arbitraire ?",corrige:`<h5>Réponse développée</h5><p>Le pouvoir discrétionnaire de l'administration, souvent perçu comme une liberté d'appréciation extensive, ne saurait en réalité être qualifié d'arbitraire dans un État de droit. Le pouvoir discrétionnaire se définit comme la faculté reconnue à l'administration de choisir, en fonction de l'opportunité, entre plusieurs décisions possibles dans le cadre de l'exercice de ses compétences, par opposition à la compétence liée.</p><p>Cette liberté n'est pas absolue et fait l'objet d'un contrôle juridictionnel rigoureux. Le juge administratif exerce un contrôle minimum portant sur quatre points essentiels. La compétence de l'auteur de l'acte. Le respect des formes et procédures. Le but poursuivi par l'acte afin de détecter d'éventuels détournements de pouvoir. L'existence des motifs invoqués pour déceler les erreurs manifestes d'appréciation.</p><p>La théorie de l'erreur manifeste d'appréciation, développée dans la jurisprudence Sieur Narcy, permet au juge de sanctionner les décisions dont la disproportion entre les faits constatés et la décision prise est tellement évidente qu'elle révèle une appréciation déraisonnable. De même, la théorie du bilan, consacrée par l'arrêt Ville nouvelle Est, autorise le juge à vérifier que les avantages attendus ne sont pas disproportionnés par rapport aux inconvénients.</p><p>Le pouvoir discrétionnaire s'exerce dans un cadre juridique strict qui garantit son utilisation raisonnée et proportionnée. Il n'est donc pas arbitraire.</p>`},
+{concours:"EPPJEJ",titre:"Les juridictions de la justice pour mineurs et les attributions du juge des enfants",meta:"INFJ EPPJEJ — Organisation Judiciaire — Session 2025 — Questions-réponses",enonce:"Quelles sont les juridictions qui ont en charge la justice pour mineurs ? Quelles sont les attributions du juge des enfants ?",corrige:`<h5>Les juridictions de la justice pour mineurs</h5><p>Le système judiciaire ivoirien a institué trois juridictions spécialisées pour les mineurs en conflit avec la loi. Le juge des enfants, juridiction d'instruction spécialisée pour toutes les infractions commises par des mineurs, conformément à l'article 787 du CPP. Le Tribunal pour Enfants, juridiction collégiale compétente pour les délits et contraventions de cinquième classe. Le Tribunal Criminel pour Mineurs, juridiction exceptionnelle compétente pour juger les crimes commis par les mineurs âgés de seize ans révolus (article 817 CPP).</p><h5>Les attributions du juge des enfants</h5><p>Le juge des enfants exerce une double fonction qui constitue une dérogation significative au principe de séparation des pouvoirs d'instruction et de jugement. En sa qualité de juge d'instruction spécialisé, il est saisi par réquisitoire introductif du procureur de la République pour procéder aux investigations sur les infractions imputées aux mineurs (articles 807 et suivants CPP). Parallèlement, il siège comme juge de jugement au sein du Tribunal pour Enfants où il préside les audiences.</p><p>Cette confusion des fonctions résulte d'un choix délibéré du législateur ivoirien, estimant que la connaissance approfondie de la personnalité du mineur acquise durant l'instruction constitue un atout précieux pour un jugement éclairé dans l'intérêt supérieur du mineur. Cette dérogation est tempérée par la présence d'assesseurs, l'assistance obligatoire d'un avocat et la possibilité d'appel.</p>`},
+{concours:"ENA",titre:"La dette extérieure des pays africains et le développement",meta:"ENA — PECOS — Sujet de discussion — Édition 2025-2026",enonce:"La dette extérieure des pays africains a-t-elle contribué au développement de ces économies ?",corrige:`<h5>Introduction</h5><p>Au lendemain des indépendances, la question du développement constituait la préoccupation majeure des États africains. Compte tenu de l'insuffisance des ressources endogènes, la plupart d'entre eux ont eu recours à la dette extérieure. Perçue comme l'ensemble des engagements financiers des débiteurs vis-à-vis des créanciers étrangers, la dette extérieure suscite de vives controverses. En quoi est-elle bénéfique ? Ne constitue-t-elle pas un obstacle à la croissance inclusive ? L'analyse de ses bienfaits précédera l'examen de ses effets pervers.</p><h5>Première partie — L'apport de la dette extérieure dans le développement</h5><div class="plan-item"><strong>Sur le plan économique</strong> — La dette extérieure constitue une ressource additionnelle majeure permettant de créer des infrastructures (routes, ports), soutenir le secteur privé et augmenter les dépenses d'investissement. L'APD à la CI est passée de 251 millions USD en 2006 à 1,201 milliard en 2019.</div><div class="plan-item"><strong>Sur le plan social</strong> — Elle permet l'éradication de la pauvreté, l'accès à la santé, à l'éducation, la création d'infrastructures sociales et le financement des transferts sociaux.</div><h5>Deuxième partie — Les effets néfastes de la dette extérieure</h5><div class="plan-item"><strong>Sur le plan économique</strong> — Ingérence des donateurs dans la politique économique intérieure, perte de crédibilité sur les marchés financiers, surendettement structurel. La dette cumulée de l'Afrique atteint 365 milliards de dollars selon l'OCDE. En CI, la dette extérieure s'élève à 8 063 milliards de FCFA avec un taux d'endettement de 48%.</div><div class="plan-item"><strong>Sur le plan social</strong> — Aggravation de la pauvreté liée au service de la dette, imposition de programmes d'austérité et persistance du chômage si les fonds ne sont pas investis dans le productif.</div><h5>Conclusion</h5><p>L'impact de la dette extérieure sur le développement est ambivalent et bidirectionnel. Ses externalités influencent significativement l'émergence des économies africaines. N'est-il pas alors impérieux de repenser le modèle de financement du développement de l'Afrique pour une insertion plus souveraine dans l'économie mondiale ?</p>`}
+];
+
+function renderSujets(){
+const tabs=document.getElementById("sujetTabs");const panels=document.getElementById("sujetPanels");
+var th="",ph="";const waMsg=encodeURIComponent("Bonjour Les Cours Sésame & SAJ, je souhaite obtenir vos ouvrages complets. Merci !");
+sujetsData.forEach(function(s,i){
+th+='<button class="sj-tab'+(i===0?' active':'')+'" onclick="switchSujet('+i+',this)">'+s.concours+'</button>';
+ph+='<div class="sujet-panel'+(i===0?' active':'')+'" id="sj'+i+'"><div class="sujet-header"><h4>'+s.titre+'</h4><div class="sj-meta">'+s.meta+'</div></div><div class="sujet-enonce"><p>'+s.enonce+'</p></div><div class="sujet-corrige">'+s.corrige+'</div><div class="sujet-cta"><p>Ce corrigé est un extrait de nos ouvrages. Obtenez la version complète avec tous les sujets.</p><a href="https://wa.me/'+WA+'?text='+waMsg+'" target="_blank">Commander l\'ouvrage complet</a></div></div>';
+});tabs.innerHTML=th;panels.innerHTML=ph}
+function switchSujet(i,btn){document.querySelectorAll(".sj-tab").forEach(t=>t.classList.remove("active"));btn.classList.add("active");document.querySelectorAll(".sujet-panel").forEach(c=>c.classList.remove("active"));document.getElementById("sj"+i).classList.add("active")}
+
+// INIT METHODO + SUJETS + RE-OBSERVE
+renderMethodo();renderEpreuves();renderSujets();
+document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+document.querySelectorAll(".hero-stats").forEach(el=>cObs.observe(el));
 </script>
-
 </body>
 </html>
