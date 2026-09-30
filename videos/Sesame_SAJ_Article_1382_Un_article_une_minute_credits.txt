@@ -1,0 +1,11 @@
+Sesame_SAJ_Article_1382_Un_article_une_minute
+
+Voix off : synthèse vocale Chatterbox Multilingual (Resemble AI, licence MIT), timbre de référence tiré de Multilingual LibriSpeech (CC BY 4.0).
+Musique et bruitages : compositions originales créées pour Les Cours Sésame et SAJ.
+Polices : Libre Baskerville et Montserrat (SIL Open Font License).
+
+Images :
+- « View of the Plateau, Abidjan », Abdel Moumen, CC BY-SA 2.0, https://commons.wikimedia.org/w/index.php?curid=85178816
+- « Les tours au Plateau (Abidjan) », Poro26, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=174507136
+- « Treichville market 2 », Anthere, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=140503644
+- « Plateau Abidjan de nuit », abdallahh, CC BY 2.0, https://commons.wikimedia.org/w/index.php?curid=99674171
