@@ -28,9 +28,14 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"EducationalOrganization","name":"Les Cours Sésame et SAJ","url":"https://concours-sesame.github.io/coursesesame/","telephone":"+2250160860537","address":{"@type":"PostalAddress","addressLocality":"Abidjan","addressCountry":"CI"},"slogan":"Votre réussite est notre mission"}
 </script>
+<!-- build:jsonld -->
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Les Cours Sésame et SAJ","url":"https://concours-sesame.github.io/coursesesame/","inLanguage":"fr"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Comment passer une commande ?","acceptedAnswer":{"@type":"Answer","text":"Vous pouvez ajouter vos ouvrages au panier puis envoyer votre commande via WhatsApp, ou cliquer directement sur le bouton WhatsApp de chaque ouvrage. Notre équipe vous confirmera la disponibilité et les modalités de livraison."}},{"@type":"Question","name":"Quels sont les modes de paiement acceptés ?","acceptedAnswer":{"@type":"Answer","text":"Nous acceptons les paiements par Mobile Money (Orange Money, MTN Money, Wave) et en espèces à la livraison pour Abidjan. Pour les autres villes, le paiement se fait avant expédition."}},{"@type":"Question","name":"Livrez-vous en dehors d'Abidjan ?","acceptedAnswer":{"@type":"Answer","text":"Oui, nous livrons dans toute la Côte d'Ivoire. Pour Abidjan, la livraison se fait sous 24 à 48 heures. Pour les autres villes, comptez 3 à 5 jours ouvrables via transporteur."}},{"@type":"Question","name":"Les ouvrages sont-ils à jour pour la session 2026 ?","acceptedAnswer":{"@type":"Answer","text":"Absolument. Tous nos ouvrages sont révisés et mis à jour chaque année pour correspondre aux programmes et aux tendances des concours les plus récents."}},{"@type":"Question","name":"Proposez-vous une remise pour les commandes groupées ?","acceptedAnswer":{"@type":"Answer","text":"Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10% sur le total de votre commande."}},{"@type":"Question","name":"Puis-je consulter un extrait avant d'acheter ?","acceptedAnswer":{"@type":"Answer","text":"Contactez-nous sur WhatsApp et nous vous enverrons un aperçu du sommaire et de quelques pages de l'ouvrage qui vous intéresse."}}]}</script>
+<!-- /build:jsonld -->
 </head>
-<body>
+<body data-root="">
 
+<!-- partial:sprite -->
 <!-- Icônes et logo (dessinés une seule fois, réutilisés partout) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="logo" viewBox="0 0 100 100">
@@ -51,9 +56,12 @@
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
 </svg>
+<!-- /partial:sprite -->
 
+<!-- partial:header -->
 <!-- EN-TÊTE -->
 <div class="site-top" id="siteTop">
   <div class="promo" id="promo">
@@ -67,11 +75,11 @@
         <span class="brand-text"><span class="brand-name">Les Cours Sésame et SAJ</span><span class="brand-rule"></span><span class="brand-tag">Concours &amp; excellence</span></span>
       </a>
       <nav class="nav" aria-label="Navigation principale">
+        <a href="#concours">Concours</a>
         <a href="#catalogue">Catalogue</a>
-        <a href="#methodologie">Méthode</a>
-        <a href="#sujets">Sujets corrigés</a>
-        <a href="#avis">Avis</a>
-        <a href="#apropos">À propos</a>
+        <a href="#conseiller">Conseil</a>
+        <a href="methodes/">Méthodes</a>
+        <a href="#sujets">Corrigés</a>
         <a href="#faq">FAQ</a>
       </nav>
       <div class="header-actions">
@@ -91,14 +99,15 @@
   <nav>
     <a href="#concours">Concours <span>01</span></a>
     <a href="#catalogue">Catalogue <span>02</span></a>
-    <a href="#methodologie">Méthode <span>03</span></a>
-    <a href="#sujets">Sujets corrigés <span>04</span></a>
-    <a href="#avis">Avis <span>05</span></a>
-    <a href="#apropos">À propos <span>06</span></a>
+    <a href="#conseiller">Quel ouvrage pour moi ? <span>03</span></a>
+    <a href="methodes/">Méthodes &amp; QCM <span>04</span></a>
+    <a href="#sujets">Sujets corrigés <span>05</span></a>
+    <a href="#avis">Avis <span>06</span></a>
     <a href="#faq">FAQ <span>07</span></a>
   </nav>
   <a class="btn btn-wa btn-block" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
 </div>
+<!-- /partial:header -->
 
 <main id="top">
 
@@ -141,9 +150,52 @@
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">Étape 1</span><h2 class="h-section">Quel concours<br><em>préparez-vous ?</em></h2></div>
-      <p class="lead">Choisissez votre concours : nous vous montrons uniquement les ouvrages conçus pour ses épreuves.</p>
+      <p class="lead">Chaque concours a sa page : épreuves, méthode, ouvrages, packs et sujet corrigé.</p>
     </div>
-    <div class="concours-grid" id="concoursGrid"></div>
+    <div class="concours-grid" id="concoursGrid"><!-- build:concours -->
+      <a class="concours-card reveal reveal-d0" href="concours/magistrature/">
+        <span class="cc-num">01</span>
+        <span class="cc-name">Magistrature</span>
+        <span class="cc-sub">INFJ Magistrature</span>
+        <span class="cc-go">16 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="concours-card reveal reveal-d1" href="concours/greffe/">
+        <span class="cc-num">02</span>
+        <span class="cc-name">Greffe</span>
+        <span class="cc-sub">INFJ Greffe</span>
+        <span class="cc-go">8 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="concours-card reveal reveal-d2" href="concours/penitentiaire/">
+        <span class="cc-num">03</span>
+        <span class="cc-name">Pénitentiaire</span>
+        <span class="cc-sub">INFJ Pénitentiaire</span>
+        <span class="cc-go">8 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="concours-card reveal reveal-d3" href="concours/eppjej/">
+        <span class="cc-num">04</span>
+        <span class="cc-name">EPPJEJ</span>
+        <span class="cc-sub">INFJ EPPJEJ</span>
+        <span class="cc-go">7 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="concours-card reveal reveal-d4" href="concours/ena/">
+        <span class="cc-num">05</span>
+        <span class="cc-name">ENA</span>
+        <span class="cc-sub">École Nationale d'Administration</span>
+        <span class="cc-go">7 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+      </a>
+    <!-- /build:concours --></div>
+  </div>
+</section>
+
+<!-- CONSEILLER -->
+<section class="section on-dark conseiller-section" id="conseiller">
+  <div class="wrap conseiller-grid">
+    <div class="reveal">
+      <span class="eyebrow">Test express · 1 minute</span>
+      <h2 class="h-section">Quel ouvrage <em>pour moi ?</em></h2>
+      <p class="lead">Votre concours, votre étape, votre matière à renforcer et le temps qu'il vous reste : nous vous proposons la sélection adaptée, à ajouter au panier en un clic.</p>
+    </div>
+    <div class="cs-card reveal reveal-d2"><div id="csBox"></div></div>
   </div>
 </section>
 
@@ -151,7 +203,7 @@
 <section class="section" id="catalogue">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Étape 2 · Le catalogue</span><h2 class="h-section">Nos ouvrages, <em>édition 2026</em></h2></div>
+      <div><span class="eyebrow">Le catalogue complet</span><h2 class="h-section">Nos ouvrages, <em>édition 2026</em></h2></div>
       <p class="lead">Touchez une couverture pour lire le détail. Ajoutez vos ouvrages au panier et commandez en un message WhatsApp.</p>
     </div>
     <div class="toolbar" id="toolbar">
@@ -163,7 +215,697 @@
       <div class="chips" id="chips" role="group" aria-label="Filtrer par concours"></div>
     </div>
     <p class="result-info" id="resultInfo" aria-live="polite"></p>
-    <div id="books"></div>
+    <div id="books"><!-- build:books --><h3 class="group-title">Magistrature<small>16 ouvrages</small><a class="group-link" href="concours/magistrature/">Page du concours</a></h3><h4 class="phase-title">Présélection<small>5 ouvrages</small></h4><div class="books"><article class="book">
+      <button class="book-cover-btn" data-open="0" aria-label="Voir le détail : Le Petit Manuel de Droit Civil"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Civil</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Petit Manuel de Droit Civil</h3>
+        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">12 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="0"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="1" aria-label="Voir le détail : Le Petit Manuel de Droit Commercial"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Commercial</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Petit Manuel de Droit Commercial</h3>
+        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">12 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="1"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="2" aria-label="Voir le détail : Le Petit Manuel de Droit Pénal"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Pénal</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Petit Manuel de Droit Pénal</h3>
+        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">12 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="2"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="3" aria-label="Voir le détail : Le Petit Manuel de Droit Administratif"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Petit Manuel de Droit Administratif</h3>
+        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">12 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="3"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="4" aria-label="Voir le détail : Le Petit Manuel d'Organisation Judiciaire et Informatique"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Organisation Judiciaire et Informatique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Petit Manuel d'Organisation Judiciaire et Informatique</h3>
+        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">12 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="4"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article></div><h4 class="phase-title">Écrit<small>11 ouvrages</small></h4><div class="books"><article class="book">
+      <button class="book-cover-btn" data-open="5" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés Magistrature"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">Magistrature</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Les Annales des Anciens Sujets Corrigés Magistrature</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">15 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="5"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="6" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">15 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="6"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="7" aria-label="Voir le détail : Le Guide Méthodologique Magistrature — Édition 2026"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">Magistrature</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Guide Méthodologique Magistrature — Édition 2026</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="7"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="8" aria-label="Voir le détail : Le Résumé de Droit Civil au Concours de la Magistrature"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Civil</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Résumé de Droit Civil au Concours de la Magistrature</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">13 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="8"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="9" aria-label="Voir le détail : Le Résumé de Droit Commercial au Concours de la Magistrature"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Commercial</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Résumé de Droit Commercial au Concours de la Magistrature</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">13 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="9"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="10" aria-label="Voir le détail : Le Sésame de Droit Pénal au Concours de la Magistrature"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Sésame</span><span class="cover-title">Droit Pénal</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Sésame de Droit Pénal au Concours de la Magistrature</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">13 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="10"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="11" aria-label="Voir le détail : Le Résumé de Droit Administratif au Concours de la Magistrature"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Résumé de Droit Administratif au Concours de la Magistrature</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">13 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="11"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="12" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Résumé de SOG aux Concours Administratifs</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="12"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="13" aria-label="Voir le détail : Le Concours de la Magistrature en 1200 Dissertations Corrigées"><div class="cover"><span class="cover-num">Numérique</span>
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Magistrature</span><span class="cover-title">1200 Dissertations Corrigées</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Concours de la Magistrature en 1200 Dissertations Corrigées</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-num">Version numérique uniquement</span>
+        <div class="book-buy">
+          <span class="price">25 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="13"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="14" aria-label="Voir le détail : Le Concours de la Magistrature en 2000 Articles Commentés"><div class="cover"><span class="cover-num">Numérique</span>
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Magistrature</span><span class="cover-title">2000 Articles Commentés</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">Le Concours de la Magistrature en 2000 Articles Commentés</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-num">Version numérique uniquement</span>
+        <div class="book-buy">
+          <span class="price">25 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="14"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="15" aria-label="Voir le détail : 1000 Fiches de Cours pour Réussir l'Écrit de la Magistrature"><div class="cover"><span class="cover-num">Numérique</span>
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Écrit de la magistrature</span><span class="cover-title">1000 Fiches de Cours</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Magistrature</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Magistrature</span>
+        <h3 class="book-title">1000 Fiches de Cours pour Réussir l'Écrit de la Magistrature</h3>
+        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-num">Version numérique uniquement</span>
+        <div class="book-buy">
+          <span class="price">25 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="15"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article></div><h3 class="group-title">Greffe<small>8 ouvrages</small><a class="group-link" href="concours/greffe/">Page du concours</a></h3><div class="books"><article class="book">
+      <button class="book-cover-btn" data-open="16" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Greffe</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Greffe</span>
+        <h3 class="book-title">Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="16"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="17" aria-label="Voir le détail : Le Guide Méthodologique INFJ — Édition 2026"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Greffe</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Greffe</span>
+        <h3 class="book-title">Le Guide Méthodologique INFJ — Édition 2026</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="17"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="18" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Greffe</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Greffe</span>
+        <h3 class="book-title">Le Résumé d'Organisation Judiciaire aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="18"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="19" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Greffe</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Greffe</span>
+        <h3 class="book-title">Le Résumé de SOG aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="19"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="20" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droits de l'Enfant</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Greffe</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Greffe</span>
+        <h3 class="book-title">Le Résumé des Droits de l'Enfant aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="20"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="21" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Greffe</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Greffe</span>
+        <h3 class="book-title">Le Résumé de Droit Administratif aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="21"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="22" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Greffe</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Greffe</span>
+        <h3 class="book-title">Le Résumé d'Informatique aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="22"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="23" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Greffe</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Greffe</span>
+        <h3 class="book-title">Le Résumé d'OPEAJ aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="23"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article></div><h3 class="group-title">Pénitentiaire<small>8 ouvrages</small><a class="group-link" href="concours/penitentiaire/">Page du concours</a></h3><div class="books"><article class="book">
+      <button class="book-cover-btn" data-open="24" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Pénitentiaire</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Pénitentiaire</span>
+        <h3 class="book-title">Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="24"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="25" aria-label="Voir le détail : Le Guide Méthodologique INFJ — Édition 2026"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Pénitentiaire</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Pénitentiaire</span>
+        <h3 class="book-title">Le Guide Méthodologique INFJ — Édition 2026</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="25"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="26" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Pénitentiaire</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Pénitentiaire</span>
+        <h3 class="book-title">Le Résumé d'Organisation Judiciaire aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="26"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="27" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droits de l'Enfant</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Pénitentiaire</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Pénitentiaire</span>
+        <h3 class="book-title">Le Résumé des Droits de l'Enfant aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="27"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="28" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Pénitentiaire</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Pénitentiaire</span>
+        <h3 class="book-title">Le Résumé de Droit Administratif aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="28"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="29" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Pénitentiaire</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Pénitentiaire</span>
+        <h3 class="book-title">Le Résumé de SOG aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="29"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="30" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Pénitentiaire</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Pénitentiaire</span>
+        <h3 class="book-title">Le Résumé d'Informatique aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="30"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="31" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ Pénitentiaire</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ Pénitentiaire</span>
+        <h3 class="book-title">Le Résumé d'OPEAJ aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="31"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article></div><h3 class="group-title">EPPJEJ<small>7 ouvrages</small><a class="group-link" href="concours/eppjej/">Page du concours</a></h3><div class="books"><article class="book">
+      <button class="book-cover-btn" data-open="32" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ EPPJEJ</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ EPPJEJ</span>
+        <h3 class="book-title">Les Annales des Anciens Sujets Corrigés INFJ — Édition 2026</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="32"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="33" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ EPPJEJ</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ EPPJEJ</span>
+        <h3 class="book-title">Le Résumé d'Organisation Judiciaire aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="33"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="34" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droits de l'Enfant</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ EPPJEJ</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ EPPJEJ</span>
+        <h3 class="book-title">Le Résumé des Droits de l'Enfant aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="34"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="35" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ EPPJEJ</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ EPPJEJ</span>
+        <h3 class="book-title">Le Résumé de Droit Administratif aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="35"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="36" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ EPPJEJ</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ EPPJEJ</span>
+        <h3 class="book-title">Le Résumé de SOG aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="36"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="37" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ EPPJEJ</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ EPPJEJ</span>
+        <h3 class="book-title">Le Résumé d'Informatique aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="37"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="38" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">INFJ EPPJEJ</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">INFJ EPPJEJ</span>
+        <h3 class="book-title">Le Résumé d'OPEAJ aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="38"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article></div><h3 class="group-title">ENA<small>7 ouvrages</small><a class="group-link" href="concours/ena/">Page du concours</a></h3><div class="books"><article class="book">
+      <button class="book-cover-btn" data-open="39" aria-label="Voir le détail : La Logique aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Entraînement</span><span class="cover-title">Logique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">ENA</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">ENA</span>
+        <h3 class="book-title">La Logique aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="39"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="40" aria-label="Voir le détail : Le Résumé d'Aptitude Verbale aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Aptitude Verbale</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">ENA</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">ENA</span>
+        <h3 class="book-title">Le Résumé d'Aptitude Verbale aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="40"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="41" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">ENA</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">ENA</span>
+        <h3 class="book-title">Le Résumé de SOG aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="41"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="42" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">ENA</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">ENA</span>
+        <h3 class="book-title">Les Annales des Anciens Sujets Corrigés de SOG</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">15 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="42"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="43" aria-label="Voir le détail : Le Résumé de PECOS aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">PECOS</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">ENA</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">ENA</span>
+        <h3 class="book-title">Le Résumé de PECOS aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="43"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="44" aria-label="Voir le détail : Le Résumé de Note de Synthèse aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Note de Synthèse</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">ENA</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">ENA</span>
+        <h3 class="book-title">Le Résumé de Note de Synthèse aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="44"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article><article class="book">
+      <button class="book-cover-btn" data-open="45" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <div class="cover-foot">ENA</div>
+    </div></button>
+      <div class="book-meta">
+        <span class="book-concours">ENA</span>
+        <h3 class="book-title">Le Résumé de Droit Administratif aux Concours Administratifs</h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span>
+        <div class="book-buy">
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="45"><svg ><use href="#i-plus"/></svg>Panier</button>
+        </div>
+      </div>
+    </article></div><!-- /build:books --></div>
   </div>
 </section>
 
@@ -184,6 +926,10 @@
       <div class="ep-tabs" id="epTabs" role="tablist" aria-label="Épreuves"></div>
       <div id="epPanel"></div>
     </div>
+    <a class="qcm-band reveal" href="methodes/#qcm">
+      <span><b>Testez votre méthode</b>10 questions sur le SOG, le cas pratique, la note de synthèse… Votre score en 2 minutes.</span>
+      <span class="btn btn-gold">Faire le test<svg fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow"/></svg></span>
+    </a>
   </div>
 </section>
 
@@ -247,7 +993,7 @@
       <h2 class="h-section">Besoin <em>d'informations ?</em></h2>
       <p class="lead">Vous ne trouvez pas votre réponse ? Écrivez-nous, nous répondons rapidement sur WhatsApp.</p>
     </div>
-    <div class="reveal reveal-d1" id="faqList"></div>
+    <div class="reveal reveal-d1" id="faqList"><!-- build:faq --><details class="faq-item" open><summary>Comment passer une commande ?<i></i></summary><p>Vous pouvez ajouter vos ouvrages au panier puis envoyer votre commande via WhatsApp, ou cliquer directement sur le bouton WhatsApp de chaque ouvrage. Notre équipe vous confirmera la disponibilité et les modalités de livraison.</p></details><details class="faq-item"><summary>Quels sont les modes de paiement acceptés ?<i></i></summary><p>Nous acceptons les paiements par Mobile Money (Orange Money, MTN Money, Wave) et en espèces à la livraison pour Abidjan. Pour les autres villes, le paiement se fait avant expédition.</p></details><details class="faq-item"><summary>Livrez-vous en dehors d'Abidjan ?<i></i></summary><p>Oui, nous livrons dans toute la Côte d'Ivoire. Pour Abidjan, la livraison se fait sous 24 à 48 heures. Pour les autres villes, comptez 3 à 5 jours ouvrables via transporteur.</p></details><details class="faq-item"><summary>Les ouvrages sont-ils à jour pour la session 2026 ?<i></i></summary><p>Absolument. Tous nos ouvrages sont révisés et mis à jour chaque année pour correspondre aux programmes et aux tendances des concours les plus récents.</p></details><details class="faq-item"><summary>Proposez-vous une remise pour les commandes groupées ?<i></i></summary><p>Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10% sur le total de votre commande.</p></details><details class="faq-item"><summary>Puis-je consulter un extrait avant d'acheter ?<i></i></summary><p>Contactez-nous sur WhatsApp et nous vous enverrons un aperçu du sommaire et de quelques pages de l'ouvrage qui vous intéresse.</p></details><!-- /build:faq --></div>
   </div>
 </section>
 
@@ -272,6 +1018,7 @@
 
 </main>
 
+<!-- partial:footer -->
 <footer class="footer on-dark">
   <div class="wrap">
     <div class="footer-grid">
@@ -280,8 +1027,12 @@
         <p class="footer-about">Votre réussite est notre mission. Ouvrages de préparation aux concours administratifs et juridiques de Côte d'Ivoire.</p>
       </div>
       <div>
+        <h4>Les concours</h4>
+        <ul><li><a href="concours/magistrature/">Magistrature</a></li><li><a href="concours/greffe/">Greffe</a></li><li><a href="concours/penitentiaire/">Pénitentiaire</a></li><li><a href="concours/eppjej/">EPPJEJ</a></li><li><a href="concours/ena/">ENA</a></li></ul>
+      </div>
+      <div>
         <h4>Le site</h4>
-        <ul><li><a href="#concours">Choisir son concours</a></li><li><a href="#catalogue">Catalogue</a></li><li><a href="#methodologie">Méthode</a></li><li><a href="#sujets">Sujets corrigés</a></li><li><a href="#faq">FAQ</a></li></ul>
+        <ul><li><a href="#catalogue">Catalogue</a></li><li><a href="#conseiller">Quel ouvrage pour moi ?</a></li><li><a href="methodes/">Méthodes des épreuves</a></li><li><a href="methodes/#qcm">QCM de méthode</a></li><li><a href="#faq">FAQ</a></li></ul>
       </div>
       <div>
         <h4>Nous joindre</h4>
@@ -338,7 +1089,9 @@
   </div>
 </div>
 
+<!-- /partial:footer -->
 <script src="assets/js/data.js"></script>
+<script src="assets/js/render.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>
