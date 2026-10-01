@@ -32,9 +32,12 @@
 
   /* ---------- Couverture d'ouvrage (modèle de la charte) ---------- */
   function coverParts(titre) {
-    const t = titre.replace(/\s+—\s+Édition \d{4}/, "").replace(/ aux Concours Administratifs$/i, "");
+    const t = titre.replace(/\s+—\s+Édition \d{4}/, "").replace(/ aux? Concours (?:Administratifs|de la Magistrature)$/i, "");
     const rules = [
+      [/^Le Petit Manuel (?:de |d'|des )(.+)$/i, "Le Petit Manuel"],
       [/^Le Résumé (?:de |d'|des )(.+)$/i, "Le Résumé"],
+      [/^Le Concours de la Magistrature en (.+)$/i, "Magistrature"],
+      [/^(\d+ Fiches de Cours) pour Réussir l'Écrit de la Magistrature$/i, "Écrit de la magistrature"],
       [/^Les Annales des Anciens Sujets Corrigés(?: de)? (.+)$/i, "Annales corrigées"],
       [/^Le Guide Méthodologique (.+)$/i, "Guide méthodologique"],
       [/^Le Sésame de (.+)$/i, "Le Sésame"],
@@ -49,7 +52,7 @@
 
   function coverHTML(o) {
     const c = coverParts(o.titre);
-    return `<div class="cover">
+    return `<div class="cover">${o.numerique ? `<span class="cover-num">Numérique</span>` : ""}
       <div class="cover-top">${svg("logo", 'class="mark" aria-hidden="true"')}<span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
       <div class="cover-band">${c.serie ? `<span class="cover-series">${c.serie}</span>` : ""}<span class="cover-title">${c.sujet}</span><span class="orn">${svg("i-star")}</span></div>
       <div class="cover-foot">${o.concours}</div>
@@ -106,7 +109,7 @@
       <div class="book-meta">
         <span class="book-concours">${o.concours}</span>
         <h3 class="book-title">${o.titre}</h3>
-        <span class="book-niveau">Niveaux ${o.niveau}</span>
+        <span class="book-niveau">${o.phase ? o.phase + " · " : ""}Niveaux ${o.niveau}</span>${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}
         <div class="book-buy">
           <span class="price">${o.prix}<small>FCFA</small></span>
           <button class="add-btn${inCart ? " in" : ""}" data-add="${idx}">${inCart ? svg("i-check") + "Ajouté" : svg("i-plus") + "Panier"}</button>
@@ -134,11 +137,20 @@
       box.innerHTML = `<div class="empty"><b>Aucun ouvrage trouvé</b>Essayez un autre mot, ou <a href="${WA_URL}" target="_blank" rel="noopener">demandez-nous sur WhatsApp</a>.</div>`;
       return;
     }
-    // Sans recherche ni tri, « Tous » est rangé par concours
-    if (state.cat === "tous" && !state.q && state.sort === "default") {
-      box.innerHTML = CONCOURS.map(c => {
+    // Sans recherche ni tri : rangement par concours, puis par phase (Présélection, Écrit)
+    const byPhase = items => {
+      const phases = [...new Set(items.map(o => o.phase).filter(Boolean))];
+      if (!phases.length) return `<div class="books">${items.map(bookHTML).join("")}</div>`;
+      return phases.map(ph => {
+        const sub = items.filter(o => o.phase === ph);
+        return `<h4 class="phase-title">${ph}<small>${sub.length} ouvrage${sub.length > 1 ? "s" : ""}</small></h4><div class="books">${sub.map(bookHTML).join("")}</div>`;
+      }).join("") + (items.some(o => !o.phase) ? `<div class="books">${items.filter(o => !o.phase).map(bookHTML).join("")}</div>` : "");
+    };
+    if (!state.q && state.sort === "default") {
+      const groups = state.cat === "tous" ? CONCOURS : CONCOURS.filter(c => c.id === state.cat);
+      box.innerHTML = groups.map(c => {
         const items = list.filter(o => o.categorie === c.id);
-        return `<h3 class="group-title">${c.court}<small>${items.length} ouvrages</small></h3><div class="books">${items.map(bookHTML).join("")}</div>`;
+        return `<h3 class="group-title">${c.court}<small>${items.length} ouvrages</small></h3>${byPhase(items)}`;
       }).join("");
     } else {
       box.innerHTML = `<div class="books">${list.map(bookHTML).join("")}</div>`;
@@ -223,7 +235,7 @@
   $("#cartSend").addEventListener("click", () => {
     const t = totals();
     let msg = "Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite commander les ouvrages suivants :\n\n";
-    cart.forEach((i, k) => { const o = OUVRAGES[i]; msg += `${k + 1}. ${o.titre}\n   ${o.concours} — ${o.prix} FCFA\n\n`; });
+    cart.forEach((i, k) => { const o = OUVRAGES[i]; msg += `${k + 1}. ${o.titre}${o.numerique ? " (version numérique)" : ""}\n   ${o.concours} — ${o.prix} FCFA\n\n`; });
     if (t.promo) msg += `🎁 Remise 10% (3+ ouvrages) : -${fmt(t.disc)} FCFA\n`;
     msg += `\n💰 Total : ${fmt(t.total)} FCFA\n\nMerci !`;
     openWhatsApp(msg);
@@ -252,7 +264,8 @@
     $("#mConcours").textContent = o.concours;
     $("#mTitle").textContent = o.titre;
     $("#mDesc").textContent = o.desc;
-    $("#mSpecs").innerHTML = `<span class="spec">Niveaux ${o.niveau}</span><span class="spec">Livraison partout en CI</span><span class="spec">Paiement Mobile Money</span>`;
+    $("#mSpecs").innerHTML = (o.phase ? `<span class="spec">${o.phase}</span>` : "") + `<span class="spec">Niveaux ${o.niveau}</span>` +
+      (o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : `<span class="spec">Livraison partout en CI</span>`) + `<span class="spec">Paiement Mobile Money</span>`;
     $("#mPrice").innerHTML = `${o.prix}<small>FCFA</small>`;
     syncModalBtn();
     $(".quick").open = false;
@@ -289,7 +302,7 @@
     const o = OUVRAGES[modalIdx];
     const m = v("#fMsg");
     const msg = ["Bonjour Les Cours Sésame & SAJ,", "", "Je souhaite passer une commande :", "",
-      `📚 ${o.titre}`, `📂 ${o.concours}`, `📊 ${o.niveau}`, `💰 ${o.prix} FCFA`, `🔢 Quantité : ${v("#fQte") || 1}`, "",
+      `📚 ${o.titre}${o.numerique ? " (version numérique)" : ""}`, `📂 ${o.concours}`, `📊 ${o.niveau}`, `💰 ${o.prix} FCFA`, `🔢 Quantité : ${v("#fQte") || 1}`, "",
       "Mes coordonnées :", `👤 ${v("#fPrenom")} ${v("#fNom")}`, `📞 ${v("#fTel")}`, `📍 ${v("#fVille")}`, m ? `\n💬 ${m}` : "", "", "Merci !"].join("\n");
     openWhatsApp(msg);
     setModal(false);
