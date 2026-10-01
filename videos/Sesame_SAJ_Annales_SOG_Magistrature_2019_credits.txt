@@ -1,10 +1,18 @@
 Sesame_SAJ_Annales_SOG_Magistrature_2019
 
 Voix off : synthèse vocale Chatterbox Multilingual (Resemble AI, licence MIT), timbre de référence tiré de Multilingual LibriSpeech (CC BY 4.0).
-Musique et bruitages : compositions originales créées pour Les Cours Sésame et SAJ.
+Musique : composition originale créée pour Les Cours Sésame et SAJ.
 Polices : Libre Baskerville et Montserrat (SIL Open Font License).
 
-Images :
-- « File:Abidjan.JPG », Zenman stitched by Marku1988 This panoramic image was created with Autostitch (stitched images may differ from reality)., CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=3667750
-- « Entrée du Plateau depuis le pont Général de Gaulle, Abidjan, 2023 », J. N. Squire, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=138017847
-- « Plateau Abidjan de nuit », abdallahh, CC BY 2.0, https://commons.wikimedia.org/w/index.php?curid=99674171
+Images et vidéos (Pixabay, licence de contenu Pixabay, usage commercial autorisé) :
+- video « buildings, lagos island, lagos state, nigeria, ariel, skyline, done shot, marina, seaport, lagos, aerial cityscape, cityscape, beautiful skyline, atlantic ocean, sealife, aerial ocean, city traffic, ship, africa, modern urban life, urban life, african sunset », par xtrovarts, https://pixabay.com/videos/id-313948/
+- video « lagos island, lagos state, nigeria, ariel, skyline, done shot, lagos, aerial cityscape, cityscape, raw footage, city, beautiful skyline, buildings, atlantic ocean, sealife, aerial ocean, oceanic, city traffic, africa, abuja, modern urban life, urban life, african sunset, sunset », par xtrovarts, https://pixabay.com/videos/id-313345/
+- video « planet, earth, space, planet earth, blue, world, stars, globe, the night lights, night, starry, the globe », par RPXStudio, https://pixabay.com/videos/id-15296/
+- video « giraffes, sunset, tree, desert, africa », par Eaktas06, https://pixabay.com/videos/id-171249/
+- video « on the table lies a thick textbook, homework, textbook, tutorial, pen, notebook, write, writing, create, record, enter, student, hand », par chayka1270, https://pixabay.com/videos/id-12040/
+- video « voters, elections, gangtok, sikkim, india, northeast, vote, shiva, politics, indian elections », par InOldNews, https://pixabay.com/videos/id-209450/
+- video « solar panels, energy, renewable, electric current, solar, panel, ecological, sustainability », par Stdudioray, https://pixabay.com/videos/id-72837/
+- video « wind turbine, aerial, landscape, wind power, environment », par marvinpolis, https://pixabay.com/videos/id-26657/
+- video « solar, panels, solar energy, photovoltaic, solar system, energy, electricity, energy transition, clouds, roof, alps, switzerland, solar cells, solar panel, solar power, heaven, power generation, environmental protection, renewable », par RoyBuri, https://pixabay.com/videos/id-42388/
+- video « library, books, corridor, reading, education, knowledge », par IlyaKulik, https://pixabay.com/videos/id-49375/
+- video « bridge, night, city, lights, water, reflection, ripples, river, skyline, cityscape, urban », par Life-Of-Vids, https://pixabay.com/videos/id-3138/
