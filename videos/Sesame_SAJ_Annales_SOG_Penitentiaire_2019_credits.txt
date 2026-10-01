@@ -1,0 +1,38 @@
+Sesame_SAJ_Annales_SOG_Penitentiaire_2019
+
+Voix off : synthèse vocale Chatterbox Multilingual (Resemble AI, licence MIT), timbre de référence tiré de Multilingual LibriSpeech (CC BY 4.0).
+Musique : composition originale créée pour Les Cours Sésame et SAJ.
+Polices : Libre Baskerville et Montserrat (SIL Open Font License).
+
+Images et vidéos (Pixabay, licence de contenu Pixabay, usage commercial autorisé) :
+- video « cars, roundabout, rondo, flowers, road, city, sidewalk, aerial view », par adamduda, https://pixabay.com/videos/id-168811/
+- video « street, crosswalk, people, walking, crossing street, city », par TahaImtiaz16, https://pixabay.com/videos/id-173333/
+- video « montreal, cityscape, aerial view, city, streets, metropole, canada, metropolitan », par Life-Of-Vids, https://pixabay.com/videos/id-3149/
+- video « seoul, night street, korea, tourism, neon, night, people walking, city spirit, street shopping, people », par RafterJr72, https://pixabay.com/videos/id-24603/
+- video « drone, drones, drone images, nature, forest, river, landscape, drone footage, aerial view, aerial image, amazon, aerial images, cloud, sky », par Drone_Aventura, https://pixabay.com/videos/id-216058/
+- video « people, dancing, party, dance, music, young, teenagers, street, public, city, happy, joy, women », par martinbravo79, https://pixabay.com/videos/id-34411/
+- video « construction site, construction workers, construction, worker, site, builder, build, job, truck, man, housebuilding, skyscraper », par chuduyen215, https://pixabay.com/videos/id-42926/
+- video « people, dance, party, music, young, teenagers, street, dancing, joy, event, women, city, urban, public, happy », par martinbravo79, https://pixabay.com/videos/id-34412/
+- video « worker, car, building, shovel, pour in, builder, wheelbarrow, construction, fill », par AlexKopeykin, https://pixabay.com/videos/id-67460/
+- video « welder, source, industry, production, factory, workshop, work, employee, steel », par messden, https://pixabay.com/videos/id-135849/
+- video « student, read, book, study, write, library », par Sang_Soi, https://pixabay.com/videos/id-140808/
+- video « automobile, black, antique car, vehicle, luxury, car, dare, vintage, dynamics, glittering, workshop, dark, service », par 6047305, https://pixabay.com/videos/id-24386/
+- video « student, read, book, study, write, library », par Sang_Soi, https://pixabay.com/videos/id-140804/
+- video « fabric, sewing machine, seamstress, workshop, cutting table, tool, work, woman, person, worker, shop, sewing equipment, human, employee », par AlexKopeykin, https://pixabay.com/videos/id-115790/
+- video « students, class, classroom, education, school, study, knowledge, learn », par Vacampbe, https://pixabay.com/videos/id-215475/
+- video « students, classroom, education, school, learning, children, books », par Vacampbe, https://pixabay.com/videos/id-215471/
+- video « animate, teacher, class, student, classroom, lecture, seminar, meeting, teach, education, doodle », par RaniRamli, https://pixabay.com/videos/id-22182/
+- video « teacher, students, classroom, teach, school, study, education, knowledge », par Vacampbe, https://pixabay.com/videos/id-215470/
+- video « work, worker, repair, workers, builder, people, business, industry, professional, building, employee, person, construction », par AlexKopeykin, https://pixabay.com/videos/id-40813/
+- video « student, education, school », par padmajatutorials40, https://pixabay.com/videos/id-296169/
+- video « construction site, construction workers, construction, worker, site, builder, build, job, truck, man, housebuilding, skyscraper », par chuduyen215, https://pixabay.com/videos/id-42923/
+- video « girl, writing, student, female, book, school, person, woman », par Nicolas_Garay, https://pixabay.com/videos/id-43459/
+- video « builder, repair, worker, building, professional, tools, safety, master, construction, foreman », par AlexKopeykin, https://pixabay.com/videos/id-85351/
+- video « books, library, to read, literature, reading, education », par AlexKopeykin, https://pixabay.com/videos/id-38917/
+- video « reading list at library, library, book, man, young, literary, read the book, read, learn, the student », par Sang_Soi, https://pixabay.com/videos/id-122232/
+- video « books, book store, library, reading, knowledge, education, learning, berkley », par jadeallencook, https://pixabay.com/videos/id-140587/
+- video « seoul, hangang river, yeouido, national assembly, ifc seoul, parc1, night view, time-lapse, aerial view, drone footage, cityscape, urban, south korea, financial district, landmark, skyline », par YounStudios, https://pixabay.com/videos/id-336755/
+- video « seoul, hangang river, yeouido, national assembly, ifc seoul, parc1, night view, hyperlapse, time-lapse, aerial view, drone footage, cityscape, urban, south korea, financial district, landmark, skyline », par YounStudios, https://pixabay.com/videos/id-337459/
+- video « night, city, architecture, cityscape, skyline, evening, skyscraper, modern, building, reflection, travel, traffic, hong kong », par bellergy, https://pixabay.com/videos/id-30154/
+- video « city, village, night, lights, roads, travel, urban, cityscape, buildings, street, architecture, skyline, tourism, sky, mountains, austria, drone », par voic, https://pixabay.com/videos/id-204326/
+- video « city, night, lights, cityscape, urban, skyline, building, architecture, skyscraper, downtown, business, metropolitan, america », par Coverr-Free-Footage, https://pixabay.com/videos/id-5624/
