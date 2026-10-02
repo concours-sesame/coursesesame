@@ -1,0 +1,21 @@
+Sesame_SAJ_Ouvrage_Annales_INFJ_2026
+
+Voix off : synthèse vocale Chatterbox Multilingual (Resemble AI, licence MIT), timbre de référence tiré de Multilingual LibriSpeech (CC BY 4.0).
+Musique : composition originale créée pour Les Cours Sésame et SAJ.
+Polices : Libre Baskerville et Montserrat (SIL Open Font License).
+
+Images et vidéos (Pixabay, licence de contenu Pixabay, usage commercial autorisé) :
+- video « books, library, education, knowledge, school », par Surajhappy, https://pixabay.com/videos/id-204243/
+- video « book, pages, wind, viewpoint, sunset, literature, poet, literat », par stefaniejockschat, https://pixabay.com/videos/id-135877/
+- video « library, books, reading, read, literature », par AlexKopeykin, https://pixabay.com/videos/id-38918/
+- video « book, reading, leaf through, pages, hands, literature, education, to read », par klimkin, https://pixabay.com/videos/id-4878/
+- video « books, book store, library, reading, knowledge, education, learning, berkley », par jadeallencook, https://pixabay.com/videos/id-140593/
+- video « boy, reading, book, learning, child, education, studying, cartoon », par StefWithAnF, https://pixabay.com/videos/id-57753/
+- video « books, book store, library, reading, knowledge, education, learning, berkley », par jadeallencook, https://pixabay.com/videos/id-140591/
+- video « ai generated, book, reading, magic, study, literature, read, poetry, paper, page, fantasy », par stefaniejockschat, https://pixabay.com/videos/id-188807/
+- video « night, evening, sea, skyline, night lights, sky », par u_b46ytp9vne, https://pixabay.com/videos/id-132804/
+- video « saigon, landscape, vietnam, travel, light, city, cityscape », par kieutruongphoto, https://pixabay.com/videos/id-14385/
+- video « city, hong kong, night, aerial view, cityscape, flight, traffic », par bellergy, https://pixabay.com/videos/id-2860/
+- video « skyscrapers, sunset, skyline, clouds, sky, metropolis, asia, city, taiwan, live wallpaper », par MagicTV, https://pixabay.com/videos/id-80724/
+- video « beijing, city, timelapse, sunset », par jeremy888, https://pixabay.com/videos/id-58580/
+- video « glitter, particles, glow, abstract, bokeh, bright, concept, design, dust, effect, futuristic, geometric, golden, light, magic, shine, texture, shiny, backdrop, beautiful wallpaper, background », par skarletmotion, https://pixabay.com/videos/id-199558/
