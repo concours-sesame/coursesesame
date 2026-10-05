@@ -6,7 +6,8 @@ Site : https://concours-sesame.github.io/coursesesame/
 
 1. Tout le contenu se trouve dans `assets/js/data.js`.
    Pour ajouter un ouvrage, copiez une ligne de `OUVRAGES` et modifiez-la.
-   Champs facultatifs : `"phase"` (ex. `"Présélection"`, `"Écrit"`) et `"numerique":true`.
+   Champs facultatifs : `"phase"` (ex. `"Présélection"`, `"Écrit"`), `"numerique":true`
+   et `"extrait"` (nom d'un PDF placé dans `assets/extraits/`, proposé en extrait gratuit).
 2. Régénérez les pages : `node tools/build.js`
    (met à jour l'accueil, les pages `concours/…`, la page `methodes/` et `sitemap.xml`).
 3. Publiez les fichiers modifiés sur la branche `main`.

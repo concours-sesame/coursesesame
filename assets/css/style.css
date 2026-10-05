@@ -226,6 +226,7 @@ input,select,textarea{font:inherit;color:inherit}
 .cover-foot{flex:0 0 11%;display:flex;align-items:center;justify-content:center;font-size:clamp(.38rem,.6vw,.5rem);font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding-left:5%}
 .cover-num{position:absolute;top:7%;right:-30%;width:90%;rotate:40deg;background:var(--gold);color:var(--navy);text-align:center;font-size:clamp(.42rem,.7vw,.56rem);font-weight:900;letter-spacing:.16em;text-transform:uppercase;padding:.35em 0;z-index:3}
 .book-num{display:inline-block;align-self:flex-start;margin-top:.45rem;font-size:.7rem;font-weight:800;color:var(--navy);background:var(--gold);padding:.2rem .6rem;border-radius:999px}
+.book-extrait{display:block;margin-top:.35rem;font-size:.72rem;font-weight:800;color:var(--gold-ink)}
 .spec.spec-num{background:var(--gold);color:var(--navy)}
 .phase-title{display:flex;align-items:baseline;gap:.8rem;font-size:.8rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-ink);margin:8px 0 18px}
 .phase-title::before{content:"";width:24px;height:2px;background:currentColor;align-self:center}
@@ -370,6 +371,7 @@ input,select,textarea{font:inherit;color:inherit}
 .footer a{text-decoration:none;transition:color .2s}
 .footer a:hover{color:var(--gold)}
 .footer-about{font-size:.92rem;margin-top:1.2rem;max-width:38ch}
+.footer-legal{font-size:.78rem;opacity:.75;max-width:90ch;padding-top:20px;margin:0}
 .footer-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem;padding-top:24px;font-size:.82rem}
 
 /* ---------- Flottants ---------- */
@@ -434,6 +436,10 @@ body.has-cart-bar .wa-float{bottom:88px}
 .spec{font-size:.78rem;font-weight:700;padding:.35rem .75rem;border-radius:999px;background:var(--cream)}
 .modal-buy{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1rem 0;border-block:1px solid var(--line)}
 .modal-buy .price{font-size:1.8rem}
+.extrait-link{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;font-weight:800;font-size:.92rem;color:var(--navy);text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px}
+.extrait-link:hover{color:var(--gold-ink)}
+.extrait-link[hidden]{display:none}
+.extrait-link svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
 .quick{margin-top:1.2rem}
 .quick summary{cursor:pointer;font-weight:800;font-size:.9rem;color:var(--gold-ink);list-style:none;display:flex;align-items:center;gap:.4rem}
 .quick summary::-webkit-details-marker{display:none}
@@ -511,6 +517,7 @@ body.has-cart-bar .wa-float{bottom:88px}
   .book-title{display:none}
   .book-niveau{display:none}
   .book-num{font-size:.62rem;margin:0 0 .2rem}
+  .book-extrait{font-size:.64rem;margin:0 0 .2rem}
   .book-meta{padding-top:12px}
   .book-buy{padding-top:.4rem;flex-direction:column;align-items:stretch;gap:.5rem}
   .price{font-size:1.15rem}

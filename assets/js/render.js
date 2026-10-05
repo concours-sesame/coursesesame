@@ -55,7 +55,7 @@
     return `<div class="cover">${o.numerique ? `<span class="cover-num">Numérique</span>` : ""}
       <div class="cover-top">${svg("logo", 'class="mark" aria-hidden="true"')}<span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
       <div class="cover-band">${c.serie ? `<span class="cover-series">${c.serie}</span>` : ""}<span class="cover-title">${c.sujet}</span><span class="orn">${svg("i-star")}</span></div>
-      <div class="cover-foot">${o.concours}</div>
+      <div class="cover-foot">${o.concours.replace(/^INFJ\s+/, "")}</div>
     </div>`;
   }
 
@@ -63,9 +63,9 @@
     return `<article class="book">
       <button class="book-cover-btn" data-open="${idx}" aria-label="Voir le détail : ${attr(o.titre)}">${coverHTML(o)}</button>
       <div class="book-meta">
-        <span class="book-concours">${o.concours}</span>
+        <span class="book-concours">${o.concoursListe || o.concours}</span>
         <h3 class="book-title">${o.titre}</h3>
-        <span class="book-niveau">${o.phase ? o.phase + " · " : ""}Niveaux ${o.niveau}</span>${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}
+        <span class="book-niveau">${o.phase ? o.phase + " · " : ""}Niveaux ${o.niveau}</span>${o.extrait ? `<span class="book-extrait">Extrait gratuit disponible</span>` : ""}${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}
         <div class="book-buy">
           <span class="price">${o.prix}<small>FCFA</small></span>
           <button class="add-btn${inCart ? " in" : ""}" data-add="${idx}">${inCart ? svg("i-check") + "Ajouté" : svg("i-plus") + "Panier"}</button>
