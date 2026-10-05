@@ -204,13 +204,13 @@ for (const c of CONCOURS) {
   const sujet = SUJETS.find(s => s.concours === c.court);
   const minPrix = Math.min(...items.map(o => parsePrice(o.prix)));
   const nomCourt = c.id === "ena" ? "de l'ENA" : c.id === "infj" ? "de la Magistrature" : `${c.court}`;
-  const title = `Concours ${nomCourt} 2026 : ouvrages, méthode et sujet corrigé | Les Cours Sésame et SAJ`;
+  const title = `Concours ${nomCourt} 2027 : ouvrages, méthode et sujet corrigé | Les Cours Sésame et SAJ`;
   const series = [...new Set(items.map(o => R.coverParts(o.titre).serie).filter(Boolean))].map(s => s.toLowerCase());
   const description = `${plural(items.length, "ouvrage")} pour préparer le ${c.nom} en Côte d'Ivoire : ${series.slice(0, 4).join(", ")}. Méthode des épreuves, sujet corrigé, commande sur WhatsApp et livraison partout en Côte d'Ivoire.`;
 
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Concours", prefix + "#concours"], [c.court, ""]],
-    eyebrow: `Session 2026 · ${c.long}`,
+    eyebrow: `Session 2027 · ${c.long}`,
     h1: `Concours ${nomCourt} : <em>ouvrages et méthode</em>`,
     lead: m ? m.conseil : "",
     ctas: `<a href="#ouvrages" class="btn btn-gold">Voir les ${items.length} ouvrages${arrow}</a><a href="${WA_URL}" target="_blank" rel="noopener" class="btn btn-ghost">${waIcon}Conseil personnalisé</a>`,

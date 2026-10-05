@@ -133,6 +133,11 @@
     $("#mSpecs").innerHTML = (o.phase ? `<span class="spec">${o.phase}</span>` : "") + `<span class="spec">Niveaux ${o.niveau}</span>` +
       (o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : `<span class="spec">Livraison partout en CI</span>`) + `<span class="spec">Paiement Mobile Money</span>`;
     $("#mPrice").innerHTML = `${o.prix}<small>FCFA</small>`;
+    const ex = $("#mExtrait");
+    if (ex) {
+      ex.hidden = !o.extrait;
+      if (o.extrait) ex.href = ROOT + "assets/extraits/" + o.extrait;
+    }
     syncModalBtn();
     $(".quick").open = false;
     setModal(true);
@@ -224,20 +229,36 @@
     if (state.sort === "price-desc") list.sort((a, b) => parsePrice(b.prix) - parsePrice(a.prix));
     if (state.sort === "alpha") list.sort((a, b) => a.titre.localeCompare(b.titre, "fr"));
 
+    const grouped = !state.q && state.sort === "default";
+    // En recherche ou en tri, un même ouvrage proposé à plusieurs concours n'apparaît qu'une fois
+    if (!grouped) {
+      const seen = new Map();
+      list = list.filter(o => {
+        const k = o.titre + "|" + o.prix;
+        if (seen.has(k)) { seen.get(k).push(o); return false; }
+        seen.set(k, [o]);
+        return true;
+      }).map(o => {
+        const same = seen.get(o.titre + "|" + o.prix);
+        return same.length > 1 ? { ...o, concoursListe: same.map(x => CONCOURS.find(c => c.id === x.categorie).court).join(" · ") } : o;
+      });
+    }
+    const idxOf = o => OUVRAGES.findIndex(x => x.titre === o.titre && x.categorie === o.categorie);
+
     const label = state.cat === "tous" ? "tous concours" : CONCOURS.find(c => c.id === state.cat).long;
     $("#resultInfo").textContent = `${plural(list.length, "ouvrage")} · ${label}`;
     if (!list.length) {
       box.innerHTML = `<div class="empty"><b>Aucun ouvrage trouvé</b>Essayez un autre mot, ou <a href="${WA_URL}" target="_blank" rel="noopener">demandez-nous sur WhatsApp</a>.</div>`;
       return;
     }
-    if (!state.q && state.sort === "default") {
+    if (grouped) {
       const groups = state.cat === "tous" ? CONCOURS : CONCOURS.filter(c => c.id === state.cat);
       box.innerHTML = groups.map(c => {
         const items = list.filter(o => o.categorie === c.id);
         return `<h3 class="group-title">${c.court}<small>${plural(items.length, "ouvrage")}</small><a class="group-link" href="${ROOT}concours/${c.slug}/">Page du concours</a></h3>${groupHTML(items, OUVRAGES, cart, false)}`;
       }).join("");
     } else {
-      box.innerHTML = `<div class="books">${list.map(o => bookHTML(o, OUVRAGES.indexOf(o), cart.includes(OUVRAGES.indexOf(o)))).join("")}</div>`;
+      box.innerHTML = `<div class="books">${list.map(o => bookHTML(o, idxOf(o), cart.includes(idxOf(o)))).join("")}</div>`;
     }
   }
   let searchTimer;
