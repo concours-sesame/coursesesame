@@ -1,6 +1,6 @@
 /* Fonctions d'affichage partagées entre le navigateur (app.js)
    et le générateur de pages (tools/build.js). Aucune dépendance au DOM. */
-(function (root) {
+(function (scope) {
   "use strict";
 
   // Concours, dans l'ordre d'affichage. "slug" donne l'adresse de la page du concours.
@@ -27,6 +27,13 @@
   const attr = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
   const slugify = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const plural = (n, mot) => `${n} ${mot}${n > 1 ? "s" : ""}`;
+
+  // Chemin vers la racine du site depuis la page affichée ("", "../" ou "../../")
+  let root = "";
+  const setRoot = r => { root = r; };
+  // Adresse de la page d'un ouvrage. L'édition n'y figure pas : l'adresse reste la même d'une année à l'autre.
+  const ouvrageSlug = o => slugify(o.titre.replace(/\s+—\s+Édition \d{4}$/, ""));
+  const ouvrageURL = o => `${root}ouvrages/${ouvrageSlug(o)}/`;
 
   function coverParts(titre) {
     const t = titre.replace(/\s+—\s+Édition \d{4}/, "").replace(/ aux? Concours (?:Administratifs|de la Magistrature)$/i, "");
@@ -64,7 +71,7 @@
       <button class="book-cover-btn" data-open="${idx}" aria-label="Voir le détail : ${attr(o.titre)}">${coverHTML(o)}</button>
       <div class="book-meta">
         <span class="book-concours">${o.concoursListe || o.concours}</span>
-        <h3 class="book-title">${o.titre}</h3>
+        <h3 class="book-title"><a href="${ouvrageURL(o)}">${o.titre}</a></h3>
         <span class="book-niveau">${o.phase ? o.phase + " · " : ""}Niveaux ${o.niveau}</span>${o.extrait ? `<span class="book-extrait">Extrait gratuit disponible</span>` : ""}${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}
         <div class="book-buy">
           <span class="price">${o.prix}<small>FCFA</small></span>
@@ -110,5 +117,5 @@
     return html;
   }
 
-  root.SESAME = { CONCOURS, EPREUVES_PAR_CONCOURS, parsePrice, fmt, svg, attr, slugify, plural, coverParts, coverHTML, bookHTML, packTotals, packHTML, groupHTML };
+  scope.SESAME = { CONCOURS, EPREUVES_PAR_CONCOURS, parsePrice, fmt, svg, attr, slugify, plural, setRoot, ouvrageSlug, ouvrageURL, coverParts, coverHTML, bookHTML, packTotals, packHTML, groupHTML };
 })(typeof window !== "undefined" ? window : globalThis);

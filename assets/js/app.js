@@ -3,14 +3,15 @@
 (function () {
   "use strict";
 
-  const { CONCOURS, parsePrice, fmt, svg, slugify, plural, coverParts, coverHTML, bookHTML, groupHTML, packTotals } = window.SESAME;
+  const { CONCOURS, parsePrice, fmt, svg, slugify, plural, setRoot, ouvrageURL, coverParts, coverHTML, bookHTML, groupHTML, packTotals } = window.SESAME;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const on = (sel, ev, fn) => { const el = typeof sel === "string" ? $(sel) : sel; if (el) el.addEventListener(ev, fn); };
   const WA_URL = "https://wa.me/" + WA;
-  const CART_KEY = "sesame-cart-v1";
+  const CART_KEY = "sesame-cart-v2";
   const PROMO_MIN = 3;
   const ROOT = document.body.dataset.root || "";
+  setRoot(ROOT);
   const PAGE_CAT = document.body.dataset.cat || "";
   const byCat = id => OUVRAGES.filter(o => o.categorie === id);
   const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -22,10 +23,16 @@
   }
 
   /* ---------- Panier ---------- */
+  // Le panier est enregistré par titre et concours (et non par position dans la liste),
+  // pour rester juste quand on ajoute un ouvrage dans data.js.
+  const keyOf = o => o.titre + "|" + o.categorie;
   let cart = [];
-  try { cart = JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch (e) { cart = []; }
-  cart = cart.filter(i => Number.isInteger(i) && OUVRAGES[i]);
-  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} };
+  try {
+    const saved = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    cart = saved.map(k => OUVRAGES.findIndex(o => keyOf(o) === k)).filter((i, at, all) => i > -1 && all.indexOf(i) === at);
+    localStorage.removeItem("sesame-cart-v1");
+  } catch (e) { cart = []; }
+  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart.map(i => keyOf(OUVRAGES[i])))); } catch (e) {} };
   const totals = () => {
     const t = packTotals(cart.map(i => OUVRAGES[i]));
     return Object.assign(t, { promo: cart.length >= PROMO_MIN });
@@ -41,7 +48,31 @@
     saveCart();
     updateCart();
     renderBooks();
+    syncAddButtons();
     if (modalIdx !== null) syncModalBtn();
+  }
+
+  // Boutons d'ajout affichés en dehors du catalogue (page d'un ouvrage, suggestions)
+  const IC = 'fill="none" stroke="currentColor" stroke-width="2.6"';
+  function paintBigAdd(b, inCart) {
+    b.classList.toggle("btn-gold", inCart);
+    b.classList.toggle("btn-navy", !inCart);
+    b.innerHTML = inCart ? svg("i-check", IC) + "Dans le panier" : svg("i-plus", IC) + "Ajouter au panier";
+  }
+  function syncAddButtons() {
+    $$("[data-add]").forEach(b => {
+      if (b.closest("#books")) return;
+      const inCart = cart.includes(+b.dataset.add);
+      if (b.classList.contains("add-btn")) {
+        b.classList.toggle("in", inCart);
+        b.innerHTML = inCart ? svg("i-check") + "Ajouté" : svg("i-plus") + "Panier";
+      } else if (b.classList.contains("p-add")) {
+        // Bouton principal d'une page ouvrage (sur fond bleu)
+        b.classList.toggle("btn-gold", !inCart);
+        b.classList.toggle("btn-ghost", inCart);
+        b.innerHTML = inCart ? svg("i-check", IC) + "Dans le panier" : svg("i-plus", IC) + "Ajouter au panier";
+      }
+    });
   }
 
   function toggleCart(idx) {
@@ -138,16 +169,14 @@
       ex.hidden = !o.extrait;
       if (o.extrait) ex.href = ROOT + "assets/extraits/" + o.extrait;
     }
+    const pg = $("#mPage");
+    if (pg) pg.href = ouvrageURL(o);
     syncModalBtn();
     $(".quick").open = false;
     setModal(true);
   }
   function syncModalBtn() {
-    const inCart = cart.includes(modalIdx);
-    const b = $("#mAdd");
-    const ic = 'fill="none" stroke="currentColor" stroke-width="2.6"';
-    b.className = "btn " + (inCart ? "btn-gold" : "btn-navy");
-    b.innerHTML = inCart ? svg("i-check", ic) + "Dans le panier" : svg("i-plus", ic) + "Ajouter au panier";
+    paintBigAdd($("#mAdd"), cart.includes(modalIdx));
   }
   function setModal(open) {
     if (open) lastFocus = document.activeElement;
@@ -187,6 +216,12 @@
     if (pack) return addMany(pack.dataset.pack.split(",").map(Number));
     const open = e.target.closest("[data-open]");
     if (open) return openModal(+open.dataset.open);
+    const share = e.target.closest("[data-share]");
+    if (share) {
+      const url = share.dataset.share, title = share.dataset.title || document.title;
+      if (navigator.share) navigator.share({ title, url }).catch(() => {});
+      else openWhatsApp(`${title}\n${url}`, false);
+    }
   });
 
   document.addEventListener("keydown", e => {
@@ -240,7 +275,7 @@
         return true;
       }).map(o => {
         const same = seen.get(o.titre + "|" + o.prix);
-        return same.length > 1 ? { ...o, concoursListe: same.map(x => CONCOURS.find(c => c.id === x.categorie).court).join(" · ") } : o;
+        return same.length > 1 ? { ...o, concours: "Concours de Côte d'Ivoire", concoursListe: same.map(x => CONCOURS.find(c => c.id === x.categorie).court).join(" · ") } : o;
       });
     }
     const idxOf = o => OUVRAGES.findIndex(x => x.titre === o.titre && x.categorie === o.categorie);
@@ -427,48 +462,73 @@
     render(0);
   }
 
-  /* ---------- QCM « Testez votre méthode » ---------- */
+  /* ---------- QCM : méthode (page Méthodes) ou matière (pages qcm/) ---------- */
   function initQCM() {
     const box = $("#qcmBox");
     if (!box || typeof QCM === "undefined") return;
-    let i = 0, score = 0;
+    const theme = box.dataset.theme && typeof QCM_MATIERES !== "undefined" ? QCM_MATIERES.find(t => t.slug === box.dataset.theme) : null;
+    const list = theme ? theme.questions : QCM;
     const letters = "ABCD";
+    // Les réponses sont présentées dans un ordre différent à chaque partie
+    const shuffle = a => { for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; } return a; };
+    let i = 0, score = 0, order = [];
     function show() {
-      const q = QCM[i];
+      const q = list[i];
+      order = shuffle(q.options.map((_, k) => k));
       box.innerHTML = `<div class="qcm-card">
-        <div class="cs-progress"><span>Question ${i + 1} sur ${QCM.length}</span><i style="width:${((i + 1) / QCM.length) * 100}%"></i></div>
-        <span class="qcm-tag">${q.epreuve}</span>
+        <div class="cs-progress"><span>Question ${i + 1} sur ${list.length}</span><i style="width:${((i + 1) / list.length) * 100}%"></i></div>
+        <span class="qcm-tag">${theme ? theme.nom : q.epreuve}</span>
         <h3>${q.q}</h3>
-        <div class="qcm-opts">${q.options.map((o, k) => `<button class="qcm-opt" data-k="${k}"><span>${letters[k]}</span>${o}</button>`).join("")}</div>
+        <div class="qcm-opts">${order.map((k, pos) => `<button class="qcm-opt" data-k="${k}"><span>${letters[pos]}</span>${q.options[k]}</button>`).join("")}</div>
         <div class="qcm-expl" hidden></div>
       </div>`;
       $$(".qcm-opt", box).forEach(b => b.addEventListener("click", () => answer(+b.dataset.k)));
     }
     function answer(k) {
-      const q = QCM[i];
+      const q = list[i];
       const good = k === q.bonne;
       if (good) score++;
-      $$(".qcm-opt", box).forEach((b, j) => { b.disabled = true; if (j === q.bonne) b.classList.add("ok"); else if (j === k) b.classList.add("ko"); });
+      $$(".qcm-opt", box).forEach(b => { const j = +b.dataset.k; b.disabled = true; if (j === q.bonne) b.classList.add("ok"); else if (j === k) b.classList.add("ko"); });
       const ex = $(".qcm-expl", box);
       ex.hidden = false;
-      ex.innerHTML = `<b>${good ? "Bonne réponse !" : "Pas tout à fait."}</b> ${q.explication} <a href="#${slugify(q.epreuve)}">Revoir la fiche</a>
-        <button class="btn btn-navy btn-sm" id="qcmNext">${i + 1 < QCM.length ? "Question suivante" : "Voir mon score"}${svg("i-arrow", 'fill="none" stroke="currentColor" stroke-width="2.4"')}</button>`;
-      on("#qcmNext", "click", () => { i++; i < QCM.length ? show() : end(); });
+      ex.innerHTML = `<b>${good ? "Bonne réponse !" : "Pas tout à fait."}</b> ${q.explication}${theme ? "" : ` <a href="#${slugify(q.epreuve)}">Revoir la fiche</a>`}
+        <button class="btn btn-navy btn-sm" id="qcmNext">${i + 1 < list.length ? "Question suivante" : "Voir mon score"}${svg("i-arrow", 'fill="none" stroke="currentColor" stroke-width="2.4"')}</button>`;
+      on("#qcmNext", "click", () => { i++; i < list.length ? show() : end(); });
+      $("#qcmNext").focus({ preventScroll: true });
     }
     function end() {
-      const pct = Math.round((score / QCM.length) * 100);
-      const msg = pct >= 80 ? "Excellent ! Votre méthode est solide." : pct >= 50 ? "Bonne base. Quelques points de méthode à consolider." : "La méthode fait la différence au concours : nos fiches et guides sont faits pour vous.";
+      const pct = Math.round((score / list.length) * 100);
+      const msg = theme
+        ? (pct >= 80 ? "Excellent ! Vos connaissances sont solides." : pct >= 50 ? "Bonne base. Quelques notions à revoir avant le concours." : "Ces notions tombent régulièrement : nos ouvrages vous aident à les maîtriser.")
+        : (pct >= 80 ? "Excellent ! Votre méthode est solide." : pct >= 50 ? "Bonne base. Quelques points de méthode à consolider." : "La méthode fait la différence au concours : nos fiches et guides sont faits pour vous.");
       box.innerHTML = `<div class="qcm-card qcm-end">
-        <div class="qcm-score"><b>${score}</b><span>/ ${QCM.length}</span></div>
+        <div class="qcm-score"><b>${score}</b><span>/ ${list.length}</span></div>
         <h3>${msg}</h3>
         <div class="cs-actions">
           <button class="btn btn-wa" id="qcmShare">${svg("i-wa", 'fill="currentColor"')}Défier un ami sur WhatsApp</button>
           <button class="btn btn-ghost" id="qcmRestart">Recommencer</button>
         </div></div>`;
-      on("#qcmShare", "click", () => openWhatsApp(`J'ai eu ${score}/${QCM.length} au test de méthode des concours (SOG, cas pratique, note de synthèse…) des Cours Sésame et SAJ. À toi de jouer : ${location.href.split("#")[0]}#qcm`, false));
+      const sujet = theme ? `au ${theme.titre}` : "au test de méthode des concours (SOG, cas pratique, note de synthèse…)";
+      on("#qcmShare", "click", () => openWhatsApp(`J'ai eu ${score}/${list.length} ${sujet} des Cours Sésame et SAJ. À toi de jouer : ${location.href.split("#")[0]}#qcm`, false));
       on("#qcmRestart", "click", () => { i = 0; score = 0; show(); });
     }
     show();
+  }
+
+  /* ---------- Sujets corrigés : filtre par concours ---------- */
+  function initSujetsFiltre() {
+    const box = $("#sujetsFiltre");
+    if (!box) return;
+    const set = f => {
+      $$(".chip", box).forEach(b => b.setAttribute("aria-pressed", b.dataset.f === f));
+      $$(".sujets-grid .sujet-card").forEach(a => { a.hidden = f !== "tous" && !a.dataset.concours.split(" ").includes(f); });
+    };
+    $$(".chip", box).forEach(b => b.addEventListener("click", () => {
+      set(b.dataset.f);
+      history.replaceState(null, "", b.dataset.f === "tous" ? location.pathname : "#" + b.dataset.f);
+    }));
+    const h = location.hash.slice(1);
+    if (CONCOURS.some(c => c.id === h)) set(h);
   }
 
   /* ---------- Toast ---------- */
@@ -554,7 +614,9 @@
   wireFAQ();
   initConseiller();
   initQCM();
+  initSujetsFiltre();
   updateCart();
+  syncAddButtons();
   syncTopHeight();
   window.addEventListener("resize", () => { syncTopHeight(); updateCart(); });
   const y = $("#year"); if (y) y.textContent = new Date().getFullYear();
