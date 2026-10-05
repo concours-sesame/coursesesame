@@ -3,14 +3,15 @@
 (function () {
   "use strict";
 
-  const { CONCOURS, parsePrice, fmt, svg, slugify, plural, coverParts, coverHTML, bookHTML, groupHTML, packTotals } = window.SESAME;
+  const { CONCOURS, parsePrice, fmt, svg, slugify, plural, setRoot, ouvrageURL, coverParts, coverHTML, bookHTML, groupHTML, packTotals } = window.SESAME;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const on = (sel, ev, fn) => { const el = typeof sel === "string" ? $(sel) : sel; if (el) el.addEventListener(ev, fn); };
   const WA_URL = "https://wa.me/" + WA;
-  const CART_KEY = "sesame-cart-v1";
+  const CART_KEY = "sesame-cart-v2";
   const PROMO_MIN = 3;
   const ROOT = document.body.dataset.root || "";
+  setRoot(ROOT);
   const PAGE_CAT = document.body.dataset.cat || "";
   const byCat = id => OUVRAGES.filter(o => o.categorie === id);
   const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -22,10 +23,16 @@
   }
 
   /* ---------- Panier ---------- */
+  // Le panier est enregistré par titre et concours (et non par position dans la liste),
+  // pour rester juste quand on ajoute un ouvrage dans data.js.
+  const keyOf = o => o.titre + "|" + o.categorie;
   let cart = [];
-  try { cart = JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch (e) { cart = []; }
-  cart = cart.filter(i => Number.isInteger(i) && OUVRAGES[i]);
-  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} };
+  try {
+    const saved = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    cart = saved.map(k => OUVRAGES.findIndex(o => keyOf(o) === k)).filter((i, at, all) => i > -1 && all.indexOf(i) === at);
+    localStorage.removeItem("sesame-cart-v1");
+  } catch (e) { cart = []; }
+  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart.map(i => keyOf(OUVRAGES[i])))); } catch (e) {} };
   const totals = () => {
     const t = packTotals(cart.map(i => OUVRAGES[i]));
     return Object.assign(t, { promo: cart.length >= PROMO_MIN });
@@ -41,7 +48,31 @@
     saveCart();
     updateCart();
     renderBooks();
+    syncAddButtons();
     if (modalIdx !== null) syncModalBtn();
+  }
+
+  // Boutons d'ajout affichés en dehors du catalogue (page d'un ouvrage, suggestions)
+  const IC = 'fill="none" stroke="currentColor" stroke-width="2.6"';
+  function paintBigAdd(b, inCart) {
+    b.classList.toggle("btn-gold", inCart);
+    b.classList.toggle("btn-navy", !inCart);
+    b.innerHTML = inCart ? svg("i-check", IC) + "Dans le panier" : svg("i-plus", IC) + "Ajouter au panier";
+  }
+  function syncAddButtons() {
+    $$("[data-add]").forEach(b => {
+      if (b.closest("#books")) return;
+      const inCart = cart.includes(+b.dataset.add);
+      if (b.classList.contains("add-btn")) {
+        b.classList.toggle("in", inCart);
+        b.innerHTML = inCart ? svg("i-check") + "Ajouté" : svg("i-plus") + "Panier";
+      } else if (b.classList.contains("p-add")) {
+        // Bouton principal d'une page ouvrage (sur fond bleu)
+        b.classList.toggle("btn-gold", !inCart);
+        b.classList.toggle("btn-ghost", inCart);
+        b.innerHTML = inCart ? svg("i-check", IC) + "Dans le panier" : svg("i-plus", IC) + "Ajouter au panier";
+      }
+    });
   }
 
   function toggleCart(idx) {
@@ -138,16 +169,14 @@
       ex.hidden = !o.extrait;
       if (o.extrait) ex.href = ROOT + "assets/extraits/" + o.extrait;
     }
+    const pg = $("#mPage");
+    if (pg) pg.href = ouvrageURL(o);
     syncModalBtn();
     $(".quick").open = false;
     setModal(true);
   }
   function syncModalBtn() {
-    const inCart = cart.includes(modalIdx);
-    const b = $("#mAdd");
-    const ic = 'fill="none" stroke="currentColor" stroke-width="2.6"';
-    b.className = "btn " + (inCart ? "btn-gold" : "btn-navy");
-    b.innerHTML = inCart ? svg("i-check", ic) + "Dans le panier" : svg("i-plus", ic) + "Ajouter au panier";
+    paintBigAdd($("#mAdd"), cart.includes(modalIdx));
   }
   function setModal(open) {
     if (open) lastFocus = document.activeElement;
@@ -187,6 +216,12 @@
     if (pack) return addMany(pack.dataset.pack.split(",").map(Number));
     const open = e.target.closest("[data-open]");
     if (open) return openModal(+open.dataset.open);
+    const share = e.target.closest("[data-share]");
+    if (share) {
+      const url = share.dataset.share, title = share.dataset.title || document.title;
+      if (navigator.share) navigator.share({ title, url }).catch(() => {});
+      else openWhatsApp(`${title}\n${url}`, false);
+    }
   });
 
   document.addEventListener("keydown", e => {
@@ -240,7 +275,7 @@
         return true;
       }).map(o => {
         const same = seen.get(o.titre + "|" + o.prix);
-        return same.length > 1 ? { ...o, concoursListe: same.map(x => CONCOURS.find(c => c.id === x.categorie).court).join(" · ") } : o;
+        return same.length > 1 ? { ...o, concours: "Concours de Côte d'Ivoire", concoursListe: same.map(x => CONCOURS.find(c => c.id === x.categorie).court).join(" · ") } : o;
       });
     }
     const idxOf = o => OUVRAGES.findIndex(x => x.titre === o.titre && x.categorie === o.categorie);
@@ -471,6 +506,22 @@
     show();
   }
 
+  /* ---------- Sujets corrigés : filtre par concours ---------- */
+  function initSujetsFiltre() {
+    const box = $("#sujetsFiltre");
+    if (!box) return;
+    const set = f => {
+      $$(".chip", box).forEach(b => b.setAttribute("aria-pressed", b.dataset.f === f));
+      $$(".sujets-grid .sujet-card").forEach(a => { a.hidden = f !== "tous" && !a.dataset.concours.split(" ").includes(f); });
+    };
+    $$(".chip", box).forEach(b => b.addEventListener("click", () => {
+      set(b.dataset.f);
+      history.replaceState(null, "", b.dataset.f === "tous" ? location.pathname : "#" + b.dataset.f);
+    }));
+    const h = location.hash.slice(1);
+    if (CONCOURS.some(c => c.id === h)) set(h);
+  }
+
   /* ---------- Toast ---------- */
   let toastTimer;
   function toast(text) {
@@ -554,7 +605,9 @@
   wireFAQ();
   initConseiller();
   initQCM();
+  initSujetsFiltre();
   updateCart();
+  syncAddButtons();
   syncTopHeight();
   window.addEventListener("resize", () => { syncTopHeight(); updateCart(); });
   const y = $("#year"); if (y) y.textContent = new Date().getFullYear();
