@@ -462,45 +462,54 @@
     render(0);
   }
 
-  /* ---------- QCM « Testez votre méthode » ---------- */
+  /* ---------- QCM : méthode (page Méthodes) ou matière (pages qcm/) ---------- */
   function initQCM() {
     const box = $("#qcmBox");
     if (!box || typeof QCM === "undefined") return;
-    let i = 0, score = 0;
+    const theme = box.dataset.theme && typeof QCM_MATIERES !== "undefined" ? QCM_MATIERES.find(t => t.slug === box.dataset.theme) : null;
+    const list = theme ? theme.questions : QCM;
     const letters = "ABCD";
+    // Les réponses sont présentées dans un ordre différent à chaque partie
+    const shuffle = a => { for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; } return a; };
+    let i = 0, score = 0, order = [];
     function show() {
-      const q = QCM[i];
+      const q = list[i];
+      order = shuffle(q.options.map((_, k) => k));
       box.innerHTML = `<div class="qcm-card">
-        <div class="cs-progress"><span>Question ${i + 1} sur ${QCM.length}</span><i style="width:${((i + 1) / QCM.length) * 100}%"></i></div>
-        <span class="qcm-tag">${q.epreuve}</span>
+        <div class="cs-progress"><span>Question ${i + 1} sur ${list.length}</span><i style="width:${((i + 1) / list.length) * 100}%"></i></div>
+        <span class="qcm-tag">${theme ? theme.nom : q.epreuve}</span>
         <h3>${q.q}</h3>
-        <div class="qcm-opts">${q.options.map((o, k) => `<button class="qcm-opt" data-k="${k}"><span>${letters[k]}</span>${o}</button>`).join("")}</div>
+        <div class="qcm-opts">${order.map((k, pos) => `<button class="qcm-opt" data-k="${k}"><span>${letters[pos]}</span>${q.options[k]}</button>`).join("")}</div>
         <div class="qcm-expl" hidden></div>
       </div>`;
       $$(".qcm-opt", box).forEach(b => b.addEventListener("click", () => answer(+b.dataset.k)));
     }
     function answer(k) {
-      const q = QCM[i];
+      const q = list[i];
       const good = k === q.bonne;
       if (good) score++;
-      $$(".qcm-opt", box).forEach((b, j) => { b.disabled = true; if (j === q.bonne) b.classList.add("ok"); else if (j === k) b.classList.add("ko"); });
+      $$(".qcm-opt", box).forEach(b => { const j = +b.dataset.k; b.disabled = true; if (j === q.bonne) b.classList.add("ok"); else if (j === k) b.classList.add("ko"); });
       const ex = $(".qcm-expl", box);
       ex.hidden = false;
-      ex.innerHTML = `<b>${good ? "Bonne réponse !" : "Pas tout à fait."}</b> ${q.explication} <a href="#${slugify(q.epreuve)}">Revoir la fiche</a>
-        <button class="btn btn-navy btn-sm" id="qcmNext">${i + 1 < QCM.length ? "Question suivante" : "Voir mon score"}${svg("i-arrow", 'fill="none" stroke="currentColor" stroke-width="2.4"')}</button>`;
-      on("#qcmNext", "click", () => { i++; i < QCM.length ? show() : end(); });
+      ex.innerHTML = `<b>${good ? "Bonne réponse !" : "Pas tout à fait."}</b> ${q.explication}${theme ? "" : ` <a href="#${slugify(q.epreuve)}">Revoir la fiche</a>`}
+        <button class="btn btn-navy btn-sm" id="qcmNext">${i + 1 < list.length ? "Question suivante" : "Voir mon score"}${svg("i-arrow", 'fill="none" stroke="currentColor" stroke-width="2.4"')}</button>`;
+      on("#qcmNext", "click", () => { i++; i < list.length ? show() : end(); });
+      $("#qcmNext").focus({ preventScroll: true });
     }
     function end() {
-      const pct = Math.round((score / QCM.length) * 100);
-      const msg = pct >= 80 ? "Excellent ! Votre méthode est solide." : pct >= 50 ? "Bonne base. Quelques points de méthode à consolider." : "La méthode fait la différence au concours : nos fiches et guides sont faits pour vous.";
+      const pct = Math.round((score / list.length) * 100);
+      const msg = theme
+        ? (pct >= 80 ? "Excellent ! Vos connaissances sont solides." : pct >= 50 ? "Bonne base. Quelques notions à revoir avant le concours." : "Ces notions tombent régulièrement : nos ouvrages vous aident à les maîtriser.")
+        : (pct >= 80 ? "Excellent ! Votre méthode est solide." : pct >= 50 ? "Bonne base. Quelques points de méthode à consolider." : "La méthode fait la différence au concours : nos fiches et guides sont faits pour vous.");
       box.innerHTML = `<div class="qcm-card qcm-end">
-        <div class="qcm-score"><b>${score}</b><span>/ ${QCM.length}</span></div>
+        <div class="qcm-score"><b>${score}</b><span>/ ${list.length}</span></div>
         <h3>${msg}</h3>
         <div class="cs-actions">
           <button class="btn btn-wa" id="qcmShare">${svg("i-wa", 'fill="currentColor"')}Défier un ami sur WhatsApp</button>
           <button class="btn btn-ghost" id="qcmRestart">Recommencer</button>
         </div></div>`;
-      on("#qcmShare", "click", () => openWhatsApp(`J'ai eu ${score}/${QCM.length} au test de méthode des concours (SOG, cas pratique, note de synthèse…) des Cours Sésame et SAJ. À toi de jouer : ${location.href.split("#")[0]}#qcm`, false));
+      const sujet = theme ? `au ${theme.titre}` : "au test de méthode des concours (SOG, cas pratique, note de synthèse…)";
+      on("#qcmShare", "click", () => openWhatsApp(`J'ai eu ${score}/${list.length} ${sujet} des Cours Sésame et SAJ. À toi de jouer : ${location.href.split("#")[0]}#qcm`, false));
       on("#qcmRestart", "click", () => { i = 0; score = 0; show(); });
     }
     show();

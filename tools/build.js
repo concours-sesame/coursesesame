@@ -8,6 +8,8 @@
    - index.html : cartes des concours, catalogue, FAQ et données Google (entre les repères build:)
    - concours/<concours>/index.html : une page par concours
    - ouvrages/index.html et ouvrages/<ouvrage>/index.html : la liste des ouvrages et une page par ouvrage
+   - sujets/ : les sujets corrigés (contenu/sujets.js et contenu/sujets/)
+   - qcm/ : les QCM par matière (assets/js/qcm-matieres.js)
    - methodes/index.html : fiches méthode et QCM
    - sitemap.xml : plan du site pour Google
    L'en-tête, le pied de page et le panier des pages sont copiés depuis index.html
@@ -165,7 +167,7 @@ function productList(items) {
 }
 
 /* ---------- Gabarit des pages intérieures ---------- */
-function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image = OG_IMAGE, ogType = "website" }) {
+function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image = OG_IMAGE, ogType = "website", scripts = [] }) {
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -204,7 +206,7 @@ ${body}
 ${rebase(partial("footer"), prefix)}
 <script src="${prefix}assets/js/data.js"></script>
 <script src="${prefix}assets/js/render.js"></script>
-<script src="${prefix}assets/js/app.js"></script>
+${scripts.map(f => `<script src="${prefix}${f}"></script>\n`).join("")}<script src="${prefix}assets/js/app.js"></script>
 </body>
 </html>
 `;
@@ -414,7 +416,7 @@ ${contactCTA(prefix)}`;
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">QCM · ${ctx.D.QCM.length} questions</span><h2 class="h-section">Testez votre <em>méthode</em></h2></div>
-      <p class="lead">Répondez, découvrez l'explication, puis défiez vos amis sur WhatsApp. Toutes les réponses se trouvent dans les fiches ci-dessous.</p>
+      <p class="lead">Répondez, découvrez l'explication, puis défiez vos amis sur WhatsApp. Toutes les réponses se trouvent dans les fiches ci-dessous. Pour tester vos connaissances, voyez aussi nos <a href="${prefix}qcm/">QCM de droit par matière</a>.</p>
     </div>
     <div class="qcm-wrap reveal"><div id="qcmBox"><p class="lead">Activez JavaScript pour lancer le QCM.</p></div></div>
   </div>
@@ -564,7 +566,7 @@ ${contactCTA(prefix)}`;
     h1: `Tous nos <em>ouvrages</em>`,
     lead: `${plural(LIVRES.length, "ouvrage")} pour préparer les concours de la Magistrature, du Greffe, de l'Administration pénitentiaire, de l'EPPJEJ et de l'ENA en Côte d'Ivoire. Ouvrez un ouvrage pour lire sa présentation, feuilleter l'extrait gratuit et le commander.`,
     ctas: `<a href="#liste" class="btn btn-gold">Voir les ouvrages${arrow}</a><a href="${WA_URL}" target="_blank" rel="noopener" class="btn btn-ghost">${waIcon}Conseil personnalisé</a>`,
-    stats: [[LIVRES.length, "Ouvrages"], [OUVRAGES.filter((o, i) => o.extrait && OUVRAGES.findIndex(x => x.titre === o.titre) === i).length, "Extraits gratuits"], [CONCOURS.length, "Concours"], ["-10 %", "Dès 3 ouvrages"]]
+    stats: [[LIVRES.length, "Ouvrages"], [OUVRAGES.filter((o, i) => o.extrait && OUVRAGES.findIndex(x => x.titre === o.titre) === i).length, "Avec extrait gratuit"], [CONCOURS.length, "Concours"], ["-10 %", "Dès 3 ouvrages"]]
   })}
 
 <section class="section" id="liste">
@@ -696,6 +698,123 @@ ${contactCTA(prefix)}`;
       "@context": "https://schema.org", "@type": "ItemList",
       itemListElement: SUJETS_PAGES.map((x, i) => ({ "@type": "ListItem", position: i + 1, url: `${SITE}sujets/${x.adresse}/`, name: x.titre }))
     }]
+  }));
+  urls.push(url);
+}
+
+/* ---------- QCM par matière ---------- */
+{
+  const qctx = {};
+  vm.createContext(qctx);
+  vm.runInContext(read("assets/js/qcm-matieres.js") + "\n;globalThis.Q=QCM_MATIERES;", qctx);
+  const THEMES = qctx.Q;
+  // Matières des sujets corrigés rattachées à chaque QCM
+  const MATIERES_SUJETS = {
+    "droit-civil": ["Droit civil", "Droit de la famille"], "droit-penal": ["Droit pénal", "Procédure pénale"],
+    "droit-administratif": ["Droit administratif"], "droits-de-l-enfant": ["Droits de l'enfant"], "organisation-judiciaire": ["Organisation judiciaire"]
+  };
+  for (const t of THEMES) {
+    t.questions.forEach((q, i) => { if (!(q.bonne >= 0 && q.bonne < q.options.length)) throw new Error(`QCM ${t.slug}, question ${i + 1} : réponse "bonne" invalide`); });
+    t.livres = t.ouvrages.map(titre => { const o = OUVRAGES.find(x => x.titre === titre); if (!o) throw new Error(`QCM ${t.slug} : ouvrage introuvable : ${titre}`); return o; });
+  }
+  const qcmCard = (t, prefix, i, href) => `<a class="ep-card reveal reveal-d${i % 4}" href="${href || `${prefix}qcm/${t.slug}/`}">
+        <span class="ep-card-tag">QCM · ${plural(t.questions.length, "question")}</span>
+        <b>${t.nom}</b>
+        <span>${t.intro}</span>
+        <small class="sujet-card-foot">${courts(t.concours)}</small>
+        <span class="ep-card-go">Faire le QCM${svg("i-arrow")}</span>
+      </a>`;
+  const methode = { nom: "Méthode des épreuves", questions: ctx.D.QCM, concours: CONCOURS.map(c => c.id), intro: "Dissertation, cas pratique, commentaire, SOG, PECOS, note de synthèse et étude de texte : connaissez-vous les règles de méthode attendues par les jurys ?" };
+
+  for (const t of THEMES) {
+    const prefix = "../../";
+    R.setRoot(prefix);
+    const url = `${SITE}qcm/${t.slug}/`;
+    const sujets = SUJETS_PAGES.filter(x => (MATIERES_SUJETS[t.slug] || []).includes(x.matiere));
+    const body = `${subHero({
+      crumbs: [["Accueil", prefix], ["QCM", prefix + "qcm/"], [t.nom, ""]],
+      eyebrow: `QCM gratuit · ${courts(t.concours)}`,
+      h1: t.titre.replace(/^(QCM (?:de |d'|sur les ))(.+)$/, "$1<em>$2</em>"),
+      lead: t.intro,
+      ctas: `<a href="#qcm" class="btn btn-gold">Commencer le QCM${arrow}</a><a href="#approfondir" class="btn btn-ghost">Approfondir</a>`,
+      stats: [[t.questions.length, "Questions"], ["2 min", "Environ"], ["100 %", "Corrigé"]]
+    })}
+
+<section class="section sujets" id="qcm">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">QCM · ${plural(t.questions.length, "question")}</span><h2 class="h-section">Testez vos <em>connaissances</em></h2></div>
+      <p class="lead">Choisissez une réponse, lisez l'explication, puis passez à la question suivante. Les réponses s'appuient sur le contenu de nos ouvrages, textes à l'appui.</p>
+    </div>
+    <div class="qcm-wrap reveal"><div id="qcmBox" data-theme="${t.slug}"><p class="lead">Activez JavaScript pour lancer le QCM.</p></div></div>
+  </div>
+</section>
+
+<section class="section section-cream" id="approfondir">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">${t.nom}</span><h2 class="h-section">Pour <em>approfondir</em></h2></div>
+      <p class="lead">Les ouvrages d'où sont tirées ces questions, avec leur extrait gratuit quand il existe.</p>
+    </div>
+    <div class="books">${t.livres.map(o => R.bookHTML(horsConcours(livreDe(o)), OUVRAGES.indexOf(o), false)).join("")}</div>
+  </div>
+</section>
+
+${sujets.length ? `<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">En accès libre · ${t.nom}</span><h2 class="h-section">Des sujets <em>corrigés</em></h2></div>
+    </div>
+    <div class="ep-cards">${sujets.slice(0, 6).map((x, i) => sujetCard(x, prefix, i)).join("")}</div>
+  </div>
+</section>` : ""}
+
+<section class="section${sujets.length ? " section-cream" : ""}">
+  <div class="wrap">
+    <div class="section-head reveal"><div><span class="eyebrow">Continuer</span><h2 class="h-section">Les autres <em>QCM</em></h2></div></div>
+    <div class="ep-cards">${THEMES.filter(x => x !== t).map((x, i) => qcmCard(x, prefix, i)).join("")}${qcmCard(methode, prefix, THEMES.length, `${prefix}methodes/#qcm`)}</div>
+  </div>
+</section>
+
+${contactCTA(prefix)}`;
+    write(`qcm/${t.slug}/index.html`, page({
+      prefix, url, body, scripts: ["assets/js/qcm-matieres.js"],
+      title: `${t.titre} gratuit, concours de Côte d'Ivoire | Les Cours Sésame et SAJ`,
+      description: `${plural(t.questions.length, "question")} corrigées de ${t.nom.toLowerCase()} pour préparer les concours ${courts(t.concours).replace(/ · /g, ", ")} : ${t.intro}`,
+      ld: [breadcrumb([["Accueil", SITE], ["QCM", SITE + "qcm/"], [t.nom, url]]), {
+        "@context": "https://schema.org", "@type": "Quiz", name: t.titre, description: t.intro, url, inLanguage: "fr",
+        about: t.nom, isAccessibleForFree: true, educationalLevel: "Concours de la fonction publique", provider: { "@type": "Organization", name: "Les Cours Sésame et SAJ" }
+      }]
+    }));
+    urls.push(url);
+  }
+
+  // Page qui réunit tous les QCM
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "qcm/";
+  const nb = THEMES.reduce((n, t) => n + t.questions.length, 0) + ctx.D.QCM.length;
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["QCM", ""]],
+    eyebrow: "Entraînement gratuit · Concours de Côte d'Ivoire",
+    h1: `Les <em>QCM</em>`,
+    lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : droit civil, droit pénal, droit administratif, droits de l'enfant, organisation judiciaire et méthode des épreuves. Chaque réponse est expliquée.`,
+    ctas: `<a href="#liste" class="btn btn-gold">Choisir un QCM${arrow}</a><a href="${prefix}sujets/" class="btn btn-ghost">Sujets corrigés</a>`,
+    stats: [[THEMES.length + 1, "QCM"], [nb, "Questions"], [CONCOURS.length, "Concours"]]
+  })}
+
+<section class="section" id="liste">
+  <div class="wrap">
+    <div class="ep-cards">${THEMES.map((t, i) => qcmCard(t, prefix, i)).join("")}${qcmCard(methode, prefix, THEMES.length, `${prefix}methodes/#qcm`)}</div>
+  </div>
+</section>
+
+${contactCTA(prefix)}`;
+  write("qcm/index.html", page({
+    prefix, url, body,
+    title: "QCM gratuits de droit et de méthode pour les concours de Côte d'Ivoire | Les Cours Sésame et SAJ",
+    description: `${nb} questions corrigées gratuites : droit civil, droit pénal, droit administratif, droits de l'enfant, organisation judiciaire et méthode des épreuves, pour les concours INFJ et ENA.`,
+    ld: [breadcrumb([["Accueil", SITE], ["QCM", url]])]
   }));
   urls.push(url);
 }

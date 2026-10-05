@@ -46,6 +46,8 @@ input,select,textarea{font:inherit;color:inherit}
 .h-section em{font-style:italic;color:var(--gold-ink)}
 .on-dark .h-section em{color:var(--gold)}
 .lead{font-size:clamp(1rem,1.6vw,1.15rem);color:var(--muted);max-width:56ch}
+.lead a{color:var(--gold-ink);font-weight:800}
+.on-dark .lead a{color:var(--gold)}
 .on-dark .lead{color:rgba(255,255,255,.72)}
 .section{padding:clamp(72px,10vw,128px) 0;position:relative}
 .section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.5rem 3rem;margin-bottom:clamp(32px,5vw,56px)}
