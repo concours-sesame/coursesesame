@@ -38,6 +38,9 @@
       [/^Les Annales des Anciens Sujets Corrigés(?: de)? (.+)$/i, "Annales corrigées"],
       [/^Le Guide Méthodologique (.+)$/i, "Guide méthodologique"],
       [/^Le Sésame de (.+)$/i, "Le Sésame"],
+      [/^Les Fiches d'Arrêts de (.+)$/i, "Fiches d'arrêts"],
+      [/^Les (\d+ Cas Pratiques Corrigés) de la Magistrature$/i, "Magistrature"],
+      [/^Le Droit Administratif en 125 Dissertations Corrigées — (Tome [IV]+)$/i, "125 dissertations · Droit administratif"],
       [/^La (Logique)$/i, "Entraînement"]
     ];
     for (const [re, serie] of rules) {
