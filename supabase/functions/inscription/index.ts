@@ -2,7 +2,8 @@
 //
 // Le compte est créé déjà confirmé : le site n'envoie aucun e-mail (le service d'e-mails par défaut
 // de Supabase ne sert qu'aux tests). L'abonnement, lui, n'est activé qu'après paiement, depuis la page
-// d'administration. Pour limiter les abus : au plus 5 inscriptions par heure depuis une même adresse IP.
+// d'administration. Pour limiter les abus : au plus 60 inscriptions par heure depuis une même adresse IP
+// (plafond large : les opérateurs mobiles et les réseaux Wi-Fi d'une salle de cours partagent une même adresse).
 //
 // Déploiement : sans vérification de jeton (la fonction est appelée par des visiteurs non connectés).
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
@@ -13,7 +14,7 @@ const CORS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 const CONCOURS = ["infj", "greffe", "penitentiaire", "eppjej", "ena", "autre"];
-const MAX_PAR_HEURE = 5;
+const MAX_PAR_HEURE = 60;
 
 // Clé secrète du projet : nouvelle forme (SUPABASE_SECRET_KEYS) ou ancienne (SUPABASE_SERVICE_ROLE_KEY)
 function cleSecrete(): string {
