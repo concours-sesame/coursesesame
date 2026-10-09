@@ -5,6 +5,8 @@
 -- Aucun contenu exclusif ne se trouve dans le dépôt du site : seuls les abonnés en cours
 -- (et l'administrateur) peuvent lire les contenus et obtenir un lien temporaire vers un fichier.
 --
+-- Les droits sont ensuite resserrés par 20261009221801_espace_abonnes_droits.sql.
+--
 -- Pour désigner l'administrateur, une fois son compte créé sur le site :
 --   insert into public.admins (user_id) select id from auth.users where email = 'adresse@exemple.com';
 
@@ -102,7 +104,9 @@ language sql stable security definer set search_path = '' as $$
     and exists (select 1 from public.contenus where fichier = chemin and publie));
 $$;
 
--- Profil créé à l'inscription, à partir des informations transmises par la fonction « inscription ».
+-- Profil créé pour tout compte confirmé, à partir des informations transmises par la fonction
+-- « inscription » (qui crée des comptes déjà confirmés). Un compte ouvert directement auprès de
+-- Supabase Auth sans confirmation n'a pas de profil : il n'apparaît nulle part et ne sert à rien.
 -- La fonction ne doit jamais faire échouer la création du compte : les valeurs sont nettoyées.
 create function public.creer_profil() returns trigger
 language plpgsql security definer set search_path = '' as $$
@@ -111,6 +115,7 @@ declare
   tel text := regexp_replace(coalesce(m ->> 'telephone', ''), '[^0-9+]', '', 'g');
   conc text := m ->> 'concours';
 begin
+  if new.email_confirmed_at is null then return new; end if;
   if tel !~ '^\+?[0-9]{8,15}$' then tel := '00000000'; end if;
   if conc is not null and conc not in ('infj', 'greffe', 'penitentiaire', 'eppjej', 'ena', 'autre') then conc := null; end if;
   insert into public.profils (id, prenom, nom, telephone, concours)
@@ -125,7 +130,7 @@ begin
 end $$;
 
 create trigger creer_profil_apres_inscription
-  after insert on auth.users
+  after insert or update of email_confirmed_at on auth.users
   for each row execute function public.creer_profil();
 
 -- ---------------------------------------------------------------------------

@@ -3,6 +3,6 @@
    La sécurité repose sur les règles d'accès de la base (supabase/migrations) : sans abonnement en cours,
    aucun contenu exclusif n'est lisible. Ne jamais placer ici la clé secrète (service_role ou sb_secret). */
 const ESPACE_CONFIG = {
-  url: "",
-  cle: ""
+  url: "https://iyftcjszvnaaakirlsdd.supabase.co",
+  cle: "sb_publishable_LuJ-9onygOrGouPTupJnPA_VzfefNtJ"
 };

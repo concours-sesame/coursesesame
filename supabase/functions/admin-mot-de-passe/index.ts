@@ -2,7 +2,8 @@
 // qui a oublié le sien (le site n'envoie pas d'e-mails). Le mot de passe est affiché à l'administrateur,
 // qui le transmet à l'abonné sur WhatsApp ; l'abonné peut ensuite le changer depuis son espace.
 //
-// Déploiement : avec vérification de jeton. La fonction contrôle en plus que l'appelant est administrateur.
+// Déploiement : sans vérification de jeton par la plateforme. La fonction vérifie elle-même la session
+// de l'appelant (auth.getUser) puis sa présence dans la table « admins ».
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 const CORS = {
@@ -10,6 +11,16 @@ const CORS = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
+// Clé secrète du projet : nouvelle forme (SUPABASE_SECRET_KEYS) ou ancienne (SUPABASE_SERVICE_ROLE_KEY)
+function cleSecrete(): string {
+  try {
+    const cles = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") ?? "{}");
+    if (cles.default) return cles.default;
+  } catch {
+    // ancienne forme seulement
+  }
+  return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+}
 const reponse = (corps: unknown, statut = 200) =>
   new Response(JSON.stringify(corps), { status: statut, headers: { ...CORS, "Content-Type": "application/json" } });
 const erreur = (message: string, statut = 400) => reponse({ error: message }, statut);
@@ -26,7 +37,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return erreur("Méthode non autorisée", 405);
 
-  const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
+  const admin = createClient(Deno.env.get("SUPABASE_URL")!, cleSecrete(), {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
@@ -48,6 +59,9 @@ Deno.serve(async (req) => {
 
   const motDePasse = motDePasseProvisoire();
   const { error } = await admin.auth.admin.updateUserById(userId, { password: motDePasse });
-  if (error) return erreur("Impossible de changer le mot de passe de ce compte.", 500);
+  if (error) {
+    console.error("updateUserById :", error.message);
+    return erreur("Impossible de changer le mot de passe de ce compte.", 500);
+  }
   return reponse({ motDePasse });
 });

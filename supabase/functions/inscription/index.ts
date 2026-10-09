@@ -15,6 +15,16 @@ const CORS = {
 const CONCOURS = ["infj", "greffe", "penitentiaire", "eppjej", "ena", "autre"];
 const MAX_PAR_HEURE = 5;
 
+// Clé secrète du projet : nouvelle forme (SUPABASE_SECRET_KEYS) ou ancienne (SUPABASE_SERVICE_ROLE_KEY)
+function cleSecrete(): string {
+  try {
+    const cles = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") ?? "{}");
+    if (cles.default) return cles.default;
+  } catch {
+    // ancienne forme seulement
+  }
+  return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+}
 const reponse = (corps: unknown, statut = 200) =>
   new Response(JSON.stringify(corps), { status: statut, headers: { ...CORS, "Content-Type": "application/json" } });
 const erreur = (message: string, statut = 400) => reponse({ error: message }, statut);
@@ -43,7 +53,7 @@ Deno.serve(async (req) => {
   if (!/^\+?[0-9]{8,15}$/.test(telephone)) return erreur("Numéro de téléphone invalide.");
   if (motDePasse.length < 8 || motDePasse.length > 72) return erreur("Le mot de passe doit compter au moins 8 caractères.");
 
-  const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
+  const admin = createClient(Deno.env.get("SUPABASE_URL")!, cleSecrete(), {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
@@ -52,7 +62,10 @@ Deno.serve(async (req) => {
   const uneHeure = new Date(Date.now() - 3600_000).toISOString();
   const { count, error: errCompte } = await admin.from("journal_inscriptions")
     .select("id", { count: "exact", head: true }).eq("ip", ip).gte("cree_le", uneHeure);
-  if (errCompte) return erreur("Inscription impossible pour le moment. Réessayez plus tard.", 500);
+  if (errCompte) {
+    console.error("journal_inscriptions :", errCompte.message);
+    return erreur("Inscription impossible pour le moment. Réessayez plus tard.", 500);
+  }
   if ((count ?? 0) >= MAX_PAR_HEURE) return erreur("Trop d'inscriptions depuis cette connexion. Réessayez dans une heure.", 429);
   await admin.from("journal_inscriptions").insert({ ip });
   await admin.from("journal_inscriptions").delete().lt("cree_le", new Date(Date.now() - 86400_000).toISOString());
@@ -68,6 +81,7 @@ Deno.serve(async (req) => {
       return erreur("Un compte existe déjà avec cette adresse e-mail. Connectez-vous.", 409);
     }
     if (/password/i.test(error.message)) return erreur("Ce mot de passe est trop faible. Choisissez-en un autre.");
+    console.error("createUser :", error.message);
     return erreur("Inscription impossible pour le moment. Réessayez plus tard.", 500);
   }
   return reponse({ ok: true });
