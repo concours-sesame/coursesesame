@@ -30,6 +30,18 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
   L'ordre des réponses est mélangé à l'affichage ; `"bonne"` donne la position de la bonne
   réponse dans la liste écrite (0 = première).
 
+## Ajouter une vidéo
+
+1. Compressez la vidéo pour le web (720 pixels de large, lecture progressive), par exemple :
+   `ffmpeg -i source.mp4 -vf scale=720:-2 -c:v libx264 -preset slow -crf 29 -maxrate 850k -bufsize 1700k -pix_fmt yuv420p -c:a aac -b:a 80k -movflags +faststart assets/video/<nom>.mp4`
+2. Tirez son affiche (une image de la vidéo, 540 pixels de large, 720 pour une vidéo carrée) :
+   `ffmpeg -ss 5 -i source.mp4 -frames:v 1 -vf scale=540:-2 -q:v 4 assets/img/videos/<nom>.jpg`
+3. Ajoutez sa fiche dans `VIDEOS` (`assets/js/data.js`) : titre, présentation, durée, format
+   (`"vertical"` ou `"carre"`) et, au choix, le concours, l'ouvrage, le sujet corrigé ou la fiche méthode
+   auxquels elle se rattache.
+4. Lancez `node tools/build.js` : la vidéo apparaît sur l'accueil (section « En vidéo ») et sur les pages
+   rattachées, avec ses données pour Google.
+
 ## Images
 
 - `assets/img/apercus/` : pages des extraits gratuits montrées sur les pages ouvrages
@@ -43,7 +55,10 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
 
 - `index.html` : page d'accueil. Les parties entre `<!-- partial:… -->` sont reprises
   sur toutes les pages ; celles entre `<!-- build:… -->` sont remplies par le générateur.
-- `concours/`, `ouvrages/`, `sujets/`, `qcm/` et `methodes/` : pages générées, à ne pas modifier à la main.
+- `concours/`, `ouvrages/`, `sujets/`, `qcm/`, `methodes/` et `mentions-legales/` : pages générées, à ne pas modifier à la main.
+- `assets/video/` et `assets/img/videos/` : les vidéos et leurs affiches.
+- Règle d'écriture : pas de tiret cadratin dans les textes. L'édition ou le tome d'un ouvrage s'écrit après une
+  virgule (« Le Guide Méthodologique Magistrature, Édition 2027 »).
 - `assets/js/render.js` : affichage des couvertures, fiches et packs (navigateur et générateur).
 - `assets/js/app.js` : panier, filtres, test « Quel ouvrage pour moi ? », QCM, partage.
 - `assets/css/style.css` : apparence (charte : bleu marine et or en aplats).

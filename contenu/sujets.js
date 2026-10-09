@@ -11,42 +11,42 @@ module.exports = [
     adresse: "theorie-imprevision-contrat-administratif",
     titre: "La théorie de l'imprévision dans le contrat administratif",
     epreuve: "Dissertation juridique", matiere: "Droit administratif", concours: ["infj", "ena"],
-    ouvrage: "Le Droit Administratif en 125 Dissertations Corrigées — Tome II",
+    ouvrage: "Le Droit Administratif en 125 Dissertations Corrigées, Tome II",
     resume: "Analyse du sujet, arrêts de référence et devoir intégralement rédigé : les conditions puis les effets de l'imprévision, de l'arrêt Gaz de Bordeaux au droit ivoirien."
   },
   {
     adresse: "refere-administratif",
     titre: "Le référé administratif",
     epreuve: "Dissertation juridique", matiere: "Droit administratif", concours: ["infj", "ena"],
-    ouvrage: "Le Droit Administratif en 125 Dissertations Corrigées — Tome II",
+    ouvrage: "Le Droit Administratif en 125 Dissertations Corrigées, Tome II",
     resume: "Notion, conditions, catégories et effets du référé administratif devant le Conseil d'État : analyse du sujet, textes applicables et devoir intégralement rédigé."
   },
   {
     adresse: "cas-pratique-accident-cause-par-un-mineur",
     titre: "L'accident causé par un mineur et la responsabilité des parents",
     epreuve: "Cas pratique", matiere: "Droit civil", concours: ["infj"],
-    ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature — Édition 2026",
+    ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026",
     resume: "Responsabilité des parents du fait de leur enfant mineur et étendue de la réparation due à la victime : corrigé-type rédigé selon le syllogisme juridique."
   },
   {
     adresse: "cas-pratique-sarl-gerant-depassement-pouvoirs",
     titre: "La SARL dont le gérant a outrepassé ses pouvoirs",
     epreuve: "Cas pratique", matiere: "Droit commercial OHADA", concours: ["infj"],
-    ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature — Édition 2026",
+    ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026",
     resume: "Opposabilité à la société d'un bail signé par le gérant en violation des statuts, puis responsabilité du gérant envers les associés au regard de l'AUSCGIE révisé."
   },
   {
     adresse: "cas-pratique-legitime-defense-agression-nocturne",
     titre: "La légitime défense invoquée après une agression nocturne",
     epreuve: "Cas pratique", matiere: "Droit pénal", concours: ["infj"],
-    ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature — Édition 2026",
+    ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026",
     resume: "Qualification des violences, degré de participation, présomption de légitime défense et juridiction compétente : corrigé-type suivant le quadriptyque pénal."
   },
   {
     adresse: "cas-pratique-accident-voirie-communale",
     titre: "L'accident sur voirie communale et la responsabilité de la commune",
     epreuve: "Cas pratique", matiere: "Droit administratif", concours: ["infj"],
-    ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature — Édition 2026",
+    ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026",
     resume: "Défaut d'entretien normal de l'ouvrage public, régime de responsabilité de la commune et chefs de préjudice indemnisables."
   },
   {
@@ -113,7 +113,7 @@ module.exports = [
     titre: "Organisation judiciaire : cinq questions sur les juridictions ivoiriennes",
     epreuve: "Questions-réponses", matiere: "Organisation judiciaire", concours: ["greffe"],
     session: "Concours direct d'admission 2027, cycle des administrateurs des greffes et parquets, session de juillet 2026",
-    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2027",
+    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027",
     resume: "Juridictions spéciales, Tribunal des conflits, juridictions suprêmes, loi du 28 mars 2025 portant organisation des juridictions et ressort de la Cour d'appel d'Abidjan."
   },
   {
@@ -121,7 +121,7 @@ module.exports = [
     titre: "Les particularités des contrats administratifs",
     epreuve: "Dissertation juridique", matiere: "Droit administratif", concours: ["greffe"],
     session: "Concours direct d'admission 2027, cycle des administrateurs des greffes et parquets, session de juillet 2026",
-    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2027",
+    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027",
     resume: "Ce qui distingue le contrat administratif, de sa formation à son exécution : dissertation entièrement rédigée."
   },
   {
@@ -129,7 +129,7 @@ module.exports = [
     titre: "OPEAJ : dix questions sur les institutions et l'administration ivoiriennes",
     epreuve: "Questions-réponses", matiere: "OPEAJ", concours: ["greffe"],
     session: "Concours direct d'entrée 2027, cycle moyen supérieur de l'École des greffes, session d'août 2026",
-    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2027",
+    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027",
     resume: "Commissions parlementaires, Sénat, procédure législative, institutions de la République, district autonome, commune et tribunaux de première instance."
   },
   {
@@ -137,7 +137,7 @@ module.exports = [
     titre: "L'amnistie et la grâce",
     epreuve: "Dissertation juridique", matiere: "Droit pénal", concours: ["penitentiaire"],
     session: "Concours direct d'entrée 2027, cycle des administrateurs des services pénitentiaires, session de juillet 2026",
-    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2027",
+    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027",
     resume: "Deux mesures de clémence convergentes dans leur finalité, mais distinctes par leur source, leur forme et la portée de leurs effets."
   },
   {
@@ -145,7 +145,7 @@ module.exports = [
     titre: "Droits de l'enfant : dix questions de cours",
     epreuve: "Questions-réponses", matiere: "Droits de l'enfant", concours: ["eppjej"],
     session: "Concours direct d'entrée 2027, cycle des inspecteurs de la protection judiciaire de l'enfance et de la jeunesse, session de juillet 2026",
-    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2027",
+    ouvrage: "Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027",
     resume: "Définition de l'enfant, juge des enfants, détention des mineurs, excuse de minorité, CADBE, admonestation et structures de la protection judiciaire."
   },
   {

@@ -29,9 +29,9 @@ const write = (f, s) => { fs.mkdirSync(path.dirname(path.join(DIR, f)), { recurs
 /* ---------- Données ---------- */
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM};", ctx);
+vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,WA2,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM,VIDEOS};", ctx);
 vm.runInContext(read("assets/js/render.js"), ctx);
-const { WA, OUVRAGES, FAQ, METHODO, EPREUVES, SUJETS } = ctx.D;
+const { WA, OUVRAGES, FAQ, METHODO, EPREUVES, SUJETS, VIDEOS } = ctx.D;
 const R = ctx.SESAME;
 const { CONCOURS, EPREUVES_PAR_CONCOURS, fmt, parsePrice, plural, slugify, attr, svg } = R;
 const byCat = id => OUVRAGES.filter(o => o.categorie === id);
@@ -58,7 +58,7 @@ function rebase(html, prefix) {
   const fix = h => {
     if (h === "#top") return prefix || "./";
     if (h.startsWith("#")) return prefix + h;
-    if (/^(methodes\/|concours\/|ouvrages\/|sujets\/|qcm\/|assets\/)/.test(h)) return prefix + h;
+    if (/^(methodes\/|concours\/|ouvrages\/|sujets\/|qcm\/|assets\/|mentions-legales\/)/.test(h)) return prefix + h;
     return h;
   };
   return html.replace(/(<a\b[^>]*?\shref=")([^"]*)(")/g, (m, a, h, b) => a + fix(h) + b);
@@ -254,7 +254,7 @@ const SUJETS_PAGES = [];
     SUJETS_PAGES.push(Object.assign({}, f, { enonce: m[1].trim(), corrige: m[2].trim(), ouvrage }));
   }
   for (const s of SUJETS) {
-    const parts = s.meta.split(" — ");
+    const parts = s.meta.split(" · ");
     const c = CONCOURS.find(x => x.court === s.concours);
     const texte = stripTags(s.corrige.replace(/<h5>[\s\S]*?<\/h5>/g, " "));
     const annee = (s.meta.match(/Session (\d{4})/) || [])[1];
@@ -285,6 +285,79 @@ function sujetCard(x, prefix, i) {
       </a>`;
 }
 
+/* ---------- Vidéos ---------- */
+// Chaque vidéo : assets/video/<fichier>.mp4 et son affiche assets/img/videos/<fichier>.jpg
+const VIDS = VIDEOS.map(v => {
+  const src = `assets/video/${v.fichier}.mp4`, poster = `assets/img/videos/${v.fichier}.jpg`;
+  [src, poster].forEach(f => { if (!exists(f)) throw new Error(`vidéo ${v.fichier} : fichier introuvable : ${f}`); });
+  if (!["vertical", "carre"].includes(v.format)) throw new Error(`vidéo ${v.fichier} : format inconnu ${v.format}`);
+  if (!/^\d+:\d{2}$/.test(v.duree)) throw new Error(`vidéo ${v.fichier} : durée à écrire en minutes:secondes`);
+  const ouvrage = v.ouvrage ? OUVRAGES.find(o => o.titre === v.ouvrage) : null;
+  if (v.ouvrage && !ouvrage) throw new Error(`vidéo ${v.fichier} : ouvrage introuvable dans data.js : ${v.ouvrage}`);
+  const sujet = v.sujet ? SUJETS_PAGES.find(x => x.adresse === v.sujet) : null;
+  if (v.sujet && !sujet) throw new Error(`vidéo ${v.fichier} : sujet introuvable : ${v.sujet}`);
+  if (v.methode && !EPREUVES.some(e => e.nom === v.methode)) throw new Error(`vidéo ${v.fichier} : fiche méthode introuvable : ${v.methode}`);
+  (v.concours || []).forEach(id => { if (!CONCOURS.some(c => c.id === id)) throw new Error(`vidéo ${v.fichier} : concours inconnu ${id}`); });
+  const [m, sec] = v.duree.split(":").map(Number);
+  return Object.assign({}, v, { src, poster, ouvrageObj: ouvrage, sujetObj: sujet, concours: v.concours || [], iso: `PT${m ? m + "M" : ""}${sec}S` });
+});
+const videoLD = v => ({
+  "@context": "https://schema.org", "@type": "VideoObject", name: v.titre, description: v.desc, inLanguage: "fr",
+  thumbnailUrl: SITE + v.poster, contentUrl: SITE + v.src, uploadDate: v.date, duration: v.iso,
+  publisher: { "@type": "Organization", name: "Les Cours Sésame et SAJ" }
+});
+// Lien utile sous une vidéo, sauf vers la page où elle se trouve déjà
+function videoLien(v, prefix, ici) {
+  if (v.sujetObj && ici !== "sujet") return [v.sujetObj.session ? "Lire le corrigé du sujet" : "Lire le corrigé", `${prefix}sujets/${v.sujet}/`];
+  if (v.ouvrageObj && ici !== "ouvrage") return ["Voir l'ouvrage", R.ouvrageURL(v.ouvrageObj)];
+  if (v.methode && ici !== "methode") return ["Lire la fiche méthode", `${prefix}methodes/#${slugify(v.methode)}`];
+  if (v.lien && ici !== "concours") return [v.lien.texte, prefix + v.lien.href];
+  return null;
+}
+function videoFrame(v, prefix) {
+  const [w, h] = v.format === "carre" ? [720, 720] : [720, 1280];
+  return `<div class="v-frame v-${v.format}">
+          <video class="v-media" controls playsinline preload="none" poster="${prefix}${v.poster}" width="${w}" height="${h}" aria-label="${attr(v.titre)}"><source src="${prefix}${v.src}" type="video/mp4"><a href="${prefix}${v.src}">Télécharger la vidéo</a></video>
+          <span class="v-dur" aria-hidden="true">${v.duree}</span>
+        </div>`;
+}
+function videoCard(v, prefix, i, ici) {
+  const l = videoLien(v, prefix, ici);
+  return `<figure class="v-card reveal reveal-d${i % 4}">
+        ${videoFrame(v, prefix)}
+        <figcaption><span class="v-tag">${v.tag}</span><b>${v.titre}</b><span class="v-desc">${v.desc}</span>${l ? `<a class="v-link" href="${l[1]}">${l[0]}${svg("i-arrow")}</a>` : ""}</figcaption>
+      </figure>`;
+}
+// Vidéo mise en avant : la vidéo d'un côté, sa présentation de l'autre
+function videoFeature(v, prefix, ici, titre, actions = "") {
+  const l = videoLien(v, prefix, ici);
+  return `<div class="v-feature v-feature-${v.format} reveal">
+      ${videoFrame(v, prefix)}
+      <div class="v-feature-text">
+        <span class="v-tag">${v.tag} · ${v.duree}</span>
+        <h3>${titre || v.titre}</h3>
+        <p>${v.desc}</p>
+        ${l || actions ? `<div class="v-actions">${l ? `<a class="btn btn-gold" href="${l[1]}">${l[0]}${arrow}</a>` : ""}${actions}</div>` : ""}
+      </div>
+    </div>`;
+}
+// Section « En vidéo » : la vidéo carrée en avant, les vidéos verticales en rangée
+function videosSection(list, prefix, { id = "videos", eyebrow = "En vidéo", h2, lead, ici, cls = "on-dark" }) {
+  if (!list.length) return "";
+  const feat = list.find(v => v.format === "carre") || (list.length === 1 ? list[0] : null);
+  const rest = list.filter(v => v !== feat);
+  return `<section class="section ${cls} videos" id="${id}">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">${eyebrow}</span><h2 class="h-section">${h2}</h2></div>
+      ${lead ? `<p class="lead">${lead}</p>` : ""}
+    </div>
+    ${feat ? videoFeature(feat, prefix, ici) : ""}
+    ${rest.length ? `<div class="v-rail${feat ? " v-rail-after" : ""}">${rest.map((v, i) => videoCard(v, prefix, i, ici)).join("")}</div>` : ""}
+  </div>
+</section>`;
+}
+
 /* ---------- Pages concours ---------- */
 const urls = [SITE];
 for (const c of CONCOURS) {
@@ -298,6 +371,8 @@ for (const c of CONCOURS) {
   const sujet = SUJETS.find(s => s.concours === c.court);
   const autresSujets = sujetsDuConcours(c.id).filter(x => !sujet || x.adresse !== slugify(sujet.titre));
   const minPrix = Math.min(...items.map(o => parsePrice(o.prix)));
+  // Vidéos du concours : la présentation d'abord, puis les vidéos propres au concours
+  const vids = VIDS.filter(v => v.concours.includes(c.id));
   const nomCourt = c.id === "ena" ? "de l'ENA" : c.id === "infj" ? "de la Magistrature" : `${c.court}`;
   const title = `Concours ${nomCourt} 2027 : ouvrages, méthode et sujet corrigé | Les Cours Sésame et SAJ`;
   const series = [...new Set(items.map(o => R.coverParts(o.titre).serie).filter(Boolean))].map(s => s.toLowerCase());
@@ -333,6 +408,11 @@ for (const c of CONCOURS) {
   </div>
 </section>
 
+${videosSection(vids, prefix, {
+    h2: `Nos <em>vidéos</em>`, ici: "concours",
+    lead: vids.length > 1 ? "Notre présentation, nos ouvrages et des sujets décryptés, en quelques minutes chacun." : "Découvrez notre accompagnement et nos ouvrages en un peu plus d'une minute."
+  })}
+
 ${sujet ? `<section class="section sujets" id="corrige">
   <div class="wrap">
     <div class="section-head reveal">
@@ -365,7 +445,7 @@ ${contactCTA(prefix)}`;
 
   write(`concours/${c.slug}/index.html`, page({
     prefix, title, description, url, body, bodyAttrs: ` data-cat="${c.id}"`,
-    ld: [breadcrumb([["Accueil", SITE], ["Concours " + c.court, url]]), productList(items)]
+    ld: [breadcrumb([["Accueil", SITE], ["Concours " + c.court, url]]), productList(items), ...vids.map(videoLD)]
   }));
   urls.push(url);
 }
@@ -392,6 +472,7 @@ ${contactCTA(prefix)}`;
     const seen = new Set();
     return OUVRAGES.filter(o => re.test(o.titre) && !seen.has(o.titre) && seen.add(o.titre));
   };
+  const vidsDe = nom => VIDS.filter(v => v.methode === nom);
   const fiches = EPREUVES.map((e, i) => {
     const cs = concoursDe(e.nom);
     const books = utiles(e.nom);
@@ -399,6 +480,7 @@ ${contactCTA(prefix)}`;
       <div class="fiche-head"><span class="fiche-num">${String(i + 1).padStart(2, "0")}</span><div><h2>${e.nom}</h2>
       ${cs.length ? `<div class="fiche-meta">Concours : ${cs.map(c => `<a href="${prefix}concours/${c.slug}/">${c.court}</a>`).join(" · ")}</div>` : ""}</div></div>
       <div class="ep-panel">${e.contenu}</div>
+      ${vidsDe(e.nom).length ? `<div class="fiche-videos"><span class="m-label">En vidéo · ${vidsDe(e.nom).length > 1 ? "des sujets décryptés" : "un sujet décrypté"}</span><div class="v-rail v-rail-sm">${vidsDe(e.nom).map((v, k) => videoCard(v, prefix, k, "methode")).join("")}</div></div>` : ""}
       ${books.length ? `<div class="fiche-books"><span class="m-label">Pour aller plus loin</span>${books.map(o => `<button class="fiche-book" data-open="${OUVRAGES.indexOf(o)}"><span class="c-mini"></span><span><b>${o.titre}</b><small>${o.concours} · ${o.prix} FCFA</small></span></button>`).join("")}</div>` : ""}
     </article>`;
   }).join("");
@@ -438,7 +520,7 @@ ${contactCTA(prefix)}`;
     prefix, url, body,
     title: "Méthodes des épreuves des concours (SOG, cas pratique, note de synthèse) et QCM | Les Cours Sésame et SAJ",
     description: "Fiches méthode des épreuves des concours INFJ et ENA en Côte d'Ivoire : dissertation juridique, cas pratique, commentaire d'arrêt, SOG, PECOS, note de synthèse, étude de texte. QCM gratuit pour tester votre méthode.",
-    ld: [breadcrumb([["Accueil", SITE], ["Méthodes des épreuves", url]])]
+    ld: [breadcrumb([["Accueil", SITE], ["Méthodes des épreuves", url]]), ...VIDS.filter(v => v.methode).map(videoLD)]
   }));
   urls.push(url);
 }
@@ -461,7 +543,8 @@ function ouvragePage(l) {
   const memePhase = x => o.phase && x.phase === o.phase;
   const suggestions = [...autres.filter(memePhase), ...autres.filter(x => !memePhase(x))].slice(0, 4);
   const sujets = sujetsDe(o);
-  const titreCourt = o.titre.replace(/\s+—\s+Édition \d{4}$/, "");
+  const titreCourt = o.titre.replace(R.EDITION, "");
+  const vids = VIDS.filter(v => v.ouvrageObj && v.ouvrageObj.titre === o.titre);
 
   const body = `<section class="hero hero-sub hero-product on-dark">
   <div class="wrap">
@@ -489,6 +572,12 @@ function ouvragePage(l) {
     </div>
   </div>
 </section>
+
+${vids.length ? `<section class="section section-cream videos" id="video">
+  <div class="wrap">
+    ${vids.map(v => videoFeature(v, prefix, "ouvrage", null, `<a class="btn btn-wa" href="${WA_URL}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener">${waIcon}Commander sur WhatsApp</a>${pdf ? `<a class="btn btn-ghost" href="${pdf}" target="_blank" rel="noopener">${bookIcon}Lire un extrait gratuit</a>` : ""}`)).join("")}
+  </div>
+</section>` : ""}
 
 ${pages.length ? `<section class="section apercu" id="apercu">
   <div class="wrap">
@@ -538,7 +627,7 @@ ${contactCTA(prefix)}`;
   write(`ouvrages/${l.slug}/index.html`, page({
     prefix, url, body, description, ogType: "product", image: imageOuvrage(o),
     title: `${o.titre} | Les Cours Sésame et SAJ`,
-    ld: [breadcrumb([["Accueil", SITE], ["Ouvrages", SITE + "ouvrages/"], [titreCourt, url]]), Object.assign({ "@context": "https://schema.org" }, productLD(o, url))]
+    ld: [breadcrumb([["Accueil", SITE], ["Ouvrages", SITE + "ouvrages/"], [titreCourt, url]]), Object.assign({ "@context": "https://schema.org" }, productLD(o, url)), ...vids.map(videoLD)]
   }));
   urls.push(url);
 }
@@ -594,6 +683,7 @@ function sujetPage(x) {
   const cs = x.concours.map(id => CONCOURS.find(c => c.id === id));
   const o = x.ouvrage;
   const livre = o && livreDe(o);
+  const vids = VIDS.filter(v => v.sujet === x.adresse);
   // Suggestions : même matière d'abord, puis même concours et même épreuve
   const score = y => 2 * (y.matiere === x.matiere) + (y.concours.some(id => x.concours.includes(id))) + (y.epreuve === x.epreuve);
   const suite = SUJETS_PAGES.filter(y => y !== x).map((y, i) => [score(y), i, y]).sort((a, b) => b[0] - a[0] || a[1] - b[1]).slice(0, 3).map(z => z[2]);
@@ -624,6 +714,7 @@ function sujetPage(x) {
 <section class="section sujet-page">
   <div class="wrap sujet-layout">
     <article class="sujet-main">
+      ${vids.map(v => `<div class="v-inline">${videoFrame(v, prefix)}<div class="v-inline-text"><span class="v-tag">${v.tag} · ${v.duree}</span><b>${v.titre} en vidéo</b><p>${v.desc}</p></div></div>`).join("")}
       <div class="enonce-box"><span class="enonce-label">Énoncé</span>${x.enonce}</div>
       <div class="copie" id="corrige">
 ${x.corrige}
@@ -658,7 +749,7 @@ ${contactCTA(prefix)}`;
       isAccessibleForFree: true, about: x.matiere, educationalLevel: "Concours de la fonction publique",
       author: { "@type": "Organization", name: "Les Cours Sésame et SAJ" }, publisher: { "@type": "Organization", name: "Les Cours Sésame et SAJ" },
       image: o ? imageOuvrage(o) : OG_IMAGE
-    }]
+    }, ...vids.map(videoLD)]
   }));
   urls.push(url);
 }
@@ -819,14 +910,76 @@ ${contactCTA(prefix)}`;
   urls.push(url);
 }
 
+/* ---------- Mentions légales et données personnelles ---------- */
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "mentions-legales/";
+  const { WA2 } = ctx.D;
+  const tel = n => `+${n.slice(0, 3)} ${n.slice(3).replace(/(\d{2})(?=\d)/g, "$1 ")}`;
+  const waLink = n => `<a class="nowrap" href="https://wa.me/${n}" target="_blank" rel="noopener">${tel(n)}</a>`;
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Mentions légales", ""]],
+    eyebrow: "Informations légales",
+    h1: `Mentions légales et <em>données personnelles</em>`,
+    lead: "Qui édite ce site, qui l'héberge, et ce que deviennent les informations que vous nous confiez.",
+    ctas: `<a href="${WA_URL}" target="_blank" rel="noopener" class="btn btn-gold">${waIcon}Nous écrire</a><a href="${prefix}#faq" class="btn btn-ghost">Questions fréquentes</a>`
+  })}
+
+<section class="section legal">
+  <div class="wrap legal-wrap">
+    <h2>Éditeur du site</h2>
+    <p>Le site ${SITE.replace(/^https:\/\//, "").replace(/\/$/, "")} est édité par Les Cours Sésame et SAJ (Savoirs &amp; Atouts Judiciaires), éditeur indépendant d'ouvrages de préparation aux concours administratifs et juridiques, établi à Abidjan, en Côte d'Ivoire.</p>
+    <p>Pour nous joindre, sur WhatsApp ou par téléphone, au ${waLink(WA)} ou au ${waLink(WA2)}.</p>
+
+    <h2>Hébergement</h2>
+    <p>Le site est hébergé par GitHub Pages, service de la société GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.</p>
+
+    <h2>Indépendance</h2>
+    <p>Les Cours Sésame et SAJ sont un éditeur indépendant. Nos ouvrages, corrigés, QCM et vidéos ne sont pas des publications de l'INFJ, de l'ENA ni d'aucun organisateur de concours, et n'engagent que leurs auteurs. Les corrigés proposés sont les nôtres et non des corrigés officiels.</p>
+
+    <h2>Propriété intellectuelle</h2>
+    <p>Les textes, corrigés, fiches, QCM, vidéos, extraits, logos et visuels de ce site appartiennent aux Cours Sésame et SAJ. Leur reproduction, leur diffusion ou leur revente, en tout ou en partie, sans notre autorisation écrite préalable est interdite. Partager le lien d'une page reste bien sûr libre.</p>
+
+    <h2>Commandes</h2>
+    <p>Les commandes se passent sur WhatsApp, depuis le panier ou depuis la page d'un ouvrage. Les prix sont affichés en francs CFA. Les modalités de paiement et de livraison sont précisées dans les <a href="${prefix}#faq">questions fréquentes</a>.</p>
+
+    <h2>Données personnelles</h2>
+    <p>Ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
+    <p>Votre panier est conservé uniquement dans votre navigateur, sur votre appareil, pour que vous le retrouviez à votre prochaine visite. Nous n'y avons pas accès. Pour le supprimer, videz-le ou effacez les données du site dans votre navigateur.</p>
+    <p>Quand vous commandez, les informations que vous saisissez (prénom, nom, téléphone, ville, message) sont placées dans un message WhatsApp que vous envoyez vous-même. Nous ne les utilisons que pour traiter votre commande et vous livrer.</p>
+    <p>Le site n'utilise ni cookies publicitaires ni outil de mesure d'audience. Les polices de caractères sont chargées depuis les serveurs de Google Fonts, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
+    <p>Conformément à la loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel, vous disposez d'un droit d'accès, de rectification, d'opposition et de suppression des données qui vous concernent. Pour l'exercer, écrivez-nous sur WhatsApp.</p>
+
+    <p class="legal-date">Mise à jour en octobre 2026.</p>
+  </div>
+</section>
+
+${contactCTA(prefix)}`;
+  write("mentions-legales/index.html", page({
+    prefix, url, body,
+    title: "Mentions légales et données personnelles | Les Cours Sésame et SAJ",
+    description: "Éditeur, hébergement, propriété intellectuelle et protection des données personnelles du site des Cours Sésame et SAJ, éditeur indépendant d'ouvrages de préparation aux concours de Côte d'Ivoire.",
+    ld: [breadcrumb([["Accueil", SITE], ["Mentions légales", url]])]
+  }));
+  urls.push(url);
+}
+
 /* ---------- Accueil ---------- */
 R.setRoot("");
 index = inject(index, "concours", "\n      " + CONCOURS.map((c, i) => concoursCard(c, i, "")).join("\n      ") + "\n    ");
 index = inject(index, "books", catalogueHTML());
 index = inject(index, "faq", faqHTML());
+index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
+  h2: `Comprendre en <em>quelques minutes</em>`, ici: "accueil",
+  lead: "Notre présentation, un ouvrage en vidéo, un article de loi expliqué en une minute et des sujets de SOG décryptés. À regarder et à partager."
+}) + "\n");
+// Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
+index = index.replace(/(data-count-from="ouvrages">)[^<]*(<)/g, `$1${LIVRES.length}$2`).replace(/(data-count-from="concours">)[^<]*(<)/g, `$1${CONCOURS.length}$2`);
 index = inject(index, "jsonld", "\n" + [
   { "@context": "https://schema.org", "@type": "WebSite", name: "Les Cours Sésame et SAJ", url: SITE, inLanguage: "fr" },
-  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+  ...VIDS.map(videoLD)
 ].map(jsonld).join("\n") + "\n");
 write("index.html", index);
 
