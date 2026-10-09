@@ -22,7 +22,8 @@
   // Date du jour à Abidjan (UTC toute l'année), au format AAAA-MM-JJ
   const auj = () => new Date().toISOString().slice(0, 10);
   const joursJusqua = d => Math.round((versDate(d) - versDate(auj())) / 864e5);
-  const fcfa = n => String(Math.round(n || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " FCFA";
+  // Espaces insécables : « 15 000 FCFA » ne se coupe jamais en fin de ligne
+  const fcfa = n => String(Math.round(n || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0") + "\u00a0FCFA";
   const WA_NUM = typeof WA !== "undefined" ? WA : "2250160860537";
   // Numéro ivoirien à 10 chiffres : indicatif 225 ajouté pour WhatsApp
   const numeroWa = tel => { let d = String(tel || "").replace(/\D/g, ""); if (d.length === 10) d = "225" + d; return d; };
