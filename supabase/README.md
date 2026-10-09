@@ -17,8 +17,9 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
 
 ## Fonctions
 
-- `functions/inscription` : crée un compte confirmé (le site n'envoie pas d'e-mails), au plus 5 par heure
-  et par adresse IP. À déployer **sans** vérification de jeton.
+- `functions/inscription` : crée un compte confirmé (le site n'envoie pas d'e-mails), au plus 60 par heure
+  et par adresse IP (les clients d'un même opérateur mobile, ou d'une même salle de cours, partagent souvent
+  une adresse). À déployer **sans** vérification de jeton.
 - `functions/admin-mot-de-passe` : mot de passe provisoire donné par l'administrateur. Déployée sans
   vérification de jeton par la plateforme : la fonction vérifie elle-même la session de l'appelant,
   puis qu'il figure dans la table `admins`.
@@ -45,6 +46,9 @@ Le tableau de bord signale quelques points qui sont voulus :
 - Protection contre les mots de passe divulgués : option de l'offre Pro.
 
 En cas de souci, les erreurs inattendues des deux fonctions apparaissent dans leurs journaux (Edge Functions, Logs).
+
+Connexions : Supabase en accepte par défaut 150 toutes les 5 minutes depuis une même adresse, ce qui suffit
+pour une salle de cours (plafond réglable dans Authentication, Rate Limits).
 
 ## Gestion courante
 
