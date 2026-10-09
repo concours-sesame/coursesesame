@@ -47,6 +47,7 @@
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></symbol>
   <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></symbol>
@@ -77,6 +78,7 @@
         <a href="../#faq">FAQ</a>
       </nav>
       <div class="header-actions">
+        <a class="icon-btn icon-espace" href="../espace-abonnes/" aria-label="Espace abonnés" title="Espace abonnés"><svg><use href="#i-user"/></svg></a>
         <button class="icon-btn" id="cartBtn" aria-label="Ouvrir le panier"><svg><use href="#i-cart"/></svg><span class="cart-count" id="cartCount">0</span></button>
         <a class="btn btn-navy btn-sm" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>WhatsApp</a>
         <button class="icon-btn menu-btn" id="menuBtn" aria-label="Ouvrir le menu" aria-expanded="false"><svg><use href="#i-menu"/></svg></button>
@@ -99,6 +101,7 @@
     <a href="../#videos">Vidéos <span>06</span></a>
     <a href="../#avis">Avis <span>07</span></a>
     <a href="../#faq">FAQ <span>08</span></a>
+    <a href="../espace-abonnes/">Espace abonnés <span>09</span></a>
   </nav>
   <a class="btn btn-wa btn-block" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
 </div>
@@ -135,11 +138,18 @@
     <p>Les commandes se passent sur WhatsApp, depuis le panier ou depuis la page d'un ouvrage. Les prix sont affichés en francs CFA. Les modalités de paiement et de livraison sont précisées dans les <a href="../#faq">questions fréquentes</a>.</p>
 
     <h2>Données personnelles</h2>
-    <p>Ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
+    <p>En dehors de l'espace abonnés, présenté plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
     <p>Votre panier est conservé uniquement dans votre navigateur, sur votre appareil, pour que vous le retrouviez à votre prochaine visite. Nous n'y avons pas accès. Pour le supprimer, videz-le ou effacez les données du site dans votre navigateur.</p>
     <p>Quand vous commandez, les informations que vous saisissez (prénom, nom, téléphone, ville, message) sont placées dans un message WhatsApp que vous envoyez vous-même. Nous ne les utilisons que pour traiter votre commande et vous livrer.</p>
     <p>Le site n'utilise ni cookies publicitaires ni outil de mesure d'audience. Les polices de caractères sont chargées depuis les serveurs de Google Fonts, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
     <p>Conformément à la loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel, vous disposez d'un droit d'accès, de rectification, d'opposition et de suppression des données qui vous concernent. Pour l'exercer, écrivez-nous sur WhatsApp.</p>
+
+    <h2 id="espace-abonnes">Espace abonnés</h2>
+    <p>Pour utiliser l'espace abonnés, vous créez un compte avec votre prénom, votre nom, votre numéro de téléphone (WhatsApp), votre adresse e-mail et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi les dates et les paiements de votre abonnement.</p>
+    <p>Ces informations servent uniquement à gérer votre compte et votre abonnement, et à vous contacter à son sujet sur WhatsApp. Elles ne sont ni vendues ni cédées à quiconque.</p>
+    <p>Elles sont conservées par notre prestataire Supabase, sur des serveurs situés en Europe. Votre mot de passe est enregistré sous une forme chiffrée que personne, pas même nous, ne peut lire.</p>
+    <p>Les vidéos et documents de l'espace affichent votre nom et votre numéro de téléphone, pour décourager leur diffusion. Ils sont réservés à votre usage personnel.</p>
+    <p>Vous pouvez demander à tout moment la correction de vos informations ou la suppression de votre compte en nous écrivant sur WhatsApp. La suppression d'un compte efface les informations qui s'y rattachent.</p>
 
     <p class="legal-date">Mise à jour en octobre 2026.</p>
   </div>
@@ -171,7 +181,7 @@
       </div>
       <div>
         <h4>Le site</h4>
-        <ul><li><a href="../ouvrages/">Tous les ouvrages</a></li><li><a href="../#conseiller">Quel ouvrage pour moi ?</a></li><li><a href="../sujets/">Sujets corrigés</a></li><li><a href="../methodes/">Méthodes des épreuves</a></li><li><a href="../qcm/">QCM gratuits</a></li><li><a href="../#videos">Nos vidéos</a></li><li><a href="../#faq">FAQ</a></li><li><a href="../mentions-legales/">Mentions légales</a></li></ul>
+        <ul><li><a href="../ouvrages/">Tous les ouvrages</a></li><li><a href="../#conseiller">Quel ouvrage pour moi ?</a></li><li><a href="../sujets/">Sujets corrigés</a></li><li><a href="../methodes/">Méthodes des épreuves</a></li><li><a href="../qcm/">QCM gratuits</a></li><li><a href="../#videos">Nos vidéos</a></li><li><a href="../espace-abonnes/">Espace abonnés</a></li><li><a href="../#faq">FAQ</a></li><li><a href="../mentions-legales/">Mentions légales</a></li></ul>
       </div>
       <div>
         <h4>Nous joindre</h4>

@@ -7,6 +7,10 @@ const WA="2250160860537";
 // Second numéro, lui aussi joignable sur WhatsApp
 const WA2="2250506600332";
 
+/* Tarifs de l'espace abonnés, affichés sur sa page (laisser vide pour indiquer « tarif sur WhatsApp »).
+   Exemple : [{"duree":"1 mois","prix":"5 000"},{"duree":"3 mois","prix":"12 000"}] */
+const TARIFS_ABONNEMENT=[];
+
 const OUVRAGES=[
 {"titre":"Le Petit Manuel de Droit Civil","desc":"Manuel synthétique de droit civil pour préparer la phase de présélection du concours de la magistrature.","concours":"INFJ Magistrature","categorie":"infj","niveau":"CS / CMS / CM","prix":"12 000","phase":"Présélection"},
 {"titre":"Le Petit Manuel de Droit Commercial","desc":"Manuel synthétique de droit commercial pour préparer la phase de présélection du concours de la magistrature.","concours":"INFJ Magistrature","categorie":"infj","niveau":"CS / CMS / CM","prix":"12 000","phase":"Présélection"},
