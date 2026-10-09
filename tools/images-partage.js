@@ -46,7 +46,7 @@ function html(l) {
   const o = l.items[0];
   const concours = l.items.length > 1 ? l.items.map(x => R.CONCOURS.find(c => c.id === x.categorie).court).join(" · ") : o.concours.replace(/^INFJ\s+/, "");
   const cover = R.coverHTML(l.items.length > 1 ? Object.assign({}, o, { concours: "Concours de Côte d'Ivoire" }) : o);
-  const titre = o.titre.replace(/\s+—\s+(Édition \d{4})$/, "<small>$1</small>");
+  const titre = o.titre.replace(/,\s+(Édition \d{4})$/, "<small>$1</small>");
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">${fonts}<style>${css}
   html,body{width:1200px;height:630px;overflow:hidden;background:var(--navy)}
   .og{position:relative;width:1200px;height:630px;background:var(--navy);color:#fff;display:grid;grid-template-columns:1fr 360px;gap:56px;align-items:center;padding:0 80px 0 76px}

@@ -28,7 +28,8 @@
   const keyOf = o => o.titre + "|" + o.categorie;
   let cart = [];
   try {
-    const saved = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    // Les anciens titres séparaient l'édition ou le tome par un tiret cadratin (\u2014) : on les retrouve sous leur forme actuelle
+    const saved = (JSON.parse(localStorage.getItem(CART_KEY)) || []).map(k => String(k).replace(/ \u2014 (Édition \d{4}|Tome [IV]+)\|/, ", $1|"));
     cart = saved.map(k => OUVRAGES.findIndex(o => keyOf(o) === k)).filter((i, at, all) => i > -1 && all.indexOf(i) === at);
     localStorage.removeItem("sesame-cart-v1");
   } catch (e) { cart = []; }
@@ -132,7 +133,7 @@
   on("#cartSend", "click", () => {
     const t = totals();
     let msg = "Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite commander les ouvrages suivants :\n\n";
-    cart.forEach((i, k) => { const o = OUVRAGES[i]; msg += `${k + 1}. ${o.titre}${o.numerique ? " (version numérique)" : ""}\n   ${o.concours} — ${o.prix} FCFA\n\n`; });
+    cart.forEach((i, k) => { const o = OUVRAGES[i]; msg += `${k + 1}. ${o.titre}${o.numerique ? " (version numérique)" : ""}\n   ${o.concours} · ${o.prix} FCFA\n\n`; });
     if (t.promo) msg += `🎁 Remise 10% (3+ ouvrages) : -${fmt(t.disc)} FCFA\n`;
     msg += `\n💰 Total : ${fmt(t.total)} FCFA\n\nMerci !`;
     openWhatsApp(msg);
@@ -580,8 +581,40 @@
     navLinks.forEach(a => { const t = document.getElementById(a.hash.slice(1)); if (t) spy.observe(t); });
   }
 
+  /* ---------- Vidéos ---------- */
+  // Sans JavaScript, chaque vidéo garde ses commandes natives. Ici : un grand bouton de lecture
+  // sur l'affiche, les commandes natives dès la lecture, et une seule vidéo à la fois.
+  function initVideos() {
+    const vids = $$("video.v-media");
+    vids.forEach(v => {
+      const frame = v.closest(".v-frame");
+      if (!frame) return;
+      v.controls = false;
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "v-play";
+      b.setAttribute("aria-label", "Lire la vidéo : " + (v.getAttribute("aria-label") || ""));
+      b.innerHTML = '<span class="v-play-pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Regarder</span></span>';
+      frame.appendChild(b);
+      b.addEventListener("click", () => {
+        v.controls = true;
+        frame.classList.add("is-playing");
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {});
+      });
+      v.addEventListener("play", () => {
+        frame.classList.add("is-playing");
+        v.controls = true;
+        vids.forEach(o => { if (o !== v && !o.paused) o.pause(); });
+      });
+      // En fin de lecture, on revient à l'affiche et au bouton de lecture
+      v.addEventListener("ended", () => { frame.classList.remove("is-playing"); v.controls = false; v.load(); });
+    });
+  }
+
   /* ---------- Compteurs et apparitions ---------- */
-  const COUNTS = { ouvrages: OUVRAGES.length, concours: CONCOURS.length };
+  // Un ouvrage proposé à plusieurs concours ne compte qu'une fois
+  const COUNTS = { ouvrages: new Set(OUVRAGES.map(o => o.titre)).size, concours: CONCOURS.length };
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   function countUp(el) {
     const target = el.dataset.countFrom in COUNTS ? COUNTS[el.dataset.countFrom] : +el.dataset.countFrom;
@@ -615,10 +648,13 @@
   initConseiller();
   initQCM();
   initSujetsFiltre();
+  initVideos();
   updateCart();
   syncAddButtons();
   syncTopHeight();
   window.addEventListener("resize", () => { syncTopHeight(); updateCart(); });
   const y = $("#year"); if (y) y.textContent = new Date().getFullYear();
+  // Les chiffres sont écrits dans la page (lisibles sans JavaScript) ; ici, ils repartent de 0 pour l'animation
+  if (!reduce) $$("[data-count-from]").forEach(el => { el.textContent = "0"; });
   $$(".reveal, [data-count-from]").forEach(el => io.observe(el));
 })();

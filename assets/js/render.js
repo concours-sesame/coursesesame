@@ -31,12 +31,14 @@
   // Chemin vers la racine du site depuis la page affichée ("", "../" ou "../../")
   let root = "";
   const setRoot = r => { root = r; };
+  // Mention d'édition en fin de titre (« …, Édition 2027 »)
+  const EDITION = /,\s+Édition \d{4}$/;
   // Adresse de la page d'un ouvrage. L'édition n'y figure pas : l'adresse reste la même d'une année à l'autre.
-  const ouvrageSlug = o => slugify(o.titre.replace(/\s+—\s+Édition \d{4}$/, ""));
+  const ouvrageSlug = o => slugify(o.titre.replace(EDITION, ""));
   const ouvrageURL = o => `${root}ouvrages/${ouvrageSlug(o)}/`;
 
   function coverParts(titre) {
-    const t = titre.replace(/\s+—\s+Édition \d{4}/, "").replace(/ aux? Concours (?:Administratifs|de la Magistrature)$/i, "");
+    const t = titre.replace(EDITION, "").replace(/ aux? Concours (?:Administratifs|de la Magistrature)$/i, "");
     const rules = [
       [/^Le Petit Manuel (?:de |d'|des )(.+)$/i, "Le Petit Manuel"],
       [/^Le Résumé (?:de |d'|des )(.+)$/i, "Le Résumé"],
@@ -47,7 +49,7 @@
       [/^Le Sésame de (.+)$/i, "Le Sésame"],
       [/^Les Fiches d'Arrêts de (.+)$/i, "Fiches d'arrêts"],
       [/^Les (\d+ Cas Pratiques Corrigés) de la Magistrature$/i, "Magistrature"],
-      [/^Le Droit Administratif en 125 Dissertations Corrigées — (Tome [IV]+)$/i, "125 dissertations · Droit administratif"],
+      [/^Le Droit Administratif en 125 Dissertations Corrigées, (Tome [IV]+)$/i, "125 dissertations · Droit administratif"],
       [/^La (Logique)$/i, "Entraînement"]
     ];
     for (const [re, serie] of rules) {
@@ -117,5 +119,5 @@
     return html;
   }
 
-  scope.SESAME = { CONCOURS, EPREUVES_PAR_CONCOURS, parsePrice, fmt, svg, attr, slugify, plural, setRoot, ouvrageSlug, ouvrageURL, coverParts, coverHTML, bookHTML, packTotals, packHTML, groupHTML };
+  scope.SESAME = { CONCOURS, EPREUVES_PAR_CONCOURS, EDITION, parsePrice, fmt, svg, attr, slugify, plural, setRoot, ouvrageSlug, ouvrageURL, coverParts, coverHTML, bookHTML, packTotals, packHTML, groupHTML };
 })(typeof window !== "undefined" ? window : globalThis);

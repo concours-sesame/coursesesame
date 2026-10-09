@@ -6,7 +6,7 @@ const QCM_MATIERES = [
 {
   "slug": "droit-civil", "titre": "QCM de droit civil", "nom": "Droit civil", "concours": ["infj"],
   "intro": "Le mariage selon la loi n° 2019-570 du 26 juin 2019, les quasi-contrats et la responsabilité civile délictuelle : dix questions pour vérifier vos bases avant l'écrit de la magistrature.",
-  "ouvrages": ["Le Résumé de Droit Civil au Concours de la Magistrature", "Les 50 Cas Pratiques Corrigés de la Magistrature — Édition 2026", "Le Petit Manuel de Droit Civil"],
+  "ouvrages": ["Le Résumé de Droit Civil au Concours de la Magistrature", "Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026", "Le Petit Manuel de Droit Civil"],
   "questions": [
     {"q": "Selon la loi du 26 juin 2019 relative au mariage, quel est l'âge nubile ?", "options": ["16 ans pour la femme et 18 ans pour l'homme", "18 ans révolus pour l'homme et la femme, sans dispense possible", "18 ans révolus, avec dispense possible du procureur", "21 ans pour les deux époux"], "bonne": 1, "explication": "L'âge nubile est fixé à dix-huit ans révolus pour l'homme et la femme indistinctement, sans dispense légale possible (article 2)."},
     {"q": "Quelle est la durée du délai de viduité imposé à la femme avant un remariage ?", "options": ["Cent quatre-vingts jours", "Un an", "Trois cents jours", "Aucun délai n'est imposé"], "bonne": 2, "explication": "La femme ne peut se remarier qu'à l'expiration d'un délai de trois cents jours à compter de la dissolution du précédent mariage, sauf abrégement judiciaire ; le délai prend fin en cas d'accouchement (article 6)."},
@@ -40,7 +40,7 @@ const QCM_MATIERES = [
 {
   "slug": "droit-administratif", "titre": "QCM de droit administratif", "nom": "Droit administratif", "concours": ["infj", "greffe", "penitentiaire", "eppjej", "ena"],
   "intro": "Les grands arrêts à connaître par cœur, de Blanco à Société des Centaures routiers : dix questions sur la jurisprudence administrative applicable en Côte d'Ivoire.",
-  "ouvrages": ["Les Fiches d'Arrêts de Droit Administratif — Édition 2026", "Le Résumé de Droit Administratif au Concours de la Magistrature", "Le Droit Administratif en 125 Dissertations Corrigées — Tome II"],
+  "ouvrages": ["Les Fiches d'Arrêts de Droit Administratif, Édition 2026", "Le Résumé de Droit Administratif au Concours de la Magistrature", "Le Droit Administratif en 125 Dissertations Corrigées, Tome II"],
   "questions": [
     {"q": "Que décide l'arrêt Blanco (Tribunal des conflits, 8 février 1873) ?", "options": ["La responsabilité de l'État pour les dommages causés par un service public obéit à des règles spéciales, distinctes du Code civil", "L'État est irresponsable des dommages causés par ses agents", "Les litiges impliquant l'État relèvent toujours du juge judiciaire", "Le préfet ne peut jamais élever le conflit"], "bonne": 0, "explication": "La responsabilité de l'État ne peut être régie par les principes du Code civil ; elle obéit à des règles spéciales et son contentieux relève de la juridiction administrative. C'est l'arrêt fondateur de l'autonomie du droit administratif."},
     {"q": "Quel arrêt est considéré comme l'équivalent ivoirien de l'arrêt Blanco ?", "options": ["Diby Yao Georges", "Société des Centaures routiers", "Mlle Audran", "SATMACI c/ Kripa Amoin"], "bonne": 1, "explication": "Par l'arrêt Société des Centaures routiers (Chambre administrative de la Cour suprême, 14 janvier 1970), le juge applique le droit administratif au bac exploité par l'État : l'unité de juridiction n'emporte pas unité du droit applicable."},
@@ -57,7 +57,7 @@ const QCM_MATIERES = [
 {
   "slug": "droits-de-l-enfant", "titre": "QCM sur les droits de l'enfant", "nom": "Droits de l'enfant", "concours": ["eppjej", "greffe", "penitentiaire"],
   "intro": "Définition de l'enfant, seuils d'âge de la responsabilité pénale, juridictions pour mineurs et mesures éducatives : dix questions pour le concours EPPJEJ et les concours INFJ.",
-  "ouvrages": ["Le Résumé des Droits de l'Enfant aux Concours Administratifs", "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2027"],
+  "ouvrages": ["Le Résumé des Droits de l'Enfant aux Concours Administratifs", "Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"],
   "questions": [
     {"q": "Selon l'article 1er de la Convention internationale relative aux droits de l'enfant, l'enfant est :", "options": ["Tout être humain âgé de moins de seize ans", "Tout être humain âgé de moins de dix-huit ans, sauf majorité atteinte plus tôt en vertu de la loi applicable", "Tout être humain âgé de moins de vingt et un ans", "Tout mineur non émancipé de moins de quinze ans"], "bonne": 1, "explication": "Le droit ivoirien s'aligne sur cette définition : la loi n° 2019-572 du 26 juin 2019 relative à la minorité qualifie de mineur la personne qui n'a pas atteint dix-huit ans accomplis."},
     {"q": "Quand la Charte africaine des droits et du bien-être de l'enfant (CADBE) a-t-elle été adoptée ?", "options": ["Le 20 novembre 1989 à New York", "Le 11 juillet 1990 à Addis-Abeba", "Le 29 novembre 1999 à Abidjan", "Le 26 juin 2019 à Yamoussoukro"], "bonne": 1, "explication": "Adoptée le 11 juillet 1990 à Addis-Abeba par la conférence des chefs d'État de l'OUA, la Charte est entrée en vigueur le 29 novembre 1999."},
@@ -74,7 +74,7 @@ const QCM_MATIERES = [
 {
   "slug": "organisation-judiciaire", "titre": "QCM d'organisation judiciaire", "nom": "Organisation judiciaire", "concours": ["greffe", "penitentiaire", "eppjej", "infj"],
   "intro": "Juridictions suprêmes, Tribunal des conflits, loi du 28 mars 2025 portant organisation des juridictions et juridictions spécialisées : dix questions à jour des dernières réformes.",
-  "ouvrages": ["Le Résumé d'Organisation Judiciaire aux Concours Administratifs", "Les Annales des Anciens Sujets Corrigés INFJ — Édition 2027", "Le Petit Manuel d'Organisation Judiciaire et Informatique"],
+  "ouvrages": ["Le Résumé d'Organisation Judiciaire aux Concours Administratifs", "Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027", "Le Petit Manuel d'Organisation Judiciaire et Informatique"],
   "questions": [
     {"q": "Combien la Côte d'Ivoire compte-t-elle de juridictions suprêmes ?", "options": ["Une, la Cour suprême", "Deux, la Cour de cassation et le Conseil d'État", "Trois, la Cour de cassation, le Conseil d'État et la Cour des comptes", "Quatre, en comptant le Conseil constitutionnel"], "bonne": 2, "explication": "Ces trois juridictions, consacrées par la révision constitutionnelle du 19 mars 2020, ont succédé aux chambres judiciaire, administrative et des comptes de l'ancienne Cour suprême."},
     {"q": "Le Conseil constitutionnel est-il la juridiction suprême d'un ordre de juridictions ?", "options": ["Oui, de l'ordre judiciaire", "Oui, de l'ordre administratif", "Non, il se situe en dehors de cette architecture", "Oui, de tous les ordres à la fois"], "bonne": 2, "explication": "Juge de la constitutionnalité des lois et du contentieux électoral, le Conseil constitutionnel n'est pas une juridiction suprême d'un ordre de juridictions."},
