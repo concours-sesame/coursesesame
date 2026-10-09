@@ -42,6 +42,14 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
 4. Lancez `node tools/build.js` : la vidéo apparaît sur l'accueil (section « En vidéo ») et sur les pages
    rattachées, avec ses données pour Google.
 
+## Espace abonnés
+
+- Page publique : `espace-abonnes/` (connexion, inscription, contenus exclusifs).
+- Administration : `espace-abonnes/admin/` (activer les abonnements, relancer, publier les contenus).
+- Tarifs affichés : `TARIFS_ABONNEMENT` dans `assets/js/data.js`.
+- Base, règles d'accès et fonctions : dossier `supabase/` (voir `supabase/README.md`).
+- Les contenus exclusifs ne sont jamais placés dans ce dépôt : on les dépose depuis l'administration.
+
 ## Images
 
 - `assets/img/apercus/` : pages des extraits gratuits montrées sur les pages ouvrages
@@ -55,7 +63,7 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
 
 - `index.html` : page d'accueil. Les parties entre `<!-- partial:… -->` sont reprises
   sur toutes les pages ; celles entre `<!-- build:… -->` sont remplies par le générateur.
-- `concours/`, `ouvrages/`, `sujets/`, `qcm/`, `methodes/` et `mentions-legales/` : pages générées, à ne pas modifier à la main.
+- `concours/`, `ouvrages/`, `sujets/`, `qcm/`, `methodes/`, `mentions-legales/` et `espace-abonnes/` : pages générées, à ne pas modifier à la main.
 - `assets/video/` et `assets/img/videos/` : les vidéos et leurs affiches.
 - Règle d'écriture : pas de tiret cadratin dans les textes. L'édition ou le tome d'un ouvrage s'écrit après une
   virgule (« Le Guide Méthodologique Magistrature, Édition 2027 »).

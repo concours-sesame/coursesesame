@@ -29,7 +29,7 @@ const write = (f, s) => { fs.mkdirSync(path.dirname(path.join(DIR, f)), { recurs
 /* ---------- Données ---------- */
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,WA2,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM,VIDEOS};", ctx);
+vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,WA2,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM,VIDEOS,TARIFS_ABONNEMENT};", ctx);
 vm.runInContext(read("assets/js/render.js"), ctx);
 const { WA, OUVRAGES, FAQ, METHODO, EPREUVES, SUJETS, VIDEOS } = ctx.D;
 const R = ctx.SESAME;
@@ -58,7 +58,7 @@ function rebase(html, prefix) {
   const fix = h => {
     if (h === "#top") return prefix || "./";
     if (h.startsWith("#")) return prefix + h;
-    if (/^(methodes\/|concours\/|ouvrages\/|sujets\/|qcm\/|assets\/|mentions-legales\/)/.test(h)) return prefix + h;
+    if (/^(methodes\/|concours\/|ouvrages\/|sujets\/|qcm\/|assets\/|mentions-legales\/|espace-abonnes\/)/.test(h)) return prefix + h;
     return h;
   };
   return html.replace(/(<a\b[^>]*?\shref=")([^"]*)(")/g, (m, a, h, b) => a + fix(h) + b);
@@ -167,7 +167,7 @@ function productList(items) {
 }
 
 /* ---------- Gabarit des pages intérieures ---------- */
-function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image = OG_IMAGE, ogType = "website", scripts = [] }) {
+function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image = OG_IMAGE, ogType = "website", scripts = [], robots = "" }) {
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -176,7 +176,7 @@ function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image
 <title>${esc(title)}</title>
 <meta name="description" content="${attr(description)}">
 <meta name="theme-color" content="#0f2a5c">
-<link rel="canonical" href="${url}">
+<link rel="canonical" href="${url}">${robots ? `\n<meta name="robots" content="${robots}">` : ""}
 <link rel="icon" href="${prefix}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="${prefix}assets/img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="${prefix}assets/img/apple-touch-icon.png">
@@ -342,7 +342,7 @@ function videoFeature(v, prefix, ici, titre, actions = "") {
     </div>`;
 }
 // Section « En vidéo » : la vidéo carrée en avant, les vidéos verticales en rangée
-function videosSection(list, prefix, { id = "videos", eyebrow = "En vidéo", h2, lead, ici, cls = "on-dark" }) {
+function videosSection(list, prefix, { id = "videos", eyebrow = "En vidéo", h2, lead, ici, cls = "on-dark", band = "" }) {
   if (!list.length) return "";
   const feat = list.find(v => v.format === "carre") || (list.length === 1 ? list[0] : null);
   const rest = list.filter(v => v !== feat);
@@ -354,8 +354,16 @@ function videosSection(list, prefix, { id = "videos", eyebrow = "En vidéo", h2,
     </div>
     ${feat ? videoFeature(feat, prefix, ici) : ""}
     ${rest.length ? `<div class="v-rail${feat ? " v-rail-after" : ""}">${rest.map((v, i) => videoCard(v, prefix, i, ici)).join("")}</div>` : ""}
+    ${band}
   </div>
 </section>`;
+}
+// Invitation à l'espace abonnés
+function espaceBand(prefix) {
+  return `<div class="espace-band reveal">
+      <div><b>Allez plus loin avec l'espace abonnés</b><p>Vidéos, documents et fiches exclusifs, réservés aux abonnés. Créez votre compte en une minute, réglez par Mobile Money, et votre accès s'ouvre.</p></div>
+      <div class="espace-band-actions"><a class="btn btn-navy" href="${prefix}espace-abonnes/#inscription">Créer mon compte${arrow}</a><a class="btn btn-ghost" href="${prefix}espace-abonnes/#connexion">Se connecter</a></div>
+    </div>`;
 }
 
 /* ---------- Pages concours ---------- */
@@ -910,6 +918,82 @@ ${contactCTA(prefix)}`;
   urls.push(url);
 }
 
+/* ---------- Espace abonnés ---------- */
+// Pages fixes ; tout le reste (connexion, contenus, administration) est affiché par espace.js et espace-admin.js
+const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-config.js", "assets/js/espace.js"];
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "espace-abonnes/";
+  const tarifs = ctx.D.TARIFS_ABONNEMENT || [];
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Espace abonnés", ""]],
+    eyebrow: "Espace abonnés",
+    h1: `Les contenus <em>réservés</em> aux abonnés`,
+    lead: "Vidéos, documents et fiches exclusifs, en plus de nos ouvrages. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.",
+    ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>`,
+    stats: tarifs.length ? tarifs.map(t => [t.prix + " F", t.duree]) : null
+  })}
+
+<section class="section espace-section" id="espace-app">
+  <div class="wrap">
+    <div class="ea-app" id="espace" aria-live="polite" aria-busy="true">
+      <p class="ea-attente">Chargement de l'espace abonnés…</p>
+      <noscript><p class="ea-erreur">L'espace abonnés a besoin de JavaScript : activez-le dans votre navigateur.</p></noscript>
+    </div>
+  </div>
+</section>
+
+<section class="section section-cream">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">Comment s'abonner</span><h2 class="h-section">Trois étapes, <em>c'est tout</em></h2></div>
+      <p class="lead">Le paiement se fait comme pour nos ouvrages : par Mobile Money, avec une confirmation sur WhatsApp.</p>
+    </div>
+    <div class="espace-etapes">
+      <div class="espace-etape reveal"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.</span></div>
+      <div class="espace-etape reveal reveal-d1"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis envoyez-nous la référence du paiement sur WhatsApp.${tarifs.length ? "" : " Nous vous indiquons le tarif."}</span></div>
+      <div class="espace-etape reveal reveal-d2"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement.</span></div>
+    </div>
+  </div>
+</section>
+
+${contactCTA(prefix)}`;
+  write("espace-abonnes/index.html", page({
+    prefix, url, body, scripts: SCRIPTS_ESPACE,
+    title: "Espace abonnés : vidéos, documents et fiches exclusifs | Les Cours Sésame et SAJ",
+    description: "L'espace abonnés des Cours Sésame et SAJ : vidéos, documents et fiches exclusifs pour préparer les concours de Côte d'Ivoire. Compte en une minute, paiement par Mobile Money.",
+    ld: [breadcrumb([["Accueil", SITE], ["Espace abonnés", url]])]
+  }));
+  urls.push(url);
+}
+{
+  // Administration : hors du plan du site et non indexée
+  const prefix = "../../";
+  R.setRoot(prefix);
+  const body = `<section class="hero hero-sub on-dark">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Fil d'Ariane"><a href="${prefix}">Accueil</a><span aria-hidden="true">›</span><a href="${prefix}espace-abonnes/">Espace abonnés</a><span aria-hidden="true">›</span><span aria-current="page">Administration</span></nav>
+    <span class="eyebrow">Réservé à l'administrateur</span>
+    <h1 class="sub-h1">Administration de <em>l'espace abonnés</em></h1>
+    <p class="lead">Activez les abonnements après paiement, relancez les abonnés sur WhatsApp et publiez les contenus exclusifs.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="ea-app" id="admin" aria-live="polite" aria-busy="true"><p class="ea-attente">Chargement…</p></div>
+  </div>
+</section>`;
+  write("espace-abonnes/admin/index.html", page({
+    prefix, url: SITE + "espace-abonnes/admin/", body, robots: "noindex, nofollow",
+    scripts: [...SCRIPTS_ESPACE, "assets/js/espace-admin.js"],
+    title: "Administration de l'espace abonnés | Les Cours Sésame et SAJ",
+    description: "Administration de l'espace abonnés des Cours Sésame et SAJ.",
+    ld: []
+  }));
+}
+
 /* ---------- Mentions légales et données personnelles ---------- */
 {
   const prefix = "../";
@@ -945,11 +1029,18 @@ ${contactCTA(prefix)}`;
     <p>Les commandes se passent sur WhatsApp, depuis le panier ou depuis la page d'un ouvrage. Les prix sont affichés en francs CFA. Les modalités de paiement et de livraison sont précisées dans les <a href="${prefix}#faq">questions fréquentes</a>.</p>
 
     <h2>Données personnelles</h2>
-    <p>Ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
+    <p>En dehors de l'espace abonnés, présenté plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
     <p>Votre panier est conservé uniquement dans votre navigateur, sur votre appareil, pour que vous le retrouviez à votre prochaine visite. Nous n'y avons pas accès. Pour le supprimer, videz-le ou effacez les données du site dans votre navigateur.</p>
     <p>Quand vous commandez, les informations que vous saisissez (prénom, nom, téléphone, ville, message) sont placées dans un message WhatsApp que vous envoyez vous-même. Nous ne les utilisons que pour traiter votre commande et vous livrer.</p>
     <p>Le site n'utilise ni cookies publicitaires ni outil de mesure d'audience. Les polices de caractères sont chargées depuis les serveurs de Google Fonts, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
     <p>Conformément à la loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel, vous disposez d'un droit d'accès, de rectification, d'opposition et de suppression des données qui vous concernent. Pour l'exercer, écrivez-nous sur WhatsApp.</p>
+
+    <h2 id="espace-abonnes">Espace abonnés</h2>
+    <p>Pour utiliser l'espace abonnés, vous créez un compte avec votre prénom, votre nom, votre numéro de téléphone (WhatsApp), votre adresse e-mail et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi les dates et les paiements de votre abonnement.</p>
+    <p>Ces informations servent uniquement à gérer votre compte et votre abonnement, et à vous contacter à son sujet sur WhatsApp. Elles ne sont ni vendues ni cédées à quiconque.</p>
+    <p>Elles sont conservées par notre prestataire Supabase, sur des serveurs situés en Europe. Votre mot de passe est enregistré sous une forme chiffrée que personne, pas même nous, ne peut lire.</p>
+    <p>Les vidéos et documents de l'espace affichent votre nom et votre numéro de téléphone, pour décourager leur diffusion. Ils sont réservés à votre usage personnel.</p>
+    <p>Vous pouvez demander à tout moment la correction de vos informations ou la suppression de votre compte en nous écrivant sur WhatsApp. La suppression d'un compte efface les informations qui s'y rattachent.</p>
 
     <p class="legal-date">Mise à jour en octobre 2026.</p>
   </div>
@@ -972,7 +1063,8 @@ index = inject(index, "books", catalogueHTML());
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
   h2: `Comprendre en <em>quelques minutes</em>`, ici: "accueil",
-  lead: "Notre présentation, un ouvrage en vidéo, un article de loi expliqué en une minute et des sujets de SOG décryptés. À regarder et à partager."
+  lead: "Notre présentation, un ouvrage en vidéo, un article de loi expliqué en une minute et des sujets de SOG décryptés. À regarder et à partager.",
+  band: espaceBand("")
 }) + "\n");
 // Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
 index = index.replace(/(data-count-from="ouvrages">)[^<]*(<)/g, `$1${LIVRES.length}$2`).replace(/(data-count-from="concours">)[^<]*(<)/g, `$1${CONCOURS.length}$2`);
