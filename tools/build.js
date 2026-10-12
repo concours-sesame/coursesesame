@@ -932,7 +932,7 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
     h1: `Les contenus <em>réservés</em> aux abonnés`,
     lead: "Vidéos, documents et fiches exclusifs, en plus de nos ouvrages. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.",
     ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>`,
-    stats: tarifs.length ? tarifs.map(t => [t.prix + " F", t.duree]) : null
+    stats: tarifs.length ? tarifs.filter(t => ["j1", "j7", "m1", "m12"].includes(t.cle)).map(t => [t.prix + " F", t.duree]) : null
   })}
 
 <section class="section espace-section" id="espace-app">
