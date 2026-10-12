@@ -380,15 +380,21 @@
   }
 
   let contenus = [], filtre = "tous";
+  // Rubriques de la bibliothèque, d'après la matière saisie (« Ouvrage · … », « Corrigé · … ») ou le type
+  const RUBRIQUES = { ouvrages: "Ouvrages complets", corriges: "Sujets corrigés", videos: "Vidéos", autres: "Autres contenus" };
+  const rubrique = c => /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
+  const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   function bibliothequeHTML() {
     if (!contenus.length) return `<div class="ea-biblio"><p class="ea-vide">Les premiers contenus exclusifs arrivent très bientôt. Revenez nous voir.</p></div>`;
-    const types = Object.keys(TYPES).filter(t => contenus.some(c => c.type === t));
-    const liste = filtre === "tous" ? contenus : contenus.filter(c => c.type === filtre);
+    const rubs = Object.keys(RUBRIQUES).filter(r => contenus.some(c => rubrique(c) === r));
+    const liste = filtre === "tous" ? contenus : contenus.filter(c => rubrique(c) === filtre);
     return `<div class="ea-biblio">
         <div class="ea-biblio-tete"><h3>Vos contenus exclusifs</h3>
-          ${types.length > 1 ? `<div class="chips" role="group" aria-label="Filtrer par type">${[["tous", "Tous", contenus.length], ...types.map(t => [t, TYPES[t].pluriel, contenus.filter(c => c.type === t).length])].map(([v, l, n]) => `<button class="chip" type="button" data-filtre="${v}" aria-pressed="${filtre === v}">${l}<span class="n">${n}</span></button>`).join("")}</div>` : ""}
+          ${rubs.length > 1 ? `<div class="chips" role="group" aria-label="Filtrer par rubrique">${[["tous", "Tous", contenus.length], ...rubs.map(r => [r, RUBRIQUES[r], contenus.filter(c => rubrique(c) === r).length])].map(([v, l, n]) => `<button class="chip" type="button" data-filtre="${v}" aria-pressed="${filtre === v}">${l}<span class="n">${n}</span></button>`).join("")}</div>` : ""}
+          ${contenus.length > 8 ? `<label class="ea-cherche"><span class="sr-only">Rechercher un contenu</span><input type="search" id="eaCherche" placeholder="Rechercher : titre, matière, concours…" autocomplete="off"></label>` : ""}
         </div>
-        <div class="ea-grille">${liste.map(c => `<button class="ea-carte" type="button" data-id="${c.id}">
+        <p class="ea-vide" id="eaAucun" hidden>Aucun contenu ne correspond à cette recherche.</p>
+        <div class="ea-grille">${liste.map(c => `<button class="ea-carte" type="button" data-id="${c.id}" data-texte="${esc(sansAccents([c.titre, c.description, c.matiere, (c.concours || []).map(nomConcours).join(" ")].join(" ")))}">
             <span class="ea-type ea-type-${c.type}">${TYPES[c.type].nom}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
@@ -441,8 +447,8 @@
       const { error } = await client.auth.signInWithPassword({ email, password });
       bouton.disabled = false;
       if (error) { msg.textContent = messageErreur(error); return; }
-      history.replaceState(null, "", location.pathname);
-      afficher();
+      if (!/^#corrige-/.test(location.hash)) history.replaceState(null, "", location.pathname);
+      afficher().then(ouvrirDepuisLien);
     });
     $("#eaInscription").addEventListener("submit", async e => {
       e.preventDefault();
@@ -490,6 +496,22 @@
     });
   }
 
+  // Recherche dans la bibliothèque
+  racine.addEventListener("input", e => {
+    if (e.target.id !== "eaCherche") return;
+    const mots = sansAccents(e.target.value).split(/\s+/).filter(Boolean);
+    let n = 0;
+    $$(".ea-grille .ea-carte", racine).forEach(c => { const ok = mots.every(m => c.dataset.texte.includes(m)); c.hidden = !ok; if (ok) n++; });
+    $("#eaAucun").hidden = n > 0;
+  });
+  // Lien direct vers un contenu depuis le site public : espace-abonnes/#corrige-<adresse du sujet>
+  function ouvrirDepuisLien() {
+    const h = decodeURIComponent(location.hash.slice(1));
+    if (!/^corrige-[a-z0-9-]+$/.test(h) || !etat.session || !(etat.abo.actif || etat.admin)) return;
+    const c = contenus.find(x => (x.fichier || "").includes("-" + h + ".pdf"));
+    if (c) ouvrirContenu(c, etat.abo.actif ? marqueDe(etat.profil) : "Aperçu administrateur");
+  }
+
   // Bibliothèque : filtres et ouverture des contenus (un seul écouteur pour toute la page)
   racine.addEventListener("click", e => {
     const ch = e.target.closest("[data-filtre]");
@@ -515,6 +537,6 @@
     if (b && b.getAttribute("aria-selected") !== "true") b.click();
     racine.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  window.addEventListener("hashchange", versFormulaire);
-  afficher().then(versFormulaire);
+  window.addEventListener("hashchange", () => { versFormulaire(); ouvrirDepuisLien(); });
+  afficher().then(() => { versFormulaire(); ouvrirDepuisLien(); });
 })();

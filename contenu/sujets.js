@@ -5,10 +5,12 @@
    - concours : identifiants des concours concernés (infj, greffe, penitentiaire, eppjej, ena)
    - ouvrage : titre exact de l'ouvrage d'où le corrigé est tiré (tel qu'il figure dans data.js)
    - session : pour un sujet réellement tombé, le concours et la session ; laisser vide sinon
+   - reserve : true si le corrigé intégral est réservé aux abonnés (seul son début figure alors dans contenu/sujets/)
    Après une modification : node tools/build.js */
 module.exports = [
   {
     adresse: "theorie-imprevision-contrat-administratif",
+    reserve: true,
     titre: "La théorie de l'imprévision dans le contrat administratif",
     epreuve: "Dissertation juridique", matiere: "Droit administratif", concours: ["infj", "ena"],
     ouvrage: "Le Droit Administratif en 125 Dissertations Corrigées, Tome II",
@@ -30,6 +32,7 @@ module.exports = [
   },
   {
     adresse: "cas-pratique-sarl-gerant-depassement-pouvoirs",
+    reserve: true,
     titre: "La SARL dont le gérant a outrepassé ses pouvoirs",
     epreuve: "Cas pratique", matiere: "Droit commercial OHADA", concours: ["infj"],
     ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026",
@@ -37,6 +40,7 @@ module.exports = [
   },
   {
     adresse: "cas-pratique-legitime-defense-agression-nocturne",
+    reserve: true,
     titre: "La légitime défense invoquée après une agression nocturne",
     epreuve: "Cas pratique", matiere: "Droit pénal", concours: ["infj"],
     ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026",
@@ -44,6 +48,7 @@ module.exports = [
   },
   {
     adresse: "cas-pratique-accident-voirie-communale",
+    reserve: true,
     titre: "L'accident sur voirie communale et la responsabilité de la commune",
     epreuve: "Cas pratique", matiere: "Droit administratif", concours: ["infj"],
     ouvrage: "Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026",
@@ -51,6 +56,7 @@ module.exports = [
   },
   {
     adresse: "commentaire-article-1376-repetition-indu",
+    reserve: true,
     titre: "Commentaire de l'article 1376 du Code civil : la répétition de l'indu",
     epreuve: "Commentaire d'article", matiere: "Droit civil", concours: ["infj"],
     session: "Concours direct de la magistrature, session d'août 2025",
@@ -59,6 +65,7 @@ module.exports = [
   },
   {
     adresse: "cas-pratique-kfk-gang-des-barbares",
+    reserve: true,
     titre: "L'affaire KFK et le gang des barbares",
     epreuve: "Cas pratique", matiere: "Droit pénal", concours: ["infj"],
     session: "Concours direct de la magistrature, session de juillet 2025",
@@ -67,6 +74,7 @@ module.exports = [
   },
   {
     adresse: "cas-pratique-magistrature-2023-dorpa",
+    reserve: true,
     titre: "Trois cas pratiques de droit pénal : DORPA, POUASS et la bande de BRI",
     epreuve: "Cas pratique", matiere: "Droit pénal", concours: ["infj"],
     session: "Concours de la magistrature, session de septembre 2023",
@@ -96,6 +104,7 @@ module.exports = [
   },
   {
     adresse: "commentaire-article-45-loi-divorce-autorite-parentale",
+    reserve: true,
     titre: "Commentaire de l'article 45 de la loi relative au divorce : l'autorité parentale après le divorce",
     epreuve: "Commentaire d'article", matiere: "Droit de la famille", concours: ["infj"],
     ouvrage: "Le Résumé de Droit Civil au Concours de la Magistrature",
@@ -103,6 +112,7 @@ module.exports = [
   },
   {
     adresse: "dissertation-controle-hierarchique-controle-de-tutelle",
+    reserve: true,
     titre: "Contrôle hiérarchique et contrôle de tutelle",
     epreuve: "Dissertation juridique", matiere: "Droit administratif", concours: ["infj", "greffe", "ena"],
     ouvrage: "Le Résumé de Droit Administratif au Concours de la Magistrature",
@@ -110,6 +120,7 @@ module.exports = [
   },
   {
     adresse: "greffe-organisation-judiciaire-2026",
+    reserve: true,
     titre: "Organisation judiciaire : cinq questions sur les juridictions ivoiriennes",
     epreuve: "Questions-réponses", matiere: "Organisation judiciaire", concours: ["greffe"],
     session: "Concours direct d'admission 2027, cycle des administrateurs des greffes et parquets, session de juillet 2026",
@@ -118,6 +129,7 @@ module.exports = [
   },
   {
     adresse: "greffe-dissertation-contrats-administratifs-2026",
+    reserve: true,
     titre: "Les particularités des contrats administratifs",
     epreuve: "Dissertation juridique", matiere: "Droit administratif", concours: ["greffe"],
     session: "Concours direct d'admission 2027, cycle des administrateurs des greffes et parquets, session de juillet 2026",
@@ -126,6 +138,7 @@ module.exports = [
   },
   {
     adresse: "greffe-opeaj-2026",
+    reserve: true,
     titre: "OPEAJ : dix questions sur les institutions et l'administration ivoiriennes",
     epreuve: "Questions-réponses", matiere: "OPEAJ", concours: ["greffe"],
     session: "Concours direct d'entrée 2027, cycle moyen supérieur de l'École des greffes, session d'août 2026",
@@ -134,6 +147,7 @@ module.exports = [
   },
   {
     adresse: "penitentiaire-dissertation-amnistie-grace-2026",
+    reserve: true,
     titre: "L'amnistie et la grâce",
     epreuve: "Dissertation juridique", matiere: "Droit pénal", concours: ["penitentiaire"],
     session: "Concours direct d'entrée 2027, cycle des administrateurs des services pénitentiaires, session de juillet 2026",
@@ -142,6 +156,7 @@ module.exports = [
   },
   {
     adresse: "droits-enfant-eppjej-2026",
+    reserve: true,
     titre: "Droits de l'enfant : dix questions de cours",
     epreuve: "Questions-réponses", matiere: "Droits de l'enfant", concours: ["eppjej"],
     session: "Concours direct d'entrée 2027, cycle des inspecteurs de la protection judiciaire de l'enfance et de la jeunesse, session de juillet 2026",
@@ -172,6 +187,7 @@ module.exports = [
   },
   {
     adresse: "sog-ouvrez-des-ecoles-vous-fermerez-des-prisons",
+    reserve: true,
     titre: "Victor Hugo : « Ouvrez des écoles, vous fermerez des prisons »",
     epreuve: "SOG", matiere: "Culture générale", concours: ["eppjej"],
     session: "Concours direct EPPJEJ, cycle moyen, session 2022",
