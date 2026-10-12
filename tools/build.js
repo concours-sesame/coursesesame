@@ -260,7 +260,7 @@ const SUJETS_PAGES = [];
     const annee = (s.meta.match(/Session (\d{4})/) || [])[1];
     SUJETS_PAGES.push({
       adresse: slugify(s.titre), titre: s.titre, epreuve: parts.filter(x => !/Session|Édition|Concours/.test(x)).pop(), matiere: /^[A-Z]+$/.test(parts[1]) ? parts[1] : parts[1][0] + parts[1].slice(1).toLowerCase(), concours: [c.id],
-      enonce: `<p>${s.enonce}</p>`, corrige: s.corrige, ouvrage: null, session: annee ? `Concours ${c.long}, session ${annee}` : "",
+      enonce: `<p>${s.enonce}</p>`, corrige: s.corrige, ouvrage: null, session: annee ? `Concours ${c.long}, session ${annee}` : "", reserve: !!s.reserve,
       resume: texte.length > 170 ? texte.slice(0, texte.lastIndexOf(" ", 165)) + "…" : texte
     });
   }
@@ -281,7 +281,7 @@ function sujetCard(x, prefix, i) {
         <b>${x.titre}</b>
         <span>${x.resume}</span>
         <small class="sujet-card-foot">${courts(x.concours)}${x.session ? `<em>Sujet tombé au concours</em>` : ""}</small>
-        <span class="ep-card-go">Lire le corrigé${svg("i-arrow")}</span>
+        <span class="ep-card-go">${x.reserve ? `${svg("i-lock")}Corrigé réservé aux abonnés` : "Lire le corrigé"}${svg("i-arrow")}</span>
       </a>`;
 }
 
@@ -724,9 +724,17 @@ function sujetPage(x) {
     <article class="sujet-main">
       ${vids.map(v => `<div class="v-inline">${videoFrame(v, prefix)}<div class="v-inline-text"><span class="v-tag">${v.tag} · ${v.duree}</span><b>${v.titre} en vidéo</b><p>${v.desc}</p></div></div>`).join("")}
       <div class="enonce-box"><span class="enonce-label">Énoncé</span>${x.enonce}</div>
-      <div class="copie" id="corrige">
+      ${x.reserve ? `<div class="copie copie-apercu" id="corrige">
 ${x.corrige}
       </div>
+      <div class="verrou">
+        <span class="eyebrow">Espace abonnés</span>
+        <h2>La suite du corrigé est réservée aux abonnés</h2>
+        <p>Le corrigé intégral de ce sujet, avec tous nos autres corrigés et nos ouvrages complets, se lit dans l'espace abonnés. Abonnement dès 500 FCFA la journée, par Mobile Money.</p>
+        <div class="verrou-actions"><a class="btn btn-gold" href="${prefix}espace-abonnes/#corrige-${x.adresse}">Lire le corrigé complet${arrow}</a><a class="btn btn-ghost" href="${prefix}espace-abonnes/#inscription">Créer mon compte</a></div>
+      </div>` : `<div class="copie" id="corrige">
+${x.corrige}
+      </div>`}
       <p class="sujet-note">Corrigé proposé par Les Cours Sésame et SAJ${o ? `, extrait de l'ouvrage « ${o.titre} »` : ""}. Ce n'est pas un corrigé officiel du concours.</p>
       <div class="sujet-actions">
         <button class="share-btn share-btn-dark" data-share="${url}" data-title="${attr(x.titre + " : sujet corrigé")}">${shareIcon}Partager ce corrigé</button>
@@ -754,7 +762,7 @@ ${contactCTA(prefix)}`;
     title: `${/^(Commentaire|Trois cas)|questions/i.test(x.titre) ? `${x.titre} (corrigé)` : `${x.titre} : ${corrigeLabel(x.epreuve)}`} | Les Cours Sésame et SAJ`,
     ld: [breadcrumb([["Accueil", SITE], ["Sujets corrigés", SITE + "sujets/"], [x.titre, url]]), {
       "@context": "https://schema.org", "@type": "Article", headline: x.titre, description: x.resume, inLanguage: "fr", url,
-      isAccessibleForFree: true, about: x.matiere, educationalLevel: "Concours de la fonction publique",
+      isAccessibleForFree: !x.reserve, about: x.matiere, educationalLevel: "Concours de la fonction publique",
       author: { "@type": "Organization", name: "Les Cours Sésame et SAJ" }, publisher: { "@type": "Organization", name: "Les Cours Sésame et SAJ" },
       image: o ? imageOuvrage(o) : OG_IMAGE
     }, ...vids.map(videoLD)]
