@@ -106,7 +106,7 @@
 
     $("#cartBody").innerHTML = n ? cart.map(i => {
       const o = OUVRAGES[i];
-      return `<div class="c-item"><span class="c-mini"></span><div><b>${o.titre}</b><small>${o.concours}${o.numerique ? " · version numérique" : ""}</small><span class="c-price">${o.prix} FCFA</span></div><button class="c-remove" data-remove="${i}" aria-label="Retirer ${o.titre.replace(/"/g, "&quot;")}">${svg("i-x")}</button></div>`;
+      return `<div class="c-item"><span class="c-mini"></span><div><b>${o.titre}</b><small>${o.concours}${o.numerique ? ", version numérique" : ""}</small><span class="c-price">${o.prix} FCFA</span></div><button class="c-remove" data-remove="${i}" aria-label="Retirer ${o.titre.replace(/"/g, "&quot;")}">${svg("i-x")}</button></div>`;
     }).join("") : `<div class="c-empty"><b>Votre panier est vide</b>Ajoutez des ouvrages depuis le catalogue.</div>`;
 
     const meter = $("#promoMeter");
@@ -120,7 +120,7 @@
     $("#cartSend").disabled = !n;
 
     $("#cartBarTotal").textContent = fmt(t.total) + " FCFA";
-    $("#cartBarCount").textContent = `${plural(n, "ouvrage")}${t.promo ? " · -10 % inclus" : ""}`;
+    $("#cartBarCount").textContent = `${plural(n, "ouvrage")}${t.promo ? ", -10 % inclus" : ""}`;
     $("#cartBar").classList.toggle("show", n > 0);
     document.body.classList.toggle("has-cart-bar", n > 0 && matchMedia("(max-width:960px)").matches);
   }
@@ -158,7 +158,7 @@
   function openModal(idx) {
     const o = OUVRAGES[idx];
     modalIdx = idx;
-    $("#mCover").innerHTML = coverHTML(o);
+    $("#mCover").innerHTML = coverHTML(o, true);
     $("#mConcours").textContent = o.concours;
     $("#mTitle").textContent = o.titre;
     $("#mDesc").textContent = o.desc;
@@ -276,13 +276,13 @@
         return true;
       }).map(o => {
         const same = seen.get(o.titre + "|" + o.prix);
-        return same.length > 1 ? { ...o, concours: "Concours de Côte d'Ivoire", concoursListe: same.map(x => CONCOURS.find(c => c.id === x.categorie).court).join(" · ") } : o;
+        return same.length > 1 ? { ...o, concours: "Concours de Côte d'Ivoire", concoursListe: same.map(x => CONCOURS.find(c => c.id === x.categorie).court).join(", ") } : o;
       });
     }
     const idxOf = o => OUVRAGES.findIndex(x => x.titre === o.titre && x.categorie === o.categorie);
 
     const label = state.cat === "tous" ? "tous concours" : CONCOURS.find(c => c.id === state.cat).long;
-    $("#resultInfo").textContent = `${plural(list.length, "ouvrage")} · ${label}`;
+    $("#resultInfo").textContent = `${plural(list.length, "ouvrage")}, ${label}`;
     if (!list.length) {
       box.innerHTML = `<div class="empty"><b>Aucun ouvrage trouvé</b>Essayez un autre mot, ou <a href="${WA_URL}" target="_blank" rel="noopener">demandez-nous sur WhatsApp</a>.</div>`;
       return;
@@ -303,14 +303,6 @@
     searchTimer = setTimeout(() => { state.q = e.target.value.trim(); renderBooks(); }, 120);
   });
   on("#sort", "change", e => { state.sort = e.target.value; renderBooks(); });
-
-  /* ---------- Bandeau défilant ---------- */
-  function renderTicker() {
-    if (!$("#ticker")) return;
-    const words = ["INFJ Magistrature", "Greffe", "Pénitentiaire", "EPPJEJ", "ENA", "Savoirs", "Méthode", "Réussite"];
-    const one = words.map(w => `<span class="ticker-item">${w}${svg("i-star")}</span>`).join("");
-    $("#ticker").innerHTML = one + one;
-  }
 
   /* ---------- Méthode (accueil) ---------- */
   function renderMethodo() {
@@ -355,7 +347,7 @@
     const show = i => {
       const s = SUJETS[i];
       $("#sPanel").innerHTML = `<article class="paper" role="tabpanel">
-        <div class="paper-side"><span class="tag">${s.concours}</span><h3>${s.titre}</h3><div class="meta">${s.meta}</div>
+        <div class="paper-side"><span class="tag">${s.concours}</span><h3>${s.titre}</h3><div class="meta">${s.meta.replace(/ · /g, ", ")}</div>
           <div class="enonce"><b>Sujet</b><p>${s.enonce}</p></div></div>
         <div class="paper-main">
           ${s.reserve ? `<div class="corrige copie-apercu">${s.corrige}</div>
@@ -376,11 +368,7 @@
   /* ---------- Avis et FAQ ---------- */
   function renderReviews() {
     if (!$("#reviews")) return;
-    const stars = svg("i-star").repeat(5);
-    const card = t => `<figure class="review"><div class="stars" aria-label="5 étoiles">${stars}</div><blockquote>« ${t.text} »</blockquote><figcaption><span class="avatar">${t.initials}</span><span><cite>${t.author}</cite><small>${t.role}</small></span></figcaption></figure>`;
-    const half = Math.ceil(TEMOIGNAGES.length / 2);
-    const row = (items, rev) => { const h = items.concat(items, items).map(card).join(""); return `<div class="r-row${rev ? " rev" : ""}">${h}${h}</div>`; };
-    $("#reviews").innerHTML = row(TEMOIGNAGES.slice(0, half), false) + row(TEMOIGNAGES.slice(half), true);
+    $("#reviews").innerHTML = TEMOIGNAGES.map(t => `<figure class="review"><blockquote>« ${t.text} »</blockquote><figcaption><cite>${t.author}</cite>, <small>${t.role.charAt(0).toLowerCase() + t.role.slice(1)}</small></figcaption></figure>`).join("");
   }
   function wireFAQ() {
     const items = $$(".faq-item");
@@ -451,7 +439,7 @@
       const ids = out.map(o => OUVRAGES.indexOf(o));
       const c = CONCOURS.find(x => x.id === ans.cat);
       box.innerHTML = `<div class="cs-result">
-        <span class="eyebrow">Notre suggestion · ${c.court}</span>
+        <span class="eyebrow">Notre suggestion pour le concours ${c.court}</span>
         <h3>${plural(out.length, "ouvrage")} pour votre préparation</h3>
         <ul class="cs-list">${out.map(o => `<li><button class="cs-book" data-open="${OUVRAGES.indexOf(o)}"><span class="c-mini"></span><span><b>${o.titre}</b><small>${why.get(o)}</small></span><em>${o.prix} FCFA</em></button></li>`).join("")}</ul>
         <div class="cs-total">${t.disc ? `<s>${fmt(t.sub)} FCFA</s>` : ""}<strong>${fmt(t.total)} FCFA</strong>${t.disc ? `<em>remise de 10 % incluse</em>` : ""}</div>
@@ -613,32 +601,7 @@
     });
   }
 
-  /* ---------- Compteurs et apparitions ---------- */
-  // Un ouvrage proposé à plusieurs concours ne compte qu'une fois
-  const COUNTS = { ouvrages: new Set(OUVRAGES.map(o => o.titre)).size, concours: CONCOURS.length };
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function countUp(el) {
-    const target = el.dataset.countFrom in COUNTS ? COUNTS[el.dataset.countFrom] : +el.dataset.countFrom;
-    if (reduce) { el.textContent = target; return; }
-    const t0 = performance.now(), d = 1400;
-    const tick = now => {
-      const p = Math.min(1, (now - t0) / d);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(en => {
-      if (!en.isIntersecting) return;
-      if (en.target.dataset.countFrom) countUp(en.target);
-      else en.target.classList.add("in");
-      io.unobserve(en.target);
-    });
-  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-
   /* ---------- Démarrage ---------- */
-  renderTicker();
   renderChips();
   renderBooks();
   renderMethodo();
@@ -655,7 +618,4 @@
   syncTopHeight();
   window.addEventListener("resize", () => { syncTopHeight(); updateCart(); });
   const y = $("#year"); if (y) y.textContent = new Date().getFullYear();
-  // Les chiffres sont écrits dans la page (lisibles sans JavaScript) ; ici, ils repartent de 0 pour l'animation
-  if (!reduce) $$("[data-count-from]").forEach(el => { el.textContent = "0"; });
-  $$(".reveal, [data-count-from]").forEach(el => io.observe(el));
 })();

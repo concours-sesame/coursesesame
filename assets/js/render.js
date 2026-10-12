@@ -59,11 +59,23 @@
     return { serie: "", sujet: t };
   }
 
-  function coverHTML(o) {
+  // Première page réelle de l'ouvrage (rendue depuis son extrait gratuit) : assets/img/pages/<extrait>.jpg
+  const pageImage = o => o.extrait ? o.extrait.replace(/\.pdf$/, "") : "";
+  // Pages au format portrait (les autres sont à l'italienne)
+  const PORTRAIT = ["annales-magistrature"];
+
+  // big : affichage en grand (fiche ou page de l'ouvrage)
+  function coverHTML(o, big) {
+    const p = pageImage(o);
+    if (p) {
+      const [w, h] = PORTRAIT.includes(p) ? [424, 600] : [600, 424];
+      const src = `${root}assets/img/pages/${p}`;
+      return `<div class="cover cover-page"><img src="${src}-600.jpg" srcset="${src}-600.jpg 600w, ${src}.jpg 960w" sizes="${big ? "(max-width:960px) 92vw, 460px" : "(max-width:640px) 46vw, 300px"}" width="${w}" height="${h}" alt="Première page de l'ouvrage ${attr(o.titre)}" loading="lazy" decoding="async"></div>`;
+    }
     const c = coverParts(o.titre);
-    return `<div class="cover">${o.numerique ? `<span class="cover-num">Numérique</span>` : ""}
-      <div class="cover-top">${svg("logo", 'class="mark" aria-hidden="true"')}<span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band">${c.serie ? `<span class="cover-series">${c.serie}</span>` : ""}<span class="cover-title">${c.sujet}</span><span class="orn">${svg("i-star")}</span></div>
+    return `<div class="cover cover-made">
+      <div class="cover-top">${svg("logo", 'class="mark" aria-hidden="true"')}<span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band">${c.serie ? `<span class="cover-series">${c.serie}</span>` : ""}<span class="cover-title">${c.sujet}</span></div>
       <div class="cover-foot">${o.concours.replace(/^INFJ\s+/, "")}</div>
     </div>`;
   }
@@ -72,9 +84,9 @@
     return `<article class="book">
       <button class="book-cover-btn" data-open="${idx}" aria-label="Voir le détail : ${attr(o.titre)}">${coverHTML(o)}</button>
       <div class="book-meta">
-        <span class="book-concours">${o.concoursListe || o.concours}</span>
+        <span class="book-concours">${(o.concoursListe || o.concours).replace(/ · /g, ", ")}</span>
         <h3 class="book-title"><a href="${ouvrageURL(o)}">${o.titre}</a></h3>
-        <span class="book-niveau">${o.phase ? o.phase + " · " : ""}Niveaux ${o.niveau}</span>${o.extrait ? `<span class="book-extrait">Extrait gratuit disponible</span>` : ""}${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}
+        <span class="book-niveau">${o.phase ? o.phase + ", niveaux " : "Niveaux "}${o.niveau}</span>${o.extrait ? `<span class="book-extrait">Extrait gratuit à lire</span>` : ""}${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}
         <div class="book-buy">
           <span class="price">${o.prix}<small>FCFA</small></span>
           <button class="add-btn${inCart ? " in" : ""}" data-add="${idx}">${inCart ? svg("i-check") + "Ajouté" : svg("i-plus") + "Panier"}</button>
