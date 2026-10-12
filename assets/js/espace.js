@@ -77,40 +77,79 @@
   }
   const lienSur = u => /^https?:\/\//i.test(String(u || ""));
 
-  /* ---------- Mention au nom de l'abonné sur un PDF ---------- */
-  async function pdfAuNom(octets, marque, mention) {
-    await chargerScript(ROOT + "assets/vendor/pdf-lib-1.17.1.min.js");
-    const { PDFDocument, StandardFonts, rgb, degrees } = window.PDFLib;
-    const doc = await PDFDocument.load(octets, { ignoreEncryption: true });
-    const gras = await doc.embedFont(StandardFonts.HelveticaBold);
-    const normal = await doc.embedFont(StandardFonts.Helvetica);
-    // Les polices standard ne connaissent que l'alphabet latin : autres caractères remplacés
-    const sur = (police, t) => { try { police.encodeText(t); return t; } catch (e) { return t.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^\x20-\x7E]/g, "?"); } };
-    const m1 = sur(gras, marque), m2 = sur(normal, mention);
-    for (const page of doc.getPages()) {
-      const { width, height } = page.getSize();
-      const taille = Math.max(14, Math.min(width, height) / 16);
-      const angle = Math.atan2(height, width);
-      const long = gras.widthOfTextAtSize(m1, taille);
-      page.drawText(m1, {
-        x: width / 2 - (Math.cos(angle) * long) / 2, y: height / 2 - (Math.sin(angle) * long) / 2,
-        size: taille, font: gras, color: rgb(0.06, 0.16, 0.36), opacity: 0.09, rotate: degrees((angle * 180) / Math.PI)
+  /* ---------- Lecture des PDF dans la page, sans téléchargement ni copie ---------- */
+  // Chaque page est dessinée en image (pas de texte sélectionnable), avec le nom de l'abonné incrusté.
+  const PDFJS = ROOT + "assets/vendor/pdfjs-3.11.174/";
+  async function afficherPdf(octets, zone, marque) {
+    await chargerScript(PDFJS + "pdf.min.js");
+    const lib = window.pdfjsLib;
+    lib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js";
+    const doc = await lib.getDocument({ data: octets, isEvalSupported: false, enableXfa: false }).promise;
+    zone.innerHTML = "";
+    const mention = `Réservé à ${marque} · Les Cours Sésame et SAJ · Reproduction interdite`;
+    const dessiner = async (n, canvas) => {
+      const page = await doc.getPage(n);
+      const base = page.getViewport({ scale: 1 });
+      const largeur = Math.min(zone.clientWidth || 800, 1100);
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      const vue = page.getViewport({ scale: (largeur / base.width) * ratio });
+      canvas.width = Math.floor(vue.width); canvas.height = Math.floor(vue.height);
+      const ctx = canvas.getContext("2d");
+      await page.render({ canvasContext: ctx, viewport: vue }).promise;
+      // Nom de l'abonné en diagonale et mention en bas de page, incrustés dans l'image
+      const w = canvas.width, h = canvas.height, angle = -Math.atan2(h, w);
+      ctx.save();
+      ctx.translate(w / 2, h / 2); ctx.rotate(angle);
+      ctx.font = `800 ${Math.round(Math.min(w, h) / 14)}px sans-serif`;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillStyle = "rgba(15,42,92,.13)";
+      ctx.fillText(marque, 0, 0);
+      ctx.restore();
+      ctx.font = `600 ${Math.max(10, Math.round(w / 95))}px sans-serif`;
+      ctx.fillStyle = "rgba(60,60,75,.85)";
+      ctx.fillText(mention, Math.round(w * 0.02), h - Math.round(h * 0.012));
+      page.cleanup();
+    };
+    const observateur = "IntersectionObserver" in window ? new IntersectionObserver(entrees => {
+      entrees.forEach(e => {
+        if (!e.isIntersecting || e.target.dataset.fait) return;
+        e.target.dataset.fait = "1";
+        observateur.unobserve(e.target);
+        dessiner(+e.target.dataset.page, e.target).catch(() => {});
       });
-      page.drawText(m2, { x: 22, y: 10, size: 6.5, font: normal, color: rgb(0.25, 0.25, 0.3), opacity: 0.85 });
+    }, { root: zone.closest(".ea-v-boite"), rootMargin: "800px 0px" }) : null;
+    for (let n = 1; n <= doc.numPages; n++) {
+      const canvas = document.createElement("canvas");
+      canvas.className = "ea-page";
+      canvas.dataset.page = n;
+      canvas.setAttribute("aria-label", `Page ${n} sur ${doc.numPages}`);
+      zone.appendChild(canvas);
+      if (observateur) observateur.observe(canvas); else await dessiner(n, canvas);
     }
-    return doc.save();
+    return doc;
   }
 
+  // Protections pendant la lecture : pas de clic droit, de sélection, de copie, d'enregistrement ni d'impression
+  const bloquer = e => { if (visionneuse && !visionneuse.hidden && visionneuse.contains(e.target)) e.preventDefault(); };
+  ["contextmenu", "copy", "cut", "selectstart", "dragstart"].forEach(t => document.addEventListener(t, bloquer, true));
+  document.addEventListener("keydown", e => {
+    if (!visionneuse || visionneuse.hidden) return;
+    const k = (e.key || "").toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && ["s", "p", "c", "x", "a", "u"].includes(k)) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
   /* ---------- Visionneuse des contenus ---------- */
-  let visionneuse, retourFocus, minuterieMarque;
+  let visionneuse, retourFocus, minuterieMarque, docOuvert;
   function fermerVisionneuse() {
     if (!visionneuse || visionneuse.hidden) return;
     const v = $("video", visionneuse);
     if (v) { v.pause(); v.removeAttribute("src"); v.load(); }
     clearInterval(minuterieMarque);
-    $$("a[data-blob]", visionneuse).forEach(a => URL.revokeObjectURL(a.href));
+    if (docOuvert) { docOuvert.destroy(); docOuvert = null; }
+    $("#eaVCorps").innerHTML = "";
     visionneuse.hidden = true;
     document.body.style.overflow = "";
+    document.body.classList.remove("ea-lecture");
     if (retourFocus) retourFocus.focus();
   }
   function creerVisionneuse() {
@@ -143,6 +182,7 @@
     corps.innerHTML = `<p class="ea-attente">Chargement…</p>`;
     visionneuse.hidden = false;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("ea-lecture");
     $(".ea-v-fermer", visionneuse).focus();
 
     if (c.type === "texte") {
@@ -155,7 +195,7 @@
         : `<p class="ea-erreur">Ce lien n'est pas valide.</p>`;
       return;
     }
-    const duree = c.type === "video" ? 4 * 3600 : 600;
+    const duree = c.type === "video" ? 4 * 3600 : 60;
     const { data, error } = await client.storage.from("exclusif").createSignedUrl(c.fichier, duree);
     if (error || !data) { corps.innerHTML = `<p class="ea-erreur">Ce contenu n'est pas accessible. Si votre abonnement est actif, rechargez la page.</p>`; return; }
 
@@ -179,27 +219,18 @@
       video.play().catch(() => {});
       return;
     }
-    // Document PDF : préparé à son nom, puis ouvert ou téléchargé
-    corps.innerHTML = `<p>Chaque page de ce document porte la mention « ${esc(marque)} ».</p>
-      <div class="ea-v-actions"><button class="btn btn-navy" type="button" id="eaPrep">Préparer le document</button></div>
-      <p class="ea-etat" role="status"></p>`;
-    $("#eaPrep").addEventListener("click", async () => {
-      const etat = $(".ea-etat", corps), bouton = $("#eaPrep");
-      bouton.disabled = true;
-      etat.textContent = "Préparation du document à votre nom…";
-      try {
-        const r = await fetch(data.signedUrl);
-        if (!r.ok) throw new Error("Téléchargement impossible");
-        const octets = await pdfAuNom(await r.arrayBuffer(), marque, `Réservé à ${marque} · Les Cours Sésame et SAJ · Reproduction et diffusion interdites`);
-        const url = URL.createObjectURL(new Blob([octets], { type: "application/pdf" }));
-        const nom = (window.SESAME ? window.SESAME.slugify(c.titre) : "document") + ".pdf";
-        $(".ea-v-actions", corps).innerHTML = `<a class="btn btn-gold" data-blob href="${url}" target="_blank" rel="noopener">Ouvrir le document</a><a class="btn btn-ghost" data-blob href="${url}" download="${esc(nom)}">Télécharger</a>`;
-        etat.textContent = "Document prêt.";
-      } catch (e) {
-        bouton.disabled = false;
-        etat.textContent = "Le document n'a pas pu être préparé. Réessayez.";
-      }
-    });
+    // Document PDF : lu dans la page, à son nom, sans téléchargement possible
+    corps.innerHTML = `<div class="ea-pdf" aria-live="polite"><p class="ea-attente">Ouverture du document…</p></div>
+      <p class="ea-mention">Document réservé à ${esc(marque)}. Lecture en ligne seulement : téléchargement, copie et impression désactivés.</p>`;
+    try {
+      const r = await fetch(data.signedUrl);
+      if (!r.ok) throw new Error("Lecture impossible");
+      const octets = new Uint8Array(await r.arrayBuffer());
+      if (visionneuse.hidden) return;
+      docOuvert = await afficherPdf(octets, $(".ea-pdf", corps), marque);
+    } catch (e) {
+      $(".ea-pdf", corps).innerHTML = `<p class="ea-erreur">Le document n'a pas pu être ouvert. Réessayez.</p>`;
+    }
   }
 
   window.Espace = { client, OUVERT, esc, dateFr, auj, joursJusqua, fcfa, WA_NUM, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur };
