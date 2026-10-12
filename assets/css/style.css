@@ -963,9 +963,9 @@ a.aside-title:hover{color:var(--gold-ink)}
 .ea-visionneuse{position:fixed;inset:0;z-index:130;display:grid;place-items:center;padding:16px;background:rgba(9,24,54,.86);overflow-y:auto}
 .ea-visionneuse[hidden]{display:none}
 .ea-v-boite{position:relative;width:min(920px,100%);max-height:calc(100vh - 32px);overflow-y:auto;padding:clamp(20px,3vw,36px);border-radius:var(--r);background:var(--paper)}
-.ea-v-boite h3{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2rem);line-height:1.15;margin:.6rem 2.6rem .5rem 0}
+.ea-v-boite h3{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2rem);line-height:1.15;margin:.6rem 0 .5rem 0}
 .ea-v-desc{color:var(--muted);margin-bottom:1rem}
-.ea-v-fermer{position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--cream)}
+.ea-v-fermer{position:sticky;top:0;float:right;z-index:4;margin:-8px -8px 0 8px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--cream);box-shadow:0 1px 6px rgba(9,24,54,.18)}
 .ea-v-fermer svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2}
 .ea-v-corps{margin-top:.6rem}
 .ea-v-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0 .4rem}
@@ -980,7 +980,9 @@ a.aside-title:hover{color:var(--gold-ink)}
 .ea-mention{margin-top:.8rem;font-size:.8rem;color:var(--muted)}
 .ea-v-boite{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .ea-pdf{display:grid;gap:12px;padding:12px;border-radius:var(--r-sm);background:#e9e6df}
-.ea-page{display:block;width:100%;height:auto;min-height:120px;background:#fff;box-shadow:0 2px 10px rgba(9,24,54,.18);pointer-events:none}
+.ea-pdf-barre{position:sticky;top:-12px;z-index:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:.5rem 1.4rem;margin:-12px -12px 0;padding:10px 60px 10px 12px;background:var(--navy);color:#fff;font-size:.85rem;font-weight:700;border-radius:var(--r-sm) var(--r-sm) 0 0}
+.ea-pdf-barre input{width:5.5em;margin-left:.4rem;padding:.3rem .5rem;border-radius:8px;border:0;font:inherit;color:var(--navy);-webkit-user-select:text;user-select:text}
+.ea-page{display:block;width:100%;height:auto;scroll-margin-top:64px;background:#fff;box-shadow:0 2px 10px rgba(9,24,54,.18);pointer-events:none}
 @media print{body.ea-lecture *{visibility:hidden!important}body.ea-lecture::after{content:"Impression désactivée : document réservé aux abonnés.";visibility:visible;display:block;padding:40px;font:700 18px sans-serif}}
 .ea-fiche{font-family:var(--serif);font-size:1.06rem;line-height:1.7;color:var(--ink)}
 .ea-fiche p{margin-bottom:.9rem}
