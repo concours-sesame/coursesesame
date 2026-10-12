@@ -245,6 +245,8 @@
     visionneuse.addEventListener("click", e => { if (e.target === visionneuse) fermerVisionneuse(); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") fermerVisionneuse(); });
   }
+  // Appelée quand un fichier est refusé (page de l'espace abonnés : contrôle de l'appareil)
+  let surRefus = null;
   // marque : texte affiché sur la vidéo et porté sur les documents (nom et téléphone de l'abonné)
   async function ouvrirContenu(c, marque) {
     if (!visionneuse) creerVisionneuse();
@@ -276,7 +278,7 @@
     }
     const duree = c.type === "video" ? 4 * 3600 : 60;
     const { data, error } = await client.storage.from("exclusif").createSignedUrl(c.fichier, duree);
-    if (error || !data) { corps.innerHTML = `<p class="ea-erreur">Ce contenu n'est pas accessible. Si votre abonnement est actif, rechargez la page.</p>`; return; }
+    if (error || !data) { corps.innerHTML = `<p class="ea-erreur">Ce contenu n'est pas accessible. Si votre abonnement est actif, rechargez la page.</p>`; if (surRefus) surRefus(); return; }
 
     if (c.type === "video") {
       corps.innerHTML = `<div class="ea-lecteur">
@@ -321,6 +323,20 @@
   if (!racine) return;
   const marqueDe = p => `${p.prenom} ${p.nom} · ${p.telephone}`;
   let etat = {};
+  // Un compte ne s'utilise que sur un appareil à la fois (voir supabase/migrations/…_un_appareil_a_la_fois.sql) :
+  // une connexion sur un autre appareil déconnecte celui-ci, avec un message au retour sur le formulaire.
+  let avisAppareil = false;
+  async function ecarterAppareil() {
+    avisAppareil = true;
+    etat = { session: null };
+    fermerVisionneuse();
+    await client.auth.signOut({ scope: "local" });
+  }
+  async function controlerAppareil() {
+    if (!etat.session || etat.admin || document.hidden) return;
+    const { data, error } = await client.rpc("verifier_appareil");
+    if (!error && data === false) { await ecarterAppareil(); afficher("connexion"); }
+  }
 
   if (!OUVERT) {
     racine.innerHTML = `<div class="ea-carte-info"><h3>L'espace abonnés ouvre bientôt.</h3><p>Écrivez-nous sur WhatsApp pour être prévenu de son ouverture.</p><a class="btn btn-wa" href="${lienWa(WA_NUM, "Bonjour Les Cours Sésame & SAJ, je souhaite être prévenu de l'ouverture de l'espace abonnés.")}" target="_blank" rel="noopener">${icone("i-wa")}Écrire sur WhatsApp</a></div>`;
@@ -330,6 +346,9 @@
   async function chargerEtat() {
     const { data: { session } } = await client.auth.getSession();
     if (!session) return { session: null };
+    const v = await client.rpc("verifier_appareil");
+    if (v.error) throw v.error;
+    if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
     const [p, a, adm] = await Promise.all([
       client.from("profils").select("prenom, nom, telephone, concours").eq("id", uid).maybeSingle(),
@@ -369,6 +388,7 @@
         <button type="button" role="tab" data-onglet="inscription" aria-selected="${onglet === "inscription"}">Créer un compte</button>
       </div>
       <form class="form ea-form" id="eaConnexion" novalidate ${onglet === "inscription" ? "hidden" : ""}>
+        ${avisAppareil ? `<p class="ea-avis">Votre compte vient d'être ouvert sur un autre appareil. Un compte ne s'utilise que sur un appareil à la fois : reconnectez-vous pour continuer ici, l'autre appareil sera déconnecté.</p>` : ""}
         <div class="field full"><label for="cEmail">Adresse e-mail</label><input id="cEmail" type="email" autocomplete="email" required></div>
         <div class="field full"><label for="cMdp">Mot de passe</label><input id="cMdp" type="password" autocomplete="current-password" required></div>
         <p class="ea-msg" role="alert"></p>
@@ -475,7 +495,7 @@
       return;
     }
     if (!etat.session) {
-      racine.innerHTML = `<div class="ea-accueil">${formulairesHTML(onglet || (location.hash === "#inscription" ? "inscription" : "connexion"))}${await apercuHTML()}</div>`;
+      racine.innerHTML = `<div class="ea-accueil">${formulairesHTML(onglet || (!avisAppareil && location.hash === "#inscription" ? "inscription" : "connexion"))}${await apercuHTML()}</div>`;
       brancherFormulaires();
     } else if (etat.abo.actif || etat.admin) {
       const { data, error } = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le").eq("publie", true).order("publie_le", { ascending: false });
@@ -505,8 +525,10 @@
       if (!email || !password) { msg.textContent = "Indiquez votre e-mail et votre mot de passe."; return; }
       bouton.disabled = true; msg.textContent = "";
       const { error } = await client.auth.signInWithPassword({ email, password });
+      if (!error) await client.rpc("prendre_appareil");
       bouton.disabled = false;
       if (error) { msg.textContent = messageErreur(error); return; }
+      avisAppareil = false;
       if (!/^#corrige-/.test(location.hash)) history.replaceState(null, "", location.pathname);
       afficher().then(ouvrirDepuisLien);
     });
@@ -525,6 +547,7 @@
       const { error } = await client.functions.invoke("inscription", { body: d });
       if (error) { bouton.disabled = false; msg.textContent = await erreurFonction(error); return; }
       const r = await client.auth.signInWithPassword({ email: d.email, password: d.motDePasse });
+      if (!r.error) await client.rpc("prendre_appareil");
       bouton.disabled = false;
       if (r.error) { msg.textContent = messageErreur(r.error); return; }
       history.replaceState(null, "", location.pathname);
@@ -598,5 +621,9 @@
     racine.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   window.addEventListener("hashchange", () => { versFormulaire(); ouvrirDepuisLien(); });
+  // Contrôle de l'appareil toutes les minutes et au retour sur la page
+  surRefus = controlerAppareil;
+  setInterval(controlerAppareil, 60000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) controlerAppareil(); });
   afficher().then(() => { versFormulaire(); ouvrirDepuisLien(); });
 })();

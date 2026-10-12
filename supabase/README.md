@@ -15,6 +15,11 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
 - Les vidéos s'ouvrent par des liens temporaires (4 heures), avec le nom et le téléphone de l'abonné en
   surimpression. Les PDF se lisent dans la page seulement (pages dessinées en image avec ce nom incrusté) :
   pas de bouton de téléchargement, ni de copie, de sélection, de clic droit ou d'impression ; lien de 60 secondes.
+- Un compte ne s'utilise que sur un appareil à la fois (`20261012225803_un_appareil_a_la_fois.sql`) : après une
+  connexion, le site enregistre la session (`prendre_appareil`) dans la table `connexions`, et seule la dernière
+  session enregistrée donne accès aux contenus et aux fichiers (`abonnement_actif`). L'ancien appareil est
+  déconnecté à sa prochaine action, ou dans la minute (`verifier_appareil`). Les administrateurs ne sont pas
+  concernés. La page d'administration signale les comptes utilisés sur 3 appareils ou plus en 7 jours.
 
 ## Fonctions
 
@@ -41,6 +46,8 @@ Projet `iyftcjszvnaaakirlsdd`, région Paris (eu-west-3).
 Le tableau de bord signale quelques points qui sont voulus :
 
 - `journal_inscriptions` sans règle d'accès : seule la fonction `inscription` (clé secrète) s'en sert.
+- `connexions` sans règle d'accès : seules les fonctions `prendre_appareil`, `verifier_appareil` et
+  `admin_appareils` s'en servent.
 - `apercu_contenus` appelable sans connexion : elle ne renvoie que les titres des contenus publiés.
 - Fonctions appelables par les comptes connectés : celles d'administration vérifient `est_admin()`,
   les autres ne renvoient que la situation du compte qui les appelle.
