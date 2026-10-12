@@ -9,7 +9,16 @@ const WA2="2250506600332";
 
 /* Tarifs de l'espace abonnés, affichés sur sa page (laisser vide pour indiquer « tarif sur WhatsApp »).
    Exemple : [{"duree":"1 mois","prix":"5 000"},{"duree":"3 mois","prix":"12 000"}] */
-const TARIFS_ABONNEMENT=[];
+const TARIFS_ABONNEMENT=[
+{"cle":"j1","prix":"500","duree":"1 jour"},
+{"cle":"j7","prix":"2 000","duree":"1 semaine"},
+{"cle":"j14","prix":"3 500","duree":"2 semaines"},
+{"cle":"m1","prix":"5 000","duree":"1 mois"},
+{"cle":"m2","prix":"9 000","duree":"2 mois"},
+{"cle":"m3","prix":"12 500","duree":"3 mois"},
+{"cle":"m6","prix":"22 500","duree":"6 mois"},
+{"cle":"m12","prix":"40 000","duree":"12 mois"}
+];
 
 const OUVRAGES=[
 {"titre":"Le Petit Manuel de Droit Civil","desc":"Manuel synthétique de droit civil pour préparer la phase de présélection du concours de la magistrature.","concours":"INFJ Magistrature","categorie":"infj","niveau":"CS / CMS / CM","prix":"12 000","phase":"Présélection"},
