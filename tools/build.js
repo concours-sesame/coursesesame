@@ -20,7 +20,7 @@ const path = require("path");
 const vm = require("vm");
 
 const DIR = path.resolve(__dirname, "..");
-const SITE = "https://concours-sesame.github.io/coursesesame/";
+const SITE = "https://coursesesame.com/";
 const OG_IMAGE = SITE + "assets/img/og-image.png";
 const TODAY = new Date().toISOString().slice(0, 10);
 const read = f => fs.readFileSync(path.join(DIR, f), "utf8");
