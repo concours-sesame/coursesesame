@@ -20,9 +20,8 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,500;0,700;1,500;1,700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="../../assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/source-serif-4-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../../assets/css/style.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://concours-sesame.github.io/coursesesame/"},{"@type":"ListItem","position":2,"name":"Ouvrages","item":"https://concours-sesame.github.io/coursesesame/ouvrages/"},{"@type":"ListItem","position":3,"name":"Le Résumé des Droits de l'Enfant aux Concours Administratifs","item":"https://concours-sesame.github.io/coursesesame/ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs/"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Le Résumé des Droits de l'Enfant aux Concours Administratifs","description":"Cours condensé sur la protection juridique de l'enfant en droit ivoirien et international. Conventions, lois nationales et mécanismes de protection.","image":"https://concours-sesame.github.io/coursesesame/assets/img/ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs.jpg","category":"Livres","sku":"le-resume-des-droits-de-l-enfant-aux-concours-administratifs","brand":{"@type":"Brand","name":"Les Cours Sésame et SAJ"},"offers":{"@type":"Offer","price":"10000","priceCurrency":"XOF","availability":"https://schema.org/InStock","url":"https://concours-sesame.github.io/coursesesame/ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs/","seller":{"@type":"Organization","name":"Les Cours Sésame et SAJ"}}}</script>
@@ -41,7 +40,6 @@
     <path style="fill:var(--m-n,#0f2a5c)" d="M77 25H82V88H77Z"/>
     <path style="fill:var(--m-g,#e8a62b)" d="M4 95C30 82 70 82 96 95 70 88.5 30 88.5 4 95Z"/>
   </symbol>
-  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 0C12.8 8 16 11.2 24 12 16 12.8 12.8 16 12 24 11.2 16 8 12.8 0 12 8 11.2 11.2 8 12 0Z"/></symbol>
   <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35zM12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.12 1.53 5.85L.06 23.8l6.1-1.6A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0zm0 21.9c-1.84 0-3.55-.5-5.03-1.38l-.36-.21-3.74.98 1-3.64-.24-.38A9.87 9.87 0 0 1 2.1 12C2.1 6.58 6.58 2.1 12 2.1S21.9 6.58 21.9 12 17.42 21.9 12 21.9z"/></symbol>
   <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.2l2.3 11.2a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.5L21.4 8H6.1"/><circle cx="10" cy="20.5" r="1.2"/><circle cx="18" cy="20.5" r="1.2"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
@@ -61,7 +59,7 @@
 <!-- EN-TÊTE -->
 <div class="site-top" id="siteTop">
   <div class="promo" id="promo">
-    <a href="../../#catalogue"><strong>Offre spéciale</strong> : -10 % dès 3 ouvrages<span class="promo-long"> commandés, appliquée automatiquement au panier</span></a>
+    <a href="../../#catalogue"><strong>-10 %</strong> dès 3 ouvrages commandés<span class="promo-long">, remise appliquée automatiquement au panier</span></a>
     <button class="promo-close" id="promoClose" aria-label="Masquer l'offre"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><use href="#i-x"/></svg></button>
   </div>
   <header class="header" id="header">
@@ -95,29 +93,25 @@
     <button class="icon-btn" id="menuClose" aria-label="Fermer le menu"><svg><use href="#i-x"/></svg></button>
   </div>
   <nav>
-    <a href="../../#concours">Concours <span>01</span></a>
-    <a href="../../#catalogue">Catalogue <span>02</span></a>
-    <a href="../../#conseiller">Quel ouvrage pour moi ? <span>03</span></a>
-    <a href="../../methodes/">Méthodes &amp; QCM <span>04</span></a>
-    <a href="../../sujets/">Sujets corrigés <span>05</span></a>
-    <a href="../../#videos">Vidéos <span>06</span></a>
-    <a href="../../#avis">Avis <span>07</span></a>
-    <a href="../../#faq">FAQ <span>08</span></a>
-    <a href="../../espace-abonnes/">Espace abonnés <span>09</span></a>
+    <a href="../../#concours">Concours</a>
+    <a href="../../#catalogue">Catalogue</a>
+    <a href="../../#conseiller">Quel ouvrage pour moi ?</a>
+    <a href="../../methodes/">Méthodes &amp; QCM</a>
+    <a href="../../sujets/">Sujets corrigés</a>
+    <a href="../../#videos">Vidéos</a>
+    <a href="../../#avis">Avis</a>
+    <a href="../../#faq">FAQ</a>
+    <a href="../../espace-abonnes/">Espace abonnés</a>
   </nav>
   <a class="btn btn-wa btn-block" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
 </div>
 
 <main id="top">
-<section class="hero hero-sub hero-product on-dark">
+<section class="hero hero-sub hero-product">
   <div class="wrap">
     <nav class="crumbs" aria-label="Fil d'Ariane"><a href="../../">Accueil</a><span aria-hidden="true">›</span><a href="../../ouvrages/">Ouvrages</a><span aria-hidden="true">›</span><span aria-current="page">Le Résumé des Droits de l'Enfant aux Concours Administratifs</span></nav>
     <div class="product">
-      <div class="product-cover"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droits de l'Enfant</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Concours de Côte d'Ivoire</div>
-    </div></div>
+      <figure class="product-cover"><div class="cover cover-page"><img src="../../assets/img/pages/resume-droits-enfant-600.jpg" srcset="../../assets/img/pages/resume-droits-enfant-600.jpg 600w, ../../assets/img/pages/resume-droits-enfant.jpg 960w" sizes="(max-width:960px) 92vw, 460px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé des Droits de l'Enfant aux Concours Administratifs" loading="lazy" decoding="async"></div><figcaption>Première page de l'extrait gratuit.</figcaption></figure>
       <div class="product-info">
         <div class="product-concours"><a href="../../concours/greffe/">Greffe</a><a href="../../concours/penitentiaire/">Pénitentiaire</a><a href="../../concours/eppjej/">EPPJEJ</a></div>
         <h1 class="product-title">Le Résumé des Droits de l'Enfant aux Concours Administratifs</h1>
@@ -144,72 +138,68 @@
 
 <section class="section apercu" id="apercu">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Extrait gratuit</span><h2 class="h-section">Feuilletez <em>l'ouvrage</em></h2></div>
+    <div class="section-head">
+      <h2 class="h-section">Quelques pages de l'extrait</h2>
       <p class="lead">Quelques pages de l'extrait gratuit, telles qu'elles figurent dans l'ouvrage : la page de garde, la présentation et des pages de contenu. Touchez une page pour ouvrir l'extrait en PDF.</p>
     </div>
-    <div class="apercu-grid"><a class="apercu-page reveal reveal-d0" href="../../assets/extraits/resume-droits-enfant.pdf#page=1" target="_blank" rel="noopener"><img src="../../assets/img/apercus/resume-droits-enfant-p1.jpg" alt="Le Résumé des Droits de l'Enfant aux Concours Administratifs : page 1 de l'extrait gratuit" width="1000" height="708" loading="lazy" decoding="async"><span>Page 1</span></a><a class="apercu-page reveal reveal-d1" href="../../assets/extraits/resume-droits-enfant.pdf#page=2" target="_blank" rel="noopener"><img src="../../assets/img/apercus/resume-droits-enfant-p2.jpg" alt="Le Résumé des Droits de l'Enfant aux Concours Administratifs : page 2 de l'extrait gratuit" width="1000" height="708" loading="lazy" decoding="async"><span>Page 2</span></a><a class="apercu-page reveal reveal-d2" href="../../assets/extraits/resume-droits-enfant.pdf#page=5" target="_blank" rel="noopener"><img src="../../assets/img/apercus/resume-droits-enfant-p5.jpg" alt="Le Résumé des Droits de l'Enfant aux Concours Administratifs : page 5 de l'extrait gratuit" width="1000" height="708" loading="lazy" decoding="async"><span>Page 5</span></a><a class="apercu-page reveal reveal-d3" href="../../assets/extraits/resume-droits-enfant.pdf#page=6" target="_blank" rel="noopener"><img src="../../assets/img/apercus/resume-droits-enfant-p6.jpg" alt="Le Résumé des Droits de l'Enfant aux Concours Administratifs : page 6 de l'extrait gratuit" width="1000" height="708" loading="lazy" decoding="async"><span>Page 6</span></a></div>
-    <div class="apercu-cta reveal"><a class="btn btn-navy" href="../../assets/extraits/resume-droits-enfant.pdf" target="_blank" rel="noopener"><svg fill="none" stroke="currentColor" stroke-width="2"><use href="#i-book"/></svg>Lire tout l'extrait gratuit (PDF)</a></div>
+    <div class="apercu-grid"><a class="apercu-page" href="../../assets/extraits/resume-droits-enfant.pdf#page=1" target="_blank" rel="noopener"><img src="../../assets/img/apercus/resume-droits-enfant-p1.jpg" alt="Le Résumé des Droits de l'Enfant aux Concours Administratifs : page 1 de l'extrait gratuit" width="1000" height="708" loading="lazy" decoding="async"><span>Page 1</span></a><a class="apercu-page" href="../../assets/extraits/resume-droits-enfant.pdf#page=2" target="_blank" rel="noopener"><img src="../../assets/img/apercus/resume-droits-enfant-p2.jpg" alt="Le Résumé des Droits de l'Enfant aux Concours Administratifs : page 2 de l'extrait gratuit" width="1000" height="708" loading="lazy" decoding="async"><span>Page 2</span></a><a class="apercu-page" href="../../assets/extraits/resume-droits-enfant.pdf#page=5" target="_blank" rel="noopener"><img src="../../assets/img/apercus/resume-droits-enfant-p5.jpg" alt="Le Résumé des Droits de l'Enfant aux Concours Administratifs : page 5 de l'extrait gratuit" width="1000" height="708" loading="lazy" decoding="async"><span>Page 5</span></a><a class="apercu-page" href="../../assets/extraits/resume-droits-enfant.pdf#page=6" target="_blank" rel="noopener"><img src="../../assets/img/apercus/resume-droits-enfant-p6.jpg" alt="Le Résumé des Droits de l'Enfant aux Concours Administratifs : page 6 de l'extrait gratuit" width="1000" height="708" loading="lazy" decoding="async"><span>Page 6</span></a></div>
+    <div class="apercu-cta"><a class="btn btn-navy" href="../../assets/extraits/resume-droits-enfant.pdf" target="_blank" rel="noopener"><svg fill="none" stroke="currentColor" stroke-width="2"><use href="#i-book"/></svg>Lire tout l'extrait gratuit (PDF)</a></div>
   </div>
 </section>
 
 <section class="section section-cream">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Selon votre concours</span><h2 class="h-section">Un ouvrage, <em>3 concours</em></h2></div>
+    <div class="section-head">
+      <h2 class="h-section">Un ouvrage pour 3 concours</h2>
       <p class="lead">Cet ouvrage figure dans notre sélection pour plusieurs concours. Voici ce qu'il vous apporte pour chacun d'eux.</p>
     </div>
-    <div class="ep-cards"><a class="ep-card reveal reveal-d0" href="../../concours/greffe/"><span class="ep-card-tag">INFJ Greffe</span><b>Greffe</b><span>Cours condensé sur la protection juridique de l'enfant en droit ivoirien et international. Conventions, lois nationales et mécanismes de protection.</span><span class="ep-card-go">Voir le concours Greffe<svg ><use href="#i-arrow"/></svg></span></a><a class="ep-card reveal reveal-d1" href="../../concours/penitentiaire/"><span class="ep-card-tag">INFJ Pénitentiaire</span><b>Pénitentiaire</b><span>Protection de l'enfance en droit ivoirien et conventions internationales. Autorité parentale, minorité, adoption et mécanismes de sauvegarde.</span><span class="ep-card-go">Voir le concours Pénitentiaire<svg ><use href="#i-arrow"/></svg></span></a><a class="ep-card reveal reveal-d2" href="../../concours/eppjej/"><span class="ep-card-tag">INFJ EPPJEJ</span><b>EPPJEJ</b><span>Ouvrage central pour le concours EPPJEJ. Protection judiciaire de la jeunesse, droits fondamentaux de l'enfant et cadre juridique complet.</span><span class="ep-card-go">Voir le concours EPPJEJ<svg ><use href="#i-arrow"/></svg></span></a></div>
+    <div class="ep-cards"><a class="ep-card" href="../../concours/greffe/"><span class="ep-card-tag">INFJ Greffe</span><b>Greffe</b><span>Cours condensé sur la protection juridique de l'enfant en droit ivoirien et international. Conventions, lois nationales et mécanismes de protection.</span><span class="ep-card-go">Voir le concours Greffe</span></a><a class="ep-card" href="../../concours/penitentiaire/"><span class="ep-card-tag">INFJ Pénitentiaire</span><b>Pénitentiaire</b><span>Protection de l'enfance en droit ivoirien et conventions internationales. Autorité parentale, minorité, adoption et mécanismes de sauvegarde.</span><span class="ep-card-go">Voir le concours Pénitentiaire</span></a><a class="ep-card" href="../../concours/eppjej/"><span class="ep-card-tag">INFJ EPPJEJ</span><b>EPPJEJ</b><span>Ouvrage central pour le concours EPPJEJ. Protection judiciaire de la jeunesse, droits fondamentaux de l'enfant et cadre juridique complet.</span><span class="ep-card-go">Voir le concours EPPJEJ</span></a></div>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Tiré de cet ouvrage</span><h2 class="h-section">Des sujets <em>corrigés</em> en accès libre</h2></div>
+    <div class="section-head">
+      <h2 class="h-section">Des sujets corrigés en accès libre</h2>
       <p class="lead">Lisez gratuitement ces corrigés extraits de l'ouvrage pour juger de la qualité du contenu.</p>
     </div>
-    <div class="ep-cards"><a class="ep-card sujet-card reveal reveal-d0" href="../../sujets/cas-pratique-responsabilite-penale-mineur/" data-concours="eppjej greffe penitentiaire">
-        <span class="ep-card-tag">Cas pratique · Droits de l'enfant</span>
+    <div class="ep-cards"><a class="ep-card sujet-card" href="../../sujets/cas-pratique-responsabilite-penale-mineur/" data-concours="eppjej greffe penitentiaire">
+        <span class="ep-card-tag">Cas pratique, droits de l'enfant</span>
         <b>La responsabilité pénale d'un mineur de douze ans</b>
         <span>Un vol commis par un enfant de douze ans : qualification, règle de l'article 113 du Code pénal, application et conclusion.</span>
-        <small class="sujet-card-foot">EPPJEJ · Greffe · Pénitentiaire</small>
-        <span class="ep-card-go">Lire le corrigé<svg ><use href="#i-arrow"/></svg></span>
-      </a><a class="ep-card sujet-card reveal reveal-d1" href="../../sujets/dissertation-specificite-justice-penale-mineurs/" data-concours="eppjej greffe penitentiaire">
-        <span class="ep-card-tag">Dissertation juridique · Droits de l'enfant</span>
+        <small class="sujet-card-foot">EPPJEJ, Greffe, Pénitentiaire</small>
+        <span class="ep-card-go">Lire le corrigé</span>
+      </a><a class="ep-card sujet-card" href="../../sujets/dissertation-specificite-justice-penale-mineurs/" data-concours="eppjej greffe penitentiaire">
+        <span class="ep-card-tag">Dissertation juridique, droits de l'enfant</span>
         <b>La spécificité de la justice pénale des mineurs</b>
         <span>Une finalité éducative affirmée, mais limitée par la gravité des actes et par les moyens : dissertation entièrement rédigée.</span>
-        <small class="sujet-card-foot">EPPJEJ · Greffe · Pénitentiaire</small>
-        <span class="ep-card-go">Lire le corrigé<svg ><use href="#i-arrow"/></svg></span>
+        <small class="sujet-card-foot">EPPJEJ, Greffe, Pénitentiaire</small>
+        <span class="ep-card-go">Lire le corrigé</span>
       </a></div>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">INFJ Greffe</span><h2 class="h-section">Complétez votre <em>préparation</em></h2></div>
+    <div class="section-head">
+      <h2 class="h-section">Les autres ouvrages du concours</h2>
       <p class="lead">D'autres ouvrages pour le concours du Greffe (INFJ). La remise de 10 % s'applique dès 3 ouvrages dans le panier.</p>
     </div>
     <div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="20" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="20" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover cover-page"><img src="../../assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg" srcset="../../assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg 600w, ../../assets/img/pages/annales-anciens-sujets-infj-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Greffe</span>
         <h3 class="book-title"><a href="../../ouvrages/les-annales-des-anciens-sujets-corriges-infj/">Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="20"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="21" aria-label="Voir le détail : Le Guide Méthodologique INFJ, Édition 2026"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="21" aria-label="Voir le détail : Le Guide Méthodologique INFJ, Édition 2026"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span></div>
       <div class="cover-foot">Greffe</div>
     </div></button>
       <div class="book-meta">
@@ -222,9 +212,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="22" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="22" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span></div>
       <div class="cover-foot">Greffe</div>
     </div></button>
       <div class="book-meta">
@@ -237,9 +227,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="23" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="23" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
       <div class="cover-foot">Greffe</div>
     </div></button>
       <div class="book-meta">
@@ -252,19 +242,23 @@
         </div>
       </div>
     </article></div>
-    <div class="apercu-cta reveal"><a class="btn btn-ghost" href="../../concours/greffe/">Tous les ouvrages Greffe<svg fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow"/></svg></a></div>
+    <div class="apercu-cta"><a class="btn btn-ghost" href="../../concours/greffe/">Tous les ouvrages Greffe</a></div>
   </div>
 </section>
 
 <section class="section contact">
   <div class="wrap contact-inner">
-    <div class="reveal">
-      <span class="eyebrow">Besoin d'un conseil ?</span>
-      <h2>Parlons de <em>votre</em> concours.</h2>
-      <p>Dites-nous où vous en êtes : nous vous aidons à choisir les ouvrages adaptés, puis nous livrons partout en Côte d'Ivoire.</p>
-      <a class="btn btn-navy" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
-      <a class="btn btn-ghost contact-alt" href="../../#conseiller">Faire le test « Quel ouvrage pour moi ? »</a>
+    <div>
+      <h2>Un conseil avant de commander ?</h2>
+      <p>Dites-nous quel concours vous préparez et où vous en êtes : nous vous aidons à choisir les ouvrages adaptés, puis nous livrons partout en Côte d'Ivoire.</p>
+      <div class="hero-ctas"><a class="btn btn-wa" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
+      <a class="btn btn-ghost" href="../../#conseiller">Faire le test « Quel ouvrage pour moi ? »</a></div>
     </div>
+    <ul class="contact-list">
+      <li><b>WhatsApp et téléphone</b><a class="nowrap" href="tel:+2250160860537">+225 01 60 86 05 37</a>, <a class="nowrap" href="tel:+2250506600332">+225 05 06 60 03 32</a></li>
+      <li><b>Livraison</b>À Abidjan sous 24 à 48 heures, dans les autres villes sous 3 à 5 jours ouvrables.</li>
+      <li><b>Paiement</b>Orange Money, MTN MoMo, Wave et Moov Money, ou en espèces à la livraison à Abidjan.</li>
+    </ul>
   </div>
 </section>
 </main>
@@ -273,7 +267,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <a href="../../" class="brand"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="brand-text"><span class="brand-name">Les Cours Sésame et SAJ</span><span class="brand-rule"></span><span class="brand-tag">Formation juridique · Concours &amp; excellence</span></span></a>
+        <a href="../../" class="brand"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="brand-text"><span class="brand-name">Les Cours Sésame et SAJ</span><span class="brand-rule"></span><span class="brand-tag">Formation juridique, concours et excellence</span></span></a>
         <p class="footer-about">Votre réussite est notre mission. Ouvrages de préparation aux concours administratifs et juridiques de Côte d'Ivoire.</p>
       </div>
       <div>
@@ -290,7 +284,7 @@
       </div>
     </div>
     <p class="footer-legal">Les Cours Sésame et SAJ sont un éditeur indépendant. Nos ouvrages ne sont pas des publications de l'INFJ, de l'ENA ni d'aucun organisateur de concours, et n'engagent que leurs auteurs.</p>
-    <div class="footer-bottom"><span>© <span id="year">2026</span> Les Cours Sésame et SAJ. Tous droits réservés. <a href="../../mentions-legales/">Mentions légales et données personnelles</a></span><span>Savoirs · Méthode · Réussite</span></div>
+    <div class="footer-bottom"><span>© <span id="year">2026</span> Les Cours Sésame et SAJ. Tous droits réservés. <a href="../../mentions-legales/">Mentions légales et données personnelles</a></span></div>
   </div>
 </footer>
 
@@ -326,7 +320,7 @@
       <div class="modal-buy"><span class="price" id="mPrice"></span><button class="btn btn-navy" id="mAdd"></button></div>
       <div class="modal-links">
         <a class="extrait-link" id="mExtrait" target="_blank" rel="noopener" hidden><svg aria-hidden="true"><use href="#i-book"/></svg>Lire un extrait gratuit (PDF)</a>
-        <a class="extrait-link" id="mPage" href="../../ouvrages/"><svg aria-hidden="true"><use href="#i-arrow"/></svg>Voir la page de l'ouvrage</a>
+        <a class="extrait-link" id="mPage" href="../../ouvrages/">Voir la page de l'ouvrage</a>
       </div>
       <details class="quick">
         <summary>Commande rapide de cet ouvrage seul</summary>

@@ -65,16 +65,17 @@ function rebase(html, prefix) {
 }
 
 /* ---------- Morceaux réutilisés ---------- */
-const arrow = svg("i-arrow", 'fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"');
+// Les boutons n'ont plus de flèche décorative : le texte dit ce que fait le bouton
+const arrow = "";
 const waIcon = svg("i-wa", 'fill="currentColor"');
 
 function concoursCard(c, i, prefix) {
-  const n = byCat(c.id).length;
-  return `<a class="concours-card reveal reveal-d${i % 5}" href="${prefix}concours/${c.slug}/">
-        <span class="cc-num">0${CONCOURS.indexOf(c) + 1}</span>
+  const items = byCat(c.id);
+  const min = Math.min(...items.map(o => parsePrice(o.prix)));
+  return `<a class="concours-card" href="${prefix}concours/${c.slug}/">
         <span class="cc-name">${c.court}</span>
-        <span class="cc-sub">${c.long}</span>
-        <span class="cc-go">${plural(n, "ouvrage")}${svg("i-arrow")}</span>
+        <span class="cc-sub">${c.long}, ${plural(items.length, "ouvrage")} dès ${fmt(min)} FCFA</span>
+        <span class="cc-go">Voir la page</span>
       </a>`;
 }
 
@@ -91,7 +92,7 @@ function faqHTML() {
 
 function sujetHTML(s) {
   return `<article class="paper paper-static">
-        <div class="paper-side"><span class="tag">${s.concours}</span><h3>${s.titre}</h3><div class="meta">${s.meta}</div>
+        <div class="paper-side"><span class="tag">${s.concours}</span><h3>${s.titre}</h3><div class="meta">${s.meta.replace(/ · /g, ", ")}</div>
           <div class="enonce"><b>Sujet</b><p>${s.enonce}</p></div></div>
         <div class="paper-main">
           <div class="corrige">${s.corrige}</div>
@@ -167,7 +168,15 @@ function productList(items) {
 }
 
 /* ---------- Gabarit des pages intérieures ---------- */
+function cleanHTML(h) {
+  return h
+    .replace(/(<h[12][^>]*>)([\s\S]*?)(<\/h[12]>)/g, (m, a, t, b) => a + t.replace(/<\/?em>/g, "") + b)
+    .replace(/<div><span class="eyebrow">[^<]*<\/span>(<h2 class="h-section">[\s\S]*?<\/h2>)<\/div>/g, "$1")
+    .replace(/class="section-head reveal"/g, 'class="section-head"')
+    .replace(/ reveal reveal-d\d/g, "").replace(/ class="reveal"/g, "").replace(/ reveal(?=")/g, "");
+}
 function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image = OG_IMAGE, ogType = "website", scripts = [], robots = "" }) {
+  body = cleanHTML(body);
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -190,9 +199,8 @@ function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,500;0,700;1,500;1,700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="${prefix}assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${prefix}assets/fonts/source-serif-4-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${prefix}assets/css/style.css">
 ${ld.map(jsonld).join("\n")}
 </head>
@@ -212,30 +220,35 @@ ${scripts.map(f => `<script src="${prefix}${f}"></script>\n`).join("")}<script s
 `;
 }
 
-function subHero({ crumbs, eyebrow, h1, lead, ctas, stats }) {
-  return `<section class="hero hero-sub on-dark">
-  <svg class="sub-door" viewBox="0 0 200 260" aria-hidden="true"><path class="sd-star" d="M100 4C102 22 108 28 126 30 108 32 102 38 100 56 98 38 92 32 74 30 92 28 98 22 100 4Z"/><path class="sd-in" d="M40 256V140a60 60 0 0 1 120 0v116z"/><path class="sd-leaf" d="M40 256V140a60 60 0 0 1 30-52v172z"/><path class="sd-frame" d="M40 256V140a60 60 0 0 1 120 0v116"/></svg>
+// facts : courtes indications en clair (« <b>20</b> ouvrages »), affichées sous les boutons
+function subHero({ crumbs, h1, lead, ctas, facts }) {
+  return `<section class="hero hero-sub">
   <div class="wrap">
     <nav class="crumbs" aria-label="Fil d'Ariane">${crumbs.map(([n, h], i) => i === crumbs.length - 1 ? `<span aria-current="page">${n}</span>` : `<a href="${h}">${n}</a><span aria-hidden="true">›</span>`).join("")}</nav>
-    <span class="eyebrow">${eyebrow}</span>
     <h1 class="sub-h1">${h1}</h1>
     <p class="lead">${lead}</p>
     <div class="hero-ctas">${ctas}</div>
-    ${stats ? `<div class="hero-stats">${stats.map(([n, l]) => `<div><div class="stat-num">${n}</div><div class="stat-label">${l}</div></div>`).join("")}</div>` : ""}
+    ${facts && facts.length ? `<ul class="hero-facts">${facts.map(f => `<li>${f}</li>`).join("")}</ul>` : ""}
   </div>
 </section>`;
 }
 
+const telAff = n => `+${n.slice(0, 3)} ${n.slice(3).replace(/(\d{2})(?=\d)/g, "$1 ")}`;
 function contactCTA(prefix) {
+  const { WA2 } = ctx.D;
   return `<section class="section contact">
   <div class="wrap contact-inner">
-    <div class="reveal">
-      <span class="eyebrow">Besoin d'un conseil ?</span>
-      <h2>Parlons de <em>votre</em> concours.</h2>
-      <p>Dites-nous où vous en êtes : nous vous aidons à choisir les ouvrages adaptés, puis nous livrons partout en Côte d'Ivoire.</p>
-      <a class="btn btn-navy" href="${WA_URL}" target="_blank" rel="noopener">${waIcon}Écrire sur WhatsApp</a>
-      <a class="btn btn-ghost contact-alt" href="${prefix}#conseiller">Faire le test « Quel ouvrage pour moi ? »</a>
+    <div>
+      <h2>Un conseil avant de commander ?</h2>
+      <p>Dites-nous quel concours vous préparez et où vous en êtes : nous vous aidons à choisir les ouvrages adaptés, puis nous livrons partout en Côte d'Ivoire.</p>
+      <div class="hero-ctas"><a class="btn btn-wa" href="${WA_URL}" target="_blank" rel="noopener">${waIcon}Écrire sur WhatsApp</a>
+      <a class="btn btn-ghost" href="${prefix}#conseiller">Faire le test « Quel ouvrage pour moi ? »</a></div>
     </div>
+    <ul class="contact-list">
+      <li><b>WhatsApp et téléphone</b><a class="nowrap" href="tel:+${WA}">${telAff(WA)}</a>, <a class="nowrap" href="tel:+${WA2}">${telAff(WA2)}</a></li>
+      <li><b>Livraison</b>À Abidjan sous 24 à 48 heures, dans les autres villes sous 3 à 5 jours ouvrables.</li>
+      <li><b>Paiement</b>Orange Money, MTN MoMo, Wave et Moov Money, ou en espèces à la livraison à Abidjan.</li>
+    </ul>
   </div>
 </section>`;
 }
@@ -268,7 +281,7 @@ const SUJETS_PAGES = [];
 }
 const sujetsDe = o => SUJETS_PAGES.filter(x => x.ouvrage && x.ouvrage.titre === o.titre);
 const sujetsDuConcours = id => SUJETS_PAGES.filter(x => x.concours.includes(id));
-const courts = ids => ids.map(id => CONCOURS.find(c => c.id === id).court).join(" · ");
+const courts = ids => ids.map(id => CONCOURS.find(c => c.id === id).court).join(", ");
 // « dissertation corrigée », « cas pratique corrigé »…
 function corrigeLabel(epreuve) {
   const L = { "Dissertation juridique": "dissertation corrigée", "Cas pratique": "cas pratique corrigé", "Commentaire d'article": "commentaire d'article corrigé",
@@ -277,11 +290,11 @@ function corrigeLabel(epreuve) {
 }
 function sujetCard(x, prefix, i) {
   return `<a class="ep-card sujet-card reveal reveal-d${i % 4}" href="${prefix}sujets/${x.adresse}/" data-concours="${x.concours.join(" ")}">
-        <span class="ep-card-tag">${x.epreuve} · ${x.matiere}</span>
+        <span class="ep-card-tag">${x.epreuve}, ${x.matiere.toLowerCase().replace("ohada", "OHADA").replace("opeaj", "OPEAJ").replace("sog", "SOG")}</span>
         <b>${x.titre}</b>
         <span>${x.resume}</span>
-        <small class="sujet-card-foot">${courts(x.concours)}${x.session ? `<em>Sujet tombé au concours</em>` : ""}</small>
-        <span class="ep-card-go">${x.reserve ? `${svg("i-lock")}Corrigé réservé aux abonnés` : "Lire le corrigé"}${svg("i-arrow")}</span>
+        <small class="sujet-card-foot">${courts(x.concours)}${x.session ? `<em>sujet tombé au concours</em>` : ""}</small>
+        <span class="ep-card-go">${x.reserve ? `${svg("i-lock")}Corrigé réservé aux abonnés` : "Lire le corrigé"}</span>
       </a>`;
 }
 
@@ -325,7 +338,7 @@ function videoCard(v, prefix, i, ici) {
   const l = videoLien(v, prefix, ici);
   return `<figure class="v-card reveal reveal-d${i % 4}">
         ${videoFrame(v, prefix)}
-        <figcaption><span class="v-tag">${v.tag}</span><b>${v.titre}</b><span class="v-desc">${v.desc}</span>${l ? `<a class="v-link" href="${l[1]}">${l[0]}${svg("i-arrow")}</a>` : ""}</figcaption>
+        <figcaption><span class="v-tag">${v.tag}</span><b>${v.titre}</b><span class="v-desc">${v.desc}</span>${l ? `<a class="v-link" href="${l[1]}">${l[0]}</a>` : ""}</figcaption>
       </figure>`;
 }
 // Vidéo mise en avant : la vidéo d'un côté, sa présentation de l'autre
@@ -334,7 +347,7 @@ function videoFeature(v, prefix, ici, titre, actions = "") {
   return `<div class="v-feature v-feature-${v.format} reveal">
       ${videoFrame(v, prefix)}
       <div class="v-feature-text">
-        <span class="v-tag">${v.tag} · ${v.duree}</span>
+        <span class="v-tag">${v.tag}, ${v.duree}</span>
         <h3>${titre || v.titre}</h3>
         <p>${v.desc}</p>
         ${l || actions ? `<div class="v-actions">${l ? `<a class="btn btn-gold" href="${l[1]}">${l[0]}${arrow}</a>` : ""}${actions}</div>` : ""}
@@ -342,14 +355,14 @@ function videoFeature(v, prefix, ici, titre, actions = "") {
     </div>`;
 }
 // Section « En vidéo » : la vidéo carrée en avant, les vidéos verticales en rangée
-function videosSection(list, prefix, { id = "videos", eyebrow = "En vidéo", h2, lead, ici, cls = "on-dark", band = "" }) {
+function videosSection(list, prefix, { id = "videos", h2, lead, ici, cls = "", band = "" }) {
   if (!list.length) return "";
   const feat = list.find(v => v.format === "carre") || (list.length === 1 ? list[0] : null);
   const rest = list.filter(v => v !== feat);
   return `<section class="section ${cls} videos" id="${id}">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">${eyebrow}</span><h2 class="h-section">${h2}</h2></div>
+    <div class="section-head">
+      <h2 class="h-section">${h2}</h2>
       ${lead ? `<p class="lead">${lead}</p>` : ""}
     </div>
     ${feat ? videoFeature(feat, prefix, ici) : ""}
@@ -388,28 +401,27 @@ for (const c of CONCOURS) {
 
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Concours", prefix + "#concours"], [c.court, ""]],
-    eyebrow: `Session 2027 · ${c.long}`,
-    h1: `Concours ${nomCourt} : <em>ouvrages et méthode</em>`,
+    h1: `Concours ${nomCourt}&nbsp;: ouvrages et méthode`,
     lead: m ? m.conseil : "",
     ctas: `<a href="#ouvrages" class="btn btn-gold">Voir les ${items.length} ouvrages${arrow}</a><a href="${WA_URL}" target="_blank" rel="noopener" class="btn btn-ghost">${waIcon}Conseil personnalisé</a>`,
-    stats: [[items.length, "Ouvrages"], [epreuves.length, "Épreuves"], [fmt(minPrix) + " F", "À partir de"], ["-10 %", "Dès 3 ouvrages"]]
+    facts: [`<b>${items.length}</b> ouvrages`, `<b>${epreuves.length}</b> épreuves principales`, `à partir de <b>${fmt(minPrix)} FCFA</b>`, `<b>-10 %</b> dès 3 ouvrages`]
   })}
 
 <section class="section" id="epreuves">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Les épreuves</span><h2 class="h-section">Ce qui vous <em>attend</em></h2></div>
+      <div><span class="eyebrow">Les épreuves</span><h2 class="h-section">Les épreuves</h2></div>
       <p class="lead">Les épreuves principales du ${c.nom}${fiches.length ? ", et nos fiches méthode pour les aborder" : ""}.</p>
     </div>
     <div class="pills pills-light reveal">${epreuves.map(e => `<span class="pill">${e}</span>`).join("")}</div>
-    ${fiches.length ? `<div class="ep-cards">${fiches.map((f, i) => `<a class="ep-card reveal reveal-d${i % 4}" href="${prefix}methodes/#${slugify(f.nom)}"><span class="ep-card-tag">Fiche méthode</span><b>${f.nom}</b><span>${stripTags(f.contenu).split(". ")[0]}.</span><span class="ep-card-go">Lire la fiche${svg("i-arrow")}</span></a>`).join("")}</div>` : ""}
+    ${fiches.length ? `<div class="ep-cards">${fiches.map((f, i) => `<a class="ep-card reveal reveal-d${i % 4}" href="${prefix}methodes/#${slugify(f.nom)}"><span class="ep-card-tag">Fiche méthode</span><b>${f.nom}</b><span>${stripTags(f.contenu).split(". ")[0]}.</span><span class="ep-card-go">Lire la fiche</span></a>`).join("")}</div>` : ""}
   </div>
 </section>
 
 <section class="section concours-books" id="ouvrages">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Les ouvrages · ${c.long}</span><h2 class="h-section">${plural(items.length, "ouvrage")} pour <em>réussir</em></h2></div>
+      <div><span class="eyebrow">Les ouvrages · ${c.long}</span><h2 class="h-section">Les ouvrages pour ce concours</h2></div>
       <p class="lead">Ajoutez un ouvrage ou un pack complet au panier, puis commandez en un message WhatsApp. La remise de 10 % s'applique dès 3 ouvrages.</p>
     </div>
     <div id="books">${R.groupHTML(items, OUVRAGES, [], true)}</div>
@@ -424,7 +436,7 @@ ${videosSection(vids, prefix, {
 ${sujet ? `<section class="section sujets" id="corrige">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Extrait de nos ouvrages</span><h2 class="h-section">Un sujet <em>corrigé</em></h2></div>
+      <div><span class="eyebrow">Extrait de nos ouvrages</span><h2 class="h-section">Un sujet corrigé en entier</h2></div>
       <p class="lead">Jugez par vous-même de la qualité de nos corrections.</p>
     </div>
     ${sujetHTML(sujet)}
@@ -445,7 +457,7 @@ ${autresSujets.length ? `<section class="section${sujet ? " section-top-0" : ""}
 <section class="section concours-section">
   <div class="wrap">
     <div class="section-head reveal"><div><span class="eyebrow">Vous hésitez ?</span><h2 class="h-section">Les autres <em>concours</em></h2></div></div>
-    <div class="concours-grid concours-grid-4">${CONCOURS.filter(x => x !== c).map((x, i) => concoursCard(x, i, prefix)).join("")}</div>
+    <div class="concours-grid">${CONCOURS.filter(x => x !== c).map((x, i) => concoursCard(x, i, prefix)).join("")}</div>
   </div>
 </section>
 
@@ -485,21 +497,20 @@ ${contactCTA(prefix)}`;
     const cs = concoursDe(e.nom);
     const books = utiles(e.nom);
     return `<article class="fiche reveal" id="${slugify(e.nom)}">
-      <div class="fiche-head"><span class="fiche-num">${String(i + 1).padStart(2, "0")}</span><div><h2>${e.nom}</h2>
-      ${cs.length ? `<div class="fiche-meta">Concours : ${cs.map(c => `<a href="${prefix}concours/${c.slug}/">${c.court}</a>`).join(" · ")}</div>` : ""}</div></div>
+      <div class="fiche-head"><div><h2>${e.nom}</h2>
+      ${cs.length ? `<div class="fiche-meta">Concours : ${cs.map(c => `<a href="${prefix}concours/${c.slug}/">${c.court}</a>`).join(", ")}</div>` : ""}</div></div>
       <div class="ep-panel">${e.contenu}</div>
-      ${vidsDe(e.nom).length ? `<div class="fiche-videos"><span class="m-label">En vidéo · ${vidsDe(e.nom).length > 1 ? "des sujets décryptés" : "un sujet décrypté"}</span><div class="v-rail v-rail-sm">${vidsDe(e.nom).map((v, k) => videoCard(v, prefix, k, "methode")).join("")}</div></div>` : ""}
-      ${books.length ? `<div class="fiche-books"><span class="m-label">Pour aller plus loin</span>${books.map(o => `<button class="fiche-book" data-open="${OUVRAGES.indexOf(o)}"><span class="c-mini"></span><span><b>${o.titre}</b><small>${o.concours} · ${o.prix} FCFA</small></span></button>`).join("")}</div>` : ""}
+      ${vidsDe(e.nom).length ? `<div class="fiche-videos"><span class="m-label">En vidéo : ${vidsDe(e.nom).length > 1 ? "des sujets décryptés" : "un sujet décrypté"}</span><div class="v-rail v-rail-sm">${vidsDe(e.nom).map((v, k) => videoCard(v, prefix, k, "methode")).join("")}</div></div>` : ""}
+      ${books.length ? `<div class="fiche-books"><span class="m-label">Pour aller plus loin</span>${books.map(o => `<button class="fiche-book" data-open="${OUVRAGES.indexOf(o)}"><span class="c-mini"></span><span><b>${o.titre}</b><small>${o.concours}, ${o.prix} FCFA</small></span></button>`).join("")}</div>` : ""}
     </article>`;
   }).join("");
 
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Méthodes des épreuves", ""]],
-    eyebrow: "Méthodologie · Concours de Côte d'Ivoire",
-    h1: `Les méthodes des épreuves : <em>SOG, cas pratique, note de synthèse…</em>`,
+    h1: `Les méthodes des épreuves`,
     lead: "Dissertation juridique, cas pratique, commentaire d'arrêt, SOG, PECOS, note de synthèse et étude de texte : la démarche attendue par les jurys, étape par étape. Testez-vous ensuite avec notre QCM.",
     ctas: `<a href="#qcm" class="btn btn-gold">Faire le QCM${arrow}</a><a href="#${slugify(EPREUVES[0].nom)}" class="btn btn-ghost">Lire les fiches</a>`,
-    stats: [[EPREUVES.length, "Fiches méthode"], [ctx.D.QCM.length, "Questions de QCM"], [CONCOURS.length, "Concours"]]
+    facts: [`<b>${EPREUVES.length}</b> fiches méthode`, `<b>${ctx.D.QCM.length}</b> questions de QCM`]
   })}
 
 <section class="section sujets" id="qcm">
@@ -512,7 +523,7 @@ ${contactCTA(prefix)}`;
   </div>
 </section>
 
-<section class="section on-dark fiches">
+<section class="section fiches">
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">Fiches méthode</span><h2 class="h-section">La démarche, <em>épreuve par épreuve</em></h2></div>
@@ -554,11 +565,11 @@ function ouvragePage(l) {
   const titreCourt = o.titre.replace(R.EDITION, "");
   const vids = VIDS.filter(v => v.ouvrageObj && v.ouvrageObj.titre === o.titre);
 
-  const body = `<section class="hero hero-sub hero-product on-dark">
+  const body = `<section class="hero hero-sub hero-product">
   <div class="wrap">
     <nav class="crumbs" aria-label="Fil d'Ariane"><a href="${prefix}">Accueil</a><span aria-hidden="true">›</span><a href="${prefix}ouvrages/">Ouvrages</a><span aria-hidden="true">›</span><span aria-current="page">${titreCourt}</span></nav>
     <div class="product">
-      <div class="product-cover">${R.coverHTML(horsConcours(l))}</div>
+      <figure class="product-cover">${R.coverHTML(horsConcours(l), true)}${o.extrait ? `<figcaption>Première page de l'extrait gratuit.</figcaption>` : ""}</figure>
       <div class="product-info">
         <div class="product-concours">${cs.map(c => `<a href="${prefix}concours/${c.slug}/">${c.court}</a>`).join("")}</div>
         <h1 class="product-title">${o.titre}</h1>
@@ -590,7 +601,7 @@ ${vids.length ? `<section class="section section-cream videos" id="video">
 ${pages.length ? `<section class="section apercu" id="apercu">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Extrait gratuit</span><h2 class="h-section">Feuilletez <em>l'ouvrage</em></h2></div>
+      <div><span class="eyebrow">Extrait gratuit</span><h2 class="h-section">Quelques pages de l'extrait</h2></div>
       <p class="lead">Quelques pages de l'extrait gratuit, telles qu'elles figurent dans l'ouvrage : la page de garde, la présentation et des pages de contenu. Touchez une page pour ouvrir l'extrait en PDF.</p>
     </div>
     <div class="apercu-grid${pages[0].h > pages[0].w ? " apercu-portrait" : ""}">${pages.map((x, i) => `<a class="apercu-page reveal reveal-d${i % 4}" href="${pdf}#page=${x.page}" target="_blank" rel="noopener"><img src="${prefix}${x.f}" alt="${attr(titreCourt)} : page ${x.page} de l'extrait gratuit" width="${x.w}" height="${x.h}" loading="lazy" decoding="async"><span>Page ${x.page}</span></a>`).join("")}</div>
@@ -601,10 +612,10 @@ ${pages.length ? `<section class="section apercu" id="apercu">
 ${l.items.length > 1 ? `<section class="section section-cream">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Selon votre concours</span><h2 class="h-section">Un ouvrage, <em>${cs.length} concours</em></h2></div>
+      <div><span class="eyebrow">Selon votre concours</span><h2 class="h-section">Un ouvrage pour ${cs.length} concours</h2></div>
       <p class="lead">Cet ouvrage figure dans notre sélection pour plusieurs concours. Voici ce qu'il vous apporte pour chacun d'eux.</p>
     </div>
-    <div class="ep-cards">${l.items.map((x, i) => { const c = concoursDe(x); return `<a class="ep-card reveal reveal-d${i % 4}" href="${prefix}concours/${c.slug}/"><span class="ep-card-tag">${c.long}</span><b>${c.court}</b><span>${x.desc}</span><span class="ep-card-go">Voir le concours ${c.court}${svg("i-arrow")}</span></a>`; }).join("")}</div>
+    <div class="ep-cards">${l.items.map((x, i) => { const c = concoursDe(x); return `<a class="ep-card reveal reveal-d${i % 4}" href="${prefix}concours/${c.slug}/"><span class="ep-card-tag">${c.long}</span><b>${c.court}</b><span>${x.desc}</span><span class="ep-card-go">Voir le concours ${c.court}</span></a>`; }).join("")}</div>
   </div>
 </section>` : ""}
 
@@ -621,7 +632,7 @@ ${sujets.length ? `<section class="section">
 ${suggestions.length ? `<section class="section${l.items.length > 1 ? "" : " section-cream"}">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">${concoursDe(o).long}</span><h2 class="h-section">Complétez votre <em>préparation</em></h2></div>
+      <div><span class="eyebrow">${concoursDe(o).long}</span><h2 class="h-section">Les autres ouvrages du concours</h2></div>
       <p class="lead">D'autres ouvrages pour le ${concoursDe(o).nom}. La remise de 10 % s'applique dès 3 ouvrages dans le panier.</p>
     </div>
     <div class="books">${suggestions.map(x => R.bookHTML(x, OUVRAGES.indexOf(x), false)).join("")}</div>
@@ -659,11 +670,10 @@ ${contactCTA(prefix)}`;
   const card = l => R.bookHTML(horsConcours(l), OUVRAGES.indexOf(l.items[0]), false);
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Ouvrages", ""]],
-    eyebrow: "Catalogue · Session 2027",
-    h1: `Tous nos <em>ouvrages</em>`,
+    h1: `Tous nos ouvrages`,
     lead: `${plural(LIVRES.length, "ouvrage")} pour préparer les concours de la Magistrature, du Greffe, de l'Administration pénitentiaire, de l'EPPJEJ et de l'ENA en Côte d'Ivoire. Ouvrez un ouvrage pour lire sa présentation, feuilleter l'extrait gratuit et le commander.`,
     ctas: `<a href="#liste" class="btn btn-gold">Voir les ouvrages${arrow}</a><a href="${WA_URL}" target="_blank" rel="noopener" class="btn btn-ghost">${waIcon}Conseil personnalisé</a>`,
-    stats: [[LIVRES.length, "Ouvrages"], [OUVRAGES.filter((o, i) => o.extrait && OUVRAGES.findIndex(x => x.titre === o.titre) === i).length, "Avec extrait gratuit"], [CONCOURS.length, "Concours"], ["-10 %", "Dès 3 ouvrages"]]
+    facts: [`<b>${LIVRES.length}</b> ouvrages`, `<b>${OUVRAGES.filter((o, i) => o.extrait && OUVRAGES.findIndex(x => x.titre === o.titre) === i).length}</b> avec un extrait gratuit`, `<b>-10 %</b> dès 3 ouvrages`]
   })}
 
 <section class="section" id="liste">
@@ -701,7 +711,7 @@ function sujetPage(x) {
         <a class="aside-title" href="${R.ouvrageURL(o)}">${o.titre}</a>
         <div class="aside-buy"><span class="price">${o.prix}<small>FCFA</small></span><button class="add-btn" data-add="${OUVRAGES.indexOf(o)}">${svg("i-plus")}Panier</button></div>
         ${o.extrait ? `<a class="extrait-link" href="${prefix}assets/extraits/${o.extrait}" target="_blank" rel="noopener">${bookIcon}Lire un extrait gratuit</a>` : ""}
-        <a class="extrait-link" href="${R.ouvrageURL(o)}">${svg("i-arrow")}Voir l'ouvrage</a>
+        <a class="extrait-link" href="${R.ouvrageURL(o)}">Voir l'ouvrage</a>
       </div>` : `<div class="aside-card">
         <span class="eyebrow">Préparer le concours</span>
         <b class="aside-title">${cs.map(c => c.long).join(", ")}</b>
@@ -709,10 +719,10 @@ function sujetPage(x) {
         ${cs.map(c => `<a class="btn btn-navy btn-sm" href="${prefix}concours/${c.slug}/">Concours ${c.court}${arrow}</a>`).join("")}
       </div>`;
 
-  const body = `<section class="hero hero-sub hero-sujet on-dark">
+  const body = `<section class="hero hero-sub hero-sujet">
   <div class="wrap">
     <nav class="crumbs" aria-label="Fil d'Ariane"><a href="${prefix}">Accueil</a><span aria-hidden="true">›</span><a href="${prefix}sujets/">Sujets corrigés</a><span aria-hidden="true">›</span><span aria-current="page">${x.epreuve}</span></nav>
-    <span class="eyebrow">${x.epreuve} · ${x.matiere}</span>
+    <span class="eyebrow">${x.epreuve}, ${x.matiere.toLowerCase().replace("ohada", "OHADA").replace("opeaj", "OPEAJ").replace("sog", "SOG")}</span>
     <h1 class="sub-h1 sujet-h1">${x.titre}</h1>
     <p class="lead">${x.session ? `<strong>Sujet tombé au concours.</strong> ${x.session}.` : x.resume}</p>
     <div class="product-concours">${cs.map(c => `<a href="${prefix}concours/${c.slug}/">${c.court}</a>`).join("")}</div>
@@ -722,7 +732,7 @@ function sujetPage(x) {
 <section class="section sujet-page">
   <div class="wrap sujet-layout">
     <article class="sujet-main">
-      ${vids.map(v => `<div class="v-inline">${videoFrame(v, prefix)}<div class="v-inline-text"><span class="v-tag">${v.tag} · ${v.duree}</span><b>${v.titre} en vidéo</b><p>${v.desc}</p></div></div>`).join("")}
+      ${vids.map(v => `<div class="v-inline">${videoFrame(v, prefix)}<div class="v-inline-text"><span class="v-tag">${v.tag}, ${v.duree}</span><b>${v.titre} en vidéo</b><p>${v.desc}</p></div></div>`).join("")}
       <div class="enonce-box"><span class="enonce-label">Énoncé</span>${x.enonce}</div>
       ${x.reserve ? `<div class="copie copie-apercu" id="corrige">
 ${x.corrige}
@@ -738,7 +748,7 @@ ${x.corrige}
       <p class="sujet-note">Corrigé proposé par Les Cours Sésame et SAJ${o ? `, extrait de l'ouvrage « ${o.titre} »` : ""}. Ce n'est pas un corrigé officiel du concours.</p>
       <div class="sujet-actions">
         <button class="share-btn share-btn-dark" data-share="${url}" data-title="${attr(x.titre + " : sujet corrigé")}">${shareIcon}Partager ce corrigé</button>
-        <a class="extrait-link" href="${prefix}sujets/">${svg("i-arrow")}Tous les sujets corrigés</a>
+        <a class="extrait-link" href="${prefix}sujets/">Tous les sujets corrigés</a>
       </div>
     </article>
     <aside class="sujet-aside">${aside}</aside>
@@ -779,11 +789,10 @@ SUJETS_PAGES.forEach(sujetPage);
   const officiels = SUJETS_PAGES.filter(x => x.session).length;
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Sujets corrigés", ""]],
-    eyebrow: "En accès libre · Concours de Côte d'Ivoire",
-    h1: `Sujets <em>corrigés</em>`,
+    h1: `Sujets corrigés`,
     lead: `${plural(SUJETS_PAGES.length, "sujet")} corrigé${SUJETS_PAGES.length > 1 ? "s" : ""} en entier, tirés de nos ouvrages : dissertations, cas pratiques, commentaires d'articles, questions de cours et SOG, dont ${officiels} sujets réellement tombés aux concours.`,
     ctas: `<a href="#liste" class="btn btn-gold">Voir les sujets${arrow}</a><a href="${prefix}methodes/" class="btn btn-ghost">Méthodes des épreuves</a>`,
-    stats: [[SUJETS_PAGES.length, "Sujets corrigés"], [officiels, "Sujets de concours"], [CONCOURS.length, "Concours"]]
+    facts: [`<b>${SUJETS_PAGES.length}</b> sujets corrigés`, `dont <b>${officiels}</b> sujets tombés aux concours`]
   })}
 
 <section class="section" id="liste">
@@ -825,11 +834,11 @@ ${contactCTA(prefix)}`;
     t.livres = t.ouvrages.map(titre => { const o = OUVRAGES.find(x => x.titre === titre); if (!o) throw new Error(`QCM ${t.slug} : ouvrage introuvable : ${titre}`); return o; });
   }
   const qcmCard = (t, prefix, i, href) => `<a class="ep-card reveal reveal-d${i % 4}" href="${href || `${prefix}qcm/${t.slug}/`}">
-        <span class="ep-card-tag">QCM · ${plural(t.questions.length, "question")}</span>
+        <span class="ep-card-tag">QCM de ${plural(t.questions.length, "question")}</span>
         <b>${t.nom}</b>
         <span>${t.intro}</span>
         <small class="sujet-card-foot">${courts(t.concours)}</small>
-        <span class="ep-card-go">Faire le QCM${svg("i-arrow")}</span>
+        <span class="ep-card-go">Faire le QCM</span>
       </a>`;
   const methode = { nom: "Méthode des épreuves", questions: ctx.D.QCM, concours: CONCOURS.map(c => c.id), intro: "Dissertation, cas pratique, commentaire, SOG, PECOS, note de synthèse et étude de texte : connaissez-vous les règles de méthode attendues par les jurys ?" };
 
@@ -840,11 +849,10 @@ ${contactCTA(prefix)}`;
     const sujets = SUJETS_PAGES.filter(x => (MATIERES_SUJETS[t.slug] || []).includes(x.matiere));
     const body = `${subHero({
       crumbs: [["Accueil", prefix], ["QCM", prefix + "qcm/"], [t.nom, ""]],
-      eyebrow: `QCM gratuit · ${courts(t.concours)}`,
-      h1: t.titre.replace(/^(QCM (?:de |d'|sur les ))(.+)$/, "$1<em>$2</em>"),
+      h1: t.titre,
       lead: t.intro,
       ctas: `<a href="#qcm" class="btn btn-gold">Commencer le QCM${arrow}</a><a href="#approfondir" class="btn btn-ghost">Approfondir</a>`,
-      stats: [[t.questions.length, "Questions"], ["2 min", "Environ"], ["100 %", "Corrigé"]]
+      facts: [`<b>${t.questions.length}</b> questions`, `chaque réponse expliquée`, `pour les concours ${courts(t.concours)}`]
     })}
 
 <section class="section sujets" id="qcm">
@@ -903,11 +911,10 @@ ${contactCTA(prefix)}`;
   const nb = THEMES.reduce((n, t) => n + t.questions.length, 0) + ctx.D.QCM.length;
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["QCM", ""]],
-    eyebrow: "Entraînement gratuit · Concours de Côte d'Ivoire",
-    h1: `Les <em>QCM</em>`,
+    h1: `Les QCM gratuits`,
     lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : droit civil, droit pénal, droit administratif, droits de l'enfant, organisation judiciaire et méthode des épreuves. Chaque réponse est expliquée.`,
     ctas: `<a href="#liste" class="btn btn-gold">Choisir un QCM${arrow}</a><a href="${prefix}sujets/" class="btn btn-ghost">Sujets corrigés</a>`,
-    stats: [[THEMES.length + 1, "QCM"], [nb, "Questions"], [CONCOURS.length, "Concours"]]
+    facts: [`<b>${THEMES.length + 1}</b> QCM`, `<b>${nb}</b> questions corrigées`]
   })}
 
 <section class="section" id="liste">
@@ -936,11 +943,10 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
   const tarifs = ctx.D.TARIFS_ABONNEMENT || [];
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Espace abonnés", ""]],
-    eyebrow: "Espace abonnés",
-    h1: `Les contenus <em>réservés</em> aux abonnés`,
+    h1: `L'espace abonnés`,
     lead: "Vidéos, documents et fiches exclusifs, en plus de nos ouvrages. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.",
     ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>`,
-    stats: tarifs.length ? tarifs.filter(t => ["j1", "j7", "m1", "m12"].includes(t.cle)).map(t => [t.prix + " F", t.duree]) : null
+    facts: tarifs.filter(t => ["j1", "j7", "m1", "m12"].includes(t.cle)).map(t => `${t.duree} : <b>${t.prix} FCFA</b>`)
   })}
 
 <section class="section espace-section" id="espace-app">
@@ -955,14 +961,14 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
 <section class="section section-cream">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Comment s'abonner</span><h2 class="h-section">Trois étapes, <em>c'est tout</em></h2></div>
+      <div><span class="eyebrow">Comment s'abonner</span><h2 class="h-section">Comment s'abonner</h2></div>
       <p class="lead">Le paiement se fait comme pour nos ouvrages : par Mobile Money, avec une confirmation sur WhatsApp.</p>
     </div>
-    <div class="espace-etapes">
-      <div class="espace-etape reveal"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.</span></div>
-      <div class="espace-etape reveal reveal-d1"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis envoyez-nous la référence du paiement sur WhatsApp.${tarifs.length ? "" : " Nous vous indiquons le tarif."}</span></div>
-      <div class="espace-etape reveal reveal-d2"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement.</span></div>
-    </div>
+    <ol class="espace-etapes">
+      <li class="espace-etape"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.</span></li>
+      <li class="espace-etape"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis envoyez-nous la référence du paiement sur WhatsApp.${tarifs.length ? "" : " Nous vous indiquons le tarif."}</span></li>
+      <li class="espace-etape"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement.</span></li>
+    </ol>
   </div>
 </section>
 
@@ -979,10 +985,9 @@ ${contactCTA(prefix)}`;
   // Administration : hors du plan du site et non indexée
   const prefix = "../../";
   R.setRoot(prefix);
-  const body = `<section class="hero hero-sub on-dark">
+  const body = `<section class="hero hero-sub">
   <div class="wrap">
     <nav class="crumbs" aria-label="Fil d'Ariane"><a href="${prefix}">Accueil</a><span aria-hidden="true">›</span><a href="${prefix}espace-abonnes/">Espace abonnés</a><span aria-hidden="true">›</span><span aria-current="page">Administration</span></nav>
-    <span class="eyebrow">Réservé à l'administrateur</span>
     <h1 class="sub-h1">Administration de <em>l'espace abonnés</em></h1>
     <p class="lead">Activez les abonnements après paiement, relancez les abonnés sur WhatsApp et publiez les contenus exclusifs.</p>
   </div>
@@ -1012,8 +1017,7 @@ ${contactCTA(prefix)}`;
   const waLink = n => `<a class="nowrap" href="https://wa.me/${n}" target="_blank" rel="noopener">${tel(n)}</a>`;
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Mentions légales", ""]],
-    eyebrow: "Informations légales",
-    h1: `Mentions légales et <em>données personnelles</em>`,
+    h1: `Mentions légales et données personnelles`,
     lead: "Qui édite ce site, qui l'héberge, et ce que deviennent les informations que vous nous confiez.",
     ctas: `<a href="${WA_URL}" target="_blank" rel="noopener" class="btn btn-gold">${waIcon}Nous écrire</a><a href="${prefix}#faq" class="btn btn-ghost">Questions fréquentes</a>`
   })}
@@ -1040,7 +1044,7 @@ ${contactCTA(prefix)}`;
     <p>En dehors de l'espace abonnés, présenté plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
     <p>Votre panier est conservé uniquement dans votre navigateur, sur votre appareil, pour que vous le retrouviez à votre prochaine visite. Nous n'y avons pas accès. Pour le supprimer, videz-le ou effacez les données du site dans votre navigateur.</p>
     <p>Quand vous commandez, les informations que vous saisissez (prénom, nom, téléphone, ville, message) sont placées dans un message WhatsApp que vous envoyez vous-même. Nous ne les utilisons que pour traiter votre commande et vous livrer.</p>
-    <p>Le site n'utilise ni cookies publicitaires ni outil de mesure d'audience. Les polices de caractères sont chargées depuis les serveurs de Google Fonts, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
+    <p>Le site n'utilise ni cookies publicitaires ni outil de mesure d'audience. Les polices de caractères sont hébergées sur le site lui-même. Quelques photographies sont affichées depuis les serveurs d'Unsplash, qui reçoivent à cette occasion l'adresse IP du visiteur, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
     <p>Conformément à la loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel, vous disposez d'un droit d'accès, de rectification, d'opposition et de suppression des données qui vous concernent. Pour l'exercer, écrivez-nous sur WhatsApp.</p>
 
     <h2 id="espace-abonnes">Espace abonnés</h2>
@@ -1049,6 +1053,15 @@ ${contactCTA(prefix)}`;
     <p>Elles sont conservées par notre prestataire Supabase, sur des serveurs situés en Europe. Votre mot de passe est enregistré sous une forme chiffrée que personne, pas même nous, ne peut lire.</p>
     <p>Les vidéos et documents de l'espace affichent votre nom et votre numéro de téléphone, pour décourager leur diffusion. Ils sont réservés à votre usage personnel.</p>
     <p>Vous pouvez demander à tout moment la correction de vos informations ou la suppression de votre compte en nous écrivant sur WhatsApp. La suppression d'un compte efface les informations qui s'y rattachent.</p>
+
+    <h2 id="credits">Crédits</h2>
+    <p>Les photographies suivantes sont publiées sous la <a href="https://unsplash.com/license" target="_blank" rel="noopener">licence Unsplash</a>, qui en permet l'usage libre :</p>
+    <ul>
+      <li>Le Plateau, à Abidjan, vu de la lagune Ébrié : <a href="https://unsplash.com/photos/e514SZzfpfM" target="_blank" rel="noopener">djebi abraham philippe</a> ;</li>
+      <li>Étudiante prenant des notes : <a href="https://unsplash.com/photos/xl-x9IB6wxc" target="_blank" rel="noopener">Kojo Kwarteng</a> ;</li>
+      <li>Correction au stylo rouge : <a href="https://unsplash.com/photos/333oj7zFsdg" target="_blank" rel="noopener">lilartsy</a>.</li>
+    </ul>
+    <p>Les polices Source Serif 4 et Source Sans 3 sont distribuées sous la licence SIL Open Font License 1.1.</p>
 
     <p class="legal-date">Mise à jour en octobre 2026.</p>
   </div>
@@ -1070,8 +1083,8 @@ index = inject(index, "concours", "\n      " + CONCOURS.map((c, i) => concoursCa
 index = inject(index, "books", catalogueHTML());
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
-  h2: `Comprendre en <em>quelques minutes</em>`, ici: "accueil",
-  lead: "Notre présentation, un ouvrage en vidéo, un article de loi expliqué en une minute et des sujets de SOG décryptés. À regarder et à partager.",
+  h2: `Nos vidéos`, ici: "accueil",
+  lead: "Notre présentation, un ouvrage en vidéo, un article de loi expliqué en une minute et des sujets de SOG décryptés.",
   band: espaceBand("")
 }) + "\n");
 // Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
@@ -1081,7 +1094,7 @@ index = inject(index, "jsonld", "\n" + [
   { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
   ...VIDS.map(videoLD)
 ].map(jsonld).join("\n") + "\n");
-write("index.html", index);
+write("index.html", cleanHTML(index));
 
 /* ---------- Plan du site ---------- */
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>

@@ -20,9 +20,8 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,500;0,700;1,500;1,700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="../assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/source-serif-4-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/css/style.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://concours-sesame.github.io/coursesesame/"},{"@type":"ListItem","position":2,"name":"Espace abonnés","item":"https://concours-sesame.github.io/coursesesame/espace-abonnes/"}]}</script>
 </head>
@@ -40,7 +39,6 @@
     <path style="fill:var(--m-n,#0f2a5c)" d="M77 25H82V88H77Z"/>
     <path style="fill:var(--m-g,#e8a62b)" d="M4 95C30 82 70 82 96 95 70 88.5 30 88.5 4 95Z"/>
   </symbol>
-  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 0C12.8 8 16 11.2 24 12 16 12.8 12.8 16 12 24 11.2 16 8 12.8 0 12 8 11.2 11.2 8 12 0Z"/></symbol>
   <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35zM12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.12 1.53 5.85L.06 23.8l6.1-1.6A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0zm0 21.9c-1.84 0-3.55-.5-5.03-1.38l-.36-.21-3.74.98 1-3.64-.24-.38A9.87 9.87 0 0 1 2.1 12C2.1 6.58 6.58 2.1 12 2.1S21.9 6.58 21.9 12 17.42 21.9 12 21.9z"/></symbol>
   <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.2l2.3 11.2a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.5L21.4 8H6.1"/><circle cx="10" cy="20.5" r="1.2"/><circle cx="18" cy="20.5" r="1.2"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
@@ -60,7 +58,7 @@
 <!-- EN-TÊTE -->
 <div class="site-top" id="siteTop">
   <div class="promo" id="promo">
-    <a href="../#catalogue"><strong>Offre spéciale</strong> : -10 % dès 3 ouvrages<span class="promo-long"> commandés, appliquée automatiquement au panier</span></a>
+    <a href="../#catalogue"><strong>-10 %</strong> dès 3 ouvrages commandés<span class="promo-long">, remise appliquée automatiquement au panier</span></a>
     <button class="promo-close" id="promoClose" aria-label="Masquer l'offre"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><use href="#i-x"/></svg></button>
   </div>
   <header class="header" id="header">
@@ -94,29 +92,27 @@
     <button class="icon-btn" id="menuClose" aria-label="Fermer le menu"><svg><use href="#i-x"/></svg></button>
   </div>
   <nav>
-    <a href="../#concours">Concours <span>01</span></a>
-    <a href="../#catalogue">Catalogue <span>02</span></a>
-    <a href="../#conseiller">Quel ouvrage pour moi ? <span>03</span></a>
-    <a href="../methodes/">Méthodes &amp; QCM <span>04</span></a>
-    <a href="../sujets/">Sujets corrigés <span>05</span></a>
-    <a href="../#videos">Vidéos <span>06</span></a>
-    <a href="../#avis">Avis <span>07</span></a>
-    <a href="../#faq">FAQ <span>08</span></a>
-    <a href="../espace-abonnes/">Espace abonnés <span>09</span></a>
+    <a href="../#concours">Concours</a>
+    <a href="../#catalogue">Catalogue</a>
+    <a href="../#conseiller">Quel ouvrage pour moi ?</a>
+    <a href="../methodes/">Méthodes &amp; QCM</a>
+    <a href="../sujets/">Sujets corrigés</a>
+    <a href="../#videos">Vidéos</a>
+    <a href="../#avis">Avis</a>
+    <a href="../#faq">FAQ</a>
+    <a href="../espace-abonnes/">Espace abonnés</a>
   </nav>
   <a class="btn btn-wa btn-block" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
 </div>
 
 <main id="top">
-<section class="hero hero-sub on-dark">
-  <svg class="sub-door" viewBox="0 0 200 260" aria-hidden="true"><path class="sd-star" d="M100 4C102 22 108 28 126 30 108 32 102 38 100 56 98 38 92 32 74 30 92 28 98 22 100 4Z"/><path class="sd-in" d="M40 256V140a60 60 0 0 1 120 0v116z"/><path class="sd-leaf" d="M40 256V140a60 60 0 0 1 30-52v172z"/><path class="sd-frame" d="M40 256V140a60 60 0 0 1 120 0v116"/></svg>
+<section class="hero hero-sub">
   <div class="wrap">
     <nav class="crumbs" aria-label="Fil d'Ariane"><a href="../">Accueil</a><span aria-hidden="true">›</span><span aria-current="page">Espace abonnés</span></nav>
-    <span class="eyebrow">Espace abonnés</span>
-    <h1 class="sub-h1">Les contenus <em>réservés</em> aux abonnés</h1>
+    <h1 class="sub-h1">L'espace abonnés</h1>
     <p class="lead">Vidéos, documents et fiches exclusifs, en plus de nos ouvrages. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.</p>
-    <div class="hero-ctas"><a href="#inscription" class="btn btn-gold">Créer mon compte<svg fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow"/></svg></a><a href="#connexion" class="btn btn-ghost">Se connecter</a></div>
-    <div class="hero-stats"><div><div class="stat-num">500 F</div><div class="stat-label">1 jour</div></div><div><div class="stat-num">2 000 F</div><div class="stat-label">1 semaine</div></div><div><div class="stat-num">5 000 F</div><div class="stat-label">1 mois</div></div><div><div class="stat-num">40 000 F</div><div class="stat-label">12 mois</div></div></div>
+    <div class="hero-ctas"><a href="#inscription" class="btn btn-gold">Créer mon compte</a><a href="#connexion" class="btn btn-ghost">Se connecter</a></div>
+    <ul class="hero-facts"><li>1 jour : <b>500 FCFA</b></li><li>1 semaine : <b>2 000 FCFA</b></li><li>1 mois : <b>5 000 FCFA</b></li><li>12 mois : <b>40 000 FCFA</b></li></ul>
   </div>
 </section>
 
@@ -131,27 +127,31 @@
 
 <section class="section section-cream">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Comment s'abonner</span><h2 class="h-section">Trois étapes, <em>c'est tout</em></h2></div>
+    <div class="section-head">
+      <h2 class="h-section">Comment s'abonner</h2>
       <p class="lead">Le paiement se fait comme pour nos ouvrages : par Mobile Money, avec une confirmation sur WhatsApp.</p>
     </div>
-    <div class="espace-etapes">
-      <div class="espace-etape reveal"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.</span></div>
-      <div class="espace-etape reveal reveal-d1"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis envoyez-nous la référence du paiement sur WhatsApp.</span></div>
-      <div class="espace-etape reveal reveal-d2"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement.</span></div>
-    </div>
+    <ol class="espace-etapes">
+      <li class="espace-etape"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.</span></li>
+      <li class="espace-etape"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis envoyez-nous la référence du paiement sur WhatsApp.</span></li>
+      <li class="espace-etape"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement.</span></li>
+    </ol>
   </div>
 </section>
 
 <section class="section contact">
   <div class="wrap contact-inner">
-    <div class="reveal">
-      <span class="eyebrow">Besoin d'un conseil ?</span>
-      <h2>Parlons de <em>votre</em> concours.</h2>
-      <p>Dites-nous où vous en êtes : nous vous aidons à choisir les ouvrages adaptés, puis nous livrons partout en Côte d'Ivoire.</p>
-      <a class="btn btn-navy" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
-      <a class="btn btn-ghost contact-alt" href="../#conseiller">Faire le test « Quel ouvrage pour moi ? »</a>
+    <div>
+      <h2>Un conseil avant de commander ?</h2>
+      <p>Dites-nous quel concours vous préparez et où vous en êtes : nous vous aidons à choisir les ouvrages adaptés, puis nous livrons partout en Côte d'Ivoire.</p>
+      <div class="hero-ctas"><a class="btn btn-wa" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
+      <a class="btn btn-ghost" href="../#conseiller">Faire le test « Quel ouvrage pour moi ? »</a></div>
     </div>
+    <ul class="contact-list">
+      <li><b>WhatsApp et téléphone</b><a class="nowrap" href="tel:+2250160860537">+225 01 60 86 05 37</a>, <a class="nowrap" href="tel:+2250506600332">+225 05 06 60 03 32</a></li>
+      <li><b>Livraison</b>À Abidjan sous 24 à 48 heures, dans les autres villes sous 3 à 5 jours ouvrables.</li>
+      <li><b>Paiement</b>Orange Money, MTN MoMo, Wave et Moov Money, ou en espèces à la livraison à Abidjan.</li>
+    </ul>
   </div>
 </section>
 </main>
@@ -160,7 +160,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <a href="../" class="brand"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="brand-text"><span class="brand-name">Les Cours Sésame et SAJ</span><span class="brand-rule"></span><span class="brand-tag">Formation juridique · Concours &amp; excellence</span></span></a>
+        <a href="../" class="brand"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="brand-text"><span class="brand-name">Les Cours Sésame et SAJ</span><span class="brand-rule"></span><span class="brand-tag">Formation juridique, concours et excellence</span></span></a>
         <p class="footer-about">Votre réussite est notre mission. Ouvrages de préparation aux concours administratifs et juridiques de Côte d'Ivoire.</p>
       </div>
       <div>
@@ -177,7 +177,7 @@
       </div>
     </div>
     <p class="footer-legal">Les Cours Sésame et SAJ sont un éditeur indépendant. Nos ouvrages ne sont pas des publications de l'INFJ, de l'ENA ni d'aucun organisateur de concours, et n'engagent que leurs auteurs.</p>
-    <div class="footer-bottom"><span>© <span id="year">2026</span> Les Cours Sésame et SAJ. Tous droits réservés. <a href="../mentions-legales/">Mentions légales et données personnelles</a></span><span>Savoirs · Méthode · Réussite</span></div>
+    <div class="footer-bottom"><span>© <span id="year">2026</span> Les Cours Sésame et SAJ. Tous droits réservés. <a href="../mentions-legales/">Mentions légales et données personnelles</a></span></div>
   </div>
 </footer>
 
@@ -213,7 +213,7 @@
       <div class="modal-buy"><span class="price" id="mPrice"></span><button class="btn btn-navy" id="mAdd"></button></div>
       <div class="modal-links">
         <a class="extrait-link" id="mExtrait" target="_blank" rel="noopener" hidden><svg aria-hidden="true"><use href="#i-book"/></svg>Lire un extrait gratuit (PDF)</a>
-        <a class="extrait-link" id="mPage" href="../ouvrages/"><svg aria-hidden="true"><use href="#i-arrow"/></svg>Voir la page de l'ouvrage</a>
+        <a class="extrait-link" id="mPage" href="../ouvrages/">Voir la page de l'ouvrage</a>
       </div>
       <details class="quick">
         <summary>Commande rapide de cet ouvrage seul</summary>

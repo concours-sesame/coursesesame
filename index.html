@@ -14,7 +14,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="Les Cours Sésame et SAJ">
-<meta property="og:title" content="Les Cours Sésame et SAJ | Ouvrez la porte de votre concours">
+<meta property="og:title" content="Les Cours Sésame et SAJ | Ouvrages et sujets corrigés pour les concours INFJ et ENA">
 <meta property="og:description" content="Résumés, annales corrigées et guides méthodologiques pour les concours INFJ et ENA. Commande en un clic sur WhatsApp.">
 <meta property="og:url" content="https://concours-sesame.github.io/coursesesame/">
 <meta property="og:image" content="https://concours-sesame.github.io/coursesesame/assets/img/og-image.png">
@@ -22,9 +22,8 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Les Cours Sésame et SAJ : Formation juridique, concours et excellence">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,500;0,700;1,500;1,700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/source-serif-4-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/style.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"EducationalOrganization","name":"Les Cours Sésame et SAJ","url":"https://concours-sesame.github.io/coursesesame/","telephone":"+2250160860537","address":{"@type":"PostalAddress","addressLocality":"Abidjan","addressCountry":"CI"},"slogan":"Votre réussite est notre mission"}
@@ -53,7 +52,6 @@
     <path style="fill:var(--m-n,#0f2a5c)" d="M77 25H82V88H77Z"/>
     <path style="fill:var(--m-g,#e8a62b)" d="M4 95C30 82 70 82 96 95 70 88.5 30 88.5 4 95Z"/>
   </symbol>
-  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 0C12.8 8 16 11.2 24 12 16 12.8 12.8 16 12 24 11.2 16 8 12.8 0 12 8 11.2 11.2 8 12 0Z"/></symbol>
   <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35zM12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.12 1.53 5.85L.06 23.8l6.1-1.6A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0zm0 21.9c-1.84 0-3.55-.5-5.03-1.38l-.36-.21-3.74.98 1-3.64-.24-.38A9.87 9.87 0 0 1 2.1 12C2.1 6.58 6.58 2.1 12 2.1S21.9 6.58 21.9 12 17.42 21.9 12 21.9z"/></symbol>
   <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.2l2.3 11.2a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.5L21.4 8H6.1"/><circle cx="10" cy="20.5" r="1.2"/><circle cx="18" cy="20.5" r="1.2"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
@@ -74,7 +72,7 @@
 <!-- EN-TÊTE -->
 <div class="site-top" id="siteTop">
   <div class="promo" id="promo">
-    <a href="#catalogue"><strong>Offre spéciale</strong> : -10 % dès 3 ouvrages<span class="promo-long"> commandés, appliquée automatiquement au panier</span></a>
+    <a href="#catalogue"><strong>-10 %</strong> dès 3 ouvrages commandés<span class="promo-long">, remise appliquée automatiquement au panier</span></a>
     <button class="promo-close" id="promoClose" aria-label="Masquer l'offre"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><use href="#i-x"/></svg></button>
   </div>
   <header class="header" id="header">
@@ -108,15 +106,15 @@
     <button class="icon-btn" id="menuClose" aria-label="Fermer le menu"><svg><use href="#i-x"/></svg></button>
   </div>
   <nav>
-    <a href="#concours">Concours <span>01</span></a>
-    <a href="#catalogue">Catalogue <span>02</span></a>
-    <a href="#conseiller">Quel ouvrage pour moi ? <span>03</span></a>
-    <a href="methodes/">Méthodes &amp; QCM <span>04</span></a>
-    <a href="sujets/">Sujets corrigés <span>05</span></a>
-    <a href="#videos">Vidéos <span>06</span></a>
-    <a href="#avis">Avis <span>07</span></a>
-    <a href="#faq">FAQ <span>08</span></a>
-    <a href="espace-abonnes/">Espace abonnés <span>09</span></a>
+    <a href="#concours">Concours</a>
+    <a href="#catalogue">Catalogue</a>
+    <a href="#conseiller">Quel ouvrage pour moi ?</a>
+    <a href="methodes/">Méthodes &amp; QCM</a>
+    <a href="sujets/">Sujets corrigés</a>
+    <a href="#videos">Vidéos</a>
+    <a href="#avis">Avis</a>
+    <a href="#faq">FAQ</a>
+    <a href="espace-abonnes/">Espace abonnés</a>
   </nav>
   <a class="btn btn-wa btn-block" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
 </div>
@@ -125,100 +123,91 @@
 <main id="top">
 
 <!-- ACCUEIL -->
-<section class="hero on-dark">
-  <svg class="hero-pattern" aria-hidden="true" width="100%" height="100%"><defs><pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#ffffff" opacity=".14"/></pattern></defs><rect width="100%" height="100%" fill="url(#dots)"/></svg>
+<section class="hero hero-home">
   <div class="wrap hero-inner">
     <div class="hero-copy">
-      <span class="eyebrow">Session 2027 · Côte d'Ivoire</span>
-      <h1><span class="line"><span>Ouvrez la porte</span></span><span class="line"><span>de votre</span></span><span class="line"><span><em>concours.</em></span></span></h1>
-      <p class="lead">Des ouvrages de référence conçus par des experts pour les candidats ambitieux aux concours administratifs et juridiques de Côte d'Ivoire.</p>
+      <h1>Ouvrages et sujets corrigés pour les concours de l'INFJ et de l'ENA</h1>
+      <p class="lead">Résumés de cours, annales corrigées, guides de méthode et cas pratiques, écrits pour le droit ivoirien. Vous commandez sur WhatsApp, vous payez par Mobile Money, et nous livrons partout en Côte d'Ivoire.</p>
       <div class="hero-ctas">
-        <a href="#concours" class="btn btn-gold">Choisir mon concours<svg fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow"/></svg></a>
-        <a href="https://wa.me/2250160860537" target="_blank" rel="noopener" class="btn btn-ghost"><svg fill="currentColor"><use href="#i-wa"/></svg>Nous écrire</a>
-        <a href="#videos" class="hero-video"><span class="hv-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>Nous découvrir en vidéo</a>
+        <a href="#catalogue" class="btn btn-navy">Voir les ouvrages</a>
+        <a href="https://wa.me/2250160860537" target="_blank" rel="noopener" class="btn btn-wa"><svg fill="currentColor"><use href="#i-wa"/></svg>Commander sur WhatsApp</a>
       </div>
-      <div class="hero-stats">
-        <div><div class="stat-num" data-count-from="ouvrages">32</div><div class="stat-label">Ouvrages</div></div>
-        <div><div class="stat-num" data-count-from="concours">5</div><div class="stat-label">Concours</div></div>
-        <div><div class="stat-num">-10 %</div><div class="stat-label">Dès 3 ouvrages</div></div>
-        <div><div class="stat-num">24-48 h</div><div class="stat-label">Livré à Abidjan</div></div>
-      </div>
+      <ul class="hero-facts">
+        <li><b data-count-from="ouvrages">32</b> ouvrages</li>
+        <li>Plus de <b>500</b> candidats accompagnés</li>
+        <li>Livraison à Abidjan en <b>24 à 48 h</b></li>
+        <li><b>-10 %</b> dès 3 ouvrages</li>
+      </ul>
     </div>
-    <div class="door-scene" aria-hidden="true">
-      <svg class="door-rays" viewBox="0 0 100 100"><line x1="50" y1="2" x2="50" y2="14"/><line x1="50" y1="86" x2="50" y2="98"/><line x1="2" y1="50" x2="14" y2="50"/><line x1="86" y1="50" x2="98" y2="50"/><line x1="17" y1="17" x2="24" y2="24"/><line x1="83" y1="17" x2="76" y2="24"/></svg>
-      <svg class="door-star"><use href="#i-star"/></svg>
-      <div class="door-frame">
-        <div class="door-light"><small>Sésame, ouvre-toi</small><b>Votre réussite</b><span>est notre mission</span></div>
-        <div class="door-leaf"><span class="door-knob"></span></div>
+    <figure class="hero-pages">
+      <div class="hp-stack">
+        <img class="hp-1" src="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg" srcset="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg 600w, assets/img/pages/1000-fiches-ecrit-magistrature.jpg 960w" sizes="(max-width:960px) 70vw, 400px" width="600" height="424" alt="Première page des 1 000 fiches pour réussir l'écrit de la magistrature">
+        <img class="hp-2" src="assets/img/pages/resume-droit-civil-600.jpg" srcset="assets/img/pages/resume-droit-civil-600.jpg 600w, assets/img/pages/resume-droit-civil.jpg 960w" sizes="(max-width:960px) 70vw, 400px" width="600" height="424" alt="Première page du résumé de droit civil ivoirien">
+        <img class="hp-3" src="assets/img/pages/annales-magistrature-600.jpg" srcset="assets/img/pages/annales-magistrature-600.jpg 424w, assets/img/pages/annales-magistrature.jpg 679w" sizes="(max-width:960px) 40vw, 220px" width="424" height="600" alt="Première page des annales corrigées du concours direct de la magistrature">
       </div>
-      <div class="door-step"></div>
-      <div class="door-floor"></div>
-    </div>
+      <figcaption>Les premières pages de trois de nos ouvrages : les annales corrigées du concours direct de la magistrature, les 1 000 fiches pour l'écrit et le résumé de droit civil ivoirien.</figcaption>
+    </figure>
   </div>
 </section>
-
-<div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
 
 <!-- CHOIX DU CONCOURS -->
 <section class="section concours-section" id="concours">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Étape 1</span><h2 class="h-section">Quel concours<br><em>préparez-vous ?</em></h2></div>
-      <p class="lead">Chaque concours a sa page : épreuves, méthode, ouvrages, packs et sujet corrigé.</p>
+    <div class="section-head">
+      <h2 class="h-section">Choisissez votre concours</h2>
+      <p class="lead">Chaque concours a sa page : les épreuves, la méthode attendue, les ouvrages conseillés et un sujet corrigé.</p>
     </div>
     <div class="concours-grid" id="concoursGrid"><!-- build:concours -->
-      <a class="concours-card reveal reveal-d0" href="concours/magistrature/">
-        <span class="cc-num">01</span>
+      <a class="concours-card" href="concours/magistrature/">
         <span class="cc-name">Magistrature</span>
-        <span class="cc-sub">INFJ Magistrature</span>
-        <span class="cc-go">20 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+        <span class="cc-sub">INFJ Magistrature, 20 ouvrages dès 10 000 FCFA</span>
+        <span class="cc-go">Voir la page</span>
       </a>
-      <a class="concours-card reveal reveal-d1" href="concours/greffe/">
-        <span class="cc-num">02</span>
+      <a class="concours-card" href="concours/greffe/">
         <span class="cc-name">Greffe</span>
-        <span class="cc-sub">INFJ Greffe</span>
-        <span class="cc-go">9 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+        <span class="cc-sub">INFJ Greffe, 9 ouvrages dès 10 000 FCFA</span>
+        <span class="cc-go">Voir la page</span>
       </a>
-      <a class="concours-card reveal reveal-d2" href="concours/penitentiaire/">
-        <span class="cc-num">03</span>
+      <a class="concours-card" href="concours/penitentiaire/">
         <span class="cc-name">Pénitentiaire</span>
-        <span class="cc-sub">INFJ Pénitentiaire</span>
-        <span class="cc-go">8 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+        <span class="cc-sub">INFJ Pénitentiaire, 8 ouvrages dès 10 000 FCFA</span>
+        <span class="cc-go">Voir la page</span>
       </a>
-      <a class="concours-card reveal reveal-d3" href="concours/eppjej/">
-        <span class="cc-num">04</span>
+      <a class="concours-card" href="concours/eppjej/">
         <span class="cc-name">EPPJEJ</span>
-        <span class="cc-sub">INFJ EPPJEJ</span>
-        <span class="cc-go">7 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+        <span class="cc-sub">INFJ EPPJEJ, 7 ouvrages dès 10 000 FCFA</span>
+        <span class="cc-go">Voir la page</span>
       </a>
-      <a class="concours-card reveal reveal-d4" href="concours/ena/">
-        <span class="cc-num">05</span>
+      <a class="concours-card" href="concours/ena/">
         <span class="cc-name">ENA</span>
-        <span class="cc-sub">École Nationale d'Administration</span>
-        <span class="cc-go">10 ouvrages<svg ><use href="#i-arrow"/></svg></span>
+        <span class="cc-sub">École Nationale d'Administration, 10 ouvrages dès 10 000 FCFA</span>
+        <span class="cc-go">Voir la page</span>
       </a>
     <!-- /build:concours --></div>
   </div>
 </section>
 
 <!-- CONSEILLER -->
-<section class="section on-dark conseiller-section" id="conseiller">
+<section class="section conseiller-section" id="conseiller">
   <div class="wrap conseiller-grid">
-    <div class="reveal">
-      <span class="eyebrow">Test express · 1 minute</span>
-      <h2 class="h-section">Quel ouvrage <em>pour moi ?</em></h2>
-      <p class="lead">Votre concours, votre étape, votre matière à renforcer et le temps qu'il vous reste : nous vous proposons la sélection adaptée, à ajouter au panier en un clic.</p>
+    <div>
+      <h2 class="h-section">Vous ne savez pas quels ouvrages prendre ?</h2>
+      <p class="lead">Répondez à quelques questions : votre concours, l'étape que vous préparez, la matière à renforcer et le temps qu'il vous reste. Nous vous proposons une sélection, à mettre au panier en une fois.</p>
+      <figure class="conseiller-photo">
+        <img src="https://images.unsplash.com/photo-1620829813947-ef4246827355?auto=format&amp;fit=crop&amp;crop=faces&amp;w=900&amp;h=675&amp;q=70" srcset="https://images.unsplash.com/photo-1620829813947-ef4246827355?auto=format&amp;fit=crop&amp;crop=faces&amp;w=600&amp;h=450&amp;q=70 600w, https://images.unsplash.com/photo-1620829813947-ef4246827355?auto=format&amp;fit=crop&amp;crop=faces&amp;w=1000&amp;h=750&amp;q=70 1000w" sizes="(max-width:960px) 92vw, 460px" width="900" height="675" alt="Une étudiante prend des notes pendant une séance de révision" loading="lazy" decoding="async">
+        <figcaption class="photo-credit">Photo : <a href="https://unsplash.com/photos/xl-x9IB6wxc" target="_blank" rel="noopener">Kojo Kwarteng, Unsplash</a></figcaption>
+      </figure>
     </div>
-    <div class="cs-card reveal reveal-d2"><div id="csBox"></div></div>
+    <div class="cs-card"><div id="csBox"></div></div>
   </div>
 </section>
 
 <!-- CATALOGUE -->
 <section class="section" id="catalogue">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Le catalogue complet</span><h2 class="h-section">Nos ouvrages, <em>session 2027</em></h2></div>
-      <p class="lead">Touchez une couverture pour lire le détail. Ajoutez vos ouvrages au panier et commandez en un message WhatsApp.</p>
+    <div class="section-head">
+      <h2 class="h-section">Tous les ouvrages, par concours</h2>
+      <p class="lead">Touchez la première page d'un ouvrage pour lire sa présentation. Ajoutez vos ouvrages au panier, puis envoyez la commande sur WhatsApp en un seul message.</p>
     </div>
     <div class="toolbar" id="toolbar">
       <div class="toolbar-row">
@@ -230,324 +219,276 @@
     </div>
     <p class="result-info" id="resultInfo" aria-live="polite"></p>
     <div id="books"><!-- build:books --><h3 class="group-title">Magistrature<small>20 ouvrages</small><a class="group-link" href="concours/magistrature/">Page du concours</a></h3><h4 class="phase-title">Présélection<small>5 ouvrages</small></h4><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="0" aria-label="Voir le détail : Le Petit Manuel de Droit Civil"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Civil</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="0" aria-label="Voir le détail : Le Petit Manuel de Droit Civil"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Civil</span></div>
       <div class="cover-foot">Magistrature</div>
     </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-petit-manuel-de-droit-civil/">Le Petit Manuel de Droit Civil</a></h3>
-        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
         <div class="book-buy">
           <span class="price">12 000<small>FCFA</small></span>
           <button class="add-btn" data-add="0"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="1" aria-label="Voir le détail : Le Petit Manuel de Droit Commercial"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Commercial</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="1" aria-label="Voir le détail : Le Petit Manuel de Droit Commercial"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Commercial</span></div>
       <div class="cover-foot">Magistrature</div>
     </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-petit-manuel-de-droit-commercial/">Le Petit Manuel de Droit Commercial</a></h3>
-        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
         <div class="book-buy">
           <span class="price">12 000<small>FCFA</small></span>
           <button class="add-btn" data-add="1"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="2" aria-label="Voir le détail : Le Petit Manuel de Droit Pénal"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Pénal</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="2" aria-label="Voir le détail : Le Petit Manuel de Droit Pénal"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Pénal</span></div>
       <div class="cover-foot">Magistrature</div>
     </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-petit-manuel-de-droit-penal/">Le Petit Manuel de Droit Pénal</a></h3>
-        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
         <div class="book-buy">
           <span class="price">12 000<small>FCFA</small></span>
           <button class="add-btn" data-add="2"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="3" aria-label="Voir le détail : Le Petit Manuel de Droit Administratif"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="3" aria-label="Voir le détail : Le Petit Manuel de Droit Administratif"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Administratif</span></div>
       <div class="cover-foot">Magistrature</div>
     </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-petit-manuel-de-droit-administratif/">Le Petit Manuel de Droit Administratif</a></h3>
-        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
         <div class="book-buy">
           <span class="price">12 000<small>FCFA</small></span>
           <button class="add-btn" data-add="3"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="4" aria-label="Voir le détail : Le Petit Manuel d'Organisation Judiciaire et Informatique"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Organisation Judiciaire et Informatique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="4" aria-label="Voir le détail : Le Petit Manuel d'Organisation Judiciaire et Informatique"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Organisation Judiciaire et Informatique</span></div>
       <div class="cover-foot">Magistrature</div>
     </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-petit-manuel-d-organisation-judiciaire-et-informatique/">Le Petit Manuel d'Organisation Judiciaire et Informatique</a></h3>
-        <span class="book-niveau">Présélection · Niveaux CS / CMS / CM</span>
+        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
         <div class="book-buy">
           <span class="price">12 000<small>FCFA</small></span>
           <button class="add-btn" data-add="4"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article></div><h4 class="phase-title">Écrit<small>15 ouvrages</small></h4><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="5" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés Magistrature"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">Magistrature</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="5" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés Magistrature"><div class="cover cover-page"><img src="assets/img/pages/annales-magistrature-600.jpg" srcset="assets/img/pages/annales-magistrature-600.jpg 600w, assets/img/pages/annales-magistrature.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="424" height="600" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés Magistrature" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-magistrature/">Les Annales des Anciens Sujets Corrigés Magistrature</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="5"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="6" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="6" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/annales-sog-600.jpg" srcset="assets/img/pages/annales-sog-600.jpg 600w, assets/img/pages/annales-sog.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-de-sog-aux-concours-administratifs/">Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="6"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="7" aria-label="Voir le détail : Le Guide Méthodologique Magistrature, Édition 2027"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">Magistrature</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="7" aria-label="Voir le détail : Le Guide Méthodologique Magistrature, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/guide-methodologique-magistrature-2027-600.jpg" srcset="assets/img/pages/guide-methodologique-magistrature-2027-600.jpg 600w, assets/img/pages/guide-methodologique-magistrature-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Guide Méthodologique Magistrature, Édition 2027" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-guide-methodologique-magistrature/">Le Guide Méthodologique Magistrature, Édition 2027</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="7"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="8" aria-label="Voir le détail : Le Résumé de Droit Civil au Concours de la Magistrature"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Civil</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="8" aria-label="Voir le détail : Le Résumé de Droit Civil au Concours de la Magistrature"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-civil-600.jpg" srcset="assets/img/pages/resume-droit-civil-600.jpg 600w, assets/img/pages/resume-droit-civil.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Civil au Concours de la Magistrature" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-civil-au-concours-de-la-magistrature/">Le Résumé de Droit Civil au Concours de la Magistrature</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">13 000<small>FCFA</small></span>
           <button class="add-btn" data-add="8"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="9" aria-label="Voir le détail : Le Résumé de Droit Commercial au Concours de la Magistrature"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Commercial</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="9" aria-label="Voir le détail : Le Résumé de Droit Commercial au Concours de la Magistrature"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Commercial</span></div>
       <div class="cover-foot">Magistrature</div>
     </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-commercial-au-concours-de-la-magistrature/">Le Résumé de Droit Commercial au Concours de la Magistrature</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span>
         <div class="book-buy">
           <span class="price">13 000<small>FCFA</small></span>
           <button class="add-btn" data-add="9"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="10" aria-label="Voir le détail : Le Sésame de Droit Pénal au Concours de la Magistrature"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Sésame</span><span class="cover-title">Droit Pénal</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="10" aria-label="Voir le détail : Le Sésame de Droit Pénal au Concours de la Magistrature"><div class="cover cover-page"><img src="assets/img/pages/sesame-droit-penal-600.jpg" srcset="assets/img/pages/sesame-droit-penal-600.jpg 600w, assets/img/pages/sesame-droit-penal.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Sésame de Droit Pénal au Concours de la Magistrature" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-sesame-de-droit-penal-au-concours-de-la-magistrature/">Le Sésame de Droit Pénal au Concours de la Magistrature</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">13 000<small>FCFA</small></span>
           <button class="add-btn" data-add="10"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="11" aria-label="Voir le détail : Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Magistrature</span><span class="cover-title">50 Cas Pratiques Corrigés</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="11" aria-label="Voir le détail : Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026"><div class="cover cover-page"><img src="assets/img/pages/50-cas-pratiques-corriges-600.jpg" srcset="assets/img/pages/50-cas-pratiques-corriges-600.jpg 600w, assets/img/pages/50-cas-pratiques-corriges.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/les-50-cas-pratiques-corriges-de-la-magistrature/">Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="11"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="12" aria-label="Voir le détail : Le Résumé de Droit Administratif au Concours de la Magistrature"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="12" aria-label="Voir le détail : Le Résumé de Droit Administratif au Concours de la Magistrature"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif au Concours de la Magistrature" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-au-concours-de-la-magistrature/">Le Résumé de Droit Administratif au Concours de la Magistrature</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">13 000<small>FCFA</small></span>
           <button class="add-btn" data-add="12"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="13" aria-label="Voir le détail : Les Fiches d'Arrêts de Droit Administratif, Édition 2026"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Fiches d'arrêts</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="13" aria-label="Voir le détail : Les Fiches d'Arrêts de Droit Administratif, Édition 2026"><div class="cover cover-page"><img src="assets/img/pages/fiches-arrets-droit-administratif-600.jpg" srcset="assets/img/pages/fiches-arrets-droit-administratif-600.jpg 600w, assets/img/pages/fiches-arrets-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Fiches d'Arrêts de Droit Administratif, Édition 2026" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/les-fiches-d-arrets-de-droit-administratif/">Les Fiches d'Arrêts de Droit Administratif, Édition 2026</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="13"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="14" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome I"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">125 dissertations · Droit administratif</span><span class="cover-title">Tome I</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="14" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome I"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">125 dissertations · Droit administratif</span><span class="cover-title">Tome I</span></div>
       <div class="cover-foot">Magistrature</div>
     </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-droit-administratif-en-125-dissertations-corrigees-tome-i/">Le Droit Administratif en 125 Dissertations Corrigées, Tome I</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="14"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="15" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome II"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">125 dissertations · Droit administratif</span><span class="cover-title">Tome II</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="15" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome II"><div class="cover cover-page"><img src="assets/img/pages/125-dissertations-droit-administratif-tome-2-600.jpg" srcset="assets/img/pages/125-dissertations-droit-administratif-tome-2-600.jpg 600w, assets/img/pages/125-dissertations-droit-administratif-tome-2.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Droit Administratif en 125 Dissertations Corrigées, Tome II" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-droit-administratif-en-125-dissertations-corrigees-tome-ii/">Le Droit Administratif en 125 Dissertations Corrigées, Tome II</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="15"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="16" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="16" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
       <div class="cover-foot">Magistrature</div>
     </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-de-sog-aux-concours-administratifs/">Le Résumé de SOG aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="16"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="17" aria-label="Voir le détail : Le Concours de la Magistrature en 1200 Dissertations Corrigées"><div class="cover"><span class="cover-num">Numérique</span>
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Magistrature</span><span class="cover-title">1200 Dissertations Corrigées</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="17" aria-label="Voir le détail : Le Concours de la Magistrature en 1200 Dissertations Corrigées"><div class="cover cover-page"><img src="assets/img/pages/1200-dissertations-magistrature-600.jpg" srcset="assets/img/pages/1200-dissertations-magistrature-600.jpg 600w, assets/img/pages/1200-dissertations-magistrature.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Concours de la Magistrature en 1200 Dissertations Corrigées" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-concours-de-la-magistrature-en-1200-dissertations-corrigees/">Le Concours de la Magistrature en 1200 Dissertations Corrigées</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span><span class="book-num">Version numérique uniquement</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><span class="book-num">Version numérique uniquement</span>
         <div class="book-buy">
           <span class="price">25 000<small>FCFA</small></span>
           <button class="add-btn" data-add="17"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="18" aria-label="Voir le détail : Le Concours de la Magistrature en 2000 Articles Commentés"><div class="cover"><span class="cover-num">Numérique</span>
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Magistrature</span><span class="cover-title">2000 Articles Commentés</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="18" aria-label="Voir le détail : Le Concours de la Magistrature en 2000 Articles Commentés"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Magistrature</span><span class="cover-title">2000 Articles Commentés</span></div>
       <div class="cover-foot">Magistrature</div>
     </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-concours-de-la-magistrature-en-2000-articles-commentes/">Le Concours de la Magistrature en 2000 Articles Commentés</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-num">Version numérique uniquement</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-num">Version numérique uniquement</span>
         <div class="book-buy">
           <span class="price">25 000<small>FCFA</small></span>
           <button class="add-btn" data-add="18"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="19" aria-label="Voir le détail : 1000 Fiches de Cours pour Réussir l'Écrit de la Magistrature"><div class="cover"><span class="cover-num">Numérique</span>
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Écrit de la magistrature</span><span class="cover-title">1000 Fiches de Cours</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="19" aria-label="Voir le détail : 1000 Fiches de Cours pour Réussir l'Écrit de la Magistrature"><div class="cover cover-page"><img src="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg" srcset="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg 600w, assets/img/pages/1000-fiches-ecrit-magistrature.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage 1000 Fiches de Cours pour Réussir l'Écrit de la Magistrature" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/1000-fiches-de-cours-pour-reussir-l-ecrit-de-la-magistrature/">1000 Fiches de Cours pour Réussir l'Écrit de la Magistrature</a></h3>
-        <span class="book-niveau">Écrit · Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span><span class="book-num">Version numérique uniquement</span>
+        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><span class="book-num">Version numérique uniquement</span>
         <div class="book-buy">
           <span class="price">25 000<small>FCFA</small></span>
           <button class="add-btn" data-add="19"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article></div><h3 class="group-title">Greffe<small>9 ouvrages</small><a class="group-link" href="concours/greffe/">Page du concours</a></h3><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="20" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="20" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg" srcset="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg 600w, assets/img/pages/annales-anciens-sujets-infj-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Greffe</span>
         <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-infj/">Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="20"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="21" aria-label="Voir le détail : Le Guide Méthodologique INFJ, Édition 2026"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="21" aria-label="Voir le détail : Le Guide Méthodologique INFJ, Édition 2026"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span></div>
       <div class="cover-foot">Greffe</div>
     </div></button>
       <div class="book-meta">
@@ -560,9 +501,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="22" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="22" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span></div>
       <div class="cover-foot">Greffe</div>
     </div></button>
       <div class="book-meta">
@@ -575,9 +516,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="23" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="23" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
       <div class="cover-foot">Greffe</div>
     </div></button>
       <div class="book-meta">
@@ -590,54 +531,42 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="24" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droits de l'Enfant</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="24" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droits-enfant-600.jpg" srcset="assets/img/pages/resume-droits-enfant-600.jpg 600w, assets/img/pages/resume-droits-enfant.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé des Droits de l'Enfant aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Greffe</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs/">Le Résumé des Droits de l'Enfant aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="24"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="25" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="25" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Greffe</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-aux-concours-administratifs/">Le Résumé de Droit Administratif aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="25"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="26" aria-label="Voir le détail : Les Fiches d'Arrêts de Droit Administratif, Édition 2026"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Fiches d'arrêts</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="26" aria-label="Voir le détail : Les Fiches d'Arrêts de Droit Administratif, Édition 2026"><div class="cover cover-page"><img src="assets/img/pages/fiches-arrets-droit-administratif-600.jpg" srcset="assets/img/pages/fiches-arrets-droit-administratif-600.jpg 600w, assets/img/pages/fiches-arrets-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Fiches d'Arrêts de Droit Administratif, Édition 2026" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Greffe</span>
         <h3 class="book-title"><a href="ouvrages/les-fiches-d-arrets-de-droit-administratif/">Les Fiches d'Arrêts de Droit Administratif, Édition 2026</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="26"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="27" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="27" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span></div>
       <div class="cover-foot">Greffe</div>
     </div></button>
       <div class="book-meta">
@@ -650,9 +579,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="28" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="28" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span></div>
       <div class="cover-foot">Greffe</div>
     </div></button>
       <div class="book-meta">
@@ -665,24 +594,20 @@
         </div>
       </div>
     </article></div><h3 class="group-title">Pénitentiaire<small>8 ouvrages</small><a class="group-link" href="concours/penitentiaire/">Page du concours</a></h3><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="29" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Pénitentiaire</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="29" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg" srcset="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg 600w, assets/img/pages/annales-anciens-sujets-infj-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Pénitentiaire</span>
         <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-infj/">Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="29"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="30" aria-label="Voir le détail : Le Guide Méthodologique INFJ, Édition 2026"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="30" aria-label="Voir le détail : Le Guide Méthodologique INFJ, Édition 2026"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span></div>
       <div class="cover-foot">Pénitentiaire</div>
     </div></button>
       <div class="book-meta">
@@ -695,9 +620,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="31" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="31" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span></div>
       <div class="cover-foot">Pénitentiaire</div>
     </div></button>
       <div class="book-meta">
@@ -710,39 +635,31 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="32" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droits de l'Enfant</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Pénitentiaire</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="32" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droits-enfant-600.jpg" srcset="assets/img/pages/resume-droits-enfant-600.jpg 600w, assets/img/pages/resume-droits-enfant.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé des Droits de l'Enfant aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Pénitentiaire</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs/">Le Résumé des Droits de l'Enfant aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="32"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="33" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">Pénitentiaire</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="33" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Pénitentiaire</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-aux-concours-administratifs/">Le Résumé de Droit Administratif aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="33"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="34" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="34" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
       <div class="cover-foot">Pénitentiaire</div>
     </div></button>
       <div class="book-meta">
@@ -755,9 +672,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="35" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="35" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span></div>
       <div class="cover-foot">Pénitentiaire</div>
     </div></button>
       <div class="book-meta">
@@ -770,9 +687,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="36" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="36" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span></div>
       <div class="cover-foot">Pénitentiaire</div>
     </div></button>
       <div class="book-meta">
@@ -785,24 +702,20 @@
         </div>
       </div>
     </article></div><h3 class="group-title">EPPJEJ<small>7 ouvrages</small><a class="group-link" href="concours/eppjej/">Page du concours</a></h3><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="37" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">INFJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">EPPJEJ</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="37" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg" srcset="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg 600w, assets/img/pages/annales-anciens-sujets-infj-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ EPPJEJ</span>
         <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-infj/">Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="37"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="38" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="38" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span></div>
       <div class="cover-foot">EPPJEJ</div>
     </div></button>
       <div class="book-meta">
@@ -815,39 +728,31 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="39" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droits de l'Enfant</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">EPPJEJ</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="39" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droits-enfant-600.jpg" srcset="assets/img/pages/resume-droits-enfant-600.jpg 600w, assets/img/pages/resume-droits-enfant.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé des Droits de l'Enfant aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ EPPJEJ</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs/">Le Résumé des Droits de l'Enfant aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="39"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="40" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">EPPJEJ</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="40" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ EPPJEJ</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-aux-concours-administratifs/">Le Résumé de Droit Administratif aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="40"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="41" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="41" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
       <div class="cover-foot">EPPJEJ</div>
     </div></button>
       <div class="book-meta">
@@ -860,9 +765,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="42" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="42" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span></div>
       <div class="cover-foot">EPPJEJ</div>
     </div></button>
       <div class="book-meta">
@@ -875,9 +780,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="43" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="43" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span></div>
       <div class="cover-foot">EPPJEJ</div>
     </div></button>
       <div class="book-meta">
@@ -890,9 +795,9 @@
         </div>
       </div>
     </article></div><h3 class="group-title">ENA<small>10 ouvrages</small><a class="group-link" href="concours/ena/">Page du concours</a></h3><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="44" aria-label="Voir le détail : La Logique aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Entraînement</span><span class="cover-title">Logique</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="44" aria-label="Voir le détail : La Logique aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Entraînement</span><span class="cover-title">Logique</span></div>
       <div class="cover-foot">ENA</div>
     </div></button>
       <div class="book-meta">
@@ -905,9 +810,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="45" aria-label="Voir le détail : Le Résumé d'Aptitude Verbale aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Aptitude Verbale</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="45" aria-label="Voir le détail : Le Résumé d'Aptitude Verbale aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Aptitude Verbale</span></div>
       <div class="cover-foot">ENA</div>
     </div></button>
       <div class="book-meta">
@@ -920,9 +825,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="46" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="46" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
       <div class="cover-foot">ENA</div>
     </div></button>
       <div class="book-meta">
@@ -935,24 +840,20 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="47" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">SOG</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="47" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG"><div class="cover cover-page"><img src="assets/img/pages/annales-sog-600.jpg" srcset="assets/img/pages/annales-sog-600.jpg 600w, assets/img/pages/annales-sog.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés de SOG" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">ENA</span>
         <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-de-sog/">Les Annales des Anciens Sujets Corrigés de SOG</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="47"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="48" aria-label="Voir le détail : Le Résumé de PECOS aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">PECOS</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="48" aria-label="Voir le détail : Le Résumé de PECOS aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">PECOS</span></div>
       <div class="cover-foot">ENA</div>
     </div></button>
       <div class="book-meta">
@@ -965,9 +866,9 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="49" aria-label="Voir le détail : Le Résumé de Note de Synthèse aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Note de Synthèse</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="49" aria-label="Voir le détail : Le Résumé de Note de Synthèse aux Concours Administratifs"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Note de Synthèse</span></div>
       <div class="cover-foot">ENA</div>
     </div></button>
       <div class="book-meta">
@@ -980,39 +881,31 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="50" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="50" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">ENA</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-aux-concours-administratifs/">Le Résumé de Droit Administratif aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">10 000<small>FCFA</small></span>
           <button class="add-btn" data-add="50"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="51" aria-label="Voir le détail : Les Fiches d'Arrêts de Droit Administratif, Édition 2026"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">Fiches d'arrêts</span><span class="cover-title">Droit Administratif</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="51" aria-label="Voir le détail : Les Fiches d'Arrêts de Droit Administratif, Édition 2026"><div class="cover cover-page"><img src="assets/img/pages/fiches-arrets-droit-administratif-600.jpg" srcset="assets/img/pages/fiches-arrets-droit-administratif-600.jpg 600w, assets/img/pages/fiches-arrets-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Fiches d'Arrêts de Droit Administratif, Édition 2026" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">ENA</span>
         <h3 class="book-title"><a href="ouvrages/les-fiches-d-arrets-de-droit-administratif/">Les Fiches d'Arrêts de Droit Administratif, Édition 2026</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="51"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="52" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome I"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">125 dissertations · Droit administratif</span><span class="cover-title">Tome I</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
+      <button class="book-cover-btn" data-open="52" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome I"><div class="cover cover-made">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">125 dissertations · Droit administratif</span><span class="cover-title">Tome I</span></div>
       <div class="cover-foot">ENA</div>
     </div></button>
       <div class="book-meta">
@@ -1025,15 +918,11 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="53" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome II"><div class="cover">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ<i></i></span></div>
-      <div class="cover-band"><span class="cover-series">125 dissertations · Droit administratif</span><span class="cover-title">Tome II</span><span class="orn"><svg ><use href="#i-star"/></svg></span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
+      <button class="book-cover-btn" data-open="53" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome II"><div class="cover cover-page"><img src="assets/img/pages/125-dissertations-droit-administratif-tome-2-600.jpg" srcset="assets/img/pages/125-dissertations-droit-administratif-tome-2-600.jpg 600w, assets/img/pages/125-dissertations-droit-administratif-tome-2.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Droit Administratif en 125 Dissertations Corrigées, Tome II" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">ENA</span>
         <h3 class="book-title"><a href="ouvrages/le-droit-administratif-en-125-dissertations-corrigees-tome-ii/">Le Droit Administratif en 125 Dissertations Corrigées, Tome II</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit disponible</span>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
           <button class="add-btn" data-add="53"><svg ><use href="#i-plus"/></svg>Panier</button>
@@ -1046,23 +935,23 @@
 <!-- MÉTHODOLOGIE -->
 <section class="section on-dark" id="methodologie">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Approche pédagogique</span><h2 class="h-section">La méthode, <em>concours par concours</em></h2></div>
-      <p class="lead">Un aperçu des épreuves et de la méthode que nos ouvrages vous enseignent.</p>
+    <div class="section-head">
+      <h2 class="h-section">Les épreuves de chaque concours</h2>
+      <p class="lead">Ce qui vous attend, concours par concours, et la démarche que nos ouvrages vous apprennent.</p>
     </div>
-    <div class="methodo-layout reveal">
+    <div class="methodo-layout">
       <div class="m-tabs" id="mTabs" role="tablist" aria-label="Concours"></div>
       <div id="mPanel"></div>
     </div>
-    <div class="ep-block reveal">
-      <h3>Fiches méthode par épreuve</h3>
+    <div class="ep-block">
+      <h3>La méthode, épreuve par épreuve</h3>
       <p class="lead">Choisissez une épreuve pour voir la démarche, étape par étape.</p>
       <div class="ep-tabs" id="epTabs" role="tablist" aria-label="Épreuves"></div>
       <div id="epPanel"></div>
     </div>
-    <a class="qcm-band reveal" href="qcm/">
-      <span><b>Testez-vous gratuitement</b>6 QCM corrigés : méthode des épreuves, droit civil, droit pénal, droit administratif, droits de l'enfant et organisation judiciaire.</span>
-      <span class="btn btn-gold">Choisir un QCM<svg fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow"/></svg></span>
+    <a class="qcm-band" href="qcm/">
+      <span><b>Testez-vous avec nos QCM gratuits</b>Six QCM corrigés : méthode des épreuves, droit civil, droit pénal, droit administratif, droits de l'enfant et organisation judiciaire.</span>
+      <span class="btn btn-gold">Choisir un QCM</span>
     </a>
   </div>
 </section>
@@ -1070,64 +959,70 @@
 <!-- SUJETS CORRIGÉS -->
 <section class="section sujets" id="sujets">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Extraits de nos ouvrages</span><h2 class="h-section">Sujets <em>corrigés</em></h2></div>
-      <p class="lead">Un sujet complet par concours pour juger par vous-même de la qualité de nos corrections. D'autres sujets, dont des sujets réellement tombés aux concours, sont en accès libre.</p>
+    <div class="section-photo">
+      <div class="section-head">
+        <h2 class="h-section">Sujets corrigés</h2>
+        <p class="lead">Un sujet par concours, corrigé comme dans nos ouvrages, pour juger de la qualité de nos corrections. D'autres sujets, dont des sujets réellement tombés aux concours, sont en accès libre.</p>
+      </div>
+      <figure>
+        <img src="https://images.unsplash.com/photo-1550592704-6c76defa9985?auto=format&amp;fit=crop&amp;w=720&amp;h=480&amp;q=70" srcset="https://images.unsplash.com/photo-1550592704-6c76defa9985?auto=format&amp;fit=crop&amp;w=480&amp;h=320&amp;q=70 480w, https://images.unsplash.com/photo-1550592704-6c76defa9985?auto=format&amp;fit=crop&amp;w=900&amp;h=600&amp;q=70 900w" sizes="(max-width:960px) 92vw, 360px" width="720" height="480" alt="Une main écrit au stylo rouge dans un cahier" loading="lazy" decoding="async">
+        <figcaption class="photo-credit">Photo : <a href="https://unsplash.com/photos/333oj7zFsdg" target="_blank" rel="noopener">lilartsy, Unsplash</a></figcaption>
+      </figure>
     </div>
-    <div class="s-tabs reveal" id="sTabs" role="tablist" aria-label="Concours"></div>
+    <div class="s-tabs" id="sTabs" role="tablist" aria-label="Concours"></div>
     <div id="sPanel"></div>
-    <div class="apercu-cta reveal"><a class="btn btn-navy" href="sujets/">Tous les sujets corrigés<svg fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow"/></svg></a></div>
+    <div class="apercu-cta"><a class="btn btn-navy" href="sujets/">Tous les sujets corrigés</a></div>
   </div>
 </section>
 
 <!-- VIDÉOS (générée à partir de VIDEOS dans data.js) -->
 <!-- build:videos -->
-<section class="section on-dark videos" id="videos">
+<section class="section  videos" id="videos">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">En vidéo</span><h2 class="h-section">Comprendre en <em>quelques minutes</em></h2></div>
-      <p class="lead">Notre présentation, un ouvrage en vidéo, un article de loi expliqué en une minute et des sujets de SOG décryptés. À regarder et à partager.</p>
+    <div class="section-head">
+      <h2 class="h-section">Nos vidéos</h2>
+      <p class="lead">Notre présentation, un ouvrage en vidéo, un article de loi expliqué en une minute et des sujets de SOG décryptés.</p>
     </div>
-    <div class="v-feature v-feature-carre reveal">
+    <div class="v-feature v-feature-carre">
       <div class="v-frame v-carre">
           <video class="v-media" controls playsinline preload="none" poster="assets/img/videos/presentation-les-cours-sesame-et-saj.jpg" width="720" height="720" aria-label="Découvrez Les Cours Sésame et SAJ"><source src="assets/video/presentation-les-cours-sesame-et-saj.mp4" type="video/mp4"><a href="assets/video/presentation-les-cours-sesame-et-saj.mp4">Télécharger la vidéo</a></video>
           <span class="v-dur" aria-hidden="true">1:17</span>
         </div>
       <div class="v-feature-text">
-        <span class="v-tag">Présentation · 1:17</span>
+        <span class="v-tag">Présentation, 1:17</span>
         <h3>Découvrez Les Cours Sésame et SAJ</h3>
         <p>Un concours ne se prépare pas au hasard. Les concours que nous préparons, notre accompagnement de la présélection à l'oral, nos ouvrages et notre exigence de rigueur.</p>
-        <div class="v-actions"><a class="btn btn-gold" href="#concours">Choisir mon concours<svg fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow"/></svg></a></div>
+        <div class="v-actions"><a class="btn btn-gold" href="#concours">Choisir mon concours</a></div>
       </div>
     </div>
-    <div class="v-rail v-rail-after"><figure class="v-card reveal reveal-d0">
+    <div class="v-rail v-rail-after"><figure class="v-card">
         <div class="v-frame v-vertical">
           <video class="v-media" controls playsinline preload="none" poster="assets/img/videos/resume-droit-civil-2027.jpg" width="720" height="1280" aria-label="Le Résumé de Droit Civil, édition 2027"><source src="assets/video/resume-droit-civil-2027.mp4" type="video/mp4"><a href="assets/video/resume-droit-civil-2027.mp4">Télécharger la vidéo</a></video>
           <span class="v-dur" aria-hidden="true">0:43</span>
         </div>
-        <figcaption><span class="v-tag">Nos ouvrages</span><b>Le Résumé de Droit Civil, édition 2027</b><span class="v-desc">Sept parties, 39 exercices intégralement corrigés, des tableaux et des annexes pour l'écrit de la magistrature.</span><a class="v-link" href="ouvrages/le-resume-de-droit-civil-au-concours-de-la-magistrature/">Voir l'ouvrage<svg ><use href="#i-arrow"/></svg></a></figcaption>
-      </figure><figure class="v-card reveal reveal-d1">
+        <figcaption><span class="v-tag">Nos ouvrages</span><b>Le Résumé de Droit Civil, édition 2027</b><span class="v-desc">Sept parties, 39 exercices intégralement corrigés, des tableaux et des annexes pour l'écrit de la magistrature.</span><a class="v-link" href="ouvrages/le-resume-de-droit-civil-au-concours-de-la-magistrature/">Voir l'ouvrage</a></figcaption>
+      </figure><figure class="v-card">
         <div class="v-frame v-vertical">
           <video class="v-media" controls playsinline preload="none" poster="assets/img/videos/article-1376-un-article-une-minute.jpg" width="720" height="1280" aria-label="L'article 1376 du Code civil"><source src="assets/video/article-1376-un-article-une-minute.mp4" type="video/mp4"><a href="assets/video/article-1376-un-article-une-minute.mp4">Télécharger la vidéo</a></video>
           <span class="v-dur" aria-hidden="true">1:33</span>
         </div>
-        <figcaption><span class="v-tag">Un article, une minute</span><b>L'article 1376 du Code civil</b><span class="v-desc">L'article tombé au concours direct de la magistrature en août 2025, expliqué avec ses deux conditions, un exemple chiffré et l'effet de la bonne ou de la mauvaise foi.</span><a class="v-link" href="sujets/commentaire-article-1376-repetition-indu/">Lire le corrigé du sujet<svg ><use href="#i-arrow"/></svg></a></figcaption>
-      </figure><figure class="v-card reveal reveal-d2">
+        <figcaption><span class="v-tag">Un article, une minute</span><b>L'article 1376 du Code civil</b><span class="v-desc">L'article tombé au concours direct de la magistrature en août 2025, expliqué avec ses deux conditions, un exemple chiffré et l'effet de la bonne ou de la mauvaise foi.</span><a class="v-link" href="sujets/commentaire-article-1376-repetition-indu/">Lire le corrigé du sujet</a></figcaption>
+      </figure><figure class="v-card">
         <div class="v-frame v-vertical">
           <video class="v-media" controls playsinline preload="none" poster="assets/img/videos/annales-sog-magistrature-2019.jpg" width="720" height="1280" aria-label="SOG Magistrature 2019"><source src="assets/video/annales-sog-magistrature-2019.mp4" type="video/mp4"><a href="assets/video/annales-sog-magistrature-2019.mp4">Télécharger la vidéo</a></video>
           <span class="v-dur" aria-hidden="true">1:33</span>
         </div>
-        <figcaption><span class="v-tag">Annales décryptées</span><b>SOG Magistrature 2019</b><span class="v-desc">Le sujet du concours direct de septembre 2019 décrypté, du type de sujet au plan en trois parties, avec les points à retenir.</span><a class="v-link" href="methodes/#sog-sujet-d-ordre-general">Lire la fiche méthode<svg ><use href="#i-arrow"/></svg></a></figcaption>
-      </figure><figure class="v-card reveal reveal-d3">
+        <figcaption><span class="v-tag">Annales décryptées</span><b>SOG Magistrature 2019</b><span class="v-desc">Le sujet du concours direct de septembre 2019 décrypté, du type de sujet au plan en trois parties, avec les points à retenir.</span><a class="v-link" href="methodes/#sog-sujet-d-ordre-general">Lire la fiche méthode</a></figcaption>
+      </figure><figure class="v-card">
         <div class="v-frame v-vertical">
           <video class="v-media" controls playsinline preload="none" poster="assets/img/videos/annales-sog-penitentiaire-2019.jpg" width="720" height="1280" aria-label="SOG Pénitentiaire 2019"><source src="assets/video/annales-sog-penitentiaire-2019.mp4" type="video/mp4"><a href="assets/video/annales-sog-penitentiaire-2019.mp4">Télécharger la vidéo</a></video>
           <span class="v-dur" aria-hidden="true">1:33</span>
         </div>
-        <figcaption><span class="v-tag">Annales décryptées</span><b>SOG Pénitentiaire 2019</b><span class="v-desc">Le sujet du cycle supérieur de septembre 2019 décrypté, des mots clés au plan, avec les pièges à éviter.</span><a class="v-link" href="methodes/#sog-sujet-d-ordre-general">Lire la fiche méthode<svg ><use href="#i-arrow"/></svg></a></figcaption>
+        <figcaption><span class="v-tag">Annales décryptées</span><b>SOG Pénitentiaire 2019</b><span class="v-desc">Le sujet du cycle supérieur de septembre 2019 décrypté, des mots clés au plan, avec les pièges à éviter.</span><a class="v-link" href="methodes/#sog-sujet-d-ordre-general">Lire la fiche méthode</a></figcaption>
       </figure></div>
-    <div class="espace-band reveal">
+    <div class="espace-band">
       <div><b>Allez plus loin avec l'espace abonnés</b><p>Vidéos, documents et fiches exclusifs, réservés aux abonnés. Créez votre compte en une minute, réglez par Mobile Money, et votre accès s'ouvre.</p></div>
-      <div class="espace-band-actions"><a class="btn btn-navy" href="espace-abonnes/#inscription">Créer mon compte<svg fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow"/></svg></a><a class="btn btn-ghost" href="espace-abonnes/#connexion">Se connecter</a></div>
+      <div class="espace-band-actions"><a class="btn btn-navy" href="espace-abonnes/#inscription">Créer mon compte</a><a class="btn btn-ghost" href="espace-abonnes/#connexion">Se connecter</a></div>
     </div>
   </div>
 </section>
@@ -1136,39 +1031,42 @@
 <!-- AVIS -->
 <section class="section" id="avis">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><span class="eyebrow">Ils nous font confiance</span><h2 class="h-section">Avis de nos <em>étudiants</em></h2></div>
+    <div class="section-head">
+      <h2 class="h-section">L'avis de nos élèves</h2>
     </div>
+    <div class="reviews" id="reviews"></div>
   </div>
-  <div class="reviews" id="reviews"></div>
 </section>
 
 <!-- À PROPOS -->
 <section class="section on-dark" id="apropos">
   <div class="wrap">
     <div class="about-grid">
-      <div class="about-text reveal">
-        <span class="eyebrow">Qui sommes-nous</span>
-        <h2 class="h-section">Savoirs, méthode, <em>réussite.</em></h2>
+      <div class="about-text">
+        <h2 class="h-section">Qui sommes-nous</h2>
         <p>Fondés à Abidjan, Les Cours Sésame et SAJ (Savoirs &amp; Atouts Judiciaires) sont nés d'un constat partagé par des anciens lauréats des concours de l'INFJ et de l'ENA. Trop de candidats talentueux échouaient, non par manque d'intelligence, mais par manque d'outils adaptés au contexte ivoirien.</p>
         <p>Notre équipe pédagogique rassemble des magistrats, des greffiers, des administrateurs civils et des enseignants universitaires, tous passés par les concours qu'ils préparent aujourd'hui. Chaque ouvrage est rédigé avec une exigence simple : offrir le niveau de qualité que nous aurions voulu avoir entre les mains le jour de notre propre concours.</p>
-        <div class="mission">Notre mission : démocratiser l'accès à une préparation juridique d'excellence, à des tarifs accessibles, pour que chaque candidat ivoirien puisse concourir à armes égales.</div>
-        <p>Tous nos ouvrages sont actualisés au droit ivoirien en vigueur, révisés chaque année pour intégrer les dernières réformes législatives et les tendances récentes des jurys de concours.</p>
+        <p class="mission">Notre mission : rendre une préparation juridique de qualité accessible à tous, à des tarifs abordables, pour que chaque candidat ivoirien puisse concourir à armes égales.</p>
+        <p>Nos ouvrages suivent le droit ivoirien en vigueur. Ils sont révisés chaque année pour tenir compte des dernières réformes et des sujets récents des concours.</p>
+        <dl class="about-facts">
+          <div><dt>Candidats accompagnés</dt><dd>Plus de 500</dd></div>
+          <div><dt>Ouvrages au catalogue</dt><dd data-count-from="ouvrages">32</dd></div>
+          <div><dt>Concours préparés</dt><dd data-count-from="concours">5</dd></div>
+          <div><dt>Formateurs</dt><dd>Plus de 10</dd></div>
+        </dl>
       </div>
-      <div class="about-stats reveal reveal-d2">
-        <div class="a-stat"><b>500+</b><span>Candidats accompagnés</span></div>
-        <div class="a-stat"><b data-count-from="ouvrages">32</b><span>Ouvrages au catalogue</span></div>
-        <div class="a-stat"><b data-count-from="concours">5</b><span>Concours couverts</span></div>
-        <div class="a-stat"><b>10+</b><span>Formateurs experts</span></div>
-      </div>
+      <figure class="about-photo">
+        <img src="https://images.unsplash.com/photo-1648770664367-54d43741edf1?auto=format&amp;fit=crop&amp;w=1000&amp;h=750&amp;q=70" srcset="https://images.unsplash.com/photo-1648770664367-54d43741edf1?auto=format&amp;fit=crop&amp;w=600&amp;h=450&amp;q=70 600w, https://images.unsplash.com/photo-1648770664367-54d43741edf1?auto=format&amp;fit=crop&amp;w=1200&amp;h=900&amp;q=70 1200w" sizes="(max-width:960px) 92vw, 520px" width="1000" height="750" alt="Le Plateau, à Abidjan, vu de la lagune Ébrié" loading="lazy" decoding="async">
+        <figcaption class="photo-credit">Le Plateau, à Abidjan, vu de la lagune Ébrié. Photo : <a href="https://unsplash.com/photos/e514SZzfpfM" target="_blank" rel="noopener">djebi abraham philippe, Unsplash</a></figcaption>
+      </figure>
     </div>
     <div class="promises">
-      <div class="promise reveal"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg><h4>Ouvrages actualisés</h4><p>Références législatives et jurisprudentielles mises à jour au droit ivoirien en vigueur.</p></div>
-      <div class="promise reveal reveal-d1"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2.5"/><path d="M11 18h2"/></svg><h4>Paiement Mobile Money</h4><p>Orange Money, MTN MoMo, Wave et Moov Money acceptés, espèces à la livraison à Abidjan.</p></div>
-      <div class="promise reveal reveal-d2"><svg viewBox="0 0 24 24"><path d="M1 4h14v12H1zM15 9h4l4 4v3h-8z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></svg><h4>Livraison dans toute la CI</h4><p>Abidjan sous 24 à 48 h, autres villes sous 3 à 5 jours ouvrables.</p></div>
-      <div class="promise reveal"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M8.5 12.5 7 22l5-3 5 3-1.5-9.5"/></svg><h4>Rédigé par des lauréats</h4><p>Anciens admis aux concours INFJ, ENA et Barreau de Côte d'Ivoire.</p></div>
-      <div class="promise reveal reveal-d1"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg><h4>Conseil sur WhatsApp</h4><p>Nous vous aidons à choisir les ouvrages adaptés à votre concours et à votre niveau.</p></div>
-      <div class="promise reveal reveal-d2"><svg viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.5"/></svg><h4>-10 % dès 3 ouvrages</h4><p>La remise est calculée automatiquement dans votre panier.</p></div>
+      <div class="promise"><h4>Ouvrages à jour</h4><p>Textes et jurisprudence du droit ivoirien en vigueur.</p></div>
+      <div class="promise"><h4>Paiement par Mobile Money</h4><p>Orange Money, MTN MoMo, Wave et Moov Money, ou en espèces à la livraison à Abidjan.</p></div>
+      <div class="promise"><h4>Livraison dans toute la Côte d'Ivoire</h4><p>À Abidjan sous 24 à 48 h, dans les autres villes sous 3 à 5 jours ouvrables.</p></div>
+      <div class="promise"><h4>Rédigés par des lauréats</h4><p>Anciens admis aux concours de l'INFJ, de l'ENA et du Barreau de Côte d'Ivoire.</p></div>
+      <div class="promise"><h4>Conseil sur WhatsApp</h4><p>Nous vous aidons à choisir les ouvrages adaptés à votre concours et à votre niveau.</p></div>
+      <div class="promise"><h4>-10 % dès 3 ouvrages</h4><p>La remise est calculée automatiquement dans votre panier.</p></div>
     </div>
   </div>
 </section>
@@ -1176,35 +1074,33 @@
 <!-- FAQ -->
 <section class="section" id="faq">
   <div class="wrap faq-grid">
-    <div class="reveal">
-      <span class="eyebrow">Questions fréquentes</span>
-      <h2 class="h-section">Besoin <em>d'informations ?</em></h2>
-      <p class="lead">Vous ne trouvez pas votre réponse ? Écrivez-nous, nous répondons rapidement sur WhatsApp.</p>
+    <div>
+      <h2 class="h-section">Questions fréquentes</h2>
+      <p class="lead">Vous ne trouvez pas votre réponse ? Écrivez-nous sur WhatsApp, nous répondons rapidement.</p>
     </div>
-    <div class="reveal reveal-d1" id="faqList"><!-- build:faq --><details class="faq-item" open><summary>Comment passer une commande ?<i></i></summary><p>Vous pouvez ajouter vos ouvrages au panier puis envoyer votre commande via WhatsApp, ou cliquer directement sur le bouton WhatsApp de chaque ouvrage. Notre équipe vous confirmera la disponibilité et les modalités de livraison.</p></details><details class="faq-item"><summary>Quels sont les modes de paiement acceptés ?<i></i></summary><p>Nous acceptons les paiements par Mobile Money (Orange Money, MTN MoMo, Wave et Moov Money) et en espèces à la livraison pour Abidjan. Pour les autres villes, le paiement se fait avant expédition.</p></details><details class="faq-item"><summary>Livrez-vous en dehors d'Abidjan ?<i></i></summary><p>Oui, nous livrons dans toute la Côte d'Ivoire. Pour Abidjan, la livraison se fait sous 24 à 48 heures. Pour les autres villes, comptez 3 à 5 jours ouvrables via transporteur.</p></details><details class="faq-item"><summary>Les ouvrages sont-ils à jour pour la session 2027 ?<i></i></summary><p>Absolument. Tous nos ouvrages sont révisés et mis à jour chaque année pour correspondre aux programmes et aux tendances des concours les plus récents.</p></details><details class="faq-item"><summary>Proposez-vous une remise pour les commandes groupées ?<i></i></summary><p>Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10 % sur le total de votre commande.</p></details><details class="faq-item"><summary>Puis-je consulter un extrait avant d'acheter ?<i></i></summary><p>Oui. La plupart des ouvrages proposent un extrait gratuit à télécharger en PDF : ouvrez la fiche de l'ouvrage et cliquez sur « Lire un extrait gratuit ». Pour les autres, écrivez-nous sur WhatsApp et nous vous enverrons un aperçu.</p></details><!-- /build:faq --></div>
+    <div id="faqList"><!-- build:faq --><details class="faq-item" open><summary>Comment passer une commande ?<i></i></summary><p>Vous pouvez ajouter vos ouvrages au panier puis envoyer votre commande via WhatsApp, ou cliquer directement sur le bouton WhatsApp de chaque ouvrage. Notre équipe vous confirmera la disponibilité et les modalités de livraison.</p></details><details class="faq-item"><summary>Quels sont les modes de paiement acceptés ?<i></i></summary><p>Nous acceptons les paiements par Mobile Money (Orange Money, MTN MoMo, Wave et Moov Money) et en espèces à la livraison pour Abidjan. Pour les autres villes, le paiement se fait avant expédition.</p></details><details class="faq-item"><summary>Livrez-vous en dehors d'Abidjan ?<i></i></summary><p>Oui, nous livrons dans toute la Côte d'Ivoire. Pour Abidjan, la livraison se fait sous 24 à 48 heures. Pour les autres villes, comptez 3 à 5 jours ouvrables via transporteur.</p></details><details class="faq-item"><summary>Les ouvrages sont-ils à jour pour la session 2027 ?<i></i></summary><p>Absolument. Tous nos ouvrages sont révisés et mis à jour chaque année pour correspondre aux programmes et aux tendances des concours les plus récents.</p></details><details class="faq-item"><summary>Proposez-vous une remise pour les commandes groupées ?<i></i></summary><p>Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10 % sur le total de votre commande.</p></details><details class="faq-item"><summary>Puis-je consulter un extrait avant d'acheter ?<i></i></summary><p>Oui. La plupart des ouvrages proposent un extrait gratuit à télécharger en PDF : ouvrez la fiche de l'ouvrage et cliquez sur « Lire un extrait gratuit ». Pour les autres, écrivez-nous sur WhatsApp et nous vous enverrons un aperçu.</p></details><!-- /build:faq --></div>
   </div>
 </section>
 
 <!-- CONTACT -->
 <section class="section contact" id="contact">
   <div class="wrap contact-inner">
-    <div class="reveal">
-      <span class="eyebrow">Contact</span>
-      <h2>Prêt à <em>franchir</em> la porte ?</h2>
-      <p>Notre équipe est disponible sur WhatsApp pour répondre à vos questions et traiter vos commandes.</p>
+    <div>
+      <h2>Nous joindre</h2>
+      <p>Pour une question, un conseil ou une commande, écrivez-nous sur WhatsApp ou appelez-nous.</p>
       <div class="contact-phones">
         <a class="contact-phone" href="tel:+2250160860537"><svg><use href="#i-phone"/></svg>+225 01 60 86 05 37</a>
         <a class="contact-phone" href="tel:+2250506600332"><svg><use href="#i-phone"/></svg>+225 05 06 60 03 32</a>
       </div>
       <p class="contact-note">Les deux numéros répondent aussi sur WhatsApp.</p>
-      <a class="btn btn-navy" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Ouvrir WhatsApp</a>
+      <a class="btn btn-wa" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
     </div>
-    <svg class="contact-door reveal reveal-d2" viewBox="0 0 200 240" aria-hidden="true">
-      <path class="cd-star" d="M100 4C102 22 108 28 126 30 108 32 102 38 100 56 98 38 92 32 74 30 92 28 98 22 100 4Z"/>
-      <path class="cd-in" d="M40 236V130a60 60 0 0 1 120 0v106z"/>
-      <path class="cd-leaf" d="M40 236V130a60 60 0 0 1 30-52v170z"/>
-      <path class="cd-frame" d="M40 236V130a60 60 0 0 1 120 0v106"/>
-    </svg>
+    <ul class="contact-list">
+      <li><b>Adresse</b>Abidjan, Côte d'Ivoire</li>
+      <li><b>Livraison</b>À Abidjan sous 24 à 48 heures, dans les autres villes sous 3 à 5 jours ouvrables.</li>
+      <li><b>Paiement</b>Orange Money, MTN MoMo, Wave et Moov Money, ou en espèces à la livraison à Abidjan.</li>
+      <li><b>Remise</b>10 % sur le total dès 3 ouvrages commandés.</li>
+    </ul>
   </div>
 </section>
 
@@ -1215,7 +1111,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <a href="#top" class="brand"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="brand-text"><span class="brand-name">Les Cours Sésame et SAJ</span><span class="brand-rule"></span><span class="brand-tag">Formation juridique · Concours &amp; excellence</span></span></a>
+        <a href="#top" class="brand"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="brand-text"><span class="brand-name">Les Cours Sésame et SAJ</span><span class="brand-rule"></span><span class="brand-tag">Formation juridique, concours et excellence</span></span></a>
         <p class="footer-about">Votre réussite est notre mission. Ouvrages de préparation aux concours administratifs et juridiques de Côte d'Ivoire.</p>
       </div>
       <div>
@@ -1232,7 +1128,7 @@
       </div>
     </div>
     <p class="footer-legal">Les Cours Sésame et SAJ sont un éditeur indépendant. Nos ouvrages ne sont pas des publications de l'INFJ, de l'ENA ni d'aucun organisateur de concours, et n'engagent que leurs auteurs.</p>
-    <div class="footer-bottom"><span>© <span id="year">2026</span> Les Cours Sésame et SAJ. Tous droits réservés. <a href="mentions-legales/">Mentions légales et données personnelles</a></span><span>Savoirs · Méthode · Réussite</span></div>
+    <div class="footer-bottom"><span>© <span id="year">2026</span> Les Cours Sésame et SAJ. Tous droits réservés. <a href="mentions-legales/">Mentions légales et données personnelles</a></span></div>
   </div>
 </footer>
 
@@ -1268,7 +1164,7 @@
       <div class="modal-buy"><span class="price" id="mPrice"></span><button class="btn btn-navy" id="mAdd"></button></div>
       <div class="modal-links">
         <a class="extrait-link" id="mExtrait" target="_blank" rel="noopener" hidden><svg aria-hidden="true"><use href="#i-book"/></svg>Lire un extrait gratuit (PDF)</a>
-        <a class="extrait-link" id="mPage" href="ouvrages/"><svg aria-hidden="true"><use href="#i-arrow"/></svg>Voir la page de l'ouvrage</a>
+        <a class="extrait-link" id="mPage" href="ouvrages/">Voir la page de l'ouvrage</a>
       </div>
       <details class="quick">
         <summary>Commande rapide de cet ouvrage seul</summary>
