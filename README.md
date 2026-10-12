@@ -1,6 +1,6 @@
 # Les Cours Sésame et SAJ
 
-Site : https://concours-sesame.github.io/coursesesame/
+Site : https://coursesesame.com/
 
 ## Modifier les ouvrages, prix, avis ou FAQ
 
