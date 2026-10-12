@@ -1082,3 +1082,21 @@ a.aside-title:hover{color:var(--gold-ink)}
 .verrou-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem}
 .verrou .btn-ghost{color:#fff;border-color:rgba(255,255,255,.5)}
 .ep-card-go svg:first-child:not(:last-child){width:15px;height:15px;margin-right:.1rem}
+
+/* ---------- QCM de l'espace abonnés ---------- */
+.qz-accueil{padding:1.2rem;border-radius:var(--r-sm);background:var(--cream)}
+.qz-accueil p{margin-bottom:.8rem}
+.qz-barre{position:sticky;top:-12px;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.2rem;padding:10px 60px 10px 12px;margin-bottom:1rem;border-radius:var(--r-sm);background:var(--navy);color:#fff;font-size:.88rem;font-weight:700}
+.qz-temps{font-variant-numeric:tabular-nums;color:var(--gold)}
+.qz-score{font-family:var(--serif);font-size:1.15rem;color:var(--gold)}
+.qz-liste{list-style:decimal;margin:0 0 0 1.4rem;display:grid;gap:1rem}
+.qz-q{padding:.9rem 1rem;border-radius:var(--r-sm);border:1.5px solid var(--line);background:#fff}
+.qz-q p{font-weight:700;margin-bottom:.5rem}
+.qz-q label{display:flex;gap:.55rem;align-items:flex-start;padding:.4rem .5rem;border-radius:8px;cursor:pointer}
+.qz-q label:hover{background:var(--cream)}
+.qz-q input{margin-top:.25rem;accent-color:var(--navy)}
+.qz-ok{border-color:#2e7d4f}.qz-ko{border-color:#b3261e}
+.qz-bonne{background:#e6f4ea!important;font-weight:700}
+.qz-fausse{background:#fce8e6!important;text-decoration:line-through}
+.qz-expli{margin-top:.6rem;padding:.6rem .8rem;border-radius:8px;background:var(--cream);font-size:.9rem}
+.qz-expli small{display:block;margin-top:.3rem;color:var(--muted)}
