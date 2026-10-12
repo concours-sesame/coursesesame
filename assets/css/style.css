@@ -978,6 +978,10 @@ a.aside-title:hover{color:var(--gold-ink)}
 .ea-plein{position:absolute;z-index:3;top:10px;right:10px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(15,42,92,.75)}
 .ea-plein svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round}
 .ea-mention{margin-top:.8rem;font-size:.8rem;color:var(--muted)}
+.ea-v-boite{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.ea-pdf{display:grid;gap:12px;padding:12px;border-radius:var(--r-sm);background:#e9e6df}
+.ea-page{display:block;width:100%;height:auto;min-height:120px;background:#fff;box-shadow:0 2px 10px rgba(9,24,54,.18);pointer-events:none}
+@media print{body.ea-lecture *{visibility:hidden!important}body.ea-lecture::after{content:"Impression désactivée : document réservé aux abonnés.";visibility:visible;display:block;padding:40px;font:700 18px sans-serif}}
 .ea-fiche{font-family:var(--serif);font-size:1.06rem;line-height:1.7;color:var(--ink)}
 .ea-fiche p{margin-bottom:.9rem}
 .ea-fiche h4{font-size:1.2rem;color:var(--navy);margin:1.4rem 0 .5rem}

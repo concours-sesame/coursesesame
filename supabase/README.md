@@ -13,7 +13,8 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
 - La clé publique du projet (dans `assets/js/espace-config.js`) n'est pas secrète. La clé secrète
   (`service_role` ou `sb_secret_…`) ne doit **jamais** apparaître dans le site.
 - Les vidéos s'ouvrent par des liens temporaires (4 heures), avec le nom et le téléphone de l'abonné en
-  surimpression. Les PDF sont remis avec ce nom sur chaque page.
+  surimpression. Les PDF se lisent dans la page seulement (pages dessinées en image avec ce nom incrusté) :
+  pas de bouton de téléchargement, ni de copie, de sélection, de clic droit ou d'impression ; lien de 60 secondes.
 
 ## Fonctions
 
