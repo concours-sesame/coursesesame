@@ -25,6 +25,8 @@
   const TAILLE_MAX = 50 * 1024 * 1024;
 
   let moi = null, abonnes = [], paiements = [], contenus = [];
+  // Au-delà de ce nombre d'appareils en 7 jours, le compte est signalé comme peut-être partagé
+  const SEUIL_PARTAGE = 3;
   let onglet = "abonnes", filtre = "tous", recherche = "";
   const retours = {}; // messages affichés sous une ligne après une action (par compte ou contenu)
 
@@ -81,14 +83,18 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c] = await Promise.all([
+    const [a, p, c, ap] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
-      client.from("contenus").select("*").order("publie_le", { ascending: false })
+      client.from("contenus").select("*").order("publie_le", { ascending: false }),
+      client.rpc("admin_appareils")
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
     abonnes = a.data; paiements = p.data; contenus = c.data;
+    // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
+    const appareils = new Map((ap.data || []).map(x => [x.user_id, Number(x.appareils_7j)]));
+    abonnes.forEach(x => { x.appareils = appareils.get(x.user_id) || 0; });
   }
 
   /* ---------- Affichage ---------- */
@@ -127,7 +133,7 @@
     const retour = retours[a.user_id] || "";
     return `<article class="ad-ligne" data-uid="${esc(a.user_id)}">
         <div class="ad-ident">
-          <div class="ad-nom"><b>${esc(a.prenom)} ${esc(a.nom)}</b><span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span></div>
+          <div class="ad-nom"><b>${esc(a.prenom)} ${esc(a.nom)}</b><span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span>${a.appareils >= SEUIL_PARTAGE ? `<span class="ad-badge ad-partage" title="Chaque nouvel appareil déconnecte le précédent. Un nombre élevé peut signaler un compte partagé.">${a.appareils} appareils en 7 jours</span>` : ""}</div>
           <small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a> · ${esc(a.email)}${a.concours ? " · " + esc(nomConcours(a.concours)) : ""} · inscrit le ${dateFr(a.inscrit_le)}${Number(a.nb_paiements) ? ` · ${a.nb_paiements} paiement${a.nb_paiements > 1 ? "s" : ""}, ${fcfa(a.total_paye)}` : ""}</small>
         </div>
         <div class="ad-actions">
