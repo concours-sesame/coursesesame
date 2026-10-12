@@ -28,6 +28,9 @@
   // Numéro ivoirien à 10 chiffres : indicatif 225 ajouté pour WhatsApp
   const numeroWa = tel => { let d = String(tel || "").replace(/\D/g, ""); if (d.length === 10) d = "225" + d; return d; };
   const lienWa = (num, msg) => `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+  // Un QCM est enregistré comme un contenu « texte » dont le texte est un objet JSON { "qcm": { "duree": minutes, "questions": [...] } }
+  const lireQcm = c => { if (c.type !== "texte" || !/^\s*\{/.test(c.texte || "")) return null; try { const o = JSON.parse(c.texte); return o && o.qcm && Array.isArray(o.qcm.questions) ? o.qcm : null; } catch (e) { return null; } };
+  const typeAffiche = c => lireQcm(c) ? { nom: "QCM", pluriel: "QCM", action: "S'entraîner" } : (TYPES[c.type] || TYPES.texte);
   const TYPES = {
     video: { nom: "Vidéo", pluriel: "Vidéos", action: "Regarder" },
     pdf: { nom: "Document", pluriel: "Documents", action: "Ouvrir le document" },
@@ -157,6 +160,59 @@
     if ((e.ctrlKey || e.metaKey) && ["s", "p", "c", "x", "a", "u"].includes(k)) { e.preventDefault(); e.stopPropagation(); }
   }, true);
 
+  /* ---------- QCM chronométré ---------- */
+  let minuterieQcm;
+  function lancerQcm(qcm, corps, marque) {
+    const melanger = t => { const a = t.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    const duree = Math.max(1, Math.round(qcm.duree || qcm.questions.length));
+    const accueil = () => {
+      clearInterval(minuterieQcm);
+      corps.innerHTML = `<div class="qz-accueil"><p><b>${qcm.questions.length} questions</b> · ${duree} minutes</p>
+          <p>Une seule bonne réponse par question. À la fin du temps, vos réponses sont corrigées automatiquement, avec l'explication et la référence de chaque question.</p>
+          <button class="btn btn-gold" type="button" data-qz="go">Commencer le QCM</button></div>
+        <p class="ea-mention">QCM réservé à ${esc(marque)}. Reproduction et diffusion interdites.</p>`;
+    };
+    let ordre = [], fin = 0;
+    const corriger = () => {
+      clearInterval(minuterieQcm);
+      let bons = 0;
+      ordre.forEach((q, i) => {
+        const bloc = $(`[data-qi="${i}"]`, corps), choix = $(`input[name="qz${i}"]:checked`, corps);
+        const rep = choix ? +choix.value : -1, ok = rep === q.bonne;
+        if (ok) bons++;
+        bloc.classList.add(ok ? "qz-ok" : "qz-ko");
+        $$("input", bloc).forEach(x => { x.disabled = true; });
+        $$("label", bloc).forEach((l, k) => { if (k === q.bonne) l.classList.add("qz-bonne"); else if (k === rep) l.classList.add("qz-fausse"); });
+        bloc.insertAdjacentHTML("beforeend", `<div class="qz-expli"><b>${ok ? "Bonne réponse." : rep < 0 ? "Sans réponse." : "Réponse inexacte."}</b> ${esc(q.explication || "")}${q.reference ? `<small>${esc(q.reference)}</small>` : ""}</div>`);
+      });
+      const bas = $(".ea-v-actions", corps); if (bas) bas.remove();
+      const pct = Math.round((100 * bons) / ordre.length);
+      $(".qz-barre", corps).innerHTML = `<span class="qz-score">Score : ${bons} / ${ordre.length} (${pct} %)</span><span>${pct >= 80 ? "Excellent niveau." : pct >= 60 ? "Bon niveau, continuez." : "Revoyez les points corrigés ci-dessous."}</span><button class="btn btn-gold btn-sm" type="button" data-qz="go">Recommencer</button>`;
+      $(".qz-barre", corps).scrollIntoView({ block: "start" });
+    };
+    const demarrer = () => {
+      ordre = melanger(qcm.questions);
+      fin = Date.now() + duree * 60000;
+      corps.innerHTML = `<div class="qz-barre"><span class="qz-temps" aria-live="off"></span><span>${ordre.length} questions</span><button class="btn btn-gold btn-sm" type="button" data-qz="fin">Valider mes réponses</button></div>
+        <ol class="qz-liste">${ordre.map((q, i) => `<li class="qz-q" data-qi="${i}"><p>${esc(q.q)}</p>${q.options.map((o, k) => `<label><input type="radio" name="qz${i}" value="${k}"> <span>${esc(o)}</span></label>`).join("")}</li>`).join("")}</ol>
+        <div class="ea-v-actions"><button class="btn btn-navy" type="button" data-qz="fin">Valider mes réponses</button></div>
+        <p class="ea-mention">QCM réservé à ${esc(marque)}. Reproduction et diffusion interdites.</p>`;
+      const tic = () => {
+        const r = Math.max(0, fin - Date.now()), m = Math.floor(r / 60000), sec = Math.floor((r % 60000) / 1000);
+        const t = $(".qz-temps", corps); if (t) t.textContent = `Temps restant ${m}:${String(sec).padStart(2, "0")}`;
+        if (r <= 0) corriger();
+      };
+      tic(); minuterieQcm = setInterval(tic, 1000);
+    };
+    corps.onclick = e => {
+      const b = e.target.closest("[data-qz]");
+      if (!b) return;
+      if (b.dataset.qz === "go") demarrer();
+      else if (b.dataset.qz === "fin" && $(".qz-temps", corps)) corriger();
+    };
+    accueil();
+  }
+
   /* ---------- Visionneuse des contenus ---------- */
   let visionneuse, retourFocus, minuterieMarque, docOuvert;
   function fermerVisionneuse() {
@@ -164,6 +220,8 @@
     const v = $("video", visionneuse);
     if (v) { v.pause(); v.removeAttribute("src"); v.load(); }
     clearInterval(minuterieMarque);
+    clearInterval(minuterieQcm);
+    const cv = $("#eaVCorps"); if (cv) cv.onclick = null;
     if (docOuvert) { docOuvert.destroy(); docOuvert = null; }
     $("#eaVCorps").innerHTML = "";
     visionneuse.hidden = true;
@@ -191,7 +249,7 @@
   async function ouvrirContenu(c, marque) {
     if (!visionneuse) creerVisionneuse();
     retourFocus = document.activeElement;
-    const t = TYPES[c.type] || TYPES.texte;
+    const t = typeAffiche(c);
     $("#eaVType").className = "ea-type ea-type-" + c.type;
     $("#eaVType").textContent = t.nom;
     $("#eaVTitre").textContent = c.titre;
@@ -204,6 +262,8 @@
     document.body.classList.add("ea-lecture");
     $(".ea-v-fermer", visionneuse).focus();
 
+    const qcm = lireQcm(c);
+    if (qcm) { lancerQcm(qcm, corps, marque); return; }
     if (c.type === "texte") {
       corps.innerHTML = `<div class="ea-fiche">${mettreEnForme(c.texte || "")}</div><p class="ea-mention">Fiche réservée à ${esc(marque)}. Reproduction et diffusion interdites.</p>`;
       return;
@@ -381,8 +441,8 @@
 
   let contenus = [], filtre = "tous";
   // Rubriques de la bibliothèque, d'après la matière saisie (« Ouvrage · … », « Corrigé · … ») ou le type
-  const RUBRIQUES = { ouvrages: "Ouvrages complets", corriges: "Sujets corrigés", videos: "Vidéos", autres: "Autres contenus" };
-  const rubrique = c => /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
+  const RUBRIQUES = { ouvrages: "Ouvrages complets", corriges: "Sujets corrigés", qcm: "QCM", videos: "Vidéos", autres: "Autres contenus" };
+  const rubrique = c => /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   function bibliothequeHTML() {
     if (!contenus.length) return `<div class="ea-biblio"><p class="ea-vide">Les premiers contenus exclusifs arrivent très bientôt. Revenez nous voir.</p></div>`;
@@ -395,11 +455,11 @@
         </div>
         <p class="ea-vide" id="eaAucun" hidden>Aucun contenu ne correspond à cette recherche.</p>
         <div class="ea-grille">${liste.map(c => `<button class="ea-carte" type="button" data-id="${c.id}" data-texte="${esc(sansAccents([c.titre, c.description, c.matiere, (c.concours || []).map(nomConcours).join(" ")].join(" ")))}">
-            <span class="ea-type ea-type-${c.type}">${TYPES[c.type].nom}</span>
+            <span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
             <small>${[c.matiere ? esc(c.matiere) : "", (c.concours || []).map(nomConcours).join(", "), dateFr(c.publie_le)].filter(Boolean).join(" · ")}</small>
-            <span class="ea-carte-go">${TYPES[c.type].action}${icone("i-arrow")}</span>
+            <span class="ea-carte-go">${typeAffiche(c).action}${icone("i-arrow")}</span>
           </button>`).join("")}</div>
       </div>`;
   }
