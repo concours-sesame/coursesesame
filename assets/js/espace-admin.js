@@ -13,7 +13,13 @@
   const ROOT = document.body.dataset.root || "";
   const URL_ESPACE = new URL(ROOT + "espace-abonnes/", location.href).href;
   const MOYENS = ["Orange Money", "MTN MoMo", "Wave", "Moov Money", "Espèces", "Autre"];
-  const DUREES = [[1, "1 mois"], [2, "2 mois"], [3, "3 mois"], [6, "6 mois"], [12, "12 mois"], [0, "Jusqu'à une date…"]];
+  // Durées proposées : j = jours, m = mois. Les prix servent à préremplir le montant (modifiable).
+  const DUREES = [["j1", "1 jour"], ["j7", "1 semaine"], ["j14", "2 semaines"], ["m1", "1 mois"], ["m2", "2 mois"], ["m3", "3 mois"], ["m6", "6 mois"], ["m12", "12 mois"], ["date", "Jusqu'à une date…"]];
+  const PRIX = Object.fromEntries((typeof TARIFS_ABONNEMENT !== "undefined" && TARIFS_ABONNEMENT.length ? TARIFS_ABONNEMENT : [
+    { cle: "j1", prix: "500" }, { cle: "j7", prix: "2 000" }, { cle: "j14", prix: "3 500" }, { cle: "m1", prix: "5 000" },
+    { cle: "m2", prix: "9 000" }, { cle: "m3", prix: "12 500" }, { cle: "m6", prix: "22 500" }, { cle: "m12", prix: "40 000" }
+  ]).filter(t => t.cle).map(t => [t.cle, String(t.prix).replace(/\D/g, "")]));
+  const plusJours = (d, n) => { const x = new Date(d + "T00:00:00Z"); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
   const MATIERES = ["Droit civil", "Droit pénal", "Procédure pénale", "Droit administratif", "Droit commercial OHADA", "Organisation judiciaire", "Droits de l'enfant", "SOG", "Méthodologie", "Culture générale"];
   const EXTENSIONS = { "video/mp4": "mp4", "video/webm": "webm", "application/pdf": "pdf" };
   const TAILLE_MAX = 50 * 1024 * 1024;
@@ -136,11 +142,11 @@
   }
   function formulaireActivation(a) {
     const debut = a.actif ? lendemain(a.fin) : auj();
-    return `<form class="form ad-form" data-form="activer" novalidate>
-        <p class="ad-note full">${a.actif ? `La prolongation commence le ${dateFr(debut)}, à la suite de l'abonnement en cours.` : "L'abonnement commence aujourd'hui."}</p>
-        <div class="field"><label>Durée</label><select name="mois">${DUREES.map(([v, l]) => `<option value="${v}">${l}</option>`).join("")}</select></div>
+    return `<form class="form ad-form" data-form="activer" data-debut="${debut}" data-suite="${a.actif ? 1 : 0}" novalidate>
+        <p class="ad-note full">${a.actif ? `La prolongation commence le ${dateFr(debut)}, à la suite de l'abonnement en cours.` : "L'abonnement commence aujourd'hui. Pour les formules en jours ou en semaines, le jour de l'activation est offert."}</p>
+        <div class="field"><label>Durée</label><select name="duree">${DUREES.map(([v, l]) => `<option value="${v}"${v === "m1" ? " selected" : ""}>${l}${PRIX[v] ? ` · ${fcfa(+PRIX[v])}` : ""}</option>`).join("")}</select></div>
         <div class="field" data-jusqua hidden><label>Jusqu'au (inclus)</label><input type="date" name="jusqua" min="${debut}"></div>
-        <div class="field"><label>Montant reçu (FCFA)</label><input type="number" name="montant" min="0" step="50" inputmode="numeric"></div>
+        <div class="field"><label>Montant reçu (FCFA)</label><input type="number" name="montant" min="0" step="50" inputmode="numeric" value="${PRIX.m1 || ""}"></div>
         <div class="field"><label>Moyen de paiement</label><select name="moyen">${MOYENS.map(m => `<option>${m}</option>`).join("")}</select></div>
         <div class="field full"><label>Note (référence du paiement…)</label><input name="note" maxlength="300"></div>
         <p class="ea-msg full" role="alert"></p>
@@ -299,7 +305,10 @@
   racine.addEventListener("change", e => {
     const f = e.target.form;
     if (!f) return;
-    if (e.target.name === "mois") $("[data-jusqua]", f).hidden = e.target.value !== "0";
+    if (e.target.name === "duree") {
+      $("[data-jusqua]", f).hidden = e.target.value !== "date";
+      if (PRIX[e.target.value]) f.elements.montant.value = PRIX[e.target.value];
+    }
     if (e.target.id === "nType") $$("[data-pour]", f).forEach(x => { x.hidden = !x.dataset.pour.split(" ").includes(e.target.value); });
   });
 
@@ -321,7 +330,12 @@
 
     if (f.dataset.form === "activer") {
       const a = abonnes.find(x => x.user_id === f.closest(".ad-ligne").dataset.uid);
-      const mois = Number(v("mois")), jusqua = v("jusqua"), montant = v("montant");
+      const duree = v("duree"), montant = v("montant");
+      const mois = duree[0] === "m" ? Number(duree.slice(1)) : 0;
+      // Durées en jours : fin calculée côté site. Pour un nouvel accès, le jour même est offert (activation en
+      // cours de journée) : « 1 jour » ouvre jusqu'au lendemain soir. Une prolongation s'enchaîne sans jour offert.
+      const nJours = duree[0] === "j" ? Number(duree.slice(1)) : 0;
+      const jusqua = nJours ? plusJours(f.dataset.debut, f.dataset.suite === "1" ? nJours - 1 : nJours) : v("jusqua");
       if (!mois && !jusqua) { msg.textContent = "Choisissez la date de fin."; return; }
       bouton.disabled = true;
       const { data: fin, error } = await client.rpc("admin_activer", {
