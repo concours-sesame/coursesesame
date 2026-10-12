@@ -94,6 +94,7 @@
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
       const vue = page.getViewport({ scale: (largeur / base.width) * ratio });
       canvas.width = Math.floor(vue.width); canvas.height = Math.floor(vue.height);
+      canvas.style.aspectRatio = `${vue.width} / ${vue.height}`;
       const ctx = canvas.getContext("2d");
       await page.render({ canvasContext: ctx, viewport: vue }).promise;
       // Nom de l'abonné en diagonale et mention en bas de page, incrustés dans l'image
@@ -110,21 +111,39 @@
       ctx.fillText(mention, Math.round(w * 0.02), h - Math.round(h * 0.012));
       page.cleanup();
     };
+    // Ouvrages de plusieurs centaines de pages : chaque page garde sa place, n'est dessinée qu'à l'approche
+    // et libérée une fois loin de l'écran, pour ne pas saturer la mémoire d'un téléphone.
+    const p1 = (await doc.getPage(1)).getViewport({ scale: 1 });
+    const total = doc.numPages;
+    if (total > 3) {
+      const barre = document.createElement("div");
+      barre.className = "ea-pdf-barre";
+      barre.innerHTML = `<span>${total} pages</span><label>Aller à la page <input type="number" min="1" max="${total}" inputmode="numeric" value="1"></label>`;
+      zone.appendChild(barre);
+      const champ = $("input", barre);
+      const aller = () => { const n = Math.min(total, Math.max(1, Math.round(+champ.value || 1))); champ.value = n; const c = zone.querySelector(`canvas[data-page="${n}"]`); if (c) c.scrollIntoView({ block: "start" }); };
+      champ.addEventListener("change", aller);
+      champ.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); aller(); } });
+    }
+    const vider = c => { if (c.dataset.fait) { c.width = 1; c.height = 1; delete c.dataset.fait; } };
     const observateur = "IntersectionObserver" in window ? new IntersectionObserver(entrees => {
       entrees.forEach(e => {
-        if (!e.isIntersecting || e.target.dataset.fait) return;
-        e.target.dataset.fait = "1";
-        observateur.unobserve(e.target);
-        dessiner(+e.target.dataset.page, e.target).catch(() => {});
+        const c = e.target;
+        if (!e.isIntersecting) { vider(c); return; }
+        if (c.dataset.fait) return;
+        c.dataset.fait = "1";
+        dessiner(+c.dataset.page, c).catch(() => { delete c.dataset.fait; });
       });
-    }, { root: zone.closest(".ea-v-boite"), rootMargin: "800px 0px" }) : null;
-    for (let n = 1; n <= doc.numPages; n++) {
+    }, { root: zone.closest(".ea-v-boite"), rootMargin: "1500px 0px" }) : null;
+    for (let n = 1; n <= total; n++) {
       const canvas = document.createElement("canvas");
       canvas.className = "ea-page";
       canvas.dataset.page = n;
-      canvas.setAttribute("aria-label", `Page ${n} sur ${doc.numPages}`);
+      canvas.width = 1; canvas.height = 1;
+      canvas.style.aspectRatio = `${p1.width} / ${p1.height}`;
+      canvas.setAttribute("aria-label", `Page ${n} sur ${total}`);
       zone.appendChild(canvas);
-      if (observateur) observateur.observe(canvas); else await dessiner(n, canvas);
+      if (observateur) observateur.observe(canvas); else if (n <= 30) await dessiner(n, canvas);
     }
     return doc;
   }
