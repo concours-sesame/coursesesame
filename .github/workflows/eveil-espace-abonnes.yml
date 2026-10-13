@@ -1,0 +1,29 @@
+# Garde l'espace abonnés éveillé.
+# Avec l'offre gratuite, Supabase met le projet en pause après 7 jours sans activité : l'espace abonnés
+# ne fonctionne plus jusqu'à ce qu'on le relance depuis le tableau de bord. Cette tâche interroge la base
+# chaque jour (aperçu public des titres, sans aucune donnée personnelle) pour qu'elle reste active.
+# L'adresse et la clé publique sont lues dans assets/js/espace-config.js.
+name: Éveil de l'espace abonnés
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  eveil:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Interroger la base
+        run: |
+          url=$(sed -n 's/^ *url: "\(.*\)",\?$/\1/p' assets/js/espace-config.js)
+          cle=$(sed -n 's/^ *cle: "\(.*\)",\?$/\1/p' assets/js/espace-config.js)
+          test -n "$url" && test -n "$cle"
+          curl -fsS --retry 3 --retry-delay 20 -X POST "$url/rest/v1/rpc/apercu_contenus" \
+            -H "apikey: $cle" -H "Content-Type: application/json" -d '{}' -o /dev/null
+          echo "Base jointe : l'espace abonnés reste actif."
