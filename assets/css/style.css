@@ -690,6 +690,10 @@ a.aside-title:hover{color:var(--gold-ink)}
 .legal h2:first-child{margin-top:0}
 .legal p,.legal li{margin:.6rem 0;color:#3f4a5e}
 .legal ul{margin-left:1.2rem}
+.legal .table-wrap{overflow-x:auto;margin:1rem 0}
+.tarifs{border-collapse:collapse;width:100%;font-size:.98rem}
+.tarifs th,.tarifs td{text-align:left;padding:.55rem .8rem;border-bottom:1px solid var(--line)}
+.tarifs th{color:var(--navy);font-weight:700;background:var(--cream)}
 .legal a{color:var(--navy);font-weight:600}
 .legal .legal-date{margin-top:2.4rem;font-size:.95rem;color:var(--muted)}
 

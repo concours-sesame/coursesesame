@@ -62,7 +62,7 @@ function rebase(html, prefix) {
   const fix = h => {
     if (h === "#top") return prefix || "./";
     if (h.startsWith("#")) return prefix + h;
-    if (/^(methodes\/|concours\/|ouvrages\/|sujets\/|qcm\/|assets\/|mentions-legales\/|espace-abonnes\/)/.test(h)) return prefix + h;
+    if (/^(methodes\/|concours\/|ouvrages\/|sujets\/|qcm\/|assets\/|mentions-legales\/|conditions-de-vente\/|espace-abonnes\/)/.test(h)) return prefix + h;
     return h;
   };
   return html.replace(/(<a\b[^>]*?\shref=")([^"]*)(")/g, (m, a, h, b) => a + fix(h) + b);
@@ -890,7 +890,8 @@ ${contactCTA(prefix)}`;
   // Matières des sujets corrigés rattachées à chaque QCM
   const MATIERES_SUJETS = {
     "droit-civil": ["Droit civil", "Droit de la famille"], "droit-penal": ["Droit pénal", "Procédure pénale"],
-    "droit-administratif": ["Droit administratif"], "droits-de-l-enfant": ["Droits de l'enfant"], "organisation-judiciaire": ["Organisation judiciaire"]
+    "droit-administratif": ["Droit administratif"], "droits-de-l-enfant": ["Droits de l'enfant"], "organisation-judiciaire": ["Organisation judiciaire"],
+    "procedure-penale": ["Procédure pénale"], "droit-ohada": ["Droit commercial OHADA"]
   };
   for (const t of THEMES) {
     t.questions.forEach((q, i) => { if (!(q.bonne >= 0 && q.bonne < q.options.length)) throw new Error(`QCM ${t.slug}, question ${i + 1} : réponse "bonne" invalide`); });
@@ -975,7 +976,7 @@ ${contactCTA(prefix)}`;
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["QCM", ""]],
     h1: `Les QCM gratuits`,
-    lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : droit civil, droit pénal, droit administratif, droits de l'enfant, organisation judiciaire et méthode des épreuves. Chaque réponse est expliquée.`,
+    lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : droit civil, droit pénal, procédure pénale, droit administratif, droit OHADA, droits de l'enfant, organisation judiciaire et méthode des épreuves. Chaque réponse est expliquée.`,
     ctas: `<a href="#liste" class="btn btn-gold">Choisir un QCM${arrow}</a><a href="${prefix}sujets/" class="btn btn-ghost">Sujets corrigés</a>`,
     facts: [`<b>${THEMES.length + 1}</b> QCM`, `<b>${nb}</b> questions corrigées`]
   })}
@@ -990,7 +991,7 @@ ${contactCTA(prefix)}`;
   write("qcm/index.html", page({
     prefix, url, body,
     title: ["QCM gratuits de droit et de méthode pour les concours ivoiriens", "QCM gratuits de droit et de méthode"],
-    description: `${nb} questions corrigées gratuites : droit civil, droit pénal, droit administratif, droits de l'enfant, organisation judiciaire et méthode des épreuves, pour les concours INFJ et ENA.`,
+    description: `${nb} questions corrigées gratuites : droit civil, droit pénal, procédure pénale, droit administratif, droit OHADA, droits de l'enfant, organisation judiciaire et méthode.`,
     ld: [breadcrumb([["Accueil", SITE], ["QCM", url]])]
   }));
   urls.push(url);
@@ -1101,7 +1102,7 @@ ${contactCTA(prefix)}`;
     <p>Les textes, corrigés, fiches, QCM, vidéos, extraits, logos et visuels de ce site appartiennent aux Cours Sésame et SAJ. Leur reproduction, leur diffusion ou leur revente, en tout ou en partie, sans notre autorisation écrite préalable est interdite. Partager le lien d'une page reste bien sûr libre.</p>
 
     <h2>Commandes</h2>
-    <p>Les commandes se passent sur WhatsApp, depuis le panier ou depuis la page d'un ouvrage. Les prix sont affichés en francs CFA. Les modalités de paiement et de livraison sont précisées dans les <a href="${prefix}#faq">questions fréquentes</a>.</p>
+    <p>Les commandes se passent sur WhatsApp, depuis le panier ou depuis la page d'un ouvrage. Les prix sont affichés en francs CFA. Le prix, le paiement, la livraison, les incidents de livraison et les abonnements sont régis par nos <a href="${prefix}conditions-de-vente/">conditions de vente et d'abonnement</a>.</p>
 
     <h2>Données personnelles</h2>
     <p>En dehors de l'espace abonnés, présenté plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
@@ -1142,6 +1143,74 @@ ${contactCTA(prefix)}`;
     title: "Mentions légales et données personnelles",
     description: "Éditeur, hébergement, propriété intellectuelle et données personnelles du site des Cours Sésame et SAJ, éditeur indépendant d'ouvrages pour les concours.",
     ld: [breadcrumb([["Accueil", SITE], ["Mentions légales", url]])]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Conditions de vente et d'abonnement ---------- */
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "conditions-de-vente/";
+  const tarifs = ctx.D.TARIFS_ABONNEMENT || [];
+  const longues = ["m1", "m2", "m3", "m6", "m12"];
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Conditions de vente", ""]],
+    h1: `Conditions de vente et d'abonnement`,
+    lead: "Comment se passent une commande d'ouvrages et un abonnement à l'espace abonnés, et ce que nous faisons si quelque chose ne va pas.",
+    ctas: `<a href="${WA_URL}" target="_blank" rel="noopener" class="btn btn-gold">${waIcon}Nous écrire</a><a href="${prefix}#faq" class="btn btn-ghost">Questions fréquentes</a>`
+  })}
+
+<section class="section legal">
+  <div class="wrap legal-wrap">
+    <p>Les présentes conditions s'appliquent aux commandes d'ouvrages passées auprès des Cours Sésame et SAJ et aux abonnements à l'espace abonnés du site. Passer commande ou souscrire un abonnement vaut acceptation de ces conditions.</p>
+
+    <h2 id="prix">Prix</h2>
+    <p>Les prix sont indiqués en francs CFA sur le site. La remise de 10 % s'applique automatiquement dès 3 ouvrages dans le panier. Le prix retenu est celui affiché au moment de la commande, et le total vous est confirmé avant tout paiement.</p>
+
+    <h2 id="commande">Commande d'ouvrages</h2>
+    <p>Vous commandez sur WhatsApp, depuis le panier ou depuis la page d'un ouvrage. Nous vous répondons pour confirmer la disponibilité, le total et les modalités de livraison. La commande est ferme une fois cette confirmation donnée et le paiement convenu effectué.</p>
+
+    <h2 id="paiement">Paiement</h2>
+    <p>Le paiement se fait par Orange Money, MTN MoMo, Wave ou Moov Money. À Abidjan, il peut aussi se faire en espèces à la livraison. Pour les autres villes, le paiement se fait avant l'expédition.</p>
+
+    <h2 id="livraison">Livraison</h2>
+    <p>Nous livrons dans toute la Côte d'Ivoire : à Abidjan sous 24 à 48 heures, dans les autres villes sous 3 à 5 jours ouvrables par transporteur. Ces délais sont indicatifs et courent à partir de la confirmation de la commande. Les ouvrages proposés en version numérique vous sont remis selon les modalités indiquées lors de la confirmation.</p>
+
+    <h2 id="incident">Colis non reçu, abîmé ou erroné</h2>
+    <p>Si votre colis n'arrive pas dans les délais, s'il arrive abîmé ou s'il ne contient pas l'ouvrage commandé, écrivez-nous sur WhatsApp dès que possible, avec une photo si l'ouvrage est abîmé. Nous recherchons le colis auprès du transporteur. S'il est perdu, abîmé ou erroné, nous vous envoyons l'ouvrage commandé sans frais supplémentaires ou, si ce n'est pas possible, nous vous remboursons la somme payée pour cet ouvrage.</p>
+
+    <h2 id="abonnement">Abonnement à l'espace abonnés</h2>
+    <p>Vous créez votre compte sur la page <a href="${prefix}espace-abonnes/">Espace abonnés</a>, vous réglez la formule choisie par Mobile Money, puis vous nous envoyez la référence du paiement sur WhatsApp. Nous activons alors votre accès. Les formules en vigueur sont les suivantes :</p>
+    ${tarifs.length ? `<div class="table-wrap"><table class="tarifs"><thead><tr><th scope="col">Formule</th><th scope="col">Prix</th><th scope="col">Ouvrages complets</th></tr></thead><tbody>${tarifs.map(t => `<tr><td>${t.duree}</td><td>${t.prix} FCFA</td><td>${longues.includes(t.cle) ? "compris" : "non compris"}</td></tr>`).join("")}</tbody></table></div>` : ""}
+    <p>La durée de la formule court à partir de l'activation, et non du paiement : un accès activé plus tard ne vous fait perdre aucun jour. Une prolongation s'ajoute à la fin de l'abonnement en cours. Les formules d'un jour, d'une semaine et de deux semaines donnent accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus.</p>
+
+    <h2 id="non-active">Abonnement payé mais pas encore activé</h2>
+    <p>L'activation se fait à la main, dès que nous avons reçu votre paiement et sa référence. Si votre accès n'est pas encore ouvert, relancez-nous sur WhatsApp avec la référence du paiement. Si l'abonnement ne peut pas être activé, par exemple parce que le paiement n'a pas abouti chez l'opérateur, la somme reçue vous est remboursée.</p>
+
+    <h2 id="usage">Usage de l'espace abonnés</h2>
+    <p>Un compte est personnel et s'utilise sur un seul appareil à la fois : une connexion sur un autre appareil déconnecte le précédent. Les contenus se lisent en ligne, portent votre nom et votre numéro de téléphone, et sont réservés à votre usage personnel. Leur copie, leur diffusion, leur partage ou leur revente sont interdits. En cas de partage du compte ou de diffusion des contenus, nous pouvons couper l'accès, sans remboursement.</p>
+    <p>Si l'espace abonnés devient indisponible plusieurs jours de suite de notre fait, nous prolongeons votre abonnement d'autant.</p>
+
+    <h2 id="remboursement">Remboursement d'un abonnement</h2>
+    <p>Les contenus sont accessibles dès l'activation : un abonnement activé n'est donc pas remboursable, même s'il n'a pas été utilisé jusqu'à son terme.</p>
+
+    <h2 id="contenus">Nature des contenus</h2>
+    <p>Nos ouvrages, fiches, corrigés, QCM et vidéos sont des outils de préparation aux concours. Ils ne sont pas des publications officielles de l'INFJ, de l'ENA ni d'aucun organisateur de concours, et ne constituent pas une consultation juridique. Les corrigés proposés sont les nôtres et non des corrigés officiels.</p>
+
+    <h2 id="litiges">Réclamations et droit applicable</h2>
+    <p>Pour toute réclamation, écrivez-nous sur WhatsApp : nous cherchons d'abord une solution à l'amiable. Les présentes conditions sont soumises au droit ivoirien. Les données personnelles sont traitées comme indiqué dans les <a href="${prefix}mentions-legales/">mentions légales</a>.</p>
+
+    <p class="legal-date">Mise à jour en octobre 2026.</p>
+  </div>
+</section>
+
+${contactCTA(prefix)}`;
+  write("conditions-de-vente/index.html", page({
+    prefix, url, body,
+    title: "Conditions de vente et d'abonnement",
+    description: "Prix, commande, paiement, livraison, colis non reçu, abonnement à l'espace abonnés, activation et remboursement : nos conditions de vente.",
+    ld: [breadcrumb([["Accueil", SITE], ["Conditions de vente", url]])]
   }));
   urls.push(url);
 }
