@@ -69,7 +69,9 @@ Le tableau de bord signale quelques points qui sont voulus :
 - `journal_inscriptions` sans règle d'accès : seule la fonction `inscription` (clé secrète) s'en sert.
 - `connexions` sans règle d'accès : seules les fonctions `prendre_appareil`, `verifier_appareil` et
   `admin_appareils` s'en servent.
-- `apercu_contenus` appelable sans connexion : elle ne renvoie que les titres des contenus publiés.
+- `apercu_contenus` appelable sans connexion : elle ne renvoie que les titres, descriptions, types, matières et
+  concours des contenus publiés (jamais un fichier, un texte ou un lien), au plus 1 000. La page de l'espace
+  abonnés s'en sert pour la liste « Au programme », rangée par rubrique.
 - Fonctions appelables par les comptes connectés : celles d'administration vérifient `est_admin()`,
   les autres ne renvoient que la situation du compte qui les appelle.
 - Protection contre les mots de passe divulgués : option de l'offre Pro.

@@ -3,7 +3,7 @@
 (function () {
   "use strict";
 
-  const { CONCOURS, parsePrice, fmt, svg, slugify, plural, setRoot, ouvrageURL, coverParts, coverHTML, bookHTML, groupHTML, packTotals } = window.SESAME;
+  const { CONCOURS, ABO_MENTION, parsePrice, fmt, svg, slugify, plural, setRoot, ouvrageURL, coverParts, coverHTML, bookHTML, groupHTML, packTotals } = window.SESAME;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const on = (sel, ev, fn) => { const el = typeof sel === "string" ? $(sel) : sel; if (el) el.addEventListener(ev, fn); };
@@ -163,7 +163,8 @@
     $("#mTitle").textContent = o.titre;
     $("#mDesc").textContent = o.desc;
     $("#mSpecs").innerHTML = (o.phase ? `<span class="spec">${o.phase}</span>` : "") + `<span class="spec">Niveaux ${o.niveau}</span>` +
-      (o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : `<span class="spec">Livraison partout en CI</span>`) + `<span class="spec">Paiement Mobile Money</span>`;
+      (o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : `<span class="spec">Livraison partout en CI</span>`) + `<span class="spec">Paiement Mobile Money</span>` +
+      (o.abonnement ? `<span class="spec spec-abo">${ABO_MENTION}</span>` : "");
     $("#mPrice").innerHTML = `${o.prix}<small>FCFA</small>`;
     const ex = $("#mExtrait");
     if (ex) {
@@ -172,6 +173,8 @@
     }
     const pg = $("#mPage");
     if (pg) pg.href = ouvrageURL(o);
+    const abo = $("#mAbo");
+    if (abo) abo.hidden = !o.abonnement;
     syncModalBtn();
     $(".quick").open = false;
     setModal(true);

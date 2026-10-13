@@ -36,6 +36,8 @@
   // Adresse de la page d'un ouvrage. L'édition n'y figure pas : l'adresse reste la même d'une année à l'autre.
   const ouvrageSlug = o => slugify(o.titre.replace(EDITION, ""));
   const ouvrageURL = o => `${root}ouvrages/${ouvrageSlug(o)}/`;
+  // Mention des ouvrages dont la version intégrale se lit dans l'espace abonnés ("abonnement":true dans data.js)
+  const ABO_MENTION = "Inclus dans l'abonnement d'un mois";
 
   function coverParts(titre) {
     const t = titre.replace(EDITION, "").replace(/ aux? Concours (?:Administratifs|de la Magistrature)$/i, "");
@@ -86,7 +88,7 @@
       <div class="book-meta">
         <span class="book-concours">${(o.concoursListe || o.concours).replace(/ · /g, ", ")}</span>
         <h3 class="book-title"><a href="${ouvrageURL(o)}">${o.titre}</a></h3>
-        <span class="book-niveau">${o.phase ? o.phase + ", niveaux " : "Niveaux "}${o.niveau}</span>${o.extrait ? `<span class="book-extrait">Extrait gratuit à lire</span>` : ""}${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}
+        <span class="book-niveau">${o.phase ? o.phase + ", niveaux " : "Niveaux "}${o.niveau}</span>${o.extrait ? `<span class="book-extrait">Extrait gratuit à lire</span>` : ""}${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}${o.abonnement ? `<a class="book-abo" href="${root}espace-abonnes/#inclus">${ABO_MENTION}</a>` : ""}
         <div class="book-buy">
           <span class="price">${o.prix}<small>FCFA</small></span>
           <button class="add-btn${inCart ? " in" : ""}" data-add="${idx}">${inCart ? svg("i-check") + "Ajouté" : svg("i-plus") + "Panier"}</button>
@@ -131,5 +133,5 @@
     return html;
   }
 
-  scope.SESAME = { CONCOURS, EPREUVES_PAR_CONCOURS, EDITION, parsePrice, fmt, svg, attr, slugify, plural, setRoot, ouvrageSlug, ouvrageURL, coverParts, coverHTML, bookHTML, packTotals, packHTML, groupHTML };
+  scope.SESAME = { CONCOURS, EPREUVES_PAR_CONCOURS, EDITION, ABO_MENTION, parsePrice, fmt, svg, attr, slugify, plural, setRoot, ouvrageSlug, ouvrageURL, coverParts, coverHTML, bookHTML, packTotals, packHTML, groupHTML };
 })(typeof window !== "undefined" ? window : globalThis);

@@ -317,7 +317,7 @@
     $(".ea-v-fermer", visionneuse).focus();
 
     if (c.verrou) {
-      corps.innerHTML = `<div class="ea-verrou">${icone("i-lock")}<p><b>Les ouvrages complets sont réservés aux formules d'un mois et plus.</b> Votre formule actuelle donne accès à tous les autres contenus : sujets corrigés, QCM, vidéos et fiches.</p>
+      corps.innerHTML = `<div class="ea-verrou">${icone("i-lock")}<p><b>Les ouvrages complets sont réservés aux formules d'un mois et plus.</b> Votre formule actuelle donne accès à tous les autres contenus : sujets corrigés, fiches de révision et QCM.</p>
           <a class="btn btn-wa" href="${lienWa(WA_NUM, c.verrou)}" target="_blank" rel="noopener">${icone("i-wa")}Passer à une formule d'un mois</a></div>`;
       return;
     }
@@ -480,19 +480,38 @@
     };
   }
 
+  // Aperçu public : tous les titres publiés, rangés par rubrique comme dans la bibliothèque.
+  // Les volumes d'un même ouvrage (« …, volume 2 : … ») n'y font qu'une ligne.
+  const ORDRE_APERCU = ["ouvrages", "corriges", "fiches", "qcm", "videos", "autres"];
+  const COMPTES = { ouvrages: ["ouvrage complet", "ouvrages complets"], corriges: ["sujet corrigé", "sujets corrigés"], fiches: ["recueil de fiches", "recueils de fiches"], qcm: ["QCM", "QCM"], videos: ["vidéo", "vidéos"], autres: ["autre contenu", "autres contenus"] };
+  const RE_VOLUME = /,\s*volume\s+\d+\s*:.*$/i;
   async function apercuHTML() {
     const { data, error } = await client.rpc("apercu_contenus");
     if (error) return "";
     if (!data.length) return `<div class="ea-apercu"><h3>Au programme</h3><p class="ea-vide">Les premiers contenus exclusifs sont en préparation. Créez votre compte dès maintenant pour y accéder dès leur publication.</p></div>`;
-    const parType = Object.keys(TYPES).map(t => [t, data.filter(c => c.type === t).length]).filter(x => x[1]);
+    // L'aperçu ne transmet pas le texte des contenus : un QCM s'y reconnaît à sa matière
+    const rubriqueApercu = c => /^QCM/i.test(c.matiere || "") ? "qcm" : rubrique(c);
+    const lignes = r => {
+      const parTitre = new Map();
+      for (const c of data.filter(x => rubriqueApercu(x) === r)) {
+        const titre = r === "ouvrages" ? c.titre.replace(RE_VOLUME, "") : c.titre;
+        if (!parTitre.has(titre)) parTitre.set(titre, { titre, items: [], concours: [] });
+        const l = parTitre.get(titre);
+        l.items.push(c);
+        (c.concours || []).forEach(x => { if (!l.concours.includes(x)) l.concours.push(x); });
+      }
+      return [...parTitre.values()];
+    };
+    const groupes = ORDRE_APERCU.map(r => [r, lignes(r)]).filter(([, l]) => l.length);
+    const cadenas = `<span class="ea-cadenas" aria-label="Réservé aux abonnés"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>`;
+    const detail = l => [l.items.length > 1 ? `${l.items.length} volumes` : (l.items[0].matiere || "").replace(/^[^·]*·\s*/, ""), l.concours.map(nomConcours).join(", ")].filter(Boolean).map(esc).join(" · ");
     return `<div class="ea-apercu">
         <h3>Au programme</h3>
-        <p class="ea-compte-types">${parType.map(([t, n]) => `<span class="ea-type ea-type-${t}">${n} ${n > 1 ? TYPES[t].pluriel.toLowerCase() : TYPES[t].nom.toLowerCase()}</span>`).join("")}</p>
-        <ul class="ea-liste">${data.slice(0, 12).map(c => `<li class="ea-item">
-          <span class="ea-cadenas" aria-label="Réservé aux abonnés"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
-          <span><b>${esc(c.titre)}</b><small>${TYPES[c.type].nom}${c.matiere ? " · " + esc(c.matiere) : ""}${(c.concours || []).length ? " · " + c.concours.map(nomConcours).join(", ") : ""}</small></span>
-        </li>`).join("")}</ul>
-        ${data.length > 12 ? `<p class="ea-vide">Et ${data.length - 12} autre${data.length - 12 > 1 ? "s" : ""} contenu${data.length - 12 > 1 ? "s" : ""}.</p>` : ""}
+        <p class="ea-apercu-intro">Tous les contenus de l'espace, à lire dès l'ouverture de votre accès. Touchez une rubrique pour voir les titres.</p>
+        ${groupes.map(([r, l]) => `<details class="ea-groupe">
+          <summary><span class="ea-groupe-nom">${RUBRIQUES[r]}</span><span class="ea-groupe-n">${l.length}<span class="sr-only"> ${COMPTES[r][l.length > 1 ? 1 : 0]}</span></span>${r === "ouvrages" ? `<span class="ea-groupe-note">Formules d'un mois et plus</span>` : ""}</summary>
+          <ul class="ea-liste">${l.map(x => `<li class="ea-item">${cadenas}<span><b>${esc(x.titre)}</b><small>${detail(x)}</small></span></li>`).join("")}</ul>
+        </details>`).join("")}
       </div>`;
   }
 
@@ -552,7 +571,7 @@
         <span class="eyebrow">${abo.deja_abonne ? "Abonnement terminé" : "Activation en attente"}</span>
         <h3>${abo.deja_abonne ? `Votre abonnement a pris fin le ${dateFr(abo.fin)}.` : `Bienvenue, ${esc(profil.prenom)}. Votre compte est prêt.`}</h3>
         ${tarifs.length ? `<p class="ea-tarifs">${tarifs.map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
-        <p class="ea-aide">Les ouvrages complets sont compris à partir de la formule d'un mois. Les formules plus courtes donnent accès à tout le reste : sujets corrigés, QCM, vidéos et fiches.</p>` : ""}
+        <p class="ea-aide">Les ouvrages complets sont compris à partir de la formule d'un mois. Les formules plus courtes donnent accès à tout le reste : sujets corrigés, fiches de révision et QCM.</p>` : ""}
         <ol class="ea-etapes">
           <li>Réglez ${abo.deja_abonne ? "votre renouvellement" : "votre abonnement"} par Mobile Money : Orange Money, MTN MoMo, Wave ou Moov Money.${tarifs.length ? "" : " Nous vous indiquons le tarif sur WhatsApp."}</li>
           <li>Envoyez-nous le message ci-dessous sur WhatsApp, avec la référence de votre paiement.</li>
