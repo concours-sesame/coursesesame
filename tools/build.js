@@ -1053,7 +1053,7 @@ ${contactCTA(prefix)}`;
   <div class="wrap">
     <nav class="crumbs" aria-label="Fil d'Ariane"><a href="${prefix}">Accueil</a><span aria-hidden="true">›</span><a href="${prefix}espace-abonnes/">Espace abonnés</a><span aria-hidden="true">›</span><span aria-current="page">Administration</span></nav>
     <h1 class="sub-h1">Administration de <em>l'espace abonnés</em></h1>
-    <p class="lead">Activez les abonnements après paiement, relancez les abonnés sur WhatsApp et publiez les contenus exclusifs.</p>
+    <p class="lead">Suivez les abonnements en direct, activez-les après paiement, suspendez-les ou supprimez-les, relancez les abonnés sur WhatsApp et publiez les contenus exclusifs.</p>
   </div>
 </section>
 
@@ -1120,8 +1120,8 @@ ${contactCTA(prefix)}`;
     <p>Pour utiliser l'espace abonnés, vous créez un compte avec votre prénom, votre nom, votre numéro de téléphone (WhatsApp), votre adresse e-mail et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi les dates et les paiements de votre abonnement.</p>
     <p>Ces informations servent uniquement à gérer votre compte et votre abonnement, et à vous contacter à son sujet sur WhatsApp. Elles ne sont ni vendues ni cédées à quiconque.</p>
     <p>Elles sont conservées par notre prestataire Supabase, sur des serveurs situés en Europe. Votre mot de passe est enregistré sous une forme chiffrée que personne, pas même nous, ne peut lire.</p>
-    <p>Les vidéos et documents de l'espace affichent votre nom et votre numéro de téléphone, pour décourager leur diffusion. Ils sont réservés à votre usage personnel.</p>
-    <p>Un compte ne s'utilise que sur un appareil à la fois. Pour l'assurer, nous enregistrons la date de chaque connexion et un identifiant technique de la session ouverte, sans aucune information sur l'appareil lui-même. Ces données servent aussi à repérer les comptes partagés.</p>
+    <p>Les vidéos, documents, fiches et QCM de l'espace affichent votre nom, votre numéro de téléphone et, sur les documents, les fiches et les QCM, votre adresse e-mail avec la date et l'heure de lecture, pour décourager leur diffusion. Ils sont réservés à votre usage personnel.</p>
+    <p>Un compte ne s'utilise que sur un appareil à la fois. Pour l'assurer, nous enregistrons la date de chaque connexion, l'heure de votre dernier passage sur l'espace abonnés et un identifiant technique de la session ouverte, sans aucune information sur l'appareil lui-même. Ces données servent aussi à repérer les comptes partagés.</p>
     <p>Vous pouvez demander à tout moment la correction de vos informations ou la suppression de votre compte en nous écrivant sur WhatsApp. La suppression d'un compte efface les informations qui s'y rattachent.</p>
 
     <h2 id="credits">Crédits</h2>
@@ -1189,7 +1189,8 @@ ${contactCTA(prefix)}`;
     <p>L'activation se fait à la main, dès que nous avons reçu votre paiement et sa référence. Si votre accès n'est pas encore ouvert, relancez-nous sur WhatsApp avec la référence du paiement. Si l'abonnement ne peut pas être activé, par exemple parce que le paiement n'a pas abouti chez l'opérateur, la somme reçue vous est remboursée.</p>
 
     <h2 id="usage">Usage de l'espace abonnés</h2>
-    <p>Un compte est personnel et s'utilise sur un seul appareil à la fois : une connexion sur un autre appareil déconnecte le précédent. Les contenus se lisent en ligne, portent votre nom et votre numéro de téléphone, et sont réservés à votre usage personnel. Leur copie, leur diffusion, leur partage ou leur revente sont interdits. En cas de partage du compte ou de diffusion des contenus, nous pouvons couper l'accès, sans remboursement.</p>
+    <p>Un compte est personnel et s'utilise sur un seul appareil à la fois : une connexion sur un autre appareil déconnecte le précédent. Les contenus se lisent en ligne, portent votre nom, votre numéro de téléphone et votre adresse e-mail, et sont réservés à votre usage personnel. Leur copie, leur capture, leur diffusion, leur partage ou leur revente sont interdits. En cas de partage du compte ou de diffusion des contenus, nous pouvons suspendre l'abonnement le temps de vérifier, puis couper l'accès, sans remboursement.</p>
+    <p>Un abonnement suspendu garde ses jours restants : ils reprennent le jour de la réactivation.</p>
     <p>Si l'espace abonnés devient indisponible plusieurs jours de suite de notre fait, nous prolongeons votre abonnement d'autant.</p>
 
     <h2 id="remboursement">Remboursement d'un abonnement</h2>

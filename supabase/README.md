@@ -19,12 +19,23 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   d'accès et fonctions d'administration en dépendent ; `admin-mot-de-passe` fait la même vérification.
   Téléphone perdu : supprimer le facteur dans le tableau de bord Supabase (Authentication, Users, le compte,
   section MFA factors), puis réactiver la validation depuis la page d'administration.
+- Suspension, suppression, présence et suivi en direct (`20261013180000_suspension_presence_direct.sql`) :
+  `admin_suspendre` coupe l'accès sans toucher aux périodes (table `suspensions`) ; `admin_reactiver` décale les
+  périodes en cours ou à venir du nombre de jours suspendus. `admin_supprimer_abonnement` marque une période (ou la
+  période en cours et ses prolongations) comme supprimée (`supprime_le`, `supprime_par`) : elle est ignorée partout,
+  sans être effacée. `verifier_appareil` note l'heure du dernier passage (`connexions.vu_le`), lue par
+  `admin_activite`. Les tables `abonnements`, `suspensions` et `profils` sont diffusées par Supabase Realtime
+  (publication `supabase_realtime`), sous les règles d'accès : seul l'administrateur reçoit les changements de tous.
 - Seuls les comptes confirmés (créés par la fonction `inscription`) reçoivent un profil.
 - La clé publique du projet (dans `assets/js/espace-config.js`) n'est pas secrète. La clé secrète
   (`service_role` ou `sb_secret_…`) ne doit **jamais** apparaître dans le site.
 - Les vidéos s'ouvrent par des liens temporaires (4 heures), avec le nom et le téléphone de l'abonné en
-  surimpression. Les PDF se lisent dans la page seulement (pages dessinées en image avec ce nom incrusté) :
-  pas de bouton de téléchargement, ni de copie, de sélection, de clic droit ou d'impression ; lien de 60 secondes.
+  surimpression. Les PDF se lisent dans la page seulement (pages dessinées en image avec ce nom incrusté, et une
+  signature répétée sur toute la page : nom, téléphone, e-mail, date et heure de lecture) : pas de bouton de
+  téléchargement, ni de copie, de sélection, de clic droit ou d'impression ; lien de 60 secondes. Les fiches et QCM
+  portent la même signature répétée. Le contenu est voilé dès que la page perd le premier plan (outil de capture,
+  autre application) ; la touche Impr. écran vide le presse-papiers. Aucune de ces mesures n'empêche une capture
+  faite par le téléphone ou l'ordinateur : elles la découragent et la rendent traçable.
 - Un compte ne s'utilise que sur un appareil à la fois (`20261012225803_un_appareil_a_la_fois.sql`) : après une
   connexion, le site enregistre la session (`prendre_appareil`) dans la table `connexions`, et seule la dernière
   session enregistrée donne accès aux contenus et aux fichiers (`abonnement_actif`). L'ancien appareil est
