@@ -514,9 +514,9 @@
   }
 
   let contenus = [], filtre = "tous";
-  // Rubriques de la bibliothèque, d'après la matière saisie (« Ouvrage · … », « Corrigé · … ») ou le type
-  const RUBRIQUES = { ouvrages: "Ouvrages complets", corriges: "Sujets corrigés", qcm: "QCM", videos: "Vidéos", autres: "Autres contenus" };
-  const rubrique = c => /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
+  // Rubriques de la bibliothèque, d'après la matière saisie (« Ouvrage · … », « Fiches · … », « Corrigé · … ») ou le type
+  const RUBRIQUES = { ouvrages: "Ouvrages complets", fiches: "Fiches de révision", corriges: "Sujets corrigés", qcm: "QCM", videos: "Vidéos", autres: "Autres contenus" };
+  const rubrique = c => /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Fiches/i.test(c.matiere || "") ? "fiches" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   // Ouvrage complet affiché avec un cadenas : formule de moins d'un mois
   const verrouille = c => !etat.ouvrages && rubrique(c) === "ouvrages";
