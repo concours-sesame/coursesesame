@@ -539,6 +539,10 @@ body.has-cart-bar .wa-float{bottom:84px}
 
 /* ---------- QCM ---------- */
 .qcm-wrap{max-width:780px}
+.qcm-sources{max-width:780px;margin-top:1.4rem;font-size:.95rem;color:var(--muted)}
+.qcm-sources h3{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.4rem}
+.qcm-sources ul{list-style:none;display:grid;gap:.3rem}
+.qcm-sources a{color:var(--navy);text-decoration-color:var(--gold);text-underline-offset:3px;overflow-wrap:anywhere}
 .qcm-card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:clamp(20px,3vw,32px)}
 .qcm-tag{display:inline-block;font-size:.92rem;font-weight:600;color:var(--gold-ink);margin-bottom:.4rem}
 .qcm-opts{display:grid;gap:8px}

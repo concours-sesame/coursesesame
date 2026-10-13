@@ -907,7 +907,7 @@ ${contactCTA(prefix)}`;
   const MATIERES_SUJETS = {
     "droit-civil": ["Droit civil", "Droit de la famille"], "droit-penal": ["Droit pénal", "Procédure pénale"],
     "droit-administratif": ["Droit administratif"], "droits-de-l-enfant": ["Droits de l'enfant"], "organisation-judiciaire": ["Organisation judiciaire"],
-    "procedure-penale": ["Procédure pénale"], "droit-ohada": ["Droit commercial OHADA"]
+    "procedure-penale": ["Procédure pénale"], "droit-ohada": ["Droit commercial OHADA"], "culture-generale": ["Culture générale"]
   };
   for (const t of THEMES) {
     t.questions.forEach((q, i) => { if (!(q.bonne >= 0 && q.bonne < q.options.length)) throw new Error(`QCM ${t.slug}, question ${i + 1} : réponse "bonne" invalide`); });
@@ -939,9 +939,10 @@ ${contactCTA(prefix)}`;
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">QCM · ${plural(t.questions.length, "question")}</span><h2 class="h-section">Testez vos <em>connaissances</em></h2></div>
-      <p class="lead">Choisissez une réponse, lisez l'explication, puis passez à la question suivante. Les réponses s'appuient sur le contenu de nos ouvrages, textes à l'appui.</p>
+      <p class="lead">Choisissez une réponse, lisez l'explication, puis passez à la question suivante. ${t.sources ? "Chaque réponse a été vérifiée sur les sources citées sous le QCM." : "Les réponses s'appuient sur le contenu de nos ouvrages, textes à l'appui."}</p>
     </div>
     <div class="qcm-wrap reveal"><div id="qcmBox" data-theme="${t.slug}"><p class="lead">Activez JavaScript pour lancer le QCM.</p></div></div>
+    ${t.sources ? `<div class="qcm-sources reveal"><h3>Sources</h3><ul>${t.sources.map(x => `<li><a href="${attr(x.url)}" target="_blank" rel="noopener">${esc(x.nom)}</a></li>`).join("")}</ul></div>` : ""}
   </div>
 </section>
 
@@ -949,7 +950,7 @@ ${contactCTA(prefix)}`;
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">${t.nom}</span><h2 class="h-section">Pour <em>approfondir</em></h2></div>
-      <p class="lead">Les ouvrages d'où sont tirées ces questions, avec leur extrait gratuit quand il existe.</p>
+      <p class="lead">${t.approfondir || "Les ouvrages d'où sont tirées ces questions, avec leur extrait gratuit quand il existe."}</p>
     </div>
     <div class="books">${t.livres.map(o => R.bookHTML(horsConcours(livreDe(o)), OUVRAGES.indexOf(o), false)).join("")}</div>
   </div>
@@ -992,7 +993,7 @@ ${contactCTA(prefix)}`;
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["QCM", ""]],
     h1: `Les QCM gratuits`,
-    lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : droit civil, droit pénal, procédure pénale, droit administratif, droit OHADA, droits de l'enfant, organisation judiciaire et méthode des épreuves. Chaque réponse est expliquée.`,
+    lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : droit civil, droit pénal, procédure pénale, droit administratif, droit OHADA, droits de l'enfant, organisation judiciaire, culture générale et méthode des épreuves. Chaque réponse est expliquée.`,
     ctas: `<a href="#liste" class="btn btn-gold">Choisir un QCM${arrow}</a><a href="${prefix}sujets/" class="btn btn-ghost">Sujets corrigés</a>`,
     facts: [`<b>${THEMES.length + 1}</b> QCM`, `<b>${nb}</b> questions corrigées`]
   })}
@@ -1007,7 +1008,7 @@ ${contactCTA(prefix)}`;
   write("qcm/index.html", page({
     prefix, url, body,
     title: ["QCM gratuits de droit et de méthode pour les concours ivoiriens", "QCM gratuits de droit et de méthode"],
-    description: `${nb} questions corrigées gratuites : droit civil, droit pénal, procédure pénale, droit administratif, droit OHADA, droits de l'enfant, organisation judiciaire et méthode.`,
+    description: `${nb} questions corrigées gratuites : droit civil, pénal, administratif et OHADA, procédure pénale, droits de l'enfant, organisation judiciaire, culture générale.`,
     ld: [breadcrumb([["Accueil", SITE], ["QCM", url]])]
   }));
   urls.push(url);
