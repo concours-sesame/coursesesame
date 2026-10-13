@@ -12,6 +12,7 @@
    - qcm/ : les QCM par matière (assets/js/qcm-matieres.js)
    - methodes/index.html : fiches méthode et QCM
    - sitemap.xml : plan du site pour Google
+   - robots.txt : adresse du plan du site pour les moteurs de recherche
    L'en-tête, le pied de page et le panier des pages sont copiés depuis index.html
    (entre les repères partial:), pour qu'il n'y ait qu'un seul endroit à modifier. */
 "use strict";
@@ -1102,4 +1103,12 @@ write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${u}</loc><lastmod>${TODAY}</lastmod></url>`).join("\n")}
 </urlset>
+`);
+
+/* ---------- Consignes aux moteurs de recherche ---------- */
+// La page d'administration porte déjà « noindex » ; le plan du site est indiqué à Google
+write("robots.txt", `User-agent: *
+Allow: /
+
+Sitemap: ${SITE}sitemap.xml
 `);

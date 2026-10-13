@@ -67,3 +67,8 @@ relancer sur WhatsApp, donner un mot de passe provisoire, ajouter et publier les
 
 50 Mo par fichier, 1 Go de fichiers, 5 Go de téléchargement par mois (environ 900 visionnages de vidéos
 de 5 Mo), et mise en pause du projet après une semaine sans activité. Au-delà, l'offre Pro.
+
+La mise en pause est évitée par la tâche GitHub `.github/workflows/eveil-espace-abonnes.yml`, qui interroge la
+base chaque matin (onglet Actions du dépôt, « Éveil de l'espace abonnés »). GitHub suspend les tâches planifiées
+d'un dépôt resté 60 jours sans modification : il suffit alors de la réactiver dans l'onglet Actions. Si le projet
+est tout de même en pause, le relancer depuis le tableau de bord Supabase (Restore project).
