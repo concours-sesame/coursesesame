@@ -176,8 +176,63 @@ function cleanHTML(h) {
     .replace(/class="section-head reveal"/g, 'class="section-head"')
     .replace(/ reveal reveal-d\d/g, "").replace(/ class="reveal"/g, "").replace(/ reveal(?=")/g, "");
 }
+/* Titres et descriptions à la longueur que Google affiche en entier.
+   title : un texte, ou une liste de formulations de la plus complète à la plus courte.
+   On garde la première qui tient, avec le nom du site si la place le permet. */
+const TITRE_MAX = 65, DESC_MAX = 160;
+const SUFFIXES = [" | Les Cours Sésame et SAJ", " | Cours Sésame et SAJ", ""];
+function titreSEO(title) {
+  const choix = [].concat(title);
+  for (const t of choix) for (const s of SUFFIXES) if ((t + s).length <= TITRE_MAX) return t + s;
+  return couper(choix[choix.length - 1], TITRE_MAX);
+}
+// Coupe un texte trop long : à la fin d'une phrase si possible, sinon entre deux mots, avec « … »
+function couper(s, max = DESC_MAX) {
+  s = String(s).replace(/\s+/g, " ").trim();
+  if (s.length <= max) return s;
+  let fin = -1;
+  for (const m of s.matchAll(/[.!?](?=\s)/g)) if (m.index + 1 <= max) fin = m.index + 1;
+  if (fin >= max * 0.55) return s.slice(0, fin);
+  // Sinon après une virgule (fin d'un élément d'énumération), à défaut entre deux mots
+  const virgule = s.lastIndexOf(", ", max - 2);
+  let t = s.slice(0, virgule >= max * 0.8 ? virgule : s.lastIndexOf(" ", max - 1));
+  for (let k = 0; k < 3; k++) t = t.replace(/[\s,;:(«]+$/, "").replace(/\s+(de|du|des|la|le|les|l'|d'|et|ou|à|au|aux|en|pour|par|sur|un|une|avec|dans|son|sa|ses|leur|leurs|chacun|chacune)$/i, "");
+  return t + "…";
+}
+// Garde les phrases entières qui tiennent dans la place disponible (au moins la première, coupée au besoin)
+function phrases(s, max) {
+  const morceaux = String(s).replace(/\s+/g, " ").trim().match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) || [];
+  let t = "";
+  for (const m of morceaux) { if ((t + m).trim().length > max) break; t += m; }
+  return t.trim() || couper(s, max);
+}
+// Titres d'ouvrages trop longs pour un titre de page, même sans le nom du site
+const TITRES_COURTS = {
+  "Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs": "Annales corrigées de SOG aux concours administratifs"
+};
+// Titres de sujets trop longs, même sans le nom du site (repérés par l'adresse de la page)
+const TITRES_SUJETS = {
+  "cas-pratique-accident-voirie-communale": "L'accident sur voirie communale : cas pratique corrigé",
+  "cas-pratique-magistrature-2023-dorpa": "Trois cas pratiques de droit pénal, magistrature 2023",
+  "commentaire-article-1376-repetition-indu": "Commentaire de l'article 1376 du Code civil (corrigé)",
+  "commentaire-article-28-code-penal-tentative": "Commentaire de l'article 28 du Code pénal (corrigé)",
+  "commentaire-article-45-loi-divorce-autorite-parentale": "Commentaire de l'article 45 de la loi sur le divorce",
+  "commentaire-de-l-article-52-de-la-loi-n-2019-570-relative-au-mariage": "Commentaire de l'article 52 de la loi sur le mariage",
+  "greffe-opeaj-2026": "OPEAJ : dix questions de cours corrigées",
+  "greffe-organisation-judiciaire-2026": "Organisation judiciaire : cinq questions de cours corrigées",
+  "le-tribunal-pour-enfants-et-le-principe-de-l-opportunite-des-poursuites": "Tribunal pour enfants et opportunité des poursuites (corrigé)",
+  "les-juridictions-de-la-justice-pour-mineurs-et-les-attributions-du-juge-des-enfants": "Les juridictions pour mineurs et le juge des enfants (corrigé)",
+  "sog-migration-clandestine": "La migration clandestine : SOG corrigé"
+};
+// Lien d'évitement (clavier) et repères communs à toutes les pages, accueil compris
+const SKIP_LINK = `<a class="skip-link" href="#top">Aller au contenu</a>`;
+const headApp = prefix => `<link rel="manifest" href="${prefix}manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Sésame et SAJ">`;
+
 function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image = OG_IMAGE, ogType = "website", scripts = [], robots = "" }) {
   body = cleanHTML(body);
+  title = titreSEO(title);
+  description = couper(description);
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -185,17 +240,16 @@ function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${attr(description)}">
-<meta name="theme-color" content="#0f2a5c">
-<link rel="canonical" href="${url}">${robots ? `\n<meta name="robots" content="${robots}">` : ""}
+<meta name="theme-color" content="#0f2a5c">${url ? `\n<link rel="canonical" href="${url}">` : ""}${robots ? `\n<meta name="robots" content="${robots}">` : ""}
 <link rel="icon" href="${prefix}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="${prefix}assets/img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="${prefix}assets/img/apple-touch-icon.png">
+${headApp(prefix)}
 <meta property="og:type" content="${ogType}">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="Les Cours Sésame et SAJ">
 <meta property="og:title" content="${attr(title)}">
-<meta property="og:description" content="${attr(description)}">
-<meta property="og:url" content="${url}">
+<meta property="og:description" content="${attr(description)}">${url ? `\n<meta property="og:url" content="${url}">` : ""}
 <meta property="og:image" content="${image}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -207,9 +261,10 @@ ${ld.map(jsonld).join("\n")}
 </head>
 <body data-root="${prefix}"${bodyAttrs}>
 <!-- Page générée par tools/build.js à partir de assets/js/data.js : ne pas modifier à la main. -->
+${SKIP_LINK}
 ${partial("sprite")}
 ${rebase(partial("header"), prefix)}
-<main id="top">
+<main id="top" tabindex="-1">
 ${body}
 </main>
 ${rebase(partial("footer"), prefix)}
@@ -396,9 +451,9 @@ for (const c of CONCOURS) {
   // Vidéos du concours : la présentation d'abord, puis les vidéos propres au concours
   const vids = VIDS.filter(v => v.concours.includes(c.id));
   const nomCourt = c.id === "ena" ? "de l'ENA" : c.id === "infj" ? "de la Magistrature" : `${c.court}`;
-  const title = `Concours ${nomCourt} 2027 : ouvrages, méthode et sujet corrigé | Les Cours Sésame et SAJ`;
+  const title = [`Concours ${nomCourt} 2027 : ouvrages, méthode et sujet corrigé`, `Concours ${nomCourt} 2027 : ouvrages et méthode`];
   const series = [...new Set(items.map(o => R.coverParts(o.titre).serie).filter(Boolean))].map(s => s.toLowerCase());
-  const description = `${plural(items.length, "ouvrage")} pour préparer le ${c.nom} en Côte d'Ivoire : ${series.slice(0, 4).join(", ")}. Méthode des épreuves, sujet corrigé, commande sur WhatsApp et livraison partout en Côte d'Ivoire.`;
+  const description = `${plural(items.length, "ouvrage")} pour le ${c.nom} : résumés, annales corrigées et méthode. Fiches méthode, sujets corrigés, commande sur WhatsApp.`;
 
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Concours", prefix + "#concours"], [c.court, ""]],
@@ -538,8 +593,8 @@ ${contactCTA(prefix)}`;
 
   write("methodes/index.html", page({
     prefix, url, body,
-    title: "Méthodes des épreuves des concours (SOG, cas pratique, note de synthèse) et QCM | Les Cours Sésame et SAJ",
-    description: "Fiches méthode des épreuves des concours INFJ et ENA en Côte d'Ivoire : dissertation juridique, cas pratique, commentaire d'arrêt, SOG, PECOS, note de synthèse, étude de texte. QCM gratuit pour tester votre méthode.",
+    title: "Méthodes des épreuves : cas pratique, SOG, note de synthèse",
+    description: "Fiches méthode des concours INFJ et ENA : dissertation, cas pratique, commentaire, SOG, PECOS, note de synthèse et étude de texte. QCM gratuit de méthode.",
     ld: [breadcrumb([["Accueil", SITE], ["Méthodes des épreuves", url]]), ...VIDS.filter(v => v.methode).map(videoLD)]
   }));
   urls.push(url);
@@ -643,10 +698,14 @@ ${suggestions.length ? `<section class="section${l.items.length > 1 ? "" : " sec
 
 ${contactCTA(prefix)}`;
 
-  const description = `${o.desc} ${o.prix} FCFA${o.numerique ? ", version numérique" : ", livraison partout en Côte d'Ivoire"}${o.extrait ? ", extrait gratuit en PDF" : ""}.`;
+  const fin = ` ${o.prix} FCFA${o.numerique ? ", version numérique" : ", livraison en Côte d'Ivoire"}${o.extrait ? ", extrait gratuit" : ""}.`;
+  // Si la présentation ne tient pas en entier, on garde le prix et on retire la mention de livraison
+  const finCourte = ` ${o.prix} FCFA${o.numerique ? ", version numérique" : ""}${o.extrait ? ", extrait gratuit" : ""}.`;
+  const entier = d => !d.endsWith("…");
+  const description = entier(phrases(o.desc, DESC_MAX - fin.length)) ? phrases(o.desc, DESC_MAX - fin.length) + fin : phrases(o.desc, DESC_MAX - finCourte.length) + finCourte;
   write(`ouvrages/${l.slug}/index.html`, page({
     prefix, url, body, description, ogType: "product", image: imageOuvrage(o),
-    title: `${o.titre} | Les Cours Sésame et SAJ`,
+    title: [o.titre, titreCourt, titreCourt.replace(/^(Les?|La) |^L'/, ""), TITRES_COURTS[o.titre] || titreCourt],
     ld: [breadcrumb([["Accueil", SITE], ["Ouvrages", SITE + "ouvrages/"], [titreCourt, url]]), Object.assign({ "@context": "https://schema.org" }, productLD(o, url)), ...vids.map(videoLD)]
   }));
   urls.push(url);
@@ -686,8 +745,8 @@ ${contactCTA(prefix)}`;
 ${contactCTA(prefix)}`;
   write("ouvrages/index.html", page({
     prefix, url, body,
-    title: "Tous les ouvrages de préparation aux concours de Côte d'Ivoire | Les Cours Sésame et SAJ",
-    description: `${plural(LIVRES.length, "ouvrage")} pour réussir les concours de la Magistrature, du Greffe, de l'Administration pénitentiaire, de l'EPPJEJ et de l'ENA : annales corrigées, résumés de cours, méthode. Extraits gratuits et commande sur WhatsApp.`,
+    title: "Ouvrages de préparation aux concours de Côte d'Ivoire",
+    description: `${plural(LIVRES.length, "ouvrage")} pour les concours de la Magistrature, du Greffe, de la Pénitentiaire, de l'EPPJEJ et de l'ENA : annales corrigées, résumés, méthode. Extraits gratuits.`,
     ld: [breadcrumb([["Accueil", SITE], ["Ouvrages", url]]), productList(LIVRES.map(l => l.items[0]))]
   }));
   urls.push(url);
@@ -767,10 +826,10 @@ ${suite.length ? `<section class="section section-cream">
 
 ${contactCTA(prefix)}`;
 
-  const description = `${corrigeLabel(x.epreuve)[0].toUpperCase() + corrigeLabel(x.epreuve).slice(1)} en ${x.matiere.toLowerCase().replace("ohada", "OHADA").replace("opeaj", "OPEAJ")} pour le concours ${courts(x.concours).replace(/ · /g, ", ")} : ${x.resume}`;
+  const description = `${corrigeLabel(x.epreuve)[0].toUpperCase() + corrigeLabel(x.epreuve).slice(1)} en ${x.matiere.toLowerCase().replace("ohada", "OHADA").replace("opeaj", "OPEAJ").replace("pecos", "PECOS")}, concours ${courts(x.concours).replace(/ · /g, ", ")}${x.reserve ? " (corrigé intégral réservé aux abonnés)" : ""}. ${x.resume}`;
   write(`sujets/${x.adresse}/index.html`, page({
     prefix, url, body, description, ogType: "article", image: o ? imageOuvrage(o) : OG_IMAGE,
-    title: `${/^(Commentaire|Trois cas)|questions/i.test(x.titre) ? `${x.titre} (corrigé)` : `${x.titre} : ${corrigeLabel(x.epreuve)}`} | Les Cours Sésame et SAJ`,
+    title: [/^(Commentaire|Trois cas)|questions/i.test(x.titre) ? `${x.titre} (corrigé)` : `${x.titre} : ${corrigeLabel(x.epreuve)}`, `${x.titre} (corrigé)`, x.titre, TITRES_SUJETS[x.adresse] || x.titre],
     ld: [breadcrumb([["Accueil", SITE], ["Sujets corrigés", SITE + "sujets/"], [x.titre, url]]), {
       "@context": "https://schema.org", "@type": "Article", headline: x.titre, description: x.resume, inLanguage: "fr", url,
       isAccessibleForFree: !x.reserve, about: x.matiere, educationalLevel: "Concours de la fonction publique",
@@ -809,8 +868,8 @@ SUJETS_PAGES.forEach(sujetPage);
 ${contactCTA(prefix)}`;
   write("sujets/index.html", page({
     prefix, url, body,
-    title: "Sujets corrigés des concours de la Magistrature, du Greffe et de l'ENA | Les Cours Sésame et SAJ",
-    description: `${SUJETS_PAGES.length} sujets corrigés gratuits pour les concours de Côte d'Ivoire (Magistrature, Greffe, Pénitentiaire, EPPJEJ, ENA) : dissertations, cas pratiques, commentaires d'articles, questions de cours et SOG.`,
+    title: ["Sujets corrigés des concours de la Magistrature, du Greffe et de l'ENA", "Sujets corrigés des concours Magistrature, Greffe et ENA"],
+    description: `${SUJETS_PAGES.length} sujets corrigés pour les concours de Côte d'Ivoire (Magistrature, Greffe, Pénitentiaire, EPPJEJ, ENA) : dissertations, cas pratiques, commentaires et SOG.`,
     ld: [breadcrumb([["Accueil", SITE], ["Sujets corrigés", url]]), {
       "@context": "https://schema.org", "@type": "ItemList",
       itemListElement: SUJETS_PAGES.map((x, i) => ({ "@type": "ListItem", position: i + 1, url: `${SITE}sujets/${x.adresse}/`, name: x.titre }))
@@ -895,8 +954,8 @@ ${sujets.length ? `<section class="section">
 ${contactCTA(prefix)}`;
     write(`qcm/${t.slug}/index.html`, page({
       prefix, url, body, scripts: ["assets/js/qcm-matieres.js"],
-      title: `${t.titre} gratuit, concours de Côte d'Ivoire | Les Cours Sésame et SAJ`,
-      description: `${plural(t.questions.length, "question")} corrigées de ${t.nom.toLowerCase()} pour préparer les concours ${courts(t.concours).replace(/ · /g, ", ")} : ${t.intro}`,
+      title: [`${t.titre} gratuit, concours de Côte d'Ivoire`, `${t.titre} gratuit`, t.titre],
+      description: `${plural(t.questions.length, "question")} corrigées ${/^[aeiouhéè]/i.test(t.nom) ? "d'" : "de "}${t.nom.toLowerCase()}, concours ${courts(t.concours).replace(/ · /g, ", ")}. ${t.intro}`,
       ld: [breadcrumb([["Accueil", SITE], ["QCM", SITE + "qcm/"], [t.nom, url]]), {
         "@context": "https://schema.org", "@type": "Quiz", name: t.titre, description: t.intro, url, inLanguage: "fr",
         about: t.nom, isAccessibleForFree: true, educationalLevel: "Concours de la fonction publique", provider: { "@type": "Organization", name: "Les Cours Sésame et SAJ" }
@@ -927,7 +986,7 @@ ${contactCTA(prefix)}`;
 ${contactCTA(prefix)}`;
   write("qcm/index.html", page({
     prefix, url, body,
-    title: "QCM gratuits de droit et de méthode pour les concours de Côte d'Ivoire | Les Cours Sésame et SAJ",
+    title: ["QCM gratuits de droit et de méthode pour les concours ivoiriens", "QCM gratuits de droit et de méthode"],
     description: `${nb} questions corrigées gratuites : droit civil, droit pénal, droit administratif, droits de l'enfant, organisation judiciaire et méthode des épreuves, pour les concours INFJ et ENA.`,
     ld: [breadcrumb([["Accueil", SITE], ["QCM", url]])]
   }));
@@ -976,8 +1035,8 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
 ${contactCTA(prefix)}`;
   write("espace-abonnes/index.html", page({
     prefix, url, body, scripts: SCRIPTS_ESPACE,
-    title: "Espace abonnés : vidéos, documents et fiches exclusifs | Les Cours Sésame et SAJ",
-    description: "L'espace abonnés des Cours Sésame et SAJ : vidéos, documents et fiches exclusifs pour préparer les concours de Côte d'Ivoire. Compte en une minute, paiement par Mobile Money.",
+    title: "Espace abonnés : ouvrages, corrigés, QCM et vidéos",
+    description: "Sujets corrigés, QCM, vidéos et ouvrages complets réservés aux abonnés. Abonnement dès 500 FCFA la journée, ouvrages compris dès la formule d'un mois.",
     ld: [breadcrumb([["Accueil", SITE], ["Espace abonnés", url]])]
   }));
   urls.push(url);
@@ -1002,7 +1061,7 @@ ${contactCTA(prefix)}`;
   write("espace-abonnes/admin/index.html", page({
     prefix, url: SITE + "espace-abonnes/admin/", body, robots: "noindex, nofollow",
     scripts: [...SCRIPTS_ESPACE, "assets/js/espace-admin.js"],
-    title: "Administration de l'espace abonnés | Les Cours Sésame et SAJ",
+    title: "Administration de l'espace abonnés",
     description: "Administration de l'espace abonnés des Cours Sésame et SAJ.",
     ld: []
   }));
@@ -1072,11 +1131,47 @@ ${contactCTA(prefix)}`;
 ${contactCTA(prefix)}`;
   write("mentions-legales/index.html", page({
     prefix, url, body,
-    title: "Mentions légales et données personnelles | Les Cours Sésame et SAJ",
-    description: "Éditeur, hébergement, propriété intellectuelle et protection des données personnelles du site des Cours Sésame et SAJ, éditeur indépendant d'ouvrages de préparation aux concours de Côte d'Ivoire.",
+    title: "Mentions légales et données personnelles",
+    description: "Éditeur, hébergement, propriété intellectuelle et données personnelles du site des Cours Sésame et SAJ, éditeur indépendant d'ouvrages pour les concours.",
     ld: [breadcrumb([["Accueil", SITE], ["Mentions légales", url]])]
   }));
   urls.push(url);
+}
+
+/* ---------- Page d'erreur ---------- */
+// GitHub Pages affiche 404.html pour toute adresse inconnue, quelle que soit sa profondeur :
+// les liens partent donc de la racine du site (« / »). Page non indexée, hors du plan du site.
+{
+  const prefix = "/";
+  R.setRoot(prefix);
+  const liens = [
+    ["ouvrages/", "Tous les ouvrages", "Le catalogue complet, avec les extraits gratuits."],
+    ["sujets/", "Sujets corrigés", "Dissertations, cas pratiques, commentaires et SOG corrigés."],
+    ["qcm/", "QCM gratuits", "Testez vos connaissances, chaque réponse expliquée."],
+    ["espace-abonnes/", "Espace abonnés", "Connexion et création de compte."]
+  ];
+  const body = `<section class="hero hero-sub">
+  <div class="wrap">
+    <h1 class="sub-h1">Cette page est introuvable</h1>
+    <p class="lead">L'adresse a peut-être été mal tapée, ou la page a changé de place. Repartez de l'accueil ou choisissez une rubrique ci-dessous. Si vous cherchiez un ouvrage précis, écrivez-nous sur WhatsApp.</p>
+    <div class="hero-ctas"><a class="btn btn-gold" href="${prefix}">Revenir à l'accueil</a><a class="btn btn-ghost" href="${WA_URL}" target="_blank" rel="noopener">${waIcon}Écrire sur WhatsApp</a></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2 class="h-section">Les rubriques du site</h2>
+    <div class="ep-cards">${liens.map(([h, t, d]) => `<a class="ep-card" href="${prefix}${h}"><b>${t}</b><span>${d}</span><span class="ep-card-go">Ouvrir</span></a>`).join("")}</div>
+    <h2 class="h-section erreur-concours">Les concours</h2>
+    <div class="concours-grid">${CONCOURS.map((c, i) => concoursCard(c, i, prefix)).join("")}</div>
+  </div>
+</section>`;
+  write("404.html", page({
+    prefix, url: null, body, robots: "noindex",
+    title: "Page introuvable",
+    description: "Cette page n'existe pas ou a changé de place. Retrouvez les ouvrages, les sujets corrigés et les QCM des Cours Sésame et SAJ.",
+    ld: []
+  }));
 }
 
 /* ---------- Accueil ---------- */

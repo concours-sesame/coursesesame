@@ -58,12 +58,19 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
   envoie le lien sur WhatsApp ou Facebook. Après l'ajout d'un ouvrage ou un changement de titre
   ou de prix : `node tools/images-partage.js` (nécessite Playwright), puis `node tools/build.js`.
   Sans image, la page utilise l'image générale du site.
+- `assets/img/icone-192.png`, `icone-512.png` et `icone-masquable-512.png` : icônes du site installé sur
+  l'écran d'accueil d'un téléphone (déclarées dans `manifest.webmanifest`). Tirées du logo par
+  `node tools/icones-application.js` (nécessite Playwright), à relancer seulement si le logo change.
 
 ## Organisation
 
 - `index.html` : page d'accueil. Les parties entre `<!-- partial:… -->` sont reprises
   sur toutes les pages ; celles entre `<!-- build:… -->` sont remplies par le générateur.
 - `concours/`, `ouvrages/`, `sujets/`, `qcm/`, `methodes/`, `mentions-legales/` et `espace-abonnes/` : pages générées, à ne pas modifier à la main.
+- `404.html` : page affichée pour une adresse inconnue, générée elle aussi. Ses liens partent de la racine du site (« / »).
+- Titres et descriptions des pages : le générateur les ramène à la longueur que Google affiche en entier
+  (65 caractères pour le titre, 160 pour la description). Un titre de sujet trop long reçoit une forme courte
+  dans `TITRES_SUJETS` (`tools/build.js`), un titre d'ouvrage dans `TITRES_COURTS`.
 - `assets/video/` et `assets/img/videos/` : les vidéos et leurs affiches.
 - Règle d'écriture : pas de tiret cadratin dans les textes. L'édition ou le tome d'un ouvrage s'écrit après une
   virgule (« Le Guide Méthodologique Magistrature, Édition 2027 »).

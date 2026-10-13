@@ -1,0 +1,26 @@
+{
+  "id": "/",
+  "name": "Les Cours Sésame et SAJ",
+  "short_name": "Sésame et SAJ",
+  "description": "Ouvrages, sujets corrigés, QCM et espace abonnés pour préparer les concours de Côte d'Ivoire.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#0f2a5c",
+  "categories": ["education", "books"],
+  "icons": [
+    { "src": "assets/img/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/img/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/img/icone-masquable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Espace abonnés", "short_name": "Mon espace", "url": "/espace-abonnes/", "icons": [{ "src": "assets/img/icone-192.png", "sizes": "192x192" }] },
+    { "name": "Tous les ouvrages", "short_name": "Ouvrages", "url": "/ouvrages/", "icons": [{ "src": "assets/img/icone-192.png", "sizes": "192x192" }] },
+    { "name": "Sujets corrigés", "short_name": "Corrigés", "url": "/sujets/", "icons": [{ "src": "assets/img/icone-192.png", "sizes": "192x192" }] },
+    { "name": "QCM gratuits", "short_name": "QCM", "url": "/qcm/", "icons": [{ "src": "assets/img/icone-192.png", "sizes": "192x192" }] }
+  ]
+}

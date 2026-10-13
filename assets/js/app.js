@@ -601,7 +601,25 @@
     });
   }
 
+  /* ---------- Installation sur l'écran d'accueil ---------- */
+  // Chrome et Edge proposent l'installation du site (manifest.webmanifest) : le bouton du pied de page
+  // n'apparaît que dans ce cas. Sur iPhone, l'ajout se fait depuis le bouton de partage de Safari (voir la FAQ).
+  function initInstallation() {
+    let invite = null;
+    const boutons = (visible) => $$("[data-install]").forEach(b => { b.hidden = !visible; });
+    window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); invite = e; boutons(true); });
+    window.addEventListener("appinstalled", () => { invite = null; boutons(false); });
+    document.addEventListener("click", async e => {
+      if (!e.target.closest("[data-install]") || !invite) return;
+      const i = invite; invite = null;
+      i.prompt();
+      try { await i.userChoice; } catch (err) { /* sans suite */ }
+      boutons(false);
+    });
+  }
+
   /* ---------- Démarrage ---------- */
+  initInstallation();
   renderChips();
   renderBooks();
   renderMethodo();
