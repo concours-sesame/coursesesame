@@ -314,7 +314,48 @@
     }
   }
 
-  window.Espace = { client, OUVERT, esc, dateFr, auj, joursJusqua, fcfa, WA_NUM, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur };
+  /* ---------- Validation en deux étapes (administrateurs) ---------- */
+  // Après le mot de passe, un administrateur qui a activé la validation en deux étapes saisit le code à 6 chiffres
+  // de son application d'authentification ; sans ce code, la base lui refuse les droits d'administrateur.
+  // Renvoie "code" si ce code est attendu, "ok" si la session est déjà validée, "aucun" si rien n'est activé.
+  async function etapeCode() {
+    const { data, error } = await client.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (error || !data) return "ok";
+    if (data.currentLevel === "aal2") return "ok";
+    return data.nextLevel === "aal2" ? "code" : "aucun";
+  }
+  // Affiche le formulaire du code dans « zone » ; la promesse est tenue quand le code est accepté
+  function formulaireCode(zone) {
+    return new Promise(tenir => {
+      zone.innerHTML = `<div class="ea-auth"><form class="form ea-form" id="eaCode" novalidate>
+          <h3 class="full">Validation en deux étapes</h3>
+          <p class="ea-aide full">Ouvrez votre application d'authentification et saisissez le code à 6 chiffres affiché pour « Les Cours Sésame et SAJ ».</p>
+          <div class="field full"><label for="eaCodeChiffres">Code à 6 chiffres</label><input id="eaCodeChiffres" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required></div>
+          <p class="ea-msg" role="alert"></p>
+          <button class="btn btn-navy" type="submit">Valider</button>
+          <button class="btn btn-ghost" type="button" data-code="sortir">Se déconnecter</button>
+        </form></div>`;
+      const f = $("#eaCode", zone), msg = $(".ea-msg", f), champ = $("#eaCodeChiffres", f);
+      champ.focus();
+      $("[data-code=sortir]", f).addEventListener("click", () => client.auth.signOut());
+      f.addEventListener("submit", async e => {
+        e.preventDefault();
+        e.stopPropagation();
+        const code = champ.value.replace(/\D/g, "");
+        if (code.length !== 6) { msg.textContent = "Le code compte 6 chiffres."; return; }
+        const bouton = $("button[type=submit]", f);
+        bouton.disabled = true;
+        const { data: l } = await client.auth.mfa.listFactors();
+        const facteur = ((l && l.totp) || []).find(x => x.status === "verified");
+        const { error } = facteur ? await client.auth.mfa.challengeAndVerify({ factorId: facteur.id, code }) : { error: new Error("Aucune application d'authentification n'est associée à ce compte.") };
+        bouton.disabled = false;
+        if (error) { msg.textContent = /invalid|expired|code/i.test(error.message || "") ? "Code incorrect ou expiré. Saisissez le code affiché en ce moment." : messageErreur(error); champ.select(); return; }
+        tenir();
+      });
+    });
+  }
+
+  window.Espace = { client, OUVERT, esc, dateFr, auj, joursJusqua, fcfa, WA_NUM, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur, etapeCode, formulaireCode };
 
   /* =====================================================================
      Page de l'espace abonnés
@@ -333,7 +374,7 @@
     await client.auth.signOut({ scope: "local" });
   }
   async function controlerAppareil() {
-    if (!etat.session || etat.admin || document.hidden) return;
+    if (!etat.session || etat.admin || etat.codeAttendu || document.hidden) return;
     const { data, error } = await client.rpc("verifier_appareil");
     if (!error && data === false) { await ecarterAppareil(); afficher("connexion"); }
   }
@@ -346,6 +387,9 @@
   async function chargerEtat() {
     const { data: { session } } = await client.auth.getSession();
     if (!session) return { session: null };
+    // Administrateur avec validation en deux étapes : le code d'abord (sinon la base ne le reconnaît pas comme tel)
+    const ad = await client.from("admins").select("user_id").eq("user_id", session.user.id).maybeSingle();
+    if (ad.data && await etapeCode() === "code") return { session, codeAttendu: true };
     const v = await client.rpc("verifier_appareil");
     if (v.error) throw v.error;
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
@@ -493,6 +537,11 @@
       $("#eaReessayer").addEventListener("click", () => afficher());
       racine.removeAttribute("aria-busy");
       return;
+    }
+    if (etat.codeAttendu) {
+      racine.removeAttribute("aria-busy");
+      await formulaireCode(racine);
+      return afficher();
     }
     if (!etat.session) {
       racine.innerHTML = `<div class="ea-accueil">${formulairesHTML(onglet || (!avisAppareil && location.hash === "#inscription" ? "inscription" : "connexion"))}${await apercuHTML()}</div>`;

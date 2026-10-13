@@ -3,7 +3,8 @@
 // qui le transmet à l'abonné sur WhatsApp ; l'abonné peut ensuite le changer depuis son espace.
 //
 // Déploiement : sans vérification de jeton par la plateforme. La fonction vérifie elle-même la session
-// de l'appelant (auth.getUser) puis sa présence dans la table « admins ».
+// de l'appelant (auth.getUser), sa présence dans la table « admins » et, si l'administrateur a activé la
+// validation en deux étapes, que sa session a été validée par le code.
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 const CORS = {
@@ -24,6 +25,15 @@ function cleSecrete(): string {
 const reponse = (corps: unknown, statut = 200) =>
   new Response(JSON.stringify(corps), { status: statut, headers: { ...CORS, "Content-Type": "application/json" } });
 const erreur = (message: string, statut = 400) => reponse({ error: message }, statut);
+
+// Niveau de la session (« aal1 » après le mot de passe, « aal2 » après le code), lu dans le jeton déjà vérifié par getUser
+function niveauSession(jeton: string): string {
+  try {
+    return JSON.parse(atob(jeton.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).aal ?? "aal1";
+  } catch {
+    return "aal1";
+  }
+}
 
 // Mot de passe lisible au téléphone : 4 lettres, un tiret, 4 chiffres (sans I, O, L, 0, 1)
 function motDePasseProvisoire() {
@@ -47,6 +57,9 @@ Deno.serve(async (req) => {
   if (errAppelant || !appelant?.user) return erreur("Connexion requise.", 401);
   const { data: estAdmin } = await admin.from("admins").select("user_id").eq("user_id", appelant.user.id).maybeSingle();
   if (!estAdmin) return erreur("Accès réservé à l'administrateur.", 403);
+  // Validation en deux étapes activée : la session doit avoir été validée par le code (niveau « aal2 » du jeton)
+  const deuxEtapes = (appelant.user.factors ?? []).some((f) => f.status === "verified");
+  if (deuxEtapes && niveauSession(jeton) !== "aal2") return erreur("Saisissez d'abord votre code de validation en deux étapes.", 403);
 
   let d: Record<string, unknown>;
   try {

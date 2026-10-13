@@ -25,6 +25,7 @@
   const TAILLE_MAX = 50 * 1024 * 1024;
 
   let moi = null, abonnes = [], paiements = [], contenus = [];
+  let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   // Au-delà de ce nombre d'appareils en 7 jours, le compte est signalé comme peut-être partagé
   const SEUIL_PARTAGE = 3;
   let onglet = "abonnes", filtre = "tous", recherche = "";
@@ -77,6 +78,10 @@
       racine.removeAttribute("aria-busy");
       return;
     }
+    // Validation en deux étapes : sans le code, la base refuse les droits d'administrateur
+    const etape = await E.etapeCode();
+    if (etape === "code") { racine.removeAttribute("aria-busy"); await E.formulaireCode(racine); return demarrer(); }
+    deuxEtapes = etape !== "aucun";
     try { await toutCharger(); afficher(); } catch (e) {
       racine.innerHTML = `<div class="ea-carte-info"><h3>Chargement impossible.</h3><p>${esc(messageErreur(e))}</p><button class="btn btn-navy" type="button" data-action="recharger">Réessayer</button></div>`;
     }
@@ -97,6 +102,33 @@
     abonnes.forEach(x => { x.appareils = appareils.get(x.user_id) || 0; });
   }
 
+  /* ---------- Validation en deux étapes : activation ---------- */
+  // Inscription d'une application d'authentification (Google Authenticator, Microsoft Authenticator…) par code QR
+  async function activerDeuxEtapes(bouton) {
+    const zone = $("#adSecurite");
+    bouton.disabled = true;
+    // Une activation commencée puis abandonnée laisse un facteur non vérifié : on le retire avant d'en créer un autre
+    const { data: l } = await client.auth.mfa.listFactors();
+    for (const f of ((l && l.all) || []).filter(x => x.status !== "verified")) await client.auth.mfa.unenroll({ factorId: f.id });
+    const { data, error } = await client.auth.mfa.enroll({ factorType: "totp", friendlyName: "Téléphone " + new Date().toISOString().slice(0, 16), issuer: "Les Cours Sésame et SAJ" });
+    if (error) { bouton.disabled = false; toast(messageErreur(error)); return; }
+    zone.classList.add("ad-securite-ouverte");
+    zone.innerHTML = `<form class="form ea-form" data-form="mfa" data-facteur="${esc(data.id)}" novalidate>
+        <h3 class="full">Activer la validation en deux étapes</h3>
+        <ol class="ad-mfa-etapes full">
+          <li>Installez sur votre téléphone <b>Google Authenticator</b> ou <b>Microsoft Authenticator</b> (gratuits, Play Store ou App Store).</li>
+          <li>Dans l'application, touchez <b>+</b>, puis <b>Scanner un code QR</b>, et visez ce code :
+            <img class="ad-qr" src="${esc(data.totp.qr_code)}" width="200" height="200" alt="Code QR à scanner avec l'application d'authentification">
+            <small>Impossible de scanner ? Choisissez « Saisir une clé » et tapez : <code class="ad-mdp">${esc(data.totp.secret)}</code></small></li>
+          <li>Saisissez ci-dessous le code à 6 chiffres que l'application affiche pour « Les Cours Sésame et SAJ ».</li>
+        </ol>
+        <div class="field"><label for="adMfaCode">Code à 6 chiffres</label><input id="adMfaCode" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required></div>
+        <p class="ea-msg" role="alert"></p>
+        <button class="btn btn-navy" type="submit">Activer</button>
+      </form>`;
+    $("#adMfaCode").focus();
+  }
+
   /* ---------- Affichage ---------- */
   function afficher() {
     const actifs = abonnes.filter(a => a.actif).length;
@@ -106,6 +138,10 @@
         <span>Administration · <b>${esc(moi.email)}</b></span>
         <div class="ea-compte-actions"><a class="btn btn-ghost btn-sm" href="../">Voir l'espace abonnés</a><button class="btn btn-ghost btn-sm" type="button" data-action="sortir">Se déconnecter</button></div>
       </div>
+      ${deuxEtapes ? "" : `<div class="ad-securite" id="adSecurite">
+        <div><b>Protégez l'administration.</b> Activez la validation en deux étapes : à chaque connexion, en plus du mot de passe, un code à 6 chiffres affiché par une application sur votre téléphone sera demandé. Un mot de passe volé ne suffira plus.</div>
+        <button class="btn btn-gold btn-sm" type="button" data-action="mfa">Activer</button>
+      </div>`}
       <div class="ad-stats">
         <div><b>${actifs}</b><span>Abonnés actifs</span></div>
         <div><b>${attente}</b><span>En attente d'activation</span></div>
@@ -249,6 +285,7 @@
     const act = b.dataset.action;
     if (act === "sortir") { await client.auth.signOut(); connexion(); return; }
     if (act === "recharger") { demarrer(); return; }
+    if (act === "mfa") { activerDeuxEtapes(b); return; }
     const ligne = b.closest(".ad-ligne");
     if (act) {
       const a = abonnes.find(x => x.user_id === ligne.dataset.uid);
@@ -324,6 +361,19 @@
     const v = n => (f.elements[n] ? f.elements[n].value.trim() : "");
     const coches = () => $$("input[name=concours]:checked", f).map(x => x.value);
     msg.textContent = "";
+
+    if (f.dataset.form === "mfa") {
+      const code = v("code").replace(/\D/g, "");
+      if (code.length !== 6) { msg.textContent = "Le code compte 6 chiffres."; return; }
+      bouton.disabled = true;
+      const { error } = await client.auth.mfa.challengeAndVerify({ factorId: f.dataset.facteur, code });
+      bouton.disabled = false;
+      if (error) { msg.textContent = "Code incorrect ou expiré. Saisissez le code affiché en ce moment par l'application."; return; }
+      deuxEtapes = true;
+      afficher();
+      toast("Validation en deux étapes activée. Le code sera demandé à chaque connexion.");
+      return;
+    }
 
     if (f.id === "adConnexion") {
       bouton.disabled = true;
