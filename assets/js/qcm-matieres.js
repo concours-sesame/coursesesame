@@ -1,5 +1,8 @@
 /* QCM par matière (pages qcm/<matière>/). Chaque réponse est tirée du contenu de nos ouvrages,
    dont les extraits gratuits sont en ligne : l'explication renvoie au texte applicable.
+   Exception : le QCM de culture générale s'appuie sur les sources listées dans "sources" (affichées
+   sous le QCM) ; chaque réponse y a été vérifiée. "approfondir" remplace le texte d'introduction
+   des ouvrages conseillés quand les questions ne sont pas tirées de ces ouvrages.
    "bonne" = position de la bonne réponse (0 = première).
    "titre" = titre de la page ; "ouvrages" = titres exacts (data.js) des ouvrages conseillés pour approfondir. */
 const QCM_MATIERES = [
@@ -120,6 +123,190 @@ const QCM_MATIERES = [
     {"q": "Dans la société en nom collectif, les associés :", "options": ["Ne répondent des dettes qu'à concurrence de leurs apports", "Sont tous commerçants et répondent indéfiniment et solidairement des dettes sociales", "Peuvent être poursuivis par les créanciers sans mise en demeure préalable de la société", "Ne sont pas commerçants"], "bonne": 1, "explication": "Tous les associés de la SNC sont commerçants et répondent indéfiniment et solidairement des dettes sociales (article 270 AUSCGIE). Les créanciers ne peuvent toutefois les poursuivre que soixante jours au moins après avoir vainement mis en demeure la société (article 271)."},
     {"q": "Quel est le capital social minimum de la société anonyme, et combien d'actionnaires faut-il au moins ?", "options": ["1 000 000 FCFA et deux actionnaires", "10 000 000 FCFA, et la société peut ne comprendre qu'un seul actionnaire", "10 000 000 FCFA et sept actionnaires", "100 000 000 FCFA et trois actionnaires"], "bonne": 1, "explication": "La société anonyme peut ne comprendre qu'un seul actionnaire (article 385 AUSCGIE) et son capital social minimum est fixé à dix millions de francs CFA (article 387)."},
     {"q": "Le groupement d'intérêt économique (GIE) :", "options": ["Doit être constitué avec un capital minimum", "A pour but premier de réaliser et partager des bénéfices", "Peut être constitué sans capital et ne donne pas lieu par lui-même à réalisation et partage de bénéfices", "Ne peut réunir que des commerçants"], "bonne": 2, "explication": "Le GIE peut être constitué sans capital (article 869 AUSCGIE) et ne donne pas lieu par lui-même à réalisation et partage de bénéfices (article 870). Deux personnes physiques ou morales au moins peuvent le constituer, y compris des membres de professions libérales (article 871)."}
+  ]
+},
+{
+  "slug": "culture-generale",
+  "titre": "QCM de culture générale",
+  "nom": "Culture générale",
+  "concours": [
+    "infj",
+    "greffe",
+    "penitentiaire",
+    "eppjej",
+    "ena"
+  ],
+  "intro": "Indépendance, symboles de la République, grandes organisations africaines et internationales : dix questions de culture générale pour les concours ivoiriens. Chaque réponse renvoie à sa source.",
+  "approfondir": "L'épreuve de culture générale se prépare surtout avec le sujet d'ordre général (SOG) : méthode, sujets corrigés et repères.",
+  "ouvrages": [
+    "Le Résumé de SOG aux Concours Administratifs",
+    "Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs"
+  ],
+  "sources": [
+    {
+      "nom": "APA News : le 7 août 1960, proclamation de l'indépendance",
+      "url": "https://fr.apanews.net/news/cote-divoire-le-7-aout-1960-proclamation-de-lindependance/"
+    },
+    {
+      "nom": "Wikipédia : Yamoussoukro",
+      "url": "https://fr.wikipedia.org/wiki/Yamoussoukro"
+    },
+    {
+      "nom": "Wikipédia : Côte d'Ivoire",
+      "url": "https://fr.wikipedia.org/wiki/C%C3%B4te_d%27Ivoire"
+    },
+    {
+      "nom": "Constitution de la Côte d'Ivoire, article 48 (Loi d'ici)",
+      "url": "https://loidici.biz/?p=118"
+    },
+    {
+      "nom": "Nations unies : la Déclaration universelle des droits de l'homme",
+      "url": "https://www.un.org/fr/about-us/universal-declaration-of-human-rights"
+    },
+    {
+      "nom": "Nations unies : la Charte des Nations unies",
+      "url": "https://www.un.org/fr/about-us/un-charter"
+    },
+    {
+      "nom": "Union africaine : message pour le 60e anniversaire de l'OUA/UA",
+      "url": "https://au.int/sites/default/files/newsevents/pressreleases/42804-PR-Message_celebration_60e_anniversaire_OUAUA_002_002_final_1.pdf"
+    },
+    {
+      "nom": "CEDEAO : présentation de la Communauté (site officiel, en anglais)",
+      "url": "https://ecowas.int/?page_id=40"
+    },
+    {
+      "nom": "Wikipédia : Union économique et monétaire ouest-africaine (en anglais)",
+      "url": "https://en.wikipedia.org/wiki/West_African_Economic_and_Monetary_Union"
+    },
+    {
+      "nom": "BCEAO : présentation de la Banque centrale",
+      "url": "https://www.bceao.int/fr/content/presentation-de-la-bceao"
+    },
+    {
+      "nom": "Wikipédia : Organisation pour l'harmonisation en Afrique du droit des affaires",
+      "url": "https://fr.wikipedia.org/wiki/Organisation_pour_l%27harmonisation_en_Afrique_du_droit_des_affaires"
+    },
+    {
+      "nom": "Banque africaine de développement : qui sommes-nous",
+      "url": "https://www.afdb.org/fr/about-us"
+    },
+    {
+      "nom": "Wikipédia : De l'esprit des lois",
+      "url": "https://fr.wikipedia.org/wiki/De_l%27esprit_des_lois"
+    }
+  ],
+  "questions": [
+    {
+      "q": "À quelle date la Côte d'Ivoire a-t-elle proclamé son indépendance ?",
+      "options": [
+        "Le 3 novembre 1960",
+        "Le 4 avril 1960",
+        "Le 7 août 1960",
+        "Le 1er janvier 1961"
+      ],
+      "bonne": 2,
+      "explication": "Le 7 août 1960, Félix Houphouët-Boigny, alors président du Conseil du gouvernement, proclame l'indépendance de la Côte d'Ivoire au nom du peuple ivoirien. Source : APA News."
+    },
+    {
+      "q": "Depuis quand Yamoussoukro est-elle la capitale politique et administrative de la Côte d'Ivoire ?",
+      "options": [
+        "Depuis l'indépendance, en 1960",
+        "Depuis mars 1983",
+        "Depuis 1993",
+        "Depuis la Constitution de 2016"
+      ],
+      "bonne": 1,
+      "explication": "Yamoussoukro est devenue la capitale politique et administrative du pays en mars 1983. Abidjan reste le principal centre urbain et économique. Source : Wikipédia."
+    },
+    {
+      "q": "Quelle est la devise de la République de Côte d'Ivoire ?",
+      "options": [
+        "Unité, Travail, Progrès",
+        "Paix, Justice, Travail",
+        "Un peuple, un but, une foi",
+        "Union, Discipline, Travail"
+      ],
+      "bonne": 3,
+      "explication": "Article 48 de la Constitution : « La devise de la République est : Union, Discipline, Travail. » Le même article fait du drapeau tricolore orange, blanc, vert l'emblème national et de l'Abidjanaise l'hymne national."
+    },
+    {
+      "q": "Quand l'Assemblée générale des Nations unies a-t-elle adopté la Déclaration universelle des droits de l'homme ?",
+      "options": [
+        "Le 26 juin 1945",
+        "Le 10 décembre 1948",
+        "Le 4 novembre 1950",
+        "Le 25 mai 1963"
+      ],
+      "bonne": 1,
+      "explication": "Le 10 décembre 1948, les 58 États membres qui composaient alors l'Assemblée générale ont adopté la Déclaration universelle. Le 26 juin 1945 est la date de la signature de la Charte des Nations unies, à San Francisco. Source : Nations unies."
+    },
+    {
+      "q": "L'Organisation de l'unité africaine (OUA), à laquelle a succédé l'Union africaine, est née :",
+      "options": [
+        "Le 28 mai 1975, à Lagos",
+        "Le 7 août 1960, à Abidjan",
+        "Le 25 mai 1963, à Addis-Abeba",
+        "Le 10 janvier 1994, à Dakar"
+      ],
+      "bonne": 2,
+      "explication": "L'OUA est fondée le 25 mai 1963 à Addis-Abeba (Éthiopie), lors d'un sommet qui réunissait 32 chefs d'État africains. L'Union africaine lui a officiellement succédé le 9 juillet 2002, à Durban (Afrique du Sud). Source : Union africaine."
+    },
+    {
+      "q": "Le traité instituant la Communauté économique des États de l'Afrique de l'Ouest (CEDEAO) a été signé :",
+      "options": [
+        "Le 28 mai 1975, à Lagos",
+        "Le 25 mai 1963, à Addis-Abeba",
+        "Le 10 janvier 1994, à Dakar",
+        "Le 17 octobre 1993, à Port-Louis"
+      ],
+      "bonne": 0,
+      "explication": "Les chefs d'État et de gouvernement de quinze pays d'Afrique de l'Ouest ont signé le traité de la CEDEAO le 28 mai 1975 à Lagos, au Nigeria. Source : CEDEAO."
+    },
+    {
+      "q": "Où siège la Commission de l'Union économique et monétaire ouest-africaine (UEMOA) ?",
+      "options": [
+        "À Dakar",
+        "À Ouagadougou",
+        "À Abidjan",
+        "À Lomé"
+      ],
+      "bonne": 1,
+      "explication": "La Commission de l'UEMOA siège à Ouagadougou (Burkina Faso), comme la Cour de justice et la Cour des comptes de l'Union. Le traité de l'UEMOA a été signé à Dakar le 10 janvier 1994, et la Banque centrale des États de l'Afrique de l'Ouest (BCEAO) a son siège à Dakar. Sources : Wikipédia, BCEAO."
+    },
+    {
+      "q": "Où siège la Cour commune de justice et d'arbitrage (CCJA) de l'OHADA ?",
+      "options": [
+        "À Yaoundé",
+        "À Porto-Novo",
+        "À Port-Louis",
+        "À Abidjan"
+      ],
+      "bonne": 3,
+      "explication": "La CCJA siège à Abidjan. Le traité OHADA a été signé le 17 octobre 1993 à Port-Louis (île Maurice) ; le Secrétariat permanent est à Yaoundé et l'École régionale supérieure de la magistrature (ERSUMA) à Porto-Novo. Source : Wikipédia."
+    },
+    {
+      "q": "Où se trouve le siège de la Banque africaine de développement (BAD) ?",
+      "options": [
+        "À Abidjan",
+        "À Addis-Abeba",
+        "À Lagos",
+        "À Nairobi"
+      ],
+      "bonne": 0,
+      "explication": "Le Groupe de la Banque africaine de développement, fondé en 1964, est basé à Abidjan, en Côte d'Ivoire. Source : Banque africaine de développement."
+    },
+    {
+      "q": "Qui est l'auteur de De l'esprit des lois, l'ouvrage de 1748 associé à la séparation des pouvoirs ?",
+      "options": [
+        "Jean-Jacques Rousseau",
+        "Voltaire",
+        "Montesquieu",
+        "Alexis de Tocqueville"
+      ],
+      "bonne": 2,
+      "explication": "Montesquieu publie De l'esprit des lois à Genève en 1748. On en retient la séparation des pouvoirs législatif, exécutif et judiciaire, et la formule « le pouvoir arrête le pouvoir ». Source : Wikipédia."
+    }
   ]
 }
 ];
