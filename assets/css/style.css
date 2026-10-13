@@ -826,6 +826,14 @@ a.aside-title:hover{color:var(--gold-ink)}
 .ad-expire{background:var(--cream-2);color:var(--muted)}
 .ad-attente{background:#fff;color:var(--gold-ink);box-shadow:inset 0 0 0 1px var(--gold)}
 .ad-partage{background:#fbe9e9;color:#9b1c1c}
+.ad-securite{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.2rem;margin:0 0 1.2rem;padding:1rem 1.2rem;border:1px solid var(--gold);border-radius:8px;background:#fdf1d8;color:var(--ink)}
+.ad-securite>div{flex:1 1 28rem}
+.ad-securite-ouverte{display:block;background:#fff}
+.ad-securite-ouverte .ea-form>h3,.ad-securite-ouverte .ea-form>ol{grid-column:1/-1}
+.ad-securite-ouverte h3{font-family:var(--serif);font-size:1.3rem;color:var(--navy)}
+.ad-mfa-etapes{display:grid;gap:.7rem;padding-left:1.2rem;margin:0}
+.ad-mfa-etapes small{display:block;margin-top:.4rem;color:var(--muted)}
+.ad-qr{display:block;margin:.6rem 0;background:#fff;border:1px solid var(--line);border-radius:6px}
 .ad-retour{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.2rem}
 .ad-mdp{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.15rem;letter-spacing:.08em;background:var(--cream);padding:.15rem .5rem;border-radius:4px}
 .ad-histo{list-style:none;display:grid;gap:.5rem;font-size:.95rem}

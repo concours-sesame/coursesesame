@@ -9,6 +9,12 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
 - Les règles d'accès sont dans la base (`migrations/`, à appliquer dans l'ordre). Un compte connecté ne lit les contenus et ne
   peut demander un lien vers un fichier que si son abonnement est en cours ; les brouillons restent invisibles.
 - Les fonctions d'administration vérifient que l'appelant figure dans la table `admins`.
+- Validation en deux étapes de l'administrateur (`20261013101259_admin_double_authentification.sql`) : une fois
+  activée depuis la page d'administration (code QR à scanner avec Google Authenticator ou Microsoft Authenticator),
+  `est_admin()` n'est vrai qu'avec une session validée par le code (niveau `aal2` du jeton). Toutes les règles
+  d'accès et fonctions d'administration en dépendent ; `admin-mot-de-passe` fait la même vérification.
+  Téléphone perdu : supprimer le facteur dans le tableau de bord Supabase (Authentication, Users, le compte,
+  section MFA factors), puis réactiver la validation depuis la page d'administration.
 - Seuls les comptes confirmés (créés par la fonction `inscription`) reçoivent un profil.
 - La clé publique du projet (dans `assets/js/espace-config.js`) n'est pas secrète. La clé secrète
   (`service_role` ou `sb_secret_…`) ne doit **jamais** apparaître dans le site.
