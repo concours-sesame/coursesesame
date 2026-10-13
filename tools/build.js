@@ -23,6 +23,9 @@ const vm = require("vm");
 const DIR = path.resolve(__dirname, "..");
 const SITE = "https://coursesesame.com/";
 const OG_IMAGE = SITE + "assets/img/og-image.png";
+// Mesure d'audience GoatCounter (sans cookies) : tableau de bord sur https://<code>.goatcounter.com
+const GOATCOUNTER = "coursesesame";
+const STATS = `<script data-goatcounter="https://${GOATCOUNTER}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>`;
 const TODAY = new Date().toISOString().slice(0, 10);
 const read = f => fs.readFileSync(path.join(DIR, f), "utf8");
 const write = (f, s) => { fs.mkdirSync(path.dirname(path.join(DIR, f)), { recursive: true }); fs.writeFileSync(path.join(DIR, f), s); console.log("écrit", f); };
@@ -229,7 +232,7 @@ const SKIP_LINK = `<a class="skip-link" href="#top">Aller au contenu</a>`;
 const headApp = prefix => `<link rel="manifest" href="${prefix}manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="Sésame et SAJ">`;
 
-function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image = OG_IMAGE, ogType = "website", scripts = [], robots = "" }) {
+function page({ prefix, title, description, url, body, ld, bodyAttrs = "", image = OG_IMAGE, ogType = "website", scripts = [], robots = "", stats = true }) {
   body = cleanHTML(body);
   title = titreSEO(title);
   description = couper(description);
@@ -256,7 +259,7 @@ ${headApp(prefix)}
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="${prefix}assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="${prefix}assets/fonts/source-serif-4-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="${prefix}assets/css/style.css">
+<link rel="stylesheet" href="${prefix}assets/css/style.css">${stats ? "\n" + STATS : ""}
 ${ld.map(jsonld).join("\n")}
 </head>
 <body data-root="${prefix}"${bodyAttrs}>
@@ -1059,7 +1062,7 @@ ${contactCTA(prefix)}`;
   </div>
 </section>`;
   write("espace-abonnes/admin/index.html", page({
-    prefix, url: SITE + "espace-abonnes/admin/", body, robots: "noindex, nofollow",
+    prefix, url: SITE + "espace-abonnes/admin/", body, robots: "noindex, nofollow", stats: false,
     scripts: [...SCRIPTS_ESPACE, "assets/js/espace-admin.js"],
     title: "Administration de l'espace abonnés",
     description: "Administration de l'espace abonnés des Cours Sésame et SAJ.",
@@ -1104,8 +1107,13 @@ ${contactCTA(prefix)}`;
     <p>En dehors de l'espace abonnés, présenté plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
     <p>Votre panier est conservé uniquement dans votre navigateur, sur votre appareil, pour que vous le retrouviez à votre prochaine visite. Nous n'y avons pas accès. Pour le supprimer, videz-le ou effacez les données du site dans votre navigateur.</p>
     <p>Quand vous commandez, les informations que vous saisissez (prénom, nom, téléphone, ville, message) sont placées dans un message WhatsApp que vous envoyez vous-même. Nous ne les utilisons que pour traiter votre commande et vous livrer.</p>
-    <p>Le site n'utilise ni cookies publicitaires ni outil de mesure d'audience. Les polices de caractères sont hébergées sur le site lui-même. Quelques photographies sont affichées depuis les serveurs d'Unsplash, qui reçoivent à cette occasion l'adresse IP du visiteur, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
+    <p>Le site n'utilise aucun cookie. Les polices de caractères sont hébergées sur le site lui-même. Quelques photographies sont affichées depuis les serveurs d'Unsplash, qui reçoivent à cette occasion l'adresse IP du visiteur, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
     <p>Conformément à la loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel, vous disposez d'un droit d'accès, de rectification, d'opposition et de suppression des données qui vous concernent. Pour l'exercer, écrivez-nous sur WhatsApp.</p>
+
+    <h2 id="mesure-audience">Mesure d'audience</h2>
+    <p>Pour connaître la fréquentation du site, nous utilisons GoatCounter, un outil de mesure d'audience qui ne dépose aucun cookie et n'enregistre rien dans votre navigateur.</p>
+    <p>Il ne produit que des statistiques globales : pages consultées, site d'où vient le visiteur, navigateur, système, taille d'écran, langue et pays. Le pays est déduit de l'adresse IP, qui n'est pas conservée. Aucun visiteur ne peut être identifié ni suivi d'un site à l'autre.</p>
+    <p>Ces statistiques sont hébergées en Europe, en Finlande et en Allemagne, et ne sont communiquées à personne. La page d'administration de l'espace abonnés n'est pas mesurée.</p>
 
     <h2 id="espace-abonnes">Espace abonnés</h2>
     <p>Pour utiliser l'espace abonnés, vous créez un compte avec votre prénom, votre nom, votre numéro de téléphone (WhatsApp), votre adresse e-mail et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi les dates et les paiements de votre abonnement.</p>
@@ -1186,6 +1194,7 @@ index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
 }) + "\n");
 // Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
 index = index.replace(/(data-count-from="ouvrages">)[^<]*(<)/g, `$1${LIVRES.length}$2`).replace(/(data-count-from="concours">)[^<]*(<)/g, `$1${CONCOURS.length}$2`);
+index = inject(index, "stats", STATS);
 index = inject(index, "jsonld", "\n" + [
   { "@context": "https://schema.org", "@type": "WebSite", name: "Les Cours Sésame et SAJ", url: SITE, inLanguage: "fr" },
   { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
