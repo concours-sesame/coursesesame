@@ -780,6 +780,10 @@ a.aside-title:hover{color:var(--gold-ink)}
 .ea-v-fermer{position:sticky;top:0;float:right;z-index:4;margin:-8px -8px 0 8px;width:44px;height:44px;border-radius:var(--r-sm);display:grid;place-items:center;background:#fff;border:1px solid var(--line)}
 .ea-v-fermer svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2}
 .ea-v-corps{margin-top:.6rem}
+/* Filigrane répété au nom du lecteur (fiches, QCM) et voile quand la page n'est plus au premier plan */
+.ea-filigrane{background-repeat:repeat;background-size:760px 360px;background-position:center top}
+body.ea-voile .ea-v-boite{filter:blur(18px);transition:none}
+body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette page pour reprendre la lecture.";position:fixed;inset:0;z-index:2;display:grid;place-items:center;padding:24px;text-align:center;font-weight:700;font-size:1.05rem;color:#fff;background:rgba(9,24,54,.55)}
 .ea-v-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin:1rem 0 .4rem}
 .ea-etat{font-weight:600;color:var(--navy)}
 .ea-lecteur{position:relative;border-radius:var(--r-sm);overflow:hidden;background:#000}
@@ -842,6 +846,31 @@ a.aside-title:hover{color:var(--gold-ink)}
 .ad-expire{background:var(--cream-2);color:var(--muted)}
 .ad-attente{background:#fff;color:var(--gold-ink);box-shadow:inset 0 0 0 1px var(--gold)}
 .ad-partage{background:#fbe9e9;color:#9b1c1c}
+.ad-suspendu{background:#fbe9e9;color:#9b1c1c;box-shadow:inset 0 0 0 1px #e8b4b4}
+.ad-avenir{background:#eef3fb;color:var(--navy)}
+/* Suivi en direct */
+.ad-stats-5{grid-template-columns:repeat(5,1fr)}
+.ad-direct-tete{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem 1rem;margin-bottom:1rem}
+.ad-direct-etat{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;margin:0;font-size:.95rem;color:var(--muted)}
+.ad-pastille{display:inline-block;width:10px;height:10px;border-radius:50%;background:#b8b8c4}
+.ad-pastille-ok{background:#1f9d55;box-shadow:0 0 0 3px rgba(31,157,85,.18);animation:ad-pouls 2s ease-in-out infinite}
+@keyframes ad-pouls{50%{box-shadow:0 0 0 6px rgba(31,157,85,.08)}}
+@media (prefers-reduced-motion:reduce){.ad-pastille-ok{animation:none}}
+.ad-direct-retour{margin-bottom:1rem;padding:.8rem 1rem;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--cream)}
+.ad-bloc{margin-bottom:1.6rem}
+.ad-bloc h3{display:flex;align-items:center;gap:.5rem;margin-bottom:.7rem;font-family:var(--serif);font-size:1.25rem;color:var(--navy)}
+.ad-bloc h3 .n{font-family:var(--sans,inherit);font-size:.85rem;font-weight:700;padding:.1rem .5rem;border-radius:99px;background:var(--cream);color:var(--navy)}
+.ad-enligne{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0}
+.ad-enligne li{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;border:1px solid var(--line);border-radius:99px;background:#fff}
+.ad-enligne small{color:var(--muted);font-size:.85rem}
+.ad-point{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:700;color:#1f7a45}
+.ad-point::before{content:"";width:8px;height:8px;border-radius:50%;background:#1f9d55}
+.ad-vert{color:#1f7a45}
+.ad-tableau td small{display:block;margin-top:.15rem;font-size:.85rem;color:var(--muted);font-weight:400}
+.ad-tableau td small a{color:var(--navy)}
+.ad-td-actions{white-space:nowrap}
+.ad-td-actions .btn-sm{min-height:34px;padding:.3rem .7rem;font-size:.88rem}
+.ad-histo li .btn-sm{margin-top:.3rem;min-height:30px;padding:.2rem .6rem;font-size:.85rem}
 .ad-securite{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.2rem;margin:0 0 1.2rem;padding:1rem 1.2rem;border:1px solid var(--gold);border-radius:8px;background:#fdf1d8;color:var(--ink)}
 .ad-securite>div{flex:1 1 28rem}
 .ad-securite-ouverte{display:block;background:#fff}
@@ -931,7 +960,7 @@ a.aside-title:hover{color:var(--gold-ink)}
   .v-rail{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;margin:0 calc(-1 * var(--gutter));padding:0 var(--gutter) 10px;scroll-padding:0 var(--gutter)}
   .v-card,.v-rail-sm .v-card{flex:0 0 min(62vw,240px);scroll-snap-align:start}
   .ea-accueil,.ea-accueil-inscrit{grid-template-columns:1fr}
-  .ad-stats{grid-template-columns:repeat(2,1fr)}
+  .ad-stats,.ad-stats-5{grid-template-columns:repeat(2,1fr)}
   .ad-ligne{grid-template-columns:1fr}
   .ad-actions{justify-content:flex-start}
   .espace-etapes{grid-template-columns:1fr}

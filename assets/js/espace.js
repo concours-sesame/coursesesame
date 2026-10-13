@@ -80,6 +80,22 @@
   }
   const lienSur = u => /^https?:\/\//i.test(String(u || ""));
 
+  /* ---------- Filigrane au nom du lecteur ---------- */
+  // Signature complète du lecteur (nom, téléphone, e-mail), fixée par la page de l'espace abonnés.
+  // Elle est répétée sur toute la surface des documents, fiches et QCM, avec la date et l'heure de lecture :
+  // une capture d'écran, même recadrée, montre de quel compte elle vient.
+  let signatureLecteur = "";
+  const horodatage = () => new Date().toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  const texteFiligrane = marque => `${signatureLecteur || marque} · ${horodatage()}`;
+  // Calque transparent répété (image SVG) posé sur un contenu en texte : fiche, QCM, lien
+  function poserFiligrane(zone, marque) {
+    const t = texteFiligrane(marque).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }[c]));
+    // Une signature entière par motif (760 x 360), pour qu'elle ne soit jamais coupée par le bord du motif
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360"><text x="380" y="180" text-anchor="middle" transform="rotate(-24 380 180)" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="rgba(15,42,92,0.10)">${t}</text></svg>`;
+    zone.classList.add("ea-filigrane");
+    zone.style.backgroundImage = `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`;
+  }
+
   /* ---------- Lecture des PDF dans la page, sans téléchargement ni copie ---------- */
   // Chaque page est dessinée en image (pas de texte sélectionnable), avec le nom de l'abonné incrusté.
   const PDFJS = ROOT + "assets/vendor/pdfjs-3.11.174/";
@@ -90,6 +106,7 @@
     const doc = await lib.getDocument({ data: octets, isEvalSupported: false, enableXfa: false }).promise;
     zone.innerHTML = "";
     const mention = `Réservé à ${marque} · Les Cours Sésame et SAJ · Reproduction interdite`;
+    const tuile = texteFiligrane(marque);
     const dessiner = async (n, canvas) => {
       const page = await doc.getPage(n);
       const base = page.getViewport({ scale: 1 });
@@ -108,6 +125,14 @@
       ctx.textAlign = "center"; ctx.textBaseline = "middle";
       ctx.fillStyle = "rgba(15,42,92,.13)";
       ctx.fillText(marque, 0, 0);
+      // Même signature, en petit et répétée sur toute la page, avec l'e-mail, la date et l'heure de lecture
+      const corps = Math.max(11, Math.round(w / 64));
+      ctx.font = `700 ${corps}px sans-serif`;
+      ctx.fillStyle = "rgba(15,42,92,.075)";
+      const pasX = ctx.measureText(tuile).width + corps * 4, pasY = corps * 7, diag = Math.hypot(w, h);
+      for (let y = -diag / 2, rang = 0; y < diag / 2; y += pasY, rang++) {
+        for (let x = -diag / 2 - (rang % 2) * pasX / 2; x < diag / 2; x += pasX) ctx.fillText(tuile, x, y);
+      }
       ctx.restore();
       ctx.font = `600 ${Math.max(10, Math.round(w / 95))}px sans-serif`;
       ctx.fillStyle = "rgba(60,60,75,.85)";
@@ -151,14 +176,40 @@
     return doc;
   }
 
-  // Protections pendant la lecture : pas de clic droit, de sélection, de copie, d'enregistrement ni d'impression
-  const bloquer = e => { if (visionneuse && !visionneuse.hidden && visionneuse.contains(e.target)) e.preventDefault(); };
+  /* ---------- Protections pendant la lecture ---------- */
+  // Aucun site ne peut empêcher une capture d'écran faite par le téléphone ou l'ordinateur. Ces mesures la
+  // découragent et la rendent traçable : filigrane au nom du lecteur (plus haut), contenu voilé dès que la page
+  // n'est plus au premier plan, clic droit, sélection, copie, glisser, impression et raccourcis désactivés.
+  const lectureOuverte = () => visionneuse && !visionneuse.hidden;
+  let dernierAvis = 0;
+  const avisProtege = () => { if (Date.now() - dernierAvis > 4000) { dernierAvis = Date.now(); toast("Contenu protégé : copie, impression et capture ne sont pas autorisées."); } };
+  const bloquer = e => {
+    if (!lectureOuverte() || !visionneuse.contains(e.target)) return;
+    e.preventDefault();
+    if (e.type === "contextmenu" || e.type === "copy" || e.type === "cut") avisProtege();
+  };
   ["contextmenu", "copy", "cut", "selectstart", "dragstart"].forEach(t => document.addEventListener(t, bloquer, true));
+  // Voile : dès que la page perd le premier plan (outil de capture, autre application, autre onglet)
+  const voiler = oui => document.body.classList.toggle("ea-voile", !!oui && lectureOuverte());
+  window.addEventListener("blur", () => voiler(true));
+  window.addEventListener("focus", () => voiler(false));
+  document.addEventListener("visibilitychange", () => voiler(document.hidden));
+  window.addEventListener("pagehide", () => voiler(true));
   document.addEventListener("keydown", e => {
-    if (!visionneuse || visionneuse.hidden) return;
-    const k = (e.key || "").toLowerCase();
-    if ((e.ctrlKey || e.metaKey) && ["s", "p", "c", "x", "a", "u"].includes(k)) { e.preventDefault(); e.stopPropagation(); }
+    if (!lectureOuverte()) return;
+    const k = (e.key || "").toLowerCase(), mod = e.ctrlKey || e.metaKey;
+    const outils = k === "f12" || (mod && e.shiftKey && ["i", "j", "c", "k"].includes(k)) || (e.metaKey && e.altKey && ["i", "j", "c", "u"].includes(k));
+    if ((mod && ["s", "p", "c", "x", "a", "u"].includes(k)) || outils) { e.preventDefault(); e.stopPropagation(); avisProtege(); return; }
+    // Touche Impr. écran (ordinateur) : contenu voilé un instant et presse-papiers vidé
+    if (k === "printscreen" || e.key === "PrintScreen") { voiler(true); setTimeout(() => voiler(!document.hasFocus()), 1500); }
   }, true);
+  document.addEventListener("keyup", e => {
+    if (!lectureOuverte() || e.key !== "PrintScreen") return;
+    voiler(true); avisProtege();
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText("Contenu protégé · Les Cours Sésame et SAJ").catch(() => {});
+    setTimeout(() => voiler(!document.hasFocus()), 1500);
+  }, true);
+  window.addEventListener("beforeprint", () => { if (lectureOuverte()) avisProtege(); });
 
   /* ---------- QCM chronométré ---------- */
   let minuterieQcm;
@@ -226,7 +277,7 @@
     $("#eaVCorps").innerHTML = "";
     visionneuse.hidden = true;
     document.body.style.overflow = "";
-    document.body.classList.remove("ea-lecture");
+    document.body.classList.remove("ea-lecture", "ea-voile");
     if (retourFocus) retourFocus.focus();
   }
   function creerVisionneuse() {
@@ -258,6 +309,7 @@
     $("#eaVDesc").textContent = c.description || "";
     $("#eaVDesc").hidden = !c.description;
     const corps = $("#eaVCorps");
+    corps.classList.remove("ea-filigrane"); corps.style.backgroundImage = "";
     corps.innerHTML = `<p class="ea-attente">Chargement…</p>`;
     visionneuse.hidden = false;
     document.body.style.overflow = "hidden";
@@ -270,9 +322,10 @@
       return;
     }
     const qcm = lireQcm(c);
-    if (qcm) { lancerQcm(qcm, corps, marque); return; }
+    if (qcm) { lancerQcm(qcm, corps, marque); poserFiligrane(corps, marque); return; }
     if (c.type === "texte") {
       corps.innerHTML = `<div class="ea-fiche">${mettreEnForme(c.texte || "")}</div><p class="ea-mention">Fiche réservée à ${esc(marque)}. Reproduction et diffusion interdites.</p>`;
+      poserFiligrane(corps, marque);
       return;
     }
     if (c.type === "lien") {
@@ -381,7 +434,12 @@
   async function controlerAppareil() {
     if (!etat.session || etat.admin || etat.codeAttendu || document.hidden) return;
     const { data, error } = await client.rpc("verifier_appareil");
-    if (!error && data === false) { await ecarterAppareil(); afficher("connexion"); }
+    if (!error && data === false) { await ecarterAppareil(); afficher("connexion"); return; }
+    // Abonnement suspendu, coupé ou activé entre-temps : la page se met à jour d'elle-même
+    const [a, s] = await Promise.all([client.rpc("mon_abonnement"), client.rpc("ma_suspension")]);
+    if (a.error || s.error || !etat.abo) return;
+    const actif = !!(a.data && a.data[0] && a.data[0].actif);
+    if (actif !== !!etat.abo.actif || (s.data || null) !== (etat.suspendu || null)) { fermerVisionneuse(); afficher(); }
   }
 
   if (!OUVERT) {
@@ -399,17 +457,23 @@
     if (v.error) throw v.error;
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
-    const [p, a, adm, ouv] = await Promise.all([
+    const [p, a, adm, ouv, sus] = await Promise.all([
       client.from("profils").select("prenom, nom, telephone, concours").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
-      client.rpc("acces_ouvrages")
+      client.rpc("acces_ouvrages"),
+      client.rpc("ma_suspension")
     ]);
     if (p.error || a.error) throw p.error || a.error;
+    const profil = p.data || { prenom: "", nom: "", telephone: "" };
+    // Signature du filigrane des documents : nom, téléphone et e-mail du lecteur
+    signatureLecteur = `${profil.prenom} ${profil.nom} · ${profil.telephone} · ${session.user.email}`;
     return {
       session, uid, email: session.user.email,
-      profil: p.data || { prenom: "", nom: "", telephone: "" },
+      profil,
       abo: (a.data && a.data[0]) || { actif: false, fin: null, deja_abonne: false },
+      // Date de début de la suspension en cours (accès coupé, jours restants gardés)
+      suspendu: (!sus.error && sus.data) || null,
       admin: !!adm.data,
       // Ouvrages complets : formules d'un mois et plus seulement (règle appliquée par la base)
       ouvrages: !!adm.data || ouv.data === true
@@ -472,6 +536,15 @@
           ${j <= 7 ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
           ${etat.ouvrages ? "" : `<p>Votre formule donne accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus.</p>`}</div>
           ${j <= 7 ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler</a>` : ""}
+        </div>`;
+    }
+    if (etat.suspendu) {
+      const reste = abo.fin ? Math.max(0, Math.round((versDate(abo.fin) - versDate(etat.suspendu)) / 864e5) + 1) : 0;
+      return `<div class="ea-statut ea-statut-attente">
+          <span class="eyebrow">Abonnement suspendu</span>
+          <h3>Votre abonnement est suspendu depuis le ${dateFr(etat.suspendu)}.</h3>
+          <p>L'accès aux contenus est fermé pendant la suspension.${reste ? ` Vos ${reste} jour${reste > 1 ? "s" : ""} d'abonnement restant${reste > 1 ? "s" : ""} sont conservé${reste > 1 ? "s" : ""} : ils reprendront le jour de la réactivation.` : ""}</p>
+          <a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Mon abonnement à l'espace abonnés est suspendu. Je souhaite en savoir plus.").replace(/\n\nRéférence de mon paiement Mobile Money : $/, ""))}" target="_blank" rel="noopener">${icone("i-wa")}Nous écrire sur WhatsApp</a>
         </div>`;
     }
     const tarifs = typeof TARIFS_ABONNEMENT !== "undefined" ? TARIFS_ABONNEMENT : [];
