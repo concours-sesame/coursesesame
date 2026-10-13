@@ -220,6 +220,9 @@ a.concours-card{text-decoration:none}
 .book-niveau{font-size:.9rem;color:var(--muted)}
 .book-extrait{display:block;margin-top:.25rem;font-size:.88rem;font-weight:600;color:var(--gold-ink)}
 .book-num{display:block;margin-top:.25rem;font-size:.88rem;font-weight:600;color:var(--navy)}
+/* Ouvrage dont la version intégrale se lit dans l'espace abonnés */
+.book-abo{align-self:flex-start;margin-top:.45rem;padding:.14rem .55rem;border:1px solid rgba(15,42,92,.3);border-radius:4px;font-size:.84rem;font-weight:700;line-height:1.35;color:var(--navy);text-decoration:none}
+.book-abo:hover,.book-abo:focus-visible{background:var(--navy);border-color:var(--navy);color:#fff}
 .book-buy{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-top:auto;padding-top:.8rem}
 .price{font-size:1.2rem;font-weight:700;white-space:nowrap;color:var(--ink)}
 .price small{font-size:.85rem;font-weight:400;color:var(--muted);margin-left:.25rem}
@@ -231,6 +234,7 @@ a.concours-card{text-decoration:none}
 .empty b{display:block;font-family:var(--serif);font-size:1.35rem;color:var(--ink);margin-bottom:.3rem}
 .empty a{color:var(--navy);font-weight:600}
 .spec.spec-num{background:var(--gold);color:var(--navy)}
+.spec.spec-abo{background:var(--navy);color:#fff}
 
 /* Packs */
 .pack{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.5rem;background:var(--cream);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r-sm);padding:.9rem 1rem .9rem 1.2rem;margin:0 0 24px}
@@ -580,6 +584,10 @@ body.has-cart-bar .wa-float{bottom:84px}
 .product-buy .btn-gold:hover{background:var(--navy-3)}
 .product-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.1rem}
 .product-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.6rem;margin-top:1.2rem;font-size:.95rem;color:var(--muted)}
+.product-abo{display:flex;gap:.75rem;align-items:flex-start;margin-top:1.1rem;padding:.85rem 1rem;background:var(--cream);border-left:3px solid var(--gold);border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:.98rem;line-height:1.5}
+.product-abo svg{flex:none;width:22px;height:22px;margin-top:.1rem;color:var(--navy)}
+.product-abo b{color:var(--navy)}
+.product-abo a{color:var(--navy);font-weight:600;text-decoration-color:var(--gold);text-underline-offset:3px}
 .share-btn{display:inline-flex;align-items:center;gap:.45rem;font-weight:600;color:var(--navy);text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px}
 .share-btn svg{width:18px;height:18px}
 .share-btn-dark{color:var(--navy)}
@@ -724,6 +732,18 @@ a.aside-title:hover{color:var(--gold-ink)}
 .ea-apercu{padding:clamp(20px,3vw,30px);border-radius:var(--r);background:var(--cream);border:1px solid var(--line)}
 .ea-apercu h3{font-family:var(--serif);font-size:1.4rem;color:var(--navy);margin-bottom:.7rem}
 .ea-compte-types{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem}
+.ea-apercu-intro{color:var(--muted);margin-bottom:.9rem}
+.ea-groupe{border-top:1px solid var(--line)}
+.ea-groupe:last-child{border-bottom:1px solid var(--line)}
+.ea-groupe summary{display:flex;flex-wrap:wrap;align-items:baseline;gap:.15rem .7rem;padding:.8rem 2rem .8rem 0;cursor:pointer;list-style:none;position:relative}
+.ea-groupe summary::-webkit-details-marker{display:none}
+.ea-groupe summary::after{content:"";position:absolute;right:.35rem;top:1.15rem;width:9px;height:9px;border-right:2px solid var(--navy);border-bottom:2px solid var(--navy);transform:rotate(45deg);transition:transform .15s}
+.ea-groupe[open] summary::after{transform:rotate(-135deg);top:1.35rem}
+.ea-groupe summary:hover .ea-groupe-nom,.ea-groupe summary:focus-visible .ea-groupe-nom{color:var(--gold-ink)}
+.ea-groupe-nom{font-weight:700;font-size:1.05rem;color:var(--navy)}
+.ea-groupe-n{min-width:1.9em;padding:.05rem .45rem;border-radius:99px;background:#fff;border:1px solid var(--line);font-size:.85rem;font-weight:700;text-align:center;color:var(--navy)}
+.ea-groupe-note{flex-basis:100%;font-size:.85rem;font-weight:600;color:var(--gold-ink)}
+.ea-groupe .ea-liste{padding-bottom:.4rem}
 .ea-liste{list-style:none;display:grid}
 .ea-item{display:grid;grid-template-columns:30px 1fr;gap:.7rem;align-items:center;padding:.6rem 0;border-top:1px solid var(--line)}
 .ea-item b{display:block;font-size:1rem;line-height:1.3}
@@ -811,6 +831,15 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
 .espace-band .btn-ghost:hover{border-color:#fff}
 .espace-band-actions{display:flex;flex-wrap:wrap;gap:.6rem}
 .espace-section{padding-top:clamp(32px,5vw,56px)}
+/* Vitrine : les ouvrages compris dans l'abonnement */
+.abo-livres{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:28px 20px}
+.abo-livre a{display:flex;flex-direction:column;gap:.65rem;height:100%;color:inherit;text-decoration:none}
+.abo-livre a:hover .cover,.abo-livre a:focus-visible .cover{border-color:var(--navy)}
+.abo-livre-txt b{display:block;font-family:var(--serif);font-size:1.02rem;font-weight:700;line-height:1.25;color:var(--ink)}
+.abo-livre a:hover b,.abo-livre a:focus-visible b{color:var(--gold-ink)}
+.abo-livre-txt small{display:block;margin-top:.25rem;font-size:.88rem;color:var(--muted)}
+.abo-note{max-width:70ch;margin-top:clamp(24px,3vw,36px);padding-top:1.1rem;border-top:1px solid var(--line);color:var(--muted)}
+.abo-note a,#inclus .lead a{color:var(--navy);font-weight:600;text-decoration-color:var(--gold);text-underline-offset:3px}
 .espace-etapes{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 28px;counter-reset:etape;border-top:2px solid var(--navy)}
 .espace-etape{counter-increment:etape;position:relative;padding:1rem 0 1rem 2.4rem;border-bottom:1px solid var(--line)}
 .espace-etape::before{content:counter(etape);position:absolute;top:1.05rem;left:0;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--navy);color:#fff;font-size:.9rem;font-weight:700;display:grid;place-items:center}
@@ -982,6 +1011,9 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
   .toolbar{position:static}
   .toolbar-row .select{width:120px;font-size:.9rem}
   .books{grid-template-columns:1fr 1fr;gap:26px 14px}
+  .abo-livres{grid-template-columns:1fr 1fr;gap:22px 14px}
+  .abo-livre-txt b{font-size:.95rem}
+  .book-abo{font-size:.8rem}
   .cover-made{padding:5% 6%}
   .cover-top{font-size:.5rem}
   .cover-title{font-size:.7rem}

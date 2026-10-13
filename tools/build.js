@@ -39,6 +39,21 @@ const { WA, OUVRAGES, FAQ, METHODO, EPREUVES, SUJETS, VIDEOS } = ctx.D;
 const R = ctx.SESAME;
 const { CONCOURS, EPREUVES_PAR_CONCOURS, fmt, parsePrice, plural, slugify, attr, svg } = R;
 const byCat = id => OUVRAGES.filter(o => o.categorie === id);
+// Ouvrages du catalogue dont la version intégrale se lit dans l'espace abonnés ("abonnement":true dans data.js).
+// Chaque livre une seule fois : deux titres qui partagent le même extrait sont le même livre. Pour la valeur
+// au catalogue, on retient le prix le plus bas du livre.
+const TARIF_MOIS = (ctx.D.TARIFS_ABONNEMENT || []).find(t => t.cle === "m1");
+const LIVRES_ABONNEMENT = (() => {
+  const livres = new Map();
+  for (const o of OUVRAGES.filter(x => x.abonnement)) {
+    const k = o.extrait || o.titre;
+    if (!livres.has(k)) livres.set(k, { o, cats: [], prix: parsePrice(o.prix) });
+    const l = livres.get(k);
+    if (!l.cats.includes(o.categorie)) l.cats.push(o.categorie);
+    l.prix = Math.min(l.prix, parsePrice(o.prix));
+  }
+  return [...livres.values()];
+})();
 const WA_URL = "https://wa.me/" + WA;
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const stripTags = s => String(s).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
@@ -433,7 +448,7 @@ function videosSection(list, prefix, { id = "videos", h2, lead, ici, cls = "", b
 // Invitation à l'espace abonnés
 function espaceBand(prefix) {
   return `<div class="espace-band reveal">
-      <div><b>Allez plus loin avec l'espace abonnés</b><p>Vidéos, documents et fiches exclusifs, réservés aux abonnés. Créez votre compte en une minute, réglez par Mobile Money, et votre accès s'ouvre.</p></div>
+      <div><b>Allez plus loin avec l'espace abonnés</b><p>Sujets corrigés, fiches de révision et QCM chronométrés, et dès la formule d'un mois, nos ouvrages complets à lire en ligne. Créez votre compte en une minute, réglez par Mobile Money, et votre accès s'ouvre.</p></div>
       <div class="espace-band-actions"><a class="btn btn-navy" href="${prefix}espace-abonnes/#inscription">Créer mon compte${arrow}</a><a class="btn btn-ghost" href="${prefix}espace-abonnes/#connexion">Se connecter</a></div>
     </div>`;
 }
@@ -633,7 +648,7 @@ function ouvragePage(l) {
         <div class="product-concours">${cs.map(c => `<a href="${prefix}concours/${c.slug}/">${c.court}</a>`).join("")}</div>
         <h1 class="product-title">${o.titre}</h1>
         <p class="lead">${o.desc}</p>
-        <div class="specs">${o.phase ? `<span class="spec">${o.phase}</span>` : ""}<span class="spec">Niveaux ${o.niveau}</span>${o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : `<span class="spec">Livraison partout en CI</span>`}<span class="spec">Paiement Mobile Money</span></div>
+        <div class="specs">${o.phase ? `<span class="spec">${o.phase}</span>` : ""}<span class="spec">Niveaux ${o.niveau}</span>${o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : `<span class="spec">Livraison partout en CI</span>`}<span class="spec">Paiement Mobile Money</span>${o.abonnement ? `<span class="spec spec-abo">${R.ABO_MENTION}</span>` : ""}</div>
         <div class="product-buy">
           <span class="price">${o.prix}<small>FCFA</small></span>
           <button class="btn btn-gold p-add" data-add="${idx}">${svg("i-plus", 'fill="none" stroke="currentColor" stroke-width="2.6"')}Ajouter au panier</button>
@@ -642,6 +657,7 @@ function ouvragePage(l) {
           <a class="btn btn-wa" href="${WA_URL}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener">${waIcon}Commander sur WhatsApp</a>
           ${pdf ? `<a class="btn btn-ghost" href="${pdf}" target="_blank" rel="noopener">${bookIcon}Lire un extrait gratuit</a>` : ""}
         </div>
+        ${o.abonnement ? `<p class="product-abo">${svg("i-book", 'fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"')}<span><b>${R.ABO_MENTION}.</b> La version intégrale de cet ouvrage se lit aussi en ligne dans l'espace abonnés, dès la formule d'un mois${TARIF_MOIS ? ` (${TARIF_MOIS.prix} FCFA)` : ""}. <a href="${prefix}espace-abonnes/#inclus">Voir ce que comprend l'abonnement</a></span></p>` : ""}
         <div class="product-foot">
           <button class="share-btn" data-share="${url}" data-title="${attr(o.titre)}">${shareIcon}Partager cet ouvrage</button>
           <span>-10 % dès 3 ouvrages, appliqué au panier</span>
@@ -1005,11 +1021,26 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
   R.setRoot(prefix);
   const url = SITE + "espace-abonnes/";
   const tarifs = ctx.D.TARIFS_ABONNEMENT || [];
+  const nomCourt = id => (CONCOURS.find(c => c.id === id) || {}).court || id;
+  const valeur = LIVRES_ABONNEMENT.reduce((s, l) => s + l.prix, 0);
+  // Vitrine : les ouvrages du catalogue compris dans l'abonnement, avec un lien vers la page de chacun
+  const vitrine = LIVRES_ABONNEMENT.length ? `<section class="section section-cream" id="inclus">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">${R.ABO_MENTION}</span><h2 class="h-section">${LIVRES_ABONNEMENT.length} ouvrages du catalogue à lire en ligne</h2></div>
+      <p class="lead">Dès la formule d'un mois${TARIF_MOIS ? ` (${TARIF_MOIS.prix} FCFA)` : ""}, vous lisez la version intégrale de ces ouvrages dans l'espace abonnés. Au catalogue, ils représentent ensemble ${fmt(valeur)} FCFA. S'y ajoutent des ouvrages réservés aux abonnés, des sujets corrigés, des fiches de révision et des QCM chronométrés : <a href="#espace-app">voir la liste complète</a>.</p>
+    </div>
+    <ul class="abo-livres">${LIVRES_ABONNEMENT.map(({ o, cats }, i) => `
+      <li class="abo-livre reveal reveal-d${i % 4}"><a href="${R.ouvrageURL(o)}">${R.coverHTML(o)}<span class="abo-livre-txt"><b>${o.titre}</b><small>${cats.map(nomCourt).join(", ")}</small></span></a></li>`).join("")}
+    </ul>
+    <p class="abo-note">Les formules d'un jour, d'une semaine et de deux semaines donnent accès à tous les autres contenus, mais pas aux ouvrages complets. Les ouvrages se lisent en ligne, sur un appareil à la fois, pendant la durée de l'abonnement. Pour garder un ouvrage, commandez-le dans <a href="${prefix}ouvrages/">notre catalogue</a>.</p>
+  </div>
+</section>` : "";
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Espace abonnés", ""]],
     h1: `L'espace abonnés`,
-    lead: "Vidéos, documents et fiches exclusifs, en plus de nos ouvrages. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.",
-    ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>`,
+    lead: "Sujets corrigés, fiches de révision, QCM chronométrés et, dès la formule d'un mois, nos ouvrages complets à lire en ligne. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.",
+    ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${LIVRES_ABONNEMENT.length ? `<a href="#inclus" class="btn btn-ghost">Ce que comprend l'abonnement</a>` : ""}`,
     facts: tarifs.filter(t => ["j1", "j7", "m1", "m12"].includes(t.cle)).map(t => `${t.duree} : <b>${t.prix} FCFA</b>`)
   })}
 
@@ -1022,7 +1053,9 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
   </div>
 </section>
 
-<section class="section section-cream">
+${vitrine}
+
+<section class="section${LIVRES_ABONNEMENT.length ? "" : " section-cream"}">
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">Comment s'abonner</span><h2 class="h-section">Comment s'abonner</h2></div>
@@ -1039,8 +1072,8 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
 ${contactCTA(prefix)}`;
   write("espace-abonnes/index.html", page({
     prefix, url, body, scripts: SCRIPTS_ESPACE,
-    title: "Espace abonnés : ouvrages, corrigés, QCM et vidéos",
-    description: "Sujets corrigés, QCM, vidéos et ouvrages complets réservés aux abonnés. Abonnement dès 500 FCFA la journée, ouvrages compris dès la formule d'un mois.",
+    title: "Espace abonnés : ouvrages complets, corrigés, fiches et QCM",
+    description: "Nos ouvrages complets à lire en ligne dès la formule d'un mois, des sujets corrigés, des fiches de révision et des QCM chronométrés. Abonnement dès 500 FCFA la journée.",
     ld: [breadcrumb([["Accueil", SITE], ["Espace abonnés", url]])]
   }));
   urls.push(url);
