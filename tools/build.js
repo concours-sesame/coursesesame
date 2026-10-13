@@ -741,7 +741,7 @@ ${x.corrige}
       <div class="verrou">
         <span class="eyebrow">Espace abonnés</span>
         <h2>La suite du corrigé est réservée aux abonnés</h2>
-        <p>Le corrigé intégral de ce sujet, avec tous nos autres corrigés et nos ouvrages complets, se lit dans l'espace abonnés. Abonnement dès 500 FCFA la journée, par Mobile Money.</p>
+        <p>Le corrigé intégral de ce sujet, avec tous nos autres corrigés, se lit dans l'espace abonnés. Abonnement dès 500 FCFA la journée, par Mobile Money. Nos ouvrages complets y sont compris à partir de la formule d'un mois.</p>
         <div class="verrou-actions"><a class="btn btn-gold" href="${prefix}espace-abonnes/#corrige-${x.adresse}">Lire le corrigé complet${arrow}</a><a class="btn btn-ghost" href="${prefix}espace-abonnes/#inscription">Créer mon compte</a></div>
       </div>` : `<div class="copie" id="corrige">
 ${x.corrige}
@@ -968,7 +968,7 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
     <ol class="espace-etapes">
       <li class="espace-etape"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.</span></li>
       <li class="espace-etape"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis envoyez-nous la référence du paiement sur WhatsApp.${tarifs.length ? "" : " Nous vous indiquons le tarif."}</span></li>
-      <li class="espace-etape"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement. Un compte s'utilise sur un appareil à la fois : une connexion sur un autre appareil déconnecte le précédent.</span></li>
+      <li class="espace-etape"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement. Les ouvrages complets sont compris à partir de la formule d'un mois. Un compte s'utilise sur un appareil à la fois : une connexion sur un autre appareil déconnecte le précédent.</span></li>
     </ol>
   </div>
 </section>

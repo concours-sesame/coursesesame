@@ -9,6 +9,10 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
 - Les règles d'accès sont dans la base (`migrations/`, à appliquer dans l'ordre). Un compte connecté ne lit les contenus et ne
   peut demander un lien vers un fichier que si son abonnement est en cours ; les brouillons restent invisibles.
 - Les fonctions d'administration vérifient que l'appelant figure dans la table `admins`.
+- Ouvrages complets réservés aux formules d'un mois et plus (`20261013102633_ouvrages_formules_longues.sql`) :
+  un contenu dont la matière commence par « Ouvrage » n'ouvre son fichier que si la période d'abonnement en cours
+  compte au moins 28 jours (`acces_ouvrages`, `fichier_autorise`). Avec une formule courte, l'ouvrage reste visible
+  dans la bibliothèque avec un cadenas. Un ouvrage doit donc être saisi avec une matière « Ouvrage · … ».
 - Validation en deux étapes de l'administrateur (`20261013101259_admin_double_authentification.sql`) : une fois
   activée depuis la page d'administration (code QR à scanner avec Google Authenticator ou Microsoft Authenticator),
   `est_admin()` n'est vrai qu'avec une session validée par le code (niveau `aal2` du jeton). Toutes les règles

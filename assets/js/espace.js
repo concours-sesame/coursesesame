@@ -264,6 +264,11 @@
     document.body.classList.add("ea-lecture");
     $(".ea-v-fermer", visionneuse).focus();
 
+    if (c.verrou) {
+      corps.innerHTML = `<div class="ea-verrou">${icone("i-lock")}<p><b>Les ouvrages complets sont réservés aux formules d'un mois et plus.</b> Votre formule actuelle donne accès à tous les autres contenus : sujets corrigés, QCM, vidéos et fiches.</p>
+          <a class="btn btn-wa" href="${lienWa(WA_NUM, c.verrou)}" target="_blank" rel="noopener">${icone("i-wa")}Passer à une formule d'un mois</a></div>`;
+      return;
+    }
     const qcm = lireQcm(c);
     if (qcm) { lancerQcm(qcm, corps, marque); return; }
     if (c.type === "texte") {
@@ -394,17 +399,20 @@
     if (v.error) throw v.error;
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
-    const [p, a, adm] = await Promise.all([
+    const [p, a, adm, ouv] = await Promise.all([
       client.from("profils").select("prenom, nom, telephone, concours").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
-      client.from("admins").select("user_id").eq("user_id", uid).maybeSingle()
+      client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
+      client.rpc("acces_ouvrages")
     ]);
     if (p.error || a.error) throw p.error || a.error;
     return {
       session, uid, email: session.user.email,
       profil: p.data || { prenom: "", nom: "", telephone: "" },
       abo: (a.data && a.data[0]) || { actif: false, fin: null, deja_abonne: false },
-      admin: !!adm.data
+      admin: !!adm.data,
+      // Ouvrages complets : formules d'un mois et plus seulement (règle appliquée par la base)
+      ouvrages: !!adm.data || ouv.data === true
     };
   }
 
@@ -461,7 +469,8 @@
       return `<div class="ea-statut ea-statut-ok">
           <div><span class="eyebrow">Abonnement actif</span>
           <h3>Votre accès est ouvert jusqu'au ${dateFr(abo.fin)}.</h3>
-          ${j <= 7 ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}</div>
+          ${j <= 7 ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
+          ${etat.ouvrages ? "" : `<p>Votre formule donne accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus.</p>`}</div>
           ${j <= 7 ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler</a>` : ""}
         </div>`;
     }
@@ -469,7 +478,8 @@
     return `<div class="ea-statut ea-statut-attente">
         <span class="eyebrow">${abo.deja_abonne ? "Abonnement terminé" : "Activation en attente"}</span>
         <h3>${abo.deja_abonne ? `Votre abonnement a pris fin le ${dateFr(abo.fin)}.` : `Bienvenue, ${esc(profil.prenom)}. Votre compte est prêt.`}</h3>
-        ${tarifs.length ? `<p class="ea-tarifs">${tarifs.map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>` : ""}
+        ${tarifs.length ? `<p class="ea-tarifs">${tarifs.map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
+        <p class="ea-aide">Les ouvrages complets sont compris à partir de la formule d'un mois. Les formules plus courtes donnent accès à tout le reste : sujets corrigés, QCM, vidéos et fiches.</p>` : ""}
         <ol class="ea-etapes">
           <li>Réglez ${abo.deja_abonne ? "votre renouvellement" : "votre abonnement"} par Mobile Money : Orange Money, MTN MoMo, Wave ou Moov Money.${tarifs.length ? "" : " Nous vous indiquons le tarif sur WhatsApp."}</li>
           <li>Envoyez-nous le message ci-dessous sur WhatsApp, avec la référence de votre paiement.</li>
@@ -508,6 +518,9 @@
   const RUBRIQUES = { ouvrages: "Ouvrages complets", corriges: "Sujets corrigés", qcm: "QCM", videos: "Vidéos", autres: "Autres contenus" };
   const rubrique = c => /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  // Ouvrage complet affiché avec un cadenas : formule de moins d'un mois
+  const verrouille = c => !etat.ouvrages && rubrique(c) === "ouvrages";
+  const msgFormule = () => `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à une formule d'un mois ou plus pour accéder aux ouvrages complets.\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
   function bibliothequeHTML() {
     if (!contenus.length) return `<div class="ea-biblio"><p class="ea-vide">Les premiers contenus exclusifs arrivent très bientôt. Revenez nous voir.</p></div>`;
     const rubs = Object.keys(RUBRIQUES).filter(r => contenus.some(c => rubrique(c) === r));
@@ -518,12 +531,12 @@
           ${contenus.length > 8 ? `<label class="ea-cherche"><span class="sr-only">Rechercher un contenu</span><input type="search" id="eaCherche" placeholder="Rechercher : titre, matière, concours…" autocomplete="off"></label>` : ""}
         </div>
         <p class="ea-vide" id="eaAucun" hidden>Aucun contenu ne correspond à cette recherche.</p>
-        <div class="ea-grille">${liste.map(c => `<button class="ea-carte" type="button" data-id="${c.id}" data-texte="${esc(sansAccents([c.titre, c.description, c.matiere, (c.concours || []).map(nomConcours).join(" ")].join(" ")))}">
+        <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}" data-texte="${esc(sansAccents([c.titre, c.description, c.matiere, (c.concours || []).map(nomConcours).join(" ")].join(" ")))}">
             <span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
             <small>${[c.matiere ? esc(c.matiere) : "", (c.concours || []).map(nomConcours).join(", "), dateFr(c.publie_le)].filter(Boolean).join(" · ")}</small>
-            <span class="ea-carte-go">${typeAffiche(c).action}${icone("i-arrow")}</span>
+            <span class="ea-carte-go">${verrouille(c) ? icone("i-lock") + "Formules d'un mois et plus" : typeAffiche(c).action + icone("i-arrow")}</span>
           </button>`).join("")}</div>
       </div>`;
   }
@@ -655,7 +668,7 @@
     const carte = e.target.closest(".ea-carte");
     if (carte && etat.session) {
       const c = contenus.find(x => String(x.id) === carte.dataset.id);
-      if (c) ouvrirContenu(c, etat.admin && !etat.abo.actif ? "Aperçu administrateur" : marqueDe(etat.profil));
+      if (c) ouvrirContenu(verrouille(c) ? Object.assign({}, c, { verrou: msgFormule() }) : c, etat.admin && !etat.abo.actif ? "Aperçu administrateur" : marqueDe(etat.profil));
     }
   });
 

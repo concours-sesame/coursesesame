@@ -351,7 +351,7 @@
           <div class="enonce"><b>Sujet</b><p>${s.enonce}</p></div></div>
         <div class="paper-main">
           ${s.reserve ? `<div class="corrige copie-apercu">${s.corrige}</div>
-          <div class="corrige-cta"><p><b>La suite du corrigé est réservée aux abonnés.</b> Lisez-le en entier, avec tous nos corrigés et nos ouvrages complets, dans l'espace abonnés, dès 500 FCFA la journée.</p><a class="btn btn-gold btn-sm" href="espace-abonnes/">${svg("i-lock", 'fill="none" stroke="currentColor" stroke-width="2.2"')}Accéder à l'espace abonnés</a></div>` : `<div class="corrige">${s.corrige}</div>
+          <div class="corrige-cta"><p><b>La suite du corrigé est réservée aux abonnés.</b> Lisez-le en entier, avec tous nos corrigés, dans l'espace abonnés, dès 500 FCFA la journée. Nos ouvrages complets y sont compris à partir de la formule d'un mois.</p><a class="btn btn-gold btn-sm" href="espace-abonnes/">${svg("i-lock", 'fill="none" stroke="currentColor" stroke-width="2.2"')}Accéder à l'espace abonnés</a></div>` : `<div class="corrige">${s.corrige}</div>
           <div class="corrige-more"><button class="btn btn-ghost btn-sm more-btn">Lire tout le corrigé</button></div>
           <div class="corrige-cta"><p>Ce corrigé est un extrait de nos ouvrages. Obtenez la version complète avec tous les sujets.</p><button class="btn btn-wa btn-sm" data-wa-order>${svg("i-wa", 'fill="currentColor"')}Commander l'ouvrage complet</button></div>`}
         </div></article>`;

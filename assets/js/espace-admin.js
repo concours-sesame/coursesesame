@@ -14,7 +14,8 @@
   const URL_ESPACE = new URL(ROOT + "espace-abonnes/", location.href).href;
   const MOYENS = ["Orange Money", "MTN MoMo", "Wave", "Moov Money", "Espèces", "Autre"];
   // Durées proposées : j = jours, m = mois. Les prix servent à préremplir le montant (modifiable).
-  const DUREES = [["j1", "1 jour"], ["j7", "1 semaine"], ["j14", "2 semaines"], ["m1", "1 mois"], ["m2", "2 mois"], ["m3", "3 mois"], ["m6", "6 mois"], ["m12", "12 mois"], ["date", "Jusqu'à une date…"]];
+  // Formules en jours ou en semaines : sans les ouvrages complets (réservés aux périodes d'au moins 28 jours)
+  const DUREES = [["j1", "1 jour, sans les ouvrages"], ["j7", "1 semaine, sans les ouvrages"], ["j14", "2 semaines, sans les ouvrages"], ["m1", "1 mois"], ["m2", "2 mois"], ["m3", "3 mois"], ["m6", "6 mois"], ["m12", "12 mois"], ["date", "Jusqu'à une date…"]];
   const PRIX = Object.fromEntries((typeof TARIFS_ABONNEMENT !== "undefined" && TARIFS_ABONNEMENT.length ? TARIFS_ABONNEMENT : [
     { cle: "j1", prix: "500" }, { cle: "j7", prix: "2 000" }, { cle: "j14", prix: "3 500" }, { cle: "m1", prix: "5 000" },
     { cle: "m2", prix: "9 000" }, { cle: "m3", prix: "12 500" }, { cle: "m6", prix: "22 500" }, { cle: "m12", prix: "40 000" }
@@ -185,7 +186,7 @@
   function formulaireActivation(a) {
     const debut = a.actif ? lendemain(a.fin) : auj();
     return `<form class="form ad-form" data-form="activer" data-debut="${debut}" data-suite="${a.actif ? 1 : 0}" novalidate>
-        <p class="ad-note full">${a.actif ? `La prolongation commence le ${dateFr(debut)}, à la suite de l'abonnement en cours.` : "L'abonnement commence aujourd'hui. Pour les formules en jours ou en semaines, le jour de l'activation est offert."}</p>
+        <p class="ad-note full">${a.actif ? `La prolongation commence le ${dateFr(debut)}, à la suite de l'abonnement en cours.` : "L'abonnement commence aujourd'hui. Pour les formules en jours ou en semaines, le jour de l'activation est offert."} Les ouvrages complets ne s'ouvrent qu'avec une période d'au moins 28 jours (formules d'un mois et plus).</p>
         <div class="field"><label>Durée</label><select name="duree">${DUREES.map(([v, l]) => `<option value="${v}"${v === "m1" ? " selected" : ""}>${l}${PRIX[v] ? ` · ${fcfa(+PRIX[v])}` : ""}</option>`).join("")}</select></div>
         <div class="field" data-jusqua hidden><label>Jusqu'au (inclus)</label><input type="date" name="jusqua" min="${debut}"></div>
         <div class="field"><label>Montant reçu (FCFA)</label><input type="number" name="montant" min="0" step="50" inputmode="numeric" value="${PRIX.m1 || ""}"></div>
