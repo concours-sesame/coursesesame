@@ -26,6 +26,7 @@
   const TAILLE_MAX = 50 * 1024 * 1024;
 
   let moi = null, abonnes = [], paiements = [], contenus = [];
+  let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [];
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
   let telechargement = false; // archive .zip en préparation : la page ne se redessine pas
@@ -66,6 +67,8 @@
     return { cle: "attente", texte: "En attente d'activation" };
   }
   const enCours = a => a.actif || !!a.suspendu_depuis;
+  // Compte inscrit depuis plus de 30 jours sans aucun paiement : faux compte ou inscription abandonnée
+  const jamaisActive = a => !Number(a.nb_paiements) && !a.fin && joursJusqua(String(a.inscrit_le).slice(0, 10)) < -30;
   // Période en cours (ou, à défaut, prochaine période) d'un compte, d'après l'historique des paiements
   function periodeCourante(a) {
     const p = paiements.filter(x => x.user_id === a.user_id).sort((x, y) => (x.debut < y.debut ? -1 : 1));
@@ -75,7 +78,7 @@
   const FILTRES = [["tous", "Tous", () => true], ["attente", "En attente", a => statut(a).cle === "attente"],
     ["actif", "En cours", a => a.actif && !a.suspendu_depuis], ["enligne", "En ligne", a => enLigne(a)],
     ["bientot", "Fin sous 7 jours", a => statut(a).cle === "bientot"], ["suspendu", "Suspendus", a => !!a.suspendu_depuis],
-    ["expire", "Terminés", a => statut(a).cle === "expire"]];
+    ["expire", "Terminés", a => statut(a).cle === "expire"], ["anciens", "Jamais activés, +30 jours", a => jamaisActive(a)]];
   function messageRelance(a) {
     const s = statut(a).cle, debut = `Bonjour ${a.prenom},\n\n`;
     const payer = "réglez votre abonnement par Mobile Money (Orange Money, MTN MoMo, Wave ou Moov Money) et envoyez-nous la référence du paiement.";
@@ -125,16 +128,24 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
       client.rpc("admin_appareils"),
-      client.rpc("admin_activite")
+      client.rpc("admin_activite"),
+      client.from("commandes").select("*").order("cree_le", { ascending: false }),
+      client.from("notes_abonnes").select("user_id, note"),
+      client.from("lectures").select("user_id, contenu_id, ouvert_le").gte("ouvert_le", new Date(Date.now() - 90 * 864e5).toISOString()).order("ouvert_le", { ascending: false }).limit(5000),
+      client.from("annonces").select("*").order("cree_le", { ascending: false }),
+      client.from("journal_admin").select("*").order("quand", { ascending: false }).limit(300)
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
     abonnes = a.data; paiements = p.data; contenus = c.data;
+    // Outils ajoutés en octobre 2026 : tables absentes ou vides, la page fonctionne quand même
+    commandes = cmd.data || []; notes = new Map((nt.data || []).map(x => [x.user_id, x.note]));
+    lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
     // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
     const appareils = new Map((ap.data || []).map(x => [x.user_id, Number(x.appareils_7j)]));
     // Dernier passage sur l'espace abonnés, dernière connexion et suspension en cours
@@ -346,12 +357,16 @@
         <div><b>${fcfa(encaisseCeMois())}</b><span>Encaissé ce mois-ci</span></div>
       </div>
       <div class="ea-onglets ad-onglets" role="tablist" aria-label="Administration">
-        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
+        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
       </div>
       <div id="adPanneau">${panneau()}</div>`;
     majIndicateur();
   }
-  const panneau = () => onglet === "direct" ? panneauDirect() : onglet === "abonnes" ? panneauAbonnes() : onglet === "contenus" ? panneauContenus() : panneauPaiements();
+  // Redessine la page (onglets compris) sans bouger la position de lecture
+  const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
+  const PANNEAUX = { direct: () => panneauDirect(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
+    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), journal: () => panneauJournal() };
+  const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
 
   /* ---------- En direct : abonnements en cours, mis à jour automatiquement ---------- */
   function panneauDirect() {
@@ -398,14 +413,22 @@
   }
 
   function panneauAbonnes() {
-    const q = recherche.toLowerCase().replace(/\s+/g, "");
-    const test = (FILTRES.find(f => f[0] === filtre) || FILTRES[0])[2];
-    const liste = abonnes.filter(test).filter(a => !q || `${a.prenom}${a.nom}${a.telephone}${a.email}`.toLowerCase().replace(/\s+/g, "").includes(q));
-    return `<div class="ad-outils">
+    const liste = listeFiltree();
+    return `<div class="ad-outils-ligne">
+        <button class="btn btn-ghost btn-sm" type="button" data-action="copier-numeros">Copier les numéros (${liste.length})</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-action="exporter" data-quoi="abonnes">Exporter les abonnés (Excel)</button>
+        ${filtre === "anciens" && liste.length ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="supprimer-anciens">Supprimer ces ${liste.length} comptes</button>` : ""}
+      </div>
+      <div class="ad-outils">
         <label class="search"><span class="sr-only">Rechercher un abonné</span>${icone("i-search")}<input type="search" id="adRecherche" placeholder="Nom, numéro ou e-mail" value="${esc(recherche)}" autocomplete="off"></label>
         <div class="chips" role="group" aria-label="Filtrer les abonnés">${FILTRES.map(([v, l, f]) => `<button class="chip" type="button" data-filtre="${v}" aria-pressed="${filtre === v}">${l}<span class="n">${abonnes.filter(f).length}</span></button>`).join("")}</div>
       </div>
       <div class="ad-liste">${liste.length ? liste.map(ligneAbonne).join("") : `<p class="ea-vide">Aucun compte ${abonnes.length ? "ne correspond." : "pour le moment. Les comptes créés sur l'espace abonnés apparaîtront ici."}</p>`}</div>`;
+  }
+  function listeFiltree() {
+    const q = recherche.toLowerCase().replace(/\s+/g, "");
+    const test = (FILTRES.find(f => f[0] === filtre) || FILTRES[0])[2];
+    return abonnes.filter(test).filter(a => !q || `${a.prenom}${a.nom}${a.telephone}${a.email}`.toLowerCase().replace(/\s+/g, "").includes(q));
   }
   function ligneAbonne(a) {
     const s = statut(a);
@@ -413,7 +436,8 @@
     return `<article class="ad-ligne" data-uid="${esc(a.user_id)}">
         <div class="ad-ident">
           <div class="ad-nom"><b>${esc(a.prenom)} ${esc(a.nom)}</b><span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span>${a.appareils >= SEUIL_PARTAGE ? `<span class="ad-badge ad-partage" title="Chaque nouvel appareil déconnecte le précédent. Un nombre élevé peut signaler un compte partagé.">${a.appareils} appareils en 7 jours</span>` : ""}</div>
-          <small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a> · ${esc(a.email)}${a.concours ? " · " + esc(nomConcours(a.concours)) : ""} · inscrit le ${dateFr(a.inscrit_le)}${Number(a.nb_paiements) ? ` · ${a.nb_paiements} paiement${a.nb_paiements > 1 ? "s" : ""}, ${fcfa(a.total_paye)}` : ""} · ${enLigne(a) ? "<b class=\"ad-vert\">en ligne</b>" : `dernier passage : ${ilYa(a.vu_le || a.derniere_connexion)}`}</small>
+          <small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a> · ${esc(a.email)}${a.concours ? " · " + esc(nomConcours(a.concours)) : ""} · inscrit le ${dateFr(a.inscrit_le)}${Number(a.nb_paiements) ? ` · ${a.nb_paiements} paiement${a.nb_paiements > 1 ? "s" : ""}, ${fcfa(a.total_paye)}` : ""} · ${enLigne(a) ? "<b class=\"ad-vert\">en ligne</b>" : `dernier passage : ${ilYa(a.vu_le || a.derniere_connexion)}`}${lecturesRecentes(l => l.user_id === a.user_id) ? ` · ${pluriel(lecturesRecentes(l => l.user_id === a.user_id), "ouverture")} en 30 jours` : ""}</small>
+          ${notes.get(a.user_id) ? `<p class="ad-note-privee"><b>Note</b> ${esc(notes.get(a.user_id))}</p>` : ""}
         </div>
         <div class="ad-actions">
           ${a.suspendu_depuis
@@ -424,6 +448,9 @@
           <a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), messageRelance(a))}" target="_blank" rel="noopener">${icone("i-wa")}${["attente", "bientot", "expire", "suspendu"].includes(s.cle) ? "Relancer" : "Écrire"}</a>
           <button class="btn btn-ghost btn-sm" type="button" data-action="mdp">Mot de passe</button>
           ${Number(a.nb_paiements) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="historique">Historique</button>` : ""}
+          <button class="btn btn-ghost btn-sm" type="button" data-action="note">Note</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-action="deconnecter" title="Ferme sa session sur tous ses appareils">Déconnecter</button>
+          ${!Number(a.nb_paiements) && !a.fin ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="supprimer-compte">Supprimer le compte</button>` : ""}
         </div>
         <div class="ad-zone"${retour ? "" : " hidden"}>${retour}</div>
       </article>`;
@@ -436,7 +463,7 @@
         <div class="field" data-jusqua hidden><label>Jusqu'au (inclus)</label><input type="date" name="jusqua" min="${debut}"></div>
         <div class="field"><label>Montant reçu (FCFA)</label><input type="number" name="montant" min="0" step="50" inputmode="numeric" value="${PRIX.m1 || ""}"></div>
         <div class="field"><label>Moyen de paiement</label><select name="moyen">${MOYENS.map(m => `<option>${m}</option>`).join("")}</select></div>
-        <div class="field full"><label>Note (référence du paiement…)</label><input name="note" maxlength="300"></div>
+        <div class="field full"><label>Référence du paiement ou note (contrôlée contre les doublons)</label><input name="note" maxlength="300"></div>
         <p class="ea-msg full" role="alert"></p>
         <button class="btn btn-gold" type="submit">Valider ${a.actif ? "la prolongation" : "l'activation"}</button>
       </form>`;
@@ -454,6 +481,7 @@
         <button class="btn btn-navy btn-sm" type="button" data-action="tout-telecharger">Télécharger tous les contenus (.zip)</button>
         <small>${nbTele} contenus, fichiers d'origine sans filigrane. Réservé à l'administrateur.</small>
       </div>` : ""}
+      ${blocAnnonces()}
       <details class="ad-ajout"${contenus.length ? "" : " open"}>
         <summary>Ajouter un contenu exclusif</summary>
         <form class="form ad-form" id="adNouveau" novalidate>
@@ -465,7 +493,8 @@
           <div class="field full" data-pour="lien" hidden><label for="nLien">Adresse du lien</label><input id="nLien" name="lien" type="url" placeholder="https://"></div>
           <div class="field full"><label for="nDesc">Présentation (facultatif)</label><textarea id="nDesc" name="description" maxlength="600"></textarea></div>
           <fieldset class="full ad-concours"><legend>Concours concernés</legend>${coches}</fieldset>
-          <label class="ea-accord full"><input type="checkbox" name="publie" checked><span>Publier tout de suite (sinon, le contenu reste en brouillon, invisible des abonnés)</span></label>
+          <label class="ea-accord full"><input type="checkbox" name="publie" checked><span>Publier (sinon, le contenu reste en brouillon, invisible des abonnés)</span></label>
+          <div class="field"><label for="nPubLe">Mettre en ligne le (facultatif)</label><input id="nPubLe" type="datetime-local" name="publie_le"><small class="ad-note">Vide : tout de suite. Sinon, le contenu apparaît seul à cette date et à cette heure.</small></div>
           <p class="ea-msg full" role="alert"></p>
           <button class="btn btn-gold" type="submit">Ajouter le contenu</button>
         </form>
@@ -476,12 +505,13 @@
     const retour = retours["c" + c.id] || "";
     return `<article class="ad-ligne" data-cid="${c.id}">
         <div class="ad-ident">
-          <div class="ad-nom"><b>${esc(c.titre)}</b><span class="ad-badge ${c.publie ? "ad-actif" : "ad-attente"}">${c.publie ? "Publié" : "Brouillon"}</span></div>
-          <small>${TYPES[c.type].nom}${c.matiere ? " · " + esc(c.matiere) : ""}${(c.concours || []).length ? " · " + c.concours.map(nomConcours).join(", ") : ""} · ${dateFr(c.publie_le)}</small>
+          <div class="ad-nom"><b>${esc(c.titre)}</b>${programme(c) ? `<span class="ad-badge ad-avenir">Programmé le ${dateHeure(c.publie_le)}</span>` : `<span class="ad-badge ${c.publie ? "ad-actif" : "ad-attente"}">${c.publie ? "Publié" : "Brouillon"}</span>`}</div>
+          <small>${TYPES[c.type].nom}${c.matiere ? " · " + esc(c.matiere) : ""}${(c.concours || []).length ? " · " + c.concours.map(nomConcours).join(", ") : ""} · ${dateFr(c.publie_le)} · ${pluriel(lecturesRecentes(l => l.contenu_id === c.id), "ouverture")} en 30 jours</small>
         </div>
         <div class="ad-actions">
           <button class="btn btn-ghost btn-sm" type="button" data-caction="voir">Aperçu</button>
           ${telechargeable(c) ? `<button class="btn btn-ghost btn-sm" type="button" data-caction="telecharger" title="Fichier d'origine, sans filigrane">Télécharger</button>` : ""}
+          <button class="btn btn-ghost btn-sm" type="button" data-caction="lecteurs">Lecteurs</button>
           <button class="btn ${c.publie ? "btn-ghost" : "btn-navy"} btn-sm" type="button" data-caction="publier">${c.publie ? "Retirer" : "Publier"}</button>
           <button class="btn btn-ghost btn-sm" type="button" data-caction="modifier">Modifier</button>
           <button class="btn btn-ghost btn-sm ad-danger" type="button" data-caction="supprimer">Supprimer</button>
@@ -497,6 +527,7 @@
         ${c.type === "texte" ? `<div class="field full"><label>Texte de la fiche</label><textarea name="texte" rows="10" maxlength="60000">${esc(c.texte)}</textarea></div>` : ""}
         ${c.type === "lien" ? `<div class="field full"><label>Adresse du lien</label><input name="lien" type="url" value="${esc(c.lien)}"></div>` : ""}
         <div class="field full"><label>Présentation</label><textarea name="description" maxlength="600">${esc(c.description || "")}</textarea></div>
+        <div class="field"><label>Mis en ligne le</label><input type="datetime-local" name="publie_le" value="${versLocal(c.publie_le)}"><small class="ad-note">Une date future programme la mise en ligne.</small></div>
         <fieldset class="full ad-concours"><legend>Concours concernés</legend>${coches}</fieldset>
         <p class="ea-msg full" role="alert"></p>
         <button class="btn btn-gold" type="submit">Enregistrer</button>
@@ -505,11 +536,267 @@
 
   function panneauPaiements() {
     const total = paiements.reduce((s, p) => s + (p.montant || 0), 0);
+    const doubles = refsEnDouble();
+    const nbDoubles = [...doubles.values()].filter(n => n > 1).length;
     return `<div class="ad-stats ad-stats-2"><div><b>${fcfa(encaisseCeMois())}</b><span>Ce mois-ci</span></div><div><b>${fcfa(total)}</b><span>Depuis l'ouverture</span></div></div>
+      ${nbDoubles ? `<p class="ad-alerte"><b>${pluriel(nbDoubles, "référence")} de paiement ${nbDoubles > 1 ? "servent" : "sert"} plusieurs fois.</b> Vérifiez les lignes marquées « En double » : une référence Mobile Money ne correspond qu'à un paiement.</p>` : ""}
+      <div class="ad-outils-ligne"><button class="btn btn-ghost btn-sm" type="button" data-action="exporter" data-quoi="paiements">Exporter les paiements (Excel)</button></div>
       ${paiements.length ? `<div class="ad-tableau" role="region" aria-label="Paiements" tabindex="0"><table>
         <thead><tr><th>Enregistré le</th><th>Abonné</th><th>Période</th><th>Montant</th><th>Moyen</th><th>Note</th></tr></thead>
-        <tbody>${paiements.map(p => `<tr><td>${dateFr(p.cree_le)}</td><td>${esc(p.prenom)} ${esc(p.nom)}</td><td>du ${dateFr(p.debut)} au ${dateFr(p.fin)}</td><td>${p.montant != null ? fcfa(p.montant) : ""}</td><td>${esc(p.moyen || "")}</td><td>${esc(p.note || "")}</td></tr>`).join("")}</tbody>
+        <tbody>${paiements.map(p => `<tr><td>${dateFr(p.cree_le)}</td><td>${esc(p.prenom)} ${esc(p.nom)}</td><td>du ${dateFr(p.debut)} au ${dateFr(p.fin)}</td><td>${p.montant != null ? fcfa(p.montant) : ""}</td><td>${esc(p.moyen || "")}</td><td>${esc(p.note || "")}${(doubles.get(normRef(p.note)) || 0) > 1 ? ` <span class="ad-badge ad-partage">En double</span>` : ""}</td></tr>`).join("")}</tbody>
       </table></div>` : `<p class="ea-vide">Aucun paiement enregistré pour le moment.</p>`}`;
+  }
+
+  /* ---------- Outils : petites aides ---------- */
+  const dateHeure = t => new Date(t).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  const versLocal = t => { if (!t) return ""; const x = new Date(t); x.setMinutes(x.getMinutes() - x.getTimezoneOffset()); return x.toISOString().slice(0, 16); };
+  const programme = c => c.publie && new Date(c.publie_le) > new Date();
+  const il30j = Date.now() - 30 * 864e5;
+  const lecturesRecentes = test => lectures.filter(l => new Date(l.ouvert_le) >= il30j && test(l)).length;
+  const nomAbonne = uid => { const a = abonnes.find(x => x.user_id === uid); return a ? `${a.prenom} ${a.nom}` : "Compte supprimé"; };
+  // Références de paiement : comparées sans espaces, tirets ni casse ; trop courtes (moins de 5 signes), ignorées
+  const normRef = t => String(t || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const paiementsMemeReference = t => { const k = normRef(t); return k.length >= 5 ? paiements.filter(p => normRef(p.note) === k) : []; };
+  const refsEnDouble = () => { const m = new Map(); paiements.forEach(p => { const k = normRef(p.note); if (k.length >= 5) m.set(k, (m.get(k) || 0) + 1); }); return m; };
+
+  /* ---------- Exports Excel (CSV, séparateur point-virgule, accents conservés) ---------- */
+  const csv = (entetes, lignes) => "﻿" + [entetes, ...lignes].map(l => l.map(x => {
+    const t = x == null ? "" : String(x);
+    return /[";\r\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
+  }).join(";")).join("\r\n");
+  function exporter(quoi) {
+    let nom, entetes, lignes;
+    if (quoi === "abonnes") {
+      nom = "Abonnés"; entetes = ["Prénom", "Nom", "Téléphone", "E-mail", "Concours", "Inscrit le", "État", "Accès jusqu'au", "Paiements", "Total payé (F CFA)", "Note privée"];
+      lignes = abonnes.map(a => [a.prenom, a.nom, a.telephone, a.email, a.concours ? nomConcours(a.concours) : "", dateFr(a.inscrit_le), statut(a).texte, a.fin ? dateFr(a.fin) : "", a.nb_paiements, a.total_paye, notes.get(a.user_id) || ""]);
+    } else if (quoi === "paiements") {
+      nom = "Paiements"; entetes = ["Enregistré le", "Prénom", "Nom", "Début", "Fin", "Montant (F CFA)", "Moyen", "Référence ou note"];
+      lignes = paiements.map(p => [dateFr(p.cree_le), p.prenom, p.nom, dateFr(p.debut), dateFr(p.fin), p.montant, p.moyen || "", p.note || ""]);
+    } else {
+      nom = "Commandes"; entetes = ["Date", "Client", "Téléphone", "Ville", "Ouvrages", "Montant (F CFA)", "Moyen", "État", "Note"];
+      lignes = commandes.map(k => [dateFr(k.cree_le), k.client, k.telephone || "", k.ville || "", (k.lignes || []).map(l => `${l.qte} x ${l.ouvrage}`).join(" | "), k.montant, k.moyen || "", libelleStatut(k.statut), k.note || ""]);
+    }
+    enregistrer(new Blob([csv(entetes, lignes)], { type: "text/csv;charset=utf-8" }), `${nom} ${auj()}.csv`);
+  }
+  // Numéros au format international, un par ligne, pour une liste de diffusion WhatsApp
+  async function copierNumeros() {
+    const liste = listeFiltree();
+    const texte = [...new Set(liste.map(a => "+" + numeroWa(a.telephone)))].join("\n");
+    try { await navigator.clipboard.writeText(texte); toast(`${pluriel(liste.length, "numéro")} copiés. Collez-les dans une liste de diffusion WhatsApp.`); }
+    catch (e) { prompt("Copiez les numéros :", texte.replace(/\n/g, " ")); }
+  }
+  async function supprimerAnciens(bouton) {
+    const liste = listeFiltree().filter(jamaisActive);
+    if (!liste.length || !confirm(`Supprimer définitivement ${pluriel(liste.length, "compte")} jamais activés depuis plus de 30 jours ?\n\nAucun n'a eu d'abonnement. Cette action ne peut pas être annulée.`)) return;
+    bouton.disabled = true;
+    let ok = 0;
+    for (const a of liste) { const { error } = await client.rpc("admin_supprimer_compte", { p_user: a.user_id }); if (!error) ok++; }
+    recharger(`${pluriel(ok, "compte")} supprimés.`);
+  }
+
+  /* ---------- Notes privées ---------- */
+  const formulaireNote = a => `<form class="form ad-form" data-form="note" novalidate>
+      <div class="field full"><label>Note privée sur ${esc(a.prenom)} ${esc(a.nom)} (jamais visible par l'abonné)</label><textarea name="note" maxlength="1000" rows="3">${esc(notes.get(a.user_id) || "")}</textarea></div>
+      <p class="ea-msg full" role="alert"></p>
+      <button class="btn btn-gold" type="submit">Enregistrer</button>
+    </form>`;
+
+  /* ---------- Relances ---------- */
+  // « Fait » est mémorisé sur cet appareil (pratique, sans enjeu) : la ligne passe en fin de liste pendant 3 jours
+  const CLE_RELANCES = "ad-relances";
+  const lireRelances = () => { try { return JSON.parse(localStorage.getItem(CLE_RELANCES) || "{}"); } catch (e) { return {}; } };
+  const marquerRelance = uid => { const m = lireRelances(); m[uid] = auj(); try { localStorage.setItem(CLE_RELANCES, JSON.stringify(m)); } catch (e) { /* stockage indisponible */ } };
+  const relanceRecente = (uid, m) => !!m[uid] && joursJusqua(m[uid]) >= -3;
+  const groupesRelance = () => [
+    ["Fin dans les 7 jours", abonnes.filter(a => statut(a).cle === "bientot")],
+    ["Terminés depuis moins de 30 jours", abonnes.filter(a => statut(a).cle === "expire" && joursJusqua(a.fin) >= -30)],
+    ["Inscrits sans abonnement", abonnes.filter(a => statut(a).cle === "attente" && !jamaisActive(a))]
+  ];
+  const nbRelances = () => { const m = lireRelances(); return groupesRelance().reduce((n, g) => n + g[1].filter(a => !relanceRecente(a.user_id, m)).length, 0); };
+  function panneauRelances() {
+    const m = lireRelances();
+    return `<p class="ad-note">Chaque bouton ouvre WhatsApp avec le message prêt. La ligne est marquée relancée et passe en fin de liste pendant 3 jours (mémorisé sur cet appareil).</p>` +
+      groupesRelance().map(([titre, liste]) => {
+        const tri = [...liste].sort((x, y) => relanceRecente(x.user_id, m) - relanceRecente(y.user_id, m));
+        return `<section class="ad-bloc"><h3>${titre} <span class="n">${liste.length}</span></h3>${tri.length ? `<ul class="ad-relances">${tri.map(a => {
+          const fait = relanceRecente(a.user_id, m);
+          return `<li data-uid="${esc(a.user_id)}"${fait ? ` class="ad-relance-faite"` : ""}>
+            <span><b>${esc(a.prenom)} ${esc(a.nom)}</b><small>${esc(a.telephone)} · ${esc(statut(a).texte)}${fait ? ` · relancé le ${dateFr(m[a.user_id])}` : ""}</small></span>
+            <span class="ad-relance-actions"><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), messageRelance(a))}" target="_blank" rel="noopener" data-relance="${esc(a.user_id)}">${icone("i-wa")}Relancer</a>
+            ${fait ? "" : `<button class="btn btn-ghost btn-sm" type="button" data-action="relance-faite">Déjà fait</button>`}</span></li>`;
+        }).join("")}</ul>` : `<p class="ea-vide">Personne à relancer.</p>`}</section>`;
+      }).join("");
+  }
+
+  /* ---------- Commandes d'ouvrages papier ---------- */
+  const STATUTS_CMD = [["nouvelle", "Nouvelle"], ["payee", "Payée"], ["expediee", "Expédiée"], ["livree", "Livrée"], ["annulee", "Annulée"]];
+  const libelleStatut = s => (STATUTS_CMD.find(x => x[0] === s) || ["", s])[1];
+  const commandesATraiter = () => commandes.filter(k => k.statut === "nouvelle" || k.statut === "payee").length;
+  const catalogue = () => (typeof OUVRAGES !== "undefined" ? OUVRAGES : []).map(o => ({ titre: o.titre, prix: Number(String(o.prix || "").replace(/\D/g, "")) || 0 }));
+  const ligneCmdHTML = () => `<div class="ad-cmd-ligne"><select name="ouvrage" aria-label="Ouvrage"><option value="">Choisir un ouvrage…</option>${catalogue().map(o => `<option value="${esc(o.titre)}" data-prix="${o.prix}">${esc(o.titre)} · ${fcfa(o.prix)}</option>`).join("")}</select><input name="qte" type="number" min="1" max="99" value="1" inputmode="numeric" aria-label="Quantité"></div>`;
+  // Remise du site : 10 % dès 3 ouvrages commandés
+  function totalCommande(f) {
+    const lignes = $$(".ad-cmd-ligne", f).map(l => {
+      const s = $("select", l), o = s.selectedOptions[0];
+      return s.value ? { ouvrage: s.value, prix: Number(o.dataset.prix) || 0, qte: Math.max(1, Math.round(Number($("input", l).value) || 1)) } : null;
+    }).filter(Boolean);
+    const nb = lignes.reduce((n, l) => n + l.qte, 0), brut = lignes.reduce((t, l) => t + l.prix * l.qte, 0);
+    const remise = nb >= 3 ? Math.round(brut * 0.1) : 0;
+    return { lignes, nb, brut, remise, total: brut - remise };
+  }
+  function majTotalCommande(f) {
+    const t = totalCommande(f);
+    $("#adCmdTotal").textContent = t.lignes.length ? `${pluriel(t.nb, "ouvrage")} · ${fcfa(t.brut)}${t.remise ? ` · remise de 10 % : ${fcfa(t.remise)}` : ""} · total ${fcfa(t.total)}` : "";
+    if (!f.elements.montant.dataset.manuel) f.elements.montant.value = t.lignes.length ? t.total : "";
+  }
+  function messageCommande(k) {
+    const liste = (k.lignes || []).map(l => `• ${l.qte} x ${l.ouvrage}`).join("\n");
+    const debut = `Bonjour ${k.client},\n\n`;
+    if (k.statut === "payee") return `${debut}Nous avons bien reçu votre paiement de ${fcfa(k.montant)} pour :\n${liste}\n\nVotre commande est en préparation. Merci !`;
+    if (k.statut === "expediee") return `${debut}Votre commande a été expédiée :\n${liste}\n\nBonne préparation !`;
+    if (k.statut === "livree") return `${debut}Votre commande vous a été remise. Merci de votre confiance et bonne préparation !`;
+    return `${debut}Nous avons bien noté votre commande :\n${liste}\n\nMontant : ${fcfa(k.montant)}. Vous pouvez régler par Orange Money, MTN MoMo, Wave ou Moov Money, puis nous envoyer la référence du paiement.`;
+  }
+  function panneauCommandes() {
+    const valides = commandes.filter(k => k.statut !== "annulee");
+    const encaisse = valides.filter(k => k.statut !== "nouvelle" && k.cree_le.slice(0, 7) === moisCourant).reduce((t, k) => t + k.montant, 0);
+    return `<div class="ad-stats ad-stats-3"><div><b>${commandesATraiter()}</b><span>À traiter (nouvelles ou payées)</span></div><div><b>${fcfa(encaisse)}</b><span>Encaissé ce mois-ci</span></div><div><b>${valides.length}</b><span>Commandes enregistrées</span></div></div>
+      <div class="ad-outils-ligne"><button class="btn btn-ghost btn-sm" type="button" data-action="exporter" data-quoi="commandes">Exporter les commandes (Excel)</button></div>
+      <details class="ad-ajout"${commandes.length ? "" : " open"}>
+        <summary>Enregistrer une commande</summary>
+        <form class="form ad-form" id="adCommande" novalidate>
+          <div class="field"><label for="kClient">Client</label><input id="kClient" name="client" maxlength="120" required></div>
+          <div class="field"><label for="kTel">Téléphone</label><input id="kTel" name="telephone" type="tel" maxlength="30" inputmode="tel"></div>
+          <div class="field"><label for="kVille">Ville</label><input id="kVille" name="ville" maxlength="80" placeholder="Abidjan"></div>
+          <div class="field full"><label>Ouvrages</label><div class="ad-cmd-lignes" id="adCmdLignes">${ligneCmdHTML()}</div>
+            <button class="btn btn-ghost btn-sm" type="button" data-action="cmd-ligne">Ajouter un autre ouvrage</button></div>
+          <p class="ad-note full" id="adCmdTotal" aria-live="polite"></p>
+          <div class="field"><label for="kMontant">Montant (F CFA)</label><input id="kMontant" name="montant" type="number" min="0" step="50" inputmode="numeric"></div>
+          <div class="field"><label for="kMoyen">Moyen de paiement</label><select id="kMoyen" name="moyen"><option value="">Pas encore payé</option>${MOYENS.map(m => `<option>${m}</option>`).join("")}</select></div>
+          <div class="field"><label for="kStatut">État</label><select id="kStatut" name="statut">${STATUTS_CMD.slice(0, 4).map(([v, l]) => `<option value="${v}">${l}</option>`).join("")}</select></div>
+          <div class="field full"><label for="kNote">Note (adresse de livraison, référence du paiement…)</label><input id="kNote" name="note" maxlength="500"></div>
+          <p class="ea-msg full" role="alert"></p>
+          <button class="btn btn-gold" type="submit">Enregistrer la commande</button>
+        </form>
+      </details>
+      <div class="ad-liste">${commandes.length ? commandes.map(ligneCommande).join("") : `<p class="ea-vide">Aucune commande enregistrée pour le moment.</p>`}</div>`;
+  }
+  const CLASSE_STATUT = { nouvelle: "ad-attente", payee: "ad-bientot", expediee: "ad-avenir", livree: "ad-actif", annulee: "ad-expire" };
+  const ligneCommande = k => `<article class="ad-ligne" data-kid="${k.id}">
+      <div class="ad-ident">
+        <div class="ad-nom"><b>${esc(k.client)}</b><span class="ad-badge ${CLASSE_STATUT[k.statut] || ""}">${libelleStatut(k.statut)}</span><b>${fcfa(k.montant)}</b></div>
+        <small>${dateHeure(k.cree_le)}${k.ville ? " · " + esc(k.ville) : ""}${k.telephone ? ` · <a href="https://wa.me/${numeroWa(k.telephone)}" target="_blank" rel="noopener">${esc(k.telephone)}</a>` : ""}${k.moyen ? " · " + esc(k.moyen) : ""}</small>
+        <ul class="ad-cmd-detail">${(k.lignes || []).map(l => `<li>${l.qte} x ${esc(l.ouvrage)} <small>${fcfa(l.prix)}</small></li>`).join("")}</ul>
+        ${k.note ? `<p class="ad-note-privee">${esc(k.note)}</p>` : ""}
+      </div>
+      <div class="ad-actions">
+        <label class="ad-statut-cmd"><span class="sr-only">État de la commande</span><select data-kstatut="${k.id}">${STATUTS_CMD.map(([v, l]) => `<option value="${v}"${v === k.statut ? " selected" : ""}>${l}</option>`).join("")}</select></label>
+        ${k.telephone ? `<a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(k.telephone), messageCommande(k))}" target="_blank" rel="noopener">${icone("i-wa")}Écrire</a>` : ""}
+        <button class="btn btn-ghost btn-sm ad-danger" type="button" data-kaction="supprimer">Supprimer</button>
+      </div>
+    </article>`;
+
+  /* ---------- Lectures ---------- */
+  function lecteursHTML(c) {
+    const parCompte = new Map();
+    lectures.filter(l => l.contenu_id === c.id).forEach(l => {
+      const x = parCompte.get(l.user_id) || { n: 0, der: l.ouvert_le };
+      x.n++; if (l.ouvert_le > x.der) x.der = l.ouvert_le;
+      parCompte.set(l.user_id, x);
+    });
+    const liste = [...parCompte].sort((a, b) => b[1].der.localeCompare(a[1].der));
+    return liste.length ? `<ul class="ad-histo">${liste.map(([uid, x]) => `<li><b>${esc(nomAbonne(uid))}</b> · ${pluriel(x.n, "ouverture")}<small>dernière le ${dateHeure(x.der)}</small></li>`).join("")}</ul><p class="ad-note">Ouvertures des 90 derniers jours (une au plus toutes les 10 minutes par abonné).</p>`
+      : `<p class="ea-vide">Aucune ouverture ces 90 derniers jours.</p>`;
+  }
+
+  /* ---------- Annonces ---------- */
+  const annonceVisible = an => an.active && an.debut <= auj() && (!an.fin || auj() <= an.fin);
+  function blocAnnonces() {
+    const visibles = annonces.filter(annonceVisible).length;
+    return `<details class="ad-ajout ad-annonces">
+        <summary>Annonces aux abonnés${visibles ? ` (${visibles} en ligne)` : ""}</summary>
+        <div class="ad-annonces-corps">
+          ${annonces.length ? `<ul class="ad-facteurs">${annonces.map(an => `<li><span><b>${esc(an.texte)}</b><small>${annonceVisible(an) ? "En ligne" : an.active ? "Programmée ou terminée" : "Masquée"} · du ${dateFr(an.debut)}${an.fin ? ` au ${dateFr(an.fin)}` : ", sans fin"}${an.lien ? " · avec un lien" : ""}</small></span>
+            <span><button class="btn btn-ghost btn-sm" type="button" data-action="annonce-basculer" data-aid="${an.id}">${an.active ? "Masquer" : "Afficher"}</button>
+            <button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="annonce-supprimer" data-aid="${an.id}">Supprimer</button></span></li>`).join("")}</ul>` : ""}
+          <form class="form ad-form" id="adAnnonce" novalidate>
+            <div class="field full"><label for="anTexte">Nouvelle annonce (affichée en haut de l'espace abonnés)</label><textarea id="anTexte" name="texte" maxlength="400" rows="2" placeholder="Exemple : nouveaux corrigés INFJ en ligne cette semaine."></textarea></div>
+            <div class="field full"><label for="anLien">Lien (facultatif)</label><input id="anLien" name="lien" type="url" placeholder="https://"></div>
+            <div class="field"><label for="anDebut">Du</label><input id="anDebut" name="debut" type="date" value="${auj()}"></div>
+            <div class="field"><label for="anFin">Au (facultatif)</label><input id="anFin" name="fin" type="date"></div>
+            <p class="ea-msg full" role="alert"></p>
+            <button class="btn btn-gold" type="submit">Publier l'annonce</button>
+          </form>
+        </div>
+      </details>`;
+  }
+
+  /* ---------- Statistiques ---------- */
+  const FORMULES = [[2, "1 jour"], [8, "1 semaine"], [15, "2 semaines"], [32, "1 mois"], [62, "2 mois"], [93, "3 mois"], [186, "6 mois"], [Infinity, "12 mois"]];
+  const formuleDe = p => { const n = Math.round((new Date(p.fin) - new Date(p.debut)) / 864e5) + 1; return FORMULES.find(f => n <= f[0])[1]; };
+  function barres(titre, lignes, format = fcfa) {
+    const max = Math.max(1, ...lignes.map(l => l[1]));
+    return `<section class="ad-bloc"><h3>${titre}</h3>${lignes.length ? `<ul class="ad-barres">${lignes.map(([nom, val, plus]) => `<li><span class="ad-barre-nom">${esc(nom)}</span><span class="ad-barre"><i style="width:${Math.max(val ? 2 : 0, Math.round(val / max * 100))}%"></i></span><span class="ad-barre-val">${format(val)}${plus ? ` <small>${plus}</small>` : ""}</span></li>`).join("")}</ul>` : `<p class="ea-vide">Pas encore de données.</p>`}</section>`;
+  }
+  const regrouper = (liste, cle, valeur) => { const m = new Map(); liste.forEach(x => { const k = cle(x); const v = m.get(k) || [0, 0]; v[0] += valeur(x); v[1]++; m.set(k, v); }); return [...m].sort((a, b) => b[1][0] - a[1][0]); };
+  function panneauStats() {
+    const d = new Date(auj() + "T00:00:00Z"), mois = [];
+    for (let i = 11; i >= 0; i--) mois.push(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - i, 1)).toISOString().slice(0, 7));
+    const vendues = commandes.filter(k => ["payee", "expediee", "livree"].includes(k.statut));
+    const parMois = mois.map(m => {
+      const a = paiements.filter(p => p.cree_le.slice(0, 7) === m).reduce((t, p) => t + (p.montant || 0), 0);
+      const c = vendues.filter(k => k.cree_le.slice(0, 7) === m).reduce((t, k) => t + k.montant, 0);
+      return [new Date(m + "-01T00:00:00Z").toLocaleDateString("fr-FR", { month: "short", year: "numeric", timeZone: "UTC" }), a + c, c ? `dont ouvrages ${fcfa(c)}` : ""];
+    });
+    // Renouvellement : parmi les comptes dont la première période est terminée, part de ceux qui ont repris
+    const parCompte = new Map();
+    paiements.forEach(p => { const l = parCompte.get(p.user_id) || []; l.push(p); parCompte.set(p.user_id, l); });
+    const eligibles = [...parCompte.values()].filter(l => l.map(p => p.fin).sort()[0] < auj());
+    const renouveles = eligibles.filter(l => l.length > 1).length;
+    const taux = eligibles.length ? Math.round(renouveles / eligibles.length * 100) : null;
+    const nb = x => String(x);
+    const lus = regrouper(lectures.filter(l => new Date(l.ouvert_le) >= il30j), l => l.contenu_id, () => 1).slice(0, 10)
+      .map(([cid, v]) => [(contenus.find(c => c.id === cid) || {}).titre || "Contenu supprimé", v[0]]);
+    const ventes = new Map();
+    commandes.filter(k => k.statut !== "annulee").forEach(k => (k.lignes || []).forEach(l => ventes.set(l.ouvrage, (ventes.get(l.ouvrage) || 0) + l.qte)));
+    const enCoursParConcours = regrouper(abonnes.filter(a => a.actif), a => a.concours ? nomConcours(a.concours) : "Non précisé", () => 1).map(([k, v]) => [k, v[0]]);
+    return `<div class="ad-stats ad-stats-3">
+        <div><b>${fcfa(paiements.reduce((t, p) => t + (p.montant || 0), 0) + vendues.reduce((t, k) => t + k.montant, 0))}</b><span>Recettes depuis l'ouverture (abonnements et ouvrages)</span></div>
+        <div><b>${taux == null ? "–" : taux + " %"}</b><span>Renouvellement${eligibles.length ? ` (${renouveles} sur ${eligibles.length} comptes arrivés au terme d'une période)` : " : pas encore de période terminée"}</span></div>
+        <div><b>${abonnes.filter(a => a.actif).length}</b><span>Abonnements en cours</span></div>
+      </div>
+      ${barres("Recettes des 12 derniers mois", parMois)}
+      ${barres("Abonnements par formule", regrouper(paiements, formuleDe, p => p.montant || 0).map(([k, v]) => [k, v[0], pluriel(v[1], "paiement")]))}
+      ${barres("Par moyen de paiement", regrouper([...paiements, ...vendues], x => x.moyen || "Non précisé", x => x.montant || 0).map(([k, v]) => [k, v[0], pluriel(v[1], "paiement")]))}
+      ${barres("Abonnés en cours par concours", enCoursParConcours, nb)}
+      ${barres("Contenus les plus ouverts (30 jours)", lus, nb)}
+      ${barres("Ouvrages papier vendus", [...ventes].sort((a, b) => b[1] - a[1]).slice(0, 15), x => pluriel(x, "exemplaire"))}`;
+  }
+
+  /* ---------- Journal ---------- */
+  const LIBELLES_JOURNAL = {
+    abonnement_active: "Abonnement activé", abonnement_supprime: "Abonnement supprimé", acces_coupe: "Accès coupé", abonnement_modifie: "Abonnement modifié",
+    abonnement_suspendu: "Abonnement suspendu", abonnement_reactive: "Abonnement réactivé", contenu_ajoute: "Contenu ajouté", contenu_supprime: "Contenu supprimé",
+    contenu_publie: "Contenu publié", contenu_retire: "Contenu retiré", contenu_modifie: "Contenu modifié", commande_ajoutee: "Commande enregistrée",
+    commande_supprimee: "Commande supprimée", commande_payee: "Commande payée", commande_expediee: "Commande expédiée", commande_livree: "Commande livrée",
+    commande_annulee: "Commande annulée", commande_nouvelle: "Commande remise en « nouvelle »", commande_modifiee: "Commande modifiée",
+    compte_deconnecte: "Abonné déconnecté de ses appareils", compte_supprime: "Compte supprimé"
+  };
+  function detailJournal(j) {
+    const x = j.details || {};
+    if (j.action.startsWith("abonnement") || j.action === "acces_coupe") return `${esc(nomAbonne(j.cible))}${x.debut ? ` · du ${dateFr(x.debut)} au ${dateFr(x.fin)}` : ""}${x.montant != null && j.action === "abonnement_active" ? ` · ${fcfa(x.montant)}` : ""}${x.moyen && j.action === "abonnement_active" ? ` · ${esc(x.moyen)}` : ""}`;
+    if (j.action.startsWith("contenu")) return esc(x.titre || "");
+    if (j.action.startsWith("commande")) return `${esc(x.client || "")}${x.montant != null ? ` · ${fcfa(x.montant)}` : ""}`;
+    if (j.action === "compte_deconnecte") return esc(nomAbonne(j.cible));
+    if (j.action === "compte_supprime") return esc(x.email || "");
+    return "";
+  }
+  function panneauJournal() {
+    return journal.length ? `<div class="ad-tableau" role="region" aria-label="Journal des actions" tabindex="0"><table>
+        <thead><tr><th>Quand</th><th>Action</th><th>Détail</th></tr></thead>
+        <tbody>${journal.map(j => `<tr><td>${dateHeure(j.quand)}</td><td>${esc(LIBELLES_JOURNAL[j.action] || j.action)}</td><td>${detailJournal(j)}</td></tr>`).join("")}</tbody>
+      </table></div><p class="ad-note">Les 300 dernières actions sur les abonnements, les contenus, les commandes et les comptes, enregistrées par la base.</p>`
+      : `<p class="ea-vide">Aucune action enregistrée pour le moment. Le journal démarre avec cette version de l'administration.</p>`;
   }
 
   /* ---------- Suivi en direct ---------- */
@@ -564,7 +851,9 @@
   }
 
   racine.addEventListener("click", async e => {
-    const b = e.target.closest("button[data-action], button[data-caction], button[data-onglet], button[data-filtre]");
+    const lienRelance = e.target.closest("a[data-relance]");
+    if (lienRelance) { marquerRelance(lienRelance.dataset.relance); setTimeout(() => { if (onglet === "relances" && !occupe()) redessiner(); }, 600); return; }
+    const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-filtre]");
     if (!b) return;
     if (b.dataset.onglet) { onglet = b.dataset.onglet; afficher(); return; }
     if (b.dataset.filtre) { filtre = b.dataset.filtre; $("#adPanneau").innerHTML = panneauAbonnes(); return; }
@@ -574,6 +863,32 @@
     if (act === "actualiser") { recharger(); return; }
     if (act === "mfa") { activerDeuxEtapes(b); return; }
     if (act === "tout-telecharger") { telechargerTout(b); return; }
+    if (act === "exporter") { exporter(b.dataset.quoi); return; }
+    if (act === "copier-numeros") { copierNumeros(); return; }
+    if (act === "supprimer-anciens") { supprimerAnciens(b); return; }
+    if (act === "cmd-ligne") { $("#adCmdLignes").insertAdjacentHTML("beforeend", ligneCmdHTML()); return; }
+    if (act === "annonce-basculer" || act === "annonce-supprimer") {
+      const an = annonces.find(x => String(x.id) === b.dataset.aid);
+      if (!an) return;
+      if (act === "annonce-supprimer" && !confirm("Supprimer cette annonce ?")) return;
+      const { error } = act === "annonce-supprimer" ? await client.from("annonces").delete().eq("id", an.id)
+        : await client.from("annonces").update({ active: !an.active }).eq("id", an.id);
+      if (error) return toast(messageErreur(error));
+      recharger(act === "annonce-supprimer" ? "Annonce supprimée." : an.active ? "Annonce masquée." : "Annonce affichée.");
+      return;
+    }
+    const lk = b.closest("[data-kid]");
+    if (lk && b.dataset.kaction) {
+      const k = commandes.find(x => String(x.id) === lk.dataset.kid);
+      if (!k) return;
+      if (b.dataset.kaction === "supprimer") {
+        if (!confirm(`Supprimer la commande de ${k.client} (${fcfa(k.montant)}) ?`)) return;
+        const { error } = await client.from("commandes").delete().eq("id", k.id);
+        if (error) return toast(messageErreur(error));
+        recharger("Commande supprimée.");
+      }
+      return;
+    }
     if (act === "secours") { await chargerFacteurs(); panneauSecours(); return; }
     if (act === "cle-secours") { activerDeuxEtapes(b, true); return; }
     if (act === "secours-fermer") {
@@ -604,6 +919,26 @@
       delete retours[a.user_id];
       // Message de retour : sous la ligne (onglet Abonnés) et en tête du suivi en direct
       const retour = html => { retours[a.user_id] = html; retourDirect = html; };
+      if (act === "relance-faite") { marquerRelance(a.user_id); redessiner(); return; }
+      if (act === "note") { basculerZone(b, formulaireNote(a)); return; }
+      if (act === "deconnecter") {
+        if (!confirm(`Déconnecter ${a.prenom} ${a.nom} de tous ses appareils ?\n\nSa session est fermée tout de suite. Son abonnement n'est pas touché : il pourra se reconnecter avec son mot de passe, sur un seul appareil.`)) return;
+        b.disabled = true;
+        const { error } = await client.rpc("admin_deconnecter", { p_user: a.user_id });
+        b.disabled = false;
+        if (error) return toast(messageErreur(error));
+        recharger(`${a.prenom} ${a.nom} est déconnecté de tous ses appareils.`);
+        return;
+      }
+      if (act === "supprimer-compte") {
+        if (!confirm(`Supprimer définitivement le compte de ${a.prenom} ${a.nom} (${a.email}) ?\n\nÀ réserver aux faux comptes et aux inscriptions abandonnées : le compte n'a jamais eu d'abonnement.`)) return;
+        b.disabled = true;
+        const { error } = await client.rpc("admin_supprimer_compte", { p_user: a.user_id });
+        b.disabled = false;
+        if (error) return toast(messageErreur(error));
+        recharger("Compte supprimé.");
+        return;
+      }
       if (act === "suspendre") {
         if (!confirm(`Suspendre l'abonnement de ${a.prenom} ${a.nom} ?\n\nL'accès est coupé tout de suite. Les ${pluriel(joursRestants(a), "jour")} restants sont gardés et repartiront le jour de la réactivation.`)) return;
         b.disabled = true;
@@ -664,6 +999,7 @@
     const ca = b.dataset.caction;
     if (ca === "voir") ouvrirContenu(c, "Aperçu administrateur");
     if (ca === "telecharger") { telechargerContenu(c, b); return; }
+    if (ca === "lecteurs") { basculerZone(b, lecteursHTML(c)); return; }
     if (ca === "modifier") basculerZone(b, formulaireModification(c));
     if (ca === "publier") {
       const maj = c.publie ? { publie: false } : { publie: true, publie_le: new Date().toISOString() };
@@ -684,6 +1020,8 @@
   });
 
   racine.addEventListener("input", e => {
+    if (e.target.form && e.target.form.id === "adCommande" && e.target.name !== "montant") { majTotalCommande(e.target.form, e.target); return; }
+    if (e.target.form && e.target.form.id === "adCommande" && e.target.name === "montant") { e.target.dataset.manuel = "1"; return; }
     if (e.target.id === "adRecherche") {
       recherche = e.target.value;
       const pos = e.target.selectionStart;
@@ -693,7 +1031,16 @@
       champ.setSelectionRange(pos, pos);
     }
   });
-  racine.addEventListener("change", e => {
+  racine.addEventListener("change", async e => {
+    if (e.target.dataset.kstatut) {
+      const k = commandes.find(x => String(x.id) === e.target.dataset.kstatut);
+      if (!k) return;
+      const { error } = await client.from("commandes").update({ statut: e.target.value, maj_le: new Date().toISOString() }).eq("id", k.id);
+      if (error) { toast(messageErreur(error)); e.target.value = k.statut; return; }
+      recharger("Commande : " + (STATUTS_CMD.find(x => x[0] === e.target.value) || ["", e.target.value])[1].toLowerCase() + ".");
+      return;
+    }
+    if (e.target.form && e.target.form.id === "adCommande") { majTotalCommande(e.target.form, e.target); return; }
     const f = e.target.form;
     if (!f) return;
     if (e.target.name === "duree") {
@@ -743,6 +1090,8 @@
       const nJours = duree[0] === "j" ? Number(duree.slice(1)) : 0;
       const jusqua = nJours ? plusJours(f.dataset.debut, f.dataset.suite === "1" ? nJours - 1 : nJours) : v("jusqua");
       if (!mois && !jusqua) { msg.textContent = "Choisissez la date de fin."; return; }
+      const deja = paiementsMemeReference(v("note"))[0];
+      if (deja && !confirm(`Attention : la référence « ${v("note")} » a déjà servi le ${dateFr(deja.cree_le)} pour ${deja.prenom} ${deja.nom}${deja.montant != null ? ` (${fcfa(deja.montant)})` : ""}.\n\nUne même référence Mobile Money ne correspond normalement qu'à un seul paiement. Enregistrer quand même ?`)) return;
       bouton.disabled = true;
       const { data: fin, error } = await client.rpc("admin_activer", {
         p_user: a.user_id, p_mois: mois || null, p_jusqu_au: mois ? null : jusqua,
@@ -756,9 +1105,49 @@
       return;
     }
 
+    if (f.dataset.form === "note") {
+      const a = abonnes.find(x => x.user_id === f.closest(".ad-ligne").dataset.uid);
+      const note = v("note");
+      bouton.disabled = true;
+      const { error } = note ? await client.from("notes_abonnes").upsert({ user_id: a.user_id, note, maj_le: new Date().toISOString() })
+        : await client.from("notes_abonnes").delete().eq("user_id", a.user_id);
+      bouton.disabled = false;
+      if (error) { msg.textContent = messageErreur(error); return; }
+      recharger(note ? "Note enregistrée." : "Note effacée.");
+      return;
+    }
+
+    if (f.id === "adAnnonce") {
+      const texte = v("texte"), lien = v("lien");
+      if (texte.length < 2) { msg.textContent = "Écrivez l'annonce."; return; }
+      if (lien && !lienSur(lien)) { msg.textContent = "Le lien doit commencer par https://"; return; }
+      if (v("fin") && v("fin") < (v("debut") || auj())) { msg.textContent = "La date de fin précède la date de début."; return; }
+      bouton.disabled = true;
+      const { error } = await client.from("annonces").insert({ texte, lien: lien || null, debut: v("debut") || auj(), fin: v("fin") || null });
+      bouton.disabled = false;
+      if (error) { msg.textContent = messageErreur(error); return; }
+      recharger("Annonce publiée.");
+      return;
+    }
+
+    if (f.id === "adCommande") {
+      const t = totalCommande(f);
+      if (v("client").length < 1) { msg.textContent = "Indiquez le nom du client."; return; }
+      if (!t.lignes.length) { msg.textContent = "Choisissez au moins un ouvrage."; return; }
+      const montant = v("montant") === "" ? t.total : Math.max(0, Math.round(Number(v("montant"))));
+      bouton.disabled = true;
+      const { error } = await client.from("commandes").insert({ client: v("client"), telephone: v("telephone") || null, ville: v("ville") || null,
+        lignes: t.lignes, montant, moyen: v("moyen") || null, statut: v("statut") || "nouvelle", note: v("note") || null, cree_par: moi.id });
+      bouton.disabled = false;
+      if (error) { msg.textContent = messageErreur(error); return; }
+      recharger("Commande enregistrée.");
+      return;
+    }
+
     if (f.dataset.form === "modifier") {
       const c = contenus.find(x => String(x.id) === f.closest(".ad-ligne").dataset.cid);
       const maj = { titre: v("titre"), matiere: v("matiere") || null, description: v("description") || null, concours: coches() };
+      if (v("publie_le")) maj.publie_le = new Date(v("publie_le")).toISOString();
       if (c.type === "texte") maj.texte = f.elements.texte.value;
       if (c.type === "lien") { maj.lien = v("lien"); if (!lienSur(maj.lien)) { msg.textContent = "L'adresse doit commencer par https://"; return; } }
       if (maj.titre.length < 2) { msg.textContent = "Indiquez un titre."; return; }
@@ -773,6 +1162,7 @@
     if (f.id === "adNouveau") {
       const type = v("type"), titre = v("titre");
       const ligne = { titre, type, matiere: v("matiere") || null, description: v("description") || null, concours: coches(), publie: f.elements.publie.checked };
+      if (v("publie_le")) ligne.publie_le = new Date(v("publie_le")).toISOString();
       if (titre.length < 2) { msg.textContent = "Indiquez un titre."; f.elements.titre.focus(); return; }
       let fichier = null;
       if (type === "video" || type === "pdf") {

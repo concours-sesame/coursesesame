@@ -426,6 +426,8 @@
           <a class="btn btn-wa" href="${lienWa(WA_NUM, c.verrou)}" target="_blank" rel="noopener">${icone("i-wa")}Passer à une formule d'un mois</a></div>`;
       return;
     }
+    // Ouverture comptée pour les statistiques de l'administration (la base ignore les administrateurs)
+    client.rpc("noter_lecture", { p_contenu: c.id }).then(() => {}, () => {});
     const qcm = lireQcm(c);
     if (qcm) { lancerQcm(qcm, corps, marque); poserFiligrane(corps, marque); return; }
     if (c.type === "texte") {
@@ -743,6 +745,13 @@
       </div>`;
   }
 
+  // Annonces en cours, publiées depuis l'administration (lisibles par tout compte connecté)
+  async function annoncesHTML() {
+    const { data, error } = await client.from("annonces").select("id, texte, lien").order("debut", { ascending: false });
+    if (error || !data || !data.length) return "";
+    return `<div class="ea-annonces" role="status">${data.map(a => `<p>${icone("i-book")}<span>${esc(a.texte)}${a.lien && lienSur(a.lien) ? ` <a href="${esc(a.lien)}" target="_blank" rel="noopener noreferrer">En savoir plus</a>` : ""}</span></p>`).join("")}</div>`;
+  }
+
   async function afficher(onglet) {
     racine.setAttribute("aria-busy", "true");
     try {
@@ -764,10 +773,10 @@
     } else if (etat.abo.actif || etat.admin) {
       const { data, error } = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le").eq("publie", true).order("publie_le", { ascending: false });
       contenus = error ? [] : data;
-      racine.innerHTML = compteHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + bibliothequeHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + bibliothequeHTML();
       brancherCompte();
     } else {
-      racine.innerHTML = compteHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
+      racine.innerHTML = compteHTML() + await annoncesHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
       brancherCompte();
     }
     racine.removeAttribute("aria-busy");
