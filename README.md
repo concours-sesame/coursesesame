@@ -52,6 +52,8 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
 - Sauvegarde de la base : requête `tools/sauvegarde.sql` (lecture seule, avec le connecteur Supabase), puis
   `python3 -I tools/sauvegarde.py <résultat> <dossier hors du dépôt>`, qui fabrique un classeur Excel lisible
   et un fichier SQL de restauration. Ces fichiers contiennent les données des abonnés : ne jamais les déposer ici.
+  Avec `--drive`, il prépare aussi des fichiers texte courts (un CSV par tableau, la restauration en parties)
+  que le connecteur Google Drive peut envoyer dans le dossier privé « Sauvegardes coursesesame (privé) ».
 
 ## Images
 
