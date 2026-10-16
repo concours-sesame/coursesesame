@@ -211,12 +211,12 @@ def entete(jour_long):
            "-- comptes doivent avoir été recréés dans Authentication avec les mêmes identifiants (liste\n"
            "-- ci-dessous), sinon les profils ne peuvent pas leur être rattachés.\n"
            "-- Les lignes déjà présentes sont ignorées (on conflict do nothing) : on peut relancer sans doublon.\n"
-           "--\n"
-           "-- Comptes au moment de la sauvegarde (identifiant, e-mail) :\n")
+           "--\n")
 
 
 def comptes(d):
-    return "".join(f"--   {u['id']}  {u['email']}\n" for u in d["utilisateurs"])
+    return ("-- Comptes au moment de la sauvegarde (identifiant, e-mail) :\n"
+            + "".join(f"--   {u['id']}  {u['email']}\n" for u in d["utilisateurs"]))
 
 
 def restauration(d, jour_long):
@@ -243,8 +243,8 @@ def restauration_parties(d, jour_long, taille=30000):
     if groupe:
         groupes.append(groupe)
     total = 1 + len(groupes)
-    titre = lambda k, objet: (entete(jour_long) + f"--\n-- Partie {k} sur {total} ({objet}). Lancer les parties "
-                              "dans l'ordre ; chacune est autonome.\n")
+    titre = lambda k, objet: (entete(jour_long) + f"-- Partie {k} sur {total} ({objet}). Lancer les parties "
+                              "dans l'ordre ; chacune est autonome.\n--\n")
     parties = [titre(1, "comptes, abonnements, suspensions") + comptes(d) + "\nbegin;\n\n"
                + bloc("profils", d["profils"], False) + bloc("admins", d["admins"], False)
                + bloc("abonnements", d["abonnements"], True) + bloc("suspensions", d["suspensions"], True)
