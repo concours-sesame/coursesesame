@@ -49,6 +49,9 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
 - Tarifs affichés : `TARIFS_ABONNEMENT` dans `assets/js/data.js`.
 - Base, règles d'accès et fonctions : dossier `supabase/` (voir `supabase/README.md`).
 - Les contenus exclusifs ne sont jamais placés dans ce dépôt : on les dépose depuis l'administration.
+- Sauvegarde de la base : requête `tools/sauvegarde.sql` (lecture seule, avec le connecteur Supabase), puis
+  `python3 -I tools/sauvegarde.py <résultat> <dossier hors du dépôt>`, qui fabrique un classeur Excel lisible
+  et un fichier SQL de restauration. Ces fichiers contiennent les données des abonnés : ne jamais les déposer ici.
 
 ## Images
 
