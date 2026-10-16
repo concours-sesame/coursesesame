@@ -17,8 +17,11 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   activée depuis la page d'administration (code QR à scanner avec Google Authenticator ou Microsoft Authenticator),
   `est_admin()` n'est vrai qu'avec une session validée par le code (niveau `aal2` du jeton). Toutes les règles
   d'accès et fonctions d'administration en dépendent ; `admin-mot-de-passe` fait la même vérification.
-  Téléphone perdu : supprimer le facteur dans le tableau de bord Supabase (Authentication, Users, le compte,
-  section MFA factors), puis réactiver la validation depuis la page d'administration.
+  Clés de secours : la page d'administration permet d'enregistrer d'autres facteurs du même type (« Clé de
+  secours … »), dont la clé est recopiée sur papier ou scannée sur un second appareil ; à la connexion, le code est
+  essayé sur chaque facteur validé. Téléphone perdu : se connecter avec une clé de secours, puis retirer le téléphone
+  depuis « Gérer ». Sans clé de secours : supprimer le facteur dans le tableau de bord Supabase (Authentication,
+  Users, le compte, section MFA factors), puis réactiver la validation depuis la page d'administration.
 - Suspension, suppression, présence et suivi en direct (`20261013180000_suspension_presence_direct.sql`) :
   `admin_suspendre` coupe l'accès sans toucher aux périodes (table `suspensions`) ; `admin_reactiver` décale les
   périodes en cours ou à venir du nombre de jours suspendus. `admin_supprimer_abonnement` marque une période (ou la

@@ -403,9 +403,14 @@
         if (code.length !== 6) { msg.textContent = "Le code compte 6 chiffres."; return; }
         const bouton = $("button[type=submit]", f);
         bouton.disabled = true;
+        // Le code peut venir du téléphone habituel ou d'une clé de secours : on l'essaie sur chaque facteur validé
         const { data: l } = await client.auth.mfa.listFactors();
-        const facteur = ((l && l.totp) || []).find(x => x.status === "verified");
-        const { error } = facteur ? await client.auth.mfa.challengeAndVerify({ factorId: facteur.id, code }) : { error: new Error("Aucune application d'authentification n'est associée à ce compte.") };
+        const valides = ((l && l.totp) || []).filter(x => x.status === "verified");
+        let error = valides.length ? null : new Error("Aucune application d'authentification n'est associée à ce compte.");
+        for (const facteur of valides) {
+          ({ error } = await client.auth.mfa.challengeAndVerify({ factorId: facteur.id, code }));
+          if (!error) break;
+        }
         bouton.disabled = false;
         if (error) { msg.textContent = /invalid|expired|code/i.test(error.message || "") ? "Code incorrect ou expiré. Saisissez le code affiché en ce moment." : messageErreur(error); champ.select(); return; }
         tenir();

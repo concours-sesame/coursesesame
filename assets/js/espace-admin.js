@@ -27,6 +27,7 @@
 
   let moi = null, abonnes = [], paiements = [], contenus = [];
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
+  let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
   // Au-delà de ce nombre d'appareils en 7 jours, le compte est signalé comme peut-être partagé
   const SEUIL_PARTAGE = 3;
   // Un abonné est « en ligne » si sa page de l'espace abonnés s'est signalée depuis moins de 3 minutes
@@ -116,6 +117,7 @@
     const etape = await E.etapeCode();
     if (etape === "code") { racine.removeAttribute("aria-busy"); await E.formulaireCode(racine); return demarrer(); }
     deuxEtapes = etape !== "aucun";
+    await chargerFacteurs();
     try { await toutCharger(); afficher(); brancherDirect(); } catch (e) {
       racine.innerHTML = `<div class="ea-carte-info"><h3>Chargement impossible.</h3><p>${esc(messageErreur(e))}</p><button class="btn btn-navy" type="button" data-action="recharger">Réessayer</button></div>`;
     }
@@ -143,18 +145,42 @@
     derniereMaj = new Date(); majEnAttente = false;
   }
 
-  /* ---------- Validation en deux étapes : activation ---------- */
-  // Inscription d'une application d'authentification (Google Authenticator, Microsoft Authenticator…) par code QR
-  async function activerDeuxEtapes(bouton) {
+  /* ---------- Validation en deux étapes : activation et clés de secours ---------- */
+  async function chargerFacteurs() {
+    const { data } = await client.auth.mfa.listFactors();
+    facteurs = ((data && data.totp) || []).filter(f => f.status === "verified")
+      .sort((a, b) => (a.created_at < b.created_at ? -1 : 1));
+  }
+  const estSecours = f => /^Clé de secours/.test(f.friendly_name || "");
+  // Inscription d'une application d'authentification (Google Authenticator, Microsoft Authenticator…) par code QR.
+  // Une « clé de secours » est un second facteur du même type : sa clé, recopiée sur papier ou scannée sur un
+  // autre appareil, permet de se connecter si le téléphone habituel est perdu (Supabase n'a pas de codes de secours).
+  async function activerDeuxEtapes(bouton, secours) {
     const zone = $("#adSecurite");
     bouton.disabled = true;
     // Une activation commencée puis abandonnée laisse un facteur non vérifié : on le retire avant d'en créer un autre
     const { data: l } = await client.auth.mfa.listFactors();
     for (const f of ((l && l.all) || []).filter(x => x.status !== "verified")) await client.auth.mfa.unenroll({ factorId: f.id });
-    const { data, error } = await client.auth.mfa.enroll({ factorType: "totp", friendlyName: "Téléphone " + new Date().toISOString().slice(0, 16), issuer: "Les Cours Sésame et SAJ" });
+    const nom = (secours ? "Clé de secours " : "Téléphone ") + new Date().toISOString().slice(0, 16).replace("T", " ");
+    const { data, error } = await client.auth.mfa.enroll({ factorType: "totp", friendlyName: nom, issuer: "Les Cours Sésame et SAJ" });
     if (error) { bouton.disabled = false; toast(messageErreur(error)); return; }
     zone.classList.add("ad-securite-ouverte");
-    zone.innerHTML = `<form class="form ea-form" data-form="mfa" data-facteur="${esc(data.id)}" novalidate>
+    zone.innerHTML = secours ? `<form class="form ea-form" data-form="mfa" data-secours="1" data-facteur="${esc(data.id)}" novalidate>
+        <h3 class="full">Créer une clé de secours</h3>
+        <ol class="ad-mfa-etapes full">
+          <li>Recopiez cette clé <b>sur papier</b>, lettre par lettre, et rangez-la en lieu sûr, loin du téléphone (par exemple avec vos papiers importants) :
+            <code class="ad-mdp ad-cle">${esc(data.totp.secret)}</code>
+            <small>Vous pouvez aussi scanner ce code avec un second appareil (tablette, ancien téléphone) qui ne reste pas avec le premier :</small>
+            <img class="ad-qr" src="${esc(data.totp.qr_code)}" width="200" height="200" alt="Code QR de la clé de secours"></li>
+          <li>Pour vérifier la clé, ajoutez-la maintenant dans une application d'authentification (« Saisir une clé », puis tapez-la), puis saisissez le code à 6 chiffres affiché. Vous pourrez ensuite la retirer de cette application si elle reste sur le même téléphone.</li>
+          <li>Si votre téléphone est perdu : installez une application d'authentification sur le nouveau, choisissez « Saisir une clé », tapez la clé recopiée, puis connectez-vous avec le code affiché.</li>
+        </ol>
+        <p class="ea-aide full">Cette clé vaut un accès complet à l'administration avec votre mot de passe : ne la photographiez pas, ne l'envoyez à personne et ne la gardez pas dans le téléphone.</p>
+        <div class="field"><label for="adMfaCode">Code à 6 chiffres</label><input id="adMfaCode" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required></div>
+        <p class="ea-msg" role="alert"></p>
+        <button class="btn btn-navy" type="submit">Enregistrer la clé de secours</button>
+        <button class="btn btn-ghost" type="button" data-action="secours-fermer">Annuler</button>
+      </form>` : `<form class="form ea-form" data-form="mfa" data-facteur="${esc(data.id)}" novalidate>
         <h3 class="full">Activer la validation en deux étapes</h3>
         <ol class="ad-mfa-etapes full">
           <li>Installez sur votre téléphone <b>Google Authenticator</b> ou <b>Microsoft Authenticator</b> (gratuits, Play Store ou App Store).</li>
@@ -169,6 +195,29 @@
       </form>`;
     $("#adMfaCode").focus();
   }
+  // Bandeau de l'administration une fois la validation activée : rappelle de créer une clé de secours
+  function blocSecours() {
+    const n = facteurs.filter(estSecours).length;
+    return n ? `<div class="ad-securite ad-securite-ok" id="adSecurite">
+        <div><b>Validation en deux étapes activée</b> · ${facteurs.length} ${facteurs.length > 1 ? "appareils ou clés enregistrés" : "appareil ou clé enregistré"}, dont ${n} ${n > 1 ? "clés" : "clé"} de secours.</div>
+        <button class="btn btn-ghost btn-sm" type="button" data-action="secours">Gérer</button>
+      </div>` : `<div class="ad-securite" id="adSecurite">
+        <div><b>Et si vous perdez votre téléphone ?</b> Sans lui, le code à 6 chiffres ne peut plus être affiché. Créez une clé de secours, à recopier sur papier : elle vous permettra de vous reconnecter depuis un nouveau téléphone.</div>
+        <button class="btn btn-gold btn-sm" type="button" data-action="secours">Créer une clé de secours</button>
+      </div>`;
+  }
+  function panneauSecours() {
+    const zone = $("#adSecurite");
+    zone.classList.add("ad-securite-ouverte");
+    zone.innerHTML = `<h3>Appareils et clés de secours</h3>
+      <p class="ea-aide">Chacun permet d'afficher le code à 6 chiffres demandé à la connexion. Si un téléphone est perdu, connectez-vous avec une clé de secours, puis retirez-le ici.</p>
+      <ul class="ad-facteurs">${facteurs.map(f => `<li><span><b>${esc(f.friendly_name || "Application d'authentification")}</b><small>ajouté le ${dateFr(f.created_at)}</small></span>
+        <button class="btn btn-ghost btn-sm" type="button" data-action="retirer-facteur" data-facteur="${esc(f.id)}"${facteurs.length < 2 ? " disabled title=\"Gardez au moins un appareil\"" : ""}>Retirer</button></li>`).join("")}</ul>
+      <div class="ad-facteurs-actions">
+        <button class="btn btn-gold btn-sm" type="button" data-action="cle-secours">Créer une clé de secours</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-action="secours-fermer">Fermer</button>
+      </div>`;
+  }
 
   /* ---------- Affichage ---------- */
   function afficher() {
@@ -181,7 +230,7 @@
         <span>Administration · <b>${esc(moi.email)}</b></span>
         <div class="ea-compte-actions"><a class="btn btn-ghost btn-sm" href="../">Voir l'espace abonnés</a><button class="btn btn-ghost btn-sm" type="button" data-action="sortir">Se déconnecter</button></div>
       </div>
-      ${deuxEtapes ? "" : `<div class="ad-securite" id="adSecurite">
+      ${deuxEtapes ? blocSecours() : `<div class="ad-securite" id="adSecurite">
         <div><b>Protégez l'administration.</b> Activez la validation en deux étapes : à chaque connexion, en plus du mot de passe, un code à 6 chiffres affiché par une application sur votre téléphone sera demandé. Un mot de passe volé ne suffira plus.</div>
         <button class="btn btn-gold btn-sm" type="button" data-action="mfa">Activer</button>
       </div>`}
@@ -359,7 +408,7 @@
   // à la liste des abonnés en ligne.
   // Si un formulaire est ouvert ou un champ en cours de saisie, la page ne se redessine pas : un bouton
   // « Nouveautés : afficher » apparaît à la place.
-  const occupe = () => !!racine.querySelector(".ad-zone:not([hidden]) form, .ad-ajout[open]") ||
+  const occupe = () => !!racine.querySelector(".ad-zone:not([hidden]) form, .ad-ajout[open], .ad-securite-ouverte") ||
     (document.activeElement && racine.contains(document.activeElement) && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
   async function actualiserEnDirect() {
     if (!moi || document.hidden) return;
@@ -414,6 +463,28 @@
     if (act === "recharger") { demarrer(); return; }
     if (act === "actualiser") { recharger(); return; }
     if (act === "mfa") { activerDeuxEtapes(b); return; }
+    if (act === "secours") { await chargerFacteurs(); panneauSecours(); return; }
+    if (act === "cle-secours") { activerDeuxEtapes(b, true); return; }
+    if (act === "secours-fermer") {
+      // Une clé commencée mais non vérifiée est retirée
+      const { data: l } = await client.auth.mfa.listFactors();
+      for (const f of ((l && l.all) || []).filter(x => x.status !== "verified")) await client.auth.mfa.unenroll({ factorId: f.id });
+      const z = $("#adSecurite");
+      z.outerHTML = blocSecours();
+      return;
+    }
+    if (act === "retirer-facteur") {
+      const f = facteurs.find(x => x.id === b.dataset.facteur);
+      if (!f || facteurs.length < 2) return;
+      if (!confirm(`Retirer « ${f.friendly_name || "cette application"} » ?\n\nIl ne permettra plus de se connecter à l'administration. À faire pour un téléphone perdu ou une clé de secours qui a pu être vue par quelqu'un d'autre.`)) return;
+      b.disabled = true;
+      const { error } = await client.auth.mfa.unenroll({ factorId: f.id });
+      if (error) { b.disabled = false; toast(messageErreur(error)); return; }
+      await chargerFacteurs();
+      panneauSecours();
+      toast("Retiré : il ne permet plus de se connecter.");
+      return;
+    }
     const ligne = b.closest("[data-uid], [data-cid]");
     if (!ligne) return;
     if (act) {
@@ -535,6 +606,8 @@
       bouton.disabled = false;
       if (error) { msg.textContent = "Code incorrect ou expiré. Saisissez le code affiché en ce moment par l'application."; return; }
       deuxEtapes = true;
+      await chargerFacteurs();
+      if (f.dataset.secours) { panneauSecours(); toast("Clé de secours enregistrée. Gardez le papier en lieu sûr."); return; }
       afficher();
       toast("Validation en deux étapes activée. Le code sera demandé à chaque connexion.");
       return;
