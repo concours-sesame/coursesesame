@@ -7,11 +7,18 @@
 Mode d'emploi
   1. Lancer la requête de tools/sauvegarde.sql avec le connecteur Supabase (lecture seule).
   2. Enregistrer le résultat dans un fichier (le connecteur le fait seul quand il est long).
-  3. python3 -I tools/sauvegarde.py <fichier du résultat> <dossier de sortie>
+  3. python3 -I tools/sauvegarde.py <fichier du résultat> <dossier de sortie> [--drive]
+
+Avec --drive, le script prépare aussi un sous-dossier « drive » de fichiers texte courts, à envoyer un par un
+avec le connecteur Google Drive (qui ne transmet que du texte recopié) : un CSV par tableau, converti en feuille
+Google Sheets à l'envoi, et le fichier de restauration découpé en parties autonomes, à lancer dans l'ordre.
 
 Le dossier de sortie doit être HORS du dépôt (il est public) : ces fichiers contiennent les noms,
 téléphones et e-mails des abonnés. Nécessite openpyxl.
 """
+import csv
+import hashlib
+import io
 import json
 import sys
 from datetime import datetime, timezone
@@ -81,10 +88,56 @@ def feuille(wb, titre, entetes, lignes, largeurs):
     return ws
 
 
-def classeur(d, jour, jour_long, nom):
+def tableaux(d, jour):
+    """Les tableaux lisibles, communs au classeur Excel et aux CSV : (titre, en-têtes, lignes, largeurs)."""
     emails = {u["id"]: u["email"] for u in d["utilisateurs"]}
     profils = {p["id"]: p for p in d["profils"]}
     admins = {a["user_id"] for a in d["admins"]}
+    nom_de = lambda uid: f"{profils.get(uid, {}).get('prenom', '')} {profils.get(uid, {}).get('nom', '')}".strip()
+
+    dernier = {}
+    for b in d["abonnements"]:
+        if not b["supprime_le"] and (b["user_id"] not in dernier or b["fin"] > dernier[b["user_id"]]["fin"]):
+            dernier[b["user_id"]] = b
+    abonnes = []
+    for u in d["utilisateurs"]:
+        p = profils.get(u["id"], {})
+        b = dernier.get(u["id"])
+        if u["id"] in admins:
+            etat = "Administrateur"
+        elif b:
+            etat = "En cours" if b["debut"] <= jour <= b["fin"] else ("À venir" if jour < b["debut"] else "Terminé")
+        else:
+            etat = "Sans abonnement"
+        abonnes.append([p.get("prenom", ""), p.get("nom", ""), u["email"], p.get("telephone", ""),
+                        p.get("concours") or "", heure(u["cree_le"]), heure(u["derniere_connexion"]),
+                        date(b["fin"]) if b else "", etat, u["id"]])
+
+    return [
+        ("Abonnés", ["Prénom", "Nom", "E-mail", "Téléphone", "Concours", "Inscrit le", "Dernière connexion",
+                     "Accès jusqu'au", "État", "Identifiant (technique)"],
+         abonnes, [16, 18, 30, 18, 16, 18, 18, 15, 16, 38]),
+        ("Abonnements", ["N°", "Abonné", "E-mail", "Début", "Fin (incluse)", "Montant (F CFA)", "Moyen", "Note",
+                         "Activé le", "Activé par", "Statut"],
+         [[b["id"], nom_de(b["user_id"]), emails.get(b["user_id"], ""), date(b["debut"]), date(b["fin"]),
+           b["montant"], b["moyen"] or "", b["note"] or "", heure(b["cree_le"]), emails.get(b["cree_par"], ""),
+           "Supprimé le " + heure(b["supprime_le"]) if b["supprime_le"] else "Valable"] for b in d["abonnements"]],
+         [6, 24, 30, 12, 13, 15, 14, 24, 18, 24, 26]),
+        ("Suspensions", ["N°", "Abonné", "E-mail", "Début", "Réactivé le", "Créée le", "Créée par"],
+         [[s["id"], nom_de(s["user_id"]), emails.get(s["user_id"], ""), date(s["debut"]), date(s["fin"]),
+           heure(s["cree_le"]), emails.get(s["cree_par"], "")] for s in d["suspensions"]],
+         [6, 24, 30, 12, 12, 18, 24]),
+        # Une cellule Excel ne peut dépasser 32 767 caractères : le texte complet reste dans le fichier .sql.
+        ("Contenus", ["N°", "Titre", "Matière", "Type", "Concours", "Publié", "Publié le",
+                      "Fichier (compartiment exclusif)", "Lien", "Description", "Texte (QCM, fiches)"],
+         [[c["id"], c["titre"], c["matiere"] or "", c["type"], ", ".join(c["concours"] or []),
+           "Oui" if c["publie"] else "Non", heure(c["publie_le"]), c["fichier"] or "", c["lien"] or "",
+           c["description"] or "", (c["texte"] or "")[:32000]] for c in d["contenus"]],
+         [6, 50, 28, 8, 16, 8, 18, 50, 20, 50, 40]),
+    ]
+
+
+def classeur(d, jour, jour_long, nom):
     fichiers = sum(1 for c in d["contenus"] if c["fichier"])
 
     wb = Workbook()
@@ -122,58 +175,15 @@ def classeur(d, jour, jour_long, nom):
             ws.cell(ws.max_row, 1).font = Font(bold=True, color="0F2A5C", size=13 if ws.max_row == 1 else 11)
     ws.column_dimensions["A"].width = 120
 
-    dernier = {}
-    for b in d["abonnements"]:
-        if not b["supprime_le"] and (b["user_id"] not in dernier or b["fin"] > dernier[b["user_id"]]["fin"]):
-            dernier[b["user_id"]] = b
-    lignes = []
-    for u in d["utilisateurs"]:
-        p = profils.get(u["id"], {})
-        b = dernier.get(u["id"])
-        if u["id"] in admins:
-            etat = "Administrateur"
-        elif b:
-            etat = "En cours" if b["debut"] <= jour <= b["fin"] else ("À venir" if jour < b["debut"] else "Terminé")
-        else:
-            etat = "Sans abonnement"
-        lignes.append([p.get("prenom", ""), p.get("nom", ""), u["email"], p.get("telephone", ""),
-                       p.get("concours") or "", heure(u["cree_le"]), heure(u["derniere_connexion"]),
-                       date(b["fin"]) if b else "", etat, u["id"]])
-    feuille(wb, "Abonnés", ["Prénom", "Nom", "E-mail", "Téléphone", "Concours", "Inscrit le",
-                            "Dernière connexion", "Accès jusqu'au", "État", "Identifiant (technique)"],
-            lignes, [16, 18, 30, 18, 16, 18, 18, 15, 16, 38])
-
-    lignes = []
-    for b in d["abonnements"]:
-        p = profils.get(b["user_id"], {})
-        lignes.append([b["id"], f"{p.get('prenom', '')} {p.get('nom', '')}".strip(), emails.get(b["user_id"], ""),
-                       date(b["debut"]), date(b["fin"]), b["montant"], b["moyen"] or "", b["note"] or "",
-                       heure(b["cree_le"]), emails.get(b["cree_par"], ""),
-                       "Supprimé le " + heure(b["supprime_le"]) if b["supprime_le"] else "Valable"])
-    ws = feuille(wb, "Abonnements", ["N°", "Abonné", "E-mail", "Début", "Fin (incluse)", "Montant (F CFA)",
-                                     "Moyen", "Note", "Activé le", "Activé par", "Statut"],
-                 lignes, [6, 24, 30, 12, 13, 15, 14, 24, 18, 24, 26])
-    ws.append([])
-    ws.append(["", "Total des abonnements valables", "", "", "",
-               sum(b["montant"] or 0 for b in d["abonnements"] if not b["supprime_le"])])
-    ws.cell(ws.max_row, 2).font = ws.cell(ws.max_row, 6).font = Font(bold=True)
-    for (c,) in ws.iter_rows(min_row=2, min_col=6, max_col=6):
-        c.number_format = "# ##0"
-
-    feuille(wb, "Suspensions", ["N°", "Abonné", "E-mail", "Début", "Réactivé le", "Créée le", "Créée par"],
-            [[s["id"], f"{profils.get(s['user_id'], {}).get('prenom', '')} "
-                       f"{profils.get(s['user_id'], {}).get('nom', '')}".strip(),
-              emails.get(s["user_id"], ""), date(s["debut"]), date(s["fin"]), heure(s["cree_le"]),
-              emails.get(s["cree_par"], "")] for s in d["suspensions"]],
-            [6, 24, 30, 12, 12, 18, 24])
-
-    # Une cellule Excel ne peut dépasser 32 767 caractères : le texte complet reste dans le fichier .sql.
-    feuille(wb, "Contenus", ["N°", "Titre", "Matière", "Type", "Concours", "Publié", "Publié le",
-                             "Fichier (compartiment exclusif)", "Lien", "Description", "Texte (QCM, fiches)"],
-            [[c["id"], c["titre"], c["matiere"] or "", c["type"], ", ".join(c["concours"] or []),
-              "Oui" if c["publie"] else "Non", heure(c["publie_le"]), c["fichier"] or "", c["lien"] or "",
-              c["description"] or "", (c["texte"] or "")[:32000]] for c in d["contenus"]],
-            [6, 50, 28, 8, 16, 8, 18, 50, 20, 50, 40])
+    for titre, entetes, lignes, largeurs in tableaux(d, jour):
+        ws = feuille(wb, titre, entetes, lignes, largeurs)
+        if titre == "Abonnements":
+            ws.append([])
+            ws.append(["", "Total des abonnements valables", "", "", "",
+                       sum(b["montant"] or 0 for b in d["abonnements"] if not b["supprime_le"])])
+            ws.cell(ws.max_row, 2).font = ws.cell(ws.max_row, 6).font = Font(bold=True)
+            for (c,) in ws.iter_rows(min_row=2, min_col=6, max_col=6):
+                c.number_format = "# ##0"
     return wb
 
 
@@ -191,8 +201,8 @@ def bloc(table, lignes, identite):
     return s + "\n"
 
 
-def restauration(d, jour_long):
-    sql = (f"-- Sauvegarde de l'espace abonnés coursesesame.com, faite le {jour_long}.\n"
+def entete(jour_long):
+    return (f"-- Sauvegarde de l'espace abonnés coursesesame.com, faite le {jour_long}.\n"
            "-- Projet Supabase sesame-saj-espace-abonnes (iyftcjszvnaaakirlsdd).\n"
            "-- Contient des données personnelles : ne pas partager.\n"
            "--\n"
@@ -203,8 +213,14 @@ def restauration(d, jour_long):
            "-- Les lignes déjà présentes sont ignorées (on conflict do nothing) : on peut relancer sans doublon.\n"
            "--\n"
            "-- Comptes au moment de la sauvegarde (identifiant, e-mail) :\n")
-    sql += "".join(f"--   {u['id']}  {u['email']}\n" for u in d["utilisateurs"])
-    sql += "\nbegin;\n\n"
+
+
+def comptes(d):
+    return "".join(f"--   {u['id']}  {u['email']}\n" for u in d["utilisateurs"])
+
+
+def restauration(d, jour_long):
+    sql = entete(jour_long) + comptes(d) + "\nbegin;\n\n"
     sql += bloc("profils", d["profils"], False)
     sql += bloc("admins", d["admins"], False)
     sql += bloc("abonnements", d["abonnements"], True)
@@ -213,11 +229,64 @@ def restauration(d, jour_long):
     return sql + "commit;\n"
 
 
+def restauration_parties(d, jour_long, taille=30000):
+    """Le fichier de restauration en parties autonomes de taille limitée (chacune dans sa propre transaction).
+    La première porte les comptes, les abonnements et les suspensions ; les suivantes, les contenus."""
+    groupes, groupe, poids = [], [], 0
+    for c in d["contenus"]:
+        n = len(json.dumps(c, ensure_ascii=False))
+        if groupe and poids + n > taille:
+            groupes.append(groupe)
+            groupe, poids = [], 0
+        groupe.append(c)
+        poids += n
+    if groupe:
+        groupes.append(groupe)
+    total = 1 + len(groupes)
+    titre = lambda k, objet: (entete(jour_long) + f"--\n-- Partie {k} sur {total} ({objet}). Lancer les parties "
+                              "dans l'ordre ; chacune est autonome.\n")
+    parties = [titre(1, "comptes, abonnements, suspensions") + comptes(d) + "\nbegin;\n\n"
+               + bloc("profils", d["profils"], False) + bloc("admins", d["admins"], False)
+               + bloc("abonnements", d["abonnements"], True) + bloc("suspensions", d["suspensions"], True)
+               + "commit;\n"]
+    for k, g in enumerate(groupes, 2):
+        parties.append(titre(k, f"contenus {g[0]['id']} à {g[-1]['id']}") + "\nbegin;\n\n"
+                       + bloc("contenus", g, True) + "commit;\n")
+    return parties
+
+
+def pour_drive(d, jour, jour_long, nom, dossier):
+    """Fichiers texte courts pour le connecteur Google Drive. Renvoie (nom, taille, empreinte) de chacun."""
+    dossier.mkdir(parents=True, exist_ok=True)
+    for vieux in dossier.glob(f"{nom}_*"):
+        vieux.unlink()
+    fichiers = []
+    for titre, entetes, lignes, _ in tableaux(d, jour):
+        if not lignes:
+            continue
+        if titre == "Contenus":  # les textes complets, trop longs pour un tableau, sont dans la restauration
+            entetes, lignes = entetes[:-1], [l[:-1] for l in lignes]
+        tampon = io.StringIO()
+        csv.writer(tampon, lineterminator="\n").writerows([entetes] + lignes)
+        fichiers.append((f"{nom}_{titre.lower().replace('é', 'e')}.csv", tampon.getvalue()))
+    parties = restauration_parties(d, jour_long)
+    for k, texte in enumerate(parties, 1):
+        fichiers.append((f"{nom}_restauration_{k}_sur_{len(parties)}.sql", texte))
+    resume = []
+    for f, texte in fichiers:
+        octets = texte.encode("utf8")
+        (dossier / f).write_bytes(octets)
+        resume.append((f, len(octets), hashlib.sha256(octets).hexdigest()))
+    return resume
+
+
 def main():
-    if len(sys.argv) != 3:
-        sys.exit("Usage : python3 -I tools/sauvegarde.py <fichier du résultat> <dossier de sortie>")
-    d = lire_resultat(sys.argv[1])
-    sortie = Path(sys.argv[2]).resolve()
+    drive = "--drive" in sys.argv[1:]
+    args = [a for a in sys.argv[1:] if a != "--drive"]
+    if len(args) != 2:
+        sys.exit("Usage : python3 -I tools/sauvegarde.py <fichier du résultat> <dossier de sortie> [--drive]")
+    d = lire_resultat(args[0])
+    sortie = Path(args[1]).resolve()
     depot = Path(__file__).resolve().parent.parent
     if sortie == depot or depot in sortie.parents:
         sys.exit("Le dossier de sortie doit être hors du dépôt : la sauvegarde contient des données personnelles.")
@@ -235,6 +304,9 @@ def main():
     en_cours = sum(1 for b in valables if b["debut"] <= jour <= b["fin"])
     print(f"{sortie / nom}.xlsx")
     print(f"{sortie / nom}.sql")
+    if drive:
+        for f, taille, empreinte in pour_drive(d, jour, jour_long, nom, sortie / "drive"):
+            print(f"{sortie / 'drive' / f}  {taille} octets  sha256 {empreinte}")
     print(f"{len(d['utilisateurs'])} comptes, {len(d['admins'])} administrateur(s), "
           f"{len(d['abonnements'])} abonnements dont {en_cours} en cours, "
           f"{sum(b['montant'] or 0 for b in valables)} F au total, {len(d['suspensions'])} suspension(s), "
