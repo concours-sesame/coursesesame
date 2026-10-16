@@ -98,37 +98,77 @@
 
   /* ---------- Lecture des PDF dans la page, sans téléchargement ni copie ---------- */
   // Chaque page est dessinée en image (pas de texte sélectionnable), avec le nom de l'abonné incrusté.
+  // Le document s'ouvre en grand format, avec zoom (boutons, Ctrl + molette) et navigation par page. Chaque page
+  // est dessinée à la densité de l'écran (au moins 1,5 point d'image par point affiché) pour un texte net, dans
+  // la limite d'une surface d'image que les téléphones savent tenir en mémoire.
   const PDFJS = ROOT + "assets/vendor/pdfjs-3.11.174/";
+  const ZOOMS = [1, 1.25, 1.5, 2, 2.5, 3];
+  const PIXELS_MAX = 12e6;
+  let nettoyerPdf = null;
   async function afficherPdf(octets, zone, marque) {
     await chargerScript(PDFJS + "pdf.min.js");
     const lib = window.pdfjsLib;
     lib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js";
     const doc = await lib.getDocument({ data: octets, isEvalSupported: false, enableXfa: false }).promise;
     zone.innerHTML = "";
+    if (visionneuse) visionneuse.classList.add("ea-v-pdf");
+    const boite = zone.closest(".ea-v-boite");
     const mention = `Réservé à ${marque} · Les Cours Sésame et SAJ · Reproduction interdite`;
     const tuile = texteFiligrane(marque);
+    const total = doc.numPages;
+    let zoom = 1;
+
+    const barre = document.createElement("div");
+    barre.className = "ea-pdf-barre";
+    barre.innerHTML = `<div class="ea-pdf-nav">
+        <button type="button" data-pdf="prec" aria-label="Page précédente">‹</button>
+        <label>Page <input type="number" min="1" max="${total}" inputmode="numeric" value="1" aria-label="Numéro de page"> / ${total}</label>
+        <button type="button" data-pdf="suiv" aria-label="Page suivante">›</button>
+      </div>
+      <div class="ea-pdf-zoom">
+        <button type="button" data-pdf="moins" aria-label="Réduire">−</button>
+        <span aria-live="polite">100 %</span>
+        <button type="button" data-pdf="plus" aria-label="Agrandir">+</button>
+        <button type="button" data-pdf="ajuster">Pleine largeur</button>
+      </div>`;
+    const pages = document.createElement("div");
+    pages.className = "ea-pdf-pages";
+    zone.append(barre, pages);
+    const champ = $("input", barre), affZoom = $(".ea-pdf-zoom span", barre);
+    const largeurUtile = () => { const st = getComputedStyle(pages); return Math.max(240, pages.clientWidth - parseFloat(st.paddingLeft) - parseFloat(st.paddingRight)); };
+    let largeurDessin = largeurUtile();
+
+    const annuler = c => { if (c._tache) { c._tache.cancel(); c._tache = null; } };
+    const vider = c => { annuler(c); delete c.dataset.fait; if (c.width > 1) { c.width = 1; c.height = 1; } };
     const dessiner = async (n, canvas) => {
+      annuler(canvas);
       const page = await doc.getPage(n);
       const base = page.getViewport({ scale: 1 });
-      const largeur = Math.min(zone.clientWidth || 800, 1100);
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      const vue = page.getViewport({ scale: (largeur / base.width) * ratio });
-      canvas.width = Math.floor(vue.width); canvas.height = Math.floor(vue.height);
-      canvas.style.aspectRatio = `${vue.width} / ${vue.height}`;
-      const ctx = canvas.getContext("2d");
-      await page.render({ canvasContext: ctx, viewport: vue }).promise;
+      const affiche = largeurDessin * zoom;
+      const densite = Math.max(Math.min(window.devicePixelRatio || 1, 3), 1.5);
+      let echelle = (affiche * densite) / base.width;
+      const aire = base.width * base.height * echelle * echelle;
+      if (aire > PIXELS_MAX) echelle *= Math.sqrt(PIXELS_MAX / aire);
+      const vue = page.getViewport({ scale: echelle });
+      // Dessin hors écran, puis copie d'un coup : l'ancienne image reste affichée pendant le calcul
+      const tampon = document.createElement("canvas");
+      tampon.width = Math.floor(vue.width); tampon.height = Math.floor(vue.height);
+      const ctx = tampon.getContext("2d");
+      const tache = page.render({ canvasContext: ctx, viewport: vue });
+      canvas._tache = tache;
+      try { await tache.promise; } catch (e) { return; } finally { if (canvas._tache === tache) canvas._tache = null; }
       // Nom de l'abonné en diagonale et mention en bas de page, incrustés dans l'image
-      const w = canvas.width, h = canvas.height, angle = -Math.atan2(h, w);
+      const w = tampon.width, h = tampon.height, angle = -Math.atan2(h, w);
       ctx.save();
       ctx.translate(w / 2, h / 2); ctx.rotate(angle);
       ctx.font = `800 ${Math.round(Math.min(w, h) / 14)}px sans-serif`;
       ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillStyle = "rgba(15,42,92,.13)";
+      ctx.fillStyle = "rgba(15,42,92,.10)";
       ctx.fillText(marque, 0, 0);
       // Même signature, en petit et répétée sur toute la page, avec l'e-mail, la date et l'heure de lecture
       const corps = Math.max(11, Math.round(w / 64));
       ctx.font = `700 ${corps}px sans-serif`;
-      ctx.fillStyle = "rgba(15,42,92,.075)";
+      ctx.fillStyle = "rgba(15,42,92,.06)";
       const pasX = ctx.measureText(tuile).width + corps * 4, pasY = corps * 7, diag = Math.hypot(w, h);
       for (let y = -diag / 2, rang = 0; y < diag / 2; y += pasY, rang++) {
         for (let x = -diag / 2 - (rang % 2) * pasX / 2; x < diag / 2; x += pasX) ctx.fillText(tuile, x, y);
@@ -138,22 +178,16 @@
       ctx.fillStyle = "rgba(60,60,75,.85)";
       ctx.fillText(mention, Math.round(w * 0.02), h - Math.round(h * 0.012));
       page.cleanup();
+      if (!canvas.dataset.fait) return; // page sortie de l'écran entre-temps
+      canvas.width = w; canvas.height = h;
+      canvas.style.aspectRatio = `${w} / ${h}`;
+      canvas.getContext("2d").drawImage(tampon, 0, 0);
+      tampon.width = 0; tampon.height = 0;
     };
+
     // Ouvrages de plusieurs centaines de pages : chaque page garde sa place, n'est dessinée qu'à l'approche
     // et libérée une fois loin de l'écran, pour ne pas saturer la mémoire d'un téléphone.
     const p1 = (await doc.getPage(1)).getViewport({ scale: 1 });
-    const total = doc.numPages;
-    if (total > 3) {
-      const barre = document.createElement("div");
-      barre.className = "ea-pdf-barre";
-      barre.innerHTML = `<span>${total} pages</span><label>Aller à la page <input type="number" min="1" max="${total}" inputmode="numeric" value="1"></label>`;
-      zone.appendChild(barre);
-      const champ = $("input", barre);
-      const aller = () => { const n = Math.min(total, Math.max(1, Math.round(+champ.value || 1))); champ.value = n; const c = zone.querySelector(`canvas[data-page="${n}"]`); if (c) c.scrollIntoView({ block: "start" }); };
-      champ.addEventListener("change", aller);
-      champ.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); aller(); } });
-    }
-    const vider = c => { if (c.dataset.fait) { c.width = 1; c.height = 1; delete c.dataset.fait; } };
     const observateur = "IntersectionObserver" in window ? new IntersectionObserver(entrees => {
       entrees.forEach(e => {
         const c = e.target;
@@ -162,7 +196,8 @@
         c.dataset.fait = "1";
         dessiner(+c.dataset.page, c).catch(() => { delete c.dataset.fait; });
       });
-    }, { root: zone.closest(".ea-v-boite"), rootMargin: "1500px 0px" }) : null;
+    }, { root: boite, rootMargin: "1200px 0px" }) : null;
+    const toiles = [];
     for (let n = 1; n <= total; n++) {
       const canvas = document.createElement("canvas");
       canvas.className = "ea-page";
@@ -170,9 +205,78 @@
       canvas.width = 1; canvas.height = 1;
       canvas.style.aspectRatio = `${p1.width} / ${p1.height}`;
       canvas.setAttribute("aria-label", `Page ${n} sur ${total}`);
-      zone.appendChild(canvas);
-      if (observateur) observateur.observe(canvas); else if (n <= 30) await dessiner(n, canvas);
+      pages.appendChild(canvas);
+      toiles.push(canvas);
+      if (observateur) observateur.observe(canvas); else if (n <= 30) { canvas.dataset.fait = "1"; await dessiner(n, canvas); }
     }
+
+    // Page affichée : la première dont le bas dépasse le haut de la zone de lecture
+    const pageCourante = () => {
+      const haut = boite.getBoundingClientRect().top + barre.offsetHeight + 8;
+      let bas = 0, haut2 = toiles.length - 1;
+      while (bas < haut2) { const m = (bas + haut2) >> 1; if (toiles[m].getBoundingClientRect().bottom < haut) bas = m + 1; else haut2 = m; }
+      return bas + 1;
+    };
+    let attenteDefil = 0;
+    const suivreDefil = () => { if (attenteDefil) return; attenteDefil = requestAnimationFrame(() => { attenteDefil = 0; if (document.activeElement !== champ) champ.value = pageCourante(); }); };
+    boite.addEventListener("scroll", suivreDefil, { passive: true });
+    const allerA = n => {
+      n = Math.min(total, Math.max(1, Math.round(+n || 1)));
+      champ.value = n;
+      boite.scrollTop += toiles[n - 1].getBoundingClientRect().top - boite.getBoundingClientRect().top - barre.offsetHeight - 6;
+    };
+    champ.addEventListener("change", () => allerA(champ.value));
+    champ.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); allerA(champ.value); } });
+
+    // Zoom : la page lue reste à l'écran ; les pages visibles sont redessinées à la nouvelle taille
+    const redessiner = () => {
+      toiles.forEach(c => { annuler(c); delete c.dataset.fait; });
+      if (observateur) { observateur.disconnect(); toiles.forEach(c => observateur.observe(c)); }
+    };
+    const zoomer = z => {
+      z = Math.min(ZOOMS[ZOOMS.length - 1], Math.max(1, z));
+      if (z === zoom) return;
+      const n = pageCourante();
+      zoom = z;
+      pages.classList.toggle("ea-pdf-agrandi", zoom > 1);
+      toiles.forEach(c => { c.style.width = zoom * 100 + "%"; });
+      affZoom.textContent = Math.round(zoom * 100) + " %";
+      allerA(n);
+      redessiner();
+    };
+    const pas = sens => { const i = ZOOMS.findIndex(x => x >= zoom - 1e-6); zoomer(ZOOMS[Math.min(ZOOMS.length - 1, Math.max(0, i + sens))]); };
+    barre.addEventListener("click", e => {
+      const b = e.target.closest("[data-pdf]");
+      if (!b) return;
+      const a = b.dataset.pdf;
+      if (a === "prec") allerA(pageCourante() - 1);
+      if (a === "suiv") allerA(pageCourante() + 1);
+      if (a === "plus") pas(1);
+      if (a === "moins") pas(-1);
+      if (a === "ajuster") zoomer(1);
+    });
+    pages.addEventListener("wheel", e => { if (!e.ctrlKey) return; e.preventDefault(); pas(e.deltaY < 0 ? 1 : -1); }, { passive: false });
+    // Fenêtre redimensionnée ou téléphone tourné : pages redessinées à la nouvelle largeur
+    let attenteTaille = 0;
+    const surTaille = () => {
+      clearTimeout(attenteTaille);
+      attenteTaille = setTimeout(() => {
+        const l = largeurUtile();
+        if (Math.abs(l - largeurDessin) < 40) return;
+        const n = pageCourante();
+        largeurDessin = l;
+        allerA(n);
+        redessiner();
+      }, 250);
+    };
+    window.addEventListener("resize", surTaille);
+    nettoyerPdf = () => {
+      window.removeEventListener("resize", surTaille);
+      boite.removeEventListener("scroll", suivreDefil);
+      if (observateur) observateur.disconnect();
+      toiles.forEach(annuler);
+      if (visionneuse) visionneuse.classList.remove("ea-v-pdf");
+    };
     return doc;
   }
 
@@ -273,6 +377,7 @@
     clearInterval(minuterieMarque);
     clearInterval(minuterieQcm);
     const cv = $("#eaVCorps"); if (cv) cv.onclick = null;
+    if (nettoyerPdf) { nettoyerPdf(); nettoyerPdf = null; }
     if (docOuvert) { docOuvert.destroy(); docOuvert = null; }
     $("#eaVCorps").innerHTML = "";
     visionneuse.hidden = true;
@@ -418,7 +523,7 @@
     });
   }
 
-  window.Espace = { client, OUVERT, esc, dateFr, auj, joursJusqua, fcfa, WA_NUM, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur, etapeCode, formulaireCode };
+  window.Espace = { client, OUVERT, esc, dateFr, auj, joursJusqua, fcfa, WA_NUM, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur, etapeCode, formulaireCode, lireQcm };
 
   /* =====================================================================
      Page de l'espace abonnés

@@ -7,7 +7,7 @@
   if (!racine) return;
   const E = window.Espace;
   if (!E || !E.OUVERT) { racine.innerHTML = `<div class="ea-carte-info"><h3>L'espace abonnés n'est pas encore configuré.</h3></div>`; return; }
-  const { client, esc, dateFr, auj, joursJusqua, fcfa, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur } = E;
+  const { client, esc, dateFr, auj, joursJusqua, fcfa, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur, lireQcm } = E;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const ROOT = document.body.dataset.root || "";
@@ -28,6 +28,7 @@
   let moi = null, abonnes = [], paiements = [], contenus = [];
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
+  let telechargement = false; // archive .zip en préparation : la page ne se redessine pas
   // Au-delà de ce nombre d'appareils en 7 jours, le compte est signalé comme peut-être partagé
   const SEUIL_PARTAGE = 3;
   // Un abonné est « en ligne » si sa page de l'espace abonnés s'est signalée depuis moins de 3 minutes
@@ -219,6 +220,109 @@
       </div>`;
   }
 
+  /* ---------- Téléchargement des originaux (administrateur) ---------- */
+  // Les fichiers du compartiment privé sont les originaux, sans filigrane : le nom de l'abonné n'est ajouté qu'à
+  // l'affichage. La base n'en ouvre la lecture qu'à l'administrateur validé par le code (est_admin) et, pour les
+  // seuls contenus publiés de leur formule, aux abonnés. Les fiches et QCM (texte) sont enregistrés en .txt.
+  const nettoyerNom = t => String(t || "contenu").normalize("NFC").replace(/[\\/:*?"<>|\u0000-\u001f]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120) || "contenu";
+  const extension = c => c.fichier ? (c.fichier.split(".").pop() || "pdf").toLowerCase() : "txt";
+  const nomDeFichier = c => `${nettoyerNom(c.titre)}.${extension(c)}`;
+  const telechargeable = c => !!c.fichier || c.type === "texte";
+  // QCM rendu lisible (questions, propositions, bonne réponse, explication et référence)
+  function texteDe(c) {
+    const qcm = lireQcm(c);
+    if (!qcm) return `${c.titre}\n\n${c.texte || ""}\n`;
+    const L = "ABCDEFGH";
+    return `${c.titre}\n${qcm.duree ? `Durée conseillée, ${qcm.duree} minutes\n` : ""}\n` + qcm.questions.map((q, i) =>
+      `${i + 1}. ${q.q}\n${(q.options || []).map((o, j) => `   ${L[j]}. ${o}`).join("\n")}\n   Bonne réponse, ${L[q.bonne] || "?"}\n${q.explication ? `   Explication. ${q.explication}\n` : ""}${q.reference ? `   Référence. ${q.reference}\n` : ""}`).join("\n");
+  }
+  const enregistrer = (blob, nom) => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = nom;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+  };
+  async function telechargerContenu(c, bouton) {
+    if (!c.fichier) { enregistrer(new Blob([texteDe(c)], { type: "text/plain;charset=utf-8" }), nomDeFichier(c)); return; }
+    bouton.disabled = true;
+    const { data, error } = await client.storage.from("exclusif").createSignedUrl(c.fichier, 120, { download: nomDeFichier(c) });
+    bouton.disabled = false;
+    if (error || !data) { toast(messageErreur(error || new Error("Fichier introuvable"))); return; }
+    const a = document.createElement("a");
+    a.href = data.signedUrl; a.rel = "noopener";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  // Archive .zip sans compression (les PDF et vidéos sont déjà compressés), noms en UTF-8
+  const TABLE_CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc32 = o => { let c = 0xffffffff; for (let i = 0; i < o.length; i++) c = TABLE_CRC[(c ^ o[i]) & 0xff] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; };
+  function archiveZip(fichiers) {
+    const enc = new TextEncoder(), parts = [], centre = [], d = new Date();
+    const heure = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+    const jour = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    let pos = 0;
+    for (const f of fichiers) {
+      const nom = enc.encode(f.nom), crc = crc32(f.octets), n = f.octets.length;
+      const loc = new DataView(new ArrayBuffer(30));
+      loc.setUint32(0, 0x04034b50, true); loc.setUint16(4, 20, true); loc.setUint16(6, 0x0800, true);
+      loc.setUint16(10, heure, true); loc.setUint16(12, jour, true); loc.setUint32(14, crc, true);
+      loc.setUint32(18, n, true); loc.setUint32(22, n, true); loc.setUint16(26, nom.length, true);
+      const cen = new DataView(new ArrayBuffer(46));
+      cen.setUint32(0, 0x02014b50, true); cen.setUint16(4, 20, true); cen.setUint16(6, 20, true); cen.setUint16(8, 0x0800, true);
+      cen.setUint16(12, heure, true); cen.setUint16(14, jour, true); cen.setUint32(16, crc, true);
+      cen.setUint32(20, n, true); cen.setUint32(24, n, true); cen.setUint16(28, nom.length, true); cen.setUint32(42, pos, true);
+      parts.push(loc.buffer, nom, f.octets);
+      centre.push(cen.buffer, nom);
+      pos += 30 + nom.length + n;
+    }
+    const tailleCentre = centre.reduce((t, x) => t + x.byteLength, 0);
+    const fin = new DataView(new ArrayBuffer(22));
+    fin.setUint32(0, 0x06054b50, true); fin.setUint16(8, fichiers.length, true); fin.setUint16(10, fichiers.length, true);
+    fin.setUint32(12, tailleCentre, true); fin.setUint32(16, pos, true);
+    return new Blob([...parts, ...centre, fin.buffer], { type: "application/zip" });
+  }
+  // Rangement dans l'archive : un dossier par famille (Ouvrage, Corrigé, Fiches, QCM…), d'après la matière
+  const dossierDe = c => nettoyerNom((c.matiere || "").split("·")[0].trim() || (TYPES[c.type] || {}).nom || "Autres");
+  async function telechargerTout(bouton) {
+    const liste = contenus.filter(telechargeable);
+    if (!liste.length) { toast("Aucun fichier à télécharger."); return; }
+    if (!confirm(`Télécharger les ${liste.length} contenus en un seul fichier .zip ?\n\nIl s'agit des fichiers d'origine, sans filigrane. Gardez l'archive pour vous : elle contient vos ouvrages complets.`)) return;
+    const libelle = bouton.textContent;
+    bouton.disabled = true;
+    telechargement = true;
+    const fichiers = [], pris = new Set(), echecs = [], total = liste.length;
+    let fait = 0;
+    const majLibelle = () => { bouton.textContent = `Téléchargement… ${fait} / ${total}`; };
+    const suivant = async () => {
+      while (liste.length) {
+        const c = liste.shift();
+        try {
+          let octets;
+          if (c.fichier) {
+            const { data, error } = await client.storage.from("exclusif").createSignedUrl(c.fichier, 300);
+            if (error || !data) throw error || new Error("introuvable");
+            const rep = await fetch(data.signedUrl);
+            if (!rep.ok) throw new Error("HTTP " + rep.status);
+            octets = new Uint8Array(await rep.arrayBuffer());
+          } else octets = new TextEncoder().encode(texteDe(c));
+          let nom = `${dossierDe(c)}/${nomDeFichier(c)}`, k = 2;
+          while (pris.has(nom.toLowerCase())) nom = `${dossierDe(c)}/${nettoyerNom(c.titre)} (${k++}).${extension(c)}`;
+          pris.add(nom.toLowerCase());
+          fichiers.push({ nom, octets });
+        } catch (e) { echecs.push(c.titre); }
+        fait++;
+        majLibelle();
+      }
+    };
+    majLibelle();
+    await Promise.all([suivant(), suivant(), suivant()]);
+    majLibelle();
+    if (fichiers.length) enregistrer(archiveZip(fichiers), `Contenus exclusifs Cours Sesame ${auj()}.zip`);
+    telechargement = false;
+    bouton.textContent = libelle;
+    bouton.disabled = false;
+    toast(echecs.length ? `${fichiers.length} contenus téléchargés. Échec pour ${echecs.length} : ${echecs.slice(0, 3).join(", ")}${echecs.length > 3 ? "…" : ""}` : `${fichiers.length} contenus téléchargés.`);
+  }
+
   /* ---------- Affichage ---------- */
   function afficher() {
     const actifs = abonnes.filter(a => a.actif && !a.suspendu_depuis).length;
@@ -345,7 +449,12 @@
 
   function panneauContenus() {
     const coches = CONC.map(c => `<label><input type="checkbox" name="concours" value="${c.id}"> ${esc(c.court)}</label>`).join("");
-    return `<details class="ad-ajout"${contenus.length ? "" : " open"}>
+    const nbTele = contenus.filter(telechargeable).length;
+    return `${nbTele ? `<div class="ad-telecharger">
+        <button class="btn btn-navy btn-sm" type="button" data-action="tout-telecharger">Télécharger tous les contenus (.zip)</button>
+        <small>${nbTele} contenus, fichiers d'origine sans filigrane. Réservé à l'administrateur.</small>
+      </div>` : ""}
+      <details class="ad-ajout"${contenus.length ? "" : " open"}>
         <summary>Ajouter un contenu exclusif</summary>
         <form class="form ad-form" id="adNouveau" novalidate>
           <div class="field full"><label for="nTitre">Titre</label><input id="nTitre" name="titre" maxlength="160" required></div>
@@ -372,6 +481,7 @@
         </div>
         <div class="ad-actions">
           <button class="btn btn-ghost btn-sm" type="button" data-caction="voir">Aperçu</button>
+          ${telechargeable(c) ? `<button class="btn btn-ghost btn-sm" type="button" data-caction="telecharger" title="Fichier d'origine, sans filigrane">Télécharger</button>` : ""}
           <button class="btn ${c.publie ? "btn-ghost" : "btn-navy"} btn-sm" type="button" data-caction="publier">${c.publie ? "Retirer" : "Publier"}</button>
           <button class="btn btn-ghost btn-sm" type="button" data-caction="modifier">Modifier</button>
           <button class="btn btn-ghost btn-sm ad-danger" type="button" data-caction="supprimer">Supprimer</button>
@@ -408,7 +518,7 @@
   // à la liste des abonnés en ligne.
   // Si un formulaire est ouvert ou un champ en cours de saisie, la page ne se redessine pas : un bouton
   // « Nouveautés : afficher » apparaît à la place.
-  const occupe = () => !!racine.querySelector(".ad-zone:not([hidden]) form, .ad-ajout[open], .ad-securite-ouverte") ||
+  const occupe = () => telechargement || !!racine.querySelector(".ad-zone:not([hidden]) form, .ad-ajout[open], .ad-securite-ouverte") ||
     (document.activeElement && racine.contains(document.activeElement) && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
   async function actualiserEnDirect() {
     if (!moi || document.hidden) return;
@@ -463,6 +573,7 @@
     if (act === "recharger") { demarrer(); return; }
     if (act === "actualiser") { recharger(); return; }
     if (act === "mfa") { activerDeuxEtapes(b); return; }
+    if (act === "tout-telecharger") { telechargerTout(b); return; }
     if (act === "secours") { await chargerFacteurs(); panneauSecours(); return; }
     if (act === "cle-secours") { activerDeuxEtapes(b, true); return; }
     if (act === "secours-fermer") {
@@ -552,6 +663,7 @@
     if (!c) return;
     const ca = b.dataset.caction;
     if (ca === "voir") ouvrirContenu(c, "Aperçu administrateur");
+    if (ca === "telecharger") { telechargerContenu(c, b); return; }
     if (ca === "modifier") basculerZone(b, formulaireModification(c));
     if (ca === "publier") {
       const maj = c.publie ? { publie: false } : { publie: true, publie_le: new Date().toISOString() };
