@@ -1156,6 +1156,10 @@ ${contactCTA(prefix)}`;
     <p>Elles sont conservées par notre prestataire Supabase, sur des serveurs situés en Europe. Votre mot de passe est enregistré sous une forme chiffrée que personne, pas même nous, ne peut lire.</p>
     <p>Les vidéos, documents, fiches et QCM de l'espace affichent votre nom, votre numéro de téléphone et, sur les documents, les fiches et les QCM, votre adresse e-mail avec la date et l'heure de lecture, pour décourager leur diffusion. Ils sont réservés à votre usage personnel.</p>
     <p>Un compte ne s'utilise que sur un appareil à la fois. Pour l'assurer, nous enregistrons la date de chaque connexion, l'heure de votre dernier passage sur l'espace abonnés et un identifiant technique de la session ouverte, sans aucune information sur l'appareil lui-même. Ces données servent aussi à repérer les comptes partagés.</p>
+
+    <h2 id="agent-revision">Agent de révision</h2>
+    <p>L'agent de révision de l'espace abonnés rédige des corrigés et corrige des copies à l'aide d'un service d'intelligence artificielle fourni par la société Anthropic, PBC, établie aux États-Unis. Lorsque vous l'utilisez, le texte de votre sujet et, le cas échéant, de votre copie lui sont transmis, avec des extraits de nos ouvrages, pour rédiger la réponse. Votre nom, votre numéro de téléphone et votre adresse e-mail ne lui sont pas transmis. Selon ses conditions commerciales, Anthropic n'utilise pas les données reçues par ce service pour entraîner ses modèles.</p>
+    <p>N'écrivez donc aucune information personnelle, ni la vôtre ni celle d'un tiers, dans le sujet ou dans la copie. Vos demandes et les réponses sont conservées dans votre compte, chez Supabase en Europe, pour que vous puissiez les relire ; elles nous servent aussi à suivre la qualité et le coût du service, et sont effacées avec votre compte.</p>
     <p>Vous pouvez demander à tout moment la correction de vos informations ou la suppression de votre compte en nous écrivant sur WhatsApp. La suppression d'un compte efface les informations qui s'y rattachent.</p>
 
     <h2 id="credits">Crédits</h2>
@@ -1229,6 +1233,10 @@ ${contactCTA(prefix)}`;
 
     <h2 id="remboursement">Remboursement d'un abonnement</h2>
     <p>Les contenus sont accessibles dès l'activation : un abonnement activé n'est donc pas remboursable, même s'il n'a pas été utilisé jusqu'à son terme.</p>
+
+    <h2 id="agent-revision">Agent de révision</h2>
+    <p>Lorsqu'il est ouvert, l'agent de révision est compris sans supplément dans les formules d'un mois et plus. Il rédige un corrigé de cas pratique, de dissertation ou de commentaire d'article, ou corrige la copie de l'abonné et lui attribue une note sur 20. Le nombre de demandes est limité par jour et par mois ; la limite en vigueur est affichée dans l'espace abonnés. L'agent peut être interrompu, notamment pour maintenance ou lorsque sa limite mensuelle de fonctionnement est atteinte ; cette interruption ne modifie ni le prix ni la durée de l'abonnement.</p>
+    <p>Les réponses de l'agent sont produites automatiquement par un service d'intelligence artificielle, à partir de nos ouvrages et de notre méthode. Elles constituent une aide à la révision et peuvent comporter des erreurs. Elles ne sont ni des corrigés officiels ni une consultation juridique, et la note attribuée est indicative : elle ne préjuge pas de celle d'un jury. Vérifiez les références avant de les apprendre. Les réponses sont réservées à votre usage personnel, dans les mêmes conditions que les autres contenus. Les données transmises à l'agent sont traitées comme indiqué dans les <a href="${prefix}mentions-legales/#agent-revision">mentions légales</a>.</p>
 
     <h2 id="contenus">Nature des contenus</h2>
     <p>Nos ouvrages, fiches, corrigés, QCM et vidéos sont des outils de préparation aux concours. Ils ne sont pas des publications officielles de l'INFJ, de l'ENA ni d'aucun organisateur de concours, et ne constituent pas une consultation juridique. Les corrigés proposés sont les nôtres et non des corrigés officiels.</p>

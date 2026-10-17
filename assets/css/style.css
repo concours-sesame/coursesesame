@@ -1123,3 +1123,28 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
   .ad-barres li{grid-template-columns:1fr auto}
   .ad-barre{grid-column:1/-1;grid-row:2}
 }
+
+/* ---------- Agent de révision (espace abonnés) ---------- */
+.ea-agent{margin:1.25rem 0;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);background:var(--paper)}
+.ea-agent>summary{cursor:pointer;list-style:none;padding:1rem 1.25rem;display:grid;gap:.2rem}
+.ea-agent>summary::-webkit-details-marker{display:none}
+.ea-agent>summary b{font-family:var(--serif);font-size:1.15rem;color:var(--navy)}
+.ea-agent>summary b::after{content:" +";color:var(--gold-ink)}
+.ea-agent[open]>summary b::after{content:" −"}
+.ea-agent>summary span:not(.eyebrow){color:var(--muted);font-size:.95rem}
+.ea-agent-form,.ea-agent-verrou,.ea-agent-sortie,.ea-agent-histo{padding:0 1.25rem 1.25rem}
+.ea-agent-mode{border:0;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem}
+.ea-agent-mode legend{font-weight:600;margin-bottom:.35rem;color:var(--navy)}
+.ea-agent-mode label{display:flex;gap:.45rem;align-items:center}
+.ea-agent-sortie .ea-attente{margin:0 0 .25rem}
+.ea-agent-progres{color:var(--gold-ink);font-weight:600;margin:0}
+.ea-agent-histo h4{margin:.25rem 0 .5rem;color:var(--navy)}
+.ea-agent-ligne{display:grid;gap:.15rem;width:100%;text-align:left;padding:.6rem .75rem;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--cream);margin-bottom:.4rem;color:var(--ink)}
+.ea-agent-ligne:hover{border-color:var(--navy)}
+.ea-agent-ligne small{color:var(--muted);overflow-wrap:anywhere}
+.ea-agent-note{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1rem;padding:.75rem 1rem;margin:0 0 1rem;background:var(--cream);border-radius:var(--r-sm);border-left:4px solid var(--gold)}
+.ea-agent-note b{font-family:var(--serif);font-size:1.6rem;color:var(--navy)}
+.ea-agent-note span{color:var(--muted);font-size:.92rem}
+.ea-agent-sources{margin-top:1.25rem;padding-top:.75rem;border-top:1px solid var(--line);font-size:.92rem;color:var(--muted)}
+.ea-agent-sources h4{margin:0 0 .35rem;color:var(--navy);font-size:.95rem}
+.ea-agent-sources ul{margin:0;padding-left:1.1rem}
