@@ -411,7 +411,7 @@
   async function ouvrirContenu(c, marque) {
     if (!visionneuse) creerVisionneuse();
     retourFocus = document.activeElement;
-    const t = typeAffiche(c);
+    const t = c.agent ? { nom: "Agent de révision" } : typeAffiche(c);
     $("#eaVType").className = "ea-type ea-type-" + c.type;
     $("#eaVType").textContent = t.nom;
     $("#eaVTitre").textContent = c.titre;
@@ -430,6 +430,7 @@
           <a class="btn btn-wa" href="${lienWa(WA_NUM, c.verrou)}" target="_blank" rel="noopener">${icone("i-wa")}Passer à une formule d'un mois</a></div>`;
       return;
     }
+    if (c.agent) { afficherReponseAgent(c.agent, corps, marque); return; }
     // Ouverture comptée pour les statistiques de l'administration (la base ignore les administrateurs)
     client.rpc("noter_lecture", { p_contenu: c.id }).then(() => {}, () => {});
     const qcm = lireQcm(c);
@@ -756,6 +757,109 @@
     return `<div class="ea-annonces" role="status">${data.map(a => `<p>${icone("i-book")}<span>${esc(a.texte)}${a.lien && lienSur(a.lien) ? ` <a href="${esc(a.lien)}" target="_blank" rel="noopener noreferrer">En savoir plus</a>` : ""}</span></p>`).join("")}</div>`;
   }
 
+  /* ---------- Agent de révision ---------- */
+  // Rédaction intégrale ou correction notée sur 20 d'un cas pratique, d'une dissertation ou d'un commentaire d'article,
+  // par la fonction Supabase « agent-revision », à partir des ouvrages de l'espace abonnés et de la méthode de l'éditeur.
+  // Réservé aux formules d'un mois et plus, dans la limite d'un quota. Pendant la rédaction, seule la progression
+  // s'affiche ; la réponse s'ouvre ensuite dans la visionneuse protégée (filigrane, voile, copie bloquée).
+  const EXERCICES = { cas_pratique: "Cas pratique", dissertation: "Dissertation juridique", commentaire: "Commentaire d'article" };
+  const MATIERES_AGENT = ["Droit civil", "Droit pénal", "Procédure pénale", "Droit administratif", "Droit commercial OHADA", "Organisation judiciaire", "Droits de l'enfant"];
+  let agent = null, echanges = [], agentOuvert = false, agentEnCours = false;
+  const noteFr = n => String(Math.round(Number(n) * 2) / 2).replace(".", ",");
+  async function chargerAgent() {
+    const [a, h] = await Promise.all([
+      client.rpc("mon_agent"),
+      client.from("agent_echanges").select("id, exercice, mode, matiere, sujet, reponse, note, sources, cree_le").eq("user_id", etat.uid).eq("statut", "termine").order("cree_le", { ascending: false }).limit(10)
+    ]);
+    agent = a.error ? null : (a.data && a.data[0]) || null;
+    echanges = h.error ? [] : h.data;
+  }
+  const titreEchange = e => `${EXERCICES[e.exercice] || "Exercice"}, ${e.mode === "correction" ? "correction de votre copie" : "corrigé rédigé"}`;
+  function agentHTML() {
+    if (!agent || (!agent.actif && !etat.admin)) return "";
+    const reste = Math.max(0, Math.min(agent.quota_jour - agent.utilises_jour, agent.quota_mois - agent.utilises_mois));
+    const formulaire = `<form class="form ea-form ea-agent-form" id="eaAgentForm" novalidate>
+        <div class="field"><label for="aExercice">Exercice</label><select id="aExercice" name="exercice">${Object.entries(EXERCICES).map(([v, l]) => `<option value="${v}">${l}</option>`).join("")}</select></div>
+        <div class="field"><label for="aMatiere">Matière (facultatif)</label><input id="aMatiere" name="matiere" list="aMatieres" maxlength="80"><datalist id="aMatieres">${MATIERES_AGENT.map(m => `<option value="${esc(m)}">`).join("")}</datalist></div>
+        <fieldset class="full ea-agent-mode"><legend>Votre demande</legend>
+          <label><input type="radio" name="mode" value="redaction" checked> Rédiger le corrigé intégral</label>
+          <label><input type="radio" name="mode" value="correction"> Corriger ma copie et la noter sur 20</label>
+        </fieldset>
+        <div class="field full"><label for="aSujet">Sujet</label><textarea id="aSujet" name="sujet" rows="6" maxlength="12000" placeholder="Collez l'énoncé complet : les faits et les questions du cas pratique, le sujet de dissertation, ou l'article à commenter avec son texte."></textarea></div>
+        <div class="field full" id="aCopieChamp" hidden><label for="aCopie">Votre copie</label><textarea id="aCopie" name="copie" rows="12" maxlength="40000" placeholder="Collez votre copie complète, telle que vous l'avez rédigée."></textarea></div>
+        <p class="ea-aide full">${etat.admin ? "Administrateur, sans limite de demandes." : `${reste} demande${reste > 1 ? "s" : ""} possible${reste > 1 ? "s" : ""} aujourd'hui (${agent.quota_jour} par jour, ${agent.quota_mois} par mois).`} N'écrivez aucun renseignement personnel dans le sujet ni dans la copie : ils sont transmis au service d'intelligence artificielle qui rédige la réponse. L'agent est une aide à la révision ; sa note est indicative.</p>
+        <p class="ea-msg full" role="alert"></p>
+        <button class="btn btn-gold" type="submit"${!etat.admin && !reste ? " disabled" : ""}>Lancer la rédaction</button>
+      </form>
+      <div class="ea-agent-sortie" id="eaAgentSortie" aria-live="polite" hidden></div>`;
+    return `<details class="ea-agent" id="eaAgent"${agentOuvert ? " open" : ""}>
+        <summary><span class="eyebrow">Agent de révision</span><b>Un corrigé rédigé ou votre copie corrigée et notée sur 20</b><span>Cas pratique, dissertation ou commentaire d'article, à partir des ouvrages de l'espace abonnés et de la méthode des Cours Sésame et SAJ.</span></summary>
+        ${!agent.acces ? `<div class="ea-agent-verrou"><p>L'agent de révision est compris dans les formules d'un mois et plus.</p><a class="btn btn-wa" href="${lienWa(WA_NUM, msgFormule())}" target="_blank" rel="noopener">${icone("i-wa")}Passer à une formule d'un mois</a></div>` : formulaire}
+        ${echanges.length ? `<div class="ea-agent-histo"><h4>Vos dernières demandes</h4>${echanges.map(e => `<button type="button" class="ea-agent-ligne" data-echange="${e.id}"><b>${titreEchange(e)}${e.note != null ? ` · ${noteFr(e.note)}/20` : ""}</b><small>${dateFr(e.cree_le)} · ${esc(e.sujet.slice(0, 110))}${e.sujet.length > 110 ? "…" : ""}</small></button>`).join("")}</div>` : ""}
+      </details>`;
+  }
+  function afficherReponseAgent(e, corps, marque) {
+    const vues = new Set();
+    const sources = (e.sources || []).filter(x => { const k = x.titre + "|" + x.page; if (vues.has(k)) return false; vues.add(k); return true; });
+    corps.innerHTML = `${e.note != null ? `<p class="ea-agent-note"><b>${noteFr(e.note)}/20</b><span>Note indicative, qui ne préjuge pas de la note d'un jury.</span></p>` : ""}
+      <div class="ea-fiche">${mettreEnForme(e.reponse || "")}</div>
+      ${sources.length ? `<div class="ea-agent-sources"><h4>Passages des ouvrages consultés</h4><ul>${sources.map(x => `<li>${esc(x.titre)}, page ${x.page}</li>`).join("")}</ul></div>` : ""}
+      ${e.tronque ? `<p class="ea-aide">La réponse a atteint sa longueur maximale et peut s'arrêter avant la fin.</p>` : ""}
+      <p class="ea-mention">Réponse de l'agent de révision, réservée à ${esc(marque)}. Aide à la révision, sans valeur de corrigé officiel : vérifiez les références avant de les apprendre. Reproduction et diffusion interdites.</p>`;
+    poserFiligrane(corps, marque);
+  }
+  const marqueLecteur = () => etat.admin && !etat.abo.actif ? "Aperçu administrateur" : marqueDe(etat.profil);
+  const ouvrirEchange = e => ouvrirContenu({ agent: e, type: "texte", titre: titreEchange(e), description: e.sujet.length > 220 ? e.sujet.slice(0, 220) + "…" : e.sujet }, marqueLecteur());
+  async function lancerAgent(f) {
+    const msg = $(".ea-msg", f), bouton = $("button[type=submit]", f), sortie = $("#eaAgentSortie");
+    const d = { exercice: f.exercice.value, mode: $("[name=mode]:checked", f).value, matiere: f.matiere.value.trim(), sujet: f.sujet.value.trim(), copie: f.copie.value.trim() };
+    if (d.sujet.length < 10) { msg.textContent = "Collez le sujet complet."; f.sujet.focus(); return; }
+    if (d.mode === "correction" && d.copie.length < 200) { msg.textContent = "Collez votre copie complète (200 caractères au moins)."; f.copie.focus(); return; }
+    if (d.mode !== "correction") d.copie = "";
+    const { data: { session } } = await client.auth.getSession();
+    if (!session) { afficher(); return; }
+    bouton.disabled = true; msg.textContent = ""; agentEnCours = true;
+    sortie.hidden = false;
+    sortie.innerHTML = `<p class="ea-attente">Recherche dans les ouvrages puis rédaction. Comptez une à deux minutes et gardez la page ouverte.</p><p class="ea-agent-progres"></p>`;
+    const progres = $(".ea-agent-progres", sortie);
+    let texte = "", fin = null, erreur = null;
+    try {
+      const rep = await fetch(`${CONF.url}/functions/v1/agent-revision`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}`, apikey: CONF.cle },
+        body: JSON.stringify(d)
+      });
+      if (!rep.ok || !rep.body) { let j = {}; try { j = await rep.json(); } catch (e) { /* réponse vide */ } throw new Error(j.error || "L'agent de révision n'a pas pu répondre. Réessayez dans quelques minutes."); }
+      const lecteur = rep.body.getReader(), dec = new TextDecoder();
+      let tampon = "";
+      for (;;) {
+        const { value, done } = await lecteur.read();
+        if (done) break;
+        tampon += dec.decode(value, { stream: true });
+        let i;
+        while ((i = tampon.indexOf("\n")) >= 0) {
+          const l = tampon.slice(0, i).trim();
+          tampon = tampon.slice(i + 1);
+          if (!l) continue;
+          let o;
+          try { o = JSON.parse(l); } catch (e) { continue; }
+          if (o.t) { texte += o.t; const n = texte.split(/\s+/).length; progres.textContent = `Rédaction en cours, ${n.toLocaleString("fr-FR")} mots…`; }
+          if (o.fin) fin = o.fin;
+          if (o.erreur) erreur = o.erreur;
+        }
+      }
+      if (!fin && !erreur) erreur = "La rédaction a été interrompue. Réessayez dans quelques minutes.";
+    } catch (e) { erreur = messageErreur(e); }
+    agentEnCours = false;
+    if (erreur) { sortie.hidden = true; bouton.disabled = false; msg.textContent = erreur; return; }
+    const e = { id: fin.id, exercice: d.exercice, mode: d.mode, matiere: d.matiere, sujet: d.sujet, reponse: fin.reponse, note: fin.note, sources: fin.sources, tronque: fin.tronque, cree_le: new Date().toISOString() };
+    echanges.unshift(e);
+    agent.utilises_jour++; agent.utilises_mois++;
+    agentOuvert = true;
+    $("#eaAgent").outerHTML = agentHTML();
+    ouvrirEchange(e);
+  }
+
   async function afficher(onglet) {
     racine.setAttribute("aria-busy", "true");
     try {
@@ -775,9 +879,12 @@
       racine.innerHTML = `<div class="ea-accueil">${formulairesHTML(onglet || (!avisAppareil && location.hash === "#inscription" ? "inscription" : "connexion"))}${await apercuHTML()}</div>`;
       brancherFormulaires();
     } else if (etat.abo.actif || etat.admin) {
-      const { data, error } = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le").eq("publie", true).order("publie_le", { ascending: false });
+      const [{ data, error }] = await Promise.all([
+        client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le").eq("publie", true).order("publie_le", { ascending: false }),
+        chargerAgent().catch(() => { agent = null; })
+      ]);
       contenus = error ? [] : data;
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + bibliothequeHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + agentHTML() + bibliothequeHTML();
       brancherCompte();
     } else {
       racine.innerHTML = compteHTML() + await annoncesHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
@@ -856,6 +963,16 @@
     });
   }
 
+  // Agent de révision : envoi de la demande, champ de la copie selon le type de demande, bloc ouvert ou fermé
+  racine.addEventListener("submit", e => {
+    if (e.target.id !== "eaAgentForm") return;
+    e.preventDefault();
+    if (!agentEnCours) lancerAgent(e.target);
+  });
+  racine.addEventListener("change", e => {
+    if (e.target.name === "mode" && e.target.closest("#eaAgentForm")) $("#aCopieChamp").hidden = e.target.value !== "correction";
+  });
+  racine.addEventListener("toggle", e => { if (e.target.id === "eaAgent") agentOuvert = e.target.open; }, true);
   // Recherche dans la bibliothèque
   racine.addEventListener("input", e => {
     if (e.target.id !== "eaCherche") return;
@@ -880,6 +997,8 @@
       $(".ea-biblio", racine).outerHTML = bibliothequeHTML();
       return;
     }
+    const ech = e.target.closest("[data-echange]");
+    if (ech) { const x = echanges.find(y => String(y.id) === ech.dataset.echange); if (x) ouvrirEchange(x); return; }
     const carte = e.target.closest(".ea-carte");
     if (carte && etat.session) {
       const c = contenus.find(x => String(x.id) === carte.dataset.id);

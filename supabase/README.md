@@ -53,6 +53,14 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
 - `functions/admin-mot-de-passe` : mot de passe provisoire donné par l'administrateur. Déployée sans
   vérification de jeton par la plateforme : la fonction vérifie elle-même la session de l'appelant,
   puis qu'il figure dans la table `admins`.
+- `functions/agent-revision` : agent de révision (rédaction intégrale ou correction notée sur 20 d'un cas
+  pratique, d'une dissertation ou d'un commentaire d'article). Déployée sans vérification de jeton : la
+  fonction vérifie la session, l'abonnement (formules d'un mois et plus), l'appareil, le quota et le plafond
+  de dépense du mois (`agent_reglages`). Elle cherche les passages utiles dans `passages` (texte des contenus,
+  préparé depuis l'administration), lit la méthode dans `agent_consignes` (réservée à l'administrateur,
+  jamais dans ce dépôt public) et appelle l'API d'Anthropic avec le secret `ANTHROPIC_API_KEY`. Seuls le
+  sujet, la copie et les passages sont transmis, jamais le nom, l'e-mail ou le téléphone de l'abonné.
+  Chaque demande est enregistrée dans `agent_echanges` (historique de l'abonné, coûts pour l'administrateur).
 
 ## Mise en service (faite le 9 octobre 2026)
 

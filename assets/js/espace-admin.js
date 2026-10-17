@@ -30,6 +30,7 @@
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
   let telechargement = false; // archive .zip ou texte pour l'agent en préparation : la page ne se redessine pas
+  let agentReglages = null, agentConsignes = new Map(), agentEchanges = []; // agent de révision (réglages, méthode, demandes des 62 derniers jours)
   let bilanPassages = null; // texte préparé pour l'agent de révision, par contenu (pages, pages sans texte, caractères)
   // Au-delà de ce nombre d'appareils en 7 jours, le compte est signalé comme peut-être partagé
   const SEUIL_PARTAGE = 3;
@@ -129,7 +130,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -140,7 +141,11 @@
       client.from("lectures").select("user_id, contenu_id, ouvert_le").gte("ouvert_le", new Date(Date.now() - 90 * 864e5).toISOString()).order("ouvert_le", { ascending: false }).limit(5000),
       client.from("annonces").select("*").order("cree_le", { ascending: false }),
       client.from("journal_admin").select("*").order("quand", { ascending: false }).limit(300),
-      client.rpc("admin_bilan_passages")
+      client.rpc("admin_bilan_passages"),
+      client.from("agent_reglages").select("*").maybeSingle(),
+      client.from("agent_consignes").select("cle, texte, maj_le"),
+      client.from("agent_echanges").select("id, user_id, exercice, mode, matiere, sujet, note, cout_fcfa, statut, jetons_entree, jetons_sortie, jetons_cache, cree_le")
+        .gte("cree_le", new Date(Date.now() - 62 * 864e5).toISOString()).order("cree_le", { ascending: false }).limit(1000)
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -149,6 +154,7 @@
     commandes = cmd.data || []; notes = new Map((nt.data || []).map(x => [x.user_id, x.note]));
     lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
     lireBilan(bil);
+    agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
     // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
     const appareils = new Map((ap.data || []).map(x => [x.user_id, Number(x.appareils_7j)]));
     // Dernier passage sur l'espace abonnés, dernière connexion et suspension en cours
@@ -443,7 +449,7 @@
         <div><b>${fcfa(encaisseCeMois())}</b><span>Encaissé ce mois-ci</span></div>
       </div>
       <div class="ea-onglets ad-onglets" role="tablist" aria-label="Administration">
-        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
+        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
       </div>
       <div id="adPanneau">${panneau()}</div>`;
     majIndicateur();
@@ -451,7 +457,7 @@
   // Redessine la page (onglets compris) sans bouger la position de lecture
   const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
   const PANNEAUX = { direct: () => panneauDirect(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
-    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), journal: () => panneauJournal() };
+    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), journal: () => panneauJournal() };
   const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
 
   /* ---------- En direct : abonnements en cours, mis à jour automatiquement ---------- */
@@ -886,6 +892,69 @@
       : `<p class="ea-vide">Aucune action enregistrée pour le moment. Le journal démarre avec cette version de l'administration.</p>`;
   }
 
+  /* ---------- Agent de révision : réglages, méthode, coûts ---------- */
+  // La méthode (consignes) est rangée dans la base, réservée à l'administrateur, et jamais dans le dépôt public.
+  // La clé de l'API Anthropic est un secret de la fonction Supabase « agent-revision » (ANTHROPIC_API_KEY).
+  const CONSIGNES = [["commun", "Consignes communes (sources, références vérifiées, style, correction)"], ["cas_pratique", "Cas pratique"], ["dissertation", "Dissertation juridique"], ["commentaire", "Commentaire d'article"]];
+  const MODELES = [["claude-sonnet-5-5", "Sonnet 5.5 (recommandé)"], ["claude-opus-5-5", "Opus 5.5 (plus fin, plus cher)"], ["claude-haiku-5-5", "Haiku 5.5 (économique)"]];
+  const EXERCICES_AGENT = { cas_pratique: "Cas pratique", dissertation: "Dissertation", commentaire: "Commentaire d'article" };
+  const auteurDemande = uid => uid === (moi && moi.id) ? "Vous" : nomAbonne(uid);
+  function panneauAgent() {
+    if (!agentReglages) return `<p class="ea-vide">L'agent de révision n'est pas encore installé dans la base.</p>`;
+    const r = agentReglages, debutMois = auj().slice(0, 8) + "01";
+    const mois = agentEchanges.filter(e => e.cree_le.slice(0, 10) >= debutMois);
+    const faits = mois.filter(e => e.statut === "termine");
+    const cout = mois.reduce((t, e) => t + Number(e.cout_fcfa || 0), 0);
+    const usagers = new Set(faits.map(e => e.user_id)).size;
+    const notes = faits.filter(e => e.note != null);
+    const consignesPretes = CONSIGNES.every(([k]) => agentConsignes.has(k));
+    return `${r.actif ? "" : `<div class="ad-alerte"><b>L'agent est fermé aux abonnés.</b> Vous pouvez le tester depuis l'espace abonnés. Ouvrez-le ci-dessous quand vous êtes satisfait.</div>`}
+      ${consignesPretes ? "" : `<div class="ad-alerte"><b>Méthode incomplète.</b> Les quatre consignes doivent être enregistrées pour que l'agent réponde.</div>`}
+      <div class="ad-stats ad-stats-5">
+        <div><b>${faits.length}</b><span>Demandes ce mois-ci</span></div>
+        <div><b>${usagers}</b><span>Abonnés utilisateurs</span></div>
+        <div><b>${fcfa(cout)}</b><span>Coût estimé ce mois-ci (plafond ${fcfa(r.plafond_mois_fcfa)})</span></div>
+        <div><b>${faits.length ? fcfa(cout / faits.length) : "–"}</b><span>Coût moyen d'une demande</span></div>
+        <div><b>${notes.length ? (notes.reduce((t, e) => t + Number(e.note), 0) / notes.length).toFixed(1).replace(".", ",") + "/20" : "–"}</b><span>Note moyenne des copies corrigées</span></div>
+      </div>
+      <details class="ad-ajout">
+        <summary>Réglages de l'agent</summary>
+        <form class="form ad-form" id="adAgentReglages" novalidate>
+          <label class="ea-accord full"><input type="checkbox" name="actif"${r.actif ? " checked" : ""}><span>Ouvrir l'agent aux abonnés (formules d'un mois et plus)</span></label>
+          <div class="field"><label for="agModele">Modèle</label><select id="agModele" name="modele">${MODELES.map(([v, l]) => `<option value="${v}"${r.modele === v ? " selected" : ""}>${l}</option>`).join("")}${MODELES.some(([v]) => v === r.modele) ? "" : `<option value="${esc(r.modele)}" selected>${esc(r.modele)}</option>`}</select></div>
+          <div class="field"><label for="agJour">Demandes par jour et par abonné</label><input id="agJour" name="quota_jour" type="number" min="0" max="100" value="${r.quota_jour}"></div>
+          <div class="field"><label for="agMois">Demandes par mois et par abonné</label><input id="agMois" name="quota_mois" type="number" min="0" max="1000" value="${r.quota_mois}"></div>
+          <div class="field"><label for="agPlafond">Plafond de dépense du mois (FCFA)</label><input id="agPlafond" name="plafond_mois_fcfa" type="number" min="0" step="1000" value="${r.plafond_mois_fcfa}"><small class="ad-note">Au-delà, l'agent s'arrête pour les abonnés jusqu'au mois suivant. Fixez aussi une limite dans la console Anthropic.</small></div>
+          <div class="field"><label for="agEntree">Prix des jetons lus ($ par million)</label><input id="agEntree" name="prix_entree_usd" type="number" min="0" step="0.01" value="${r.prix_entree_usd}"></div>
+          <div class="field"><label for="agSortie">Prix des jetons écrits ($ par million)</label><input id="agSortie" name="prix_sortie_usd" type="number" min="0" step="0.01" value="${r.prix_sortie_usd}"></div>
+          <div class="field"><label for="agCache">Prix des jetons en cache ($ par million)</label><input id="agCache" name="prix_cache_usd" type="number" min="0" step="0.01" value="${r.prix_cache_usd}"></div>
+          <div class="field"><label for="agTaux">Cours du dollar (FCFA)</label><input id="agTaux" name="taux_fcfa" type="number" min="1" step="1" value="${r.taux_fcfa}"></div>
+          <p class="ea-msg full" role="alert"></p>
+          <button class="btn btn-gold" type="submit">Enregistrer les réglages</button>
+        </form>
+      </details>
+      ${CONSIGNES.map(([k, l]) => { const c = agentConsignes.get(k); return `<details class="ad-ajout">
+        <summary>Méthode, ${l}${c ? ` <small>(${pluriel(c.texte.split(/\s+/).length, "mot")}, modifiée le ${dateFr(c.maj_le)})</small>` : " <small>(à enregistrer)</small>"}</summary>
+        <form class="form ad-form" data-form="consigne" data-cle="${k}" novalidate>
+          <div class="field full"><label for="agC-${k}">Texte lu par l'agent avant chaque réponse</label><textarea id="agC-${k}" name="texte" rows="18" maxlength="200000">${esc(c ? c.texte : "")}</textarea></div>
+          <p class="ea-msg full" role="alert"></p>
+          <button class="btn btn-gold" type="submit">Enregistrer</button>
+        </form>
+      </details>`; }).join("")}
+      <div class="ad-bloc"><h3>Dernières demandes</h3>
+      ${agentEchanges.length ? `<div class="ad-tableau" role="region" aria-label="Demandes à l'agent" tabindex="0"><table>
+        <thead><tr><th>Quand</th><th>Abonné</th><th>Exercice</th><th>Note</th><th>Coût</th><th></th></tr></thead>
+        <tbody>${agentEchanges.slice(0, 100).map(e => `<tr><td>${dateHeure(e.cree_le)}</td><td>${esc(auteurDemande(e.user_id))}</td><td>${EXERCICES_AGENT[e.exercice] || e.exercice}, ${e.mode === "correction" ? "correction" : "rédaction"}${e.statut === "erreur" ? " · échec" : e.statut === "en_cours" ? " · en cours" : ""}</td><td>${e.note != null ? String(e.note).replace(".", ",") + "/20" : ""}</td><td>${e.cout_fcfa != null ? fcfa(e.cout_fcfa) : ""}</td><td>${e.statut === "termine" ? `<button class="btn btn-ghost btn-sm" type="button" data-action="agent-voir" data-eid="${e.id}">Voir</button>` : ""}</td></tr>`).join("")}</tbody>
+      </table></div>` : `<p class="ea-vide">Aucune demande pour le moment.</p>`}
+      <p class="ad-note">Coûts estimés d'après les jetons comptés par Anthropic et les tarifs ci-dessus. La facture réelle est dans la console Anthropic.</p></div>`;
+  }
+  async function voirEchange(id) {
+    const { data, error } = await client.from("agent_echanges").select("*").eq("id", id).maybeSingle();
+    if (error || !data) { toast(messageErreur(error || new Error("Demande introuvable"))); return; }
+    const texte = `**Demande de ${auteurDemande(data.user_id)}, ${dateHeure(data.cree_le)}**\n\n## Sujet\n\n${data.sujet}${data.copie ? `\n\n## Copie de l'abonné\n\n${data.copie}` : ""}\n\n## Réponse de l'agent${data.note != null ? ` (note indicative ${String(data.note).replace(".", ",")}/20)` : ""}\n\n${data.reponse || ""}`;
+    ouvrirContenu({ type: "texte", titre: `${EXERCICES_AGENT[data.exercice] || "Exercice"}, ${data.mode === "correction" ? "correction" : "rédaction"}`, texte }, "Administration");
+  }
+
   /* ---------- Suivi en direct ---------- */
   // Changements des abonnements, suspensions et comptes reçus en direct (Supabase Realtime, réservé à
   // l'administrateur par les règles d'accès) ; actualisation de secours toutes les 30 secondes, qui sert aussi
@@ -951,6 +1020,7 @@
     if (act === "mfa") { activerDeuxEtapes(b); return; }
     if (act === "tout-telecharger") { telechargerTout(b); return; }
     if (act === "indexer") { indexerContenus(b); return; }
+    if (act === "agent-voir") { voirEchange(Number(b.dataset.eid)); return; }
     if (act === "exporter") { exporter(b.dataset.quoi); return; }
     if (act === "copier-numeros") { copierNumeros(); return; }
     if (act === "supprimer-anciens") { supprimerAnciens(b); return; }
@@ -1202,6 +1272,33 @@
       bouton.disabled = false;
       if (error) { msg.textContent = messageErreur(error); return; }
       recharger(note ? "Note enregistrée." : "Note effacée.");
+      return;
+    }
+
+    if (f.id === "adAgentReglages") {
+      const nb = n => Number(v(n));
+      const maj = { actif: f.elements.actif.checked, modele: v("modele"), quota_jour: nb("quota_jour"), quota_mois: nb("quota_mois"), plafond_mois_fcfa: nb("plafond_mois_fcfa"),
+        prix_entree_usd: nb("prix_entree_usd"), prix_sortie_usd: nb("prix_sortie_usd"), prix_cache_usd: nb("prix_cache_usd"), taux_fcfa: nb("taux_fcfa"), maj_le: new Date().toISOString() };
+      if (Object.values(maj).some(x => typeof x === "number" && !(x >= 0))) { msg.textContent = "Vérifiez les nombres saisis."; return; }
+      if (maj.actif && !CONSIGNES.every(([k]) => agentConsignes.has(k))) { msg.textContent = "Enregistrez d'abord les quatre consignes."; return; }
+      bouton.disabled = true;
+      const { error } = await client.from("agent_reglages").update(maj).eq("id", true);
+      bouton.disabled = false;
+      if (error) { msg.textContent = messageErreur(error); return; }
+      f.closest("details").open = false;
+      recharger(maj.actif ? "Réglages enregistrés. L'agent est ouvert aux abonnés." : "Réglages enregistrés.");
+      return;
+    }
+
+    if (f.dataset.form === "consigne") {
+      const texte = f.elements.texte.value.trim();
+      if (texte.length < 50) { msg.textContent = "Le texte est trop court."; return; }
+      bouton.disabled = true;
+      const { error } = await client.from("agent_consignes").upsert({ cle: f.dataset.cle, texte, maj_le: new Date().toISOString() });
+      bouton.disabled = false;
+      if (error) { msg.textContent = messageErreur(error); return; }
+      f.closest("details").open = false;
+      recharger("Méthode enregistrée.");
       return;
     }
 
