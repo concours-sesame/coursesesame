@@ -400,6 +400,8 @@
           }
         } catch (e) { echecs.push(c.titre); }
       }
+      // Fréquence des mots, qui sert à la recherche des passages par l'agent
+      await client.rpc("admin_actualiser_lexiques");
       lireBilan(await client.rpc("admin_bilan_passages"));
     } catch (e) { echecs.push(messageErreur(e)); }
     telechargement = false;
