@@ -105,10 +105,14 @@
   const ZOOMS = [1, 1.25, 1.5, 2, 2.5, 3];
   const PIXELS_MAX = 12e6;
   let nettoyerPdf = null;
-  async function afficherPdf(octets, zone, marque) {
+  async function chargerPdfJs() {
     await chargerScript(PDFJS + "pdf.min.js");
     const lib = window.pdfjsLib;
     lib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js";
+    return lib;
+  }
+  async function afficherPdf(octets, zone, marque) {
+    const lib = await chargerPdfJs();
     const doc = await lib.getDocument({ data: octets, isEvalSupported: false, enableXfa: false }).promise;
     zone.innerHTML = "";
     if (visionneuse) visionneuse.classList.add("ea-v-pdf");
@@ -525,7 +529,7 @@
     });
   }
 
-  window.Espace = { client, OUVERT, esc, dateFr, auj, joursJusqua, fcfa, WA_NUM, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur, etapeCode, formulaireCode, lireQcm };
+  window.Espace = { client, OUVERT, esc, dateFr, auj, joursJusqua, fcfa, WA_NUM, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur, etapeCode, formulaireCode, lireQcm, chargerPdfJs };
 
   /* =====================================================================
      Page de l'espace abonnés
