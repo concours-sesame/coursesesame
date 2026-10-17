@@ -29,7 +29,8 @@
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [];
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
-  let telechargement = false; // archive .zip en préparation : la page ne se redessine pas
+  let telechargement = false; // archive .zip ou texte pour l'agent en préparation : la page ne se redessine pas
+  let bilanPassages = null; // texte préparé pour l'agent de révision, par contenu (pages, pages sans texte, caractères)
   // Au-delà de ce nombre d'appareils en 7 jours, le compte est signalé comme peut-être partagé
   const SEUIL_PARTAGE = 3;
   // Un abonné est « en ligne » si sa page de l'espace abonnés s'est signalée depuis moins de 3 minutes
@@ -128,7 +129,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -138,7 +139,8 @@
       client.from("notes_abonnes").select("user_id, note"),
       client.from("lectures").select("user_id, contenu_id, ouvert_le").gte("ouvert_le", new Date(Date.now() - 90 * 864e5).toISOString()).order("ouvert_le", { ascending: false }).limit(5000),
       client.from("annonces").select("*").order("cree_le", { ascending: false }),
-      client.from("journal_admin").select("*").order("quand", { ascending: false }).limit(300)
+      client.from("journal_admin").select("*").order("quand", { ascending: false }).limit(300),
+      client.rpc("admin_bilan_passages")
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -146,6 +148,7 @@
     // Outils ajoutés en octobre 2026 : tables absentes ou vides, la page fonctionne quand même
     commandes = cmd.data || []; notes = new Map((nt.data || []).map(x => [x.user_id, x.note]));
     lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
+    lireBilan(bil);
     // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
     const appareils = new Map((ap.data || []).map(x => [x.user_id, Number(x.appareils_7j)]));
     // Dernier passage sur l'espace abonnés, dernière connexion et suspension en cours
@@ -334,6 +337,89 @@
     toast(echecs.length ? `${fichiers.length} contenus téléchargés. Échec pour ${echecs.length} : ${echecs.slice(0, 3).join(", ")}${echecs.length > 3 ? "…" : ""}` : `${fichiers.length} contenus téléchargés.`);
   }
 
+  /* ---------- Agent de révision : texte des contenus pour la recherche ---------- */
+  // Le texte de chaque page des PDF est extrait ici, dans le navigateur de l'administrateur, puis enregistré dans la
+  // table « passages », réservée à l'administrateur. Une page sans texte lisible (image scannée) est enregistrée
+  // vide et le bilan la signale. Les fiches et QCM sont découpés en parties d'environ 3 000 caractères.
+  const indexable = c => (c.type === "pdf" && !!c.fichier) || c.type === "texte";
+  const nettoyerTexte = t => t.replace(/\u0000/g, "").replace(/[ \t\u00a0]+/g, " ").replace(/ *\n */g, "\n").replace(/\n{3,}/g, "\n\n").trim().slice(0, 20000);
+  function decouper(texte, taille = 3000) {
+    const parts = [];
+    let cur = "";
+    for (const para of texte.split(/\n{2,}/)) {
+      if (cur && cur.length + para.length > taille) { parts.push(cur); cur = ""; }
+      cur += (cur ? "\n\n" : "") + para;
+    }
+    if (cur) parts.push(cur);
+    return parts.length ? parts : [""];
+  }
+  async function pagesDe(c, lib) {
+    if (!c.fichier) return decouper(texteDe(c)).map(nettoyerTexte);
+    const { data, error } = await client.storage.from("exclusif").createSignedUrl(c.fichier, 300);
+    if (error || !data) throw error || new Error("introuvable");
+    const rep = await fetch(data.signedUrl);
+    if (!rep.ok) throw new Error("HTTP " + rep.status);
+    const doc = await lib.getDocument({ data: new Uint8Array(await rep.arrayBuffer()), isEvalSupported: false, enableXfa: false }).promise;
+    const pages = [];
+    try {
+      for (let n = 1; n <= doc.numPages; n++) {
+        const page = await doc.getPage(n);
+        const { items } = await page.getTextContent();
+        pages.push(nettoyerTexte(items.map(i => (i.str || "") + (i.hasEOL ? "\n" : "")).join("")));
+        page.cleanup();
+      }
+    } finally { doc.destroy(); }
+    return pages;
+  }
+  const lireBilan = r => { bilanPassages = !r || r.error ? null : new Map((r.data || []).map(x => [x.contenu_id, x])); };
+  async function indexerContenus(bouton) {
+    const liste = contenus.filter(indexable);
+    if (!liste.length) { toast("Aucun contenu à préparer."); return; }
+    if (!confirm(`Préparer le texte des ${liste.length} contenus pour l'agent de révision ?\n\nLe texte de chaque page est extrait ici puis enregistré dans la base, où seul l'administrateur peut le lire. Comptez quelques minutes et gardez la page ouverte.`)) return;
+    const libelle = bouton.textContent;
+    bouton.disabled = true;
+    telechargement = true;
+    const echecs = [];
+    try {
+      const lib = await E.chargerPdfJs();
+      for (const [k, c] of liste.entries()) {
+        bouton.textContent = `Préparation… ${k + 1} / ${liste.length}`;
+        try {
+          const pages = await pagesDe(c, lib);
+          const ancien = await client.from("passages").delete().eq("contenu_id", c.id);
+          if (ancien.error) throw ancien.error;
+          for (let i = 0; i < pages.length; i += 100) {
+            const { error } = await client.from("passages").insert(pages.slice(i, i + 100).map((texte, j) => ({ contenu_id: c.id, page: i + j + 1, texte })));
+            if (error) throw error;
+          }
+        } catch (e) { echecs.push(c.titre); }
+      }
+      lireBilan(await client.rpc("admin_bilan_passages"));
+    } catch (e) { echecs.push(messageErreur(e)); }
+    telechargement = false;
+    bouton.disabled = false;
+    bouton.textContent = libelle;
+    redessiner();
+    toast(echecs.length ? `Texte préparé, sauf pour ${echecs.length} : ${echecs.slice(0, 3).join(", ")}${echecs.length > 3 ? "…" : ""}` : "Texte de tous les contenus préparé.");
+  }
+  function blocAgent() {
+    const total = contenus.filter(indexable).length;
+    if (!total) return "";
+    let resume = "Pas encore préparé.";
+    if (bilanPassages && bilanPassages.size) {
+      const L = [...bilanPassages.values()], somme = k => L.reduce((t, x) => t + Number(x[k] || 0), 0);
+      const nb = n => Number(n).toLocaleString("fr-FR");
+      const scans = contenus.filter(c => { const x = bilanPassages.get(c.id); return x && x.pages_vides > 0; })
+        .map(c => { const x = bilanPassages.get(c.id); return `${esc(c.titre)} (${x.pages_vides} sur ${x.pages})`; });
+      resume = `${L.length} contenus sur ${total} préparés, ${nb(somme("pages"))} pages, ${nb(somme("caracteres"))} caractères.`
+        + (scans.length ? `<br>Pages sans texte lisible (images scannées) : ${scans.join(", ")}.` : "");
+    }
+    return `<div class="ad-telecharger">
+        <button class="btn btn-ghost btn-sm" type="button" data-action="indexer">Préparer le texte pour l'agent de révision</button>
+        <small>${resume} À relancer après l'ajout ou le remplacement d'un fichier.</small>
+      </div>`;
+  }
+
   /* ---------- Affichage ---------- */
   function afficher() {
     const actifs = abonnes.filter(a => a.actif && !a.suspendu_depuis).length;
@@ -481,6 +567,7 @@
         <button class="btn btn-navy btn-sm" type="button" data-action="tout-telecharger">Télécharger tous les contenus (.zip)</button>
         <small>${nbTele} contenus, fichiers d'origine sans filigrane. Réservé à l'administrateur.</small>
       </div>` : ""}
+      ${blocAgent()}
       ${blocAnnonces()}
       <details class="ad-ajout"${contenus.length ? "" : " open"}>
         <summary>Ajouter un contenu exclusif</summary>
@@ -863,6 +950,7 @@
     if (act === "actualiser") { recharger(); return; }
     if (act === "mfa") { activerDeuxEtapes(b); return; }
     if (act === "tout-telecharger") { telechargerTout(b); return; }
+    if (act === "indexer") { indexerContenus(b); return; }
     if (act === "exporter") { exporter(b.dataset.quoi); return; }
     if (act === "copier-numeros") { copierNumeros(); return; }
     if (act === "supprimer-anciens") { supprimerAnciens(b); return; }
