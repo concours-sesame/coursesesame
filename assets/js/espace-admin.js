@@ -38,6 +38,7 @@
   // (elle le fait à l'ouverture puis chaque minute tant qu'elle est affichée)
   const EN_LIGNE_MS = 3 * 60 * 1000;
   let onglet = "direct", filtre = "tous", recherche = "";
+  let filtreC = "tous", rechercheC = ""; // recherche et filtre de l'onglet Contenus
   const retours = {}; // messages affichés sous une ligne après une action (par compte ou contenu)
   // Suivi en direct : changements reçus de Supabase Realtime, et actualisation de secours toutes les 30 secondes
   let canal = null, enDirect = false, majEnAttente = false, derniereMaj = null, minuterieDirect = null, attenteSignal = null;
@@ -81,6 +82,32 @@
     ["actif", "En cours", a => a.actif && !a.suspendu_depuis], ["enligne", "En ligne", a => enLigne(a)],
     ["bientot", "Fin sous 7 jours", a => statut(a).cle === "bientot"], ["suspendu", "Suspendus", a => !!a.suspendu_depuis],
     ["expire", "Terminés", a => statut(a).cle === "expire"], ["anciens", "Jamais activés, +30 jours", a => jamaisActive(a)]];
+  const estOuvrage = c => /^ouvrage/i.test(c.matiere || "");
+  const FILTRES_C = [["tous", "Tous", () => true], ["ouvrages", "Ouvrages complets", estOuvrage],
+    ["pdf", "Autres PDF", c => c.type === "pdf" && !estOuvrage(c)], ["texte", "Fiches et QCM", c => c.type === "texte"],
+    ["video", "Vidéos", c => c.type === "video"], ["brouillons", "Brouillons et programmés", c => !c.publie || programme(c)]];
+  // Recherche sans accents ni majuscules ; tous les mots tapés doivent se retrouver (titre, matière, présentation, concours)
+  const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  function contenusFiltres() {
+    const mots = sansAccents(rechercheC).split(/\s+/).filter(Boolean);
+    const test = (FILTRES_C.find(f => f[0] === filtreC) || FILTRES_C[0])[2];
+    return contenus.filter(test).filter(c => {
+      const t = sansAccents(`${c.titre} ${c.matiere || ""} ${c.description || ""} ${(c.concours || []).map(nomConcours).join(" ")} ${(c.concours || []).join(" ")}`);
+      return mots.every(m => t.includes(m));
+    });
+  }
+  function listeContenus() {
+    const liste = contenusFiltres();
+    return `<p class="ad-note">${liste.length === contenus.length ? pluriel(contenus.length, "contenu") : `${liste.length} sur ${pluriel(contenus.length, "contenu")}`}</p>
+      ${liste.length ? liste.map(ligneContenu).join("") : `<p class="ea-vide">${contenus.length ? "Aucun contenu ne correspond. Essayez un autre mot." : "Aucun contenu pour le moment."}</p>`}`;
+  }
+  function zoneContenus() {
+    return `<div class="ad-outils ad-outils-c">
+        <label class="search"><span class="sr-only">Rechercher un contenu</span>${icone("i-search")}<input type="search" id="adRechercheC" placeholder="Rechercher un ouvrage par titre, matière ou concours" value="${esc(rechercheC)}" autocomplete="off"></label>
+        <div class="chips" role="group" aria-label="Filtrer les contenus">${FILTRES_C.map(([v, l, f]) => `<button class="chip" type="button" data-filtrec="${v}" aria-pressed="${filtreC === v}">${l}<span class="n">${contenus.filter(f).length}</span></button>`).join("")}</div>
+      </div>
+      <div class="ad-liste" id="adListeC">${listeContenus()}</div>`;
+  }
   function messageRelance(a) {
     const s = statut(a).cle, debut = `Bonjour ${a.prenom},\n\n`;
     const payer = "réglez votre abonnement par Mobile Money (Orange Money, MTN MoMo, Wave ou Moov Money) et envoyez-nous la référence du paiement.";
@@ -624,8 +651,6 @@
         <button class="btn btn-navy btn-sm" type="button" data-action="tout-telecharger">Télécharger tous les contenus (.zip)</button>
         <small>${nbTele} contenus, fichiers d'origine sans filigrane. Réservé à l'administrateur.</small>
       </div>` : ""}
-      ${blocAgent()}
-      ${blocAnnonces()}
       <details class="ad-ajout"${contenus.length ? "" : " open"}>
         <summary>Ajouter un contenu exclusif</summary>
         <form class="form ad-form" id="adNouveau" novalidate>
@@ -643,7 +668,9 @@
           <button class="btn btn-gold" type="submit">Ajouter le contenu</button>
         </form>
       </details>
-      <div class="ad-liste">${contenus.length ? contenus.map(ligneContenu).join("") : `<p class="ea-vide">Aucun contenu pour le moment.</p>`}</div>`;
+      <div id="adZoneC" class="ad-zone-c">${zoneContenus()}</div>
+      ${blocAgent()}
+      ${blocAnnonces()}`;
   }
   function ligneContenu(c) {
     const retour = retours["c" + c.id] || "";
@@ -1061,10 +1088,11 @@
   racine.addEventListener("click", async e => {
     const lienRelance = e.target.closest("a[data-relance]");
     if (lienRelance) { marquerRelance(lienRelance.dataset.relance); setTimeout(() => { if (onglet === "relances" && !occupe()) redessiner(); }, 600); return; }
-    const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-filtre]");
+    const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-filtre], button[data-filtrec]");
     if (!b) return;
     if (b.dataset.onglet) { onglet = b.dataset.onglet; afficher(); return; }
     if (b.dataset.filtre) { filtre = b.dataset.filtre; $("#adPanneau").innerHTML = panneauAbonnes(); return; }
+    if (b.dataset.filtrec) { filtreC = b.dataset.filtrec; $("#adZoneC").innerHTML = zoneContenus(); return; }
     const act = b.dataset.action;
     if (act === "sortir") { debrancherDirect(); await client.auth.signOut(); connexion(); return; }
     if (act === "recharger") { demarrer(); return; }
@@ -1233,6 +1261,7 @@
   racine.addEventListener("input", e => {
     if (e.target.form && e.target.form.id === "adCommande" && e.target.name !== "montant") { majTotalCommande(e.target.form, e.target); return; }
     if (e.target.form && e.target.form.id === "adCommande" && e.target.name === "montant") { e.target.dataset.manuel = "1"; return; }
+    if (e.target.id === "adRechercheC") { rechercheC = e.target.value; $("#adListeC").innerHTML = listeContenus(); return; }
     if (e.target.id === "adRecherche") {
       recherche = e.target.value;
       const pos = e.target.selectionStart;

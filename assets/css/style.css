@@ -871,6 +871,8 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
 .ad-outils{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;margin-bottom:1rem}
 .ad-outils .search{flex:1 1 260px}
 .ad-outils .chips{margin-top:0}
+.ad-outils-c .search{flex-basis:100%}
+.ad-zone-c{margin-bottom:1.25rem}
 .ad-liste{display:grid;gap:8px}
 .ad-ligne{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem 1.4rem;align-items:center;padding:.9rem 1.1rem;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff}
 .ad-nom{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .7rem}
