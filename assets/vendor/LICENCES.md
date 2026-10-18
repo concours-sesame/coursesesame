@@ -3,6 +3,7 @@
 Ces fichiers sont des copies, non modifiées (sauf le retrait du lien vers la carte de sources), des bibliothèques suivantes.
 
 - supabase-2.117.0.js : @supabase/supabase-js 2.117.0, licence MIT (connexion à Supabase)
+- pdf-lib-1.17.1/ : pdf-lib 1.17.1, licence MIT dont le texte est dans pdf-lib-1.17.1/LICENSE.md (extraction de pages, page d'administration seulement)
 - pdfjs-3.11.174/ : PDF.js (pdfjs-dist 3.11.174, Mozilla), licence Apache 2.0 dont le texte est dans pdfjs-3.11.174/LICENSE (affichage des documents dans la page, sans téléchargement)
 
 ## @supabase/supabase-js
