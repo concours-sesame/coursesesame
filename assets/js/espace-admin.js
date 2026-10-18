@@ -272,6 +272,55 @@
     a.href = data.signedUrl; a.rel = "noopener";
     document.body.appendChild(a); a.click(); a.remove();
   }
+  // Extraction de pages : « 3-7, 12, 20-25 » donne un PDF des seules pages demandées, dans l'ordre saisi,
+  // tirées du fichier d'origine (sans filigrane). La bibliothèque pdf-lib n'est chargée qu'à la première demande.
+  function lirePages(texte, total) {
+    const pages = [];
+    for (const morceau of String(texte).split(/[,;\s]+/).filter(Boolean)) {
+      const m = morceau.match(/^(\d+)(?:-(\d+))?$/);
+      if (!m) throw new Error(`« ${morceau} » n'est pas une page ni un intervalle (exemple : 3-7, 12).`);
+      const a = +m[1], b = m[2] ? +m[2] : a;
+      if (a < 1 || b < a || b > total) throw new Error(`Pages ${morceau} hors du document, qui compte ${total} pages.`);
+      for (let n = a; n <= b; n++) pages.push(n);
+    }
+    if (!pages.length) throw new Error("Indiquez au moins une page.");
+    return pages;
+  }
+  function formulairePages(c) {
+    return `<form class="form ad-form" data-form="pages" novalidate>
+        <div class="field full"><label>Pages à télécharger</label><input name="pages" placeholder="Exemple : 3-7, 12, 20-25" autocomplete="off" required></div>
+        <small class="ad-note full">Pages du fichier PDF, séparées par des virgules ; un tiret pour un intervalle. Fichier d'origine, sans filigrane.</small>
+        <p class="ea-msg full" role="alert"></p>
+        <button class="btn btn-gold btn-sm" type="submit">Télécharger ces pages</button>
+      </form>`;
+  }
+  async function telechargerPages(c, texte, f, msg, bouton) {
+    bouton.disabled = true;
+    msg.textContent = "Préparation du fichier…";
+    try {
+      await new Promise((ok, ko) => {
+        if (window.PDFLib) return ok();
+        const s = document.createElement("script");
+        s.src = "../../assets/vendor/pdf-lib-1.17.1/pdf-lib.min.js"; s.onload = ok; s.onerror = () => ko(new Error("Chargement de l'outil PDF impossible."));
+        document.head.appendChild(s);
+      });
+      const { data, error } = await client.storage.from("exclusif").createSignedUrl(c.fichier, 300);
+      if (error || !data) throw error || new Error("Fichier introuvable");
+      const rep = await fetch(data.signedUrl);
+      if (!rep.ok) throw new Error("Téléchargement impossible (" + rep.status + ").");
+      const source = await PDFLib.PDFDocument.load(await rep.arrayBuffer(), { ignoreEncryption: true });
+      const pages = lirePages(texte, source.getPageCount());
+      const cible = await PDFLib.PDFDocument.create();
+      (await cible.copyPages(source, pages.map(n => n - 1))).forEach(p => cible.addPage(p));
+      cible.setTitle(`${c.titre} (pages ${texte.replace(/\s+/g, "")})`);
+      const nom = `${nettoyerNom(c.titre)} (p. ${texte.replace(/\s+/g, "").replace(/,/g, ", ")}).pdf`;
+      enregistrer(new Blob([await cible.save()], { type: "application/pdf" }), nom);
+      msg.textContent = `${pages.length} page${pages.length > 1 ? "s" : ""} sur ${source.getPageCount()} téléchargée${pages.length > 1 ? "s" : ""}.`;
+    } catch (e) {
+      msg.textContent = e && e.message ? e.message : messageErreur(e);
+    }
+    bouton.disabled = false;
+  }
   // Archive .zip sans compression (les PDF et vidéos sont déjà compressés), noms en UTF-8
   const TABLE_CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
   const crc32 = o => { let c = 0xffffffff; for (let i = 0; i < o.length; i++) c = TABLE_CRC[(c ^ o[i]) & 0xff] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; };
@@ -606,6 +655,7 @@
         <div class="ad-actions">
           <button class="btn btn-ghost btn-sm" type="button" data-caction="voir">Aperçu</button>
           ${telechargeable(c) ? `<button class="btn btn-ghost btn-sm" type="button" data-caction="telecharger" title="Fichier d'origine, sans filigrane">Télécharger</button>` : ""}
+          ${c.type === "pdf" && c.fichier ? `<button class="btn btn-ghost btn-sm" type="button" data-caction="pages" title="Extraire certaines pages, sans filigrane">Pages…</button>` : ""}
           <button class="btn btn-ghost btn-sm" type="button" data-caction="lecteurs">Lecteurs</button>
           <button class="btn ${c.publie ? "btn-ghost" : "btn-navy"} btn-sm" type="button" data-caction="publier">${c.publie ? "Retirer" : "Publier"}</button>
           <button class="btn btn-ghost btn-sm" type="button" data-caction="modifier">Modifier</button>
@@ -1159,6 +1209,7 @@
     const ca = b.dataset.caction;
     if (ca === "voir") ouvrirContenu(c, "Aperçu administrateur");
     if (ca === "telecharger") { telechargerContenu(c, b); return; }
+    if (ca === "pages") { basculerZone(b, formulairePages(c)); return; }
     if (ca === "lecteurs") { basculerZone(b, lecteursHTML(c)); return; }
     if (ca === "modifier") basculerZone(b, formulaireModification(c));
     if (ca === "publier") {
@@ -1328,6 +1379,12 @@
       bouton.disabled = false;
       if (error) { msg.textContent = messageErreur(error); return; }
       recharger("Commande enregistrée.");
+      return;
+    }
+
+    if (f.dataset.form === "pages") {
+      const c = contenus.find(x => String(x.id) === f.closest(".ad-ligne").dataset.cid);
+      if (c) await telechargerPages(c, v("pages"), f, msg, bouton);
       return;
     }
 
