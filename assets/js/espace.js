@@ -474,18 +474,90 @@
       video.play().catch(() => {});
       return;
     }
-    // Document PDF : lu dans la page, à son nom, sans téléchargement possible
+    // Document PDF : lu dans la page, à son nom ; quelques pages téléchargeables chaque semaine, filigranées par le serveur
     corps.innerHTML = `<div class="ea-pdf" aria-live="polite"><p class="ea-attente">Ouverture du document…</p></div>
-      <p class="ea-mention">Document réservé à ${esc(marque)}. Lecture en ligne seulement : téléchargement, copie et impression désactivés.</p>`;
+      <p class="ea-mention">Document réservé à ${esc(marque)}. Copie et impression désactivées. Quelques pages peuvent être téléchargées chaque semaine, avec votre nom imprimé sur chaque page.</p>`;
     try {
       const r = await fetch(data.signedUrl);
       if (!r.ok) throw new Error("Lecture impossible");
       const octets = new Uint8Array(await r.arrayBuffer());
       if (visionneuse.hidden) return;
       docOuvert = await afficherPdf(octets, $(".ea-pdf", corps), marque, c.page);
+      if (c.id) ajouterTelechargement(c, $(".ea-pdf", corps));
     } catch (e) {
       $(".ea-pdf", corps).innerHTML = `<p class="ea-erreur">Le document n'a pas pu être ouvert. Réessayez.</p>`;
     }
+  }
+
+  /* ---------- Téléchargement de pages (limite hebdomadaire) ---------- */
+  // Sur 7 jours glissants : 5 % du total des pages des PDF, 15 pages au plus d'un même document. Le PDF est découpé
+  // et filigrané au nom de l'abonné par la fonction « telechargement » ; la base tient le décompte.
+  function ajouterTelechargement(c, zone) {
+    const barre = $(".ea-pdf-barre", zone);
+    if (!barre) return;
+    const champPage = $("input", barre);
+    const total = Number(champPage.max) || 1;
+    const bouton = document.createElement("button");
+    bouton.type = "button"; bouton.className = "ea-pdf-tele"; bouton.textContent = "Télécharger des pages";
+    const panneau = document.createElement("form");
+    panneau.className = "ea-tele"; panneau.hidden = true; panneau.noValidate = true;
+    panneau.innerHTML = `<p class="ea-tele-etat">Calcul de votre limite…</p>
+      <div class="ea-tele-ligne"><label>Pages <input name="pages" autocomplete="off" inputmode="numeric" placeholder="Exemple 3-7, 12"></label>
+        <button class="btn btn-gold btn-sm" type="submit">Télécharger</button></div>
+      <p class="ea-msg" role="alert"></p>
+      <small>Votre nom, votre téléphone, votre e-mail, la date et l'heure sont imprimés sur chaque page. Usage strictement personnel ; toute diffusion est interdite et identifiable.</small>`;
+    barre.appendChild(bouton);
+    barre.after(panneau);
+    const etatTxt = $(".ea-tele-etat", panneau), msg = $(".ea-msg", panneau), champ = panneau.pages, envoi = $("button", panneau);
+    let reste = 0;
+    const majEtat = async () => {
+      const { data, error } = await client.rpc("mes_telechargements");
+      if (error || !data) { etatTxt.textContent = "Limite indisponible pour le moment."; return; }
+      const doc = Number((data.documents || {})[c.id] || 0);
+      reste = Math.max(0, Math.min(data.quota - data.utilises, data.par_document - doc));
+      const lib = data.liberation ? new Date(data.liberation).toLocaleString("fr-FR", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) : "";
+      etatTxt.innerHTML = reste
+        ? `Vous pouvez télécharger <b>${reste} page${reste > 1 ? "s" : ""}</b> de ce document. Sur 7 jours, ${data.quota} pages au plus en tout (${data.utilises} déjà utilisée${data.utilises > 1 ? "s" : ""}) et ${data.par_document} au plus par document.`
+        : `Limite atteinte pour ce document ou pour la semaine. ${lib ? `Des pages se libèrent ${esc(lib)}.` : ""}`;
+      champ.disabled = envoi.disabled = !reste;
+    };
+    bouton.addEventListener("click", () => {
+      panneau.hidden = !panneau.hidden;
+      if (panneau.hidden) return;
+      if (!champ.value) champ.value = String(Math.min(total, Number(champPage.value) || 1));
+      msg.textContent = "";
+      majEtat();
+    });
+    panneau.addEventListener("submit", async e => {
+      e.preventDefault();
+      const pages = champ.value.trim();
+      if (!/^[\d\s,;-]+$/.test(pages)) { msg.textContent = "Indiquez des numéros de page, par exemple 3-7, 12."; champ.focus(); return; }
+      const { data: { session } } = await client.auth.getSession();
+      if (!session) { afficher(); return; }
+      envoi.disabled = true; msg.textContent = "Préparation du fichier à votre nom…";
+      try {
+        const rep = await fetch(`${CONF.url}/functions/v1/telechargement`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}`, apikey: CONF.cle },
+          body: JSON.stringify({ contenu: c.id, pages })
+        });
+        if (!rep.ok || !/pdf/.test(rep.headers.get("Content-Type") || "")) {
+          const r = await rep.json().catch(() => ({}));
+          throw new Error(r.error || "Téléchargement impossible. Réessayez.");
+        }
+        const blob = await rep.blob();
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `${c.titre.replace(/[\\/:*?"<>|]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120)} (p. ${pages.replace(/\s+/g, "").replace(/,/g, ", ")}).pdf`;
+        panneau.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+        const n = Number(rep.headers.get("X-Pages")) || 0;
+        msg.textContent = `${n} page${n > 1 ? "s" : ""} téléchargée${n > 1 ? "s" : ""}.`;
+      } catch (err) {
+        msg.textContent = err && err.message ? err.message : "Téléchargement impossible. Réessayez.";
+      }
+      await majEtat();
+    });
   }
 
   /* ---------- Validation en deux étapes (administrateurs) ---------- */

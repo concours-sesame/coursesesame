@@ -61,6 +61,12 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   jamais dans ce dépôt public) et appelle l'API d'Anthropic avec le secret `ANTHROPIC_API_KEY`. Seuls le
   sujet, la copie et les passages sont transmis, jamais le nom, l'e-mail ou le téléphone de l'abonné.
   Chaque demande est enregistrée dans `agent_echanges` (historique de l'abonné, coûts pour l'administrateur).
+- `functions/telechargement` : téléchargement de pages d'un PDF par un abonné, avec son nom, son téléphone, son
+  e-mail, la date et l'heure imprimés sur chaque page. Déployée sans vérification de jeton : la fonction vérifie la
+  session, l'appareil et le droit de lire le fichier (`fichier_autorise`, avec le jeton de l'abonné), puis réserve
+  les pages par `reserver_telechargement` (sous verrou) : sur 7 jours glissants, au plus 5 % du total des pages des
+  PDF publiés (pages comptées dans `passages`) et 15 pages d'un même document. Le fichier d'origine ne quitte pas
+  le serveur. Chaque téléchargement est enregistré dans `telechargements`.
 
 ## Mise en service (faite le 9 octobre 2026)
 

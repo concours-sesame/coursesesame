@@ -825,6 +825,13 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
 .ea-pdf-barre button[data-pdf=ajuster]{font-size:.85rem}
 .ea-pdf-barre button:hover,.ea-pdf-barre button:focus-visible{background:rgba(255,255,255,.26)}
 .ea-pdf-zoom span{min-width:3.6em;text-align:center}
+.ea-pdf-barre button.ea-pdf-tele{font-size:.85rem;background:var(--gold);color:var(--navy)}
+.ea-pdf-barre button.ea-pdf-tele:hover,.ea-pdf-barre button.ea-pdf-tele:focus-visible{background:#f2bd55}
+.ea-tele{display:grid;gap:.5rem;padding:12px 14px;background:#fff8e8;border:1px solid #f0d9a4;border-top:0;font-size:.95rem}
+.ea-tele p{margin:0}
+.ea-tele small{color:var(--muted)}
+.ea-tele-ligne{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.ea-tele-ligne input{width:11em;margin-left:.4rem;padding:.4rem .5rem;border:1.5px solid var(--line);border-radius:6px;font:inherit;-webkit-user-select:text;user-select:text}
 .ea-pdf-barre input{width:4.2em;margin:0 .3rem;padding:.3rem .4rem;border-radius:4px;border:0;font:inherit;color:var(--navy);-webkit-user-select:text;user-select:text}
 .ea-pdf-pages{display:grid;justify-items:start;gap:12px;padding:12px;overflow-x:auto}
 .ea-page{display:block;width:100%;max-width:none;height:auto;scroll-margin-top:64px;background:#fff;box-shadow:0 2px 10px rgba(9,24,54,.18);pointer-events:none}
