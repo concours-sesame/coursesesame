@@ -111,7 +111,7 @@
     lib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js";
     return lib;
   }
-  async function afficherPdf(octets, zone, marque) {
+  async function afficherPdf(octets, zone, marque, depart) {
     const lib = await chargerPdfJs();
     const doc = await lib.getDocument({ data: octets, isEvalSupported: false, enableXfa: false }).promise;
     zone.innerHTML = "";
@@ -281,6 +281,8 @@
       toiles.forEach(annuler);
       if (visionneuse) visionneuse.classList.remove("ea-v-pdf");
     };
+    // Ouverture à une page précise (réponse attendue du grand oral, par exemple)
+    if (depart > 1) requestAnimationFrame(() => allerA(depart));
     return doc;
   }
 
@@ -380,7 +382,8 @@
     if (v) { v.pause(); v.removeAttribute("src"); v.load(); }
     clearInterval(minuterieMarque);
     clearInterval(minuterieQcm);
-    const cv = $("#eaVCorps"); if (cv) cv.onclick = null;
+    const cv = $("#eaVCorps"); if (cv) { cv.onclick = null; cv.onchange = null; cv.onsubmit = null; }
+    if (arretOutil) { arretOutil(); arretOutil = null; }
     if (nettoyerPdf) { nettoyerPdf(); nettoyerPdf = null; }
     if (docOuvert) { docOuvert.destroy(); docOuvert = null; }
     $("#eaVCorps").innerHTML = "";
@@ -411,7 +414,7 @@
   async function ouvrirContenu(c, marque) {
     if (!visionneuse) creerVisionneuse();
     retourFocus = document.activeElement;
-    const t = c.agent ? { nom: "Agent de révision" } : typeAffiche(c);
+    const t = c.agent ? { nom: "Agent de révision" } : c.outil ? { nom: "Révision" } : typeAffiche(c);
     $("#eaVType").className = "ea-type ea-type-" + c.type;
     $("#eaVType").textContent = t.nom;
     $("#eaVTitre").textContent = c.titre;
@@ -431,6 +434,7 @@
       return;
     }
     if (c.agent) { afficherReponseAgent(c.agent, corps, marque); return; }
+    if (c.outil) { c.outil(corps, marque); return; }
     // Ouverture comptée pour les statistiques de l'administration (la base ignore les administrateurs)
     client.rpc("noter_lecture", { p_contenu: c.id }).then(() => {}, () => {});
     const qcm = lireQcm(c);
@@ -478,7 +482,7 @@
       if (!r.ok) throw new Error("Lecture impossible");
       const octets = new Uint8Array(await r.arrayBuffer());
       if (visionneuse.hidden) return;
-      docOuvert = await afficherPdf(octets, $(".ea-pdf", corps), marque);
+      docOuvert = await afficherPdf(octets, $(".ea-pdf", corps), marque, c.page);
     } catch (e) {
       $(".ea-pdf", corps).innerHTML = `<p class="ea-erreur">Le document n'a pas pu être ouvert. Réessayez.</p>`;
     }
@@ -575,7 +579,7 @@
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
     const [p, a, adm, ouv, sus] = await Promise.all([
-      client.from("profils").select("prenom, nom, telephone, concours").eq("id", uid).maybeSingle(),
+      client.from("profils").select("prenom, nom, telephone, concours, date_concours").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
       client.rpc("acces_ouvrages"),
@@ -860,6 +864,342 @@
     ouvrirEchange(e);
   }
 
+  /* ---------- Outils de révision : révision du jour, grand oral, sujet de la semaine, tableau de bord ---------- */
+  // Tous s'appuient sur les contenus déjà publiés. Ils s'ouvrent dans la visionneuse, donc avec le filigrane,
+  // le voile et la copie bloquée des autres contenus.
+  // Révision du jour : les questions des QCM de l'espace reviennent selon la méthode des boîtes. Une réponse juste
+  // fait passer la question dans la boîte suivante (retour dans 1, 3, 7, 15 puis 30 jours), une erreur la renvoie
+  // au lendemain. La progression est enregistrée dans la table qcm_progres.
+  const INTERVALLES = [1, 1, 3, 7, 15, 30];
+  const SEANCE = 20, NOUVELLES = 10, MAITRISE = 3;
+  let progres = new Map(), stats = null, oralQuestions = [], arretOutil = null;
+  const cleQ = (cid, i) => cid + ":" + i;
+  const dansJours = n => { const d = new Date(auj() + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+  const matiereQcm = c => (c.matiere || "").replace(/^QCM\s*·\s*/i, "") || "QCM";
+  const toutesQuestions = () => contenus.filter(c => lireQcm(c)).flatMap(c => lireQcm(c).questions.map((q, i) => ({ c, i, q, matiere: matiereQcm(c) })));
+  const matieresQcm = () => [...new Set(toutesQuestions().map(x => x.matiere))];
+  const lu = (cle, def) => { try { return JSON.parse(localStorage.getItem(cle)) || def; } catch (e) { return def; } };
+  const ecrit = (cle, v) => { try { localStorage.setItem(cle, JSON.stringify(v)); } catch (e) { /* stockage indisponible */ } };
+  async function chargerOutils() {
+    const [p, s, g] = await Promise.all([
+      client.from("qcm_progres").select("contenu_id, question, boite, prochaine, bonnes, erreurs").eq("user_id", etat.uid),
+      client.rpc("mes_statistiques"),
+      client.from("grand_oral").select("id, contenu_id, page, numero, theme, question").order("numero")
+    ]);
+    progres = new Map((p.error ? [] : p.data).map(x => [cleQ(x.contenu_id, x.question), x]));
+    stats = s.error ? null : s.data;
+    oralQuestions = g.error ? [] : g.data;
+  }
+  const aRevoir = x => { const p = progres.get(cleQ(x.c.id, x.i)); return !!p && p.prochaine <= auj(); };
+  const nouvelle = x => !progres.has(cleQ(x.c.id, x.i));
+  // Séance : d'abord les questions à revoir (les plus anciennes en premier), puis des nouvelles, en alternant les matières
+  function seance(matiere) {
+    const toutes = toutesQuestions().filter(x => !matiere || x.matiere === matiere);
+    const revoir = toutes.filter(aRevoir).sort((a, b) => (progres.get(cleQ(a.c.id, a.i)).prochaine < progres.get(cleQ(b.c.id, b.i)).prochaine ? -1 : 1)).slice(0, SEANCE);
+    const parMatiere = {};
+    toutes.filter(nouvelle).forEach(x => (parMatiere[x.matiere] = parMatiere[x.matiere] || []).push(x));
+    const nouv = [], files = Object.values(parMatiere);
+    while (nouv.length < Math.min(NOUVELLES, SEANCE - revoir.length) && files.some(f => f.length)) files.forEach(f => { if (f.length && nouv.length < Math.min(NOUVELLES, SEANCE - revoir.length)) nouv.push(f.shift()); });
+    return [...revoir, ...nouv];
+  }
+  const maitrise = matiere => {
+    const qs = toutesQuestions().filter(x => x.matiere === matiere);
+    const ok = qs.filter(x => { const p = progres.get(cleQ(x.c.id, x.i)); return p && p.boite >= MAITRISE; }).length;
+    return { total: qs.length, ok, pct: qs.length ? Math.round(ok * 100 / qs.length) : 0 };
+  };
+  async function enregistrerReponse(x, juste) {
+    const k = cleQ(x.c.id, x.i), avant = progres.get(k) || { boite: 0, bonnes: 0, erreurs: 0 };
+    const boite = juste ? Math.min(5, (progres.has(k) ? avant.boite : 0) + 1) : 0;
+    const ligne = { user_id: etat.uid, contenu_id: x.c.id, question: x.i, boite, prochaine: dansJours(INTERVALLES[boite]),
+      bonnes: avant.bonnes + (juste ? 1 : 0), erreurs: avant.erreurs + (juste ? 0 : 1), maj_le: new Date().toISOString() };
+    progres.set(k, ligne);
+    const { error } = await client.from("qcm_progres").upsert(ligne);
+    if (error && !enregistrerReponse.averti) { enregistrerReponse.averti = true; toast(etat.admin ? "Compte administrateur : la progression n'est pas enregistrée." : "Progression non enregistrée. Vérifiez votre connexion."); }
+  }
+
+  function outilRevision(corps, marque) {
+    let matiere = "", liste = [], n = 0, justes = 0;
+    const accueil = () => {
+      const ms = matieresQcm();
+      const compte = m => seance(m).length;
+      corps.innerHTML = `<div class="ea-outil">
+          <p>Les questions des QCM de l'espace reviennent au bon moment : une question réussie s'espace (1, 3, 7, 15 puis 30 jours), une question manquée revient dès demain. Quelques minutes par jour suffisent.</p>
+          <div class="chips" role="group" aria-label="Matière">${[["", "Toutes les matières"], ...ms.map(m => [m, m])].map(([v, l]) => `<button class="chip" type="button" data-rmat="${esc(v)}" aria-pressed="${matiere === v}">${esc(l)}<span class="n">${compte(v || null)}</span></button>`).join("")}</div>
+          <div class="ea-maitrise">${ms.map(m => { const x = maitrise(m); return `<div><span>${esc(m)}</span><span class="ea-barre"><i style="width:${x.pct}%"></i></span><b>${x.ok}/${x.total}</b></div>`; }).join("")}</div>
+          <p class="ea-aide">Une question est « maîtrisée » après trois bonnes réponses espacées.</p>
+          ${compte(matiere || null) ? `<button class="btn btn-gold" type="button" data-raction="commencer">Commencer, ${compte(matiere || null)} questions</button>` : `<p class="ea-outil-fait"><b>Tout est à jour pour aujourd'hui.</b> Revenez demain pour la suite.</p>`}
+        </div>`;
+      poserFiligrane(corps, marque);
+    };
+    const question = () => {
+      const x = liste[n], L = "ABCDEFGH";
+      corps.innerHTML = `<div class="ea-outil ea-rev">
+          <p class="ea-rev-tete"><span>Question ${n + 1} sur ${liste.length}</span><span>${esc(x.matiere)}${nouvelle(x) ? " · nouvelle" : ""}</span></p>
+          <p class="ea-rev-q">${esc(x.q.q)}</p>
+          <div class="ea-rev-options">${(x.q.options || []).map((o, j) => `<button type="button" class="ea-rev-opt" data-ropt="${j}"><b>${L[j]}</b><span>${esc(o)}</span></button>`).join("")}</div>
+          <div class="ea-rev-retour" hidden></div>
+        </div>`;
+      poserFiligrane(corps, marque);
+    };
+    const repondre = j => {
+      const x = liste[n], juste = j === x.q.bonne;
+      if (juste) justes++;
+      $$(".ea-rev-opt", corps).forEach((b, k) => { b.disabled = true; if (k === x.q.bonne) b.classList.add("ea-ok"); else if (k === j) b.classList.add("ea-ko"); });
+      const r = $(".ea-rev-retour", corps);
+      r.hidden = false;
+      r.innerHTML = `<p class="${juste ? "ea-ok-t" : "ea-ko-t"}"><b>${juste ? "Bonne réponse." : "Ce n'est pas la bonne réponse."}</b> ${juste ? `Elle reviendra dans ${INTERVALLES[Math.min(5, ((progres.get(cleQ(x.c.id, x.i)) || {}).boite || 0) + 1)]} jours.` : "Elle reviendra demain."}</p>
+        ${x.q.explication ? `<p>${esc(x.q.explication)}</p>` : ""}${x.q.reference ? `<p class="ea-aide">Référence : ${esc(x.q.reference)}</p>` : ""}
+        <button class="btn btn-navy" type="button" data-raction="suivante">${n + 1 < liste.length ? "Question suivante" : "Voir le bilan"}</button>`;
+      enregistrerReponse(x, juste);
+    };
+    const bilan = () => {
+      corps.innerHTML = `<div class="ea-outil">
+          <p class="ea-outil-fait"><b>${justes} bonne${justes > 1 ? "s" : ""} réponse${justes > 1 ? "s" : ""} sur ${liste.length}.</b> ${justes === liste.length ? "Sans faute." : "Les questions manquées reviendront demain."}</p>
+          <div class="ea-maitrise">${matieresQcm().map(m => { const x = maitrise(m); return `<div><span>${esc(m)}</span><span class="ea-barre"><i style="width:${x.pct}%"></i></span><b>${x.ok}/${x.total}</b></div>`; }).join("")}</div>
+          <button class="btn btn-ghost" type="button" data-raction="accueil">Revenir à la révision</button>
+        </div>`;
+      poserFiligrane(corps, marque);
+      majOutils();
+    };
+    corps.onclick = e => {
+      const m = e.target.closest("[data-rmat]");
+      if (m) { matiere = m.dataset.rmat; accueil(); return; }
+      const o = e.target.closest("[data-ropt]");
+      if (o && !o.disabled) { repondre(+o.dataset.ropt); return; }
+      const a = e.target.closest("[data-raction]");
+      if (!a) return;
+      if (a.dataset.raction === "commencer") { liste = seance(matiere || null); n = 0; justes = 0; question(); }
+      if (a.dataset.raction === "suivante") { n++; if (n < liste.length) question(); else bilan(); }
+      if (a.dataset.raction === "accueil") accueil();
+    };
+    accueil();
+  }
+
+  // Grand oral : question tirée parmi les séries publiées, préparation chronométrée (1 minute), réponse à voix haute
+  // (3 minutes, comme le conseille la série), enregistrement facultatif qui reste sur l'appareil, puis grille
+  // d'auto-évaluation et réponse attendue, ouverte à la bonne page.
+  const GRILLE_ORAL = ["J'ai ouvert par une phrase qui donne la solution.", "J'ai cité les articles exacts.", "J'ai déroulé les fondements avec ordre.", "Je suis resté dans les trois minutes.", "J'ai anticipé la relance probable du jury."];
+  const duree = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  function outilOral(corps, marque) {
+    let minuterie = null, enregistreur = null, flux = null, audio = null, q = null;
+    const faites = () => lu("ea-oral-faites", []);
+    const arreter = () => {
+      clearInterval(minuterie); minuterie = null;
+      if (enregistreur && enregistreur.state !== "inactive") enregistreur.stop();
+      if (flux) flux.getTracks().forEach(t => t.stop());
+      flux = null;
+    };
+    arretOutil = () => { arreter(); if (audio) URL.revokeObjectURL(audio); };
+    const peutEnregistrer = !!(navigator.mediaDevices && window.MediaRecorder);
+    const liste = () => {
+      arreter();
+      const f = faites();
+      corps.innerHTML = `<div class="ea-outil">
+          <p>Le jury pose une question, vous avez une minute pour vous préparer, puis trois minutes pour répondre à voix haute. Ouvrez par la solution, puis déroulez-en les fondements, article à l'appui.</p>
+          ${peutEnregistrer ? `<label class="ea-accord"><input type="checkbox" id="eaOralMicro"${lu("ea-oral-micro", false) ? " checked" : ""}><span>M'enregistrer pour me réécouter (l'enregistrement reste sur cet appareil)</span></label>` : ""}
+          <button class="btn btn-gold" type="button" data-oaction="hasard">Tirer une question au hasard</button>
+          <ol class="ea-oral-liste">${oralQuestions.map(x => `<li><button type="button" data-oq="${x.id}"><small>${esc(x.theme || "")}${f.includes(x.id) ? " · travaillée" : ""}</small>${esc(x.question)}</button></li>`).join("")}</ol>
+        </div>`;
+      poserFiligrane(corps, marque);
+    };
+    const chrono = (secondes, fin) => {
+      let reste = secondes;
+      const aff = $(".ea-chrono", corps);
+      aff.textContent = duree(reste);
+      clearInterval(minuterie);
+      minuterie = setInterval(() => { reste--; aff.textContent = duree(Math.max(0, reste)); if (reste <= 10) aff.classList.add("ea-chrono-fin"); if (reste <= 0) { clearInterval(minuterie); fin(); } }, 1000);
+    };
+    const ecran = (etape, bouton) => {
+      corps.innerHTML = `<div class="ea-outil ea-oral">
+          <p class="ea-rev-tete"><span>${esc(q.theme || "Grand oral")}</span><span>${etape}</span></p>
+          <p class="ea-oral-q">${esc(q.question)}</p>
+          <p class="ea-chrono" aria-live="off"></p>
+          ${bouton}
+        </div>`;
+      poserFiligrane(corps, marque);
+    };
+    const preparer = () => { ecran("Préparation", `<button class="btn btn-gold" type="button" data-oaction="repondre">Je suis prêt, je réponds</button>`); chrono(60, repondre); };
+    const repondre = async () => {
+      ecran("Réponse à voix haute", `<button class="btn btn-navy" type="button" data-oaction="terminer">J'ai terminé</button>`);
+      chrono(180, terminer);
+      if (lu("ea-oral-micro", false) && peutEnregistrer) {
+        try {
+          flux = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const morceaux = [];
+          enregistreur = new MediaRecorder(flux);
+          enregistreur.ondataavailable = e => morceaux.push(e.data);
+          enregistreur.onstop = () => { if (audio) URL.revokeObjectURL(audio); audio = URL.createObjectURL(new Blob(morceaux, { type: enregistreur.mimeType })); const a = $("#eaOralAudio", corps); if (a) a.src = audio; };
+          enregistreur.start();
+          $(".ea-chrono", corps).insertAdjacentHTML("afterend", `<p class="ea-aide">Enregistrement en cours.</p>`);
+        } catch (e) { toast("Micro indisponible : la réponse n'est pas enregistrée."); }
+      }
+    };
+    const terminer = () => {
+      arreter();
+      ecrit("ea-oral-faites", [...new Set([...faites(), q.id])]);
+      corps.innerHTML = `<div class="ea-outil ea-oral">
+          <p class="ea-oral-q">${esc(q.question)}</p>
+          ${lu("ea-oral-micro", false) && peutEnregistrer ? `<audio id="eaOralAudio" controls${audio ? ` src="${audio}"` : ""}></audio>` : ""}
+          <fieldset class="ea-oral-grille"><legend>Votre auto-évaluation</legend>${GRILLE_ORAL.map((g, i) => `<label><input type="checkbox" data-og="${i}"> ${esc(g)}</label>`).join("")}</fieldset>
+          <p class="ea-aide" id="eaOralScore"></p>
+          <div class="ea-outil-boutons">
+            <button class="btn btn-gold" type="button" data-oaction="corrige">Voir la réponse attendue</button>
+            <button class="btn btn-ghost" type="button" data-oaction="hasard">Autre question</button>
+            <button class="btn btn-ghost" type="button" data-oaction="liste">Toutes les questions</button>
+          </div>
+        </div>`;
+      poserFiligrane(corps, marque);
+      majOutils();
+    };
+    corps.onchange = e => {
+      if (e.target.id === "eaOralMicro") ecrit("ea-oral-micro", e.target.checked);
+      if (e.target.dataset.og !== undefined) { const n = $$("[data-og]:checked", corps).length; $("#eaOralScore", corps).textContent = `${n} point${n > 1 ? "s" : ""} sur ${GRILLE_ORAL.length}. ${n === GRILLE_ORAL.length ? "Réponse de niveau grand oral." : "Comparez avec la réponse attendue pour combler l'écart."}`; }
+    };
+    corps.onclick = e => {
+      const b = e.target.closest("[data-oq], [data-oaction]");
+      if (!b) return;
+      if (b.dataset.oq) { q = oralQuestions.find(x => String(x.id) === b.dataset.oq); preparer(); return; }
+      const a = b.dataset.oaction;
+      if (a === "hasard") { const f = faites(), restantes = oralQuestions.filter(x => !f.includes(x.id)); const pool = restantes.length ? restantes : oralQuestions; q = pool[Math.floor(Math.random() * pool.length)]; preparer(); }
+      if (a === "repondre") repondre();
+      if (a === "terminer") terminer();
+      if (a === "liste") liste();
+      if (a === "corrige") { const c = contenus.find(x => x.id === q.contenu_id); if (c) ouvrirContenu(Object.assign({}, c, { page: q.page }), marque); }
+    };
+    if (!oralQuestions.length) { corps.innerHTML = `<p class="ea-vide">Les questions du grand oral arrivent bientôt.</p>`; return; }
+    liste();
+  }
+
+  // Sujet de la semaine : un des sujets corrigés de l'espace, le même pour tous, qui change chaque lundi
+  const corriges = () => contenus.filter(c => rubrique(c) === "corriges").sort((a, b) => a.id - b.id);
+  const lundi = (decalage = 0) => { const d = new Date(auj() + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7) + 7 * decalage); return d; };
+  const numeroSemaine = (decalage = 0) => Math.floor(lundi(decalage).getTime() / (7 * 864e5));
+  const sujetSemaine = (decalage = 0) => { const l = corriges(); return l.length ? l[((numeroSemaine(decalage) % l.length) + l.length) % l.length] : null; };
+  const intituleSujet = c => c.titre.replace(/^(Cas pratique|Dissertation|Commentaire|SOG)( OHADA)? corrigée?s?\s*(de l'|du |de la )?/i, "").replace(/^:\s*/, "").replace(/^\w/, x => x.toUpperCase());
+  const exerciceDe = c => /cas pratique/i.test(c.titre) ? "cas_pratique" : /commentaire/i.test(c.titre) ? "commentaire" : "dissertation";
+  function outilSujet(corps, marque) {
+    const c = sujetSemaine();
+    const fin = lundi(); fin.setUTCDate(fin.getUTCDate() + 6);
+    const avant = [1, 2, 3].map(k => sujetSemaine(-k)).filter((x, i, t) => x && x !== c && t.indexOf(x) === i);
+    corps.innerHTML = `<div class="ea-outil">
+        <p class="ea-rev-tete"><span>Du ${dateFr(lundi().toISOString())} au ${dateFr(fin.toISOString())}</span><span>${esc((c.matiere || "").replace(/^Corrigé\s*·\s*/i, ""))}</span></p>
+        <p class="ea-oral-q">${esc(c.titre)}</p>
+        <p>Traitez ce sujet en conditions réelles, sans ouvrir le corrigé : trois heures pour une dissertation ou un cas pratique, comme au concours. Comparez ensuite votre copie au corrigé${agent && agent.acces && (agent.actif || etat.admin) ? ", ou faites-la corriger et noter par l'agent de révision" : ""}.</p>
+        <div class="ea-outil-boutons">
+          <button class="btn btn-gold" type="button" data-saction="corrige">Ouvrir le corrigé</button>
+          ${agent && agent.acces && (agent.actif || etat.admin) ? `<button class="btn btn-navy" type="button" data-saction="agent">Faire corriger ma copie</button>` : ""}
+        </div>
+        ${avant.length ? `<h4>Les semaines précédentes</h4><ul class="ea-oral-liste">${avant.map(x => `<li><button type="button" data-sid="${x.id}">${esc(x.titre)}</button></li>`).join("")}</ul>` : ""}
+      </div>`;
+    poserFiligrane(corps, marque);
+    corps.onclick = e => {
+      const s = e.target.closest("[data-sid]");
+      if (s) { const x = contenus.find(y => String(y.id) === s.dataset.sid); if (x) ouvrirContenu(x, marque); return; }
+      const a = e.target.closest("[data-saction]");
+      if (!a) return;
+      if (a.dataset.saction === "corrige") ouvrirContenu(c, marque);
+      if (a.dataset.saction === "agent") {
+        fermerVisionneuse();
+        const d = $("#eaAgent"), f = $("#eaAgentForm");
+        if (!d || !f) return;
+        d.open = true; agentOuvert = true;
+        f.exercice.value = exerciceDe(c);
+        $("[name=mode][value=correction]", f).checked = true;
+        $("#aCopieChamp").hidden = false;
+        f.matiere.value = (c.matiere || "").replace(/^Corrigé\s*·\s*/i, "");
+        f.sujet.value = intituleSujet(c);
+        d.scrollIntoView({ behavior: "smooth", block: "start" });
+        f.copie.focus({ preventScroll: true });
+      }
+    };
+  }
+
+  // Tableau de bord : compte à rebours du concours, série de jours, lectures, maîtrise des QCM, notes, badges
+  const PLANNING = () => contenus.find(c => /^Planning de révision/i.test(c.titre));
+  const joursAvant = () => etat.profil.date_concours ? joursJusqua(etat.profil.date_concours) : null;
+  function badges() {
+    const s = stats || { serie: 0, contenus_lus: 0, qcm_bonnes: 0 };
+    const notes = echanges.filter(e => e.note != null).map(e => Number(e.note));
+    const oral = lu("ea-oral-faites", []).length;
+    const maitrisee = matieresQcm().some(m => maitrise(m).pct >= 80);
+    return [
+      ["Premiers pas", "Ouvrir un premier contenu", s.contenus_lus >= 1],
+      ["Lecteur assidu", "Ouvrir dix contenus différents", s.contenus_lus >= 10],
+      ["Une semaine", "Réviser sept jours d'affilée", s.serie >= 7],
+      ["Un mois", "Réviser trente jours d'affilée", s.serie >= 30],
+      ["Cinquante bonnes réponses", "Réussir cinquante questions de QCM", s.qcm_bonnes >= 50],
+      ["Matière maîtrisée", "Maîtriser 80 % des questions d'une matière", maitrisee],
+      ["Face au jury", "Travailler cinq questions du grand oral", oral >= 5],
+      ["Première copie", "Faire corriger une copie par l'agent", notes.length >= 1],
+      ["Au-dessus de la moyenne", "Obtenir plus de 12 sur 20 à une copie", notes.some(n => n > 12)]
+    ];
+  }
+  function outilTableau(corps, marque) {
+    const s = stats || { jours: [], serie: 0, contenus_lus: 0, qcm_bonnes: 0, qcm_erreurs: 0 };
+    const j = joursAvant(), p = PLANNING();
+    const semaine = j != null && j >= 0 && j < 84 ? 12 - Math.floor(j / 7) : null;
+    const actifs = new Set(s.jours || []);
+    const cases = Array.from({ length: 56 }, (_, k) => dansJours(k - 55));
+    const notes = echanges.filter(e => e.note != null).slice(0, 6);
+    const reste = etat.abo.actif && etat.abo.fin ? joursJusqua(etat.abo.fin) : null;
+    corps.innerHTML = `<div class="ea-outil ea-tableau">
+        <form class="ea-tb-concours" id="eaConcours">
+          <label for="eaDateConcours">Date de mon concours</label>
+          <input id="eaDateConcours" type="date" value="${esc(etat.profil.date_concours || "")}" min="${auj()}">
+          <button class="btn btn-ghost btn-sm" type="submit">Enregistrer</button>
+        </form>
+        <div class="ea-tb-chiffres">
+          <div><b>${j == null ? "–" : j < 0 ? "Passé" : "J-" + j}</b><span>avant le concours</span></div>
+          <div><b>${s.serie}</b><span>jour${s.serie > 1 ? "s" : ""} de révision d'affilée</span></div>
+          <div><b>${s.contenus_lus}</b><span>contenu${s.contenus_lus > 1 ? "s" : ""} ouvert${s.contenus_lus > 1 ? "s" : ""} sur ${contenus.length}</span></div>
+          <div><b>${reste == null ? "–" : reste}</b><span>jour${reste > 1 ? "s" : ""} d'abonnement restant${reste > 1 ? "s" : ""}</span></div>
+        </div>
+        ${semaine && p ? `<p class="ea-outil-fait">Vous êtes dans la <b>semaine ${semaine} sur 12</b> du planning de révision. <button class="btn btn-ghost btn-sm" type="button" data-taction="planning">Ouvrir le planning</button></p>` : ""}
+        <h4>Les huit dernières semaines</h4>
+        <div class="ea-calendrier" aria-label="Jours de révision des huit dernières semaines">${cases.map(d => `<i class="${actifs.has(d) ? "ea-actif" : ""}" title="${dateFr(d)}"></i>`).join("")}</div>
+        <h4>Maîtrise des QCM</h4>
+        <div class="ea-maitrise">${matieresQcm().map(m => { const x = maitrise(m); return `<div><span>${esc(m)}</span><span class="ea-barre"><i style="width:${x.pct}%"></i></span><b>${x.pct} %</b></div>`; }).join("")}</div>
+        ${notes.length ? `<h4>Vos dernières notes (agent de révision)</h4><p>${notes.map(e => `<span class="ea-tb-note">${noteFr(e.note)}/20</span>`).join(" ")}</p>` : ""}
+        <h4>Vos badges</h4>
+        <div class="ea-badges">${badges().map(([t, d, ok]) => `<div class="${ok ? "ea-badge-ok" : ""}"><b>${ok ? "★" : "☆"} ${t}</b><span>${d}</span></div>`).join("")}</div>
+      </div>`;
+    poserFiligrane(corps, marque);
+    corps.onclick = e => { const a = e.target.closest("[data-taction]"); if (a && a.dataset.taction === "planning" && p) ouvrirContenu(p, marque); };
+    corps.onsubmit = async e => {
+      e.preventDefault();
+      const v = $("#eaDateConcours", corps).value || null;
+      const { error } = await client.from("profils").update({ date_concours: v }).eq("id", etat.uid);
+      if (error) { toast(messageErreur(error)); return; }
+      etat.profil.date_concours = v;
+      toast(v ? "Date du concours enregistrée." : "Date du concours effacée.");
+      outilTableau(corps, marque);
+      majOutils();
+    };
+  }
+
+  const OUTILS = {
+    revision: ["Révision du jour", outilRevision],
+    oral: ["Simulateur de grand oral", outilOral],
+    sujet: ["Sujet de la semaine", outilSujet],
+    tableau: ["Mon tableau de bord", outilTableau]
+  };
+  function outilsHTML() {
+    const aFaire = seance(null).length, oral = oralQuestions.length, c = sujetSemaine(), j = joursAvant(), s = stats || { serie: 0 };
+    const carte = (id, titre, texte, pied) => `<button class="ea-outil-carte" type="button" data-outil="${id}"><b>${titre}</b><span>${texte}</span><small>${pied}</small></button>`;
+    return `<div class="ea-outils" id="eaOutils">
+        ${toutesQuestions().length ? carte("revision", "Révision du jour", aFaire ? `${aFaire} question${aFaire > 1 ? "s" : ""} de QCM à travailler aujourd'hui.` : "Tout est à jour pour aujourd'hui.", "Méthode des boîtes, quelques minutes par jour") : ""}
+        ${oral ? carte("oral", "Grand oral", `${oral} questions du jury, avec chrono et enregistrement.`, "Préparation 1 min, réponse 3 min") : ""}
+        ${c ? carte("sujet", "Sujet de la semaine", esc(c.titre), "Nouveau sujet chaque lundi") : ""}
+        ${carte("tableau", "Mon tableau de bord", `${s.serie} jour${s.serie > 1 ? "s" : ""} de révision d'affilée${j != null && j >= 0 ? `, J-${j} avant le concours` : ""}.`, "Progression, planning et badges")}
+      </div>`;
+  }
+  async function majOutils() {
+    try { const r = await client.rpc("mes_statistiques"); if (!r.error) stats = r.data; } catch (e) { /* hors ligne */ }
+    const b = $("#eaOutils");
+    if (b) b.outerHTML = outilsHTML();
+  }
+  const ouvrirOutil = id => ouvrirContenu({ outil: OUTILS[id][1], titre: OUTILS[id][0], type: "texte" }, marqueLecteur());
+
   async function afficher(onglet) {
     racine.setAttribute("aria-busy", "true");
     try {
@@ -881,10 +1221,11 @@
     } else if (etat.abo.actif || etat.admin) {
       const [{ data, error }] = await Promise.all([
         client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le").eq("publie", true).order("publie_le", { ascending: false }),
-        chargerAgent().catch(() => { agent = null; })
+        chargerAgent().catch(() => { agent = null; }),
+        chargerOutils().catch(() => { /* outils indisponibles : la bibliothèque reste accessible */ })
       ]);
       contenus = error ? [] : data;
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + agentHTML() + bibliothequeHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + outilsHTML() + agentHTML() + bibliothequeHTML();
       brancherCompte();
     } else {
       racine.innerHTML = compteHTML() + await annoncesHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
@@ -997,6 +1338,8 @@
       $(".ea-biblio", racine).outerHTML = bibliothequeHTML();
       return;
     }
+    const outil = e.target.closest("[data-outil]");
+    if (outil && OUTILS[outil.dataset.outil]) { ouvrirOutil(outil.dataset.outil); return; }
     const ech = e.target.closest("[data-echange]");
     if (ech) { const x = echanges.find(y => String(y.id) === ech.dataset.echange); if (x) ouvrirEchange(x); return; }
     const carte = e.target.closest(".ea-carte");

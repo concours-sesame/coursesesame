@@ -1040,7 +1040,7 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Espace abonnés", ""]],
     h1: `L'espace abonnés`,
-    lead: "Sujets corrigés, fiches de révision, QCM chronométrés et, dès la formule d'un mois, nos ouvrages complets à lire en ligne. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.",
+    lead: "Sujets corrigés, fiches de révision, QCM chronométrés, révision du jour et simulateur de grand oral et, dès la formule d'un mois, nos ouvrages complets à lire en ligne. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.",
     ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${LIVRES_ABONNEMENT.length ? `<a href="#inclus" class="btn btn-ghost">Ce que comprend l'abonnement</a>` : ""}`,
     facts: tarifs.filter(t => ["j1", "j7", "m1", "m12"].includes(t.cle)).map(t => `${t.duree} : <b>${t.prix} FCFA</b>`)
   })}
@@ -1051,6 +1051,21 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
       <p class="ea-attente">Chargement de l'espace abonnés…</p>
       <noscript><p class="ea-erreur">L'espace abonnés a besoin de JavaScript : activez-le dans votre navigateur.</p></noscript>
     </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">Outils de révision</span><h2 class="h-section">Réviser chaque jour, pas seulement lire</h2></div>
+      <p class="lead">Avec votre abonnement, l'espace ne se contente pas de mettre des documents à disposition : il vous fait travailler, au rythme qui fait retenir.</p>
+    </div>
+    <ol class="espace-etapes">
+      <li class="espace-etape"><b>Révision du jour</b><span>Les questions des QCM reviennent au bon moment : une question réussie s'espace, une question manquée revient dès le lendemain. Votre maîtrise s'affiche matière par matière.</span></li>
+      <li class="espace-etape"><b>Simulateur de grand oral</b><span>Une question du jury, une minute de préparation, trois minutes pour répondre à voix haute, avec enregistrement facultatif, grille d'auto-évaluation et réponse attendue.</span></li>
+      <li class="espace-etape"><b>Sujet de la semaine</b><span>Chaque lundi, un sujet corrigé à traiter en conditions réelles, puis à comparer avec notre corrigé.</span></li>
+      <li class="espace-etape"><b>Tableau de bord</b><span>Compte à rebours jusqu'au concours, semaine du planning de révision, jours de travail d'affilée, progression et badges.</span></li>
+    </ol>
   </div>
 </section>
 
