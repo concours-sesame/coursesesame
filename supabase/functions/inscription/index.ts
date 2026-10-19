@@ -4,6 +4,8 @@
 // de Supabase ne sert qu'aux tests). L'abonnement, lui, n'est activé qu'après paiement, depuis la page
 // d'administration. Pour limiter les abus : au plus 60 inscriptions par heure depuis une même adresse IP
 // (plafond large : les opérateurs mobiles et les réseaux Wi-Fi d'une salle de cours partagent une même adresse).
+// Code de parrainage facultatif (profils.code_parrain d'un autre compte) : il est enregistré dans profils.parrain_id ;
+// un code inconnu est ignoré sans bloquer l'inscription.
 //
 // Déploiement : sans vérification de jeton (la fonction est appelée par des visiteurs non connectés).
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
@@ -48,6 +50,7 @@ Deno.serve(async (req) => {
   const telephone = String(d.telephone ?? "").replace(/[^0-9+]/g, "");
   const concours = CONCOURS.includes(String(d.concours)) ? String(d.concours) : null;
   const motDePasse = String(d.motDePasse ?? "");
+  const parrain = String(d.parrain ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12);
 
   if (!prenom || !nom) return erreur("Indiquez votre prénom et votre nom.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return erreur("Adresse e-mail invalide.");
@@ -71,7 +74,7 @@ Deno.serve(async (req) => {
   await admin.from("journal_inscriptions").insert({ ip });
   await admin.from("journal_inscriptions").delete().lt("cree_le", new Date(Date.now() - 86400_000).toISOString());
 
-  const { error } = await admin.auth.admin.createUser({
+  const { data: cree, error } = await admin.auth.admin.createUser({
     email,
     password: motDePasse,
     email_confirm: true,
@@ -84,6 +87,10 @@ Deno.serve(async (req) => {
     if (/password/i.test(error.message)) return erreur("Ce mot de passe est trop faible. Choisissez-en un autre.");
     console.error("createUser :", error.message);
     return erreur("Inscription impossible pour le moment. Réessayez plus tard.", 500);
+  }
+  if (parrain && cree?.user) {
+    const { data: p } = await admin.from("profils").select("id").eq("code_parrain", parrain).maybeSingle();
+    if (p && p.id !== cree.user.id) await admin.from("profils").update({ parrain_id: p.id }).eq("id", cree.user.id);
   }
   return reponse({ ok: true });
 });

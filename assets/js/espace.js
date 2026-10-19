@@ -683,7 +683,7 @@
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
     const [p, a, adm, ouv, sus] = await Promise.all([
-      client.from("profils").select("prenom, nom, telephone, concours, date_concours, emails_nouveautes").eq("id", uid).maybeSingle(),
+      client.from("profils").select("prenom, nom, telephone, concours, date_concours, emails_nouveautes, code_parrain").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
       client.rpc("acces_ouvrages"),
@@ -762,6 +762,7 @@
         <div class="field"><label for="iConcours">Concours préparé</label><select id="iConcours"><option value="">Choisir…</option>${options}<option value="autre">Autre concours</option></select></div>
         <div class="field full"><label for="iEmail">Adresse e-mail</label><input id="iEmail" type="email" autocomplete="email" required></div>
         <div class="field full"><label for="iMdp">Mot de passe (8 caractères au moins)</label><input id="iMdp" type="password" autocomplete="new-password" minlength="8" required></div>
+        <div class="field full"><label for="iParrain">Code de parrainage (facultatif)</label><input id="iParrain" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" value="${esc(codeParrainRecu())}"></div>
         <label class="ea-accord full"><input type="checkbox" id="iAccord" required><span>J'accepte que ces informations servent à gérer mon abonnement, comme l'expliquent les <a href="${ROOT}mentions-legales/#espace-abonnes" target="_blank">mentions légales</a>.</span></label>
         <p class="ea-msg" role="alert"></p>
         <button class="btn btn-navy" type="submit">Créer mon compte</button>
@@ -828,7 +829,7 @@
           <button class="btn btn-ghost btn-sm" type="submit">Changer le mot de passe</button>
         </form>
         <form class="form ea-form" id="eaEmails" novalidate>
-          <label class="ea-accord full"><input type="checkbox" name="nouveautes"${profil.emails_nouveautes === false ? "" : " checked"}><span>Recevoir par e-mail l'annonce des nouveaux contenus (un e-mail par jour au plus, seulement s'il y a des nouveautés)</span></label>
+          <label class="ea-accord full"><input type="checkbox" name="nouveautes"${profil.emails_nouveautes === false ? "" : " checked"}><span>Recevoir par e-mail l'annonce des nouveaux contenus (un e-mail par jour au plus, seulement s'il y a des nouveautés) et un rappel si vous ne passez pas pendant quelques jours (une fois par semaine au plus)</span></label>
           <p class="ea-msg" role="alert"></p>
         </form>
       </div>`;
@@ -851,6 +852,7 @@
           ${rubs.length > 1 ? `<div class="chips" role="group" aria-label="Filtrer par rubrique">${[["tous", "Tous", contenus.length], ...rubs.map(r => [r, RUBRIQUES[r], contenus.filter(c => rubrique(c) === r).length])].map(([v, l, n]) => `<button class="chip" type="button" data-filtre="${v}" aria-pressed="${filtre === v}">${l}<span class="n">${n}</span></button>`).join("")}</div>` : ""}
           ${contenus.length > 8 ? `<label class="ea-cherche"><span class="sr-only">Rechercher un contenu</span><input type="search" id="eaCherche" placeholder="Rechercher : titre, matière, concours…" autocomplete="off"></label>` : ""}
         </div>
+        ${["textes", "jurisprudence"].includes(filtre) ? rechercheTextesHTML() : ""}
         <p class="ea-vide" id="eaAucun" hidden>Aucun contenu ne correspond à cette recherche.</p>
         <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}" data-texte="${esc(sansAccents([c.titre, c.description, c.matiere, (c.concours || []).map(nomConcours).join(" ")].join(" ")))}">
             <span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>
@@ -860,6 +862,30 @@
             <span class="ea-carte-go">${verrouille(c) ? icone("i-lock") + "Formules d'un mois et plus" : typeAffiche(c).action + icone("i-arrow")}</span>
           </button>`).join("")}</div>
       </div>`;
+  }
+
+  // Recherche dans le texte des textes officiels et de la jurisprudence (fonction rechercher_textes de la base) :
+  // un extrait par page trouvée, puis ouverture du document à cette page
+  let rechercheT = "", resultatsT = null;
+  const extraitHTML = t => esc(t).replace(/\[\[/g, "<mark>").replace(/\]\]/g, "</mark>");
+  function resultatsTextesHTML() {
+    if (resultatsT === null) return "";
+    if (!resultatsT.length) return `<p class="ea-vide">Aucun passage trouvé. Essayez un autre mot, ou le numéro d'article seul (par exemple « article 461 »).</p>`;
+    return `<ol class="ea-textes-res">${resultatsT.map((r, i) => `<li><button type="button" data-texte-res="${i}"><b>${esc(r.titre)}</b><small>Page ${r.page}</small><span>${extraitHTML(r.extrait)}</span></button></li>`).join("")}</ol>`;
+  }
+  const rechercheTextesHTML = () => `<form class="ea-textes-cherche" id="eaTextesForm" role="search">
+      <label for="eaTextesQ">Rechercher dans le texte des lois et des décisions</label>
+      <div><input type="search" id="eaTextesQ" value="${esc(rechercheT)}" placeholder="Ex. : détention préventive, article 461, prescription" autocomplete="off"><button class="btn btn-navy btn-sm" type="submit">Chercher</button></div>
+      <div id="eaTextesRes" aria-live="polite">${resultatsTextesHTML()}</div>
+    </form>`;
+  async function chercherTextes(q) {
+    rechercheT = q.trim();
+    const zone = $("#eaTextesRes");
+    if (!rechercheT) { resultatsT = null; if (zone) zone.innerHTML = ""; return; }
+    if (zone) zone.innerHTML = `<p class="ea-attente">Recherche…</p>`;
+    const { data, error } = await client.rpc("rechercher_textes", { p_texte: rechercheT });
+    resultatsT = error ? [] : data || [];
+    if (zone) zone.innerHTML = error ? `<p class="ea-erreur">${esc(messageErreur(error))}</p>` : resultatsTextesHTML();
   }
 
   // Annonces en cours, publiées depuis l'administration (lisibles par tout compte connecté)
@@ -1294,16 +1320,57 @@
   function outilsHTML() {
     const aFaire = seance(null).length, oral = oralQuestions.length, c = sujetSemaine(), j = joursAvant(), s = stats || { serie: 0 };
     const carte = (id, titre, texte, pied) => `<button class="ea-outil-carte" type="button" data-outil="${id}"><b>${titre}</b><span>${texte}</span><small>${pied}</small></button>`;
-    return `<div class="ea-outils" id="eaOutils">
+    return demarrageHTML() + `<div class="ea-outils" id="eaOutils">
         ${toutesQuestions().length ? carte("revision", "Révision du jour", aFaire ? `${aFaire} question${aFaire > 1 ? "s" : ""} de QCM à travailler aujourd'hui.` : "Tout est à jour pour aujourd'hui.", "Méthode des boîtes, quelques minutes par jour") : ""}
         ${oral ? carte("oral", "Grand oral", `${oral} questions du jury, avec chrono et enregistrement.`, "Préparation 1 min, réponse 3 min") : ""}
         ${c ? carte("sujet", "Sujet de la semaine", esc(c.titre), "Nouveau sujet chaque lundi") : ""}
         ${carte("tableau", "Mon tableau de bord", `${s.serie} jour${s.serie > 1 ? "s" : ""} de révision d'affilée${j != null && j >= 0 ? `, J-${j} avant le concours` : ""}.`, "Progression, planning et badges")}
       </div>`;
   }
+  // Pour bien commencer : trois premiers gestes, cochés d'après l'usage réel. L'encadré disparaît quand tout est fait
+  // ou quand l'abonné le masque (mémorisé sur cet appareil)
+  const CLE_DEMARRAGE = "ea-demarrage-masque";
+  const demarrageMasque = () => { try { return localStorage.getItem(CLE_DEMARRAGE) === "1"; } catch (e) { return false; } };
+  function demarrageHTML() {
+    if (!etat.abo.actif || !stats || demarrageMasque()) return "";
+    const etapes = [
+      [Number(stats.contenus_lus) > 0, "Ouvrir un document de votre bibliothèque", "Un ouvrage, un sujet corrigé ou un texte officiel, plus bas sur cette page.", `<button class="btn btn-ghost btn-sm" type="button" data-demarrage="biblio">Voir la bibliothèque</button>`],
+      [Number(stats.qcm_bonnes) + Number(stats.qcm_erreurs) > 0, "Faire votre première révision du jour", "Quelques questions de QCM, qui reviendront ensuite au bon moment.", toutesQuestions().length ? `<button class="btn btn-ghost btn-sm" type="button" data-outil="revision">Commencer</button>` : ""],
+      [!!(etat.profil && etat.profil.date_concours), "Indiquer la date de votre concours", "Votre tableau de bord affiche alors le compte à rebours et un planning.", `<button class="btn btn-ghost btn-sm" type="button" data-outil="tableau">Indiquer la date</button>`]
+    ];
+    const faites = etapes.filter(x => x[0]).length;
+    if (faites === etapes.length) return "";
+    return `<section class="ea-demarrage" id="eaDemarrage" aria-labelledby="eaDemTitre">
+        <div class="ea-demarrage-tete"><h3 id="eaDemTitre">Pour bien commencer</h3><span>${faites} sur ${etapes.length}</span>
+          <button class="ea-demarrage-masquer" type="button" data-demarrage="masquer">Masquer</button></div>
+        <ol>${etapes.map(([fait, titre, aide, action]) => `<li${fait ? ` class="fait"` : ""}><span class="ea-demarrage-coche" aria-hidden="true">${fait ? "✓" : ""}</span>
+          <span><b>${titre}</b>${fait ? `<small>C'est fait.</small>` : `<small>${aide}</small>`}</span>${fait ? "" : action}</li>`).join("")}</ol>
+      </section>`;
+  }
+  // Parrainage : code reçu par lien (espace-abonnes/?parrain=CODE), gardé le temps de la visite ; encadré de l'abonné
+  const CLE_PARRAIN = "ea-parrain";
+  function codeParrainRecu() {
+    const q = new URLSearchParams(location.search).get("parrain");
+    try {
+      if (q) sessionStorage.setItem(CLE_PARRAIN, q.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12));
+      return sessionStorage.getItem(CLE_PARRAIN) || "";
+    } catch (e) { return q || ""; }
+  }
+  let filleuls = null;
+  function parrainageHTML() {
+    const code = etat.profil && etat.profil.code_parrain;
+    if (!code || !etat.abo.actif) return "";
+    const lien = `${new URL(ROOT + "espace-abonnes/", location.href).href}?parrain=${code}#inscription`;
+    const msg = `Je prépare mes concours avec l'espace abonnés des Cours Sésame et SAJ : ouvrages complets, sujets corrigés, QCM, textes officiels et agent de révision. Inscris-toi avec mon code ${code} :\n${lien}`;
+    return `<section class="ea-parrainage"><div><h3>Parrainez un ami</h3>
+        <p>Votre code : <b class="ea-code">${esc(code)}</b>. Votre ami l'indique en créant son compte. Dès son premier abonnement payé, <b>7 jours vous sont offerts</b>, ajoutés à la suite de votre abonnement.${filleuls ? ` Déjà ${filleuls} ${filleuls > 1 ? "amis parrainés" : "ami parrainé"}, merci !` : ""}</p></div>
+        <a class="btn btn-wa btn-sm" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${icone("i-wa")}Inviter sur WhatsApp</a>
+      </section>`;
+  }
   async function majOutils() {
     try { const r = await client.rpc("mes_statistiques"); if (!r.error) stats = r.data; } catch (e) { /* hors ligne */ }
-    const b = $("#eaOutils");
+    const b = $("#eaOutils"), d = $("#eaDemarrage");
+    if (d) d.remove();
     if (b) b.outerHTML = outilsHTML();
   }
   const ouvrirOutil = id => ouvrirContenu({ outil: OUTILS[id][1], titre: OUTILS[id][0], type: "texte" }, marqueLecteur());
@@ -1333,7 +1400,8 @@
         chargerOutils().catch(() => { /* outils indisponibles : la bibliothèque reste accessible */ })
       ]);
       contenus = error ? [] : data;
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + outilsHTML() + agentHTML() + bibliothequeHTML();
+      if (etat.abo.actif) { try { const r = await client.rpc("mes_parrainages"); filleuls = r.error ? null : r.data; } catch (e) { filleuls = null; } }
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + outilsHTML() + agentHTML() + bibliothequeHTML() + parrainageHTML();
       brancherCompte();
     } else {
       racine.innerHTML = compteHTML() + await annoncesHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
@@ -1370,7 +1438,7 @@
       const f = e.currentTarget, msg = $(".ea-msg", f), bouton = $("button[type=submit]", f);
       const d = {
         prenom: $("#iPrenom").value.trim(), nom: $("#iNom").value.trim(), telephone: $("#iTel").value.trim(),
-        concours: $("#iConcours").value, email: $("#iEmail").value.trim(), motDePasse: $("#iMdp").value
+        concours: $("#iConcours").value, email: $("#iEmail").value.trim(), motDePasse: $("#iMdp").value, parrain: $("#iParrain").value.trim()
       };
       const manque = [["#iPrenom", d.prenom], ["#iNom", d.nom], ["#iTel", d.telephone], ["#iEmail", d.email], ["#iMdp", d.motDePasse]].find(x => !x[1]);
       if (manque) { msg.textContent = "Merci de remplir tous les champs."; $(manque[0]).focus(); return; }
@@ -1421,6 +1489,7 @@
 
   // Agent de révision : envoi de la demande, champ de la copie selon le type de demande, bloc ouvert ou fermé
   racine.addEventListener("submit", e => {
+    if (e.target.id === "eaTextesForm") { e.preventDefault(); chercherTextes($("#eaTextesQ").value); return; }
     if (e.target.id !== "eaAgentForm") return;
     e.preventDefault();
     if (!agentEnCours) lancerAgent(e.target);
@@ -1451,6 +1520,18 @@
     if (ch && $(".ea-biblio", racine)) {
       filtre = ch.dataset.filtre;
       $(".ea-biblio", racine).outerHTML = bibliothequeHTML();
+      return;
+    }
+    const res = e.target.closest("[data-texte-res]");
+    if (res && resultatsT) {
+      const r = resultatsT[Number(res.dataset.texteRes)], c = r && contenus.find(x => x.id === r.contenu_id);
+      if (c) ouvrirContenu(Object.assign({}, c, { page: r.page }), etat.admin && !etat.abo.actif ? "Aperçu administrateur" : marqueDe(etat.profil));
+      return;
+    }
+    const dem = e.target.closest("[data-demarrage]");
+    if (dem) {
+      if (dem.dataset.demarrage === "masquer") { try { localStorage.setItem(CLE_DEMARRAGE, "1"); } catch (x) { /* stockage indisponible */ } const d = $("#eaDemarrage"); if (d) d.remove(); }
+      else { const b = $(".ea-biblio", racine); if (b) b.scrollIntoView({ behavior: "smooth", block: "start" }); }
       return;
     }
     const outil = e.target.closest("[data-outil]");
@@ -1484,7 +1565,7 @@
   if (desinscription) {
     history.replaceState(null, "", location.pathname + location.hash);
     fetch(`${CONF.url}/functions/v1/emails`, { method: "POST", headers: { "Content-Type": "application/json", apikey: CONF.cle }, body: JSON.stringify({ action: "desinscrire", jeton: desinscription }) })
-      .then(r => r.json()).then(r => toast(r.ok ? "C'est noté. Vous ne recevrez plus l'annonce des nouveautés par e-mail." : (r.error || "Lien invalide.")))
+      .then(r => r.json()).then(r => toast(r.ok ? "C'est noté. Vous ne recevrez plus l'annonce des nouveautés ni les rappels par e-mail." : (r.error || "Lien invalide.")))
       .catch(() => toast("La désinscription n'a pas abouti. Réessayez plus tard."));
   }
   afficher().then(() => { versFormulaire(); ouvrirDepuisLien(); });
