@@ -96,14 +96,14 @@
     zone.style.backgroundImage = `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`;
   }
 
-  /* ---------- Lecture des PDF dans la page, sans téléchargement ni copie ---------- */
-  // Chaque page est dessinée en image (pas de texte sélectionnable), avec le nom de l'abonné incrusté.
-  // Le document s'ouvre en grand format, avec zoom (boutons, Ctrl + molette) et navigation par page. Chaque page
-  // est dessinée à la densité de l'écran (au moins 1,5 point d'image par point affiché) pour un texte net, dans
-  // la limite d'une surface d'image que les téléphones savent tenir en mémoire.
+  /* ---------- Lecture des PDF, page par page, en images signées par le serveur ---------- */
+  // Le fichier d'origine n'est jamais envoyé au navigateur. La fonction « pages » renvoie chaque page sous forme
+  // d'image, avec le nom, le téléphone, l'e-mail, la date et l'heure de l'abonné fondus dans les pixels. Une page
+  // n'est demandée qu'à l'approche de l'écran ; chaque page différente lue dans la journée compte dans le plafond
+  // de lecture (300 par jour). Zoom de 100 à 300 % : au-delà de 175 %, la page est redemandée en plus grand.
+  // pdf.js reste chargé par l'administration pour préparer le texte destiné à l'agent de révision.
   const PDFJS = ROOT + "assets/vendor/pdfjs-3.11.174/";
   const ZOOMS = [1, 1.25, 1.5, 2, 2.5, 3];
-  const PIXELS_MAX = 12e6;
   let nettoyerPdf = null;
   async function chargerPdfJs() {
     await chargerScript(PDFJS + "pdf.min.js");
@@ -111,16 +111,32 @@
     lib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js";
     return lib;
   }
-  async function afficherPdf(octets, zone, marque, depart) {
-    const lib = await chargerPdfJs();
-    const doc = await lib.getDocument({ data: octets, isEvalSupported: false, enableXfa: false }).promise;
+  // Appel de la fonction « pages » avec la session de l'abonné ; une erreur porte le message du serveur
+  async function appelPages(corps, signal) {
+    const { data: { session } } = await client.auth.getSession();
+    if (!session) throw new Error("Connexion requise. Reconnectez-vous.");
+    const rep = await fetch(`${CONF.url}/functions/v1/pages`, {
+      method: "POST", signal,
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}`, apikey: CONF.cle },
+      body: JSON.stringify(corps)
+    });
+    if (!rep.ok || /json/.test(rep.headers.get("Content-Type") || "") && corps.action !== "info" && corps.action !== "reserver") {
+      const r = await rep.json().catch(() => ({}));
+      const e = new Error(r.error || "Le document n'a pas pu être chargé. Réessayez.");
+      e.statut = rep.status;
+      throw e;
+    }
+    return rep;
+  }
+  async function afficherPages(c, zone, depart) {
+    const info = await (await appelPages({ action: "info", contenu: c.id })).json();
     zone.innerHTML = "";
     if (visionneuse) visionneuse.classList.add("ea-v-pdf");
     const boite = zone.closest(".ea-v-boite");
-    const mention = `Réservé à ${marque} · Les Cours Sésame et SAJ · Reproduction interdite`;
-    const tuile = texteFiligrane(marque);
-    const total = doc.numPages;
-    let zoom = 1;
+    const total = info.pages;
+    const arret = new AbortController();
+    const urls = [];
+    let zoom = 1, plafondAtteint = false;
 
     const barre = document.createElement("div");
     barre.className = "ea-pdf-barre";
@@ -135,90 +151,83 @@
         <button type="button" data-pdf="plus" aria-label="Agrandir">+</button>
         <button type="button" data-pdf="ajuster">Pleine largeur</button>
       </div>`;
+    const quota = document.createElement("p");
+    quota.className = "ea-pdf-quota";
+    const majQuota = lues => { if (!info.admin && !plafondAtteint) quota.textContent = `Pages lues aujourd'hui ${lues} sur ${info.plafond}.`; };
+    majQuota(info.lues);
     const pages = document.createElement("div");
     pages.className = "ea-pdf-pages";
-    zone.append(barre, pages);
+    zone.append(barre, quota, pages);
     const champ = $("input", barre), affZoom = $(".ea-pdf-zoom span", barre);
-    const largeurUtile = () => { const st = getComputedStyle(pages); return Math.max(240, pages.clientWidth - parseFloat(st.paddingLeft) - parseFloat(st.paddingRight)); };
-    let largeurDessin = largeurUtile();
 
-    const annuler = c => { if (c._tache) { c._tache.cancel(); c._tache = null; } };
-    const vider = c => { annuler(c); delete c.dataset.fait; if (c.width > 1) { c.width = 1; c.height = 1; } };
-    const dessiner = async (n, canvas) => {
-      annuler(canvas);
-      const page = await doc.getPage(n);
-      const base = page.getViewport({ scale: 1 });
-      const affiche = largeurDessin * zoom;
-      const densite = Math.max(Math.min(window.devicePixelRatio || 1, 3), 1.5);
-      let echelle = (affiche * densite) / base.width;
-      const aire = base.width * base.height * echelle * echelle;
-      if (aire > PIXELS_MAX) echelle *= Math.sqrt(PIXELS_MAX / aire);
-      const vue = page.getViewport({ scale: echelle });
-      // Dessin hors écran, puis copie d'un coup : l'ancienne image reste affichée pendant le calcul
-      const tampon = document.createElement("canvas");
-      tampon.width = Math.floor(vue.width); tampon.height = Math.floor(vue.height);
-      const ctx = tampon.getContext("2d");
-      const tache = page.render({ canvasContext: ctx, viewport: vue });
-      canvas._tache = tache;
-      try { await tache.promise; } catch (e) { return; } finally { if (canvas._tache === tache) canvas._tache = null; }
-      // Nom de l'abonné en diagonale et mention en bas de page, incrustés dans l'image
-      const w = tampon.width, h = tampon.height, angle = -Math.atan2(h, w);
-      ctx.save();
-      ctx.translate(w / 2, h / 2); ctx.rotate(angle);
-      ctx.font = `800 ${Math.round(Math.min(w, h) / 14)}px sans-serif`;
-      ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillStyle = "rgba(15,42,92,.10)";
-      ctx.fillText(marque, 0, 0);
-      // Même signature, en petit et répétée sur toute la page, avec l'e-mail, la date et l'heure de lecture
-      const corps = Math.max(11, Math.round(w / 64));
-      ctx.font = `700 ${corps}px sans-serif`;
-      ctx.fillStyle = "rgba(15,42,92,.06)";
-      const pasX = ctx.measureText(tuile).width + corps * 4, pasY = corps * 7, diag = Math.hypot(w, h);
-      for (let y = -diag / 2, rang = 0; y < diag / 2; y += pasY, rang++) {
-        for (let x = -diag / 2 - (rang % 2) * pasX / 2; x < diag / 2; x += pasX) ctx.fillText(tuile, x, y);
+    // Chargement d'une page : deux demandes à la fois au plus, dans l'ordre d'arrivée à l'écran
+    const file = [];
+    let actives = 0;
+    const suivante = () => {
+      while (actives < 2 && file.length && !plafondAtteint) {
+        const img = file.shift();
+        if (!img.dataset.attente) continue;
+        actives++;
+        charger(img).finally(() => { actives--; suivante(); });
       }
-      ctx.restore();
-      ctx.font = `600 ${Math.max(10, Math.round(w / 95))}px sans-serif`;
-      ctx.fillStyle = "rgba(60,60,75,.85)";
-      ctx.fillText(mention, Math.round(w * 0.02), h - Math.round(h * 0.012));
-      page.cleanup();
-      if (!canvas.dataset.fait) return; // page sortie de l'écran entre-temps
-      canvas.width = w; canvas.height = h;
-      canvas.style.aspectRatio = `${w} / ${h}`;
-      canvas.getContext("2d").drawImage(tampon, 0, 0);
-      tampon.width = 0; tampon.height = 0;
+    };
+    const demander = (img, echelle) => {
+      if (plafondAtteint || img.dataset.attente || +(img.dataset.echelle || 0) >= echelle) return;
+      img.dataset.attente = String(echelle);
+      file.push(img);
+      suivante();
+    };
+    const charger = async img => {
+      const n = +img.dataset.page, echelle = +img.dataset.attente;
+      try {
+        const rep = await appelPages({ action: "lire", contenu: c.id, page: n, echelle }, arret.signal);
+        const restantes = +rep.headers.get("X-Restantes");
+        const points = (rep.headers.get("X-Points") || "").split("x").map(Number);
+        const url = URL.createObjectURL(await rep.blob());
+        urls.push(url);
+        if (img.dataset.url) URL.revokeObjectURL(img.dataset.url);
+        img.dataset.url = url;
+        img.src = url;
+        img.dataset.echelle = String(echelle);
+        img.classList.remove("ea-page-vide");
+        if (points[0] && points[1]) img.style.aspectRatio = `${points[0]} / ${points[1]}`;
+        if (n === 1 && points[0]) $$(".ea-page-vide", pages).forEach(x => { x.style.aspectRatio = `${points[0]} / ${points[1]}`; });
+        if (restantes >= 0) majQuota(info.plafond - restantes);
+      } catch (e) {
+        if (arret.signal.aborted) return;
+        if (e.statut === 429) {
+          plafondAtteint = true;
+          quota.textContent = e.message;
+          quota.classList.add("ea-pdf-quota-fin");
+          toast(e.message);
+        }
+        img.dataset.erreur = e.message;
+      } finally {
+        delete img.dataset.attente;
+      }
     };
 
-    // Ouvrages de plusieurs centaines de pages : chaque page garde sa place, n'est dessinée qu'à l'approche
-    // et libérée une fois loin de l'écran, pour ne pas saturer la mémoire d'un téléphone.
-    const p1 = (await doc.getPage(1)).getViewport({ scale: 1 });
     const observateur = "IntersectionObserver" in window ? new IntersectionObserver(entrees => {
-      entrees.forEach(e => {
-        const c = e.target;
-        if (!e.isIntersecting) { vider(c); return; }
-        if (c.dataset.fait) return;
-        c.dataset.fait = "1";
-        dessiner(+c.dataset.page, c).catch(() => { delete c.dataset.fait; });
-      });
-    }, { root: boite, rootMargin: "1200px 0px" }) : null;
-    const toiles = [];
+      entrees.forEach(e => { if (e.isIntersecting) demander(e.target, zoom > 1.75 ? 3 : 2); });
+    }, { root: boite, rootMargin: "400px 0px" }) : null;
+    const images = [];
     for (let n = 1; n <= total; n++) {
-      const canvas = document.createElement("canvas");
-      canvas.className = "ea-page";
-      canvas.dataset.page = n;
-      canvas.width = 1; canvas.height = 1;
-      canvas.style.aspectRatio = `${p1.width} / ${p1.height}`;
-      canvas.setAttribute("aria-label", `Page ${n} sur ${total}`);
-      pages.appendChild(canvas);
-      toiles.push(canvas);
-      if (observateur) observateur.observe(canvas); else if (n <= 30) { canvas.dataset.fait = "1"; await dessiner(n, canvas); }
+      const img = document.createElement("img");
+      img.className = "ea-page ea-page-vide";
+      img.dataset.page = n;
+      img.alt = `Page ${n} sur ${total}`;
+      img.draggable = false;
+      img.style.aspectRatio = "595 / 842";
+      pages.appendChild(img);
+      images.push(img);
+      if (observateur) observateur.observe(img); else if (n <= 3) demander(img, 2);
     }
 
     // Page affichée : la première dont le bas dépasse le haut de la zone de lecture
     const pageCourante = () => {
       const haut = boite.getBoundingClientRect().top + barre.offsetHeight + 8;
-      let bas = 0, haut2 = toiles.length - 1;
-      while (bas < haut2) { const m = (bas + haut2) >> 1; if (toiles[m].getBoundingClientRect().bottom < haut) bas = m + 1; else haut2 = m; }
+      let bas = 0, haut2 = images.length - 1;
+      while (bas < haut2) { const m = (bas + haut2) >> 1; if (images[m].getBoundingClientRect().bottom < haut) bas = m + 1; else haut2 = m; }
       return bas + 1;
     };
     let attenteDefil = 0;
@@ -227,26 +236,22 @@
     const allerA = n => {
       n = Math.min(total, Math.max(1, Math.round(+n || 1)));
       champ.value = n;
-      boite.scrollTop += toiles[n - 1].getBoundingClientRect().top - boite.getBoundingClientRect().top - barre.offsetHeight - 6;
+      boite.scrollTop += images[n - 1].getBoundingClientRect().top - boite.getBoundingClientRect().top - barre.offsetHeight - 6;
     };
     champ.addEventListener("change", () => allerA(champ.value));
     champ.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); allerA(champ.value); } });
 
-    // Zoom : la page lue reste à l'écran ; les pages visibles sont redessinées à la nouvelle taille
-    const redessiner = () => {
-      toiles.forEach(c => { annuler(c); delete c.dataset.fait; });
-      if (observateur) { observateur.disconnect(); toiles.forEach(c => observateur.observe(c)); }
-    };
+    // Zoom : la page lue reste à l'écran ; au-delà de 175 %, les pages visibles sont redemandées en plus grand
     const zoomer = z => {
       z = Math.min(ZOOMS[ZOOMS.length - 1], Math.max(1, z));
       if (z === zoom) return;
       const n = pageCourante();
       zoom = z;
       pages.classList.toggle("ea-pdf-agrandi", zoom > 1);
-      toiles.forEach(c => { c.style.width = zoom * 100 + "%"; });
+      images.forEach(i => { i.style.width = zoom * 100 + "%"; });
       affZoom.textContent = Math.round(zoom * 100) + " %";
       allerA(n);
-      redessiner();
+      if (observateur) { observateur.disconnect(); images.forEach(i => observateur.observe(i)); }
     };
     const pas = sens => { const i = ZOOMS.findIndex(x => x >= zoom - 1e-6); zoomer(ZOOMS[Math.min(ZOOMS.length - 1, Math.max(0, i + sens))]); };
     barre.addEventListener("click", e => {
@@ -260,30 +265,15 @@
       if (a === "ajuster") zoomer(1);
     });
     pages.addEventListener("wheel", e => { if (!e.ctrlKey) return; e.preventDefault(); pas(e.deltaY < 0 ? 1 : -1); }, { passive: false });
-    // Fenêtre redimensionnée ou téléphone tourné : pages redessinées à la nouvelle largeur
-    let attenteTaille = 0;
-    const surTaille = () => {
-      clearTimeout(attenteTaille);
-      attenteTaille = setTimeout(() => {
-        const l = largeurUtile();
-        if (Math.abs(l - largeurDessin) < 40) return;
-        const n = pageCourante();
-        largeurDessin = l;
-        allerA(n);
-        redessiner();
-      }, 250);
-    };
-    window.addEventListener("resize", surTaille);
     nettoyerPdf = () => {
-      window.removeEventListener("resize", surTaille);
+      arret.abort();
       boite.removeEventListener("scroll", suivreDefil);
       if (observateur) observateur.disconnect();
-      toiles.forEach(annuler);
+      urls.forEach(u => URL.revokeObjectURL(u));
       if (visionneuse) visionneuse.classList.remove("ea-v-pdf");
     };
     // Ouverture à une page précise (réponse attendue du grand oral, par exemple)
     if (depart > 1) requestAnimationFrame(() => allerA(depart));
-    return doc;
   }
 
   /* ---------- Protections pendant la lecture ---------- */
@@ -375,7 +365,7 @@
   }
 
   /* ---------- Visionneuse des contenus ---------- */
-  let visionneuse, retourFocus, minuterieMarque, docOuvert;
+  let visionneuse, retourFocus, minuterieMarque;
   function fermerVisionneuse() {
     if (!visionneuse || visionneuse.hidden) return;
     const v = $("video", visionneuse);
@@ -385,7 +375,6 @@
     const cv = $("#eaVCorps"); if (cv) { cv.onclick = null; cv.onchange = null; cv.onsubmit = null; }
     if (arretOutil) { arretOutil(); arretOutil = null; }
     if (nettoyerPdf) { nettoyerPdf(); nettoyerPdf = null; }
-    if (docOuvert) { docOuvert.destroy(); docOuvert = null; }
     $("#eaVCorps").innerHTML = "";
     visionneuse.hidden = true;
     document.body.style.overflow = "";
@@ -450,7 +439,19 @@
         : `<p class="ea-erreur">Ce lien n'est pas valide.</p>`;
       return;
     }
-    const duree = c.type === "video" ? 4 * 3600 : 60;
+    if (c.type === "pdf") {
+      corps.innerHTML = `<div class="ea-pdf" aria-live="polite"><p class="ea-attente">Ouverture du document…</p></div>
+        <p class="ea-mention">Document réservé à ${esc(marque)}. Chaque page porte votre nom. Copie et impression désactivées ; quelques pages peuvent être téléchargées chaque semaine.</p>`;
+      try {
+        await afficherPages(c, $(".ea-pdf", corps), c.page);
+        if (!visionneuse.hidden) ajouterTelechargement(c, $(".ea-pdf", corps));
+      } catch (e) {
+        $(".ea-pdf", corps).innerHTML = `<p class="ea-erreur">${esc(e && e.message ? e.message : "Le document n'a pas pu être ouvert. Réessayez.")}</p>`;
+        if (e && e.statut === 403 && surRefus) surRefus();
+      }
+      return;
+    }
+    const duree = 4 * 3600;
     const { data, error } = await client.storage.from("exclusif").createSignedUrl(c.fichier, duree);
     if (error || !data) { corps.innerHTML = `<p class="ea-erreur">Ce contenu n'est pas accessible. Si votre abonnement est actif, rechargez la page.</p>`; if (surRefus) surRefus(); return; }
 
@@ -473,19 +474,6 @@
       });
       video.play().catch(() => {});
       return;
-    }
-    // Document PDF : lu dans la page, à son nom ; quelques pages téléchargeables chaque semaine, filigranées par le serveur
-    corps.innerHTML = `<div class="ea-pdf" aria-live="polite"><p class="ea-attente">Ouverture du document…</p></div>
-      <p class="ea-mention">Document réservé à ${esc(marque)}. Copie et impression désactivées. Quelques pages peuvent être téléchargées chaque semaine, avec votre nom imprimé sur chaque page.</p>`;
-    try {
-      const r = await fetch(data.signedUrl);
-      if (!r.ok) throw new Error("Lecture impossible");
-      const octets = new Uint8Array(await r.arrayBuffer());
-      if (visionneuse.hidden) return;
-      docOuvert = await afficherPdf(octets, $(".ea-pdf", corps), marque, c.page);
-      if (c.id) ajouterTelechargement(c, $(".ea-pdf", corps));
-    } catch (e) {
-      $(".ea-pdf", corps).innerHTML = `<p class="ea-erreur">Le document n'a pas pu être ouvert. Réessayez.</p>`;
     }
   }
 
@@ -528,33 +516,49 @@
       msg.textContent = "";
       majEtat();
     });
+    // Réservation des pages (décomptées tout de suite), puis chaque page demandée une à une au serveur, qui la renvoie
+    // en image signée ; le navigateur les rassemble en un seul PDF. Une réservation interrompue (réseau coupé) se
+    // reprend sans nouveau décompte pendant 30 minutes, en relançant les mêmes pages.
+    let enCours = null;
     panneau.addEventListener("submit", async e => {
       e.preventDefault();
       const pages = champ.value.trim();
       if (!/^[\d\s,;-]+$/.test(pages)) { msg.textContent = "Indiquez des numéros de page, par exemple 3-7, 12."; champ.focus(); return; }
-      const { data: { session } } = await client.auth.getSession();
-      if (!session) { afficher(); return; }
-      envoi.disabled = true; msg.textContent = "Préparation du fichier à votre nom…";
+      envoi.disabled = true; msg.textContent = "Réservation des pages…";
       try {
-        const rep = await fetch(`${CONF.url}/functions/v1/telechargement`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}`, apikey: CONF.cle },
-          body: JSON.stringify({ contenu: c.id, pages })
-        });
-        if (!rep.ok || !/pdf/.test(rep.headers.get("Content-Type") || "")) {
-          const r = await rep.json().catch(() => ({}));
-          throw new Error(r.error || "Téléchargement impossible. Réessayez.");
+        if (!enCours || enCours.texte !== pages || Date.now() - enCours.debut > 29 * 60000) {
+          const r = await (await appelPages({ action: "reserver", contenu: c.id, pages })).json();
+          if (r.error) throw new Error(r.error);
+          enCours = { texte: pages, debut: Date.now(), reservation: r.reservation, liste: r.pages, faites: new Map() };
         }
-        const blob = await rep.blob();
+        await chargerScript(ROOT + "assets/vendor/pdf-lib-1.17.1/pdf-lib.min.js");
+        for (const n of enCours.liste) {
+          if (enCours.faites.has(n)) continue;
+          msg.textContent = `Préparation de la page ${n} (${enCours.faites.size + 1} sur ${enCours.liste.length})…`;
+          let octets = null;
+          for (let essai = 0; essai < 2 && !octets; essai++) {
+            try { octets = await (await appelPages({ action: "telecharger", reservation: enCours.reservation, page: n })).arrayBuffer(); }
+            catch (err) { if (essai || (err.statut && err.statut < 500)) throw err; }
+          }
+          enCours.faites.set(n, octets);
+        }
+        const doc = await PDFLib.PDFDocument.create();
+        for (const n of enCours.liste) {
+          const une = await PDFLib.PDFDocument.load(enCours.faites.get(n));
+          (await doc.copyPages(une, [0])).forEach(pg => doc.addPage(pg));
+        }
+        doc.setTitle(`${c.titre} (pages ${pages.replace(/\s+/g, "")})`);
         const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
+        a.href = URL.createObjectURL(new Blob([await doc.save()], { type: "application/pdf" }));
         a.download = `${c.titre.replace(/[\\/:*?"<>|]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120)} (p. ${pages.replace(/\s+/g, "").replace(/,/g, ", ")}).pdf`;
         panneau.appendChild(a); a.click(); a.remove();
         setTimeout(() => URL.revokeObjectURL(a.href), 60000);
-        const n = Number(rep.headers.get("X-Pages")) || 0;
-        msg.textContent = `${n} page${n > 1 ? "s" : ""} téléchargée${n > 1 ? "s" : ""}.`;
+        const nb = enCours.liste.length;
+        msg.textContent = `${nb} page${nb > 1 ? "s" : ""} téléchargée${nb > 1 ? "s" : ""}.`;
+        enCours = null;
       } catch (err) {
-        msg.textContent = err && err.message ? err.message : "Téléchargement impossible. Réessayez.";
+        msg.textContent = (err && err.message ? err.message : "Téléchargement impossible.") +
+          (enCours && enCours.faites.size < enCours.liste.length ? " Les pages réservées restent disponibles 30 minutes. Relancez le téléchargement des mêmes pages, elles ne seront pas décomptées une seconde fois." : "");
       }
       await majEtat();
     });
