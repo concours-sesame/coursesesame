@@ -16,7 +16,19 @@
   const byCat = id => OUVRAGES.filter(o => o.categorie === id);
   const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
+  // Mesure des clics utiles dans GoatCounter (sans cookies) : WhatsApp et espace abonnés, avec la page d'origine
+  function compter(nom) {
+    try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: `${nom} ${location.pathname}`, title: nom, event: true }); } catch (e) { /* mesure indisponible */ }
+  }
+  document.addEventListener("click", e => {
+    const a = e.target.closest("a[href]");
+    if (!a) return;
+    if (/wa\.me\//.test(a.href)) compter("clic-whatsapp");
+    else if (/\/espace-abonnes\//.test(a.href) && !/\/espace-abonnes\//.test(location.pathname)) compter("clic-espace-abonnes");
+  });
+
   function openWhatsApp(text, toNumber = true) {
+    compter("clic-whatsapp");
     const url = (toNumber ? WA_URL : "https://wa.me/") + "?text=" + encodeURIComponent(text);
     const w = window.open(url, "_blank", "noopener");
     if (!w) location.href = url;

@@ -72,7 +72,7 @@
     if (p) {
       const [w, h] = PORTRAIT.includes(p) ? [424, 600] : [600, 424];
       const src = `${root}assets/img/pages/${p}`;
-      return `<div class="cover cover-page"><img src="${src}-600.jpg" srcset="${src}-600.jpg 600w, ${src}.jpg 960w" sizes="${big ? "(max-width:960px) 92vw, 460px" : "(max-width:640px) 46vw, 300px"}" width="${w}" height="${h}" alt="Première page de l'ouvrage ${attr(o.titre)}" loading="lazy" decoding="async"></div>`;
+      return `<div class="cover cover-page"><img src="${src}-600.jpg" srcset="${src}-600.jpg ${w}w, ${src}.jpg ${Math.round(960 * w / 600)}w" sizes="${big ? "(max-width:960px) 92vw, 460px" : "(max-width:640px) 46vw, 300px"}" width="${w}" height="${h}" alt="Première page de l'ouvrage ${attr(o.titre)}" loading="lazy" decoding="async"></div>`;
     }
     const c = coverParts(o.titre);
     return `<div class="cover cover-made">

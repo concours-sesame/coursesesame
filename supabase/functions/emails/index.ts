@@ -1,6 +1,7 @@
 // Fonction « emails » : envoi des e-mails aux abonnés par Brevo, depuis infos@coursesesame.com.
 //   { action: "planif" }          appel de la tâche planifiée (en-tête x-planif, vérifié par la base) : bienvenue,
-//                                 rappel de fin d'abonnement, annonce quotidienne des nouveautés
+//                                 rappels de fin d'abonnement (7 et 3 jours avant), relance d'inactivité,
+//                                 annonce quotidienne des nouveautés
 //   { action: "etat" }            administrateur : envoi ouvert ou fermé, clé Brevo enregistrée ou non
 //   { action: "essai" }           administrateur : e-mail d'essai envoyé à sa propre adresse
 //   { action: "desinscrire", jeton } lien des e-mails : l'abonné ne reçoit plus l'annonce des nouveautés
@@ -109,8 +110,9 @@ async function planif(service: SupabaseClient) {
     if (!id) continue;
     const m = l.type === "bienvenue" ? bienvenue(l.prenom, l.donnees)
       : l.type === "rappel_fin" ? rappel(l.prenom, l.donnees)
+      : l.type === "inactif" ? relance(l.prenom, l.donnees)
       : nouveautes(l.prenom, l.donnees.contenus as Contenu[], String(l.donnees.jeton ?? ""));
-    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, l.type === "nouveautes" ? String(l.donnees.jeton ?? "") : undefined);
+    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, ["nouveautes", "inactif"].includes(l.type) ? String(l.donnees.jeton ?? "") : undefined);
     await service.from("emails_envoyes").update({ statut: echec ? "erreur" : "envoye", erreur: echec }).eq("id", id);
     if (echec) erreurs++; else envoyes++;
     if (l.type === "nouveautes") annonce = true;
@@ -188,6 +190,29 @@ ${bouton("Prolonger sur WhatsApp", `https://wa.me/${WA}?text=${message}`, "#25d3
 <p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
   const texte = `Bonjour ${prenom},\n\nVotre abonnement à l'espace abonnés se termine le ${fin} au soir.\n\nPour continuer sans interruption, réglez la formule de votre choix par Mobile Money, puis envoyez-nous la référence du paiement sur WhatsApp au ${WHATSAPP}. La prolongation s'ajoute à la suite de votre abonnement en cours, vous ne perdez donc aucun jour.\n\nL'équipe des Cours Sésame et SAJ`;
   return { sujet, html: gabarit(sujet, corps, piedService), texte };
+}
+
+function relance(prenom: string, d: Record<string, unknown>) {
+  const jours = Number(d.jours ?? 0), fin = dateFr(d.fin), nouveaux = Number(d.nouveaux ?? 0);
+  const titres = (d.titres ?? []) as string[];
+  const sujet = "Votre espace abonnés vous attend";
+  const etapes = [
+    "la révision du jour, une dizaine de questions qui reviennent au bon moment",
+    "un sujet corrigé ou une fiche de révision de la matière que vous redoutez le plus",
+    "les textes officiels, pour relire un article de code en quelques secondes",
+  ];
+  const nouv = nouveaux
+    ? `<p>Depuis votre dernier passage, ${nouveaux === 1 ? "un nouveau contenu a été ajouté" : `${nouveaux} nouveaux contenus ont été ajoutés`}, notamment</p><ul>${titres.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`
+    : "";
+  const corps = `<p>Bonjour ${esc(prenom)},</p>
+<p>Nous ne vous avons pas vu dans votre espace abonnés depuis quelques jours. Votre abonnement court jusqu'au <b>${fin}</b> : il vous reste ${jours} ${jours > 1 ? "jours" : "jour"} pour en profiter.</p>
+${nouv}<p>Pour reprendre en un quart d'heure, commencez par</p><ul>${etapes.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+${bouton("Reprendre ma préparation", `${SITE}/espace-abonnes/`)}
+<p>Une difficulté pour vous connecter ? Écrivez-nous sur WhatsApp, nous vous répondons rapidement.</p>
+<p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
+  const pied = `${piedService} Vous pouvez <a href="${lienDesinscription(String(d.jeton ?? ""))}" style="color:#5b6475">ne plus recevoir nos e-mails d'information</a> (nouveautés et relances), ou changer ce choix dans votre espace, rubrique Mon compte.`;
+  const texte = `Bonjour ${prenom},\n\nNous ne vous avons pas vu dans votre espace abonnés depuis quelques jours. Votre abonnement court jusqu'au ${fin} : il vous reste ${jours} ${jours > 1 ? "jours" : "jour"} pour en profiter.\n\n${nouveaux ? `Depuis votre dernier passage, ${nouveaux} nouveau${nouveaux > 1 ? "x contenus ont été ajoutés" : " contenu a été ajouté"}, notamment\n${titres.map((t) => "- " + t).join("\n")}\n\n` : ""}Pour reprendre en un quart d'heure, commencez par\n${etapes.map((x) => "- " + x).join("\n")}\n\nReprendre ma préparation ${SITE}/espace-abonnes/\n\nUne difficulté pour vous connecter ? Écrivez-nous sur WhatsApp au ${WHATSAPP}.\n\nL'équipe des Cours Sésame et SAJ\n\nNe plus recevoir nos e-mails d'information ${lienDesinscription(String(d.jeton ?? ""))}`;
+  return { sujet, html: gabarit(sujet, corps, pied), texte };
 }
 
 function nouveautes(prenom: string, contenus: Contenu[], jeton: string) {

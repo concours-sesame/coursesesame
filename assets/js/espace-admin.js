@@ -61,6 +61,11 @@
     return h < 24 ? `il y a ${h} h` : `le ${dateFr(t)}`;
   }
   const enLigne = a => !!a.vu_le && Date.now() - new Date(a.vu_le) < EN_LIGNE_MS;
+  // Abonné en cours qui n'est pas passé dans l'espace depuis JOURS_INACTIF jours (à défaut de passage : début de la période)
+  const JOURS_INACTIF = 5;
+  const dernierPassage = a => a.vu_le || a.derniere_connexion || ((periodeCourante(a) || {}).debut ? periodeCourante(a).debut + "T00:00:00Z" : null);
+  const joursSansPassage = a => { const t = dernierPassage(a); return t ? Math.floor((Date.now() - new Date(t)) / 864e5) : 0; };
+  const inactif = a => a.actif && !a.suspendu_depuis && joursSansPassage(a) >= JOURS_INACTIF;
   // Jours restants (aujourd'hui compris) ; pendant une suspension, jours gardés en réserve
   const joursRestants = a => !a.fin ? 0 : Math.max(0, (a.suspendu_depuis ? Math.round((new Date(a.fin + "T00:00:00Z") - new Date(a.suspendu_depuis + "T00:00:00Z")) / 864e5) : joursJusqua(a.fin)) + 1);
   const pluriel = (n, mot) => `${n} ${mot}${n > 1 ? "s" : ""}`;
@@ -85,7 +90,7 @@
   }
   const FILTRES = [["tous", "Tous", () => true], ["attente", "En attente", a => statut(a).cle === "attente"],
     ["actif", "En cours", a => a.actif && !a.suspendu_depuis], ["enligne", "En ligne", a => enLigne(a)],
-    ["bientot", "Fin sous 7 jours", a => statut(a).cle === "bientot"], ["suspendu", "Suspendus", a => !!a.suspendu_depuis],
+    ["bientot", "Fin sous 7 jours", a => statut(a).cle === "bientot"], ["inactif", "Inactifs", a => inactif(a)], ["suspendu", "Suspendus", a => !!a.suspendu_depuis],
     ["expire", "Terminés", a => statut(a).cle === "expire"], ["anciens", "Jamais activés, +30 jours", a => jamaisActive(a)]];
   const estOuvrage = c => /^ouvrage/i.test(c.matiere || "");
   const FILTRES_C = [["tous", "Tous", () => true], ["ouvrages", "Ouvrages complets", estOuvrage],
@@ -117,6 +122,10 @@
     const s = statut(a).cle, debut = `Bonjour ${a.prenom},\n\n`;
     const payer = "réglez votre abonnement par Mobile Money (Orange Money, MTN MoMo, Wave ou Moov Money) et envoyez-nous la référence du paiement.";
     if (s === "attente") return `${debut}Votre compte sur l'espace abonnés des Cours Sésame et SAJ est prêt. Pour l'activer, ${payer}\n\n${URL_ESPACE}`;
+    if (s === "actif" && inactif(a)) {
+      const recents = contenus.filter(c => c.publie && c.publie_le && Date.now() - new Date(c.publie_le) < 7 * 864e5).length;
+      return `${debut}Nous ne vous avons pas vu dans votre espace abonnés des Cours Sésame et SAJ depuis quelques jours. Votre abonnement court jusqu'au ${dateFr(a.fin)} : il vous reste ${pluriel(joursRestants(a), "jour")} pour en profiter.${recents ? `\n\n${recents > 1 ? `${recents} nouveaux contenus ont été ajoutés` : "Un nouveau contenu a été ajouté"} cette semaine.` : ""}\n\nPour reprendre en un quart d'heure : la révision du jour, un sujet corrigé, ou les textes officiels. Si vous avez du mal à vous connecter, répondez-moi ici.\n\n${URL_ESPACE}`;
+    }
     if (s === "bientot") return `${debut}Votre abonnement à l'espace abonnés des Cours Sésame et SAJ prend fin le ${dateFr(a.fin)}. Pour le renouveler, ${payer}`;
     if (s === "expire") return `${debut}Votre abonnement à l'espace abonnés des Cours Sésame et SAJ a pris fin le ${dateFr(a.fin)}. Pour retrouver l'accès, ${payer}`;
     if (s === "suspendu") return `${debut}Votre abonnement à l'espace abonnés des Cours Sésame et SAJ est suspendu depuis le ${dateFr(a.suspendu_depuis)}. Vos ${pluriel(joursRestants(a), "jour")} restants sont conservés : ils reprendront le jour de la réactivation.`;
@@ -793,6 +802,7 @@
   const relanceRecente = (uid, m) => !!m[uid] && joursJusqua(m[uid]) >= -3;
   const groupesRelance = () => [
     ["Fin dans les 7 jours", abonnes.filter(a => statut(a).cle === "bientot")],
+    [`En cours, sans passage depuis ${JOURS_INACTIF} jours ou plus`, abonnes.filter(a => statut(a).cle === "actif" && inactif(a))],
     ["Terminés depuis moins de 30 jours", abonnes.filter(a => statut(a).cle === "expire" && joursJusqua(a.fin) >= -30)],
     ["Inscrits sans abonnement", abonnes.filter(a => statut(a).cle === "attente" && !jamaisActive(a))]
   ];
@@ -1032,7 +1042,7 @@
 
   /* ---------- E-mails aux abonnés (Brevo) ---------- */
   // Trois e-mails automatiques, préparés par la base et envoyés par la fonction « emails » toutes les 15 minutes
-  const TYPES_EMAIL = { bienvenue: "Bienvenue", rappel_fin: "Rappel de fin", nouveautes: "Nouveautés", essai: "Essai" };
+  const TYPES_EMAIL = { bienvenue: "Bienvenue", rappel_fin: "Rappel de fin", inactif: "Relance d'inactivité", nouveautes: "Nouveautés", essai: "Essai" };
   async function verifierBrevo() {
     const { data, error } = await client.functions.invoke("emails", { body: { action: "etat" } });
     etatBrevo = error ? { erreur: await erreurFonction(error) } : data;
@@ -1056,9 +1066,9 @@
           <button class="btn ${emailsReglages.actif ? "btn-ghost" : "btn-navy"} btn-sm" type="button" data-action="emails-basculer">${emailsReglages.actif ? "Fermer l'envoi" : "Ouvrir l'envoi"}</button>
           <button class="btn btn-ghost btn-sm" type="button" data-action="emails-essai">M'envoyer un e-mail d'essai</button>
         </div>
-        <p class="ad-note">Expéditeur infos@coursesesame.com, par Brevo. Trois e-mails partent seuls, au plus tard 15 minutes après l'événement. La bienvenue, au premier abonnement d'un compte. Le rappel, 3 jours avant la fin d'un abonnement qui n'a pas été prolongé. L'annonce des nouveautés, chaque jour à partir de 9 h s'il y a eu des mises en ligne, aux abonnés en cours qui ne l'ont pas refusée. Chaque annonce contient un lien de désinscription ; l'abonné peut aussi changer son choix dans « Mon compte ».</p>
+        <p class="ad-note">Expéditeur infos@coursesesame.com, par Brevo. Quatre e-mails partent seuls, au plus tard 15 minutes après l'événement. La bienvenue, au premier abonnement d'un compte. Le rappel, 7 jours puis 3 jours avant la fin d'un abonnement qui n'a pas été prolongé. La relance d'inactivité, entre 9 h et 20 h, à l'abonné en cours qui n'est pas passé dans l'espace depuis 5 jours (une fois par semaine au plus, jamais un jour d'annonce des nouveautés, ni dans les 3 derniers jours). L'annonce des nouveautés, chaque jour à partir de 9 h s'il y a eu des mises en ligne, aux abonnés en cours qui ne l'ont pas refusée. Chaque annonce contient un lien de désinscription ; l'abonné peut aussi changer son choix dans « Mon compte ».</p>
       </section>
-      <div class="ad-stats"><div><b>${compte("bienvenue")}</b><span>Bienvenues, 30 jours</span></div><div><b>${compte("rappel_fin")}</b><span>Rappels, 30 jours</span></div>
+      <div class="ad-stats"><div><b>${compte("bienvenue")}</b><span>Bienvenues, 30 jours</span></div><div><b>${compte("rappel_fin")}</b><span>Rappels, 30 jours</span></div><div><b>${compte("inactif")}</b><span>Relances, 30 jours</span></div>
         <div><b>${compte("nouveautes")}</b><span>Annonces, 30 jours</span></div><div><b>${erreurs}</b><span>Erreurs, 30 jours</span></div></div>
       <section class="ad-bloc"><h3>Derniers envois <span class="n">${emailsEnvoyes.length}</span></h3>
         ${emailsEnvoyes.length ? `<div class="ad-tableau" role="region" aria-label="Derniers e-mails" tabindex="0"><table>

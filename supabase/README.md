@@ -74,11 +74,25 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
 - `functions/emails` : e-mails aux abonnés par Brevo, depuis infos@coursesesame.com (secret `BREVO_API_KEY`).
   Déployée sans vérification de jeton. La tâche planifiée `emails-abonnes` (pg_cron, toutes les 15 minutes) l'appelle
   avec une clé gardée dans le coffre (Vault, `emails_planif`), vérifiée par `emails_verifier_planif`. La base prépare la
-  file (`emails_file`) : bienvenue au premier abonnement, rappel 3 jours avant la fin d'un abonnement non prolongé,
+  file (`emails_file`) : bienvenue au premier abonnement, rappels 7 et 3 jours avant la fin d'un abonnement non
+  prolongé, relance d'inactivité (abonné en cours sans passage depuis 5 jours, entre 9 h et 20 h, une par semaine au
+  plus, jamais un jour d'annonce ni dans les 3 derniers jours ; dernier passage lu dans `connexions.vu_le`),
   annonce quotidienne (à partir de 9 h) des contenus mis en ligne, aux abonnés en cours qui ne l'ont pas refusée
   (`profils.emails_nouveautes`, lien de désinscription par `profils.jeton_emails`). Rien ne part tant que
   `emails_reglages.actif` est faux (onglet « E-mails » de l'administration). Chaque envoi est noté dans `emails_envoyes`,
   dont la clé unique empêche les doublons.
+
+- Recherche dans les textes : `rechercher_textes` (abonnés en cours et administrateur) cherche dans `passages`, pour
+  les seuls contenus « Texte officiel » et « Jurisprudence », et renvoie un court extrait par page trouvée. Elle ne
+  donne des résultats qu'après « Préparer le texte pour l'agent de révision » dans l'administration.
+- Parrainage : `profils.code_parrain` (6 caractères, créé à l'inscription), `profils.parrain_id` (enregistré par
+  `functions/inscription` à partir du code saisi ou du lien `espace-abonnes/?parrain=CODE`). Au premier abonnement
+  payé du filleul, le déclencheur `abonnements_parrainage` offre 7 jours au parrain (période à 0 FCFA, moyen
+  « Parrainage », à la suite de son abonnement) et l'inscrit dans `parrainages` (une récompense par filleul).
+  Pour annuler une récompense abusive : supprimer cette période depuis l'administration.
+- Sauvegarde automatique : `sauvegardes.prendre()`, chaque dimanche à 3 h (pg_cron `sauvegarde-hebdomadaire`), copie
+  les tables essentielles dans `sauvegardes.instantanes` (schéma privé, 8 emplacements réutilisés à tour de rôle).
+  Protège contre une erreur de manipulation, pas contre la perte du projet (voir la sauvegarde du README principal).
 
 ## Mise en service (faite le 9 octobre 2026)
 
