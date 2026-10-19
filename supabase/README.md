@@ -90,6 +90,11 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   payé du filleul, le déclencheur `abonnements_parrainage` offre 7 jours au parrain (période à 0 FCFA, moyen
   « Parrainage », à la suite de son abonnement) et l'inscrit dans `parrainages` (une récompense par filleul).
   Pour annuler une récompense abusive : supprimer cette période depuis l'administration.
+- Concours blanc : tables `concours_blancs` (créées et publiées par l'administrateur, onglet « Concours blancs ») et
+  `copies_blanc`. `mes_concours_blancs` ne livre le sujet qu'à partir de l'heure du début ; `enregistrer_copie_blanc`
+  accepte la copie jusqu'à 5 minutes après la fin, puis la fige une fois rendue ; `noter_copie_blanc` ne retient la note
+  de l'agent que si la correction porte exactement sur le sujet et la copie rendue. Classement anonyme (rang, nombre de
+  copies notées, moyenne, meilleure note).
 - Sauvegarde automatique : `sauvegardes.prendre()`, chaque dimanche à 3 h (pg_cron `sauvegarde-hebdomadaire`), copie
   les tables essentielles dans `sauvegardes.instantanes` (schéma privé, 8 emplacements réutilisés à tour de rôle).
   Protège contre une erreur de manipulation, pas contre la perte du projet (voir la sauvegarde du README principal).
