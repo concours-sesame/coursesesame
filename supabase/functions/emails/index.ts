@@ -98,14 +98,20 @@ async function planif(service: SupabaseClient) {
   let envoyes = 0, erreurs = 0, annonce = false;
   for (const l of (file ?? []) as Ligne[]) {
     if (envoyes + erreurs >= ENVOIS_MAX) break;
-    // Réservation de l'envoi : une seule exécution peut l'obtenir (clé unique abonné, type, clé)
-    const { data: reserve } = await service.from("emails_envoyes").upsert({ user_id: l.user_id, type: l.type, cle: l.cle }, { onConflict: "user_id,type,cle", ignoreDuplicates: true }).select("id");
-    if (!reserve?.length) continue;
+    // Réservation de l'envoi : une seule exécution peut l'obtenir (clé unique abonné, type, clé). Un envoi déjà
+    // tenté en vain est repris, trois fois au plus (emails_reprendre)
+    const { data: nouveau } = await service.from("emails_envoyes").upsert({ user_id: l.user_id, type: l.type, cle: l.cle }, { onConflict: "user_id,type,cle", ignoreDuplicates: true }).select("id");
+    let id = nouveau?.[0]?.id as number | undefined;
+    if (!id) {
+      const { data: repris } = await service.rpc("emails_reprendre", { p_user: l.user_id, p_type: l.type, p_cle: l.cle });
+      id = repris ?? undefined;
+    }
+    if (!id) continue;
     const m = l.type === "bienvenue" ? bienvenue(l.prenom, l.donnees)
       : l.type === "rappel_fin" ? rappel(l.prenom, l.donnees)
       : nouveautes(l.prenom, l.donnees.contenus as Contenu[], String(l.donnees.jeton ?? ""));
     const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, l.type === "nouveautes" ? String(l.donnees.jeton ?? "") : undefined);
-    await service.from("emails_envoyes").update({ statut: echec ? "erreur" : "envoye", erreur: echec }).eq("id", reserve[0].id);
+    await service.from("emails_envoyes").update({ statut: echec ? "erreur" : "envoye", erreur: echec }).eq("id", id);
     if (echec) erreurs++; else envoyes++;
     if (l.type === "nouveautes") annonce = true;
   }

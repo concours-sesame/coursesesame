@@ -40,6 +40,7 @@ create table public.emails_envoyes (
   cle text not null,
   statut text not null default 'en_cours' check (statut in ('en_cours', 'envoye', 'erreur')),
   erreur text check (char_length(erreur) <= 500),
+  tentatives smallint not null default 1,
   cree_le timestamptz not null default now(),
   unique (user_id, type, cle)
 );
@@ -70,7 +71,7 @@ begin
     join public.profils p on p.id = a.user_id
     where a.supprime_le is null and a.cree_le > now() - interval '2 days'
       and not exists (select 1 from public.abonnements b where b.user_id = a.user_id and b.supprime_le is null and b.cree_le < a.cree_le)
-      and not exists (select 1 from public.emails_envoyes e where e.user_id = a.user_id and e.type = 'bienvenue');
+      and not exists (select 1 from public.emails_envoyes e where e.user_id = a.user_id and e.type = 'bienvenue' and (e.statut <> 'erreur' or e.tentatives >= 3));
   -- Rappel : abonnement qui finit dans 3 jours, sans prolongation déjà payée
   return query
     select 'rappel_fin'::text, a.id::text, a.user_id, u.email::text, p.prenom, jsonb_build_object('fin', a.fin)
@@ -79,7 +80,7 @@ begin
     join public.profils p on p.id = a.user_id
     where a.supprime_le is null and a.fin = v_jour + 3
       and not exists (select 1 from public.abonnements b where b.user_id = a.user_id and b.supprime_le is null and b.fin > a.fin)
-      and not exists (select 1 from public.emails_envoyes e where e.user_id = a.user_id and e.type = 'rappel_fin' and e.cle = a.id::text);
+      and not exists (select 1 from public.emails_envoyes e where e.user_id = a.user_id and e.type = 'rappel_fin' and e.cle = a.id::text and (e.statut <> 'erreur' or e.tentatives >= 3));
   -- Nouveautés : une fois par jour à partir de 9 h, contenus mis en ligne depuis la dernière annonce
   if (now() at time zone 'Africa/Abidjan')::time >= time '09:00' and (r.derniere_annonce at time zone 'Africa/Abidjan')::date < v_jour then
     select jsonb_agg(jsonb_build_object('titre', c.titre, 'matiere', c.matiere, 'type', c.type) order by c.publie_le)
@@ -94,7 +95,7 @@ begin
         where p.emails_nouveautes
           and exists (select 1 from public.abonnements a where a.user_id = p.id and a.supprime_le is null and v_jour between a.debut and a.fin)
           and not exists (select 1 from public.suspensions s where s.user_id = p.id and s.fin is null)
-          and not exists (select 1 from public.emails_envoyes e where e.user_id = p.id and e.type = 'nouveautes' and e.cle = v_jour::text);
+          and not exists (select 1 from public.emails_envoyes e where e.user_id = p.id and e.type = 'nouveautes' and e.cle = v_jour::text and (e.statut <> 'erreur' or e.tentatives >= 3));
     end if;
   end if;
 end $$;
@@ -138,3 +139,15 @@ select cron.schedule('emails-abonnes', '*/15 * * * *', $$
     body := '{"action":"planif"}'::jsonb,
     timeout_milliseconds := 60000);
 $$);
+
+-- ---------------------------------------------------------------------------
+-- 5. Nouvelle tentative des envois en échec, trois au plus (ajouté le 19 octobre, après un refus de Brevo)
+-- ---------------------------------------------------------------------------
+create function public.emails_reprendre(p_user uuid, p_type text, p_cle text) returns bigint
+language sql security definer set search_path = '' as $$
+  update public.emails_envoyes set statut = 'en_cours', tentatives = tentatives + 1, erreur = null
+  where user_id = p_user and type = p_type and cle = p_cle and statut = 'erreur' and tentatives < 3
+  returning id;
+$$;
+revoke all on function public.emails_reprendre(uuid, text, text) from public, anon, authenticated;
+grant execute on function public.emails_reprendre(uuid, text, text) to service_role;
