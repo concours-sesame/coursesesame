@@ -3,6 +3,8 @@
 // gardée dans le coffre et vérifiée par textes_verifier_import) et ne télécharge que depuis les sites listés dans
 // HOTES. Le contenu est créé en brouillon : il n'est visible des abonnés qu'une fois publié.
 // Requête : POST { url, titre, description, matiere, concours: [...], nom } ; nom = nom du fichier, sans extension.
+// Variante pour un fichier transmis par l'éditeur : POST { action: "televersement", nom } renvoie une adresse de dépôt
+// signée, valable deux heures, pour le seul fichier textes/<nom>.pdf (sans remplacement d'un fichier existant).
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 const HOTES = [/(^|\.)ohada\.org$/, /(^|\.)ccja-ohada\.org$/, /(^|\.)gouv\.ci$/, /(^|\.)conseil-constitutionnel\.ci$/,
@@ -41,6 +43,12 @@ Deno.serve(async (req) => {
     d = await req.json();
   } catch {
     return json({ error: "Requête invalide" }, 400);
+  }
+  if (d.action === "televersement") {
+    const nomDepot = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
+    if (!nomDepot) return json({ error: "Nom manquant" }, 400);
+    const { data, error } = await service.storage.from("exclusif").createSignedUploadUrl(`textes/${nomDepot}.pdf`);
+    return error ? json({ error: `Stockage ${error.message}` }, 409) : json({ chemin: data.path, url: data.signedUrl });
   }
   const url = String(d.url ?? ""), titre = String(d.titre ?? "").trim().slice(0, 160), matiere = String(d.matiere ?? "").trim().slice(0, 80);
   const nom = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
