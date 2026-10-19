@@ -24,7 +24,7 @@
   const MATIERES = ["Droit civil", "Droit pénal", "Procédure pénale", "Droit administratif", "Droit commercial OHADA", "Organisation judiciaire", "Droits de l'enfant", "SOG", "Méthodologie", "Culture générale",
     // Textes publics : lecture sans plafond, texte complet téléchargeable, hors du calcul des 5 % (matière commençant ainsi)
     "Texte officiel · Institutions", "Texte officiel · Droit pénal", "Texte officiel · Droit civil", "Texte officiel · OHADA", "Texte officiel · Droit administratif",
-    "Jurisprudence · CCJA", "Jurisprudence · Côte d'Ivoire"];
+    "Jurisprudence · CCJA", "Jurisprudence · Droit administratif", "Jurisprudence · Droit civil", "Jurisprudence · Droit pénal"];
   const EXTENSIONS = { "video/mp4": "mp4", "video/webm": "webm", "application/pdf": "pdf" };
   const TAILLE_MAX = 50 * 1024 * 1024;
 
