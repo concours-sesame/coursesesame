@@ -61,12 +61,16 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   jamais dans ce dépôt public) et appelle l'API d'Anthropic avec le secret `ANTHROPIC_API_KEY`. Seuls le
   sujet, la copie et les passages sont transmis, jamais le nom, l'e-mail ou le téléphone de l'abonné.
   Chaque demande est enregistrée dans `agent_echanges` (historique de l'abonné, coûts pour l'administrateur).
-- `functions/telechargement` : téléchargement de pages d'un PDF par un abonné, avec son nom, son téléphone, son
-  e-mail, la date et l'heure imprimés sur chaque page. Déployée sans vérification de jeton : la fonction vérifie la
-  session, l'appareil et le droit de lire le fichier (`fichier_autorise`, avec le jeton de l'abonné), puis réserve
-  les pages par `reserver_telechargement` (sous verrou) : sur 7 jours glissants, au plus 5 % du total des pages des
-  PDF publiés (pages comptées dans `passages`) et 15 pages d'un même document. Le fichier d'origine ne quitte pas
-  le serveur. Chaque téléchargement est enregistré dans `telechargements`.
+- `functions/pages` : seule porte d'accès des abonnés aux PDF (les règles de `storage.objects` ne leur ouvrent plus
+  que les vidéos, par `fichier_direct_autorise`). Déployée sans vérification de jeton : la fonction vérifie la session,
+  l'appareil et le droit de lire le document (`fichier_autorise`, avec le jeton de l'abonné). Elle découpe le document
+  en morceaux de 20 pages (`exclusif/pages/<contenu>/<empreinte du fichier>/<n>.pdf`, préparés à la première lecture),
+  imprime la signature de l'abonné sur la page puis la transforme en image (PDFium en WebAssembly, chargé depuis
+  jsDelivr et contrôlé par son empreinte SHA-256) : le filigrane fait partie des pixels. Lecture à l'écran : 300 pages
+  différentes par jour (`noter_page_lue`, table `pages_lues`). Téléchargement : réservation par `reserver_telechargement`
+  (5 % du total des pages sur 7 jours glissants, 15 pages par document, table `telechargements`), puis chaque page
+  réservée livrée en PDF image pendant 30 minutes. Nombre de pages gardé dans `documents_pages`.
+- `functions/telechargement` : fermée le 19 octobre 2026 (réponse 410), remplacée par `pages`.
 
 ## Mise en service (faite le 9 octobre 2026)
 

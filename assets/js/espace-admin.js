@@ -27,6 +27,7 @@
 
   let moi = null, abonnes = [], paiements = [], contenus = [];
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [];
+  let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
   let telechargement = false; // archive .zip ou texte pour l'agent en préparation : la page ne se redessine pas
@@ -157,7 +158,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -172,7 +173,10 @@
       client.from("agent_reglages").select("*").maybeSingle(),
       client.from("agent_consignes").select("cle, texte, maj_le"),
       client.from("agent_echanges").select("id, user_id, exercice, mode, matiere, sujet, note, cout_fcfa, statut, jetons_entree, jetons_sortie, jetons_cache, cree_le")
-        .gte("cree_le", new Date(Date.now() - 62 * 864e5).toISOString()).order("cree_le", { ascending: false }).limit(1000)
+        .gte("cree_le", new Date(Date.now() - 62 * 864e5).toISOString()).order("cree_le", { ascending: false }).limit(1000),
+      client.rpc("admin_telechargements", { p_jours: 60 }),
+      client.rpc("admin_pages_lues", { p_jours: 30 }),
+      client.rpc("telechargement_limites")
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -181,6 +185,7 @@
     commandes = cmd.data || []; notes = new Map((nt.data || []).map(x => [x.user_id, x.note]));
     lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
     lireBilan(bil);
+    telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
     agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
     // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
     const appareils = new Map((ap.data || []).map(x => [x.user_id, Number(x.appareils_7j)]));
@@ -527,7 +532,7 @@
         <div><b>${fcfa(encaisseCeMois())}</b><span>Encaissé ce mois-ci</span></div>
       </div>
       <div class="ea-onglets ad-onglets" role="tablist" aria-label="Administration">
-        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
+        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["telechargements", "Téléchargements"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
       </div>
       <div id="adPanneau">${panneau()}</div>`;
     majIndicateur();
@@ -535,7 +540,7 @@
   // Redessine la page (onglets compris) sans bouger la position de lecture
   const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
   const PANNEAUX = { direct: () => panneauDirect(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
-    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), journal: () => panneauJournal() };
+    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), telechargements: () => panneauTelechargements(), journal: () => panneauJournal() };
   const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
 
   /* ---------- En direct : abonnements en cours, mis à jour automatiquement ---------- */
@@ -978,6 +983,46 @@
   const MODELES = [["claude-sonnet-5-5", "Sonnet 5.5 (recommandé)"], ["claude-opus-5-5", "Opus 5.5 (plus fin, plus cher)"], ["claude-haiku-5-5", "Haiku 5.5 (économique)"]];
   const EXERCICES_AGENT = { cas_pratique: "Cas pratique", dissertation: "Dissertation", commentaire: "Commentaire d'article" };
   const auteurDemande = uid => uid === (moi && moi.id) ? "Vous" : nomAbonne(uid);
+  /* ---------- Téléchargements et lectures des abonnés ---------- */
+  // Pages réservées au téléchargement (60 derniers jours) et pages lues à l'écran (30 derniers jours), par abonné
+  const plages = l => { const r = []; for (const n of [...l].sort((a, b) => a - b)) { const d = r[r.length - 1]; if (d && n === d[1] + 1) d[1] = n; else r.push([n, n]); } return r.map(([a, b]) => a === b ? a : `${a}-${b}`).join(", "); };
+  const nomDe = uid => { const a = abonnes.find(x => x.user_id === uid); return a ? `${a.prenom} ${a.nom}` : "Compte supprimé"; };
+  function tablesTelechargements() {
+    const q = sansAccents(rechercheT).trim();
+    const il7j = Date.now() - 7 * 864e5, jour = auj();
+    const parAbonne = new Map();
+    const ligne = uid => { if (!parAbonne.has(uid)) parAbonne.set(uid, { uid, tele7: 0, tele60: 0, dernier: null, luesJour: 0, lues30: 0 }); return parAbonne.get(uid); };
+    telechargements.forEach(t => { const x = ligne(t.user_id); x.tele60 += t.nb; if (new Date(t.cree_le) >= il7j) x.tele7 += t.nb; if (!x.dernier || t.cree_le > x.dernier) x.dernier = t.cree_le; });
+    pagesLues.forEach(l => { const x = ligne(l.user_id); x.lues30 += Number(l.pages); if (l.jour === jour) x.luesJour += Number(l.pages); });
+    const garde = uid => !q || sansAccents(`${nomDe(uid)} ${(abonnes.find(x => x.user_id === uid) || {}).telephone || ""}`).includes(q);
+    const resume = [...parAbonne.values()].filter(x => garde(x.uid)).sort((a, b) => b.tele7 - a.tele7 || b.luesJour - a.luesJour || b.lues30 - a.lues30);
+    const liste = telechargements.filter(t => garde(t.user_id) || sansAccents(t.titre).includes(q));
+    const quota = limitesTele ? limitesTele.quota : 0;
+    return `<section class="ad-bloc"><h3>Par abonné <span class="n">${resume.length}</span></h3>
+        ${resume.length ? `<div class="ad-tableau" role="region" aria-label="Téléchargements et lectures par abonné" tabindex="0"><table>
+          <thead><tr><th>Abonné</th><th>Téléchargées, 7 jours</th><th>Lues aujourd'hui</th><th>Lues, 30 jours</th><th>Dernier téléchargement</th></tr></thead>
+          <tbody>${resume.map(x => `<tr><td>${esc(nomDe(x.uid))}</td><td>${x.tele7}${quota ? ` / ${quota}` : ""}${quota && x.tele7 >= quota * 0.8 ? ` <span class="ad-badge ad-partage">Limite proche</span>` : ""}</td><td>${x.luesJour} / 300${x.luesJour >= 240 ? ` <span class="ad-badge ad-partage">Limite proche</span>` : ""}</td><td>${x.lues30}</td><td>${x.dernier ? dateHeure(x.dernier) : ""}</td></tr>`).join("")}</tbody>
+        </table></div>` : `<p class="ea-vide">${q ? "Aucun abonné ne correspond." : "Aucune page lue ni téléchargée pour le moment."}</p>`}
+      </section>
+      <section class="ad-bloc"><h3>Téléchargements des 60 derniers jours <span class="n">${liste.length}</span></h3>
+        ${liste.length ? `<div class="ad-tableau" role="region" aria-label="Téléchargements" tabindex="0"><table>
+          <thead><tr><th>Date</th><th>Abonné</th><th>Document</th><th>Pages</th><th>Nombre</th><th>Réf.</th></tr></thead>
+          <tbody>${liste.map(t => `<tr><td>${dateHeure(t.cree_le)}</td><td>${esc(`${t.prenom || ""} ${t.nom || ""}`.trim() || nomDe(t.user_id))}${t.telephone ? `<small> · ${esc(t.telephone)}</small>` : ""}</td><td>${esc(t.titre)}</td><td>${esc(plages(t.pages))}</td><td>${t.nb}</td><td>${t.id}</td></tr>`).join("")}</tbody>
+        </table></div>` : `<p class="ea-vide">${q ? "Aucun téléchargement ne correspond." : "Aucun téléchargement pour le moment."}</p>`}
+      </section>`;
+  }
+  function panneauTelechargements() {
+    const il7j = Date.now() - 7 * 864e5, jour = auj();
+    const tele7 = telechargements.filter(t => new Date(t.cree_le) >= il7j);
+    return `<div class="ad-stats"><div><b>${tele7.reduce((s, t) => s + t.nb, 0)}</b><span>Pages téléchargées en 7 jours</span></div>
+        <div><b>${new Set(tele7.map(t => t.user_id)).size}</b><span>Abonnés ayant téléchargé en 7 jours</span></div>
+        <div><b>${pagesLues.filter(l => l.jour === jour).reduce((s, l) => s + Number(l.pages), 0)}</b><span>Pages lues aujourd'hui</span></div>
+        <div><b>${limitesTele ? limitesTele.quota : "?"}</b><span>Limite par abonné et par semaine (15 par document)</span></div></div>
+      <p class="ad-note">Chaque page lue ou téléchargée porte, fondus dans l'image, le nom, le téléphone et l'e-mail de l'abonné ; les pages téléchargées portent aussi la référence ci-dessous. Une page trouvée en dehors de l'espace permet ainsi de retrouver le compte et le téléchargement d'origine.</p>
+      <div class="ad-outils ad-outils-c"><label class="search"><span class="sr-only">Rechercher</span>${icone("i-search")}<input type="search" id="adRechercheT" placeholder="Rechercher un abonné, un numéro ou un document" value="${esc(rechercheT)}" autocomplete="off"></label></div>
+      <div id="adTablesT">${tablesTelechargements()}</div>`;
+  }
+
   function panneauAgent() {
     if (!agentReglages) return `<p class="ea-vide">L'agent de révision n'est pas encore installé dans la base.</p>`;
     const r = agentReglages, debutMois = auj().slice(0, 8) + "01";
@@ -1261,6 +1306,7 @@
   racine.addEventListener("input", e => {
     if (e.target.form && e.target.form.id === "adCommande" && e.target.name !== "montant") { majTotalCommande(e.target.form, e.target); return; }
     if (e.target.form && e.target.form.id === "adCommande" && e.target.name === "montant") { e.target.dataset.manuel = "1"; return; }
+    if (e.target.id === "adRechercheT") { rechercheT = e.target.value; $("#adTablesT").innerHTML = tablesTelechargements(); return; }
     if (e.target.id === "adRechercheC") { rechercheC = e.target.value; $("#adListeC").innerHTML = listeContenus(); return; }
     if (e.target.id === "adRecherche") {
       recherche = e.target.value;
