@@ -285,6 +285,7 @@
   const avisProtege = () => { if (Date.now() - dernierAvis > 4000) { dernierAvis = Date.now(); toast("Contenu protégé : copie, impression et capture ne sont pas autorisées."); } };
   const bloquer = e => {
     if (!lectureOuverte() || !visionneuse.contains(e.target)) return;
+    if (e.target.closest && e.target.closest(".ea-blanc-copie") && e.type === "selectstart") return;
     e.preventDefault();
     if (e.type === "contextmenu" || e.type === "copy" || e.type === "cut") avisProtege();
   };
@@ -960,6 +961,16 @@
     sortie.hidden = false;
     sortie.innerHTML = `<p class="ea-attente">Recherche dans les ouvrages puis rédaction. Comptez une à deux minutes et gardez la page ouverte.</p><p class="ea-agent-progres"></p>`;
     const progres = $(".ea-agent-progres", sortie);
+    const { fin, erreur } = await appelAgent(d, session, n => { progres.textContent = `Rédaction en cours, ${n.toLocaleString("fr-FR")} mots…`; });
+    agentEnCours = false;
+    if (erreur) { sortie.hidden = true; bouton.disabled = false; msg.textContent = erreur; return; }
+    const e = noterEchange(d, fin);
+    agentOuvert = true;
+    $("#eaAgent").outerHTML = agentHTML();
+    ouvrirEchange(e);
+  }
+  // Appel de la fonction agent-revision, réponse lue au fil de la rédaction ; renvoie { fin } ou { erreur }
+  async function appelAgent(d, session, progres) {
     let texte = "", fin = null, erreur = null;
     try {
       const rep = await fetch(`${CONF.url}/functions/v1/agent-revision`, {
@@ -981,21 +992,20 @@
           if (!l) continue;
           let o;
           try { o = JSON.parse(l); } catch (e) { continue; }
-          if (o.t) { texte += o.t; const n = texte.split(/\s+/).length; progres.textContent = `Rédaction en cours, ${n.toLocaleString("fr-FR")} mots…`; }
+          if (o.t) { texte += o.t; progres(texte.split(/\s+/).length); }
           if (o.fin) fin = o.fin;
           if (o.erreur) erreur = o.erreur;
         }
       }
       if (!fin && !erreur) erreur = "La rédaction a été interrompue. Réessayez dans quelques minutes.";
     } catch (e) { erreur = messageErreur(e); }
-    agentEnCours = false;
-    if (erreur) { sortie.hidden = true; bouton.disabled = false; msg.textContent = erreur; return; }
+    return { fin, erreur };
+  }
+  function noterEchange(d, fin) {
     const e = { id: fin.id, exercice: d.exercice, mode: d.mode, matiere: d.matiere, sujet: d.sujet, reponse: fin.reponse, note: fin.note, sources: fin.sources, tronque: fin.tronque, cree_le: new Date().toISOString() };
     echanges.unshift(e);
     agent.utilises_jour++; agent.utilises_mois++;
-    agentOuvert = true;
-    $("#eaAgent").outerHTML = agentHTML();
-    ouvrirEchange(e);
+    return e;
   }
 
   /* ---------- Outils de révision : révision du jour, grand oral, sujet de la semaine, tableau de bord ---------- */
@@ -1023,6 +1033,7 @@
     progres = new Map((p.error ? [] : p.data).map(x => [cleQ(x.contenu_id, x.question), x]));
     stats = s.error ? null : s.data;
     oralQuestions = g.error ? [] : g.data;
+    await chargerBlancs().catch(() => { blancs = []; });
   }
   const aRevoir = x => { const p = progres.get(cleQ(x.c.id, x.i)); return !!p && p.prochaine <= auj(); };
   const nouvelle = x => !progres.has(cleQ(x.c.id, x.i));
@@ -1311,7 +1322,108 @@
     };
   }
 
+  /* ---------- Concours blanc ---------- */
+  // Épreuve à date et heure fixes (table concours_blancs, créée depuis l'administration). Le sujet n'arrive qu'au début ;
+  // la copie s'enregistre toutes les 30 secondes et part d'elle-même à la fin. Après la fin, la copie rendue est
+  // corrigée et notée par l'agent de révision, telle quelle ; la base retient la note et calcule le rang (anonyme).
+  let blancs = [];
+  const heureFr = d => new Date(d).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  const jourHeure = d => `${dateFr(d)} à ${heureFr(d)}`;
+  const dureeTxt = m => m % 60 ? `${Math.floor(m / 60) ? Math.floor(m / 60) + " h " : ""}${m % 60} min` : `${m / 60} h`;
+  const restant = ms => { const t = Math.max(0, Math.floor(ms / 1000)), h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), x = t % 60; return `${h ? h + " h " : ""}${String(m).padStart(h ? 2 : 1, "0")} min ${String(x).padStart(2, "0")} s`; };
+  async function chargerBlancs() { const r = await client.rpc("mes_concours_blancs"); blancs = r.error ? [] : r.data || []; }
+  // Épreuve mise en avant : en cours, sinon la prochaine, sinon la plus récente
+  function blancEnVue() {
+    const t = Date.now();
+    return blancs.find(b => new Date(b.debut) <= t && t <= new Date(b.fin)) ||
+      [...blancs].filter(b => new Date(b.debut) > t).sort((x, y) => new Date(x.debut) - new Date(y.debut))[0] || blancs[0] || null;
+  }
+  function carteBlanc() {
+    const b = blancEnVue(); if (!b) return "";
+    const t = Date.now(), debut = new Date(b.debut), fin = new Date(b.fin);
+    const texte = t < debut ? `${esc(b.titre)}, le ${jourHeure(b.debut)}.` : t <= fin ? `${esc(b.titre)} : l'épreuve est en cours, jusqu'à ${heureFr(b.fin)}.` : b.note != null ? `${esc(b.titre)} : ${noteFr(b.note)}/20, rang ${b.rang} sur ${b.notes}.` : `${esc(b.titre)} : épreuve terminée, faites corriger votre copie.`;
+    return `<button class="ea-outil-carte" type="button" data-outil="blanc"><b>Concours blanc</b><span>${texte}</span><small>${EXERCICES[b.exercice] || ""}, ${dureeTxt(b.duree_minutes)}, en conditions réelles</small></button>`;
+  }
+  function outilBlanc(corps, marque, id) {
+    const b = id ? blancs.find(x => x.id === id) : blancEnVue();
+    if (!b) { corps.innerHTML = `<p class="ea-vide">Aucun concours blanc pour le moment.</p>`; return; }
+    let minuterie = null, sauvegarde = null, envoye = false;
+    arretOutil = () => { clearInterval(minuterie); clearInterval(sauvegarde); };
+    const autres = blancs.filter(x => x !== b);
+    const tete = `<p class="ea-rev-tete"><span>${EXERCICES[b.exercice] || ""}${b.matiere ? ", " + esc(b.matiere) : ""}</span><span>${jourHeure(b.debut)}, ${dureeTxt(b.duree_minutes)}</span></p><h4>${esc(b.titre)}</h4>`;
+    const pied = autres.length ? `<h4>Autres épreuves</h4><ul class="ea-oral-liste">${autres.map(x => `<li><button type="button" data-blanc="${x.id}">${esc(x.titre)}, ${dateFr(x.debut)}</button></li>`).join("")}</ul>` : "";
+    const t = Date.now(), debut = new Date(b.debut), fin = new Date(b.fin), limite = fin.getTime() + 5 * 60000;
+    const sujetHTML = b.sujet ? `<div class="ea-blanc-sujet">${mettreEnForme(b.sujet)}</div>` : "";
+    if (t < debut) {
+      corps.innerHTML = `<div class="ea-outil">${tete}<p>Le sujet s'affichera ici le <b>${jourHeure(b.debut)}</b>. Vous aurez ${dureeTxt(b.duree_minutes)}, comme au concours : préparez de quoi écrire au brouillon, puis saisissez votre copie dans l'espace prévu. Elle s'enregistre seule et part automatiquement à la fin.</p>
+        <p class="ea-blanc-chrono">Début dans <b id="eaBlancChrono">${restant(debut - t)}</b></p>${pied}</div>`;
+      minuterie = setInterval(() => { const r = new Date(b.debut) - Date.now(); if (r <= 0) { arretOutil(); chargerBlancs().then(() => outilBlanc(corps, marque, b.id)); return; } const c = $("#eaBlancChrono"); if (c) c.textContent = restant(r); }, 1000);
+      corps.onclick = ouvrirAutre;
+    } else if (t <= limite && !b.rendue_le) {
+      corps.innerHTML = `<div class="ea-outil">${tete}${sujetHTML}
+        <p class="ea-blanc-chrono">Temps restant : <b id="eaBlancChrono">${restant(fin - t)}</b></p>
+        <label class="ea-blanc-label" for="eaBlancCopie">Votre copie</label>
+        <textarea class="ea-blanc-copie" id="eaBlancCopie" rows="18" maxlength="40000" spellcheck="true">${esc(b.copie || "")}</textarea>
+        <p class="ea-blanc-etat" id="eaBlancEtat" aria-live="polite">${b.copie ? "Copie reprise là où vous l'aviez laissée." : "La copie s'enregistre toutes les 30 secondes."}</p>
+        <div class="ea-outil-boutons"><button class="btn btn-gold" type="button" data-bl="rendre">Rendre ma copie</button></div></div>`;
+      const zone = $("#eaBlancCopie"), etatTxt = $("#eaBlancEtat");
+      let dernier = zone.value;
+      const enregistrer = async rendre => {
+        if (envoye) return;
+        if (!rendre && zone.value === dernier) return;
+        const texte = zone.value;
+        const { error } = await client.rpc("enregistrer_copie_blanc", { p_concours: b.id, p_copie: texte, p_rendre: !!rendre });
+        if (error) { etatTxt.textContent = messageErreur(error); return; }
+        dernier = texte; b.copie = texte;
+        etatTxt.textContent = `Enregistrée à ${heureFr(new Date())}.`;
+        if (rendre) { envoye = true; clearInterval(minuterie); clearInterval(sauvegarde); b.rendue_le = new Date().toISOString(); toast("Copie rendue."); outilBlanc(corps, marque, b.id); }
+      };
+      sauvegarde = setInterval(() => enregistrer(false), 30000);
+      // Fermeture de la visionneuse pendant l'épreuve : dernier enregistrement
+      arretOutil = () => { clearInterval(minuterie); clearInterval(sauvegarde); enregistrer(false); };
+      minuterie = setInterval(() => { const r = new Date(b.fin) - Date.now(); const c = $("#eaBlancChrono"); if (c) c.textContent = r > 0 ? restant(r) : "temps écoulé"; if (r <= 0) enregistrer(true); }, 1000);
+      corps.onclick = e => { if (e.target.closest("[data-bl=rendre]") && confirm("Rendre votre copie maintenant ? Vous ne pourrez plus la modifier.")) enregistrer(true); else ouvrirAutre(e); };
+      return;
+    } else {
+      const ouvert = agent && agent.acces && (agent.actif || etat.admin);
+      const copie = (b.copie || "").trim();
+      let resultat;
+      if (!copie) resultat = `<p class="ea-vide">Vous n'avez pas rendu de copie pour cette épreuve.</p>`;
+      else if (t <= fin) resultat = `<p>Copie rendue. La correction s'ouvre à la fin de l'épreuve, à ${heureFr(b.fin)}.</p>`;
+      else if (b.note != null) resultat = `<div class="ea-blanc-note"><b>${noteFr(b.note)}/20</b><span>Rang ${b.rang} sur ${b.notes} ${b.notes > 1 ? "copies notées" : "copie notée"}. Moyenne ${noteFr(b.moyenne)}, meilleure note ${noteFr(b.meilleure)}.</span></div>${echanges.some(x => x.sujet && x.sujet.trim() === (b.sujet || "").trim() && x.note != null) ? `<div class="ea-outil-boutons"><button class="btn btn-ghost" type="button" data-bl="voir">Relire la correction</button></div>` : ""}`;
+      else if (copie.length < 200) resultat = `<p>Votre copie est trop courte pour être corrigée par l'agent (200 caractères au moins).</p>`;
+      else if (!ouvert) resultat = `<p>La correction notée par l'agent de révision est réservée aux formules d'un mois et plus.</p>`;
+      else resultat = `<p>L'épreuve est terminée. Faites corriger et noter votre copie, telle que vous l'avez rendue, par l'agent de révision. Votre note entre ensuite dans le classement.</p><div class="ea-outil-boutons"><button class="btn btn-gold" type="button" data-bl="corriger">Faire corriger ma copie</button></div><p class="ea-agent-progres" id="eaBlancProgres"></p>`;
+      corps.innerHTML = `<div class="ea-outil">${tete}${sujetHTML}${copie ? `<h4>Votre copie</h4><div class="ea-blanc-rendue">${mettreEnForme(copie)}</div>` : ""}${resultat}${pied}</div>`;
+      corps.onclick = async e => {
+        const a = e.target.closest("[data-bl]");
+        if (a && a.dataset.bl === "voir") { const x = echanges.find(y => y.sujet && y.sujet.trim() === (b.sujet || "").trim() && y.note != null); if (x) ouvrirEchange(x); return; }
+        if (a && a.dataset.bl === "corriger") {
+          const { data: { session } } = await client.auth.getSession();
+          if (!session) { afficher(); return; }
+          a.disabled = true; agentEnCours = true;
+          const prog = $("#eaBlancProgres");
+          prog.textContent = "Correction en cours. Comptez une à deux minutes et gardez la page ouverte.";
+          const d = { exercice: b.exercice, mode: "correction", matiere: b.matiere || "", sujet: b.sujet, copie };
+          const { fin: f, erreur } = await appelAgent(d, session, n => { prog.textContent = `Correction en cours, ${n.toLocaleString("fr-FR")} mots…`; });
+          agentEnCours = false;
+          if (erreur) { a.disabled = false; prog.textContent = erreur; return; }
+          const ech = noterEchange(d, f);
+          const r = await client.rpc("noter_copie_blanc", { p_concours: b.id, p_echange: f.id });
+          if (r.error) toast(messageErreur(r.error));
+          await chargerBlancs();
+          majOutils();
+          ouvrirEchange(ech);
+          return;
+        }
+        ouvrirAutre(e);
+      };
+    }
+    function ouvrirAutre(e) { const o = e.target.closest("[data-blanc]"); if (o) { arretOutil(); outilBlanc(corps, marque, Number(o.dataset.blanc)); } }
+  }
+
   const OUTILS = {
+    blanc: ["Concours blanc", outilBlanc],
     revision: ["Révision du jour", outilRevision],
     oral: ["Simulateur de grand oral", outilOral],
     sujet: ["Sujet de la semaine", outilSujet],
@@ -1321,6 +1433,7 @@
     const aFaire = seance(null).length, oral = oralQuestions.length, c = sujetSemaine(), j = joursAvant(), s = stats || { serie: 0 };
     const carte = (id, titre, texte, pied) => `<button class="ea-outil-carte" type="button" data-outil="${id}"><b>${titre}</b><span>${texte}</span><small>${pied}</small></button>`;
     return demarrageHTML() + `<div class="ea-outils" id="eaOutils">
+        ${carteBlanc()}
         ${toutesQuestions().length ? carte("revision", "Révision du jour", aFaire ? `${aFaire} question${aFaire > 1 ? "s" : ""} de QCM à travailler aujourd'hui.` : "Tout est à jour pour aujourd'hui.", "Méthode des boîtes, quelques minutes par jour") : ""}
         ${oral ? carte("oral", "Grand oral", `${oral} questions du jury, avec chrono et enregistrement.`, "Préparation 1 min, réponse 3 min") : ""}
         ${c ? carte("sujet", "Sujet de la semaine", esc(c.titre), "Nouveau sujet chaque lundi") : ""}

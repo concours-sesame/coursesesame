@@ -29,7 +29,7 @@
   const TAILLE_MAX = 50 * 1024 * 1024;
 
   let moi = null, abonnes = [], paiements = [], contenus = [];
-  let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [];
+  let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [];
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
   let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
@@ -171,7 +171,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -191,7 +191,8 @@
       client.rpc("admin_pages_lues", { p_jours: 30 }),
       client.rpc("telechargement_limites"),
       client.from("emails_reglages").select("*").maybeSingle(),
-      client.from("emails_envoyes").select("*").order("cree_le", { ascending: false }).limit(300)
+      client.from("emails_envoyes").select("*").order("cree_le", { ascending: false }).limit(300),
+      client.rpc("admin_concours_blancs")
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -201,6 +202,7 @@
     lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
     lireBilan(bil);
     emailsReglages = er.data || null; emailsEnvoyes = ee.data || [];
+    blancs = cb.data || [];
     telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
     agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
     // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
@@ -548,7 +550,7 @@
         <div><b>${fcfa(encaisseCeMois())}</b><span>Encaissé ce mois-ci</span></div>
       </div>
       <div class="ea-onglets ad-onglets" role="tablist" aria-label="Administration">
-        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["telechargements", "Téléchargements"], ["emails", "E-mails"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
+        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["blancs", "Concours blancs"], ["telechargements", "Téléchargements"], ["emails", "E-mails"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
       </div>
       <div id="adPanneau">${panneau()}</div>`;
     majIndicateur();
@@ -556,7 +558,7 @@
   // Redessine la page (onglets compris) sans bouger la position de lecture
   const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
   const PANNEAUX = { direct: () => panneauDirect(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
-    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
+    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), blancs: () => panneauBlancs(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
   const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
 
   /* ---------- En direct : abonnements en cours, mis à jour automatiquement ---------- */
@@ -933,6 +935,33 @@
     return `<section class="ad-bloc"><h3>${titre}</h3>${lignes.length ? `<ul class="ad-barres">${lignes.map(([nom, val, plus]) => `<li><span class="ad-barre-nom">${esc(nom)}</span><span class="ad-barre"><i style="width:${Math.max(val ? 2 : 0, Math.round(val / max * 100))}%"></i></span><span class="ad-barre-val">${format(val)}${plus ? ` <small>${plus}</small>` : ""}</span></li>`).join("")}</ul>` : `<p class="ea-vide">Pas encore de données.</p>`}</section>`;
   }
   const regrouper = (liste, cle, valeur) => { const m = new Map(); liste.forEach(x => { const k = cle(x); const v = m.get(k) || [0, 0]; v[0] += valeur(x); v[1]++; m.set(k, v); }); return [...m].sort((a, b) => b[1][0] - a[1][0]); };
+  /* ---------- Concours blancs ---------- */
+  // Épreuves à date et heure fixes : le sujet n'est visible des abonnés qu'à l'heure du début. Une épreuve publiée et
+  // commencée ne se modifie plus (les copies portent sur ce sujet).
+  function panneauBlancs() {
+    const maintenant = Date.now();
+    const etatB = b => { const d = new Date(b.debut), f = d.getTime() + b.duree_minutes * 60000; return !b.publie ? "Brouillon" : maintenant < d ? "Publiée, à venir" : maintenant <= f ? "En cours" : "Terminée"; };
+    const liste = blancs.length ? `<ul class="ad-facteurs">${blancs.map(b => `<li><span><b>${esc(b.titre)}</b><small>${etatB(b)} · ${EXERCICES_AGENT[b.exercice] || b.exercice}${b.matiere ? ", " + esc(b.matiere) : ""} · ${dateHeure(b.debut)}, ${b.duree_minutes} min · ${pluriel(b.copies, "copie")}, ${b.rendues} rendue${b.rendues > 1 ? "s" : ""}, ${b.notes} notée${b.notes > 1 ? "s" : ""}${b.moyenne != null ? `, moyenne ${String(b.moyenne).replace(".", ",")}/20` : ""}</small></span>
+        <span>${!b.publie || new Date(b.debut) > maintenant ? `<button class="btn btn-ghost btn-sm" type="button" data-action="blanc-basculer" data-bid="${b.id}">${b.publie ? "Retirer" : "Publier"}</button>` : ""}</span></li>`).join("")}</ul>` : `<p class="ea-vide">Aucun concours blanc pour le moment.</p>`;
+    return `<section class="ad-bloc"><h3>Concours blancs <span class="n">${blancs.length}</span></h3>
+        <p class="ad-note">Les abonnés en cours voient l'épreuve publiée dès sa publication, mais le sujet n'apparaît qu'à l'heure du début. La copie s'enregistre seule et part à la fin (5 minutes de tolérance). Ensuite, chacun la fait corriger et noter par l'agent de révision (formules d'un mois et plus) ; le classement est anonyme. Prévenez les abonnés par une annonce.</p>
+        ${liste}
+        <details class="ad-ajout"><summary>Nouveau concours blanc</summary>
+          <form class="form ad-form" id="adBlanc" novalidate>
+            <div class="field full"><label for="cbTitre">Titre</label><input id="cbTitre" name="titre" maxlength="120" placeholder="Exemple : Concours blanc INFJ n° 1, cas pratique de droit pénal"></div>
+            <div class="field"><label for="cbExercice">Épreuve</label><select id="cbExercice" name="exercice">${Object.entries(EXERCICES_AGENT).map(([k, l]) => `<option value="${k}">${l}</option>`).join("")}</select></div>
+            <div class="field"><label for="cbMatiere">Matière</label><input id="cbMatiere" name="matiere" maxlength="80" placeholder="Droit pénal"></div>
+            <div class="field"><label for="cbDebut">Début (date et heure d'Abidjan)</label><input id="cbDebut" name="debut" type="datetime-local"></div>
+            <div class="field"><label for="cbDuree">Durée (minutes)</label><input id="cbDuree" name="duree" type="number" min="30" max="600" value="180"></div>
+            <div class="field full"><label for="cbSujet">Sujet (énoncé complet, tel qu'il sera donné)</label><textarea id="cbSujet" name="sujet" rows="8" maxlength="12000"></textarea></div>
+            <label class="ea-accord full"><input type="checkbox" name="publie"><span>Publier tout de suite (sinon, brouillon)</span></label>
+            <p class="ea-msg" role="alert"></p>
+            <button class="btn btn-gold" type="submit">Enregistrer</button>
+          </form>
+        </details>
+      </section>`;
+  }
+
   function panneauStats() {
     const d = new Date(auj() + "T00:00:00Z"), mois = [];
     for (let i = 11; i >= 0; i--) mois.push(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - i, 1)).toISOString().slice(0, 7));
@@ -1222,6 +1251,15 @@
     if (act === "copier-numeros") { copierNumeros(); return; }
     if (act === "supprimer-anciens") { supprimerAnciens(b); return; }
     if (act === "cmd-ligne") { $("#adCmdLignes").insertAdjacentHTML("beforeend", ligneCmdHTML()); return; }
+    if (act === "blanc-basculer") {
+      const cb = blancs.find(x => String(x.id) === b.dataset.bid);
+      if (!cb) return;
+      if (!cb.publie && !confirm(`Publier « ${cb.titre} » ? Les abonnés verront l'épreuve et sa date ; le sujet restera caché jusqu'au début.`)) return;
+      const { error } = await client.from("concours_blancs").update({ publie: !cb.publie }).eq("id", cb.id);
+      if (error) { toast(messageErreur(error)); return; }
+      recharger(cb.publie ? "Concours blanc retiré." : "Concours blanc publié.");
+      return;
+    }
     if (act === "annonce-basculer" || act === "annonce-supprimer") {
       const an = annonces.find(x => String(x.id) === b.dataset.aid);
       if (!an) return;
@@ -1499,6 +1537,23 @@
       if (error) { msg.textContent = messageErreur(error); return; }
       f.closest("details").open = false;
       recharger("Méthode enregistrée.");
+      return;
+    }
+
+    if (f.id === "adBlanc") {
+      const debut = v("debut"), duree = Number(v("duree"));
+      if (v("titre").length < 3) { msg.textContent = "Indiquez un titre."; return; }
+      if (!debut) { msg.textContent = "Indiquez la date et l'heure du début."; return; }
+      if (!(duree >= 30 && duree <= 600)) { msg.textContent = "La durée va de 30 à 600 minutes."; return; }
+      if (v("sujet").length < 10) { msg.textContent = "Collez le sujet complet."; return; }
+      // Heure d'Abidjan = temps universel
+      const debutIso = new Date(debut + ":00Z").toISOString();
+      if (new Date(debutIso) < new Date()) { msg.textContent = "Le début doit être dans le futur."; return; }
+      bouton.disabled = true;
+      const { error } = await client.from("concours_blancs").insert({ titre: v("titre"), exercice: v("exercice"), matiere: v("matiere"), sujet: v("sujet"), debut: debutIso, duree_minutes: duree, publie: f.elements.publie.checked });
+      bouton.disabled = false;
+      if (error) { msg.textContent = messageErreur(error); return; }
+      recharger(f.elements.publie.checked ? "Concours blanc publié." : "Concours blanc enregistré en brouillon.");
       return;
     }
 
