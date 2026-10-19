@@ -1,14 +1,17 @@
 // Fonction « import-texte » : verse dans l'espace abonnés un texte officiel (loi, décret, acte uniforme, décision)
-// téléchargé directement depuis sa source officielle. Elle n'est appelable que par la base (en-tête x-import, clé
-// gardée dans le coffre et vérifiée par textes_verifier_import) et ne télécharge que depuis les sites listés dans
-// HOTES. Le contenu est créé en brouillon : il n'est visible des abonnés qu'une fois publié.
+// téléchargé directement depuis sa source officielle, ou depuis CIVLII (civlii.laws.africa), source approuvée par
+// l'éditeur. Elle n'est appelable que par la base (en-tête x-import, clé gardée dans le coffre et vérifiée par
+// textes_verifier_import) et ne télécharge que depuis les sites listés dans HOTES. Le contenu est créé en brouillon :
+// il n'est visible des abonnés qu'une fois publié.
 // Requête : POST { url, titre, description, matiere, concours: [...], nom } ; nom = nom du fichier, sans extension.
 // Variante pour un fichier transmis par l'éditeur : POST { action: "televersement", nom } renvoie une adresse de dépôt
 // signée, valable deux heures, pour le seul fichier textes/<nom>.pdf (sans remplacement d'un fichier existant).
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 const HOTES = [/(^|\.)ohada\.org$/, /(^|\.)ccja-ohada\.org$/, /(^|\.)gouv\.ci$/, /(^|\.)conseil-constitutionnel\.ci$/,
-  /(^|\.)courdecassation\.ci$/, /(^|\.)assemblee-nationale\.ci$/, /(^|\.)senat\.ci$/, /(^|\.)presidence\.ci$/, /(^|\.)conseil-etat\.ci$/];
+  /(^|\.)courdecassation\.ci$/, /(^|\.)assemblee-nationale\.ci$/, /(^|\.)senat\.ci$/, /(^|\.)presidence\.ci$/, /(^|\.)conseil-etat\.ci$/,
+  // ONECI (organisme public, copies du Journal officiel) et CIVLII (Laws.Africa : scans du Journal officiel et textes consolidés)
+  /(^|\.)oneci\.ci$/, /(^|\.)laws\.africa$/];
 const TAILLE_MAX = 50 * 1024 * 1024;
 
 function cleJson(nom: string, ancien: string): string {
