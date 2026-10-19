@@ -71,6 +71,14 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   (5 % du total des pages sur 7 jours glissants, 15 pages par document, table `telechargements`), puis chaque page
   réservée livrée en PDF image pendant 30 minutes. Nombre de pages gardé dans `documents_pages`.
 - `functions/telechargement` : fermée le 19 octobre 2026 (réponse 410), remplacée par `pages`.
+- `functions/emails` : e-mails aux abonnés par Brevo, depuis infos@coursesesame.com (secret `BREVO_API_KEY`).
+  Déployée sans vérification de jeton. La tâche planifiée `emails-abonnes` (pg_cron, toutes les 15 minutes) l'appelle
+  avec une clé gardée dans le coffre (Vault, `emails_planif`), vérifiée par `emails_verifier_planif`. La base prépare la
+  file (`emails_file`) : bienvenue au premier abonnement, rappel 3 jours avant la fin d'un abonnement non prolongé,
+  annonce quotidienne (à partir de 9 h) des contenus mis en ligne, aux abonnés en cours qui ne l'ont pas refusée
+  (`profils.emails_nouveautes`, lien de désinscription par `profils.jeton_emails`). Rien ne part tant que
+  `emails_reglages.actif` est faux (onglet « E-mails » de l'administration). Chaque envoi est noté dans `emails_envoyes`,
+  dont la clé unique empêche les doublons.
 
 ## Mise en service (faite le 9 octobre 2026)
 

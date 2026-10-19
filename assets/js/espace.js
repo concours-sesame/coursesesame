@@ -655,7 +655,7 @@
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
     const [p, a, adm, ouv, sus] = await Promise.all([
-      client.from("profils").select("prenom, nom, telephone, concours, date_concours").eq("id", uid).maybeSingle(),
+      client.from("profils").select("prenom, nom, telephone, concours, date_concours, emails_nouveautes").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
       client.rpc("acces_ouvrages"),
@@ -798,6 +798,10 @@
           <div class="field full"><label for="mMdp">Nouveau mot de passe (8 caractères au moins)</label><input id="mMdp" type="password" autocomplete="new-password" minlength="8" required></div>
           <p class="ea-msg" role="alert"></p>
           <button class="btn btn-ghost btn-sm" type="submit">Changer le mot de passe</button>
+        </form>
+        <form class="form ea-form" id="eaEmails" novalidate>
+          <label class="ea-accord full"><input type="checkbox" name="nouveautes"${profil.emails_nouveautes === false ? "" : " checked"}><span>Recevoir par e-mail l'annonce des nouveaux contenus (un e-mail par jour au plus, seulement s'il y a des nouveautés)</span></label>
+          <p class="ea-msg" role="alert"></p>
         </form>
       </div>`;
   }
@@ -1370,6 +1374,13 @@
       msg.textContent = error ? messageErreur(error) : "Numéro enregistré.";
       if (!error) etat.profil.telephone = tel;
     });
+    $("#eaEmails").addEventListener("change", async e => {
+      const f = e.currentTarget, oui = f.nouveautes.checked, msg = $(".ea-msg", f);
+      const { error } = await client.from("profils").update({ emails_nouveautes: oui }).eq("id", etat.uid);
+      if (error) { msg.textContent = messageErreur(error); f.nouveautes.checked = !oui; return; }
+      etat.profil.emails_nouveautes = oui;
+      msg.textContent = oui ? "Vous recevrez l'annonce des nouveautés." : "Vous ne recevrez plus l'annonce des nouveautés.";
+    });
     $("#eaMdp").addEventListener("submit", async e => {
       e.preventDefault();
       const msg = $(".ea-msg", e.currentTarget), mdp = $("#mMdp").value;
@@ -1440,5 +1451,13 @@
   surRefus = controlerAppareil;
   setInterval(controlerAppareil, 60000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) controlerAppareil(); });
+  // Lien « ne plus recevoir l'annonce des nouveautés » des e-mails : fonctionne sans connexion
+  const desinscription = new URLSearchParams(location.search).get("desinscription");
+  if (desinscription) {
+    history.replaceState(null, "", location.pathname + location.hash);
+    fetch(`${CONF.url}/functions/v1/emails`, { method: "POST", headers: { "Content-Type": "application/json", apikey: CONF.cle }, body: JSON.stringify({ action: "desinscrire", jeton: desinscription }) })
+      .then(r => r.json()).then(r => toast(r.ok ? "C'est noté. Vous ne recevrez plus l'annonce des nouveautés par e-mail." : (r.error || "Lien invalide.")))
+      .catch(() => toast("La désinscription n'a pas abouti. Réessayez plus tard."));
+  }
   afficher().then(() => { versFormulaire(); ouvrirDepuisLien(); });
 })();

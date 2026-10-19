@@ -28,6 +28,7 @@
   let moi = null, abonnes = [], paiements = [], contenus = [];
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [];
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
+  let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
   let telechargement = false; // archive .zip ou texte pour l'agent en préparation : la page ne se redessine pas
@@ -158,7 +159,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -176,7 +177,9 @@
         .gte("cree_le", new Date(Date.now() - 62 * 864e5).toISOString()).order("cree_le", { ascending: false }).limit(1000),
       client.rpc("admin_telechargements", { p_jours: 60 }),
       client.rpc("admin_pages_lues", { p_jours: 30 }),
-      client.rpc("telechargement_limites")
+      client.rpc("telechargement_limites"),
+      client.from("emails_reglages").select("*").maybeSingle(),
+      client.from("emails_envoyes").select("*").order("cree_le", { ascending: false }).limit(300)
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -185,6 +188,7 @@
     commandes = cmd.data || []; notes = new Map((nt.data || []).map(x => [x.user_id, x.note]));
     lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
     lireBilan(bil);
+    emailsReglages = er.data || null; emailsEnvoyes = ee.data || [];
     telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
     agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
     // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
@@ -532,7 +536,7 @@
         <div><b>${fcfa(encaisseCeMois())}</b><span>Encaissé ce mois-ci</span></div>
       </div>
       <div class="ea-onglets ad-onglets" role="tablist" aria-label="Administration">
-        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["telechargements", "Téléchargements"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
+        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["telechargements", "Téléchargements"], ["emails", "E-mails"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
       </div>
       <div id="adPanneau">${panneau()}</div>`;
     majIndicateur();
@@ -540,7 +544,7 @@
   // Redessine la page (onglets compris) sans bouger la position de lecture
   const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
   const PANNEAUX = { direct: () => panneauDirect(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
-    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), telechargements: () => panneauTelechargements(), journal: () => panneauJournal() };
+    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
   const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
 
   /* ---------- En direct : abonnements en cours, mis à jour automatiquement ---------- */
@@ -1023,6 +1027,44 @@
       <div id="adTablesT">${tablesTelechargements()}</div>`;
   }
 
+  /* ---------- E-mails aux abonnés (Brevo) ---------- */
+  // Trois e-mails automatiques, préparés par la base et envoyés par la fonction « emails » toutes les 15 minutes
+  const TYPES_EMAIL = { bienvenue: "Bienvenue", rappel_fin: "Rappel de fin", nouveautes: "Nouveautés", essai: "Essai" };
+  async function verifierBrevo() {
+    const { data, error } = await client.functions.invoke("emails", { body: { action: "etat" } });
+    etatBrevo = error ? { erreur: await erreurFonction(error) } : data;
+    const el = $("#adEtatBrevo");
+    if (el) el.innerHTML = etatBrevoHTML();
+  }
+  const etatBrevoHTML = () => !etatBrevo ? "Vérification de la clé Brevo…"
+    : etatBrevo.erreur ? esc(etatBrevo.erreur)
+    : etatBrevo.cle ? `<span class="ad-badge ad-actif">Clé Brevo enregistrée</span>` : `<span class="ad-badge ad-attente">Clé Brevo absente</span> À enregistrer dans Supabase, Edge Functions, Secrets, sous le nom BREVO_API_KEY.`;
+  function panneauEmails() {
+    if (!emailsReglages) return `<p class="ea-vide">Les e-mails ne sont pas encore installés dans la base.</p>`;
+    if (!etatBrevo) setTimeout(verifierBrevo, 0);
+    const il30j = Date.now() - 30 * 864e5;
+    const recents = emailsEnvoyes.filter(e => new Date(e.cree_le) >= il30j);
+    const compte = t => recents.filter(e => e.type === t && e.statut === "envoye").length;
+    const erreurs = recents.filter(e => e.statut === "erreur").length;
+    return `<section class="ad-bloc">
+        <h3>Envoi des e-mails <span class="ad-badge ${emailsReglages.actif ? "ad-actif" : "ad-attente"}">${emailsReglages.actif ? "Ouvert" : "Fermé"}</span></h3>
+        <p id="adEtatBrevo">${etatBrevoHTML()}</p>
+        <div class="ad-outils-ligne">
+          <button class="btn ${emailsReglages.actif ? "btn-ghost" : "btn-navy"} btn-sm" type="button" data-action="emails-basculer">${emailsReglages.actif ? "Fermer l'envoi" : "Ouvrir l'envoi"}</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-action="emails-essai">M'envoyer un e-mail d'essai</button>
+        </div>
+        <p class="ad-note">Expéditeur infos@coursesesame.com, par Brevo. Trois e-mails partent seuls, au plus tard 15 minutes après l'événement. La bienvenue, au premier abonnement d'un compte. Le rappel, 3 jours avant la fin d'un abonnement qui n'a pas été prolongé. L'annonce des nouveautés, chaque jour à partir de 9 h s'il y a eu des mises en ligne, aux abonnés en cours qui ne l'ont pas refusée. Chaque annonce contient un lien de désinscription ; l'abonné peut aussi changer son choix dans « Mon compte ».</p>
+      </section>
+      <div class="ad-stats"><div><b>${compte("bienvenue")}</b><span>Bienvenues, 30 jours</span></div><div><b>${compte("rappel_fin")}</b><span>Rappels, 30 jours</span></div>
+        <div><b>${compte("nouveautes")}</b><span>Annonces, 30 jours</span></div><div><b>${erreurs}</b><span>Erreurs, 30 jours</span></div></div>
+      <section class="ad-bloc"><h3>Derniers envois <span class="n">${emailsEnvoyes.length}</span></h3>
+        ${emailsEnvoyes.length ? `<div class="ad-tableau" role="region" aria-label="Derniers e-mails" tabindex="0"><table>
+          <thead><tr><th>Date</th><th>Abonné</th><th>E-mail</th><th>État</th></tr></thead>
+          <tbody>${emailsEnvoyes.map(e => `<tr><td>${dateHeure(e.cree_le)}</td><td>${esc(e.user_id ? nomDe(e.user_id) : "")}</td><td>${esc(TYPES_EMAIL[e.type] || e.type)}</td><td>${e.statut === "envoye" ? "Envoyé" : e.statut === "erreur" ? `<span class="ad-badge ad-partage">Erreur</span> <small>${esc(e.erreur || "")}</small>` : "En cours"}</td></tr>`).join("")}</tbody>
+        </table></div>` : `<p class="ea-vide">Aucun e-mail envoyé pour le moment.</p>`}
+      </section>`;
+  }
+
   function panneauAgent() {
     if (!agentReglages) return `<p class="ea-vide">L'agent de révision n'est pas encore installé dans la base.</p>`;
     const r = agentReglages, debutMois = auj().slice(0, 8) + "01";
@@ -1140,6 +1182,23 @@
     if (b.dataset.filtrec) { filtreC = b.dataset.filtrec; $("#adZoneC").innerHTML = zoneContenus(); return; }
     const act = b.dataset.action;
     if (act === "sortir") { debrancherDirect(); await client.auth.signOut(); connexion(); return; }
+    if (act === "emails-basculer") {
+      const actif = !emailsReglages.actif;
+      if (actif && !confirm("Ouvrir l'envoi des e-mails ? Les bienvenues, rappels et annonces partiront automatiquement.")) return;
+      const { error } = await client.from("emails_reglages").update({ actif, maj_le: new Date().toISOString() }).eq("id", true);
+      if (error) return toast(messageErreur(error));
+      emailsReglages.actif = actif;
+      toast(actif ? "Envoi des e-mails ouvert." : "Envoi des e-mails fermé.");
+      afficher();
+      return;
+    }
+    if (act === "emails-essai") {
+      b.disabled = true;
+      const { data, error } = await client.functions.invoke("emails", { body: { action: "essai" } });
+      b.disabled = false;
+      toast(error ? await erreurFonction(error) : `E-mail d'essai envoyé à ${data.a}. Regardez aussi dans les courriers indésirables.`);
+      return;
+    }
     if (act === "recharger") { demarrer(); return; }
     if (act === "actualiser") { recharger(); return; }
     if (act === "mfa") { activerDeuxEtapes(b); return; }
