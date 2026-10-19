@@ -194,12 +194,23 @@ function nouveautes(prenom: string, contenus: Contenu[], jeton: string) {
   const n = contenus.length;
   const sujet = n === 1 ? `Nouveau dans votre espace, ${contenus[0].titre}` : `${n} nouveaux contenus dans votre espace abonnés`;
   const nature = (c: Contenu) => (/^ouvrage/i.test(c.matiere ?? "") ? "Ouvrage complet" : c.type === "video" ? "Vidéo" : c.type === "texte" ? "Fiche ou QCM" : "Document");
+  const rubrique = (c: Contenu) => (/^ouvrage/i.test(c.matiere ?? "") || !c.matiere ? nature(c) : c.matiere);
+  // Au-delà de 12 contenus, la liste est regroupée par rubrique pour rester lisible
+  const groupes = new Map<string, number>();
+  contenus.forEach((c) => groupes.set(rubrique(c), (groupes.get(rubrique(c)) ?? 0) + 1));
+  const regroupe = n > 12;
+  const lignes = regroupe
+    ? [...groupes].map(([r, k]) => `<li><b>${esc(r)}</b>, ${k} ${k === 1 ? "contenu" : "contenus"}</li>`)
+    : contenus.map((c) => `<li><b>${esc(c.titre)}</b><br><span style="color:#5b6475;font-size:14px">${esc(rubrique(c))}</span></li>`);
+  const lignesTexte = regroupe
+    ? [...groupes].map(([r, k]) => `- ${r}, ${k} ${k === 1 ? "contenu" : "contenus"}`)
+    : contenus.map((c) => `- ${c.titre} (${nature(c)})`);
   const corps = `<p>Bonjour ${esc(prenom)},</p>
 <p>${n === 1 ? "Un nouveau contenu vient d'être mis en ligne" : `${n} nouveaux contenus viennent d'être mis en ligne`} dans votre espace abonnés.</p>
-<ul>${contenus.map((c) => `<li><b>${esc(c.titre)}</b><br><span style="color:#5b6475;font-size:14px">${esc(/^ouvrage/i.test(c.matiere ?? "") || !c.matiere ? nature(c) : c.matiere)}</span></li>`).join("")}</ul>
+<ul>${lignes.join("")}</ul>
 ${bouton("Voir les nouveautés", `${SITE}/espace-abonnes/`)}
 <p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
   const pied = `${piedService} Vous pouvez <a href="${lienDesinscription(jeton)}" style="color:#5b6475">ne plus recevoir l'annonce des nouveautés</a>, ou changer ce choix dans votre espace, rubrique Mon compte.`;
-  const texte = `Bonjour ${prenom},\n\n${n === 1 ? "Un nouveau contenu vient d'être mis en ligne" : `${n} nouveaux contenus viennent d'être mis en ligne`} dans votre espace abonnés.\n\n${contenus.map((c) => `- ${c.titre} (${nature(c)})`).join("\n")}\n\nVoir les nouveautés ${SITE}/espace-abonnes/\n\nL'équipe des Cours Sésame et SAJ\n\nNe plus recevoir l'annonce des nouveautés ${lienDesinscription(jeton)}`;
+  const texte = `Bonjour ${prenom},\n\n${n === 1 ? "Un nouveau contenu vient d'être mis en ligne" : `${n} nouveaux contenus viennent d'être mis en ligne`} dans votre espace abonnés.\n\n${lignesTexte.join("\n")}\n\nVoir les nouveautés ${SITE}/espace-abonnes/\n\nL'équipe des Cours Sésame et SAJ\n\nNe plus recevoir l'annonce des nouveautés ${lienDesinscription(jeton)}`;
   return { sujet, html: gabarit(sujet, corps, pied), texte };
 }
