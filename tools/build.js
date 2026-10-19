@@ -1264,6 +1264,7 @@ ${contactCTA(prefix)}`;
 
     <h2 id="contenus">Nature des contenus</h2>
     <p>Nos ouvrages, fiches, corrigés, QCM et vidéos sont des outils de préparation aux concours. Ils ne sont pas des publications officielles de l'INFJ, de l'ENA ni d'aucun organisateur de concours, et ne constituent pas une consultation juridique. Les corrigés proposés sont les nôtres et non des corrigés officiels.</p>
+    <p>Les textes officiels (lois, décrets, actes uniformes OHADA) et les décisions de justice de l'espace abonnés sont reproduits d'après leurs sources officielles, indiquées pour chacun, avec la date de leur mise en ligne. Ils sont fournis à titre documentaire : seule leur publication officielle, notamment au Journal officiel, fait foi. Malgré notre vigilance, un texte peut avoir été modifié depuis ; vérifiez sa version en vigueur avant tout usage. Les noms des personnes physiques figurant dans les décisions de justice sont remplacés par des initiales.</p>
 
     <h2 id="litiges">Réclamations et droit applicable</h2>
     <p>Pour toute réclamation, écrivez-nous sur WhatsApp : nous cherchons d'abord une solution à l'amiable. Les présentes conditions sont soumises au droit ivoirien. Les données personnelles sont traitées comme indiqué dans les <a href="${prefix}mentions-legales/">mentions légales</a>.</p>

@@ -128,7 +128,7 @@
     }
     return rep;
   }
-  async function afficherPages(c, zone, depart) {
+  async function afficherPages(c, zone, depart, officiel) {
     const info = await (await appelPages({ action: "info", contenu: c.id })).json();
     zone.innerHTML = "";
     if (visionneuse) visionneuse.classList.add("ea-v-pdf");
@@ -153,7 +153,7 @@
       </div>`;
     const quota = document.createElement("p");
     quota.className = "ea-pdf-quota";
-    const majQuota = lues => { if (!info.admin && !plafondAtteint) quota.textContent = `Pages lues aujourd'hui ${lues} sur ${info.plafond}.`; };
+    const majQuota = lues => { if (!info.admin && !officiel && !plafondAtteint) quota.textContent = `Pages lues aujourd'hui ${lues} sur ${info.plafond}.`; };
     majQuota(info.lues);
     const pages = document.createElement("div");
     pages.className = "ea-pdf-pages";
@@ -440,11 +440,13 @@
       return;
     }
     if (c.type === "pdf") {
+      // Textes officiels et jurisprudence : lecture sans plafond et texte complet téléchargeable
+      const officiel = /^\s*(Texte officiel|Jurisprudence)/i.test(c.matiere || "");
       corps.innerHTML = `<div class="ea-pdf" aria-live="polite"><p class="ea-attente">Ouverture du document…</p></div>
-        <p class="ea-mention">Document réservé à ${esc(marque)}. Chaque page porte votre nom. Copie et impression désactivées ; quelques pages peuvent être téléchargées chaque semaine.</p>`;
+        <p class="ea-mention">${officiel ? "Texte reproduit d'après sa source officielle, indiquée dans la présentation. Seule la publication au Journal officiel fait foi." : `Document réservé à ${esc(marque)}. Chaque page porte votre nom. Copie et impression désactivées ; quelques pages peuvent être téléchargées chaque semaine.`}</p>`;
       try {
-        await afficherPages(c, $(".ea-pdf", corps), c.page);
-        if (!visionneuse.hidden) ajouterTelechargement(c, $(".ea-pdf", corps));
+        await afficherPages(c, $(".ea-pdf", corps), c.page, officiel);
+        if (!visionneuse.hidden) (officiel ? ajouterTexteComplet : ajouterTelechargement)(c, $(".ea-pdf", corps));
       } catch (e) {
         $(".ea-pdf", corps).innerHTML = `<p class="ea-erreur">${esc(e && e.message ? e.message : "Le document n'a pas pu être ouvert. Réessayez.")}</p>`;
         if (e && e.statut === 403 && surRefus) surRefus();
@@ -475,6 +477,32 @@
       video.play().catch(() => {});
       return;
     }
+  }
+
+  /* ---------- Texte officiel : téléchargement du fichier complet ---------- */
+  function ajouterTexteComplet(c, zone) {
+    const barre = $(".ea-pdf-barre", zone);
+    if (!barre) return;
+    const bouton = document.createElement("button");
+    bouton.type = "button"; bouton.className = "ea-pdf-tele"; bouton.textContent = "Télécharger le texte (PDF)";
+    barre.appendChild(bouton);
+    bouton.addEventListener("click", async () => {
+      bouton.disabled = true;
+      try {
+        const { data, error } = await client.storage.from("exclusif").createSignedUrl(c.fichier, 60);
+        if (error || !data) throw new Error("Téléchargement impossible. Réessayez.");
+        const rep = await fetch(data.signedUrl);
+        if (!rep.ok) throw new Error("Téléchargement impossible. Réessayez.");
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(await rep.blob());
+        a.download = `${c.titre.replace(/[\\/:*?"<>|]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120)}.pdf`;
+        zone.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+      } catch (e) {
+        toast(e.message);
+      }
+      bouton.disabled = false;
+    });
   }
 
   /* ---------- Téléchargement de pages (limite hebdomadaire) ---------- */
@@ -808,8 +836,8 @@
 
   let contenus = [], filtre = "tous";
   // Rubriques de la bibliothèque, d'après la matière saisie (« Ouvrage · … », « Fiches · … », « Corrigé · … ») ou le type
-  const RUBRIQUES = { ouvrages: "Ouvrages complets", fiches: "Fiches de révision", corriges: "Sujets corrigés", qcm: "QCM", videos: "Vidéos", autres: "Autres contenus" };
-  const rubrique = c => /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Fiches/i.test(c.matiere || "") ? "fiches" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
+  const RUBRIQUES = { ouvrages: "Ouvrages complets", fiches: "Fiches de révision", corriges: "Sujets corrigés", qcm: "QCM", videos: "Vidéos", textes: "Textes officiels", jurisprudence: "Jurisprudence", autres: "Autres contenus" };
+  const rubrique = c => /^\s*Texte officiel/i.test(c.matiere || "") ? "textes" : /^\s*Jurisprudence/i.test(c.matiere || "") ? "jurisprudence" : /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Fiches/i.test(c.matiere || "") ? "fiches" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   // Ouvrage complet affiché avec un cadenas : formule de moins d'un mois
   const verrouille = c => !etat.ouvrages && rubrique(c) === "ouvrages";

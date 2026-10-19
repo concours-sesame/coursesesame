@@ -21,7 +21,10 @@
     { cle: "m2", prix: "9 000" }, { cle: "m3", prix: "12 500" }, { cle: "m6", prix: "22 500" }, { cle: "m12", prix: "40 000" }
   ]).filter(t => t.cle).map(t => [t.cle, String(t.prix).replace(/\D/g, "")]));
   const plusJours = (d, n) => { const x = new Date(d + "T00:00:00Z"); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
-  const MATIERES = ["Droit civil", "Droit pénal", "Procédure pénale", "Droit administratif", "Droit commercial OHADA", "Organisation judiciaire", "Droits de l'enfant", "SOG", "Méthodologie", "Culture générale"];
+  const MATIERES = ["Droit civil", "Droit pénal", "Procédure pénale", "Droit administratif", "Droit commercial OHADA", "Organisation judiciaire", "Droits de l'enfant", "SOG", "Méthodologie", "Culture générale",
+    // Textes publics : lecture sans plafond, texte complet téléchargeable, hors du calcul des 5 % (matière commençant ainsi)
+    "Texte officiel · Institutions", "Texte officiel · Droit pénal", "Texte officiel · Droit civil", "Texte officiel · OHADA", "Texte officiel · Droit administratif",
+    "Jurisprudence · CCJA", "Jurisprudence · Côte d'Ivoire"];
   const EXTENSIONS = { "video/mp4": "mp4", "video/webm": "webm", "application/pdf": "pdf" };
   const TAILLE_MAX = 50 * 1024 * 1024;
 
