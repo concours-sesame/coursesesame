@@ -11,7 +11,9 @@ import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 const HOTES = [/(^|\.)ohada\.org$/, /(^|\.)ccja-ohada\.org$/, /(^|\.)gouv\.ci$/, /(^|\.)conseil-constitutionnel\.ci$/,
   /(^|\.)courdecassation\.ci$/, /(^|\.)assemblee-nationale\.ci$/, /(^|\.)senat\.ci$/, /(^|\.)presidence\.ci$/, /(^|\.)conseil-etat\.ci$/,
   // ONECI (organisme public, copies du Journal officiel) et CIVLII (Laws.Africa : scans du Journal officiel et textes consolidés)
-  /(^|\.)oneci\.ci$/, /(^|\.)laws\.africa$/];
+  /(^|\.)oneci\.ci$/, /(^|\.)laws\.africa$/,
+  // Assemblée nationale (site officiel assnat.ci : textes votés)
+  /(^|\.)assnat\.ci$/];
 const TAILLE_MAX = 50 * 1024 * 1024;
 
 function cleJson(nom: string, ancien: string): string {
