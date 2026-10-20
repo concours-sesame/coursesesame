@@ -77,7 +77,7 @@ function rebase(html, prefix) {
   const fix = h => {
     if (h === "#top") return prefix || "./";
     if (h.startsWith("#")) return prefix + h;
-    if (/^(methodes\/|concours\/|ouvrages\/|sujets\/|qcm\/|assets\/|mentions-legales\/|conditions-de-vente\/|espace-abonnes\/)/.test(h)) return prefix + h;
+    if (/^(methodes\/|concours\/|ouvrages\/|sujets\/|qcm\/|assets\/|mentions-legales\/|conditions-de-vente\/|espace-abonnes\/|concours-blancs\/)/.test(h)) return prefix + h;
     return h;
   };
   return html.replace(/(<a\b[^>]*?\shref=")([^"]*)(")/g, (m, a, h, b) => a + fix(h) + b);
@@ -1094,6 +1094,53 @@ ${contactCTA(prefix)}`;
   }));
   urls.push(url);
 }
+/* ---------- Concours blancs ---------- */
+// Sujets en accès libre, chronométrés dans le navigateur ; corrigés réservés aux abonnés (assets/js/concours-blancs.js)
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "concours-blancs/";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Concours blancs", ""]],
+    h1: `10 concours blancs de la <em>magistrature</em>`,
+    lead: "Dix séries complètes et inédites, aux conditions du concours direct de l'INFJ : la présélection en 2 heures, puis les cinq épreuves écrites en 4 heures chacune (sujet d'ordre général, droit civil, droit commercial et OHADA, droit pénal et procédure pénale, droit administratif). Chacun compose gratuitement ; le corrigé de chaque épreuve est réservé aux abonnés.",
+    ctas: `<a href="#blancs-app" class="btn btn-gold">Choisir une épreuve${arrow}</a><a href="${prefix}espace-abonnes/#inscription" class="btn btn-ghost">S'abonner pour les corrigés</a>`,
+    facts: ["<b>10</b> séries", "<b>60</b> épreuves", "Présélection en <b>2 h</b>", "Écrits en <b>4 h</b>"]
+  })}
+
+<section class="section section-cream cb-charte-section">
+  <div class="wrap">
+    <div class="cb-charte reveal">
+      <h2 class="h-section">Avant de commencer</h2>
+      <p class="lead">Ces concours blancs servent à mesurer votre vrai niveau. Traitez-les comme le jour du concours : seul, sans document, sans téléphone et sans recherche, d'une traite. Un résultat obtenu en trichant ne vous apprend rien ; un résultat honnête vous dit exactement ce qu'il reste à travailler.</p>
+      <ol class="espace-etapes">
+        <li class="espace-etape"><b>Le chronomètre démarre à l'entrée</b><span>Dès que vous entrez dans le sujet, le temps tourne : 2 heures pour la présélection, 4 heures pour chaque épreuve écrite. Il n'y a pas de retour en arrière, l'épreuve ne se recommence pas.</span></li>
+        <li class="espace-etape"><b>Quitter fige le compteur</b><span>Si vous quittez la page, le compteur reste figé et repart dès que vous revenez dans le sujet. Le temps déjà passé reste acquis.</span></li>
+        <li class="espace-etape"><b>Le corrigé après la copie</b><span>Une fois la copie rendue ou le temps écoulé, les abonnés des formules d'une semaine et plus lisent le corrigé : note immédiate et justifications pour la présélection, corrigé-type et grille de notation pour les écrits.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="blancs-app">
+  <div class="wrap">
+    <div class="ea-app cb-app" id="blancs" aria-live="polite" aria-busy="true">
+      <p class="ea-attente">Chargement des concours blancs…</p>
+      <noscript><p class="ea-erreur">Les concours blancs ont besoin de JavaScript : activez-le dans votre navigateur.</p></noscript>
+    </div>
+    <p class="abo-note">Votre progression et votre copie restent dans ce navigateur, sur cet appareil. Les concours blancs des autres concours (greffe, ENA, administration pénitentiaire) suivront.</p>
+  </div>
+</section>
+
+${contactCTA(prefix)}`;
+  write("concours-blancs/index.html", page({
+    prefix, url, body, scripts: [...SCRIPTS_ESPACE, "assets/js/concours-blancs.js"],
+    title: "10 concours blancs gratuits de la magistrature (INFJ), chronométrés",
+    description: "Dix concours blancs inédits de la magistrature : présélection en 2 heures et cinq épreuves écrites en 4 heures, à traiter gratuitement en ligne. Corrigés réservés aux abonnés.",
+    ld: [breadcrumb([["Accueil", SITE], ["Concours blancs", url]])]
+  }));
+  urls.push(url);
+}
 {
   // Administration : hors du plan du site et non indexée
   const prefix = "../../";
@@ -1294,6 +1341,7 @@ ${contactCTA(prefix)}`;
   const liens = [
     ["ouvrages/", "Tous les ouvrages", "Le catalogue complet, avec les extraits gratuits."],
     ["sujets/", "Sujets corrigés", "Dissertations, cas pratiques, commentaires et SOG corrigés."],
+    ["concours-blancs/", "Concours blancs", "Dix concours blancs chronométrés de la magistrature."],
     ["qcm/", "QCM gratuits", "Testez vos connaissances, chaque réponse expliquée."],
     ["espace-abonnes/", "Espace abonnés", "Connexion et création de compte."]
   ];
