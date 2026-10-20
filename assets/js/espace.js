@@ -1341,7 +1341,7 @@
   function carteBlanc() {
     const b = blancEnVue(); if (!b) return "";
     const t = Date.now(), debut = new Date(b.debut), fin = new Date(b.fin);
-    const texte = t < debut ? `${esc(b.titre)}, le ${jourHeure(b.debut)}.` : t <= fin ? `${esc(b.titre)} : l'épreuve est en cours, jusqu'à ${heureFr(b.fin)}.` : b.note != null ? `${esc(b.titre)} : ${noteFr(b.note)}/20, rang ${b.rang} sur ${b.notes}.` : `${esc(b.titre)} : épreuve terminée, faites corriger votre copie.`;
+    const texte = t < debut ? `${esc(b.titre)}, le ${jourHeure(b.debut)}.` : t <= fin ? `${esc(b.titre)} : l'épreuve est en cours, jusqu'à ${heureFr(b.fin)}.` : b.note != null ? `${esc(b.titre)} : ${noteFr(b.note)}/20, rang ${b.rang} sur ${b.notes}.` : `${esc(b.titre)} : épreuve terminée, ${agent && agent.acces && agent.actif ? "faites corriger votre copie" : "lisez le corrigé-type"}.`;
     return `<button class="ea-outil-carte" type="button" data-outil="blanc"><b>Concours blanc</b><span>${texte}</span><small>${EXERCICES[b.exercice] || ""}, ${dureeTxt(b.duree_minutes)}, en conditions réelles</small></button>`;
   }
   function outilBlanc(corps, marque, id) {
@@ -1392,11 +1392,21 @@
       else if (t <= fin) resultat = `<p>Copie rendue. La correction s'ouvre à la fin de l'épreuve, à ${heureFr(b.fin)}.</p>`;
       else if (b.note != null) resultat = `<div class="ea-blanc-note"><b>${noteFr(b.note)}/20</b><span>Rang ${b.rang} sur ${b.notes} ${b.notes > 1 ? "copies notées" : "copie notée"}. Moyenne ${noteFr(b.moyenne)}, meilleure note ${noteFr(b.meilleure)}.</span></div>${echanges.some(x => x.sujet && x.sujet.trim() === (b.sujet || "").trim() && x.note != null) ? `<div class="ea-outil-boutons"><button class="btn btn-ghost" type="button" data-bl="voir">Relire la correction</button></div>` : ""}`;
       else if (copie.length < 200) resultat = `<p>Votre copie est trop courte pour être corrigée par l'agent (200 caractères au moins).</p>`;
-      else if (!ouvert) resultat = `<p>La correction notée par l'agent de révision est réservée aux formules d'un mois et plus.</p>`;
+      else if (!ouvert) resultat = `<p>${agent && agent.acces ? "La correction notée par l'agent de révision n'est pas encore ouverte." : "La correction notée par l'agent de révision est réservée aux formules d'un mois et plus."} Comparez votre copie au corrigé-type et notez-la vous-même avec sa grille d'auto-évaluation.</p>`;
       else resultat = `<p>L'épreuve est terminée. Faites corriger et noter votre copie, telle que vous l'avez rendue, par l'agent de révision. Votre note entre ensuite dans le classement.</p><div class="ea-outil-boutons"><button class="btn btn-gold" type="button" data-bl="corriger">Faire corriger ma copie</button></div><p class="ea-agent-progres" id="eaBlancProgres"></p>`;
-      corps.innerHTML = `<div class="ea-outil">${tete}${sujetHTML}${copie ? `<h4>Votre copie</h4><div class="ea-blanc-rendue">${mettreEnForme(copie)}</div>` : ""}${resultat}${pied}</div>`;
+      corps.innerHTML = `<div class="ea-outil">${tete}${sujetHTML}${copie ? `<h4>Votre copie</h4><div class="ea-blanc-rendue">${mettreEnForme(copie)}</div>` : ""}${resultat}<div id="eaBlancCorrige"></div>${pied}</div>`;
+      // Corrigé-type de l'épreuve, publié à sa fin (concours_blancs.corrige_id, livré par corrige_blanc)
+      let corrige = null;
+      if (t > fin) client.rpc("corrige_blanc", { p_concours: b.id }).then(async r => {
+        if (r.error || !r.data) return;
+        corrige = contenus.find(x => x.id === r.data);
+        if (!corrige) { const q = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le").eq("id", r.data).maybeSingle(); corrige = q.data; }
+        const z = $("#eaBlancCorrige");
+        if (corrige && z) z.innerHTML = `<div class="ea-outil-boutons"><button class="btn btn-navy" type="button" data-bl="corrige">Lire le corrigé-type et sa grille</button></div>`;
+      });
       corps.onclick = async e => {
         const a = e.target.closest("[data-bl]");
+        if (a && a.dataset.bl === "corrige" && corrige) { arretOutil(); ouvrirContenu(corrige, marque); return; }
         if (a && a.dataset.bl === "voir") { const x = echanges.find(y => y.sujet && y.sujet.trim() === (b.sujet || "").trim() && y.note != null); if (x) ouvrirEchange(x); return; }
         if (a && a.dataset.bl === "corriger") {
           const { data: { session } } = await client.auth.getSession();
