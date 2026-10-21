@@ -639,7 +639,7 @@
     });
   }
 
-  window.Espace = { client, OUVERT, esc, dateFr, auj, joursJusqua, fcfa, WA_NUM, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur, etapeCode, formulaireCode, lireQcm, chargerPdfJs };
+  window.Espace = { client, OUVERT, esc, dateFr, auj, joursJusqua, fcfa, WA_NUM, numeroWa, lienWa, TYPES, CONC, nomConcours, icone, messageErreur, erreurFonction, toast, ouvrirContenu, lienSur, etapeCode, formulaireCode, lireQcm, chargerPdfJs, mettreEnForme, poserFiligrane };
 
   /* =====================================================================
      Page de l'espace abonnés
@@ -1543,6 +1543,10 @@
       bouton.disabled = false;
       if (error) { msg.textContent = messageErreur(error); return; }
       avisAppareil = false;
+      // Retour à la page d'où vient le candidat (corrigé d'un concours blanc)
+      let retour = null;
+      try { retour = sessionStorage.getItem("sesame-retour"); sessionStorage.removeItem("sesame-retour"); } catch (err) { /* stockage bloqué */ }
+      if (retour && /^concours-blancs\/(#epreuve-\d+)?$/.test(retour)) { location.href = ROOT + retour; return; }
       if (!/^#corrige-/.test(location.hash)) history.replaceState(null, "", location.pathname);
       afficher().then(ouvrirDepuisLien);
     });

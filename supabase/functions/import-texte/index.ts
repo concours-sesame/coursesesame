@@ -6,6 +6,9 @@
 // Requête : POST { url, titre, description, matiere, concours: [...], nom } ; nom = nom du fichier, sans extension.
 // Variante pour un fichier transmis par l'éditeur : POST { action: "televersement", nom } renvoie une adresse de dépôt
 // signée, valable deux heures, pour le seul fichier textes/<nom>.pdf (sans remplacement d'un fichier existant).
+// Chargement des concours blancs : POST { action: "epreuves_blanches", nom } lit le fichier JSON déposé à textes/<nom>.pdf
+// (tableau de lignes { concours, serie, ordre, epreuve, titre, nature, duree_minutes, sujet, corrige }), l'enregistre dans
+// epreuves_blanches (une épreuve existante est remplacée, sa publication est conservée) puis efface le fichier.
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 const HOTES = [/(^|\.)ohada\.org$/, /(^|\.)ccja-ohada\.org$/, /(^|\.)gouv\.ci$/, /(^|\.)conseil-constitutionnel\.ci$/,
@@ -54,6 +57,25 @@ Deno.serve(async (req) => {
     if (!nomDepot) return json({ error: "Nom manquant" }, 400);
     const { data, error } = await service.storage.from("exclusif").createSignedUploadUrl(`textes/${nomDepot}.pdf`);
     return error ? json({ error: `Stockage ${error.message}` }, 409) : json({ chemin: data.path, url: data.signedUrl });
+  }
+  if (d.action === "epreuves_blanches") {
+    const nomDepot = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
+    const chemin = `textes/${nomDepot}.pdf`;
+    const { data: fichier, error: errLecture } = await service.storage.from("exclusif").download(chemin);
+    if (errLecture || !fichier) return json({ error: `Stockage ${errLecture?.message ?? "fichier absent"}` }, 404);
+    let lignes: Record<string, unknown>[];
+    try {
+      lignes = JSON.parse(await fichier.text());
+      if (!Array.isArray(lignes) || !lignes.length) throw new Error();
+    } catch {
+      return json({ error: "Fichier JSON invalide" }, 400);
+    }
+    const champs = ["concours", "serie", "ordre", "epreuve", "titre", "nature", "duree_minutes", "sujet", "corrige"];
+    const propres = lignes.map((l) => Object.fromEntries(champs.map((c) => [c, l[c]])));
+    const { error } = await service.from("epreuves_blanches").upsert(propres, { onConflict: "concours,serie,ordre" });
+    if (error) return json({ error: `Base ${error.message}` }, 500);
+    await service.storage.from("exclusif").remove([chemin]);
+    return json({ lignes: propres.length });
   }
   const url = String(d.url ?? ""), titre = String(d.titre ?? "").trim().slice(0, 160), matiere = String(d.matiere ?? "").trim().slice(0, 80);
   const nom = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);

@@ -29,7 +29,7 @@
   const TAILLE_MAX = 50 * 1024 * 1024;
 
   let moi = null, abonnes = [], paiements = [], contenus = [];
-  let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [];
+  let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [], epreuvesB = [];
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
   let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
@@ -171,7 +171,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -192,7 +192,8 @@
       client.rpc("telechargement_limites"),
       client.from("emails_reglages").select("*").maybeSingle(),
       client.from("emails_envoyes").select("*").order("cree_le", { ascending: false }).limit(300),
-      client.rpc("admin_concours_blancs")
+      client.rpc("admin_concours_blancs"),
+      client.from("epreuves_blanches").select("id, concours, serie, ordre, epreuve, titre, nature, duree_minutes, publie").order("serie").order("ordre")
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -202,7 +203,7 @@
     lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
     lireBilan(bil);
     emailsReglages = er.data || null; emailsEnvoyes = ee.data || [];
-    blancs = cb.data || [];
+    blancs = cb.data || []; epreuvesB = eb.data || [];
     telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
     agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
     // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
@@ -943,7 +944,7 @@
     const etatB = b => { const d = new Date(b.debut), f = d.getTime() + b.duree_minutes * 60000; return !b.publie ? "Brouillon" : maintenant < d ? "Publiée, à venir" : maintenant <= f ? "En cours" : "Terminée"; };
     const liste = blancs.length ? `<ul class="ad-facteurs">${blancs.map(b => `<li><span><b>${esc(b.titre)}</b><small>${etatB(b)} · ${EXERCICES_AGENT[b.exercice] || b.exercice}${b.matiere ? ", " + esc(b.matiere) : ""} · ${dateHeure(b.debut)}, ${b.duree_minutes} min · ${pluriel(b.copies, "copie")}, ${b.rendues} rendue${b.rendues > 1 ? "s" : ""}, ${b.notes} notée${b.notes > 1 ? "s" : ""}${b.moyenne != null ? `, moyenne ${String(b.moyenne).replace(".", ",")}/20` : ""}</small></span>
         <span>${!b.publie || new Date(b.debut) > maintenant ? `<button class="btn btn-ghost btn-sm" type="button" data-action="blanc-basculer" data-bid="${b.id}">${b.publie ? "Retirer" : "Publier"}</button>` : ""}</span></li>`).join("")}</ul>` : `<p class="ea-vide">Aucun concours blanc pour le moment.</p>`;
-    return `<section class="ad-bloc"><h3>Concours blancs <span class="n">${blancs.length}</span></h3>
+    return `${blocEpreuvesBlanches()}<section class="ad-bloc"><h3>Concours blancs à date fixe <span class="n">${blancs.length}</span></h3>
         <p class="ad-note">Les abonnés en cours voient l'épreuve publiée dès sa publication, mais le sujet n'apparaît qu'à l'heure du début. La copie s'enregistre seule et part à la fin (5 minutes de tolérance). Ensuite, chacun la fait corriger et noter par l'agent de révision (formules d'un mois et plus) ; le classement est anonyme. Prévenez les abonnés par une annonce.</p>
         ${liste}
         <details class="ad-ajout"><summary>Nouveau concours blanc</summary>
@@ -960,6 +961,41 @@
           </form>
         </details>
       </section>`;
+  }
+
+  // Concours blancs en accès libre (page concours-blancs/) : sujets lisibles de tous une fois publiés, corrigés
+  // réservés aux abonnés des formules d'une semaine et plus. L'administrateur lit les deux, publiés ou non.
+  const NOMS_EPREUVES = { preselection: "Présélection", sog: "Sujet d'ordre général", droit_civil: "Droit civil", droit_commercial: "Droit commercial et OHADA", droit_penal: "Droit pénal et procédure pénale", droit_administratif: "Droit administratif" };
+  function blocEpreuvesBlanches() {
+    const series = [...new Set(epreuvesB.map(e => `${e.concours}|${e.serie}`))];
+    const publiees = epreuvesB.filter(e => e.publie).length;
+    return `<section class="ad-bloc"><h3>Concours blancs en accès libre <span class="n">${epreuvesB.length}</span></h3>
+        <p class="ad-note">Chaque série comprend la présélection (2 heures) et les cinq épreuves écrites (4 heures chacune). Tout visiteur compose sur la page <a href="${ROOT}concours-blancs/" target="_blank" rel="noopener">Concours blancs</a> ; le corrigé est réservé aux abonnés des formules d'une semaine et plus. ${publiees} épreuve${publiees > 1 ? "s" : ""} publiée${publiees > 1 ? "s" : ""} sur ${epreuvesB.length}.</p>
+        ${series.length ? series.map(k => {
+          const [conc, n] = k.split("|"), liste = epreuvesB.filter(e => e.concours === conc && String(e.serie) === n);
+          const toutes = liste.every(e => e.publie);
+          return `<details class="ad-ajout"><summary>${esc(nomConcours(conc === "magistrature" ? "infj" : conc))}, série ${n} · ${liste.filter(e => e.publie).length}/${liste.length} publiées</summary>
+            <ul class="ad-facteurs">${liste.map(e => `<li><span><b>${esc(NOMS_EPREUVES[e.epreuve] || e.titre)}</b><small>${esc(e.nature)} · ${e.duree_minutes} min · ${e.publie ? "publiée" : "brouillon"}</small></span>
+              <span><button class="btn btn-ghost btn-sm" type="button" data-action="eb-voir" data-quoi="sujet" data-ebid="${e.id}">Sujet</button><button class="btn btn-ghost btn-sm" type="button" data-action="eb-voir" data-quoi="corrige" data-ebid="${e.id}">Corrigé</button></span></li>`).join("")}</ul>
+            <p><button class="btn btn-navy btn-sm" type="button" data-action="eb-serie" data-conc="${esc(conc)}" data-serie="${n}" data-publie="${toutes ? "0" : "1"}">${toutes ? "Retirer la série" : "Publier la série"}</button></p></details>`;
+        }).join("") : `<p class="ea-vide">Aucune épreuve pour le moment.</p>`}
+      </section>`;
+  }
+  // Présélection : le sujet et le corrigé sont des objets JSON ; on les présente en texte lisible
+  function texteEpreuve(e, quoi, t) {
+    if (e.epreuve !== "preselection") return t;
+    try {
+      const o = JSON.parse(t);
+      if (quoi === "sujet") return `${o.consigne || ""}\n\n${(o.items || []).map(i => `**${i.n}.** ${i.matiere ? `(${i.matiere}) ` : ""}${i.texte}`).join("\n\n")}`;
+      return (o.reponses || []).map(r => `**${r.n}. ${r.r === "V" ? "Vrai" : "Faux"}.** ${r.j || ""}`).join("\n\n");
+    } catch (err) { return t; }
+  }
+  async function voirEpreuveBlanche(id, quoi) {
+    const e = epreuvesB.find(x => x.id === id);
+    if (!e) return;
+    const { data, error } = await client.from("epreuves_blanches").select(quoi).eq("id", id).maybeSingle();
+    if (error || !data) { toast(error ? messageErreur(error) : "Épreuve introuvable."); return; }
+    ouvrirContenu({ type: "texte", titre: `Série ${e.serie}, ${NOMS_EPREUVES[e.epreuve] || e.titre}, ${quoi === "sujet" ? "sujet" : "corrigé"}`, texte: texteEpreuve(e, quoi, data[quoi]) }, "Administration");
   }
 
   function panneauStats() {
@@ -1071,7 +1107,7 @@
 
   /* ---------- E-mails aux abonnés (Brevo) ---------- */
   // Trois e-mails automatiques, préparés par la base et envoyés par la fonction « emails » toutes les 15 minutes
-  const TYPES_EMAIL = { bienvenue: "Bienvenue", rappel_fin: "Rappel de fin", inactif: "Relance d'inactivité", nouveautes: "Nouveautés", essai: "Essai" };
+  const TYPES_EMAIL = { bienvenue: "Bienvenue", rappel_fin: "Rappel de fin", inactif: "Relance d'inactivité", campagne: "Annonce (campagne)", nouveautes: "Nouveautés", essai: "Essai" };
   async function verifierBrevo() {
     const { data, error } = await client.functions.invoke("emails", { body: { action: "etat" } });
     etatBrevo = error ? { erreur: await erreurFonction(error) } : data;
@@ -1251,6 +1287,15 @@
     if (act === "copier-numeros") { copierNumeros(); return; }
     if (act === "supprimer-anciens") { supprimerAnciens(b); return; }
     if (act === "cmd-ligne") { $("#adCmdLignes").insertAdjacentHTML("beforeend", ligneCmdHTML()); return; }
+    if (act === "eb-voir") { voirEpreuveBlanche(Number(b.dataset.ebid), b.dataset.quoi === "sujet" ? "sujet" : "corrige"); return; }
+    if (act === "eb-serie") {
+      const publier = b.dataset.publie === "1";
+      if (publier && !confirm(`Publier la série ${b.dataset.serie} ? Tous les visiteurs pourront composer ; les abonnés des formules d'une semaine et plus liront les corrigés.`)) return;
+      const { error } = await client.from("epreuves_blanches").update({ publie: publier }).eq("concours", b.dataset.conc).eq("serie", Number(b.dataset.serie));
+      if (error) { toast(messageErreur(error)); return; }
+      recharger(publier ? "Série publiée." : "Série retirée.");
+      return;
+    }
     if (act === "blanc-basculer") {
       const cb = blancs.find(x => String(x.id) === b.dataset.bid);
       if (!cb) return;

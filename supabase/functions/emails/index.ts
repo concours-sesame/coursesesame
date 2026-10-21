@@ -111,8 +111,9 @@ async function planif(service: SupabaseClient) {
     const m = l.type === "bienvenue" ? bienvenue(l.prenom, l.donnees)
       : l.type === "rappel_fin" ? rappel(l.prenom, l.donnees)
       : l.type === "inactif" ? relance(l.prenom, l.donnees)
+      : l.type === "campagne" ? campagne(l.prenom, l.donnees)
       : nouveautes(l.prenom, l.donnees.contenus as Contenu[], String(l.donnees.jeton ?? ""));
-    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, ["nouveautes", "inactif"].includes(l.type) ? String(l.donnees.jeton ?? "") : undefined);
+    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, ["nouveautes", "inactif", "campagne"].includes(l.type) ? String(l.donnees.jeton ?? "") : undefined);
     await service.from("emails_envoyes").update({ statut: echec ? "erreur" : "envoye", erreur: echec }).eq("id", id);
     if (echec) erreurs++; else envoyes++;
     if (l.type === "nouveautes") annonce = true;
@@ -237,5 +238,45 @@ ${bouton("Voir les nouveautés", `${SITE}/espace-abonnes/`)}
 <p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
   const pied = `${piedService} Vous pouvez <a href="${lienDesinscription(jeton)}" style="color:#5b6475">ne plus recevoir l'annonce des nouveautés</a>, ou changer ce choix dans votre espace, rubrique Mon compte.`;
   const texte = `Bonjour ${prenom},\n\n${n === 1 ? "Un nouveau contenu vient d'être mis en ligne" : `${n} nouveaux contenus viennent d'être mis en ligne`} dans votre espace abonnés.\n\n${lignesTexte.join("\n")}\n\nVoir les nouveautés ${SITE}/espace-abonnes/\n\nL'équipe des Cours Sésame et SAJ\n\nNe plus recevoir l'annonce des nouveautés ${lienDesinscription(jeton)}`;
+  return { sujet, html: gabarit(sujet, corps, pied), texte };
+}
+
+// Campagnes ponctuelles (table emails_campagnes) ; une seule pour l'instant, l'ouverture des concours blancs
+function campagne(prenom: string, d: Record<string, unknown>) {
+  const jeton = String(d.jeton ?? "");
+  const lien = `${SITE}/concours-blancs/`;
+  const sujet = "10 concours blancs de la magistrature, chronométrés, avec leurs corrigés";
+  const corps = `<p>Bonjour ${esc(prenom)},</p>
+<p style="font-size:20px;line-height:1.3;font-weight:700;color:#0f2a5c">10 CONCOURS BLANCS DE LA MAGISTRATURE SONT EN LIGNE</p>
+<p>Chaque série reproduit le concours direct de l'INFJ, sur des sujets inédits : la <b>présélection en 2 heures</b>, puis les cinq épreuves écrites en <b>4 heures chacune</b> (sujet d'ordre général, droit civil, droit commercial et OHADA, droit pénal et procédure pénale, droit administratif).</p>
+<p>Le chronomètre démarre dès que vous entrez dans le sujet, et il n'y a pas de retour en arrière. Si vous quittez la page, il se fige, puis repart quand vous revenez.</p>
+<p>Avec votre abonnement, vous lisez le corrigé de chaque épreuve dès votre copie rendue (formules d'une semaine et plus) :</p>
+<ul>
+<li>la note et la justification de chaque affirmation pour la présélection ;</li>
+<li>un corrigé-type et une grille de notation sur 20 pour les écrits.</li>
+</ul>
+<p>Composez seul, sans document et sans aide, comme le jour du concours. Ces épreuves servent à mesurer votre vrai niveau : un résultat honnête vous dit exactement ce qu'il reste à travailler.</p>
+${bouton("Je passe un concours blanc", lien)}
+<p>Bon courage,<br>L'équipe des Cours Sésame et SAJ</p>`;
+  const pied = `${piedService} Vous pouvez <a href="${lienDesinscription(jeton)}" style="color:#5b6475">ne plus recevoir nos e-mails d'information</a>, ou changer ce choix dans votre espace, rubrique Mon compte.`;
+  const texte = `Bonjour ${prenom},
+
+10 CONCOURS BLANCS DE LA MAGISTRATURE SONT EN LIGNE
+
+Chaque série reproduit le concours direct de l'INFJ, sur des sujets inédits : la présélection en 2 heures, puis les cinq épreuves écrites en 4 heures chacune (sujet d'ordre général, droit civil, droit commercial et OHADA, droit pénal et procédure pénale, droit administratif).
+
+Le chronomètre démarre dès que vous entrez dans le sujet, et il n'y a pas de retour en arrière. Si vous quittez la page, il se fige, puis repart quand vous revenez.
+
+Avec votre abonnement, vous lisez le corrigé de chaque épreuve dès votre copie rendue (formules d'une semaine et plus) :
+- la note et la justification de chaque affirmation pour la présélection ;
+- un corrigé-type et une grille de notation sur 20 pour les écrits.
+
+Composez seul, sans document et sans aide, comme le jour du concours. Ces épreuves servent à mesurer votre vrai niveau : un résultat honnête vous dit exactement ce qu'il reste à travailler.
+
+Je passe un concours blanc ${lien}
+
+L'équipe des Cours Sésame et SAJ
+
+Ne plus recevoir nos e-mails d'information ${lienDesinscription(jeton)}`;
   return { sujet, html: gabarit(sujet, corps, pied), texte };
 }
