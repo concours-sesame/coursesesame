@@ -2,7 +2,7 @@
 // envoyé : chaque page est signée à leur nom (nom, téléphone, e-mail, date et heure) puis transformée en image.
 //   { action: "info", contenu }                 nombre de pages, pages lues aujourd'hui et plafond
 //   { action: "lire", contenu, page, echelle }  une page en PNG, comptée dans le plafond de lecture (300 par jour)
-//   { action: "reserver", contenu, pages }      réserve des pages à télécharger (5 % du total sur 7 jours, 15 par document)
+//   { action: "reserver", contenu, pages }      réserve des pages à télécharger (20 pages sur 30 jours, 5 par document)
 //   { action: "telecharger", reservation, page } une page réservée, en PDF image (30 minutes après la réservation)
 //
 // Déploiement : sans vérification de jeton par la plateforme. La fonction vérifie elle-même la session de l'appelant,
