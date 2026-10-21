@@ -95,6 +95,8 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   accepte la copie jusqu'à 5 minutes après la fin, puis la fige une fois rendue ; `noter_copie_blanc` ne retient la note
   de l'agent que si la correction porte exactement sur le sujet et la copie rendue. Classement anonyme (rang, nombre de
   copies notées, moyenne, meilleure note).
+  Chaque épreuve peut être rattachée à un corrigé-type (`concours_blancs.corrige_id`, contenu programmé pour paraître à
+  la fin de l'épreuve) ; `corrige_blanc` ne le livre qu'après la fin. Les corrigés se rattachent en SQL pour l'instant.
 - Sauvegarde automatique : `sauvegardes.prendre()`, chaque dimanche à 3 h (pg_cron `sauvegarde-hebdomadaire`), copie
   les tables essentielles dans `sauvegardes.instantanes` (schéma privé, 8 emplacements réutilisés à tour de rôle).
   Protège contre une erreur de manipulation, pas contre la perte du projet (voir la sauvegarde du README principal).
