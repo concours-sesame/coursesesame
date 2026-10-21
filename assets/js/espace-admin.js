@@ -1071,19 +1071,19 @@
   const nomDe = uid => { const a = abonnes.find(x => x.user_id === uid); return a ? `${a.prenom} ${a.nom}` : "Compte supprimé"; };
   function tablesTelechargements() {
     const q = sansAccents(rechercheT).trim();
-    const il7j = Date.now() - 7 * 864e5, jour = auj();
+    const depuis30j = Date.now() - 30 * 864e5, jour = auj();
     const parAbonne = new Map();
-    const ligne = uid => { if (!parAbonne.has(uid)) parAbonne.set(uid, { uid, tele7: 0, tele60: 0, dernier: null, luesJour: 0, lues30: 0 }); return parAbonne.get(uid); };
-    telechargements.forEach(t => { const x = ligne(t.user_id); x.tele60 += t.nb; if (new Date(t.cree_le) >= il7j) x.tele7 += t.nb; if (!x.dernier || t.cree_le > x.dernier) x.dernier = t.cree_le; });
+    const ligne = uid => { if (!parAbonne.has(uid)) parAbonne.set(uid, { uid, tele30: 0, tele60: 0, dernier: null, luesJour: 0, lues30: 0 }); return parAbonne.get(uid); };
+    telechargements.forEach(t => { const x = ligne(t.user_id); x.tele60 += t.nb; if (new Date(t.cree_le) >= depuis30j) x.tele30 += t.nb; if (!x.dernier || t.cree_le > x.dernier) x.dernier = t.cree_le; });
     pagesLues.forEach(l => { const x = ligne(l.user_id); x.lues30 += Number(l.pages); if (l.jour === jour) x.luesJour += Number(l.pages); });
     const garde = uid => !q || sansAccents(`${nomDe(uid)} ${(abonnes.find(x => x.user_id === uid) || {}).telephone || ""}`).includes(q);
-    const resume = [...parAbonne.values()].filter(x => garde(x.uid)).sort((a, b) => b.tele7 - a.tele7 || b.luesJour - a.luesJour || b.lues30 - a.lues30);
+    const resume = [...parAbonne.values()].filter(x => garde(x.uid)).sort((a, b) => b.tele30 - a.tele30 || b.luesJour - a.luesJour || b.lues30 - a.lues30);
     const liste = telechargements.filter(t => garde(t.user_id) || sansAccents(t.titre).includes(q));
     const quota = limitesTele ? limitesTele.quota : 0;
     return `<section class="ad-bloc"><h3>Par abonné <span class="n">${resume.length}</span></h3>
         ${resume.length ? `<div class="ad-tableau" role="region" aria-label="Téléchargements et lectures par abonné" tabindex="0"><table>
-          <thead><tr><th>Abonné</th><th>Téléchargées, 7 jours</th><th>Lues aujourd'hui</th><th>Lues, 30 jours</th><th>Dernier téléchargement</th></tr></thead>
-          <tbody>${resume.map(x => `<tr><td>${esc(nomDe(x.uid))}</td><td>${x.tele7}${quota ? ` / ${quota}` : ""}${quota && x.tele7 >= quota * 0.8 ? ` <span class="ad-badge ad-partage">Limite proche</span>` : ""}</td><td>${x.luesJour} / 300${x.luesJour >= 240 ? ` <span class="ad-badge ad-partage">Limite proche</span>` : ""}</td><td>${x.lues30}</td><td>${x.dernier ? dateHeure(x.dernier) : ""}</td></tr>`).join("")}</tbody>
+          <thead><tr><th>Abonné</th><th>Téléchargées, 30 jours</th><th>Lues aujourd'hui</th><th>Lues, 30 jours</th><th>Dernier téléchargement</th></tr></thead>
+          <tbody>${resume.map(x => `<tr><td>${esc(nomDe(x.uid))}</td><td>${x.tele30}${quota ? ` / ${quota}` : ""}${quota && x.tele30 >= quota * 0.8 ? ` <span class="ad-badge ad-partage">Limite proche</span>` : ""}</td><td>${x.luesJour} / 300${x.luesJour >= 240 ? ` <span class="ad-badge ad-partage">Limite proche</span>` : ""}</td><td>${x.lues30}</td><td>${x.dernier ? dateHeure(x.dernier) : ""}</td></tr>`).join("")}</tbody>
         </table></div>` : `<p class="ea-vide">${q ? "Aucun abonné ne correspond." : "Aucune page lue ni téléchargée pour le moment."}</p>`}
       </section>
       <section class="ad-bloc"><h3>Téléchargements des 60 derniers jours <span class="n">${liste.length}</span></h3>
@@ -1094,12 +1094,12 @@
       </section>`;
   }
   function panneauTelechargements() {
-    const il7j = Date.now() - 7 * 864e5, jour = auj();
-    const tele7 = telechargements.filter(t => new Date(t.cree_le) >= il7j);
-    return `<div class="ad-stats"><div><b>${tele7.reduce((s, t) => s + t.nb, 0)}</b><span>Pages téléchargées en 7 jours</span></div>
-        <div><b>${new Set(tele7.map(t => t.user_id)).size}</b><span>Abonnés ayant téléchargé en 7 jours</span></div>
+    const depuis30j = Date.now() - 30 * 864e5, jour = auj();
+    const tele30 = telechargements.filter(t => new Date(t.cree_le) >= depuis30j);
+    return `<div class="ad-stats"><div><b>${tele30.reduce((s, t) => s + t.nb, 0)}</b><span>Pages téléchargées en 30 jours</span></div>
+        <div><b>${new Set(tele30.map(t => t.user_id)).size}</b><span>Abonnés ayant téléchargé en 30 jours</span></div>
         <div><b>${pagesLues.filter(l => l.jour === jour).reduce((s, l) => s + Number(l.pages), 0)}</b><span>Pages lues aujourd'hui</span></div>
-        <div><b>${limitesTele ? limitesTele.quota : "?"}</b><span>Limite par abonné et par semaine (15 par document)</span></div></div>
+        <div><b>${limitesTele ? limitesTele.quota : "?"}</b><span>Limite par abonné sur 30 jours (5 par ouvrage)</span></div></div>
       <p class="ad-note">Chaque page lue ou téléchargée porte, fondus dans l'image, le nom, le téléphone et l'e-mail de l'abonné ; les pages téléchargées portent aussi la référence ci-dessous. Une page trouvée en dehors de l'espace permet ainsi de retrouver le compte et le téléchargement d'origine.</p>
       <div class="ad-outils ad-outils-c"><label class="search"><span class="sr-only">Rechercher</span>${icone("i-search")}<input type="search" id="adRechercheT" placeholder="Rechercher un abonné, un numéro ou un document" value="${esc(rechercheT)}" autocomplete="off"></label></div>
       <div id="adTablesT">${tablesTelechargements()}</div>`;

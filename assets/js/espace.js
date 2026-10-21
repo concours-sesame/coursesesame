@@ -444,7 +444,7 @@
       // Textes officiels et jurisprudence : lecture sans plafond et texte complet téléchargeable
       const officiel = /^\s*(Texte officiel|Jurisprudence)/i.test(c.matiere || "");
       corps.innerHTML = `<div class="ea-pdf" aria-live="polite"><p class="ea-attente">Ouverture du document…</p></div>
-        <p class="ea-mention">${officiel ? "Texte reproduit d'après sa source officielle, indiquée dans la présentation. Seule la publication au Journal officiel fait foi." : `Document réservé à ${esc(marque)}. Chaque page porte votre nom. Copie et impression désactivées ; quelques pages peuvent être téléchargées chaque semaine.`}</p>`;
+        <p class="ea-mention">${officiel ? "Texte reproduit d'après sa source officielle, indiquée dans la présentation. Seule la publication au Journal officiel fait foi." : `Document réservé à ${esc(marque)}. Chaque page porte votre nom. Copie et impression désactivées ; quelques pages peuvent être téléchargées chaque mois.`}</p>`;
       try {
         await afficherPages(c, $(".ea-pdf", corps), c.page, officiel);
         if (!visionneuse.hidden) (officiel ? ajouterTexteComplet : ajouterTelechargement)(c, $(".ea-pdf", corps));
@@ -506,8 +506,8 @@
     });
   }
 
-  /* ---------- Téléchargement de pages (limite hebdomadaire) ---------- */
-  // Sur 7 jours glissants : 5 % du total des pages des PDF, 15 pages au plus d'un même document. Le PDF est découpé
+  /* ---------- Téléchargement de pages (limite mensuelle) ---------- */
+  // Sur 30 jours glissants : 20 pages au plus en tout, 5 pages au plus d'un même document. Le PDF est découpé
   // et filigrané au nom de l'abonné par la fonction « telechargement » ; la base tient le décompte.
   function ajouterTelechargement(c, zone) {
     const barre = $(".ea-pdf-barre", zone);
@@ -534,8 +534,8 @@
       reste = Math.max(0, Math.min(data.quota - data.utilises, data.par_document - doc));
       const lib = data.liberation ? new Date(data.liberation).toLocaleString("fr-FR", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) : "";
       etatTxt.innerHTML = reste
-        ? `Vous pouvez télécharger <b>${reste} page${reste > 1 ? "s" : ""}</b> de ce document. Sur 7 jours, ${data.quota} pages au plus en tout (${data.utilises} déjà utilisée${data.utilises > 1 ? "s" : ""}) et ${data.par_document} au plus par document.`
-        : `Limite atteinte pour ce document ou pour la semaine. ${lib ? `Des pages se libèrent ${esc(lib)}.` : ""}`;
+        ? `Vous pouvez télécharger <b>${reste} page${reste > 1 ? "s" : ""}</b> de ce document. Sur 30 jours, ${data.quota} pages au plus pour l'ensemble des ouvrages (${data.utilises} déjà utilisée${data.utilises > 1 ? "s" : ""}) et ${data.par_document} au plus par ouvrage.`
+        : `Limite atteinte pour ce document ou pour les 30 derniers jours. ${lib ? `Des pages se libèrent ${esc(lib)}.` : ""}`;
       champ.disabled = envoi.disabled = !reste;
     };
     bouton.addEventListener("click", () => {
