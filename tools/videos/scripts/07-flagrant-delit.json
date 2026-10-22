@@ -1,0 +1,41 @@
+{
+ "fichier": "notion-flagrant-delit",
+ "titre": "Le flagrant délit",
+ "rubrique": "Procédure pénale",
+ "scenes": [
+  {"type": "intro", "titre": "Le flagrant délit",
+   "dit": ["Une notion, une minute.", "Le *flagrant* délit."]},
+  {"type": "question", "titre": "Surpris la main dans le sac.",
+   "texte": "Que peut faire la police, et même un simple passant ?", "cueTexte": 1,
+   "dit": ["Yaoplé arrache un sac au marché. La foule le poursuit en criant au voleur.", "Que peut faire la police, et même un simple *passant* ?"]},
+  {"type": "article", "titre": "Article 77 du Code de procédure pénale",
+   "citation": "Est qualifié crime ou délit flagrant, le crime ou le délit qui est en train de se commettre, ou qui vient de se commettre.", "cueCitation": 1,
+   "dit": ["Tout dépend de la flagrance, définie par l'article *77* du Code de procédure pénale.", "Est flagrant le crime ou le délit qui est *en train* de se commettre, ou qui vient de se commettre."]},
+  {"type": "etapes", "titre": "Trois situations de flagrance",
+   "items": [
+     {"n": "1", "t": "En train de se commettre", "d": "L'auteur est surpris pendant l'action", "cue": 1},
+     {"n": "2", "t": "Qui vient de se commettre", "d": "L'infraction vient d'avoir lieu", "cue": 2},
+     {"n": "3", "t": "Dans un temps très voisin de l'action", "d": "Clameur publique, objets en sa possession, traces ou indices", "cue": 3}],
+   "dit": ["Trois situations sont visées.", "L'infraction *en train* de se commettre.", "L'infraction qui *vient* de se commettre.", "Et, dans un temps très voisin de l'action, la personne poursuivie par la *clameur publique*, trouvée en possession d'objets, ou présentant des traces ou indices de sa participation."]},
+  {"type": "blocs", "titre": "Des pouvoirs renforcés",
+   "items": [
+     {"t": "Se transporter sans délai", "d": "L'officier de police judiciaire informe le procureur et fait les constatations (article 78).", "cue": 1},
+     {"t": "Perquisitionner", "d": "Chez les personnes qui paraissent avoir participé au crime (article 80).", "cue": 2},
+     {"t": "Retenir sur place", "d": "Défense de s'éloigner jusqu'à la clôture des opérations (article 81).", "cue": 3}],
+   "dit": ["L'enquête de flagrance donne à la police des pouvoirs renforcés.", "L'officier de police judiciaire informe immédiatement le procureur, se transporte *sans délai* sur les lieux et procède aux constatations.", "Il peut *perquisitionner* au domicile des personnes qui paraissent avoir participé au crime.", "Et il peut défendre à toute personne de s'éloigner des lieux jusqu'à la fin de ses opérations."]},
+  {"type": "article", "titre": "Article 88 du Code de procédure pénale",
+   "citation": "Dans les cas de crime flagrant ou de délit flagrant puni d'une peine d'emprisonnement, toute personne a qualité pour en appréhender l'auteur et le conduire devant l'officier de police judiciaire le plus proche.", "cueCitation": 1,
+   "dit": ["Et le simple passant ?", "Selon l'article *88*, en cas de crime flagrant, ou de délit flagrant puni d'emprisonnement, toute personne peut appréhender l'auteur et le conduire devant l'officier de police judiciaire le plus proche."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Flagrance", "d": "Yaoplé est rattrapé quelques minutes plus tard, le sac à la main.", "cue": 1},
+     {"ok": false, "t": "Pas de flagrance", "d": "Il est identifié trois semaines après, sur dénonciation : c'est une enquête préliminaire.", "cue": 2}],
+   "dit": ["Un exemple.", "Yaoplé est rattrapé par la foule quelques minutes plus tard, le sac à la main : c'est la *flagrance*.", "Mais s'il est identifié trois semaines après, sur dénonciation, l'enquête n'est plus de flagrance : c'est une enquête *préliminaire*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "La foule ne se fait pas justice", "d": "Celui qui appréhende l'auteur doit le conduire devant l'officier de police judiciaire le plus proche.", "cue": 0}],
+   "dit": ["Le piège : croire que la foule peut se faire justice.", "Celui qui appréhende l'auteur doit le *conduire* devant l'officier de police judiciaire le plus proche : il ne peut ni le garder, ni le punir lui-même."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

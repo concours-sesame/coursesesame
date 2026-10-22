@@ -1,0 +1,36 @@
+{
+ "fichier": "notion-recidive",
+ "titre": "La récidive",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {"type": "intro", "titre": "La récidive",
+   "dit": ["Une notion, une minute.", "La *récidive*."]},
+  {"type": "question", "titre": "Déjà condamné, il recommence.",
+   "texte": "Le juge peut-il le punir plus sévèrement ?", "cueTexte": 1,
+   "dit": ["Sélibo a déjà été condamné. Il commet une nouvelle infraction.", "Le juge peut-il le punir plus *sévèrement* ?"]},
+  {"type": "article", "titre": "Article 12 du Code pénal",
+   "citation": "Toute personne qui, alors qu'elle a fait l'objet d'une condamnation pénale devenue définitive et non effacée par amnistie, réhabilitation ou autre mesure légale, commet une nouvelle infraction est en état de récidive.", "cueCitation": 0,
+   "dit": ["Oui, s'il est en état de récidive, selon l'article *12* du Code pénal.", "La récidive suppose une condamnation pénale devenue *définitive*, non effacée par l'amnistie ou la réhabilitation, puis une nouvelle infraction."]},
+  {"type": "blocs", "titre": "Les effets sur la peine",
+   "items": [
+     {"t": "Crime, puis crime ou délit", "d": "Après une peine de plus de cinq ans pour crime : le maximum de la peine encourue, qui peut être porté au double (articles 122 et 123).", "cue": 1},
+     {"t": "Délit, puis même délit", "d": "Après une peine de plus d'un an pour délit : au moins le double de la peine précédente, sans dépasser le double du maximum (article 123).", "cue": 3, "fort": true}],
+   "dit": ["La loi distingue deux cas.", "Premier cas : condamné pour crime à plus de cinq ans d'emprisonnement, il commet un crime ou un délit.", "Il est alors condamné au *maximum* de la peine encourue, qui peut être porté jusqu'au double.", "Second cas : condamné pour délit à plus d'un an, il commet le *même* délit.", "La peine est au moins le double de la précédente, sans dépasser le double du maximum."]},
+  {"type": "etapes", "titre": "Pour le délit, deux précisions",
+   "items": [
+     {"n": "1", "t": "Un délai de cinq ans", "d": "Le nouveau délit doit être commis au plus tard cinq ans après l'expiration ou la prescription de la première peine", "cue": 1},
+     {"n": "2", "t": "Des délits assimilés", "d": "Vol, escroquerie, abus de confiance, recel et délits relatifs aux chèques sont considérés comme les mêmes délits", "cue": 2}],
+   "dit": ["Pour le délit, la loi ajoute deux précisions.", "Le nouveau délit doit être commis au plus tard *cinq ans* après l'expiration ou la prescription de la première peine.", "Et le vol, l'escroquerie, l'abus de confiance, le recel et les délits relatifs aux chèques sont considérés comme les *mêmes* délits."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Récidive", "d": "Condamné à deux ans pour vol, Sélibo commet une escroquerie trois ans après sa libération : au moins quatre ans.", "cue": 1},
+     {"ok": false, "t": "Pas d'aggravation", "d": "Condamné à six mois seulement : la première peine ne dépassait pas un an.", "cue": 2}],
+   "dit": ["Un exemple.", "Condamné à deux ans pour vol, Sélibo commet une escroquerie trois ans après sa libération : c'est le même délit, et la peine sera d'au moins *quatre* ans.", "Mais s'il n'avait été condamné qu'à six mois, cette aggravation ne jouerait pas : la première peine ne dépassait pas *un an*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Récidive ou concours d'infractions", "d": "Sans condamnation définitive entre les deux faits, il n'y a pas récidive : les peines ne se cumulent pas (article 119).", "cue": 0}],
+   "dit": ["Le piège : confondre récidive et concours d'infractions.", "Sans condamnation définitive entre les deux faits, il n'y a pas récidive, et selon l'article *119*, les peines ne se cumulent pas."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

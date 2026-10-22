@@ -464,7 +464,7 @@ function videosSection(list, prefix, { id = "videos", h2, lead, ici, cls = "", b
 // Invitation à l'espace abonnés
 function espaceBand(prefix) {
   return `<div class="espace-band reveal">
-      <div><b>Allez plus loin avec l'espace abonnés</b><p>Sujets corrigés, fiches de révision et QCM chronométrés, et dès la formule d'un mois, nos ouvrages complets à lire en ligne. Créez votre compte en une minute, réglez par Mobile Money, et votre accès s'ouvre.</p></div>
+      <div><b>Allez plus loin avec l'espace abonnés</b><p>Sujets corrigés, fiches de révision et QCM chronométrés, et dès la formule d'un mois, nos ouvrages complets à lire en ligne. Créez votre compte en une minute, réglez votre formule, et votre accès s'ouvre.</p></div>
       <div class="espace-band-actions"><a class="btn btn-navy" href="${prefix}espace-abonnes/#inscription">Créer mon compte${arrow}</a><a class="btn btn-ghost" href="${prefix}espace-abonnes/#connexion">Se connecter</a></div>
     </div>`;
 }

@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-garde-a-vue",
+ "titre": "La garde à vue",
+ "rubrique": "Procédure pénale",
+ "scenes": [
+  {"type": "intro", "titre": "La garde à vue",
+   "dit": ["Une notion, une minute.", "La *garde à vue*."]},
+  {"type": "question", "titre": "Retenu au commissariat.",
+   "texte": "Combien de temps, et avec quels droits ?", "cueTexte": 1,
+   "dit": ["Dognimé est retenu au commissariat, soupçonné d'un vol.", "Combien de temps peut-il être *retenu*, et avec quels droits ?"]},
+  {"type": "article", "titre": "Article 71 du Code de procédure pénale",
+   "citation": "Si pour les nécessités de l'enquête, l'officier de police judiciaire est amené à garder à sa disposition une ou plusieurs personnes contre lesquelles existent des indices graves et concordants de participation à une infraction, il peut les placer en garde à vue.", "cueCitation": 0,
+   "dit": ["Selon l'article *71* du Code de procédure pénale, la garde à vue suppose des indices *graves et concordants* de participation à une infraction.", "Et elle doit être l'unique moyen d'atteindre l'un des objectifs fixés par la loi, comme empêcher la modification des preuves ou les pressions sur les témoins."]},
+  {"type": "etapes", "titre": "Une durée encadrée",
+   "items": [
+     {"n": "1", "t": "Quarante-huit heures au plus", "d": "Le procureur est informé dès le début de la mesure", "cue": 1},
+     {"n": "2", "t": "Une prolongation possible", "d": "De quarante-huit heures, accordée par le procureur, par écrit ou verbalement", "cue": 2},
+     {"n": "3", "t": "À l'issue", "d": "Déféré devant le procureur, ou remis en liberté", "cue": 3}],
+   "dit": ["La durée est encadrée par l'article 72.", "Au plus *quarante-huit heures*, et le procureur est informé dès le début.", "Le procureur peut accorder une prolongation de quarante-huit heures, par écrit ou verbalement.", "À l'issue, la personne est soit *déférée* devant le procureur, soit remise en liberté."]},
+  {"type": "blocs", "titre": "Ses droits",
+   "items": [
+     {"t": "Être informée", "d": "De la mesure, de sa durée, de la nature et de la date présumée de l'infraction (article 74).", "cue": 1},
+     {"t": "Faire prévenir un proche", "d": "Une personne avec qui elle vit, un parent, un ami ou son employeur (article 74).", "cue": 2},
+     {"t": "Un examen médical", "d": "De droit si elle-même ou un membre de sa famille le demande (article 75).", "cue": 3, "fort": true}],
+   "dit": ["Ses droits.", "Elle est immédiatement *informée* de la mesure, de sa durée, et de l'infraction qui lui est reprochée.", "Elle peut faire *prévenir* un proche, un parent, un ami ou son employeur.", "Et l'examen *médical* est de droit si elle, ou un membre de sa famille, le demande."]},
+  {"type": "cas", "titre": "Et les mineurs ?",
+   "items": [
+     {"ok": false, "t": "Moins de treize ans", "d": "Aucune garde à vue n'est possible (article 790).", "cue": 1},
+     {"ok": true, "t": "Treize ans et plus", "d": "Autorisation préalable du procureur, vingt-quatre heures au plus sauf en matière criminelle (articles 790 et 791).", "cue": 2}],
+   "dit": ["Pour les mineurs, des règles propres.", "Avant *treize ans*, aucune garde à vue n'est possible.", "À partir de treize ans, il faut l'autorisation préalable du procureur, et la mesure ne peut dépasser *vingt-quatre heures*, sauf en matière criminelle."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Qui peut décider ?", "d": "Seul l'officier de police judiciaire : l'agent de police judiciaire n'en a pas le pouvoir (article 33).", "cue": 0}],
+   "dit": ["Le piège : croire que tout policier peut placer en garde à vue.", "Seul l'*officier* de police judiciaire le peut : l'agent de police judiciaire n'en a pas le pouvoir."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
