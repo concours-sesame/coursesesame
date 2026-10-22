@@ -166,6 +166,7 @@ const VIDEOS=[
 ];
 // Vidéos réservées aux abonnés (espace abonnés) : seule leur affiche est publique, assets/img/videos/<fichier>.jpg
 const VIDEOS_ABONNES=[
+{"fichier":"notion-recidive","duree":"1:42","tag":"Une notion, une minute","titre":"La récidive","desc":"L'article 12 du Code pénal, les effets sur la peine selon les articles 122 et 123, le délai de cinq ans, les délits assimilés, un exemple et le piège du concours d'infractions.","concours":["infj","greffe","penitentiaire","eppjej"]},
 {"fichier":"notion-immunite-familiale","duree":"1:26","tag":"Une notion, une minute","titre":"L'immunité familiale","desc":"L'article 103 du Code pénal : les trois cercles de proches, les limites de l'immunité, un exemple et le piège de la volonté de la victime.","concours":["infj","greffe","penitentiaire","eppjej"]},
 {"fichier":"notion-tentative-punissable","duree":"1:39","tag":"Une notion, une minute","titre":"La tentative punissable","desc":"L'article 28 du Code pénal : les deux conditions, un exemple, la tentative de crime et de délit, le but impossible et le piège des actes préparatoires.","concours":["infj","greffe","penitentiaire","eppjej"]}
 ];
