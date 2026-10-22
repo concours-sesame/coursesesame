@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-personnalite-juridique",
+ "titre": "La personnalité juridique",
+ "rubrique": "Droit civil",
+ "scenes": [
+  {"type": "intro", "titre": "La personnalité juridique",
+   "dit": ["Une notion, une minute.", "La *personnalité* juridique."]},
+  {"type": "question", "titre": "Un nouveau-né, une société, un animal.",
+   "texte": "Qui peut être titulaire de droits ?", "cueTexte": 1,
+   "dit": ["Un nouveau-né, une société, un animal.", "Qui peut être *titulaire* de droits et d'obligations ?"]},
+  {"type": "article", "titre": "Article 2 de la Constitution",
+   "citation": "Tout individu a droit à la dignité humaine et à la reconnaissance de sa personnalité juridique.", "cueCitation": 1,
+   "dit": ["La personnalité juridique, c'est l'aptitude à être titulaire de droits et d'obligations.", "Selon l'article *2* de la Constitution, tout individu a droit à la reconnaissance de sa personnalité juridique."]},
+  {"type": "blocs", "titre": "Deux catégories de personnes",
+   "items": [
+     {"t": "Les personnes physiques", "d": "Les êtres humains.", "cue": 1},
+     {"t": "Les personnes morales", "d": "Des groupements dotés de la personnalité, comme la société, dès son immatriculation au registre du commerce et du crédit mobilier.", "cue": 2},
+     {"t": "Et l'animal ?", "d": "Il n'est pas une personne : c'est un bien.", "cue": 3, "fort": true}],
+   "dit": ["Il existe deux catégories de personnes.", "Les personnes *physiques* : les êtres humains.", "Les personnes *morales* : des groupements, comme la société, qui acquiert la personnalité juridique dès son immatriculation au registre du commerce et du crédit mobilier.", "Quant à l'animal, il n'est pas une personne : c'est un *bien*."]},
+  {"type": "etapes", "titre": "La vie de la personne physique",
+   "items": [
+     {"n": "1", "t": "La naissance", "d": "La personnalité commence à la naissance", "cue": 1},
+     {"n": "2", "t": "L'enfant conçu", "d": "Il peut hériter, s'il naît vivant (article 7 de la loi relative aux successions)", "cue": 2},
+     {"n": "3", "t": "Le décès", "d": "La personnalité s'éteint avec la mort", "cue": 3}],
+   "dit": ["Pour la personne physique, la personnalité commence à la *naissance*.", "Mais l'enfant simplement conçu peut déjà hériter, à condition de naître *vivant*, selon l'article 7 de la loi relative aux successions.", "Et la personnalité s'éteint avec le *décès*."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Héritier", "d": "Le père de Kessiélé meurt avant sa naissance : née vivante, elle hérite de lui.", "cue": 1},
+     {"ok": false, "t": "Pas d'héritier", "d": "Un enfant qui n'est pas encore conçu au décès ne peut pas hériter.", "cue": 2}],
+   "dit": ["Un exemple.", "Le père de Kessiélé meurt pendant la grossesse. Née vivante, Kessiélé *hérite* de lui.", "En revanche, un enfant qui n'était pas encore conçu au moment du décès ne peut pas hériter."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Personnalité et capacité", "d": "Le mineur a la personnalité juridique, même s'il n'exerce pas seul ses droits.", "cue": 0}],
+   "dit": ["Le piège : confondre personnalité et *capacité*.", "Le mineur a la personnalité juridique : il est titulaire de droits, même s'il ne peut pas les exercer seul."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
