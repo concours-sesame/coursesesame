@@ -684,12 +684,22 @@ a.aside-title:hover{color:var(--gold-ink)}
 .v-rail{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,24px)}
 .v-rail-after{margin-top:clamp(40px,6vw,64px)}
 .v-card{min-width:0;margin:0;display:flex;flex-direction:column;gap:.8rem}
-.v-card figcaption{display:flex;flex-direction:column;gap:.25rem}
+.v-card figcaption,.v-cap{display:flex;flex-direction:column;gap:.25rem}
 .v-card b{font-family:var(--serif);font-size:1.12rem;line-height:1.25;color:var(--ink)}
 .v-desc{font-size:.95rem;line-height:1.5;color:var(--muted)}
 .v-link{display:inline-block;margin-top:.2rem;font-size:.95rem;font-weight:600;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:3px;color:var(--navy)}
 .v-link svg{display:none}
 .v-rail-sm{grid-template-columns:repeat(auto-fill,minmax(180px,220px))}
+.v-abo{color:inherit;text-decoration:none}
+.v-abo .v-frame{display:block}
+.v-abo-pill{position:absolute;left:12px;bottom:12px;z-index:1;display:inline-flex;align-items:center;gap:.45rem;padding:.35rem .8rem;border-radius:var(--r-sm);background:#fff;color:var(--navy);font-size:.9rem;font-weight:700}
+.v-abo-pill svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;flex:none}
+.v-abo:hover .v-abo-pill{background:var(--gold)}
+.v-abo:focus-visible{outline:3px solid var(--gold);outline-offset:4px;border-radius:var(--r-sm)}
+.v-abo-head{margin:clamp(40px,6vw,64px) 0 clamp(16px,2.5vw,24px)}
+.v-abo-head h3{display:flex;align-items:center;gap:.5rem;font-family:var(--serif);font-weight:700;font-size:clamp(1.25rem,2.2vw,1.55rem);color:var(--navy)}
+.v-abo-head h3 svg{width:22px;height:22px;fill:none;stroke:var(--gold);stroke-width:2.2;flex:none}
+.v-abo-head p{color:var(--muted);margin-top:.3rem}
 .v-inline{display:grid;grid-template-columns:180px minmax(0,1fr);gap:1.2rem;align-items:center;padding:.9rem;border:1px solid var(--line);border-radius:var(--r);background:var(--cream);margin-bottom:clamp(22px,3vw,32px)}
 .v-inline b{display:block;font-family:var(--serif);font-size:1.2rem;line-height:1.25;margin:.3rem 0 .4rem;color:var(--navy)}
 .v-inline p{font-size:.95rem;color:var(--muted)}

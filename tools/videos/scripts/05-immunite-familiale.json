@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-immunite-familiale",
+ "titre": "L'immunité familiale",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {"type": "intro", "titre": "L'immunité familiale",
+   "dit": ["Une notion, une minute.", "L'*immunité* familiale."]},
+  {"type": "question", "titre": "Il prend l'argent de son père.",
+   "texte": "Peut-il être poursuivi devant le juge pénal ?", "cueTexte": 1,
+   "dit": ["Un fils prend l'argent de son père, sans son accord.", "Peut-il être *poursuivi* devant le juge pénal ?"]},
+  {"type": "article", "titre": "Article 103 du Code pénal",
+   "citation": "Ne peuvent donner lieu qu'à des réparations civiles les infractions contre la propriété commises […]", "cueCitation": 1,
+   "dit": ["Non, selon l'article *103* du Code pénal.", "Les infractions contre la propriété commises entre certains proches ne peuvent donner lieu qu'à des *réparations civiles*."]},
+  {"type": "etapes", "titre": "Trois cercles de proches",
+   "items": [
+     {"n": "1", "t": "Les époux", "d": "L'un au préjudice de l'autre ; le veuf ou la veuve, pour les biens du défunt", "cue": 1},
+     {"n": "2", "t": "Ascendants et descendants", "d": "L'enfant envers ses parents, les parents envers leurs enfants", "cue": 2},
+     {"n": "3", "t": "Les alliés aux mêmes degrés", "d": "Si l'infraction est commise pendant la durée du mariage", "cue": 3}],
+   "dit": ["Trois cercles de proches sont concernés.", "Les *époux*, l'un au préjudice de l'autre, et le conjoint survivant, pour les biens de l'époux décédé.", "Les *ascendants* et les *descendants* : l'enfant envers ses parents, et les parents envers leurs enfants.", "Et les *alliés* aux mêmes degrés, à condition que l'infraction ait été commise pendant la durée du mariage."]},
+  {"type": "blocs", "titre": "Ses limites",
+   "items": [
+     {"t": "La propriété seulement", "d": "Le vol, par exemple ; les violences restent poursuivies.", "cue": 1},
+     {"t": "Une immunité personnelle", "d": "Le complice étranger à la famille reste poursuivi.", "cue": 2},
+     {"t": "La réparation civile demeure", "d": "La victime peut obtenir réparation.", "cue": 3, "fort": true}],
+   "dit": ["Attention à ses limites.", "Elle ne couvre que les infractions contre la *propriété*, comme le vol : les violences restent poursuivies.", "Elle est *personnelle* : le complice étranger à la famille reste poursuivi.", "Et la victime conserve son action en *réparation civile*."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Immunité", "d": "Koudjéla prend l'argent de son père : seule une réparation civile est possible.", "cue": 1},
+     {"ok": false, "t": "Poursuites", "d": "Son ami Tébalo, qui l'a aidé, reste poursuivi comme complice.", "cue": 2}],
+   "dit": ["Un exemple.", "Koudjéla prend l'argent de son père : il ne peut faire l'objet que d'une action en *réparation civile*.", "Mais son ami Tébalo, qui l'a aidé, reste *poursuivi* comme complice."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "La volonté de la victime", "d": "Même si le père veut voir son fils puni, l'immunité s'impose.", "cue": 0}],
+   "dit": ["Le piège : croire que tout dépend de la victime.", "Même si le père veut voir son fils puni, l'immunité *s'impose* : seule la réparation civile reste possible."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

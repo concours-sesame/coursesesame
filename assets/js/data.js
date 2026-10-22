@@ -164,3 +164,8 @@ const VIDEOS=[
 {"fichier":"annales-sog-magistrature-2019","format":"vertical","duree":"1:33","date":"2026-10-09","tag":"Annales décryptées","titre":"SOG Magistrature 2019","desc":"Le sujet du concours direct de septembre 2019 décrypté, du type de sujet au plan en trois parties, avec les points à retenir.","methode":"SOG (Sujet d'Ordre Général)","concours":["infj"]},
 {"fichier":"annales-sog-penitentiaire-2019","format":"vertical","duree":"1:33","date":"2026-10-09","tag":"Annales décryptées","titre":"SOG Pénitentiaire 2019","desc":"Le sujet du cycle supérieur de septembre 2019 décrypté, des mots clés au plan, avec les pièges à éviter.","methode":"SOG (Sujet d'Ordre Général)","concours":["penitentiaire"]}
 ];
+// Vidéos réservées aux abonnés (espace abonnés) : seule leur affiche est publique, assets/img/videos/<fichier>.jpg
+const VIDEOS_ABONNES=[
+{"fichier":"notion-immunite-familiale","duree":"1:26","tag":"Une notion, une minute","titre":"L'immunité familiale","desc":"L'article 103 du Code pénal : les trois cercles de proches, les limites de l'immunité, un exemple et le piège de la volonté de la victime.","concours":["infj","greffe","penitentiaire","eppjej"]},
+{"fichier":"notion-tentative-punissable","duree":"1:39","tag":"Une notion, une minute","titre":"La tentative punissable","desc":"L'article 28 du Code pénal : les deux conditions, un exemple, la tentative de crime et de délit, le but impossible et le piège des actes préparatoires.","concours":["infj","greffe","penitentiaire","eppjej"]}
+];
