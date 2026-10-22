@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-prescription-action-publique",
+ "titre": "La prescription de l'action publique",
+ "rubrique": "Procédure pénale",
+ "scenes": [
+  {"type": "intro", "titre": "La prescription de l'action publique",
+   "dit": ["Une notion, une minute.", "La *prescription* de l'action publique."]},
+  {"type": "question", "titre": "Un vol vieux de quatre ans.",
+   "texte": "Peut-on encore poursuivre son auteur ?", "cueTexte": 1,
+   "dit": ["Djérabo a commis un vol il y a quatre ans. Depuis, aucun acte n'a été accompli.", "Peut-on encore le *poursuivre* ?"]},
+  {"type": "article", "titre": "Article 12 du Code de procédure pénale",
+   "citation": "En matière de crime, l'action publique se prescrit par dix années révolues à compter du jour où le crime a été commis si, dans cet intervalle, il n'a été fait aucun acte d'instruction ou de poursuite.", "cueCitation": 1,
+   "dit": ["Non. Passé un certain délai, l'action publique est *prescrite*, selon l'article 12 du Code de procédure pénale.", "Pour un crime, le délai est de dix années révolues à compter du jour des faits, si aucun acte d'instruction ou de poursuite n'a été accompli."]},
+  {"type": "etapes", "titre": "Trois délais",
+   "items": [
+     {"n": "1", "t": "Crime : dix ans", "d": "Années révolues, à compter du jour des faits", "cue": 1},
+     {"n": "2", "t": "Délit : trois ans", "d": "Le vol de Djérabo est donc prescrit", "cue": 2},
+     {"n": "3", "t": "Contravention : un an", "d": "Selon les mêmes règles", "cue": 3}],
+   "dit": ["Trois délais, selon la gravité de l'infraction.", "*Dix ans* pour un crime.", "*Trois ans* pour un délit : le vol de Djérabo est donc prescrit.", "Et *un an* pour une contravention."]},
+  {"type": "blocs", "titre": "Le délai peut repartir",
+   "items": [
+     {"t": "Un acte d'instruction ou de poursuite", "d": "Le délai court à nouveau à compter du dernier acte.", "cue": 1},
+     {"t": "À l'égard de tous", "d": "Même des personnes qui ne sont pas impliquées dans cet acte.", "cue": 2},
+     {"t": "Des crimes imprescriptibles", "d": "Crimes contre l'humanité, génocide et crimes de guerre.", "cue": 3, "fort": true}],
+   "dit": ["Attention, le délai peut repartir.", "Si un acte d'instruction ou de poursuite est accompli, le délai court à nouveau à compter du *dernier* acte.", "Et cet effet joue même à l'égard des personnes qui ne sont pas impliquées dans cet acte.", "Enfin, les crimes contre l'humanité, le génocide et les crimes de guerre sont *imprescriptibles*."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": false, "t": "Prescription acquise", "d": "Un vol commis il y a quatre ans, sans aucun acte depuis.", "cue": 1},
+     {"ok": true, "t": "Poursuite possible", "d": "Un acte de poursuite il y a deux ans : le délai de trois ans repart de cet acte.", "cue": 2}],
+   "dit": ["Reprenons.", "Si rien n'a été fait depuis quatre ans, la prescription est *acquise*.", "Mais si un acte de poursuite a été accompli il y a deux ans, le délai de trois ans repart de cet acte : la poursuite reste *possible*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Action publique ou peine", "d": "Après une condamnation définitive, c'est la prescription de la peine qui court : vingt ans pour un crime, cinq ans pour un délit (article 133 du Code pénal).", "cue": 0}],
+   "dit": ["Le piège : confondre la prescription de l'action publique et celle de la *peine*.", "Après une condamnation définitive, c'est la prescription de la peine qui court : vingt ans pour un crime, cinq ans pour un délit, selon l'article 133 du Code pénal."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
