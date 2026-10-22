@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-vices-du-consentement",
+ "titre": "Les vices du consentement",
+ "rubrique": "Droit civil",
+ "scenes": [
+  {"type": "intro", "titre": "Les vices du consentement",
+   "dit": ["Une notion, une minute.", "Les *vices* du consentement."]},
+  {"type": "question", "titre": "Un masque ancien… qui était une copie.",
+   "texte": "Peut-il faire annuler la vente ?", "cueTexte": 1,
+   "dit": ["Tiéfolo achète un masque qu'il croit ancien. C'était en réalité une copie récente.", "Peut-il faire *annuler* la vente ?"]},
+  {"type": "article", "titre": "Article 1109 du Code civil",
+   "citation": "Il n'y a point de consentement valable si le consentement n'a été donné que par erreur, ou s'il a été extorqué par violence ou surpris par dol.", "cueCitation": 1,
+   "dit": ["Oui, si son consentement était vicié, selon l'article *1109* du Code civil.", "Il n'y a point de consentement valable s'il a été donné par erreur, extorqué par violence, ou surpris par dol."]},
+  {"type": "blocs", "titre": "Trois vices",
+   "items": [
+     {"t": "L'erreur", "d": "Sur la substance même de la chose qui fait l'objet du contrat (article 1110).", "cue": 1},
+     {"t": "Le dol", "d": "Des manœuvres sans lesquelles l'autre partie n'aurait pas contracté (article 1116).", "cue": 2},
+     {"t": "La violence", "d": "Une crainte d'un mal considérable et présent, même venant d'un tiers (articles 1111 et 1112).", "cue": 3}],
+   "dit": ["Trois vices sont retenus.", "L'*erreur*, lorsqu'elle tombe sur la substance même de la chose qui fait l'objet du contrat.", "Le *dol* : des manœuvres de l'une des parties, sans lesquelles l'autre n'aurait pas contracté.", "Et la *violence*, de nature à inspirer la crainte d'un mal considérable et présent, même si elle vient d'un tiers."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Erreur sur la substance", "d": "L'ancienneté du masque était déterminante pour Tiéfolo : la nullité peut être demandée.", "cue": 1},
+     {"ok": false, "t": "Erreur sur la personne", "d": "En principe pas de nullité, sauf si la personne était la cause principale du contrat.", "cue": 2}],
+   "dit": ["Pour Tiéfolo, l'ancienneté du masque était déterminante : c'est une erreur sur la *substance*, il peut demander la nullité.", "En revanche, l'erreur sur la personne du vendeur n'est pas, en principe, une cause de nullité, sauf si la considération de cette personne était la cause *principale* du contrat."]},
+  {"type": "etapes", "titre": "La sanction",
+   "items": [
+     {"n": "1", "t": "Pas de nullité de plein droit", "d": "Le contrat n'est pas nul automatiquement (article 1117)", "cue": 1},
+     {"n": "2", "t": "Une action en nullité", "d": "La victime doit agir en justice", "cue": 1},
+     {"n": "3", "t": "Le dol se prouve", "d": "Il ne se présume pas (article 1116)", "cue": 2}],
+   "dit": ["Quelle sanction ?", "Selon l'article 1117, le contrat n'est pas nul de plein droit : la victime doit exercer une *action* en nullité.", "Et le dol ne se présume pas : il doit être *prouvé*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "La crainte révérentielle", "d": "La seule crainte envers un père, une mère ou un ascendant, sans violence, ne suffit pas (article 1114).", "cue": 0}],
+   "dit": ["Le piège : la crainte *révérentielle*.", "Selon l'article 1114, la seule crainte envers le père, la mère ou un autre ascendant, sans violence exercée, ne suffit pas pour annuler le contrat."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

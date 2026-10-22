@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-recours-exces-de-pouvoir",
+ "titre": "Le recours pour excès de pouvoir",
+ "rubrique": "Droit administratif",
+ "scenes": [
+  {"type": "intro", "titre": "Le recours pour excès de pouvoir",
+   "dit": ["Une notion, une minute.", "Le recours pour *excès de pouvoir*."]},
+  {"type": "question", "titre": "Révoqué par son ministre.",
+   "texte": "Comment faire annuler la décision ?", "cueTexte": 1,
+   "dit": ["Dossolo, fonctionnaire, est révoqué par son ministre. Il estime la décision illégale.", "Comment la faire *annuler* ?"]},
+  {"type": "article", "titre": "Article 69 de la loi organique relative au Conseil d'État",
+   "citation": "Le recours en annulation pour excès de pouvoir a pour objet d'obtenir l'annulation d'un acte administratif en raison de son illégalité.", "cueCitation": 1,
+   "dit": ["Par le recours pour excès de pouvoir.", "Selon l'article *69* de la loi organique relative au Conseil d'État, il a pour objet d'obtenir l'annulation d'un acte administratif en raison de son *illégalité*."]},
+  {"type": "etapes", "titre": "Trois étapes",
+   "items": [
+     {"n": "1", "t": "Le recours administratif préalable", "d": "Gracieux ou hiérarchique, par écrit, dans les deux mois (articles 71 et 72)", "cue": 1},
+     {"n": "2", "t": "Le silence vaut rejet", "d": "Sans réponse dans les deux mois, le recours est réputé rejeté (article 73)", "cue": 2},
+     {"n": "3", "t": "La requête au Conseil d'État", "d": "Dans les deux mois qui suivent le rejet (article 74)", "cue": 3}],
+   "dit": ["Trois étapes.", "D'abord, un recours administratif *préalable* : gracieux, devant l'auteur de la décision, ou hiérarchique, devant son supérieur, formé par écrit dans les deux mois.", "Ensuite, si l'administration ne répond pas dans les deux mois, son *silence* vaut rejet.", "Enfin, la requête au *Conseil d'État*, dans les deux mois qui suivent ce rejet."]},
+  {"type": "blocs", "titre": "Les cas d'ouverture",
+   "items": [
+     {"t": "Légalité externe", "d": "L'incompétence de l'auteur, le vice de forme ou de procédure.", "cue": 1},
+     {"t": "Légalité interne", "d": "La violation de la loi, le détournement de pouvoir.", "cue": 2},
+     {"t": "Une annulation", "d": "Le juge annule l'acte illégal ; il ne le réforme pas.", "cue": 3, "fort": true}],
+   "dit": ["Quelles illégalités invoquer ?", "Au titre de la légalité *externe* : l'incompétence de l'auteur, le vice de forme ou de procédure.", "Au titre de la légalité *interne* : la violation de la loi et le détournement de pouvoir.", "Et le juge *annule* l'acte illégal : il ne le réforme pas."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Recours recevable", "d": "Dossolo forme un recours hiérarchique, puis saisit le Conseil d'État dans les deux mois du rejet.", "cue": 1},
+     {"ok": false, "t": "Recours irrecevable", "d": "Il saisit directement le Conseil d'État, sans recours préalable (article 71).", "cue": 2}],
+   "dit": ["Dossolo forme un recours hiérarchique, puis saisit le Conseil d'État dans les deux mois du rejet : son recours est *recevable*.", "S'il saisit directement le Conseil d'État, sans recours préalable, son recours est *irrecevable*, selon l'article 71."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Le recours parallèle", "d": "Le recours en annulation est irrecevable si l'intéressé dispose du recours de pleine juridiction (article 70).", "cue": 0}],
+   "dit": ["Le piège : le recours *parallèle*.", "Selon l'article 70, le recours en annulation est irrecevable lorsque l'intéressé dispose, pour faire valoir ses droits, du recours ordinaire de pleine juridiction."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
