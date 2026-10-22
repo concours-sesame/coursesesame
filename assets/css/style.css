@@ -918,6 +918,7 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
 .ad-bloc{margin-bottom:1.6rem}
 .ad-bloc h3{display:flex;align-items:center;gap:.5rem;margin-bottom:.7rem;font-family:var(--serif);font-size:1.25rem;color:var(--navy)}
 .ad-bloc h3 .n{font-family:var(--sans,inherit);font-size:.85rem;font-weight:700;padding:.1rem .5rem;border-radius:99px;background:var(--cream);color:var(--navy)}
+.ad-barre-v{display:block;height:8px;min-width:2px;border-radius:4px;background:var(--gold, #e8a62b)}
 .ad-enligne{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0}
 .ad-enligne li{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;border:1px solid var(--line);border-radius:99px;background:#fff}
 .ad-enligne small{color:var(--muted);font-size:.85rem}
