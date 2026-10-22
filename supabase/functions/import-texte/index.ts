@@ -9,6 +9,11 @@
 // Chargement des concours blancs : POST { action: "epreuves_blanches", nom } lit le fichier JSON déposé à textes/<nom>.pdf
 // (tableau de lignes { concours, serie, ordre, epreuve, titre, nature, duree_minutes, sujet, corrige }), l'enregistre dans
 // epreuves_blanches (une épreuve existante est remplacée, sa publication est conservée) puis efface le fichier.
+// Texte des textes officiels et décisions, préparé hors du navigateur (extraction et reconnaissance de caractères) :
+// POST { action: "lecture", contenu_id } renvoie une adresse de lecture de dix minutes pour le PDF d'un contenu
+// « Texte officiel » ou « Jurisprudence » ; POST { action: "passages", nom } lit le fichier JSON déposé à textes/<nom>.pdf
+// (tableau de { contenu_id, pages: [texte de chaque page] }), remplace les passages de ces seuls contenus puis efface
+// le fichier. La fréquence des mots (passages_lexiques) se recalcule ensuite en SQL.
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 const HOTES = [/(^|\.)ohada\.org$/, /(^|\.)ccja-ohada\.org$/, /(^|\.)gouv\.ci$/, /(^|\.)conseil-constitutionnel\.ci$/,
@@ -76,6 +81,42 @@ Deno.serve(async (req) => {
     if (error) return json({ error: `Base ${error.message}` }, 500);
     await service.storage.from("exclusif").remove([chemin]);
     return json({ lignes: propres.length });
+  }
+  const estTexte = (m: unknown) => /^(texte officiel|jurisprudence)/i.test(String(m ?? ""));
+  if (d.action === "lecture") {
+    const { data: c } = await service.from("contenus").select("fichier, matiere").eq("id", Number(d.contenu_id)).maybeSingle();
+    if (!c?.fichier || !estTexte(c.matiere)) return json({ error: "Contenu introuvable ou non autorisé" }, 404);
+    const { data, error } = await service.storage.from("exclusif").createSignedUrl(c.fichier, 600);
+    return error ? json({ error: `Stockage ${error.message}` }, 409) : json({ url: data.signedUrl });
+  }
+  if (d.action === "passages") {
+    const nomDepot = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
+    const chemin = `textes/${nomDepot}.pdf`;
+    const { data: fichier, error: errLecture } = await service.storage.from("exclusif").download(chemin);
+    if (errLecture || !fichier) return json({ error: `Stockage ${errLecture?.message ?? "fichier absent"}` }, 404);
+    let lots: { contenu_id: number; pages: string[] }[];
+    try {
+      lots = JSON.parse(await fichier.text());
+      if (!Array.isArray(lots) || !lots.length) throw new Error();
+    } catch {
+      return json({ error: "Fichier JSON invalide" }, 400);
+    }
+    const faits: number[] = [];
+    for (const lot of lots) {
+      const id = Number(lot.contenu_id);
+      const { data: c } = await service.from("contenus").select("matiere").eq("id", id).maybeSingle();
+      if (!c || !estTexte(c.matiere) || !Array.isArray(lot.pages)) continue;
+      const { error: e1 } = await service.from("passages").delete().eq("contenu_id", id);
+      if (e1) return json({ error: `Base ${e1.message}`, faits }, 500);
+      const pages = lot.pages.map((t) => String(t ?? "").replace(/\u0000/g, "").slice(0, 20000));
+      for (let i = 0; i < pages.length; i += 100) {
+        const { error } = await service.from("passages").insert(pages.slice(i, i + 100).map((texte, j) => ({ contenu_id: id, page: i + j + 1, texte })));
+        if (error) return json({ error: `Base ${error.message}`, faits }, 500);
+      }
+      faits.push(id);
+    }
+    await service.storage.from("exclusif").remove([chemin]);
+    return json({ contenus: faits.length });
   }
   const url = String(d.url ?? ""), titre = String(d.titre ?? "").trim().slice(0, 160), matiere = String(d.matiere ?? "").trim().slice(0, 80);
   const nom = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);

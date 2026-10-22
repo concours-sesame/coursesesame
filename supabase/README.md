@@ -82,6 +82,12 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   `emails_reglages.actif` est faux (onglet « E-mails » de l'administration). Chaque envoi est noté dans `emails_envoyes`,
   dont la clé unique empêche les doublons.
 
+- `functions/import-texte` : versement des textes officiels (voir l'en-tête du fichier), appelable par la base seule
+  (clé `textes_import` du coffre). Actions : téléchargement depuis une source officielle, `televersement` (adresse de
+  dépôt signée), `epreuves_blanches` (chargement des concours blancs), `lecture` (adresse de lecture de dix minutes d'un
+  PDF « Texte officiel » ou « Jurisprudence ») et `passages` (remplace le texte, page par page, de ces contenus).
+  Le texte des textes officiels est ainsi préparé hors du navigateur : extraction par `pdftotext`, reconnaissance de
+  caractères Tesseract (français) pour les pages scannées, puis `refresh materialized view public.passages_lexiques`.
 - Recherche dans les textes : `rechercher_textes` (abonnés en cours et administrateur) cherche dans `passages`, pour
   les seuls contenus « Texte officiel » et « Jurisprudence », et renvoie un court extrait par page trouvée. Elle ne
   donne des résultats qu'après « Préparer le texte pour l'agent de révision » dans l'administration.
