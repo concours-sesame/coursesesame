@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-deux-ordres-de-juridiction",
+ "titre": "Les deux ordres de juridiction",
+ "rubrique": "Organisation judiciaire",
+ "scenes": [
+  {"type": "intro", "titre": "Les deux ordres de juridiction",
+   "dit": ["Une notion, une minute.", "Les *deux* ordres de juridiction."]},
+  {"type": "question", "titre": "Un litige entre voisins, un litige avec un ministre.",
+   "texte": "Quel juge saisir ?", "cueTexte": 1,
+   "dit": ["Un litige entre deux voisins. Un litige avec un ministre.", "Quel *juge* saisir ?"]},
+  {"type": "article", "titre": "Article 143 de la Constitution",
+   "citation": "La justice est rendue sur toute l'étendue du territoire national, au nom du peuple ivoirien, par la Cour de Cassation, le Conseil d'Etat, la Cour des Comptes, les Cours d'appel, les tribunaux de Première instance, les tribunaux administratifs et les Chambres régionales des Comptes.", "cueCitation": 1,
+   "dit": ["Tout dépend de l'ordre de juridiction.", "Selon l'article *143* de la Constitution, la justice est rendue par la Cour de cassation, le Conseil d'État, la Cour des comptes, les cours d'appel, les tribunaux de première instance, les tribunaux administratifs et les chambres régionales des comptes."]},
+  {"type": "etapes", "titre": "L'ordre judiciaire",
+   "items": [
+     {"n": "1", "t": "Les tribunaux de première instance", "d": "Ils jugent les litiges entre particuliers et les affaires pénales", "cue": 1},
+     {"n": "2", "t": "Les cours d'appel", "d": "Elles rejugent l'affaire", "cue": 2},
+     {"n": "3", "t": "La Cour de cassation", "d": "La plus haute juridiction de l'ordre judiciaire (article 148)", "cue": 3}],
+   "dit": ["Premier ordre : l'ordre *judiciaire*.", "Les tribunaux de première instance jugent les litiges entre particuliers et les affaires pénales.", "Les cours d'appel rejugent l'affaire.", "Et la *Cour de cassation* est au sommet de l'ordre judiciaire, selon l'article 148."]},
+  {"type": "blocs", "titre": "L'ordre administratif",
+   "items": [
+     {"t": "Les tribunaux administratifs", "d": "Ils jugent les litiges qui mettent en cause l'administration.", "cue": 1},
+     {"t": "Le Conseil d'État", "d": "La plus haute juridiction de l'ordre administratif (article 149).", "cue": 2, "fort": true},
+     {"t": "Les juridictions financières", "d": "La Cour des comptes et les chambres régionales des comptes s'y rattachent.", "cue": 3}],
+   "dit": ["Second ordre : l'ordre *administratif*.", "Les tribunaux administratifs jugent les litiges qui mettent en cause l'administration, et le *Conseil d'État* est au sommet de cet ordre, selon l'article 149.", "Les juridictions financières, la Cour des comptes et les chambres régionales des comptes, se rattachent à cet ordre."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Ordre judiciaire", "d": "Deux voisins se disputent une clôture : tribunal de première instance.", "cue": 1},
+     {"ok": true, "t": "Ordre administratif", "d": "Un fonctionnaire conteste sa révocation par un ministre : Conseil d'État, en premier et dernier ressort.", "cue": 2}],
+   "dit": ["Reprenons.", "Deux voisins se disputent une clôture : c'est le tribunal de *première instance*.", "Un fonctionnaire conteste sa révocation par un ministre, autorité administrative centrale : c'est le *Conseil d'État*, en premier et dernier ressort."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Parler encore de Cour suprême", "d": "Depuis la révision de la Constitution de 2020, la Cour de cassation et le Conseil d'État sont deux juridictions distinctes.", "cue": 0}],
+   "dit": ["Le piège : parler encore de la Cour *suprême*.", "Depuis la révision de la Constitution de 2020, la Cour de cassation et le Conseil d'État sont deux juridictions distinctes, chacune au sommet de son ordre."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

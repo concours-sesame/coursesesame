@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-principes-du-service-public",
+ "titre": "Les trois principes du service public",
+ "rubrique": "Droit administratif",
+ "scenes": [
+  {"type": "intro", "titre": "Les trois principes du service public",
+   "dit": ["Une notion, une minute.", "Les trois *principes* du service public."]},
+  {"type": "question", "titre": "Les agents d'un service public en grève.",
+   "texte": "Le service peut-il s'arrêter totalement ?", "cueTexte": 1,
+   "dit": ["Les agents d'un service public se mettent en grève.", "Le service peut-il s'arrêter *totalement* ?"]},
+  {"type": "article", "titre": "Article 42 de la Constitution",
+   "citation": "L'Etat et les collectivités publiques doivent garantir à tous un service public de qualité, répondant aux exigences de l'intérêt général.", "cueCitation": 1,
+   "dit": ["Le service public répond à l'*intérêt général*.", "Selon l'article 42 de la Constitution, l'État et les collectivités publiques doivent garantir à tous un service public de qualité, répondant aux exigences de l'intérêt général."]},
+  {"type": "etapes", "titre": "Les lois de Rolland",
+   "items": [
+     {"n": "1", "t": "La continuité", "d": "Le service fonctionne de façon régulière, sans interruption", "cue": 1},
+     {"n": "2", "t": "L'égalité", "d": "Les usagers placés dans la même situation sont traités de la même façon", "cue": 2},
+     {"n": "3", "t": "La mutabilité", "d": "Le service s'adapte à l'évolution des besoins de l'intérêt général", "cue": 3}],
+   "dit": ["La doctrine les appelle les lois de Rolland.", "La *continuité* : le service fonctionne de façon régulière, sans interruption.", "L'*égalité* : les usagers placés dans la même situation sont traités de la même façon.", "Et la *mutabilité* : le service s'adapte à l'évolution des besoins de l'intérêt général."]},
+  {"type": "blocs", "titre": "Leurs conséquences",
+   "items": [
+     {"t": "Une grève encadrée", "d": "Le droit de grève des agents publics s'exerce dans les limites déterminées par la loi (article 17 de la Constitution).", "cue": 1},
+     {"t": "Aucune discrimination", "d": "Nul ne peut être privilégié ou discriminé (article 4 de la Constitution).", "cue": 2},
+     {"t": "Pas de droit acquis", "d": "L'usager ne peut exiger le maintien des règles du service.", "cue": 3}],
+   "dit": ["Leurs conséquences.", "Le droit de grève est reconnu aux agents de l'administration publique, mais il s'exerce dans les *limites* déterminées par la loi, selon l'article 17 de la Constitution.", "Nul usager ne peut être privilégié ou *discriminé*, rappelle l'article 4.", "Et l'usager ne peut pas exiger le maintien des règles du service : l'administration peut les modifier."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Conforme", "d": "Le service modifie ses horaires pour mieux répondre aux besoins des usagers.", "cue": 1},
+     {"ok": false, "t": "Contraire à l'égalité", "d": "Un tarif plus élevé pour certains usagers placés dans la même situation que les autres.", "cue": 2}],
+   "dit": ["Un exemple.", "Le service modifie ses horaires pour mieux répondre aux besoins : c'est la *mutabilité*.", "Mais imposer un tarif plus élevé à certains usagers placés dans la même situation que les autres méconnaît l'*égalité*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Égalité n'est pas uniformité", "d": "Des usagers placés dans des situations différentes peuvent être traités différemment.", "cue": 0}],
+   "dit": ["Le piège : confondre égalité et *uniformité*.", "Des usagers placés dans des situations différentes peuvent être traités différemment, sans que l'égalité soit méconnue."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-injonction-de-payer",
+ "titre": "L'injonction de payer",
+ "rubrique": "Droit OHADA",
+ "scenes": [
+  {"type": "intro", "titre": "L'injonction de payer",
+   "dit": ["Une notion, une minute.", "L'*injonction* de payer."]},
+  {"type": "question", "titre": "Une facture impayée depuis des mois.",
+   "texte": "Comment obtenir vite un titre contre le client ?", "cueTexte": 1,
+   "dit": ["Siéla a livré des marchandises. Son client ne paie pas.", "Comment obtenir *vite* un titre contre lui ?"]},
+  {"type": "article", "titre": "Article 2 de l'Acte uniforme sur le recouvrement",
+   "citation": "Le recouvrement d'une créance certaine, liquide et exigible peut être demandé suivant la procédure d'injonction de payer.", "cueCitation": 1,
+   "dit": ["Par l'injonction de payer, prévue par l'article *2* de l'Acte uniforme OHADA sur les procédures simplifiées de recouvrement.", "La créance doit être certaine, liquide et exigible, et avoir une cause *contractuelle*, ou résulter d'un effet de commerce ou d'un chèque sans provision."]},
+  {"type": "etapes", "titre": "La procédure",
+   "items": [
+     {"n": "1", "t": "La requête", "d": "Au président de la juridiction du domicile du débiteur (articles 3 et 4)", "cue": 1},
+     {"n": "2", "t": "L'ordonnance", "d": "Rendue dans les trois jours (article 5)", "cue": 2},
+     {"n": "3", "t": "La signification", "d": "Dans les trois mois, sinon l'ordonnance est non avenue (article 7)", "cue": 3}],
+   "dit": ["La procédure est rapide.", "Une *requête* au président de la juridiction du domicile du débiteur.", "Une *ordonnance*, rendue dans les trois jours.", "Puis la signification au débiteur, dans les trois mois, sinon l'ordonnance est non avenue."]},
+  {"type": "blocs", "titre": "Et le débiteur ?",
+   "items": [
+     {"t": "Payer", "d": "Dans les dix jours de la signification (article 8).", "cue": 1},
+     {"t": "Former opposition", "d": "Dans le même délai de dix jours (articles 9 et 10).", "cue": 2},
+     {"t": "Sinon, la formule exécutoire", "d": "L'ordonnance vaut décision contradictoire, sans appel (article 16).", "cue": 3, "fort": true}],
+   "dit": ["Le débiteur a dix jours pour *payer*,", "ou pour former *opposition*.", "À défaut, le créancier obtient la formule *exécutoire* : l'ordonnance produit tous les effets d'une décision contradictoire, et n'est pas susceptible d'appel."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Possible", "d": "La facture impayée de Siéla : une créance contractuelle.", "cue": 1},
+     {"ok": false, "t": "Impossible", "d": "Des dommages-intérêts après un accident : la créance n'a pas de cause contractuelle.", "cue": 2}],
+   "dit": ["La facture impayée de Siéla a une cause contractuelle : l'injonction de payer est *possible*.", "Mais des dommages et intérêts réclamés après un accident n'ont pas de cause contractuelle : la procédure est *exclue*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "La charge de la preuve", "d": "Sur opposition, c'est toujours le créancier qui prouve sa créance (article 13).", "cue": 0}],
+   "dit": ["Le piège : croire que l'opposant doit tout prouver.", "Selon l'article 13, celui qui a demandé l'ordonnance supporte la charge de la *preuve* de sa créance."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

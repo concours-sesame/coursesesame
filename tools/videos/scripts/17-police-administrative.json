@@ -1,0 +1,40 @@
+{
+ "fichier": "notion-police-administrative",
+ "titre": "La police administrative",
+ "rubrique": "Droit administratif",
+ "scenes": [
+  {"type": "intro", "titre": "La police administrative",
+   "dit": ["Une notion, une minute.", "La police *administrative*."]},
+  {"type": "question", "titre": "Le maire interdit toute réunion publique.",
+   "texte": "En a-t-il le droit ?", "cueTexte": 1,
+   "dit": ["Un maire interdit toute réunion publique dans sa commune, pour éviter les troubles.", "En a-t-il le *droit* ?"]},
+  {"type": "blocs", "titre": "Une mission de prévention",
+   "items": [
+     {"t": "Prévenir", "d": "Éviter les troubles avant qu'ils ne surviennent.", "cue": 1},
+     {"t": "L'ordre public", "d": "La sécurité, la tranquillité et la salubrité publiques.", "cue": 2, "fort": true},
+     {"t": "Par des mesures", "d": "Règlements, autorisations, interdictions, opérations matérielles.", "cue": 3}],
+   "dit": ["La police administrative est une mission de *prévention*.", "Elle vise à maintenir l'ordre public : la sécurité, la tranquillité et la *salubrité* publiques.", "Elle agit par des règlements, des autorisations, des interdictions, et des opérations matérielles."]},
+  {"type": "etapes", "titre": "Générale ou spéciale",
+   "items": [
+     {"n": "1", "t": "La police générale", "d": "Elle maintient l'ordre public dans tous les domaines", "cue": 1},
+     {"n": "2", "t": "Les polices spéciales", "d": "Un texte les organise pour une activité déterminée", "cue": 2}],
+   "dit": ["On distingue deux types de police.", "La police *générale*, qui maintient l'ordre public dans tous les domaines.", "Et les polices *spéciales*, organisées par un texte pour une activité déterminée."]},
+  {"type": "blocs", "titre": "Ses limites",
+   "items": [
+     {"t": "Nécessaire et proportionnée", "d": "La mesure doit être adaptée à la gravité de la menace.", "cue": 1},
+     {"t": "Pas d'interdiction générale et absolue", "d": "Une liberté ne peut être supprimée en tout temps et en tout lieu.", "cue": 2},
+     {"t": "Sous le contrôle du juge", "d": "Le recours pour excès de pouvoir permet d'annuler la mesure illégale.", "cue": 3}],
+   "dit": ["Mais ce pouvoir a des limites.", "La mesure doit être *nécessaire* et proportionnée à la menace : c'est la leçon de l'arrêt Benjamin du Conseil d'État français, dont s'inspire la jurisprudence ivoirienne.", "Une liberté ne peut pas faire l'objet d'une interdiction générale et *absolue*.", "Et le juge contrôle la mesure, par le recours pour excès de pouvoir."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": false, "t": "Illégal", "d": "Interdire toute réunion publique, partout et sans limite de temps.", "cue": 1},
+     {"ok": true, "t": "Légal", "d": "Interdire une réunion précise, face à une menace grave impossible à contenir autrement.", "cue": 2}],
+   "dit": ["Notre maire a donc excédé ses pouvoirs : interdire toute réunion, partout et sans limite de temps, est *illégal*.", "En revanche, il peut interdire une réunion précise, face à une menace grave qu'aucune autre mesure ne permettrait de contenir."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Ne pas la confondre avec la police judiciaire", "d": "Celle-ci constate les infractions, en rassemble les preuves et en recherche les auteurs (article 25 du Code de procédure pénale).", "cue": 0}],
+   "dit": ["Le piège : la confondre avec la police *judiciaire*.", "Selon l'article 25 du Code de procédure pénale, la police judiciaire constate les infractions, en rassemble les preuves et en recherche les auteurs : elle réprime, quand la police administrative prévient."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
