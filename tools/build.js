@@ -1102,10 +1102,10 @@ ${contactCTA(prefix)}`;
   const url = SITE + "concours-blancs/";
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Concours blancs", ""]],
-    h1: `10 concours blancs de la <em>magistrature</em>`,
-    lead: "Dix séries complètes et inédites, aux conditions du concours direct de l'INFJ : la présélection en 2 heures, puis les cinq épreuves écrites en 4 heures chacune (sujet d'ordre général, droit civil, droit commercial et OHADA, droit pénal et procédure pénale, droit administratif). Chacun compose gratuitement ; le corrigé de chaque épreuve est réservé aux abonnés.",
+    h1: `Concours blancs de la <em>magistrature</em> et du <em>Greffe</em>`,
+    lead: "Des séries complètes et inédites, aux conditions des concours directs de l'INFJ. Magistrature : dix séries, la présélection en 2 heures puis les cinq épreuves écrites en 4 heures. Greffe : cinq séries par cycle (administrateurs, attachés, secrétaires des greffes et parquets), avec le sujet d'ordre général, les épreuves juridiques et l'informatique. Chacun compose gratuitement ; le corrigé de chaque épreuve est réservé aux abonnés.",
     ctas: `<a href="#blancs-app" class="btn btn-gold">Choisir une épreuve${arrow}</a><a href="${prefix}espace-abonnes/#inscription" class="btn btn-ghost">S'abonner pour les corrigés</a>`,
-    facts: ["<b>10</b> séries", "<b>60</b> épreuves", "Présélection en <b>2 h</b>", "Écrits en <b>4 h</b>"]
+    facts: ["<b>25</b> séries", "<b>125</b> épreuves", "Magistrature et Greffe", "Corrigés et grilles sur 20"]
   })}
 
 <section class="section section-cream cb-charte-section">
@@ -1114,9 +1114,9 @@ ${contactCTA(prefix)}`;
       <h2 class="h-section">Avant de commencer</h2>
       <p class="lead">Ces concours blancs servent à mesurer votre vrai niveau. Traitez-les comme le jour du concours : seul, sans document, sans téléphone et sans recherche, d'une traite. Un résultat obtenu en trichant ne vous apprend rien ; un résultat honnête vous dit exactement ce qu'il reste à travailler.</p>
       <ol class="espace-etapes">
-        <li class="espace-etape"><b>Le chronomètre démarre à l'entrée</b><span>Dès que vous entrez dans le sujet, le temps tourne : 2 heures pour la présélection, 4 heures pour chaque épreuve écrite. Il n'y a pas de retour en arrière, l'épreuve ne se recommence pas.</span></li>
+        <li class="espace-etape"><b>Le chronomètre démarre à l'entrée</b><span>Dès que vous entrez dans le sujet, le temps tourne, à la durée officielle de l'épreuve, de 2 à 4 heures. Il n'y a pas de retour en arrière, l'épreuve ne se recommence pas.</span></li>
         <li class="espace-etape"><b>Quitter fige le compteur</b><span>Si vous quittez la page, le compteur reste figé et repart dès que vous revenez dans le sujet. Le temps déjà passé reste acquis.</span></li>
-        <li class="espace-etape"><b>Le corrigé après la copie</b><span>Une fois la copie rendue ou le temps écoulé, les abonnés des formules d'une semaine et plus lisent le corrigé : note immédiate et justifications pour la présélection, corrigé-type et grille de notation pour les écrits.</span></li>
+        <li class="espace-etape"><b>Le corrigé après la copie</b><span>Une fois la copie rendue ou le temps écoulé, les abonnés des formules d'une semaine et plus lisent le corrigé : note immédiate et justifications pour les épreuves en vrai ou faux, corrigé-type et grille de notation pour les écrits.</span></li>
       </ol>
     </div>
   </div>
@@ -1128,15 +1128,15 @@ ${contactCTA(prefix)}`;
       <p class="ea-attente">Chargement des concours blancs…</p>
       <noscript><p class="ea-erreur">Les concours blancs ont besoin de JavaScript : activez-le dans votre navigateur.</p></noscript>
     </div>
-    <p class="abo-note">Votre progression et votre copie restent dans ce navigateur, sur cet appareil. Les concours blancs des autres concours (greffe, ENA, administration pénitentiaire) suivront.</p>
+    <p class="abo-note">Votre progression et votre copie restent dans ce navigateur, sur cet appareil. Les concours blancs des autres concours (ENA, administration pénitentiaire, EPPJEJ) suivront.</p>
   </div>
 </section>
 
 ${contactCTA(prefix)}`;
   write("concours-blancs/index.html", page({
     prefix, url, body, scripts: [...SCRIPTS_ESPACE, "assets/js/concours-blancs.js"],
-    title: "10 concours blancs gratuits de la magistrature (INFJ), chronométrés",
-    description: "Dix concours blancs inédits de la magistrature : présélection en 2 heures et cinq épreuves écrites en 4 heures, à traiter gratuitement en ligne. Corrigés réservés aux abonnés.",
+    title: "Concours blancs magistrature et Greffe (INFJ), gratuits",
+    description: "Concours blancs inédits de l'INFJ : 10 séries pour la magistrature, 15 pour le Greffe (trois cycles), chronométrées et gratuites en ligne. Corrigés réservés aux abonnés.",
     ld: [breadcrumb([["Accueil", SITE], ["Concours blancs", url]])]
   }));
   urls.push(url);
@@ -1341,7 +1341,7 @@ ${contactCTA(prefix)}`;
   const liens = [
     ["ouvrages/", "Tous les ouvrages", "Le catalogue complet, avec les extraits gratuits."],
     ["sujets/", "Sujets corrigés", "Dissertations, cas pratiques, commentaires et SOG corrigés."],
-    ["concours-blancs/", "Concours blancs", "Dix concours blancs chronométrés de la magistrature."],
+    ["concours-blancs/", "Concours blancs", "Concours blancs chronométrés de la magistrature et du Greffe."],
     ["qcm/", "QCM gratuits", "Testez vos connaissances, chaque réponse expliquée."],
     ["espace-abonnes/", "Espace abonnés", "Connexion et création de compte."]
   ];

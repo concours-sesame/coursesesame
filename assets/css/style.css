@@ -1264,6 +1264,14 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
 .annonce-blancs-txt b{color:var(--gold)}
 .annonce-blancs-btn{font-size:clamp(1.05rem,2vw,1.2rem);padding:.85rem 1.6rem}
 .cb-charte{max-width:62rem}
+.cb-onglets{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:.6rem;margin:0 0 1.25rem}
+.cb-onglet{display:flex;flex-direction:column;gap:.1rem;text-align:left;padding:.65rem .85rem;border:1.5px solid var(--line);border-radius:var(--r-sm);background:#fff;font:inherit;color:inherit;cursor:pointer}
+.cb-onglet b{color:var(--navy)}
+.cb-onglet small{font-size:.85rem;color:var(--muted)}
+.cb-onglet:hover{border-color:var(--navy)}
+.cb-onglet.is-actif{background:var(--navy);border-color:var(--navy)}
+.cb-onglet.is-actif b{color:#fff}
+.cb-onglet.is-actif small{color:var(--gold)}
 .cb-series{display:grid;gap:1.25rem}
 .cb-serie{border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem;background:var(--paper)}
 .cb-serie h3{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.3rem 1rem;margin:0 0 .75rem;font-family:var(--serif);color:var(--navy);font-size:1.3rem}
