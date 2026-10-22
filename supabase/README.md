@@ -68,7 +68,7 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   imprime la signature de l'abonné sur la page puis la transforme en image (PDFium en WebAssembly, chargé depuis
   jsDelivr et contrôlé par son empreinte SHA-256) : le filigrane fait partie des pixels. Lecture à l'écran : 300 pages
   différentes par jour (`noter_page_lue`, table `pages_lues`). Téléchargement : réservation par `reserver_telechargement`
-  (5 % du total des pages sur 7 jours glissants, 15 pages par document, table `telechargements`), puis chaque page
+  (sur 30 jours glissants, 20 pages en tout et 5 pages par document, valeurs données par `telechargement_limites`, table `telechargements`), puis chaque page
   réservée livrée en PDF image pendant 30 minutes. Nombre de pages gardé dans `documents_pages`.
 - `functions/telechargement` : fermée le 19 octobre 2026 (réponse 410), remplacée par `pages`.
 - `functions/emails` : e-mails aux abonnés par Brevo, depuis infos@coursesesame.com (secret `BREVO_API_KEY`).
@@ -95,6 +95,7 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   accepte la copie jusqu'à 5 minutes après la fin, puis la fige une fois rendue ; `noter_copie_blanc` ne retient la note
   de l'agent que si la correction porte exactement sur le sujet et la copie rendue. Classement anonyme (rang, nombre de
   copies notées, moyenne, meilleure note).
+  Concours blancs en accès libre (page `concours-blancs/`) : table `epreuves_blanches`, une ligne par épreuve (concours, série, ordre). Concours : `magistrature`, puis `greffe_cs`, `greffe_cms` et `greffe_cm` pour les trois cycles de l'École des greffes. Les épreuves `preselection` et `informatique` sont en vrai ou faux (sujet et corrigé en JSON). Chargement par la fonction `import-texte` (action `epreuves_blanches`).
   Chaque épreuve peut être rattachée à un corrigé-type (`concours_blancs.corrige_id`, contenu programmé pour paraître à
   la fin de l'épreuve) ; `corrige_blanc` ne le livre qu'après la fin. Les corrigés se rattachent en SQL pour l'instant.
 - Sauvegarde automatique : `sauvegardes.prendre()`, chaque dimanche à 3 h (pg_cron `sauvegarde-hebdomadaire`), copie

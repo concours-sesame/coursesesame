@@ -1,5 +1,5 @@
-/* Concours blancs en accès libre (page concours-blancs/) : chaque série comprend la présélection et les cinq épreuves
-   écrites de la magistrature. Tout visiteur compose, sans compte ; le chronomètre et la copie restent dans son
+/* Concours blancs en accès libre (page concours-blancs/) : séries de la magistrature (présélection et cinq épreuves
+   écrites) et du Greffe, un jeu par cycle (les épreuves d'admissibilité de l'École des greffes). Tout visiteur compose, sans compte ; le chronomètre et la copie restent dans son
    navigateur. Le chronomètre démarre à l'entrée dans le sujet, s'arrête quand le candidat quitte la page et reprend à
    son retour, sans jamais revenir à zéro. Le corrigé n'est livré par la base qu'aux abonnés des formules d'une semaine
    et plus (fonction corrige_epreuve_blanche, supabase/migrations/…_epreuves_blanches.sql). */
@@ -17,8 +17,22 @@
 
   const NOMS = {
     preselection: "Présélection", sog: "Sujet d'ordre général", droit_civil: "Droit civil",
-    droit_commercial: "Droit commercial et OHADA", droit_penal: "Droit pénal et procédure pénale", droit_administratif: "Droit administratif"
+    droit_commercial: "Droit commercial et OHADA", droit_penal: "Droit pénal et procédure pénale", droit_administratif: "Droit administratif",
+    organisation_judiciaire: "Organisation judiciaire", opaj: "Organisation politique, administrative et judiciaire",
+    opea: "Organisation politique, économique et administrative", informatique: "Informatique et bureautique"
   };
+  // Un onglet par concours ; seuls ceux qui ont des épreuves publiées s'affichent
+  const CONCOURS = [
+    { id: "magistrature", nom: "Magistrature", detail: "Concours direct de la magistrature" },
+    { id: "greffe_cs", nom: "Greffe, cycle supérieur", detail: "Administrateurs des greffes et parquets" },
+    { id: "greffe_cms", nom: "Greffe, cycle moyen supérieur", detail: "Attachés des greffes et parquets" },
+    { id: "greffe_cm", nom: "Greffe, cycle moyen", detail: "Secrétaires des greffes et parquets" }
+  ];
+  const nomConc = id => (CONCOURS.find(c => c.id === id) || { nom: "" }).nom;
+  // Épreuves en vrai ou faux : sujet et corrigé en JSON, note calculée à l'écran
+  const enVraiFaux = e => e.epreuve === "preselection" || e.epreuve === "informatique";
+  const intitule = e => `${e.concours === "magistrature" ? "" : `${nomConc(e.concours)}, `}concours blanc n° ${e.serie}, ${NOMS[e.epreuve] || e.titre}`;
+  const majuscule = t => t.charAt(0).toUpperCase() + t.slice(1);
   const duree = m => m % 60 ? `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")}` : `${m / 60} heure${m > 60 ? "s" : ""}`;
   const horloge = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`; };
 
@@ -28,7 +42,7 @@
   function lire(id) { try { return JSON.parse(localStorage.getItem(cle(id))) || null; } catch (e) { return null; } }
   function ecrire(id, c) { try { localStorage.setItem(cle(id), JSON.stringify(c)); } catch (e) { /* stockage plein ou bloqué */ } }
 
-  let epreuves = [], acces = null, session = null, marque = "";
+  let epreuves = [], acces = null, session = null, marque = "", choix = "magistrature";
   let ouverte = null; // { e, copie, debutTic, minuteur }
 
   async function chargerAcces() {
@@ -56,11 +70,15 @@
     arreterMinuteur();
     document.body.classList.remove("cb-compose");
     if (!epreuves.length) { racine.innerHTML = `<p class="ea-vide">Les concours blancs seront mis en ligne très prochainement.</p>`; return; }
-    const series = [...new Set(epreuves.map(e => e.serie))];
-    racine.innerHTML = `<div class="cb-series">${series.map(n => {
-      const liste = epreuves.filter(e => e.serie === n);
+    const presents = CONCOURS.filter(c => epreuves.some(e => e.concours === c.id));
+    if (!presents.some(c => c.id === choix)) choix = presents[0].id;
+    const onglets = presents.length > 1 ? `<div class="cb-onglets" role="tablist" aria-label="Concours">${presents.map(c => `<button type="button" role="tab" class="cb-onglet${c.id === choix ? " is-actif" : ""}" aria-selected="${c.id === choix}" data-conc="${c.id}"><b>${esc(c.nom)}</b><small>${esc(c.detail)}</small></button>`).join("")}</div>` : "";
+    const duConcours = epreuves.filter(e => e.concours === choix);
+    const series = [...new Set(duConcours.map(e => e.serie))];
+    racine.innerHTML = `${onglets}<div class="cb-series">${series.map(n => {
+      const liste = duConcours.filter(e => e.serie === n);
       const finies = liste.filter(e => (lire(e.id) || {}).fini).length;
-      return `<section class="cb-serie" id="serie-${n}"><h3>Concours blanc n° ${n}<small>${finies ? `${finies} épreuve${finies > 1 ? "s" : ""} sur ${liste.length} terminée${finies > 1 ? "s" : ""}` : `${liste.length} épreuves`}</small></h3>
+      return `<section class="cb-serie" id="${choix === "magistrature" ? "" : `${choix}-`}serie-${n}"><h3>Concours blanc n° ${n}<small>${finies ? `${finies} épreuve${finies > 1 ? "s" : ""} sur ${liste.length} terminée${finies > 1 ? "s" : ""}` : `${liste.length} épreuves`}</small></h3>
         <ol class="cb-epreuves">${liste.map(e => { const s = etatEpreuve(e); return `<li><button type="button" class="cb-epreuve${s.cls}" data-eid="${e.id}"><b>${esc(NOMS[e.epreuve] || e.titre)}</b><span>${esc(e.nature)}</span><small>${esc(s.txt)}</small></button></li>`; }).join("")}</ol></section>`;
     }).join("")}</div>`;
   }
@@ -73,13 +91,13 @@
     document.body.classList.remove("cb-compose");
     racine.innerHTML = `<div class="cb-avert">
       <p class="cb-retour"><button type="button" class="btn btn-ghost btn-sm" data-action="liste">Retour aux séries</button></p>
-      <h3>Concours blanc n° ${e.serie}, ${esc(NOMS[e.epreuve] || e.titre)}</h3>
+      <h3>${esc(majuscule(intitule(e)))}</h3>
       <p class="cb-avert-duree">${esc(e.nature)} · <b>${duree(e.duree_minutes)}</b></p>
       <div class="cb-avert-regles">
         <p><b>Dès que vous entrez dans le sujet, le chronomètre démarre.</b> Vous ne pourrez plus faire machine arrière : l'épreuve ne se recommence pas à zéro.</p>
         <p>Si vous quittez la page, le compteur reste figé et recommence à compter dès que vous revenez dans le sujet. À la fin du temps, la copie est close.</p>
         <p><b>Composez seul, sans document, sans téléphone, sans recherche sur Internet et sans aide.</b> Ce concours blanc sert à mesurer votre vrai niveau, à quelques semaines du concours. Tricher ne trompe que vous : seul un résultat honnête vous dit ce qu'il reste à travailler.</p>
-        <p>Installez-vous au calme, pour ${duree(e.duree_minutes)} d'affilée, comme le jour du concours. ${e.epreuve === "preselection" ? "Cochez vrai ou faux pour chaque affirmation." : "Vous pouvez composer sur papier ou dans le cadre prévu à l'écran ; la copie tapée reste sur cet appareil."}</p>
+        <p>Installez-vous au calme, pour ${duree(e.duree_minutes)} d'affilée, comme le jour du concours. ${enVraiFaux(e) ? "Cochez vrai ou faux pour chaque affirmation." : "Vous pouvez composer sur papier ou dans le cadre prévu à l'écran ; la copie tapée reste sur cet appareil."}</p>
       </div>
       <label class="ea-accord"><input type="checkbox" id="cbEngage"><span>Je m'engage à composer seul, sans aucune aide, dans les conditions du concours.</span></label>
       <p><button type="button" class="btn btn-gold" data-action="entrer" data-eid="${e.id}" disabled>J'entre dans le sujet et je lance le chronomètre</button></p>
@@ -97,7 +115,7 @@
     if (error || !d) { racine.innerHTML = `<p class="ea-erreur">${esc(error ? messageErreur(error) : "Cette épreuve n'est plus disponible.")}</p><p><button type="button" class="btn btn-ghost btn-sm" data-action="liste">Retour aux séries</button></p>`; return; }
     const copie = lire(e.id) || { ecoule: 0, fini: false, reponses: {}, copie: "" };
     ecrire(e.id, copie);
-    const pre = e.epreuve === "preselection" ? lirePreselection(d.sujet) : null;
+    const pre = enVraiFaux(e) ? lirePreselection(d.sujet) : null;
     const sujetHTML = pre
       ? `${pre.consigne ? `<p class="cb-consigne">${esc(pre.consigne)}</p>` : ""}<ol class="cb-items">${pre.items.map(it => `<li class="cb-item" data-n="${it.n}">
           <p>${it.matiere ? `<small>${esc(it.matiere)}</small>` : ""}${esc(it.texte)}</p>
@@ -106,7 +124,7 @@
          <label class="ea-blanc-label" for="cbCopie">Votre copie (facultatif, elle reste sur cet appareil)</label>
          <textarea id="cbCopie" class="ea-blanc-copie" spellcheck="false"${copie.fini ? " readonly" : ""}>${esc(copie.copie || "")}</textarea>`;
     racine.innerHTML = `<div class="cb-compo">
-      <div class="cb-barre" role="timer" aria-live="off"><span>Concours blanc n° ${e.serie}, ${esc(NOMS[e.epreuve] || e.titre)}</span><b id="cbReste">${horloge(e.duree_minutes * 60000 - copie.ecoule)}</b></div>
+      <div class="cb-barre" role="timer" aria-live="off"><span>${esc(majuscule(intitule(e)))}</span><b id="cbReste">${horloge(e.duree_minutes * 60000 - copie.ecoule)}</b></div>
       ${copie.fini ? "" : `<p class="cb-rappel">Le chronomètre tourne tant que cette page est ouverte. Composez seul, sans document : c'est votre vrai niveau qui compte.</p>`}
       ${sujetHTML}
       <div class="cb-fin" id="cbFin">${copie.fini ? "" : `<button type="button" class="btn btn-navy" data-action="rendre">Je rends ma copie</button>`}
@@ -211,6 +229,13 @@
     if (lien) { try { sessionStorage.setItem("sesame-retour", lien.dataset.retour); } catch (e) { /* stockage bloqué */ } return; }
     const b = ev.target.closest("button");
     if (!b) return;
+    if (b.classList.contains("cb-onglet")) {
+      choix = b.dataset.conc;
+      try { localStorage.setItem("sesame-blanc-concours", choix); } catch (e) { /* stockage bloqué */ }
+      history.replaceState(null, "", `${location.pathname}${choix === "magistrature" ? "" : `?concours=${choix}`}`);
+      afficherListe();
+      return;
+    }
     const e = b.dataset.eid && epreuves.find(x => String(x.id) === b.dataset.eid);
     if (b.classList.contains("cb-epreuve") && e) { avertir(e); return; }
     const act = b.dataset.action;
@@ -218,7 +243,7 @@
     if (act === "liste") {
       if (ouverte && ouverte.minuteur && !confirm("Quitter l'épreuve ? Le chronomètre s'arrête et reprendra dès que vous reviendrez dans le sujet. L'épreuve ne recommencera pas à zéro.")) return;
       arreterMinuteur(); ouverte = null;
-      history.replaceState(null, "", location.pathname);
+      history.replaceState(null, "", `${location.pathname}${choix === "magistrature" ? "" : `?concours=${choix}`}`);
       afficherListe();
       racine.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
@@ -234,19 +259,28 @@
 
   (async () => {
     try {
-      const [l] = await Promise.all([client.rpc("epreuves_blanches_liste", { p_concours: "magistrature" }), chargerAcces().catch(() => {})]);
-      if (l.error) throw l.error;
-      epreuves = l.data || [];
+      const [listes] = await Promise.all([
+        Promise.all(CONCOURS.map(c => client.rpc("epreuves_blanches_liste", { p_concours: c.id }))),
+        chargerAcces().catch(() => {})
+      ]);
+      const err = listes.find(l => l.error);
+      if (err) throw err.error;
+      epreuves = listes.flatMap((l, i) => (l.data || []).map(e => ({ ...e, concours: CONCOURS[i].id })));
     } catch (err) {
       racine.innerHTML = `<p class="ea-erreur">${esc(messageErreur(err))}</p>`;
       racine.setAttribute("aria-busy", "false");
       return;
     }
     racine.setAttribute("aria-busy", "false");
+    // Concours affiché : adresse (?concours=greffe_cs ou #greffe_cs-serie-2), sinon le dernier choisi sur cet appareil
+    const q = new URLSearchParams(location.search).get("concours");
+    const s = location.hash.match(/^#(?:([a-z_]+)-)?serie-(\d+)$/);
+    let memo = null;
+    try { memo = localStorage.getItem("sesame-blanc-concours"); } catch (e) { /* stockage bloqué */ }
+    choix = (s && (s[1] || "magistrature")) || q || memo || "magistrature";
     const m = location.hash.match(/^#epreuve-(\d+)$/);
     const e = m && epreuves.find(x => String(x.id) === m[1]);
-    if (e) avertir(e); else afficherListe();
-    const s = location.hash.match(/^#serie-(\d+)$/);
-    if (s) { const el = document.getElementById(`serie-${s[1]}`); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }
+    if (e) { choix = e.concours; avertir(e); } else afficherListe();
+    if (s) { const el = document.getElementById(`${s[1] ? `${s[1]}-` : ""}serie-${s[2]}`); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }
   })();
 })();
