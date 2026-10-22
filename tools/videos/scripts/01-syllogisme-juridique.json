@@ -1,0 +1,31 @@
+{
+ "fichier": "notion-syllogisme-juridique",
+ "titre": "Le syllogisme juridique",
+ "rubrique": "Méthode",
+ "scenes": [
+  {"type": "intro", "titre": "Le syllogisme juridique",
+   "dit": ["Une notion, une minute.", "Le *syllogisme* juridique."]},
+  {"type": "question", "titre": "Une bonne réponse ne suffit pas",
+   "texte": "Le correcteur note le raisonnement, pas seulement la solution.",
+   "dit": ["Au concours, une bonne réponse sans raisonnement rapporte peu de points.", "Le correcteur attend un *syllogisme*."]},
+  {"type": "etapes", "titre": "Trois temps",
+   "items": [
+     {"n": "1", "t": "La majeure", "d": "La règle de droit, avec l'article exact", "cue": 1},
+     {"n": "2", "t": "La mineure", "d": "L'application aux faits : « En l'espèce »", "cue": 2},
+     {"n": "3", "t": "La conclusion", "d": "La solution : « Par conséquent »", "cue": 3}],
+   "dit": ["Le syllogisme juridique est un raisonnement en *trois temps*.", "D'abord la *majeure* : la règle de droit, avec l'article exact.", "Ensuite la *mineure* : vous appliquez cette règle aux faits, en commençant par « en l'espèce ».", "Enfin la *conclusion* : vous tranchez, par conséquent."]},
+  {"type": "blocs", "titre": "Un exemple",
+   "items": [
+     {"t": "Majeure", "d": "Article 97 du Code pénal : pas d'infraction si la défense contre une attaque injuste est nécessaire, concomitante et proportionnée.", "cue": 1},
+     {"t": "Mineure", "d": "En l'espèce, M. Zakobé repousse à mains nues un agresseur armé d'un couteau, pendant l'attaque.", "cue": 2},
+     {"t": "Conclusion", "d": "Par conséquent, M. Zakobé n'a commis aucune infraction.", "cue": 3, "fort": true}],
+   "dit": ["Un exemple.", "Majeure : selon l'article *97* du Code pénal, il n'y a pas d'infraction lorsque la défense contre une attaque injuste est nécessaire, concomitante et proportionnée.", "Mineure : en l'espèce, Monsieur Zakobé repousse à mains nues un agresseur armé d'un couteau, au moment même de l'attaque.", "Conclusion : par conséquent, Monsieur Zakobé n'a commis aucune *infraction*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Sauter la majeure", "d": "Une solution sans règle de droit est sanctionnée.", "cue": 1},
+     {"t": "Recopier les faits", "d": "La mineure confronte chaque fait à chaque condition.", "cue": 2}],
+   "dit": ["Attention au piège.", "Ne sautez jamais la *majeure* : une solution sans règle de droit est sanctionnée.", "Et ne recopiez pas les faits : la mineure *confronte* chaque fait à chaque condition."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
