@@ -1,0 +1,131 @@
+{
+ "fichier": "notion-tentative-punissable",
+ "titre": "La tentative punissable",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "La tentative punissable",
+   "dit": [
+    "Une notion, une minute.",
+    "La *tentative* punissable."
+   ]
+  },
+  {
+   "type": "question",
+   "titre": "Il a tiré. Il a manqué sa cible.",
+   "texte": "Peut-il être puni comme s'il avait tué ?",
+   "cueTexte": 1,
+   "dit": [
+    "Gbadjéli tire sur son voisin, et le manque.",
+    "Peut-il être puni comme s'il l'avait *tué* ?"
+   ]
+  },
+  {
+   "type": "article",
+   "titre": "Article 28 du Code pénal",
+   "citation": "Toute tentative de crime manifestée par un acte impliquant, sans équivoque, l'intention irrévocable de son auteur de commettre l'infraction est considérée comme le crime lui-même si elle n'a été suspendue ou si elle n'a manqué son effet que par des circonstances indépendantes de la volonté dudit auteur.",
+   "cueCitation": 0,
+   "dit": [
+    "Oui, selon l'article *28* du Code pénal.",
+    "La tentative de crime est considérée comme le crime lui-même, lorsqu'elle est manifestée par un acte impliquant, sans équivoque, l'intention irrévocable de commettre l'infraction, et qu'elle n'a échoué que par des circonstances indépendantes de la volonté de son auteur."
+   ]
+  },
+  {
+   "type": "etapes",
+   "titre": "Deux conditions",
+   "items": [
+    {
+     "n": "1",
+     "t": "Un commencement d'exécution",
+     "d": "Un acte qui révèle, sans équivoque, l'intention irrévocable",
+     "cue": 1
+    },
+    {
+     "n": "2",
+     "t": "Pas de désistement volontaire",
+     "d": "L'échec tient à une circonstance extérieure",
+     "cue": 2
+    }
+   ],
+   "dit": [
+    "Deux conditions, donc.",
+    "Un *commencement d'exécution* : un acte qui révèle, sans équivoque, l'intention irrévocable de commettre l'infraction.",
+    "Et l'absence de *désistement volontaire* : l'échec tient à une circonstance indépendante de la volonté de l'auteur."
+   ]
+  },
+  {
+   "type": "cas",
+   "titre": "Un exemple",
+   "items": [
+    {
+     "ok": true,
+     "t": "Pas de tentative punissable",
+     "d": "Gbadjéli renonce de lui-même et range son arme.",
+     "cue": 1
+    },
+    {
+     "ok": false,
+     "t": "Tentative punissable",
+     "d": "Un passant le désarme au moment où il vise.",
+     "cue": 2
+    }
+   ],
+   "dit": [
+    "Un exemple.",
+    "Si Gbadjéli renonce de lui-même et range son arme, il n'y a pas de tentative *punissable*.",
+    "Mais si un passant le désarme au moment où il vise, l'échec ne dépend pas de sa volonté : la tentative est *punissable*."
+   ]
+  },
+  {
+   "type": "blocs",
+   "titre": "Crime ou délit ?",
+   "items": [
+    {
+     "t": "Crime",
+     "d": "La tentative est punissable dans les conditions de l'article 28.",
+     "cue": 1
+    },
+    {
+     "t": "Délit",
+     "d": "Seulement dans les cas prévus par un texte.",
+     "cue": 2
+    },
+    {
+     "t": "But impossible",
+     "d": "La tentative reste punissable, même si le but ne pouvait être atteint.",
+     "cue": 3,
+     "fort": true
+    }
+   ],
+   "dit": [
+    "Attention à la nature de l'infraction.",
+    "La tentative de *crime* est punissable dans les conditions de l'article 28.",
+    "La tentative de *délit* ne l'est que dans les cas prévus par un texte.",
+    "Et la tentative reste punissable même si le but ne pouvait pas être atteint, par exemple avec une arme que l'auteur croyait chargée."
+   ]
+  },
+  {
+   "type": "piege",
+   "titre": "Le piège",
+   "items": [
+    {
+     "t": "Les actes préparatoires",
+     "d": "Le simple achat d'une arme ne suffit pas : il faut un acte qui engage l'exécution.",
+     "cue": 0
+    }
+   ],
+   "dit": [
+    "Le piège : confondre la tentative et les *actes préparatoires*.",
+    "Le simple achat d'une arme ne suffit pas : il faut un acte qui révèle, sans équivoque, l'intention irrévocable de passer à l'exécution."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Les Cours Sésame et SAJ.",
+    "Votre réussite est notre mission."
+   ]
+  }
+ ]
+}

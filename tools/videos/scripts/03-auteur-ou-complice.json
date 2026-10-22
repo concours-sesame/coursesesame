@@ -1,0 +1,131 @@
+{
+ "fichier": "notion-auteur-ou-complice",
+ "titre": "Auteur ou complice ?",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Auteur ou complice ?",
+   "dit": [
+    "Une notion, une minute.",
+    "*Auteur*, ou *complice* ?"
+   ]
+  },
+  {
+   "type": "question",
+   "titre": "Ils étaient plusieurs. Qui est auteur ?",
+   "texte": "Le Code pénal ne connaît que deux qualités : l'auteur et le complice.",
+   "cueTexte": 2,
+   "dit": [
+    "Plusieurs personnes participent à une infraction.",
+    "Sont-elles toutes *auteurs* ?",
+    "Le Code pénal ne connaît que deux qualités : l'auteur, et le *complice*."
+   ]
+  },
+  {
+   "type": "etapes",
+   "titre": "L'auteur, article 29",
+   "items": [
+    {
+     "n": "1",
+     "t": "Il commet l'infraction",
+     "d": "Il accomplit lui-même le fait matériel",
+     "cue": 1
+    },
+    {
+     "n": "2",
+     "t": "Il participe avec l'auteur matériel",
+     "d": "Ou se sert d'un irresponsable, ou contraint autrui",
+     "cue": 2
+    },
+    {
+     "n": "3",
+     "t": "Il incite sciemment un tiers",
+     "d": "Instructions, dons, promesses, menaces",
+     "cue": 3
+    }
+   ],
+   "dit": [
+    "Selon l'article *29*, est auteur d'abord celui qui commet *matériellement* l'infraction.",
+    "Ensuite celui qui participe à sa commission avec l'auteur matériel, se sert d'une personne pénalement irresponsable, ou contraint, en connaissance de cause, une autre personne à la commettre.",
+    "Enfin celui qui *incite*, en connaissance de cause, un tiers à la commettre, par des instructions, des dons, des promesses ou des menaces."
+   ]
+  },
+  {
+   "type": "blocs",
+   "titre": "Le complice, article 30",
+   "items": [
+    {
+     "t": "Sans part directe",
+     "d": "Il ne réalise pas l'infraction, mais agit en connaissance de cause.",
+     "cue": 0
+    },
+    {
+     "t": "Il procure un moyen",
+     "d": "Une arme, un instrument ou un renseignement.",
+     "cue": 1
+    },
+    {
+     "t": "Ou il aide l'auteur",
+     "d": "Dans les faits qui préparent ou consomment l'infraction.",
+     "cue": 2
+    }
+   ],
+   "dit": [
+    "Le *complice*, selon l'article 30, ne prend pas de part directe à la réalisation, et agit en connaissance de cause.",
+    "Il procure un moyen, comme une arme, un instrument ou un renseignement.",
+    "Ou il aide l'auteur dans les faits qui préparent ou consomment l'infraction."
+   ]
+  },
+  {
+   "type": "blocs",
+   "titre": "Un exemple",
+   "items": [
+    {
+     "t": "Auteur",
+     "d": "Gnangoré frappe la victime : il commet matériellement l'infraction.",
+     "cue": 1
+    },
+    {
+     "t": "Complice",
+     "d": "Sabéla lui a prêté le bâton, en sachant à quoi il servirait.",
+     "cue": 2,
+     "fort": true
+    }
+   ],
+   "dit": [
+    "Un exemple.",
+    "Gnangoré frappe la victime : il est *auteur*.",
+    "Sabéla lui a prêté le bâton, en sachant à quoi il servirait : elle est donc *complice*."
+   ]
+  },
+  {
+   "type": "piege",
+   "titre": "Deux pièges",
+   "items": [
+    {
+     "t": "Le « coauteur »",
+     "d": "Le Code pénal ne connaît que l'auteur et le complice.",
+     "cue": 1
+    },
+    {
+     "t": "Une peine moins lourde ?",
+     "d": "Le complice encourt les mêmes peines que l'auteur (art. 32).",
+     "cue": 2
+    }
+   ],
+   "dit": [
+    "Deux pièges.",
+    "Le mot *coauteur* n'existe pas dans le Code pénal : on est auteur, ou complice.",
+    "Et le complice encourt les *mêmes peines* que l'auteur, même si le juge le punit selon son propre degré de participation."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Les Cours Sésame et SAJ.",
+    "Votre réussite est notre mission."
+   ]
+  }
+ ]
+}

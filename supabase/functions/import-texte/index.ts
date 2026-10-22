@@ -5,7 +5,8 @@
 // il n'est visible des abonnés qu'une fois publié.
 // Requête : POST { url, titre, description, matiere, concours: [...], nom } ; nom = nom du fichier, sans extension.
 // Variante pour un fichier transmis par l'éditeur : POST { action: "televersement", nom } renvoie une adresse de dépôt
-// signée, valable deux heures, pour le seul fichier textes/<nom>.pdf (sans remplacement d'un fichier existant).
+// signée, valable deux heures, pour le seul fichier textes/<nom>.pdf (sans remplacement d'un fichier existant) ;
+// avec format: "mp4", pour la vidéo videos/<nom>.mp4 (vidéo réservée aux abonnés, contenu de type « video »).
 // Chargement des concours blancs : POST { action: "epreuves_blanches", nom } lit le fichier JSON déposé à textes/<nom>.pdf
 // (tableau de lignes { concours, serie, ordre, epreuve, titre, nature, duree_minutes, sujet, corrige }), l'enregistre dans
 // epreuves_blanches (une épreuve existante est remplacée, sa publication est conservée) puis efface le fichier.
@@ -60,7 +61,9 @@ Deno.serve(async (req) => {
   if (d.action === "televersement") {
     const nomDepot = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
     if (!nomDepot) return json({ error: "Nom manquant" }, 400);
-    const { data, error } = await service.storage.from("exclusif").createSignedUploadUrl(`textes/${nomDepot}.pdf`);
+    // Une vidéo réservée aux abonnés (format "mp4") est déposée dans videos/<nom>.mp4
+    const chemin = d.format === "mp4" ? `videos/${nomDepot}.mp4` : `textes/${nomDepot}.pdf`;
+    const { data, error } = await service.storage.from("exclusif").createSignedUploadUrl(chemin);
     return error ? json({ error: `Stockage ${error.message}` }, 409) : json({ chemin: data.path, url: data.signedUrl });
   }
   if (d.action === "epreuves_blanches") {
