@@ -1,0 +1,135 @@
+{
+ "fichier": "notion-legitime-defense",
+ "titre": "La légitime défense",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "La légitime défense",
+   "dit": [
+    "Une notion, une minute.",
+    "La *légitime défense*."
+   ]
+  },
+  {
+   "type": "question",
+   "titre": "Vous êtes attaqué. Vous ripostez.",
+   "texte": "Êtes-vous coupable ?",
+   "dit": [
+    "Vous êtes attaqué, et vous ripostez.",
+    "Êtes-vous *coupable* ?",
+    "Pas forcément."
+   ]
+  },
+  {
+   "type": "article",
+   "titre": "Article 97 du Code pénal",
+   "citation": "Il n'y a pas d'infraction lorsque les faits sont commandés par la nécessité actuelle de défense de soi-même ou d'autrui ou d'un bien juridiquement protégé contre une attaque injuste […]",
+   "dit": [
+    "La légitime défense *supprime l'infraction*.",
+    "Selon l'article *97* du Code pénal, il n'y a pas d'infraction lorsque les faits sont commandés par la nécessité actuelle de défense de soi-même, d'autrui ou d'un bien, contre une attaque injuste."
+   ]
+  },
+  {
+   "type": "etapes",
+   "titre": "Quatre conditions",
+   "items": [
+    {
+     "n": "1",
+     "t": "Une attaque injuste",
+     "d": "",
+     "cue": 1
+    },
+    {
+     "n": "2",
+     "t": "Impossible à écarter autrement",
+     "d": "",
+     "cue": 2
+    },
+    {
+     "n": "3",
+     "t": "Une défense concomitante",
+     "d": "Pendant l'attaque, pas après",
+     "cue": 3
+    },
+    {
+     "n": "4",
+     "t": "Une défense proportionnée",
+     "d": "Au danger et à la gravité de l'attaque",
+     "cue": 4
+    }
+   ],
+   "dit": [
+    "Quatre conditions doivent être réunies.",
+    "L'attaque doit être *injuste*.",
+    "Elle ne doit pas pouvoir être écartée *autrement*.",
+    "La défense doit être *concomitante* à l'attaque.",
+    "Et elle doit être *proportionnée* au danger."
+   ]
+  },
+  {
+   "type": "cas",
+   "titre": "Un exemple",
+   "items": [
+    {
+     "ok": true,
+     "t": "Légitime défense",
+     "d": "Mme Zéhilo repousse un voleur armé qui la menace.",
+     "cue": 1
+    },
+    {
+     "ok": false,
+     "t": "Infraction",
+     "d": "Elle le frappe alors qu'il s'enfuit : l'attaque a cessé.",
+     "cue": 2
+    }
+   ],
+   "dit": [
+    "Un exemple.",
+    "Madame Zéhilo repousse un voleur armé qui la menace : c'est la *légitime défense*.",
+    "Mais si elle le frappe alors qu'il s'enfuit, l'attaque a cessé : la défense n'est plus concomitante, et l'infraction *demeure*."
+   ]
+  },
+  {
+   "type": "blocs",
+   "titre": "Article 98 : la présomption",
+   "items": [
+    {
+     "t": "La nuit",
+     "d": "Repousser l'escalade ou l'effraction d'une maison ou d'un appartement habité.",
+     "cue": 0
+    },
+    {
+     "t": "Face à la violence",
+     "d": "Se défendre contre les auteurs de vols ou de pillages exécutés avec violence.",
+     "cue": 0
+    }
+   ],
+   "dit": [
+    "L'article *98* présume la légitime défense de celui qui repousse, pendant la nuit, l'escalade ou l'effraction d'une maison habitée, ou qui se défend contre les auteurs de vols ou de pillages exécutés avec violence."
+   ]
+  },
+  {
+   "type": "piege",
+   "titre": "Le piège",
+   "items": [
+    {
+     "t": "Défense ou vengeance ?",
+     "d": "Une riposte tardive ou disproportionnée reste punissable.",
+     "cue": 0
+    }
+   ],
+   "dit": [
+    "Le piège : confondre la défense et la *vengeance*.",
+    "Une riposte tardive ou disproportionnée reste *punissable*."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Les Cours Sésame et SAJ.",
+    "Votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1376,7 +1376,7 @@ index = inject(index, "books", catalogueHTML());
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
   h2: `Nos vidéos`, ici: "accueil",
-  lead: "Notre présentation, un ouvrage en vidéo, un article de loi expliqué en une minute et des sujets de SOG décryptés.",
+  lead: "Notre présentation, un ouvrage en vidéo, des notions et un article de loi expliqués en une minute, et des sujets de SOG décryptés.",
   band: espaceBand("")
 }) + "\n");
 // Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
