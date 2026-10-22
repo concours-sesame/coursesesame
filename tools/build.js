@@ -33,9 +33,9 @@ const write = (f, s) => { fs.mkdirSync(path.dirname(path.join(DIR, f)), { recurs
 /* ---------- Données ---------- */
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,WA2,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM,VIDEOS,TARIFS_ABONNEMENT};", ctx);
+vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,WA2,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM,VIDEOS,VIDEOS_ABONNES,TARIFS_ABONNEMENT};", ctx);
 vm.runInContext(read("assets/js/render.js"), ctx);
-const { WA, OUVRAGES, FAQ, METHODO, EPREUVES, SUJETS, VIDEOS } = ctx.D;
+const { WA, OUVRAGES, FAQ, METHODO, EPREUVES, SUJETS, VIDEOS, VIDEOS_ABONNES } = ctx.D;
 const R = ctx.SESAME;
 const { CONCOURS, EPREUVES_PAR_CONCOURS, fmt, parsePrice, plural, slugify, attr, svg } = R;
 const byCat = id => OUVRAGES.filter(o => o.categorie === id);
@@ -388,6 +388,14 @@ const VIDS = VIDEOS.map(v => {
   const [m, sec] = v.duree.split(":").map(Number);
   return Object.assign({}, v, { src, poster, ouvrageObj: ouvrage, sujetObj: sujet, concours: v.concours || [], iso: `PT${m ? m + "M" : ""}${sec}S` });
 });
+// Vidéos de l'espace abonnés : seule l'affiche est publique, la carte mène à l'inscription
+const VIDS_ABO = VIDEOS_ABONNES.map(v => {
+  const poster = `assets/img/videos/${v.fichier}.jpg`;
+  if (!exists(poster)) throw new Error(`vidéo abonnés ${v.fichier} : affiche introuvable : ${poster}`);
+  if (!/^\d+:\d{2}$/.test(v.duree)) throw new Error(`vidéo abonnés ${v.fichier} : durée à écrire en minutes:secondes`);
+  (v.concours || []).forEach(id => { if (!CONCOURS.some(c => c.id === id)) throw new Error(`vidéo abonnés ${v.fichier} : concours inconnu ${id}`); });
+  return Object.assign({}, v, { poster, concours: v.concours || [] });
+});
 const videoLD = v => ({
   "@context": "https://schema.org", "@type": "VideoObject", name: v.titre, description: v.desc, inLanguage: "fr",
   thumbnailUrl: SITE + v.poster, contentUrl: SITE + v.src, uploadDate: v.date, duration: v.iso,
@@ -415,6 +423,12 @@ function videoCard(v, prefix, i, ici) {
         <figcaption><span class="v-tag">${v.tag}</span><b>${v.titre}</b><span class="v-desc">${v.desc}</span>${l ? `<a class="v-link" href="${l[1]}">${l[0]}</a>` : ""}</figcaption>
       </figure>`;
 }
+function videoAboCard(v, prefix, i) {
+  return `<a class="v-card v-abo reveal reveal-d${i % 4}" href="${prefix}espace-abonnes/#inscription">
+        <span class="v-frame v-vertical"><img class="v-media" src="${prefix}${v.poster}" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">${v.duree}</span><span class="v-abo-pill">${svg("i-lock")}Réservée aux abonnés</span></span>
+        <span class="v-cap"><span class="v-tag">${v.tag}</span><b>${v.titre}</b><span class="v-desc">${v.desc}</span><span class="v-link">S'abonner pour la regarder</span></span>
+      </a>`;
+}
 // Vidéo mise en avant : la vidéo d'un côté, sa présentation de l'autre
 function videoFeature(v, prefix, ici, titre, actions = "") {
   const l = videoLien(v, prefix, ici);
@@ -429,7 +443,7 @@ function videoFeature(v, prefix, ici, titre, actions = "") {
     </div>`;
 }
 // Section « En vidéo » : la vidéo carrée en avant, les vidéos verticales en rangée
-function videosSection(list, prefix, { id = "videos", h2, lead, ici, cls = "", band = "" }) {
+function videosSection(list, prefix, { id = "videos", h2, lead, ici, cls = "", band = "", abo = [] }) {
   if (!list.length) return "";
   const feat = list.find(v => v.format === "carre") || (list.length === 1 ? list[0] : null);
   const rest = list.filter(v => v !== feat);
@@ -441,6 +455,8 @@ function videosSection(list, prefix, { id = "videos", h2, lead, ici, cls = "", b
     </div>
     ${feat ? videoFeature(feat, prefix, ici) : ""}
     ${rest.length ? `<div class="v-rail${feat ? " v-rail-after" : ""}">${rest.map((v, i) => videoCard(v, prefix, i, ici)).join("")}</div>` : ""}
+    ${abo.length ? `<div class="v-abo-head reveal"><h3>${svg("i-lock")}Réservées aux abonnés</h3><p>D'autres notions expliquées en une minute, à regarder dans l'espace abonnés.</p></div>
+    <div class="v-rail">${abo.map((v, i) => videoAboCard(v, prefix, i)).join("")}</div>` : ""}
     ${band}
   </div>
 </section>`;
@@ -504,7 +520,8 @@ for (const c of CONCOURS) {
 
 ${videosSection(vids, prefix, {
     h2: `Nos <em>vidéos</em>`, ici: "concours",
-    lead: vids.length > 1 ? "Notre présentation, nos ouvrages et des sujets décryptés, en quelques minutes chacun." : "Découvrez notre accompagnement et nos ouvrages en un peu plus d'une minute."
+    lead: vids.length > 1 ? "Notre présentation, nos ouvrages et des sujets décryptés, en quelques minutes chacun." : "Découvrez notre accompagnement et nos ouvrages en un peu plus d'une minute.",
+    abo: VIDS_ABO.filter(v => v.concours.includes(c.id))
   })}
 
 ${sujet ? `<section class="section sujets" id="corrige">
@@ -1379,7 +1396,7 @@ index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
   h2: `Nos vidéos`, ici: "accueil",
   lead: "Notre présentation, un ouvrage en vidéo, des notions et un article de loi expliqués en une minute, et des sujets de SOG décryptés.",
-  band: espaceBand("")
+  band: espaceBand(""), abo: VIDS_ABO
 }) + "\n");
 // Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
 index = index.replace(/(data-count-from="ouvrages">)[^<]*(<)/g, `$1${LIVRES.length}$2`).replace(/(data-count-from="concours">)[^<]*(<)/g, `$1${CONCOURS.length}$2`);
