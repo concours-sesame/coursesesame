@@ -455,7 +455,7 @@ function videosSection(list, prefix, { id = "videos", h2, lead, ici, cls = "", b
     </div>
     ${feat ? videoFeature(feat, prefix, ici) : ""}
     ${rest.length ? `<div class="v-rail${feat ? " v-rail-after" : ""}">${rest.map((v, i) => videoCard(v, prefix, i, ici)).join("")}</div>` : ""}
-    ${abo.length ? `<div class="v-abo-head reveal"><h3>${svg("i-lock")}Réservées aux abonnés</h3><p>D'autres notions expliquées en une minute, à regarder dans l'espace abonnés.</p></div>
+    ${abo.length ? `<div class="v-abo-head reveal"><h3>${svg("i-lock")}Réservées aux abonnés</h3><p>D'autres notions expliquées en une minute, à regarder dans l'espace abonnés dès la formule d'une semaine.</p></div>
     <div class="v-rail">${abo.map((v, i) => videoAboCard(v, prefix, i)).join("")}</div>` : ""}
     ${band}
   </div>
@@ -1307,7 +1307,7 @@ ${contactCTA(prefix)}`;
     <h2 id="abonnement">Abonnement à l'espace abonnés</h2>
     <p>Vous créez votre compte sur la page <a href="${prefix}espace-abonnes/">Espace abonnés</a>, vous réglez la formule choisie par Mobile Money, puis vous nous envoyez la référence du paiement sur WhatsApp. Nous activons alors votre accès. Les formules en vigueur sont les suivantes :</p>
     ${tarifs.length ? `<div class="table-wrap"><table class="tarifs"><thead><tr><th scope="col">Formule</th><th scope="col">Prix</th><th scope="col">Ouvrages complets</th></tr></thead><tbody>${tarifs.map(t => `<tr><td>${t.duree}</td><td>${t.prix} FCFA</td><td>${longues.includes(t.cle) ? "compris" : "non compris"}</td></tr>`).join("")}</tbody></table></div>` : ""}
-    <p>La durée de la formule court à partir de l'activation, et non du paiement : un accès activé plus tard ne vous fait perdre aucun jour. Une prolongation s'ajoute à la fin de l'abonnement en cours. Les formules d'un jour, d'une semaine et de deux semaines donnent accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus.</p>
+    <p>La durée de la formule court à partir de l'activation, et non du paiement : un accès activé plus tard ne vous fait perdre aucun jour. Une prolongation s'ajoute à la fin de l'abonnement en cours. Les formules d'une semaine et de deux semaines donnent accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus. La formule d'un jour donne accès à tous les contenus, sauf les ouvrages complets et les vidéos, réservées aux formules d'une semaine et plus.</p>
 
     <h2 id="non-active">Abonnement payé mais pas encore activé</h2>
     <p>L'activation se fait à la main, dès que nous avons reçu votre paiement et sa référence. Si votre accès n'est pas encore ouvert, relancez-nous sur WhatsApp avec la référence du paiement. Si l'abonnement ne peut pas être activé, par exemple parce que le paiement n'a pas abouti chez l'opérateur, la somme reçue vous est remboursée.</p>

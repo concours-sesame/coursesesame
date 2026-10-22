@@ -419,8 +419,11 @@
     $(".ea-v-fermer", visionneuse).focus();
 
     if (c.verrou) {
-      corps.innerHTML = `<div class="ea-verrou">${icone("i-lock")}<p><b>Les ouvrages complets sont réservés aux formules d'un mois et plus.</b> Votre formule actuelle donne accès à tous les autres contenus : sujets corrigés, fiches de révision et QCM.</p>
-          <a class="btn btn-wa" href="${lienWa(WA_NUM, c.verrou)}" target="_blank" rel="noopener">${icone("i-wa")}Passer à une formule d'un mois</a></div>`;
+      const video = c.type === "video" && !etat.videos;
+      corps.innerHTML = `<div class="ea-verrou">${icone("i-lock")}<p>${video
+        ? "<b>Les vidéos sont réservées aux formules d'une semaine et plus.</b> Votre formule actuelle donne accès aux sujets corrigés, aux fiches de révision et aux QCM."
+        : `<b>Les ouvrages complets sont réservés aux formules d'un mois et plus.</b> Votre formule actuelle donne accès à tous les autres contenus : sujets corrigés, fiches de révision${etat.videos ? ", QCM et vidéos" : " et QCM"}.`}</p>
+          <a class="btn btn-wa" href="${lienWa(WA_NUM, c.verrou)}" target="_blank" rel="noopener">${icone("i-wa")}${video ? "Passer à une formule d'une semaine" : "Passer à une formule d'un mois"}</a></div>`;
       return;
     }
     if (c.agent) { afficherReponseAgent(c.agent, corps, marque); return; }
@@ -683,11 +686,12 @@
     if (v.error) throw v.error;
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
-    const [p, a, adm, ouv, sus] = await Promise.all([
+    const [p, a, adm, ouv, vid, sus] = await Promise.all([
       client.from("profils").select("prenom, nom, telephone, concours, date_concours, emails_nouveautes, code_parrain").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
       client.rpc("acces_ouvrages"),
+      client.rpc("acces_videos"),
       client.rpc("ma_suspension")
     ]);
     if (p.error || a.error) throw p.error || a.error;
@@ -702,7 +706,9 @@
       suspendu: (!sus.error && sus.data) || null,
       admin: !!adm.data,
       // Ouvrages complets : formules d'un mois et plus seulement (règle appliquée par la base)
-      ouvrages: !!adm.data || ouv.data === true
+      ouvrages: !!adm.data || ouv.data === true,
+      // Vidéos : formules d'une semaine et plus seulement (règle appliquée par la base)
+      videos: !!adm.data || vid.data === true
     };
   }
 
@@ -735,7 +741,7 @@
         <h3>Au programme</h3>
         <p class="ea-apercu-intro">Tous les contenus de l'espace, à lire dès l'ouverture de votre accès. Touchez une rubrique pour voir les titres.</p>
         ${groupes.map(([r, l]) => `<details class="ea-groupe">
-          <summary><span class="ea-groupe-nom">${RUBRIQUES[r]}</span><span class="ea-groupe-n">${l.length}<span class="sr-only"> ${COMPTES[r][l.length > 1 ? 1 : 0]}</span></span>${r === "ouvrages" ? `<span class="ea-groupe-note">Formules d'un mois et plus</span>` : ""}</summary>
+          <summary><span class="ea-groupe-nom">${RUBRIQUES[r]}</span><span class="ea-groupe-n">${l.length}<span class="sr-only"> ${COMPTES[r][l.length > 1 ? 1 : 0]}</span></span>${r === "ouvrages" ? `<span class="ea-groupe-note">Formules d'un mois et plus</span>` : r === "videos" ? `<span class="ea-groupe-note">Formules d'une semaine et plus</span>` : ""}</summary>
           <ul class="ea-liste">${l.map(x => `<li class="ea-item">${cadenas}<span><b>${esc(x.titre)}</b><small>${detail(x)}</small></span></li>`).join("")}</ul>
         </details>`).join("")}
       </div>`;
@@ -780,7 +786,7 @@
           <div><span class="eyebrow">Abonnement actif</span>
           <h3>Votre accès est ouvert jusqu'au ${dateFr(abo.fin)}.</h3>
           ${j <= 7 ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
-          ${etat.ouvrages ? "" : `<p>Votre formule donne accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus.</p>`}</div>
+          ${!etat.videos ? `<p>Votre formule donne accès à tous les contenus, sauf les vidéos, réservées aux formules d'une semaine et plus, et les ouvrages complets, réservés aux formules d'un mois et plus.</p>` : etat.ouvrages ? "" : `<p>Votre formule donne accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus.</p>`}</div>
           ${j <= 7 ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler</a>` : ""}
         </div>`;
     }
@@ -798,7 +804,7 @@
         <span class="eyebrow">${abo.deja_abonne ? "Abonnement terminé" : "Activation en attente"}</span>
         <h3>${abo.deja_abonne ? `Votre abonnement a pris fin le ${dateFr(abo.fin)}.` : `Bienvenue, ${esc(profil.prenom)}. Votre compte est prêt.`}</h3>
         ${tarifs.length ? `<p class="ea-tarifs">${tarifs.map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
-        <p class="ea-aide">Les ouvrages complets sont compris à partir de la formule d'un mois. Les formules plus courtes donnent accès à tout le reste : sujets corrigés, fiches de révision et QCM.</p>` : ""}
+        <p class="ea-aide">Les vidéos sont comprises à partir de la formule d'une semaine, les ouvrages complets à partir de la formule d'un mois. Toutes les formules donnent accès aux sujets corrigés, aux fiches de révision et aux QCM.</p>` : ""}
         <ol class="ea-etapes">
           <li>Réglez ${abo.deja_abonne ? "votre renouvellement" : "votre abonnement"} par Mobile Money : Orange Money, MTN MoMo, Wave ou Moov Money.${tarifs.length ? "" : " Nous vous indiquons le tarif sur WhatsApp."}</li>
           <li>Envoyez-nous le message ci-dessous sur WhatsApp, avec la référence de votre paiement.</li>
@@ -841,9 +847,12 @@
   const RUBRIQUES = { ouvrages: "Ouvrages complets", fiches: "Fiches de révision", corriges: "Sujets corrigés", qcm: "QCM", videos: "Vidéos", textes: "Textes officiels", jurisprudence: "Jurisprudence", autres: "Autres contenus" };
   const rubrique = c => /^\s*Texte officiel/i.test(c.matiere || "") ? "textes" : /^\s*Jurisprudence/i.test(c.matiere || "") ? "jurisprudence" : /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Fiches/i.test(c.matiere || "") ? "fiches" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  // Ouvrage complet affiché avec un cadenas : formule de moins d'un mois
-  const verrouille = c => !etat.ouvrages && rubrique(c) === "ouvrages";
-  const msgFormule = () => `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à une formule d'un mois ou plus pour accéder aux ouvrages complets.\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
+  // Affichés avec un cadenas : un ouvrage complet avec une formule de moins d'un mois, une vidéo avec une formule de moins d'une semaine
+  const verrouOuvrage = c => !etat.ouvrages && rubrique(c) === "ouvrages";
+  const verrouVideo = c => !etat.videos && c.type === "video";
+  const verrouille = c => verrouOuvrage(c) || verrouVideo(c);
+  const noteVerrou = c => verrouOuvrage(c) ? "Formules d'un mois et plus" : "Formules d'une semaine et plus";
+  const msgFormule = c => c && !verrouOuvrage(c) && verrouVideo(c) ? `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à une formule d'une semaine ou plus pour accéder aux vidéos.\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : ` : `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à une formule d'un mois ou plus pour accéder aux ouvrages complets.\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
   function bibliothequeHTML() {
     if (!contenus.length) return `<div class="ea-biblio"><p class="ea-vide">Les premiers contenus exclusifs arrivent très bientôt. Revenez nous voir.</p></div>`;
     const rubs = Object.keys(RUBRIQUES).filter(r => contenus.some(c => rubrique(c) === r));
@@ -860,7 +869,7 @@
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
             <small>${[c.matiere ? esc(c.matiere) : "", (c.concours || []).map(nomConcours).join(", "), dateFr(c.publie_le)].filter(Boolean).join(" · ")}</small>
-            <span class="ea-carte-go">${verrouille(c) ? icone("i-lock") + "Formules d'un mois et plus" : typeAffiche(c).action + icone("i-arrow")}</span>
+            <span class="ea-carte-go">${verrouille(c) ? icone("i-lock") + noteVerrou(c) : typeAffiche(c).action + icone("i-arrow")}</span>
           </button>`).join("")}</div>
       </div>`;
   }
@@ -1668,7 +1677,7 @@
     const carte = e.target.closest(".ea-carte");
     if (carte && etat.session) {
       const c = contenus.find(x => String(x.id) === carte.dataset.id);
-      if (c) ouvrirContenu(verrouille(c) ? Object.assign({}, c, { verrou: msgFormule() }) : c, etat.admin && !etat.abo.actif ? "Aperçu administrateur" : marqueDe(etat.profil));
+      if (c) ouvrirContenu(verrouille(c) ? Object.assign({}, c, { verrou: msgFormule(c) }) : c, etat.admin && !etat.abo.actif ? "Aperçu administrateur" : marqueDe(etat.profil));
     }
   });
 
