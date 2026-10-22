@@ -31,6 +31,7 @@
   let moi = null, abonnes = [], paiements = [], contenus = [];
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [], epreuvesB = [];
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
+  let visites = [], visitesJours = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
   let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
@@ -171,7 +172,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -193,7 +194,9 @@
       client.from("emails_reglages").select("*").maybeSingle(),
       client.from("emails_envoyes").select("*").order("cree_le", { ascending: false }).limit(300),
       client.rpc("admin_concours_blancs"),
-      client.from("epreuves_blanches").select("id, concours, serie, ordre, epreuve, titre, nature, duree_minutes, publie").order("serie").order("ordre")
+      client.from("epreuves_blanches").select("id, concours, serie, ordre, epreuve, titre, nature, duree_minutes, publie").order("serie").order("ordre"),
+      client.rpc("admin_visites", { p_heures: 48 }),
+      client.rpc("admin_visites_jours", { p_jours: 30 })
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -204,6 +207,7 @@
     lireBilan(bil);
     emailsReglages = er.data || null; emailsEnvoyes = ee.data || [];
     blancs = cb.data || []; epreuvesB = eb.data || [];
+    visites = vi.data || []; visitesJours = vj.data || [];
     telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
     agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
     // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
@@ -551,16 +555,78 @@
         <div><b>${fcfa(encaisseCeMois())}</b><span>Encaissé ce mois-ci</span></div>
       </div>
       <div class="ea-onglets ad-onglets" role="tablist" aria-label="Administration">
-        ${[["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["blancs", "Concours blancs"], ["telechargements", "Téléchargements"], ["emails", "E-mails"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
+        ${[["direct", "En direct"], ["visites", "Visites du site"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["blancs", "Concours blancs"], ["telechargements", "Téléchargements"], ["emails", "E-mails"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
       </div>
       <div id="adPanneau">${panneau()}</div>`;
     majIndicateur();
   }
   // Redessine la page (onglets compris) sans bouger la position de lecture
   const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
-  const PANNEAUX = { direct: () => panneauDirect(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
+  const PANNEAUX = { direct: () => panneauDirect(), visites: () => panneauVisites(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
     contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), blancs: () => panneauBlancs(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
   const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
+
+  /* ---------- Visites du site public, actualisées toutes les 15 secondes ---------- */
+  // Chaque page vue du site est enregistrée par assets/js/visite.js : identifiant anonyme propre au navigateur,
+  // compte abonné si le visiteur est connecté, page, provenance et appareil (jamais l'adresse IP).
+  const EN_VISITE_MS = 5 * 60 * 1000;
+  const nomPage = pg => { const x = decodeURIComponent(pg || "/").replace(/^\/|\/$/g, ""); return x ? x.replace(/\//g, " › ").replace(/-/g, " ") : "Accueil"; };
+  const visiteurCourt = v => String(v.visiteur || "").slice(0, 4).toUpperCase();
+  const quiVisite = v => v.user_id
+    ? `<b>${esc(`${v.prenom || ""} ${v.nom || ""}`.trim() || "Compte sans nom")}</b> <span class="ad-badge ad-${v.abonne ? "actif" : "attente"}">${v.abonne ? "Abonné" : "Compte sans abonnement"}</span>`
+    : `<b>Visiteur ${esc(visiteurCourt(v))}</b> <span class="ad-badge ad-avenir">Non connecté</span>`;
+  const FILTRES_V = [["tous", "Tous", () => true], ["abonnes", "Abonnés", v => v.user_id && v.abonne], ["comptes", "Comptes sans abonnement", v => v.user_id && !v.abonne], ["anonymes", "Non connectés", v => !v.user_id]];
+  function panneauVisites() {
+    const t = Date.now(), filtreF = (FILTRES_V.find(f => f[0] === filtreV) || FILTRES_V[0])[2];
+    const derniers = new Map();
+    visites.filter(v => t - new Date(v.quand) < EN_VISITE_MS).forEach(v => { if (!derniers.has(v.visiteur)) derniers.set(v.visiteur, v); });
+    const maintenant = [...derniers.values()];
+    const auj = new Date().toISOString().slice(0, 10);
+    const jour = visitesJours.find(x => x.jour === auj) || { pages: 0, visiteurs: 0, comptes: 0 };
+    const somme = (l, k) => l.reduce((n, x) => n + Number(x[k] || 0), 0);
+    const sept = visitesJours.filter(x => t - new Date(x.jour + "T00:00:00Z") < 7 * 864e5);
+    const max = Math.max(1, ...visitesJours.map(x => Number(x.visiteurs)));
+    const liste = visites.filter(filtreF).slice(0, 300);
+    return `<div class="ad-direct-tete">
+        <p class="ad-direct-etat"><span class="ad-pastille ad-pastille-ok" aria-hidden="true"></span>Actualisation automatique toutes les 15 secondes.${derniereMaj ? ` Mise à jour à ${heure(derniereMaj)}.` : ""}</p>
+        <button class="btn btn-ghost btn-sm" type="button" data-action="actualiser-visites">Actualiser</button>
+      </div>
+      <div class="ad-stats">
+        <div><b>${maintenant.length}</b><span>Sur le site en ce moment (5 min)</span></div>
+        <div><b>${Number(jour.visiteurs)}</b><span>Visiteurs aujourd'hui · ${pluriel(Number(jour.pages), "page")} vue${Number(jour.pages) > 1 ? "s" : ""}</span></div>
+        <div><b>${Number(jour.comptes)}</b><span>Comptes connectés aujourd'hui</span></div>
+        <div><b>${somme(sept, "visiteurs")}</b><span>Visiteurs sur 7 jours (cumul quotidien)</span></div>
+      </div>
+      <section class="ad-bloc">
+        <h3>Sur le site en ce moment <span class="n">${maintenant.length}</span></h3>
+        ${maintenant.length ? `<ul class="ad-enligne">${maintenant.map(v => `<li><span class="ad-point" aria-hidden="true"></span>${quiVisite(v)}<small>${esc(nomPage(v.page))} · ${ilYa(v.quand)}</small></li>`).join("")}</ul>`
+          : `<p class="ea-vide">Personne sur le site depuis 5 minutes.</p>`}
+      </section>
+      <section class="ad-bloc">
+        <h3>Dernières pages vues (48 heures)</h3>
+        <div class="chips" role="group" aria-label="Filtrer les visites">${FILTRES_V.map(([v, l, f]) => `<button class="chip" type="button" data-filtrev="${v}" aria-pressed="${filtreV === v}">${l}<span class="n">${visites.filter(f).length}</span></button>`).join("")}</div>
+        ${liste.length ? `<div class="ad-tableau" role="region" aria-label="Dernières pages vues" tabindex="0"><table>
+          <thead><tr><th>Quand</th><th>Qui</th><th>Page</th><th>Provenance</th><th>Appareil</th></tr></thead>
+          <tbody>${liste.map(v => `<tr><td>${heure(new Date(v.quand))}<small>${ilYa(v.quand)}</small></td><td>${quiVisite(v)}${v.telephone ? `<small><a href="https://wa.me/${numeroWa(v.telephone)}" target="_blank" rel="noopener">${esc(v.telephone)}</a></small>` : ""}</td><td>${esc(nomPage(v.page))}</td><td>${esc(v.provenance === "(site)" ? "page précédente du site" : v.provenance || "accès direct")}</td><td>${esc(v.appareil || "")}</td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="ea-vide">Aucune visite dans cette catégorie depuis 48 heures.</p>`}
+        <p class="ad-note">Un visiteur non connecté est désigné par les quatre premiers caractères d'un identifiant anonyme propre à son navigateur : le même code d'une visite à l'autre signale le même navigateur. Son identité n'est pas connue. Un abonné est reconnu lorsqu'il est connecté à son compte.</p>
+      </section>
+      <section class="ad-bloc">
+        <h3>Les 30 derniers jours</h3>
+        ${visitesJours.length ? `<div class="ad-tableau" role="region" aria-label="Visites par jour" tabindex="0"><table>
+          <thead><tr><th>Jour</th><th>Visiteurs</th><th>Pages vues</th><th>Comptes connectés</th><th><span class="sr-only">Graphique</span></th></tr></thead>
+          <tbody>${visitesJours.map(x => `<tr><td>${dateFr(x.jour)}</td><td><b>${Number(x.visiteurs)}</b></td><td>${Number(x.pages)}</td><td>${Number(x.comptes)}</td><td><span class="ad-barre-v" style="width:${Math.round(100 * Number(x.visiteurs) / max)}%"></span></td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="ea-vide">Les visites s'afficheront ici dès les premières pages vues.</p>`}
+      </section>`;
+  }
+  async function rafraichirVisites() {
+    if (!moi || document.hidden || onglet !== "visites" || occupe()) return;
+    const [vi, vj] = await Promise.all([client.rpc("admin_visites", { p_heures: 48 }), client.rpc("admin_visites_jours", { p_jours: 30 })]);
+    if (vi.error || vj.error) return;
+    visites = vi.data || []; visitesJours = vj.data || []; derniereMaj = new Date();
+    const z = $("#adPanneau");
+    if (z && onglet === "visites") { const y = scrollY; z.innerHTML = panneauVisites(); scrollTo(0, y); }
+  }
 
   /* ---------- En direct : abonnements en cours, mis à jour automatiquement ---------- */
   function panneauDirect() {
@@ -1221,6 +1287,7 @@
   const signal = () => { clearTimeout(attenteSignal); attenteSignal = setTimeout(actualiserEnDirect, 800); };
   function brancherDirect() {
     if (!minuterieDirect) minuterieDirect = setInterval(actualiserEnDirect, 30000);
+    if (!minuterieVisites) minuterieVisites = setInterval(rafraichirVisites, 15000);
     if (canal || typeof client.channel !== "function") return;
     canal = client.channel("admin-direct")
       .on("postgres_changes", { event: "*", schema: "public", table: "abonnements" }, signal)
@@ -1230,6 +1297,7 @@
   }
   function debrancherDirect() {
     clearInterval(minuterieDirect); minuterieDirect = null;
+    clearInterval(minuterieVisites); minuterieVisites = null;
     if (canal) { client.removeChannel(canal); canal = null; }
     enDirect = false;
   }
@@ -1256,11 +1324,12 @@
   racine.addEventListener("click", async e => {
     const lienRelance = e.target.closest("a[data-relance]");
     if (lienRelance) { marquerRelance(lienRelance.dataset.relance); setTimeout(() => { if (onglet === "relances" && !occupe()) redessiner(); }, 600); return; }
-    const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-filtre], button[data-filtrec]");
+    const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-filtre], button[data-filtrec], button[data-filtrev]");
     if (!b) return;
     if (b.dataset.onglet) { onglet = b.dataset.onglet; afficher(); return; }
     if (b.dataset.filtre) { filtre = b.dataset.filtre; $("#adPanneau").innerHTML = panneauAbonnes(); return; }
     if (b.dataset.filtrec) { filtreC = b.dataset.filtrec; $("#adZoneC").innerHTML = zoneContenus(); return; }
+    if (b.dataset.filtrev) { filtreV = b.dataset.filtrev; $("#adPanneau").innerHTML = panneauVisites(); return; }
     const act = b.dataset.action;
     if (act === "sortir") { debrancherDirect(); await client.auth.signOut(); connexion(); return; }
     if (act === "emails-basculer") {
@@ -1282,6 +1351,7 @@
     }
     if (act === "recharger") { demarrer(); return; }
     if (act === "actualiser") { recharger(); return; }
+    if (act === "actualiser-visites") { const o = onglet; onglet = "visites"; await rafraichirVisites(); onglet = o; toast("Visites actualisées"); return; }
     if (act === "mfa") { activerDeuxEtapes(b); return; }
     if (act === "tout-telecharger") { telechargerTout(b); return; }
     if (act === "indexer") { indexerContenus(b); return; }
