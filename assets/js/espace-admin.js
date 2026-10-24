@@ -1032,20 +1032,20 @@
 
   // Concours blancs en accès libre (page concours-blancs/) : sujets lisibles de tous une fois publiés, corrigés
   // réservés aux abonnés des formules d'une semaine et plus. L'administrateur lit les deux, publiés ou non.
-  const NOMS_EPREUVES = { preselection: "Présélection", sog: "Sujet d'ordre général", droit_civil: "Droit civil", droit_commercial: "Droit commercial et OHADA", droit_penal: "Droit pénal et procédure pénale", droit_administratif: "Droit administratif", organisation_judiciaire: "Organisation judiciaire", opaj: "OPAJ", opea: "Organisation politique, économique et administrative", informatique: "Informatique et bureautique" };
-  const NOMS_BLANCS = { magistrature: "Magistrature", greffe_cs: "Greffe, cycle supérieur", greffe_cms: "Greffe, cycle moyen supérieur", greffe_cm: "Greffe, cycle moyen" };
+  const NOMS_EPREUVES = { preselection: "Présélection", sog: "Sujet d'ordre général", droit_civil: "Droit civil", droit_commercial: "Droit commercial et OHADA", droit_penal: "Droit pénal et procédure pénale", droit_administratif: "Droit administratif", organisation_judiciaire: "Organisation judiciaire", opaj: "OPAJ", opea: "Organisation politique, économique et administrative", systeme_penitentiaire: "Droit pénitentiaire", administration_penitentiaire: "Administration pénitentiaire", etude_texte: "Étude de texte", informatique: "Informatique et bureautique" };
+  const NOMS_BLANCS = { magistrature: "Magistrature", greffe_cs: "Greffe, cycle supérieur", greffe_cms: "Greffe, cycle moyen supérieur", greffe_cm: "Greffe, cycle moyen", penitentiaire_cs: "Pénitentiaire, cycle supérieur", penitentiaire_cms: "Pénitentiaire, cycle moyen supérieur", penitentiaire_cm: "Pénitentiaire, cycle moyen" };
   function blocEpreuvesBlanches() {
     const rang = c => { const i = Object.keys(NOMS_BLANCS).indexOf(c); return i < 0 ? 99 : i; };
     const series = [...new Set(epreuvesB.map(e => `${e.concours}|${e.serie}`))]
       .sort((x, y) => { const [cx, nx] = x.split("|"), [cy, ny] = y.split("|"); return rang(cx) - rang(cy) || nx - ny; });
     const publiees = epreuvesB.filter(e => e.publie).length;
     return `<section class="ad-bloc"><h3>Concours blancs en accès libre <span class="n">${epreuvesB.length}</span></h3>
-        <p class="ad-note">Magistrature : la présélection (2 heures) et les cinq épreuves écrites (4 heures chacune). Greffe : les épreuves d'admissibilité de chaque cycle. Tout visiteur compose sur la page <a href="${ROOT}concours-blancs/" target="_blank" rel="noopener">Concours blancs</a> ; le corrigé est réservé aux abonnés des formules d'une semaine et plus. ${publiees} épreuve${publiees > 1 ? "s" : ""} publiée${publiees > 1 ? "s" : ""} sur ${epreuvesB.length}.</p>
+        <p class="ad-note">Magistrature : la présélection (2 heures) et les cinq épreuves écrites (4 heures chacune). Greffe et pénitentiaire : les épreuves d'admissibilité de chaque cycle. Tout visiteur compose sur la page <a href="${ROOT}concours-blancs/" target="_blank" rel="noopener">Concours blancs</a> ; le corrigé est réservé aux abonnés des formules d'une semaine et plus. ${publiees} épreuve${publiees > 1 ? "s" : ""} publiée${publiees > 1 ? "s" : ""} sur ${epreuvesB.length}.</p>
         ${series.length ? series.map(k => {
           const [conc, n] = k.split("|"), liste = epreuvesB.filter(e => e.concours === conc && String(e.serie) === n);
           const toutes = liste.every(e => e.publie);
           return `<details class="ad-ajout"><summary>${esc(NOMS_BLANCS[conc] || nomConcours(conc))}, série ${n} · ${liste.filter(e => e.publie).length}/${liste.length} publiées</summary>
-            <ul class="ad-facteurs">${liste.map(e => `<li><span><b>${esc(NOMS_EPREUVES[e.epreuve] || e.titre)}</b><small>${esc(e.nature)} · ${e.duree_minutes} min · ${e.publie ? "publiée" : "brouillon"}</small></span>
+            <ul class="ad-facteurs">${liste.map(e => `<li><span><b>${esc(e.titre || NOMS_EPREUVES[e.epreuve])}</b><small>${esc(e.nature)} · ${e.duree_minutes} min · ${e.publie ? "publiée" : "brouillon"}</small></span>
               <span><button class="btn btn-ghost btn-sm" type="button" data-action="eb-voir" data-quoi="sujet" data-ebid="${e.id}">Sujet</button><button class="btn btn-ghost btn-sm" type="button" data-action="eb-voir" data-quoi="corrige" data-ebid="${e.id}">Corrigé</button></span></li>`).join("")}</ul>
             <p><button class="btn btn-navy btn-sm" type="button" data-action="eb-serie" data-conc="${esc(conc)}" data-serie="${n}" data-publie="${toutes ? "0" : "1"}">${toutes ? "Retirer la série" : "Publier la série"}</button></p></details>`;
         }).join("") : `<p class="ea-vide">Aucune épreuve pour le moment.</p>`}
@@ -1065,7 +1065,7 @@
     if (!e) return;
     const { data, error } = await client.from("epreuves_blanches").select(quoi).eq("id", id).maybeSingle();
     if (error || !data) { toast(error ? messageErreur(error) : "Épreuve introuvable."); return; }
-    ouvrirContenu({ type: "texte", titre: `${NOMS_BLANCS[e.concours] || e.concours}, série ${e.serie}, ${NOMS_EPREUVES[e.epreuve] || e.titre}, ${quoi === "sujet" ? "sujet" : "corrigé"}`, texte: texteEpreuve(e, quoi, data[quoi]) }, "Administration");
+    ouvrirContenu({ type: "texte", titre: `${NOMS_BLANCS[e.concours] || e.concours}, série ${e.serie}, ${e.titre || NOMS_EPREUVES[e.epreuve]}, ${quoi === "sujet" ? "sujet" : "corrigé"}`, texte: texteEpreuve(e, quoi, data[quoi]) }, "Administration");
   }
 
   function panneauStats() {
