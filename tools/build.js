@@ -1119,10 +1119,10 @@ ${contactCTA(prefix)}`;
   const url = SITE + "concours-blancs/";
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Concours blancs", ""]],
-    h1: `Concours blancs de la <em>magistrature</em> et du <em>Greffe</em>`,
-    lead: "Des séries complètes et inédites, aux conditions des concours directs de l'INFJ. Magistrature : dix séries, la présélection en 2 heures puis les cinq épreuves écrites en 4 heures. Greffe : cinq séries par cycle (administrateurs, attachés, secrétaires des greffes et parquets), avec le sujet d'ordre général, les épreuves juridiques et l'informatique. Chacun compose gratuitement ; le corrigé de chaque épreuve est réservé aux abonnés.",
+    h1: `Concours blancs de la <em>magistrature</em>, du <em>Greffe</em> et du <em>pénitentiaire</em>`,
+    lead: "Des séries complètes et inédites, aux conditions des concours directs de l'INFJ. Magistrature : dix séries, la présélection en 2 heures puis les cinq épreuves écrites en 4 heures. Greffe : cinq séries par cycle (administrateurs, attachés, secrétaires des greffes et parquets), avec le sujet d'ordre général, les épreuves juridiques et l'informatique. Administration pénitentiaire : cinq séries par cycle (administrateurs, attachés, agents d'encadrement), avec le droit pénal, le droit pénitentiaire et l'étude de texte. Chacun compose gratuitement ; le corrigé de chaque épreuve est réservé aux abonnés.",
     ctas: `<a href="#blancs-app" class="btn btn-gold">Choisir une épreuve${arrow}</a><a href="${prefix}espace-abonnes/#inscription" class="btn btn-ghost">S'abonner pour les corrigés</a>`,
-    facts: ["<b>25</b> séries", "<b>125</b> épreuves", "Magistrature et Greffe", "Corrigés et grilles sur 20"]
+    facts: ["<b>40</b> séries", "<b>185</b> épreuves", "Magistrature, Greffe, pénitentiaire", "Corrigés et grilles sur 20"]
   })}
 
 <section class="section section-cream cb-charte-section">
@@ -1145,15 +1145,15 @@ ${contactCTA(prefix)}`;
       <p class="ea-attente">Chargement des concours blancs…</p>
       <noscript><p class="ea-erreur">Les concours blancs ont besoin de JavaScript : activez-le dans votre navigateur.</p></noscript>
     </div>
-    <p class="abo-note">Votre progression et votre copie restent dans ce navigateur, sur cet appareil. Les concours blancs des autres concours (ENA, administration pénitentiaire, EPPJEJ) suivront.</p>
+    <p class="abo-note">Votre progression et votre copie restent dans ce navigateur, sur cet appareil. Les concours blancs de l'EPPJEJ et de l'ENA suivront.</p>
   </div>
 </section>
 
 ${contactCTA(prefix)}`;
   write("concours-blancs/index.html", page({
     prefix, url, body, scripts: [...SCRIPTS_ESPACE, "assets/js/concours-blancs.js"],
-    title: "Concours blancs magistrature et Greffe (INFJ), gratuits",
-    description: "Concours blancs inédits de l'INFJ : 10 séries pour la magistrature, 15 pour le Greffe (trois cycles), chronométrées et gratuites en ligne. Corrigés réservés aux abonnés.",
+    title: "Concours blancs magistrature, Greffe et pénitentiaire (INFJ)",
+    description: "Concours blancs inédits de l'INFJ : 10 séries de magistrature, 15 du Greffe et 15 du pénitentiaire, chronométrées et gratuites. Corrigés pour les abonnés.",
     ld: [breadcrumb([["Accueil", SITE], ["Concours blancs", url]])]
   }));
   urls.push(url);
@@ -1360,7 +1360,7 @@ ${contactCTA(prefix)}`;
   const liens = [
     ["ouvrages/", "Tous les ouvrages", "Le catalogue complet, avec les extraits gratuits."],
     ["sujets/", "Sujets corrigés", "Dissertations, cas pratiques, commentaires et SOG corrigés."],
-    ["concours-blancs/", "Concours blancs", "Concours blancs chronométrés de la magistrature et du Greffe."],
+    ["concours-blancs/", "Concours blancs", "Concours blancs chronométrés de la magistrature, du Greffe et du pénitentiaire."],
     ["qcm/", "QCM gratuits", "Testez vos connaissances, chaque réponse expliquée."],
     ["espace-abonnes/", "Espace abonnés", "Connexion et création de compte."]
   ];

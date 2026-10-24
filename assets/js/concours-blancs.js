@@ -1,5 +1,5 @@
 /* Concours blancs en accès libre (page concours-blancs/) : séries de la magistrature (présélection et cinq épreuves
-   écrites) et du Greffe, un jeu par cycle (les épreuves d'admissibilité de l'École des greffes). Tout visiteur compose, sans compte ; le chronomètre et la copie restent dans son
+   écrites), du Greffe et de l'administration pénitentiaire, un jeu par cycle (les épreuves d'admissibilité de chaque école). Tout visiteur compose, sans compte ; le chronomètre et la copie restent dans son
    navigateur. Le chronomètre démarre à l'entrée dans le sujet, s'arrête quand le candidat quitte la page et reprend à
    son retour, sans jamais revenir à zéro. Le corrigé n'est livré par la base qu'aux abonnés des formules d'une semaine
    et plus (fonction corrige_epreuve_blanche, supabase/migrations/…_epreuves_blanches.sql). */
@@ -19,19 +19,23 @@
     preselection: "Présélection", sog: "Sujet d'ordre général", droit_civil: "Droit civil",
     droit_commercial: "Droit commercial et OHADA", droit_penal: "Droit pénal et procédure pénale", droit_administratif: "Droit administratif",
     organisation_judiciaire: "Organisation judiciaire", opaj: "Organisation politique, administrative et judiciaire",
-    opea: "Organisation politique, économique et administrative", informatique: "Informatique et bureautique"
+    opea: "Organisation politique, économique et administrative", informatique: "Informatique et bureautique",
+    systeme_penitentiaire: "Droit pénitentiaire", administration_penitentiaire: "Administration pénitentiaire", etude_texte: "Étude de texte"
   };
   // Un onglet par concours ; seuls ceux qui ont des épreuves publiées s'affichent
   const CONCOURS = [
     { id: "magistrature", nom: "Magistrature", detail: "Concours direct de la magistrature" },
     { id: "greffe_cs", nom: "Greffe, cycle supérieur", detail: "Administrateurs des greffes et parquets" },
     { id: "greffe_cms", nom: "Greffe, cycle moyen supérieur", detail: "Attachés des greffes et parquets" },
-    { id: "greffe_cm", nom: "Greffe, cycle moyen", detail: "Secrétaires des greffes et parquets" }
+    { id: "greffe_cm", nom: "Greffe, cycle moyen", detail: "Secrétaires des greffes et parquets" },
+    { id: "penitentiaire_cs", nom: "Pénitentiaire, cycle supérieur", detail: "Administrateurs des services pénitentiaires" },
+    { id: "penitentiaire_cms", nom: "Pénitentiaire, cycle moyen supérieur", detail: "Attachés des services pénitentiaires" },
+    { id: "penitentiaire_cm", nom: "Pénitentiaire, cycle moyen", detail: "Agents d'encadrement" }
   ];
   const nomConc = id => (CONCOURS.find(c => c.id === id) || { nom: "" }).nom;
   // Épreuves en vrai ou faux : sujet et corrigé en JSON, note calculée à l'écran
   const enVraiFaux = e => e.epreuve === "preselection" || e.epreuve === "informatique";
-  const intitule = e => `${e.concours === "magistrature" ? "" : `${nomConc(e.concours)}, `}concours blanc n° ${e.serie}, ${NOMS[e.epreuve] || e.titre}`;
+  const intitule = e => `${e.concours === "magistrature" ? "" : `${nomConc(e.concours)}, `}concours blanc n° ${e.serie}, ${e.titre || NOMS[e.epreuve]}`;
   const majuscule = t => t.charAt(0).toUpperCase() + t.slice(1);
   const duree = m => m % 60 ? `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")}` : `${m / 60} heure${m > 60 ? "s" : ""}`;
   const horloge = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`; };
