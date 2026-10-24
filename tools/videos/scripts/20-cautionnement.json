@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-cautionnement",
+ "titre": "Le cautionnement",
+ "rubrique": "Droit OHADA",
+ "scenes": [
+  {"type": "intro", "titre": "Le cautionnement",
+   "dit": ["Une notion, une minute.", "Le *cautionnement*."]},
+  {"type": "question", "titre": "Il se porte caution du prêt de son frère.",
+   "texte": "Que risque-t-il ?", "cueTexte": 1,
+   "dit": ["Lonsé se porte caution du prêt que son frère a obtenu à la banque.", "Que *risque*-t-il ?"]},
+  {"type": "article", "titre": "Article 13 de l'Acte uniforme portant organisation des sûretés",
+   "citation": "Le cautionnement est un contrat par lequel la caution s'engage, envers le créancier qui accepte, à exécuter une obligation présente ou future contractée par le débiteur, si celui-ci n'y satisfait pas lui-même.", "cueCitation": 1,
+   "dit": ["Selon l'article *13* de l'Acte uniforme OHADA portant organisation des sûretés,", "la caution s'engage envers le créancier à exécuter l'obligation du débiteur, si celui-ci n'y satisfait pas *lui-même*."]},
+  {"type": "etapes", "titre": "Sa formation",
+   "items": [
+     {"n": "1", "t": "Il ne se présume pas", "d": "Quelle que soit l'obligation garantie (article 14)", "cue": 1},
+     {"n": "2", "t": "Un acte signé", "d": "Par la caution et par le créancier", "cue": 2},
+     {"n": "3", "t": "Une mention manuscrite", "d": "La somme maximale garantie, en lettres et en chiffres ; les lettres l'emportent", "cue": 3}],
+   "dit": ["Le cautionnement ne se *présume* pas, selon l'article 14.", "Il se prouve par un acte signé par la caution et par le créancier,", "avec la mention, écrite de la main de la caution, de la somme maximale garantie, en lettres et en chiffres. En cas de différence, les *lettres* l'emportent."]},
+  {"type": "blocs", "titre": "Ses effets",
+   "items": [
+     {"t": "Après le débiteur", "d": "Poursuites possibles après une mise en demeure du débiteur restée sans effet (article 23).", "cue": 1},
+     {"t": "L'information de la caution", "d": "Dans le mois, sinon elle ne doit ni pénalités ni intérêts de retard pour cette période (article 24).", "cue": 2},
+     {"t": "Dans la limite de la somme garantie", "d": "Principal, accessoires et frais de recouvrement (article 18).", "cue": 3}],
+   "dit": ["Ses effets.", "Le créancier ne peut poursuivre la caution qu'après une mise en demeure du débiteur restée *sans effet*.", "Il doit informer la caution de la défaillance dans le mois, sinon elle ne doit pas les pénalités ni les intérêts de retard de cette période.", "Et la caution n'est tenue que dans la limite de la somme *maximale* garantie."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Cautionnement prouvé", "d": "Lonsé a signé l'acte et écrit de sa main « deux millions de francs ».", "cue": 1},
+     {"ok": false, "t": "Pas de cautionnement prouvé", "d": "Une simple promesse orale de « se porter garant ».", "cue": 2}],
+   "dit": ["Lonsé a signé l'acte et écrit de sa main la somme de deux millions de francs : le cautionnement est *prouvé*.", "Une simple promesse orale de se porter garant ne suffirait pas : le cautionnement ne se présume pas."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Simple ou solidaire ?", "d": "Le cautionnement est réputé solidaire ; il n'est simple que si la loi ou la convention le prévoit expressément (article 20).", "cue": 0}],
+   "dit": ["Le piège : croire que la caution est simple par principe.", "Selon l'article 20, le cautionnement est réputé *solidaire* : il n'est simple que si la loi ou la convention le prévoit expressément."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

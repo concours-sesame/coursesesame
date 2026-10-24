@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-qui-est-commercant",
+ "titre": "Qui est commerçant ?",
+ "rubrique": "Droit commercial OHADA",
+ "scenes": [
+  {"type": "intro", "titre": "Qui est commerçant ?",
+   "dit": ["Une notion, une minute.", "Qui est *commerçant* ?"]},
+  {"type": "question", "titre": "Elle revend des pagnes chaque jour au marché.",
+   "texte": "Est-elle commerçante ?", "cueTexte": 1,
+   "dit": ["Mahiné achète des pagnes en gros et les revend chaque jour au marché.", "Est-elle *commerçante* ?"]},
+  {"type": "article", "titre": "Article 2 de l'Acte uniforme sur le droit commercial général",
+   "citation": "Est commerçant celui qui fait de l'accomplissement d'actes de commerce par nature sa profession.", "cueCitation": 1,
+   "dit": ["La réponse est dans l'article *2* de l'Acte uniforme OHADA sur le droit commercial général.", "Est commerçant celui qui fait de l'accomplissement d'actes de commerce par nature sa *profession*."]},
+  {"type": "blocs", "titre": "Les actes de commerce par nature",
+   "items": [
+     {"t": "Acheter pour revendre", "d": "Des biens, meubles ou immeubles (article 3).", "cue": 1, "fort": true},
+     {"t": "Banque, bourse, assurance", "d": "Mais aussi change, courtage et transit.", "cue": 2},
+     {"t": "Transport, location de meubles", "d": "Et les actes effectués par les sociétés commerciales.", "cue": 3}],
+   "dit": ["Selon l'article 3, ont notamment ce caractère :", "l'achat de biens, meubles ou immeubles, en vue de leur *revente* ;", "les opérations de banque, de bourse, de change, de courtage, d'assurance et de transit ;", "les opérations de transport, de location de meubles, et les actes effectués par les sociétés commerciales."]},
+  {"type": "etapes", "titre": "Trois conditions",
+   "items": [
+     {"n": "1", "t": "Des actes de commerce par nature", "d": "Comme l'achat pour revendre", "cue": 1},
+     {"n": "2", "t": "À titre de profession", "d": "De manière habituelle, pour en vivre", "cue": 2},
+     {"n": "3", "t": "La capacité", "d": "Le mineur non émancipé ne peut être commerçant (article 7)", "cue": 3}],
+   "dit": ["Trois conditions, donc.", "Accomplir des actes de commerce *par nature*.", "En faire sa *profession*.", "Et être capable : le mineur, sauf s'il est émancipé, ne peut pas être commerçant, selon l'article 7."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Commerçante", "d": "Mahiné achète pour revendre, chaque jour : elle est commerçante.", "cue": 1},
+     {"ok": false, "t": "Incompatibilité", "d": "Un fonctionnaire ne peut pas exercer le commerce (article 9).", "cue": 2}],
+   "dit": ["Mahiné achète pour revendre, et en fait sa profession : elle est *commerçante*.", "En revanche, un fonctionnaire ne peut pas exercer une activité commerciale : c'est une *incompatibilité*, selon l'article 9."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Les actes de commerce par la forme", "d": "Signer une lettre de change (article 4) ne fait pas de vous un commerçant.", "cue": 0}],
+   "dit": ["Le piège : les actes de commerce par la *forme*.", "Signer une lettre de change est un acte de commerce, selon l'article 4, mais cela ne fait pas de vous un commerçant : l'article 2 ne vise que les actes de commerce par nature."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

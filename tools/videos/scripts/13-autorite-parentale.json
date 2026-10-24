@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-autorite-parentale",
+ "titre": "L'autorité parentale",
+ "rubrique": "Droit civil",
+ "scenes": [
+  {"type": "intro", "titre": "L'autorité parentale",
+   "dit": ["Une notion, une minute.", "L'*autorité* parentale."]},
+  {"type": "question", "titre": "Ses parents divorcent.",
+   "texte": "Qui décide pour l'enfant ?", "cueTexte": 1,
+   "dit": ["Les parents de la petite Nanlé divorcent.", "Qui *décide* désormais pour elle ?"]},
+  {"type": "article", "titre": "Article 3 de la loi relative à la minorité",
+   "citation": "L'autorité parentale est l'ensemble des droits et obligations reconnus aux père et mère sur la personne et les biens de leur enfant mineur et ayant pour finalité l'intérêt de celui-ci.", "cueCitation": 1,
+   "dit": ["Tout part de l'article *3* de la loi relative à la minorité.", "L'autorité parentale est l'ensemble des droits et obligations des père et mère sur la personne et les biens de leur enfant mineur, dans l'*intérêt* de celui-ci."]},
+  {"type": "blocs", "titre": "Son contenu",
+   "items": [
+     {"t": "La personne de l'enfant", "d": "Garde, direction, surveillance, entretien, instruction et éducation.", "cue": 1},
+     {"t": "Les grandes décisions", "d": "Consentir à son adoption, à son émancipation.", "cue": 2},
+     {"t": "Ses biens", "d": "Administrer ses biens et disposer de leurs revenus.", "cue": 3}],
+   "dit": ["Selon l'article 4, elle comporte notamment :", "la garde, la direction, la surveillance, l'entretien, l'instruction et l'*éducation* de l'enfant ;", "le droit de consentir à son *adoption* ou à son émancipation ;", "et l'administration de ses *biens*."]},
+  {"type": "etapes", "titre": "Qui l'exerce ?",
+   "items": [
+     {"n": "1", "t": "Pendant le mariage", "d": "Les père et mère, en commun (article 5)", "cue": 1},
+     {"n": "2", "t": "Après le divorce", "d": "Le parent à qui le juge a confié la garde (article 6)", "cue": 2},
+     {"n": "3", "t": "Hors mariage", "d": "Le parent à l'égard duquel la filiation est établie, ou les deux (article 9)", "cue": 3}],
+   "dit": ["Qui l'exerce ?", "Pendant le mariage, les père et mère, *en commun*.", "Après le divorce, le parent à qui le juge a confié la *garde*.", "Et pour l'enfant né hors mariage, le parent à l'égard duquel la filiation est établie, ou les deux si elle l'est à l'égard des deux."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "La mère, gardienne", "d": "Le juge lui confie la garde de Nanlé : elle exerce l'autorité parentale.", "cue": 1},
+     {"ok": true, "t": "Le père", "d": "Il conserve le droit de visite et de surveillance, et celui de consentir à l'adoption ou à l'émancipation.", "cue": 2}],
+   "dit": ["Le juge confie la garde de Nanlé à sa mère : c'est elle qui *exerce* l'autorité parentale.", "Mais son père n'est pas écarté : il conserve le droit de *visite* et de surveillance, et celui de consentir à l'adoption ou à l'émancipation."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Tout ne se délègue pas", "d": "Le droit de consentir à l'adoption du mineur ne peut être délégué (article 18).", "cue": 0}],
+   "dit": ["Le piège : croire que tout se délègue.", "L'autorité parentale peut être déléguée, mais selon l'article 18, le droit de consentir à l'*adoption* du mineur ne peut pas l'être."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
