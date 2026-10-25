@@ -1032,7 +1032,7 @@
 
   // Concours blancs en accès libre (page concours-blancs/) : sujets lisibles de tous une fois publiés, corrigés
   // réservés aux abonnés des formules d'une semaine et plus. L'administrateur lit les deux, publiés ou non.
-  const NOMS_EPREUVES = { preselection: "Présélection", sog: "Sujet d'ordre général", droit_civil: "Droit civil", droit_commercial: "Droit commercial et OHADA", droit_penal: "Droit pénal et procédure pénale", droit_administratif: "Droit administratif", organisation_judiciaire: "Organisation judiciaire", opaj: "OPAJ", opea: "Organisation politique, économique et administrative", systeme_penitentiaire: "Droit pénitentiaire", administration_penitentiaire: "Administration pénitentiaire", etude_texte: "Étude de texte", droits_enfant: "Droits de l'enfant", fonction_publique: "Statut et déontologie de la fonction publique", pecos: "Problèmes économiques et sociaux", note_synthese: "Note de synthèse", informatique: "Informatique et bureautique" };
+  const NOMS_EPREUVES = { preselection: "Présélection", sog: "Sujet d'ordre général", droit_civil: "Droit civil", droit_commercial: "Droit commercial et OHADA", droit_penal: "Droit pénal et procédure pénale", droit_administratif: "Droit administratif", organisation_judiciaire: "Organisation judiciaire", opaj: "OPAJ", opea: "Organisation politique, économique et administrative", systeme_penitentiaire: "Droit pénitentiaire", administration_penitentiaire: "Administration pénitentiaire", etude_texte: "Étude de texte", droits_enfant: "Droits de l'enfant", fonction_publique: "Statut et déontologie de la fonction publique", pecos: "Problèmes économiques et sociaux", note_synthese: "Note de synthèse", informatique: "Informatique et bureautique", droit_constitutionnel: "Droit constitutionnel", resume_texte: "Résumé de texte", cmc: "Connaissance du monde contemporain" };
   const NOMS_BLANCS = { magistrature: "Magistrature", greffe_cs: "Greffe, cycle supérieur", greffe_cms: "Greffe, cycle moyen supérieur", greffe_cm: "Greffe, cycle moyen", penitentiaire_cs: "Pénitentiaire, cycle supérieur", penitentiaire_cms: "Pénitentiaire, cycle moyen supérieur", penitentiaire_cm: "Pénitentiaire, cycle moyen", eppjej_cs: "EPPJEJ, cycle supérieur", eppjej_cms: "EPPJEJ, cycle moyen supérieur", eppjej_cm: "EPPJEJ, cycle moyen", ena_cs: "ENA, cycle supérieur", ena_cms: "ENA, cycle moyen supérieur", ena_cm: "ENA, cycle moyen" };
   function blocEpreuvesBlanches() {
     const rang = c => { const i = Object.keys(NOMS_BLANCS).indexOf(c); return i < 0 ? 99 : i; };
@@ -1051,13 +1051,13 @@
         }).join("") : `<p class="ea-vide">Aucune épreuve pour le moment.</p>`}
       </section>`;
   }
-  // Présélection : le sujet et le corrigé sont des objets JSON ; on les présente en texte lisible
+  // Présélection, informatique et QCM : le sujet et le corrigé sont des objets JSON ; on les présente en texte lisible
   function texteEpreuve(e, quoi, t) {
-    if (e.epreuve !== "preselection" && e.epreuve !== "informatique") return t;
+    if (!["preselection", "informatique", "cmc"].includes(e.epreuve)) return t;
     try {
       const o = JSON.parse(t);
-      if (quoi === "sujet") return `${o.consigne || ""}\n\n${(o.items || []).map(i => `**${i.n}.** ${i.matiere ? `(${i.matiere}) ` : ""}${i.texte}`).join("\n\n")}`;
-      return (o.reponses || []).map(r => `**${r.n}. ${r.r === "V" ? "Vrai" : "Faux"}.** ${r.j || ""}`).join("\n\n");
+      if (quoi === "sujet") return `${o.consigne || ""}\n\n${(o.items || []).map(i => `**${i.n}.** ${i.matiere ? `(${i.matiere}) ` : ""}${i.texte}${Array.isArray(i.choix) ? `\n${i.choix.map((c, k) => `${"ABCD"[k]}. ${c}`).join("\n")}` : ""}`).join("\n\n")}`;
+      return (o.reponses || []).map(r => `**${r.n}. ${r.r === "V" ? "Vrai" : r.r === "F" ? "Faux" : `Réponse ${r.r}`}.** ${r.j || ""}`).join("\n\n");
     } catch (err) { return t; }
   }
   async function voirEpreuveBlanche(id, quoi) {

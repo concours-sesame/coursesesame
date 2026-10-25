@@ -22,7 +22,8 @@
     opea: "Organisation politique, économique et administrative", informatique: "Informatique et bureautique",
     systeme_penitentiaire: "Droit pénitentiaire", administration_penitentiaire: "Administration pénitentiaire", etude_texte: "Étude de texte",
     droits_enfant: "Droits de l'enfant", fonction_publique: "Statut et déontologie de la fonction publique",
-    pecos: "Problèmes économiques et sociaux", note_synthese: "Note de synthèse"
+    pecos: "Problèmes économiques et sociaux", note_synthese: "Note de synthèse", droit_constitutionnel: "Droit constitutionnel",
+    resume_texte: "Résumé de texte", cmc: "Connaissance du monde contemporain"
   };
   // Un onglet par concours ; seuls ceux qui ont des épreuves publiées s'affichent
   const CONCOURS = [
@@ -41,8 +42,8 @@
     { id: "ena_cm", nom: "ENA, cycle moyen", detail: "Écoles EGAD (administration, diplomatie) et EGEF (économie, finances)" }
   ];
   const nomConc = id => (CONCOURS.find(c => c.id === id) || { nom: "" }).nom;
-  // Épreuves en vrai ou faux : sujet et corrigé en JSON, note calculée à l'écran
-  const enVraiFaux = e => e.epreuve === "preselection" || e.epreuve === "informatique";
+  // Épreuves en vrai ou faux ou en QCM à quatre choix : sujet et corrigé en JSON, note calculée à l'écran
+  const enVraiFaux = e => e.epreuve === "preselection" || e.epreuve === "informatique" || e.epreuve === "cmc";
   const intitule = e => `${e.concours === "magistrature" ? "" : `${nomConc(e.concours)}, `}concours blanc n° ${e.serie}, ${e.titre || NOMS[e.epreuve]}`;
   const majuscule = t => t.charAt(0).toUpperCase() + t.slice(1);
   const duree = m => m % 60 ? `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")}` : `${m / 60} heure${m > 60 ? "s" : ""}`;
@@ -109,7 +110,7 @@
         <p><b>Dès que vous entrez dans le sujet, le chronomètre démarre.</b> Vous ne pourrez plus faire machine arrière : l'épreuve ne se recommence pas à zéro.</p>
         <p>Si vous quittez la page, le compteur reste figé et recommence à compter dès que vous revenez dans le sujet. À la fin du temps, la copie est close.</p>
         <p><b>Composez seul, sans document, sans téléphone, sans recherche sur Internet et sans aide.</b> Ce concours blanc sert à mesurer votre vrai niveau, à quelques semaines du concours. Tricher ne trompe que vous : seul un résultat honnête vous dit ce qu'il reste à travailler.</p>
-        <p>Installez-vous au calme, pour ${duree(e.duree_minutes)} d'affilée, comme le jour du concours. ${enVraiFaux(e) ? "Cochez vrai ou faux pour chaque affirmation." : "Vous pouvez composer sur papier ou dans le cadre prévu à l'écran ; la copie tapée reste sur cet appareil."}</p>
+        <p>Installez-vous au calme, pour ${duree(e.duree_minutes)} d'affilée, comme le jour du concours. ${e.epreuve === "cmc" ? "Cochez la bonne réponse pour chaque question." : enVraiFaux(e) ? "Cochez vrai ou faux pour chaque affirmation." : "Vous pouvez composer sur papier ou dans le cadre prévu à l'écran ; la copie tapée reste sur cet appareil."}</p>
       </div>
       <label class="ea-accord"><input type="checkbox" id="cbEngage"><span>Je m'engage à composer seul, sans aucune aide, dans les conditions du concours.</span></label>
       <p><button type="button" class="btn btn-gold" data-action="entrer" data-eid="${e.id}" disabled>J'entre dans le sujet et je lance le chronomètre</button></p>
@@ -131,7 +132,9 @@
     const sujetHTML = pre
       ? `${pre.consigne ? `<p class="cb-consigne">${esc(pre.consigne)}</p>` : ""}<ol class="cb-items">${pre.items.map(it => `<li class="cb-item" data-n="${it.n}">
           <p>${it.matiere ? `<small>${esc(it.matiere)}</small>` : ""}${esc(it.texte)}</p>
-          <span class="cb-vf" role="radiogroup" aria-label="Affirmation ${it.n}">${["V", "F"].map(v => `<label><input type="radio" name="cb-${it.n}" value="${v}"${copie.reponses[it.n] === v ? " checked" : ""}${copie.fini ? " disabled" : ""}><span>${v === "V" ? "Vrai" : "Faux"}</span></label>`).join("")}</span></li>`).join("")}</ol>`
+          ${Array.isArray(it.choix)
+            ? `<span class="cb-vf cb-qcm" role="radiogroup" aria-label="Question ${it.n}">${it.choix.map((c, k) => { const v = "ABCD"[k]; return `<label><input type="radio" name="cb-${it.n}" value="${v}"${copie.reponses[it.n] === v ? " checked" : ""}${copie.fini ? " disabled" : ""}><span><b>${v}.</b> ${esc(c)}</span></label>`; }).join("")}</span>`
+            : `<span class="cb-vf" role="radiogroup" aria-label="Affirmation ${it.n}">${["V", "F"].map(v => `<label><input type="radio" name="cb-${it.n}" value="${v}"${copie.reponses[it.n] === v ? " checked" : ""}${copie.fini ? " disabled" : ""}><span>${v === "V" ? "Vrai" : "Faux"}</span></label>`).join("")}</span>`}</li>`).join("")}</ol>`
       : `<div class="cb-sujet">${mettreEnForme(d.sujet)}</div>
          <label class="ea-blanc-label" for="cbCopie">Votre copie (facultatif, elle reste sur cet appareil)</label>
          <textarea id="cbCopie" class="ea-blanc-copie" spellcheck="false"${copie.fini ? " readonly" : ""}>${esc(copie.copie || "")}</textarea>`;
@@ -207,7 +210,7 @@
     const bilan = `<p class="cb-temps">Temps de composition : ${passe} minute${passe > 1 ? "s" : ""} sur ${o.e.duree_minutes}.</p>`;
     if (!session || !acces) {
       zone.innerHTML = `${bilan}<div class="cb-verrou"><h3>Le corrigé est réservé aux abonnés</h3>
-        <p>${session ? "Votre formule actuelle ne comprend pas les corrigés des concours blancs." : "Connectez-vous à votre compte abonné pour lire le corrigé."} Les corrigés ${o.pre ? "(réponses et justifications de chaque affirmation, avec votre note)" : "(corrigé-type intégral et grille de notation sur 20)"} sont ouverts aux formules d'une semaine et plus, dès 2 000 FCFA.</p>
+        <p>${session ? "Votre formule actuelle ne comprend pas les corrigés des concours blancs." : "Connectez-vous à votre compte abonné pour lire le corrigé."} Les corrigés ${o.pre ? `(réponses et justifications de chaque ${o.e.epreuve === "cmc" ? "question" : "affirmation"}, avec votre note)` : "(corrigé-type intégral et grille de notation sur 20)"} sont ouverts aux formules d'une semaine et plus, dès 2 000 FCFA.</p>
         <div class="hero-ctas"><a class="btn btn-gold" href="${ROOT}espace-abonnes/#inscription">S'abonner</a>${session ? "" : `<a class="btn btn-ghost" href="${ROOT}espace-abonnes/#connexion" data-retour="concours-blancs/#epreuve-${o.e.id}">Se connecter</a>`}</div></div>`;
       return;
     }
@@ -223,11 +226,11 @@
         if (!r) return;
         if (!donne) vides++; else if (donne === r.r) bonnes++;
         li.classList.add(!donne ? "is-vide" : donne === r.r ? "is-bon" : "is-faux");
-        if (!li.querySelector(".cb-just")) li.insertAdjacentHTML("beforeend", `<p class="cb-just"><b>${r.r === "V" ? "Vrai" : "Faux"}.</b> ${esc(r.j || "")}</p>`);
+        if (!li.querySelector(".cb-just")) li.insertAdjacentHTML("beforeend", `<p class="cb-just"><b>${r.r === "V" ? "Vrai" : r.r === "F" ? "Faux" : `Réponse ${r.r}`}.</b> ${esc(r.j || "")}</p>`);
       });
       const total = Object.keys(rep).length || 1;
       const note = Math.round(bonnes / total * 40) / 2;
-      zone.innerHTML = `${bilan}<div class="ea-blanc-note"><b>${String(note).replace(".", ",")}/20</b><span>${bonnes} bonne${bonnes > 1 ? "s" : ""} réponse${bonnes > 1 ? "s" : ""} sur ${total}${vides ? `, ${vides} sans réponse` : ""}. La justification de chaque affirmation s'affiche sous la question.</span></div>`;
+      zone.innerHTML = `${bilan}<div class="ea-blanc-note"><b>${String(note).replace(".", ",")}/20</b><span>${bonnes} bonne${bonnes > 1 ? "s" : ""} réponse${bonnes > 1 ? "s" : ""} sur ${total}${vides ? `, ${vides} sans réponse` : ""}. La justification de chaque ${o.e.epreuve === "cmc" ? "réponse" : "affirmation"} s'affiche sous la question.</span></div>`;
       poserFiligrane($(".cb-items"), marque);
       return;
     }
