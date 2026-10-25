@@ -36,9 +36,9 @@
     { id: "eppjej_cs", nom: "EPPJEJ, cycle supérieur", detail: "Protection judiciaire de l'enfance et de la jeunesse" },
     { id: "eppjej_cms", nom: "EPPJEJ, cycle moyen supérieur", detail: "Protection judiciaire de l'enfance et de la jeunesse" },
     { id: "eppjej_cm", nom: "EPPJEJ, cycle moyen", detail: "Protection judiciaire de l'enfance et de la jeunesse" },
-    { id: "ena_cs", nom: "ENA, cycle supérieur", detail: "École nationale d'administration" },
-    { id: "ena_cms", nom: "ENA, cycle moyen supérieur", detail: "École nationale d'administration" },
-    { id: "ena_cm", nom: "ENA, cycle moyen", detail: "École nationale d'administration" }
+    { id: "ena_cs", nom: "ENA, cycle supérieur", detail: "Écoles EGAD (administration, diplomatie) et EGEF (économie, finances)" },
+    { id: "ena_cms", nom: "ENA, cycle moyen supérieur", detail: "Écoles EGAD (administration, diplomatie) et EGEF (économie, finances)" },
+    { id: "ena_cm", nom: "ENA, cycle moyen", detail: "Écoles EGAD (administration, diplomatie) et EGEF (économie, finances)" }
   ];
   const nomConc = id => (CONCOURS.find(c => c.id === id) || { nom: "" }).nom;
   // Épreuves en vrai ou faux : sujet et corrigé en JSON, note calculée à l'écran
