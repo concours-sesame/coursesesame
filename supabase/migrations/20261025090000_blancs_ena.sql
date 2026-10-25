@@ -1,0 +1,11 @@
+-- Concours blancs de l'ENA : un identifiant par cycle (supérieur, moyen supérieur, moyen) et les épreuves propres à ce
+-- concours (problèmes économiques et sociaux, note de synthèse).
+alter table public.epreuves_blanches drop constraint epreuves_blanches_concours_check;
+alter table public.epreuves_blanches add constraint epreuves_blanches_concours_check
+  check (concours in ('magistrature', 'greffe', 'greffe_cs', 'greffe_cms', 'greffe_cm', 'penitentiaire', 'penitentiaire_cs',
+    'penitentiaire_cms', 'penitentiaire_cm', 'eppjej', 'eppjej_cs', 'eppjej_cms', 'eppjej_cm', 'ena', 'ena_cs', 'ena_cms', 'ena_cm'));
+alter table public.epreuves_blanches drop constraint epreuves_blanches_epreuve_check;
+alter table public.epreuves_blanches add constraint epreuves_blanches_epreuve_check
+  check (epreuve in ('preselection', 'sog', 'droit_civil', 'droit_commercial', 'droit_penal', 'droit_administratif',
+    'organisation_judiciaire', 'opaj', 'opea', 'informatique', 'systeme_penitentiaire', 'administration_penitentiaire',
+    'droits_enfant', 'fonction_publique', 'etude_texte', 'pecos', 'note_synthese'));

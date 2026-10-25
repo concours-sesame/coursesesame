@@ -21,7 +21,8 @@
     organisation_judiciaire: "Organisation judiciaire", opaj: "Organisation politique, administrative et judiciaire",
     opea: "Organisation politique, économique et administrative", informatique: "Informatique et bureautique",
     systeme_penitentiaire: "Droit pénitentiaire", administration_penitentiaire: "Administration pénitentiaire", etude_texte: "Étude de texte",
-    droits_enfant: "Droits de l'enfant", fonction_publique: "Statut et déontologie de la fonction publique"
+    droits_enfant: "Droits de l'enfant", fonction_publique: "Statut et déontologie de la fonction publique",
+    pecos: "Problèmes économiques et sociaux", note_synthese: "Note de synthèse"
   };
   // Un onglet par concours ; seuls ceux qui ont des épreuves publiées s'affichent
   const CONCOURS = [
@@ -34,7 +35,10 @@
     { id: "penitentiaire_cm", nom: "Pénitentiaire, cycle moyen", detail: "Agents d'encadrement" },
     { id: "eppjej_cs", nom: "EPPJEJ, cycle supérieur", detail: "Protection judiciaire de l'enfance et de la jeunesse" },
     { id: "eppjej_cms", nom: "EPPJEJ, cycle moyen supérieur", detail: "Protection judiciaire de l'enfance et de la jeunesse" },
-    { id: "eppjej_cm", nom: "EPPJEJ, cycle moyen", detail: "Protection judiciaire de l'enfance et de la jeunesse" }
+    { id: "eppjej_cm", nom: "EPPJEJ, cycle moyen", detail: "Protection judiciaire de l'enfance et de la jeunesse" },
+    { id: "ena_cs", nom: "ENA, cycle supérieur", detail: "École nationale d'administration" },
+    { id: "ena_cms", nom: "ENA, cycle moyen supérieur", detail: "École nationale d'administration" },
+    { id: "ena_cm", nom: "ENA, cycle moyen", detail: "École nationale d'administration" }
   ];
   const nomConc = id => (CONCOURS.find(c => c.id === id) || { nom: "" }).nom;
   // Épreuves en vrai ou faux : sujet et corrigé en JSON, note calculée à l'écran
