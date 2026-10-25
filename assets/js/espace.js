@@ -74,9 +74,14 @@
     });
   }
   // Mise en forme d'une fiche : paragraphes, intertitres (« ## »), gras (**…**). Tout est échappé avant.
+  // Illustration : un bloc « ![légende](assets/img/blancs/fichier.jpg) », limité aux images du site
+  const IMAGE = /^!\[([^\]]*)\]\((assets\/img\/blancs\/[a-z0-9-]+\.(?:jpg|png|webp|svg))\)$/;
   function mettreEnForme(t) {
-    return esc(t).split(/\n{2,}/).map(b => b.trim()).filter(Boolean).map(b =>
-      /^##\s/.test(b) ? `<h4>${b.replace(/^##\s+/, "")}</h4>` : `<p>${b.replace(/\n/g, "<br>").replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</p>`).join("");
+    return esc(t).split(/\n{2,}/).map(b => b.trim()).filter(Boolean).map(b => {
+      const img = b.match(IMAGE);
+      if (img) return `<figure class="cb-figure"><img src="${ROOT}${img[2]}" alt="${img[1]}" loading="lazy"><figcaption>${img[1]}</figcaption></figure>`;
+      return /^##\s/.test(b) ? `<h4>${b.replace(/^##\s+/, "")}</h4>` : `<p>${b.replace(/\n/g, "<br>").replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</p>`;
+    }).join("");
   }
   const lienSur = u => /^https?:\/\//i.test(String(u || ""));
 

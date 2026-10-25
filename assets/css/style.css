@@ -1307,6 +1307,8 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
 .cb-barre b.is-fin{color:#ff8a80}
 .cb-rappel{color:var(--muted);font-size:.95rem}
 .cb-sujet{padding:1rem 1.1rem;border:1px solid var(--line);border-left:4px solid var(--navy);border-radius:var(--r-sm);background:var(--cream);margin:.75rem 0;-webkit-user-select:none;user-select:none}
+.cb-sujet p{margin:0 0 .75rem}
+.cb-figure{margin:1rem auto;max-width:640px;text-align:center}.cb-figure img{width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff}.cb-figure figcaption{font-size:.85rem;color:var(--muted,#5b6475);margin-top:.35rem;line-height:1.4}
 .cb-sujet h4,.cb-corrige h4{font-family:var(--serif);color:var(--navy);margin:1.1rem 0 .4rem}
 .cb-consigne{font-weight:600}
 .cb-items{margin:.5rem 0;padding-left:1.6rem;-webkit-user-select:none;user-select:none}
