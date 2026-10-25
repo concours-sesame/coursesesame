@@ -20,7 +20,8 @@
     droit_commercial: "Droit commercial et OHADA", droit_penal: "Droit pénal et procédure pénale", droit_administratif: "Droit administratif",
     organisation_judiciaire: "Organisation judiciaire", opaj: "Organisation politique, administrative et judiciaire",
     opea: "Organisation politique, économique et administrative", informatique: "Informatique et bureautique",
-    systeme_penitentiaire: "Droit pénitentiaire", administration_penitentiaire: "Administration pénitentiaire", etude_texte: "Étude de texte"
+    systeme_penitentiaire: "Droit pénitentiaire", administration_penitentiaire: "Administration pénitentiaire", etude_texte: "Étude de texte",
+    droits_enfant: "Droits de l'enfant", fonction_publique: "Statut et déontologie de la fonction publique"
   };
   // Un onglet par concours ; seuls ceux qui ont des épreuves publiées s'affichent
   const CONCOURS = [
@@ -30,7 +31,10 @@
     { id: "greffe_cm", nom: "Greffe, cycle moyen", detail: "Secrétaires des greffes et parquets" },
     { id: "penitentiaire_cs", nom: "Pénitentiaire, cycle supérieur", detail: "Administrateurs des services pénitentiaires" },
     { id: "penitentiaire_cms", nom: "Pénitentiaire, cycle moyen supérieur", detail: "Attachés des services pénitentiaires" },
-    { id: "penitentiaire_cm", nom: "Pénitentiaire, cycle moyen", detail: "Agents d'encadrement" }
+    { id: "penitentiaire_cm", nom: "Pénitentiaire, cycle moyen", detail: "Agents d'encadrement" },
+    { id: "eppjej_cs", nom: "EPPJEJ, cycle supérieur", detail: "Protection judiciaire de l'enfance et de la jeunesse" },
+    { id: "eppjej_cms", nom: "EPPJEJ, cycle moyen supérieur", detail: "Protection judiciaire de l'enfance et de la jeunesse" },
+    { id: "eppjej_cm", nom: "EPPJEJ, cycle moyen", detail: "Protection judiciaire de l'enfance et de la jeunesse" }
   ];
   const nomConc = id => (CONCOURS.find(c => c.id === id) || { nom: "" }).nom;
   // Épreuves en vrai ou faux : sujet et corrigé en JSON, note calculée à l'écran
