@@ -23,6 +23,11 @@ const TARIFS_ABONNEMENT=[
 {"cle":"m12","prix":"40 000","duree":"12 mois"}
 ];
 
+/* Numéros Mobile Money affichés dans l'espace abonnés, au moment du paiement de l'abonnement (laisser vide pour
+   indiquer « le numéro de paiement vous est donné sur WhatsApp »).
+   Exemple : [{"moyen":"Orange Money","numero":"07 00 00 00 00"},{"moyen":"Wave","numero":"01 00 00 00 00"}] */
+const NUMEROS_PAIEMENT=[];
+
 const OUVRAGES=[
 {"titre":"Le Petit Manuel de Droit Civil","desc":"Manuel synthétique de droit civil pour préparer la phase de présélection du concours de la magistrature.","concours":"INFJ Magistrature","categorie":"infj","niveau":"CS / CMS / CM","prix":"12 000","phase":"Présélection"},
 {"titre":"Le Petit Manuel de Droit Commercial","desc":"Manuel synthétique de droit commercial pour préparer la phase de présélection du concours de la magistrature.","concours":"INFJ Magistrature","categorie":"infj","niveau":"CS / CMS / CM","prix":"12 000","phase":"Présélection"},
@@ -98,11 +103,11 @@ const FAQ=[
 {"q":"Puis-je consulter un extrait avant d'acheter ?","a":"Oui. La plupart des ouvrages proposent un extrait gratuit à télécharger en PDF : ouvrez la fiche de l'ouvrage et cliquez sur « Lire un extrait gratuit ». Pour les autres, écrivez-nous sur WhatsApp et nous vous enverrons un aperçu."},
 {"q": "Qu'est-ce que l'espace abonnés ?", "a": "C'est un espace privé du site, réservé aux abonnés. Vous y lisez nos sujets corrigés en entier, nos fiches de révision, nos QCM chronométrés avec correction détaillée et, à partir de la formule d'un mois, nos ouvrages complets. Les contenus se lisent en ligne, sur téléphone comme sur ordinateur, et sont réservés à votre usage personnel."},
 {"q": "Combien coûte l'abonnement ?", "a": "500 FCFA pour un jour, 2 000 FCFA pour une semaine, 3 500 FCFA pour deux semaines, 5 000 FCFA pour un mois, 9 000 FCFA pour deux mois, 12 500 FCFA pour trois mois, 22 500 FCFA pour six mois et 40 000 FCFA pour douze mois."},
-{"q": "Comment activer mon abonnement ?", "a": "Créez votre compte sur la page Espace abonnés, puis réglez la formule choisie par Orange Money, MTN MoMo, Wave ou Moov Money. Envoyez-nous ensuite la référence du paiement sur WhatsApp : nous activons votre accès dès réception, pour toute la durée de votre formule."},
+{"q": "Comment activer mon abonnement ?", "a": "Créez votre compte sur la page Espace abonnés, puis réglez la formule choisie par Orange Money, MTN MoMo, Wave ou Moov Money. Saisissez ensuite la référence du paiement dans votre espace, ou envoyez-la-nous sur WhatsApp. Nous activons votre accès dès la vérification du paiement, pour toute la durée de votre formule."},
 {"q": "Les ouvrages complets sont-ils compris dans toutes les formules ?", "a": "Non. Ils sont compris à partir de la formule d'un mois. Les formules d'une semaine et de deux semaines donnent accès à tout le reste : sujets corrigés, fiches de révision, QCM et vidéos. La formule d'un jour donne accès aux sujets corrigés, aux fiches de révision et aux QCM, sans les vidéos, comprises à partir de la formule d'une semaine. Vous pouvez passer à une formule plus longue à tout moment en nous écrivant sur WhatsApp."},
 {"q": "Quels ouvrages sont compris dans l'abonnement ?", "a": "Dans le catalogue, chaque ouvrage compris porte la mention « Inclus dans l'abonnement d'un mois » : annales corrigées, résumés de cours, guide méthodologique, fiches d'arrêts, recueils de dissertations, de cas pratiques et d'articles commentés. S'y ajoutent des ouvrages réservés aux abonnés, comme le Résumé de droit constitutionnel. La liste complète figure sur la page Espace abonnés."},
 {"q": "Puis-je utiliser mon compte sur plusieurs appareils ?", "a": "Un compte s'utilise sur un seul appareil à la fois. Si vous vous connectez sur un autre téléphone ou un autre ordinateur, le premier est déconnecté. Vous pouvez donc changer d'appareil, mais un compte ne se partage pas."},
-{"q": "J'ai oublié mon mot de passe. Que faire ?", "a": "Écrivez-nous sur WhatsApp en indiquant l'adresse e-mail de votre compte : nous vous donnons un mot de passe provisoire. Une fois connecté, remplacez-le par le vôtre : bouton « Mon compte », puis « Changer le mot de passe »."},
+{"q": "J'ai oublié mon mot de passe. Que faire ?", "a": "Sur la page Espace abonnés, touchez « Mot de passe oublié ? » sous le formulaire de connexion et indiquez l'adresse e-mail de votre compte. Vous recevez un lien pour choisir un nouveau mot de passe. Si l'e-mail n'arrive pas, regardez dans les courriers indésirables, ou écrivez-nous sur WhatsApp : nous vous donnons un mot de passe provisoire."},
 {"q": "Puis-je installer le site sur mon téléphone ?", "a": "Oui. Sur Android, ouvrez le site dans Chrome, touchez le menu en haut à droite, puis « Ajouter à l'écran d'accueil » ou « Installer l'application ». Sur iPhone, ouvrez-le dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ». Le site s'ouvre alors d'un geste, comme une application, avec notre logo."}
 ];
 

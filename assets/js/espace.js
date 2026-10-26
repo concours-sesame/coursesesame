@@ -235,8 +235,10 @@
       while (bas < haut2) { const m = (bas + haut2) >> 1; if (images[m].getBoundingClientRect().bottom < haut) bas = m + 1; else haut2 = m; }
       return bas + 1;
     };
-    let attenteDefil = 0;
-    const suivreDefil = () => { if (attenteDefil) return; attenteDefil = requestAnimationFrame(() => { attenteDefil = 0; if (document.activeElement !== champ) champ.value = pageCourante(); }); };
+    let attenteDefil = 0, dernierMemo = 0;
+    // Page lue retenue pour « Reprendre ma lecture » (une écriture par seconde au plus)
+    const memoriser = () => { if (memoLecture && Date.now() - dernierMemo > 1000) { dernierMemo = Date.now(); memoLecture(c, pageCourante()); } };
+    const suivreDefil = () => { if (attenteDefil) return; attenteDefil = requestAnimationFrame(() => { attenteDefil = 0; if (document.activeElement !== champ) champ.value = pageCourante(); memoriser(); }); };
     boite.addEventListener("scroll", suivreDefil, { passive: true });
     const allerA = n => {
       n = Math.min(total, Math.max(1, Math.round(+n || 1)));
@@ -277,8 +279,9 @@
       urls.forEach(u => URL.revokeObjectURL(u));
       if (visionneuse) visionneuse.classList.remove("ea-v-pdf");
     };
-    // Ouverture à une page précise (réponse attendue du grand oral, par exemple)
+    // Ouverture à une page précise (réponse attendue du grand oral, reprise de la lecture…)
     if (depart > 1) requestAnimationFrame(() => allerA(depart));
+    else if (memoLecture) memoLecture(c, 1);
   }
 
   /* ---------- Protections pendant la lecture ---------- */
@@ -394,6 +397,7 @@
     visionneuse.innerHTML = `<div class="ea-v-boite" role="dialog" aria-modal="true" aria-labelledby="eaVTitre">
         <button class="ea-v-fermer" type="button" aria-label="Fermer">${icone("i-x")}</button>
         <span class="ea-type" id="eaVType"></span>
+        <button class="ea-v-favori" type="button" id="eaVFavori" aria-pressed="false" hidden></button>
         <h3 id="eaVTitre"></h3>
         <p class="ea-v-desc" id="eaVDesc"></p>
         <div class="ea-v-corps" id="eaVCorps"></div>
@@ -405,6 +409,8 @@
   }
   // Appelée quand un fichier est refusé (page de l'espace abonnés : contrôle de l'appareil)
   let surRefus = null;
+  // Crochets posés par la page de l'espace abonnés : dernière page lue (« Reprendre ma lecture ») et favoris
+  let memoLecture = null, favoris = null;
   // marque : texte affiché sur la vidéo et porté sur les documents (nom et téléphone de l'abonné)
   async function ouvrirContenu(c, marque) {
     if (!visionneuse) creerVisionneuse();
@@ -415,6 +421,13 @@
     $("#eaVTitre").textContent = c.titre;
     $("#eaVDesc").textContent = c.description || "";
     $("#eaVDesc").hidden = !c.description;
+    const fav = $("#eaVFavori");
+    fav.hidden = !(favoris && c.id && !c.agent && !c.outil && !c.verrou);
+    if (!fav.hidden) {
+      const maj = () => { const oui = favoris.est(c.id); fav.textContent = oui ? "★ Dans mes favoris" : "☆ Ajouter à mes favoris"; fav.setAttribute("aria-pressed", String(oui)); };
+      maj();
+      fav.onclick = () => { favoris.basculer(c.id); maj(); };
+    }
     const corps = $("#eaVCorps");
     corps.classList.remove("ea-filigrane"); corps.style.backgroundImage = "";
     corps.innerHTML = `<p class="ea-attente">Chargement…</p>`;
@@ -438,6 +451,7 @@
     const qcm = lireQcm(c);
     if (qcm) { lancerQcm(qcm, corps, marque); poserFiligrane(corps, marque); return; }
     if (c.type === "texte") {
+      if (memoLecture) memoLecture(c, 1);
       corps.innerHTML = `<div class="ea-fiche">${mettreEnForme(c.texte || "")}</div><p class="ea-mention">Fiche réservée à ${esc(marque)}. Reproduction et diffusion interdites.</p>`;
       poserFiligrane(corps, marque);
       return;
@@ -659,6 +673,7 @@
   // Un compte ne s'utilise que sur un appareil à la fois (voir supabase/migrations/…_un_appareil_a_la_fois.sql) :
   // une connexion sur un autre appareil déconnecte celui-ci, avec un message au retour sur le formulaire.
   let avisAppareil = false;
+  let invitationInstall = null; // évènement « beforeinstallprompt » gardé pour le bouton « Installer l'application »
   async function ecarterAppareil() {
     avisAppareil = true;
     etat = { session: null };
@@ -691,13 +706,14 @@
     if (v.error) throw v.error;
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
-    const [p, a, adm, ouv, vid, sus] = await Promise.all([
+    const [p, a, adm, ouv, vid, sus, dem] = await Promise.all([
       client.from("profils").select("prenom, nom, telephone, concours, date_concours, emails_nouveautes, code_parrain").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
       client.rpc("acces_ouvrages"),
       client.rpc("acces_videos"),
-      client.rpc("ma_suspension")
+      client.rpc("ma_suspension"),
+      client.from("demandes_activation").select("id, formule, montant, moyen, reference, statut, motif, cree_le").eq("user_id", uid).order("cree_le", { ascending: false }).limit(1)
     ]);
     if (p.error || a.error) throw p.error || a.error;
     const profil = p.data || { prenom: "", nom: "", telephone: "" };
@@ -709,6 +725,8 @@
       abo: (a.data && a.data[0]) || { actif: false, fin: null, deja_abonne: false },
       // Date de début de la suspension en cours (accès coupé, jours restants gardés)
       suspendu: (!sus.error && sus.data) || null,
+      // Dernière demande d'activation envoyée depuis l'espace (en attente, validée ou refusée)
+      demande: (!dem.error && dem.data && dem.data[0]) || null,
       admin: !!adm.data,
       // Ouvrages complets : formules d'un mois et plus seulement (règle appliquée par la base)
       ouvrages: !!adm.data || ouv.data === true,
@@ -765,13 +783,21 @@
         <div class="field full"><label for="cMdp">Mot de passe</label><input id="cMdp" type="password" autocomplete="current-password" required></div>
         <p class="ea-msg" role="alert"></p>
         <button class="btn btn-navy" type="submit">Se connecter</button>
-        <p class="ea-aide full">Mot de passe oublié ? <a href="${lienWa(WA_NUM, "Bonjour Les Cours Sésame & SAJ, j'ai oublié le mot de passe de mon compte abonné. Mon adresse e-mail : ")}" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a> : nous vous donnons un mot de passe provisoire.</p>
+        <p class="ea-aide full"><button class="ea-lien" type="button" data-oubli="ouvrir">Mot de passe oublié ?</button></p>
+      </form>
+      <form class="form ea-form" id="eaOubli" novalidate hidden>
+        <p class="ea-aide full">Indiquez l'adresse e-mail de votre compte. Vous recevrez un lien pour choisir un nouveau mot de passe.</p>
+        <div class="field full"><label for="oEmail">Adresse e-mail</label><input id="oEmail" type="email" autocomplete="email" required></div>
+        <p class="ea-msg" role="alert"></p>
+        <button class="btn btn-navy" type="submit">Recevoir le lien</button>
+        <p class="ea-aide full"><button class="ea-lien" type="button" data-oubli="fermer">Revenir à la connexion</button>. Pas d'e-mail reçu ? <a href="${lienWa(WA_NUM, "Bonjour Les Cours Sésame & SAJ, j'ai oublié le mot de passe de mon compte abonné. Mon adresse e-mail : ")}" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a>, nous vous donnons un mot de passe provisoire.</p>
       </form>
       <form class="form ea-form" id="eaInscription" novalidate ${onglet === "inscription" ? "" : "hidden"}>
         <div class="field"><label for="iPrenom">Prénom</label><input id="iPrenom" autocomplete="given-name" maxlength="60" required></div>
         <div class="field"><label for="iNom">Nom</label><input id="iNom" autocomplete="family-name" maxlength="60" required></div>
         <div class="field"><label for="iTel">Téléphone WhatsApp</label><input id="iTel" type="tel" inputmode="tel" autocomplete="tel" placeholder="07 XX XX XX XX" required></div>
         <div class="field"><label for="iConcours">Concours préparé</label><select id="iConcours"><option value="">Choisir…</option>${options}<option value="autre">Autre concours</option></select></div>
+        <div class="field"><label for="iDate">Date du concours (facultatif)</label><input id="iDate" type="date" min="${auj()}"></div>
         <div class="field full"><label for="iEmail">Adresse e-mail</label><input id="iEmail" type="email" autocomplete="email" required></div>
         <div class="field full"><label for="iMdp">Mot de passe (8 caractères au moins)</label><input id="iMdp" type="password" autocomplete="new-password" minlength="8" required></div>
         <div class="field full"><label for="iParrain">Code de parrainage (facultatif)</label><input id="iParrain" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" value="${esc(codeParrainRecu())}"></div>
@@ -780,6 +806,63 @@
         <button class="btn btn-navy" type="submit">Créer mon compte</button>
       </form>
     </div>`;
+  }
+
+  /* ---------- Demande d'activation en ligne ---------- */
+  // L'abonné choisit sa formule, règle par Mobile Money et saisit la référence du paiement : la demande arrive dans
+  // l'administration, qui vérifie le paiement et active l'accès. La page se met à jour d'elle-même à l'activation.
+  const MOYENS_PAIEMENT = ["Orange Money", "MTN MoMo", "Wave", "Moov Money"];
+  const tarifsAbo = () => (typeof TARIFS_ABONNEMENT !== "undefined" ? TARIFS_ABONNEMENT : []).filter(t => t.cle);
+  const numerosPaiement = () => (typeof NUMEROS_PAIEMENT !== "undefined" ? NUMEROS_PAIEMENT : []).filter(n => n.moyen && n.numero);
+  const prixDe = cle => { const t = tarifsAbo().find(x => x.cle === cle); return t ? Number(String(t.prix).replace(/\D/g, "")) || null : null; };
+  const nomFormule = cle => { const t = tarifsAbo().find(x => x.cle === cle); return t ? t.duree : cle; };
+  const demandeEnAttente = () => etat.demande && etat.demande.statut === "en_attente" ? etat.demande : null;
+  function etapesPaiement(renouveler) {
+    const nums = numerosPaiement();
+    return `<ol class="ea-etapes">
+        <li>Choisissez votre formule et réglez-la par Mobile Money (Orange Money, MTN MoMo, Wave ou Moov Money)${nums.length ? `, au numéro de votre opérateur ${nums.map(n => `<b>${esc(n.moyen)} ${esc(n.numero)}</b>`).join(", ")}` : ". Le numéro de paiement vous est donné sur WhatsApp"}.</li>
+        <li>Saisissez ci-dessous la référence du paiement, telle qu'elle figure dans le SMS de confirmation, puis envoyez la demande.</li>
+        <li>${renouveler ? "La nouvelle période s'ajoute à la suite de l'abonnement en cours" : "Votre accès s'ouvre"} dès la vérification du paiement. Cette page se met à jour d'elle-même.</li>
+      </ol>`;
+  }
+  function formulairePaiement(renouveler) {
+    const d = demandeEnAttente();
+    return `<form class="form ea-form ea-paiement" id="eaPaiement" novalidate>
+        <div class="field"><label for="pFormule">Formule</label><select id="pFormule" name="formule">${tarifsAbo().map(t => `<option value="${esc(t.cle)}"${(d ? d.formule === t.cle : t.cle === "m1") ? " selected" : ""}>${esc(t.duree)}, ${esc(t.prix)} FCFA</option>`).join("")}</select></div>
+        <div class="field"><label for="pMoyen">Moyen de paiement</label><select id="pMoyen" name="moyen">${MOYENS_PAIEMENT.map(m => `<option${d && d.moyen === m ? " selected" : ""}>${m}</option>`).join("")}</select></div>
+        <div class="field full"><label for="pRef">Référence du paiement</label><input id="pRef" name="reference" maxlength="80" autocomplete="off" value="${d ? esc(d.reference) : ""}"></div>
+        <p class="ea-msg full" role="alert"></p>
+        <button class="btn btn-gold" type="submit">${d ? "Mettre à jour ma demande" : renouveler ? "Envoyer ma demande de renouvellement" : "Envoyer ma demande d'activation"}</button>
+      </form>`;
+  }
+  function demandeHTML() {
+    const d = etat.demande;
+    if (!d) return "";
+    if (d.statut === "en_attente") return `<div class="ea-demande" role="status">
+        <p><b>Demande envoyée le ${dateFr(d.cree_le)}.</b> ${esc(nomFormule(d.formule))}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence ${esc(d.reference)}.</p>
+        <p>Nous vérifions votre paiement. Votre accès s'ouvrira dès la validation, et cette page se mettra à jour d'elle-même.</p>
+        <p class="ea-demande-actions"><button class="btn btn-ghost btn-sm" type="button" data-paiement="modifier">Corriger la demande</button><button class="btn btn-ghost btn-sm" type="button" data-paiement="retirer">Annuler la demande</button></p>
+      </div>`;
+    if (d.statut === "refusee" && !etat.abo.actif) return `<p class="ea-avis">Votre demande du ${dateFr(d.cree_le)} n'a pas pu être validée${d.motif ? ` (${esc(d.motif)})` : ""}. Vérifiez la référence et envoyez une nouvelle demande, ou écrivez-nous sur WhatsApp.</p>`;
+    return "";
+  }
+  // Bloc complet : demande en cours, ou étapes et formulaire ; à défaut de tarifs publiés, la seule voie WhatsApp
+  function paiementHTML(renouveler) {
+    if (!tarifsAbo().length) return "";
+    return demandeEnAttente()
+      ? `${demandeHTML()}<div id="eaPaiementZone" hidden>${formulairePaiement(renouveler)}</div>`
+      : `${demandeHTML()}${etapesPaiement(renouveler)}${formulairePaiement(renouveler)}`;
+  }
+  async function envoyerDemande(f) {
+    const msg = $(".ea-msg", f), bouton = $("button[type=submit]", f);
+    const formule = f.formule.value, moyen = f.moyen.value, reference = f.reference.value.trim();
+    if (reference.replace(/[^A-Za-z0-9]/g, "").length < 4) { msg.textContent = "Indiquez la référence complète de votre paiement."; f.reference.focus(); return; }
+    bouton.disabled = true; msg.textContent = "";
+    const { error } = await client.rpc("demander_activation", { p_formule: formule, p_moyen: moyen, p_reference: reference, p_montant: prixDe(formule) });
+    bouton.disabled = false;
+    if (error) { msg.textContent = messageErreur(error); return; }
+    toast("Demande envoyée. Nous vérifions votre paiement.");
+    afficher();
   }
 
   function statutHTML() {
@@ -792,8 +875,8 @@
           <h3>Votre accès est ouvert jusqu'au ${dateFr(abo.fin)}.</h3>
           ${j <= 7 ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
           ${!etat.videos ? `<p>Votre formule donne accès à tous les contenus, sauf les vidéos, réservées aux formules d'une semaine et plus, et les ouvrages complets, réservés aux formules d'un mois et plus.</p>` : etat.ouvrages ? "" : `<p>Votre formule donne accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus.</p>`}</div>
-          ${j <= 7 ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler</a>` : ""}
-        </div>`;
+          ${j <= 7 ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler sur WhatsApp</a>` : ""}
+        </div>${j <= 7 && tarifsAbo().length ? `<div class="ea-statut ea-statut-attente ea-renouvellement"><span class="eyebrow">Renouveler en ligne</span>${paiementHTML(true)}</div>` : ""}`;
     }
     if (etat.suspendu) {
       const reste = abo.fin ? Math.max(0, Math.round((versDate(abo.fin) - versDate(etat.suspendu)) / 864e5) + 1) : 0;
@@ -810,12 +893,12 @@
         <h3>${abo.deja_abonne ? `Votre abonnement a pris fin le ${dateFr(abo.fin)}.` : `Bienvenue, ${esc(profil.prenom)}. Votre compte est prêt.`}</h3>
         ${tarifs.length ? `<p class="ea-tarifs">${tarifs.map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
         <p class="ea-aide">Les vidéos sont comprises à partir de la formule d'une semaine, les ouvrages complets à partir de la formule d'un mois. Toutes les formules donnent accès aux sujets corrigés, aux fiches de révision et aux QCM.</p>` : ""}
-        <ol class="ea-etapes">
-          <li>Réglez ${abo.deja_abonne ? "votre renouvellement" : "votre abonnement"} par Mobile Money : Orange Money, MTN MoMo, Wave ou Moov Money.${tarifs.length ? "" : " Nous vous indiquons le tarif sur WhatsApp."}</li>
+        ${tarifsAbo().length ? paiementHTML(false) : `<ol class="ea-etapes">
+          <li>Réglez ${abo.deja_abonne ? "votre renouvellement" : "votre abonnement"} par Mobile Money : Orange Money, MTN MoMo, Wave ou Moov Money. Nous vous indiquons le tarif sur WhatsApp.</li>
           <li>Envoyez-nous le message ci-dessous sur WhatsApp, avec la référence de votre paiement.</li>
           <li>Votre accès s'ouvre dès réception du paiement : rechargez alors cette page.</li>
-        </ol>
-        <a class="btn btn-wa" href="${lienWa(WA_NUM, msg(abo.deja_abonne ? "Je souhaite renouveler mon abonnement à l'espace abonnés." : "Je souhaite activer mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}${abo.deja_abonne ? "Renouveler sur WhatsApp" : "Activer sur WhatsApp"}</a>
+        </ol>`}
+        <p class="ea-aide ea-wa-secours">${tarifsAbo().length ? "Une question sur le paiement ? " : ""}<a class="btn ${tarifsAbo().length ? "btn-ghost btn-sm" : "btn-wa"}" href="${lienWa(WA_NUM, msg(abo.deja_abonne ? "Je souhaite renouveler mon abonnement à l'espace abonnés." : "Je souhaite activer mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}${tarifsAbo().length ? "Écrire sur WhatsApp" : abo.deja_abonne ? "Renouveler sur WhatsApp" : "Activer sur WhatsApp"}</a></p>
       </div>`;
   }
 
@@ -825,11 +908,17 @@
         <span>Connecté : <b>${esc(profil.prenom)} ${esc(profil.nom)}</b> · ${esc(email)}</span>
         <div class="ea-compte-actions">
           ${admin ? `<a class="btn btn-gold btn-sm" href="${ROOT}espace-abonnes/admin/">Administration</a>` : ""}
+          <button class="btn btn-ghost btn-sm" type="button" id="eaInstaller"${invitationInstall ? "" : " hidden"}>Installer l'application</button>
           <button class="btn btn-ghost btn-sm" type="button" id="eaMonCompte" aria-expanded="false" aria-controls="eaPanneau">Mon compte</button>
           <button class="btn btn-ghost btn-sm" type="button" id="eaSortir">Se déconnecter</button>
         </div>
       </div>
       <div class="ea-panneau" id="eaPanneau" hidden>
+        <form class="form ea-form" id="eaConcoursForm" novalidate>
+          <div class="field full"><label for="mConcours">Concours préparé</label><select id="mConcours">${profil.concours ? "" : `<option value="">Choisir…</option>`}${[...CONC.map(c => [c.id, c.court]), ["autre", "Autre concours"]].map(([v, l]) => `<option value="${v}"${profil.concours === v ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></div>
+          <p class="ea-msg" role="alert"></p>
+          <button class="btn btn-ghost btn-sm" type="submit">Enregistrer le concours</button>
+        </form>
         <form class="form ea-form" id="eaTel" novalidate>
           <div class="field full"><label for="mTel">Téléphone WhatsApp</label><input id="mTel" type="tel" inputmode="tel" value="${esc(profil.telephone)}" required></div>
           <p class="ea-msg" role="alert"></p>
@@ -858,25 +947,66 @@
   const verrouille = c => verrouOuvrage(c) || verrouVideo(c);
   const noteVerrou = c => verrouOuvrage(c) ? "Formules d'un mois et plus" : "Formules d'une semaine et plus";
   const msgFormule = c => c && !verrouOuvrage(c) && verrouVideo(c) ? `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à une formule d'une semaine ou plus pour accéder aux vidéos.\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : ` : `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à une formule d'un mois ou plus pour accéder aux ouvrages complets.\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
+  // Bibliothèque centrée sur le concours de l'abonné : par défaut, les contenus de son concours et les contenus
+  // communs à tous les concours ; un bouton montre tout. Favoris, pastille « Nouveau » et reprise de la lecture
+  // sont mémorisés sur cet appareil (un compte ne s'utilise que sur un appareil à la fois).
+  let portee = null; // "moi" ou "tous" ; null : choix automatique
+  const monConcours = () => { const id = etat.profil && etat.profil.concours; return CONC.some(c => c.id === id) ? id : null; };
+  const pourMoi = c => !(c.concours && c.concours.length) || c.concours.includes(monConcours());
+  const porteeActive = () => !monConcours() ? "tous" : portee || (contenus.some(pourMoi) ? "moi" : "tous");
+  const cleAbonne = nom => `ea-${nom}-${etat.uid}`;
+  let vuAvant = null; // date de la visite précédente sur cet appareil (contenus « Nouveau »)
+  const estNouveau = c => !!vuAvant && !!c.publie_le && new Date(c.publie_le) > vuAvant && new Date(c.publie_le) <= new Date();
+  const listeFavoris = () => lu(cleAbonne("favoris"), []);
+  const crochetFavoris = {
+    est: id => listeFavoris().includes(id),
+    basculer: id => {
+      const l = listeFavoris(), i = l.indexOf(id);
+      if (i >= 0) l.splice(i, 1); else l.unshift(id);
+      ecrit(cleAbonne("favoris"), l.slice(0, 300));
+      toast(i >= 0 ? "Retiré de vos favoris." : "Ajouté à vos favoris.");
+      const b = $(".ea-biblio", racine); if (b) b.outerHTML = bibliothequeHTML();
+    }
+  };
   function bibliothequeHTML() {
     if (!contenus.length) return `<div class="ea-biblio"><p class="ea-vide">Les premiers contenus exclusifs arrivent très bientôt. Revenez nous voir.</p></div>`;
-    const rubs = Object.keys(RUBRIQUES).filter(r => contenus.some(c => rubrique(c) === r));
-    const liste = filtre === "tous" ? contenus : contenus.filter(c => rubrique(c) === filtre);
+    const moi = porteeActive() === "moi", base = moi ? contenus.filter(pourMoi) : contenus;
+    const favs = new Set(listeFavoris()), nbFavs = base.filter(c => favs.has(c.id)).length;
+    const rubs = Object.keys(RUBRIQUES).filter(r => base.some(c => rubrique(c) === r));
+    if (filtre !== "tous" && !(filtre === "favoris" ? nbFavs : rubs.includes(filtre))) filtre = "tous";
+    const liste = filtre === "tous" ? base : filtre === "favoris" ? base.filter(c => favs.has(c.id)) : base.filter(c => rubrique(c) === filtre);
+    const chips = [["tous", "Tous", base.length], ...(nbFavs ? [["favoris", "★ Mes favoris", nbFavs]] : []), ...rubs.map(r => [r, RUBRIQUES[r], base.filter(c => rubrique(c) === r).length])];
+    const nomMoi = monConcours() ? nomConcours(monConcours()) : "";
     return `<div class="ea-biblio">
         <div class="ea-biblio-tete"><h3>Vos contenus exclusifs</h3>
-          ${rubs.length > 1 ? `<div class="chips" role="group" aria-label="Filtrer par rubrique">${[["tous", "Tous", contenus.length], ...rubs.map(r => [r, RUBRIQUES[r], contenus.filter(c => rubrique(c) === r).length])].map(([v, l, n]) => `<button class="chip" type="button" data-filtre="${v}" aria-pressed="${filtre === v}">${l}<span class="n">${n}</span></button>`).join("")}</div>` : ""}
-          ${contenus.length > 8 ? `<label class="ea-cherche"><span class="sr-only">Rechercher un contenu</span><input type="search" id="eaCherche" placeholder="Rechercher : titre, matière, concours…" autocomplete="off"></label>` : ""}
+          ${monConcours() ? `<div class="ea-portee" role="group" aria-label="Concours">
+            <button type="button" data-portee="moi" aria-pressed="${moi}">${esc(nomMoi)}<span class="n">${contenus.filter(pourMoi).length}</span></button>
+            <button type="button" data-portee="tous" aria-pressed="${!moi}">Tous les concours<span class="n">${contenus.length}</span></button>
+          </div>` : ""}
+          ${chips.length > 2 ? `<div class="chips" role="group" aria-label="Filtrer par rubrique">${chips.map(([v, l, n]) => `<button class="chip" type="button" data-filtre="${v}" aria-pressed="${filtre === v}">${l}<span class="n">${n}</span></button>`).join("")}</div>` : ""}
+          ${base.length > 8 ? `<label class="ea-cherche"><span class="sr-only">Rechercher un contenu</span><input type="search" id="eaCherche" placeholder="Rechercher : titre, matière, concours…" autocomplete="off"></label>` : ""}
         </div>
         ${["textes", "jurisprudence"].includes(filtre) ? rechercheTextesHTML() : ""}
         <p class="ea-vide" id="eaAucun" hidden>Aucun contenu ne correspond à cette recherche.</p>
         <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}" data-texte="${esc(sansAccents([c.titre, c.description, c.matiere, (c.concours || []).map(nomConcours).join(" ")].join(" ")))}">
-            <span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>
+            <span class="ea-carte-marques"><span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
             <small>${[c.matiere ? esc(c.matiere) : "", (c.concours || []).map(nomConcours).join(", "), dateFr(c.publie_le)].filter(Boolean).join(" · ")}</small>
             <span class="ea-carte-go">${verrouille(c) ? icone("i-lock") + noteVerrou(c) : typeAffiche(c).action + icone("i-arrow")}</span>
           </button>`).join("")}</div>
       </div>`;
+  }
+  // « Reprendre ma lecture » : dernier document ou fiche ouvert sur cet appareil, à la dernière page lue
+  const lireReprise = () => { const r = lu(cleAbonne("reprise"), null); const c = r && contenus.find(x => x.id === r.id); return c && !verrouille(c) ? { c, page: Math.max(1, Number(r.page) || 1) } : null; };
+  function repriseHTML() {
+    const r = lireReprise();
+    if (!r) return "";
+    return `<button class="ea-reprise" type="button" data-reprise="1">
+        <span class="eyebrow">Reprendre ma lecture</span>
+        <b>${esc(r.c.titre)}</b>
+        <span>${r.c.type === "pdf" && r.page > 1 ? `Page ${r.page}` : typeAffiche(r.c).nom}</span>
+      </button>`;
   }
 
   // Recherche dans le texte des textes officiels et de la jurisprudence (fonction rechercher_textes de la base) :
@@ -1045,6 +1175,7 @@
       client.from("grand_oral").select("id, contenu_id, page, numero, theme, question").order("numero")
     ]);
     progres = new Map((p.error ? [] : p.data).map(x => [cleQ(x.contenu_id, x.question), x]));
+    await chargerEpreuvesBlanches().catch(() => { nbEpreuvesBlanches = null; });
     stats = s.error ? null : s.data;
     oralQuestions = g.error ? [] : g.data;
     await chargerBlancs().catch(() => { blancs = []; });
@@ -1446,6 +1577,24 @@
     function ouvrirAutre(e) { const o = e.target.closest("[data-blanc]"); if (o) { arretOutil(); outilBlanc(corps, marque, Number(o.dataset.blanc)); } }
   }
 
+  // Épreuves blanches en accès libre (page concours-blancs/), au concours de l'abonné : le cycle supérieur par défaut,
+  // les autres cycles s'ouvrent depuis la page
+  const BLANCS_DU_CONCOURS = { infj: "magistrature", greffe: "greffe_cs", penitentiaire: "penitentiaire_cs", eppjej: "eppjej_cs", ena: "ena_cs" };
+  let nbEpreuvesBlanches = null;
+  async function chargerEpreuvesBlanches() {
+    const id = BLANCS_DU_CONCOURS[etat.profil && etat.profil.concours];
+    nbEpreuvesBlanches = null;
+    if (!id) return;
+    const r = await client.rpc("epreuves_blanches_liste", { p_concours: id });
+    nbEpreuvesBlanches = r.error ? null : (r.data || []).length;
+  }
+  function carteEpreuvesBlanches() {
+    const id = BLANCS_DU_CONCOURS[etat.profil && etat.profil.concours];
+    const lien = `${ROOT}concours-blancs/${id ? `?concours=${id}` : ""}`;
+    const texte = id && nbEpreuvesBlanches ? `${nbEpreuvesBlanches} épreuves blanches ${id === "magistrature" ? "de la magistrature" : `du concours ${esc(nomConcours(etat.profil.concours))}`}, chronométrées.` : "Des séries complètes pour chaque concours, chronométrées.";
+    return `<a class="ea-outil-carte" href="${lien}"><b>Épreuves blanches</b><span>${texte}</span><small>Corrigé dès la copie rendue</small></a>`;
+  }
+
   const OUTILS = {
     blanc: ["Concours blanc", outilBlanc],
     revision: ["Révision du jour", outilRevision],
@@ -1458,6 +1607,7 @@
     const carte = (id, titre, texte, pied) => `<button class="ea-outil-carte" type="button" data-outil="${id}"><b>${titre}</b><span>${texte}</span><small>${pied}</small></button>`;
     return demarrageHTML() + `<div class="ea-outils" id="eaOutils">
         ${carteBlanc()}
+        ${carteEpreuvesBlanches()}
         ${toutesQuestions().length ? carte("revision", "Révision du jour", aFaire ? `${aFaire} question${aFaire > 1 ? "s" : ""} de QCM à travailler aujourd'hui.` : "Tout est à jour pour aujourd'hui.", "Méthode des boîtes, quelques minutes par jour") : ""}
         ${oral ? carte("oral", "Grand oral", `${oral} questions du jury, avec chrono et enregistrement.`, "Préparation 1 min, réponse 3 min") : ""}
         ${c ? carte("sujet", "Sujet de la semaine", esc(c.titre), "Nouveau sujet chaque lundi") : ""}
@@ -1528,6 +1678,7 @@
       return afficher();
     }
     if (!etat.session) {
+      memoLecture = null; favoris = null; vuAvant = null;
       racine.innerHTML = `<div class="ea-accueil">${formulairesHTML(onglet || (!avisAppareil && location.hash === "#inscription" ? "inscription" : "connexion"))}${await apercuHTML()}</div>`;
       brancherFormulaires();
     } else if (etat.abo.actif || etat.admin) {
@@ -1538,9 +1689,14 @@
       ]);
       contenus = error ? [] : data;
       if (etat.abo.actif) { try { const r = await client.rpc("mes_parrainages"); filleuls = r.error ? null : r.data; } catch (e) { filleuls = null; } }
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + outilsHTML() + agentHTML() + bibliothequeHTML() + parrainageHTML();
+      // Visite précédente sur cet appareil : relevée une fois par chargement de la page, puis remplacée
+      if (vuAvant === null) { const v = lu(cleAbonne("visite"), 0); vuAvant = v ? new Date(v) : false; ecrit(cleAbonne("visite"), Date.now()); }
+      memoLecture = (c, page) => { if (c && c.id) ecrit(cleAbonne("reprise"), { id: c.id, page: Number(page) || 1 }); };
+      favoris = crochetFavoris;
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + outilsHTML() + agentHTML() + bibliothequeHTML() + parrainageHTML();
       brancherCompte();
     } else {
+      memoLecture = null; favoris = null;
       racine.innerHTML = compteHTML() + await annoncesHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
       brancherCompte();
     }
@@ -1553,9 +1709,26 @@
       $$(".ea-onglets [data-onglet]", racine).forEach(x => x.setAttribute("aria-selected", x === b));
       $("#eaConnexion").hidden = o !== "connexion";
       $("#eaInscription").hidden = o !== "inscription";
+      $("#eaOubli").hidden = true;
       history.replaceState(null, "", "#" + o);
       $(o === "connexion" ? "#cEmail" : "#iPrenom").focus();
     }));
+    $$("[data-oubli]", racine).forEach(b => b.addEventListener("click", () => {
+      const ouvrir = b.dataset.oubli === "ouvrir";
+      $("#eaConnexion").hidden = ouvrir;
+      $("#eaOubli").hidden = !ouvrir;
+      if (ouvrir) { $("#oEmail").value = $("#cEmail").value; $("#oEmail").focus(); } else $("#cEmail").focus();
+    }));
+    $("#eaOubli").addEventListener("submit", async e => {
+      e.preventDefault();
+      const f = e.currentTarget, msg = $(".ea-msg", f), bouton = $("button[type=submit]", f);
+      const email = $("#oEmail").value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { msg.textContent = "Indiquez une adresse e-mail valide."; $("#oEmail").focus(); return; }
+      bouton.disabled = true; msg.textContent = "Envoi…";
+      const { data, error } = await client.functions.invoke("mot-de-passe-oublie", { body: { email } });
+      bouton.disabled = false;
+      msg.textContent = error ? await erreurFonction(error) : data.message;
+    });
     $("#eaConnexion").addEventListener("submit", async e => {
       e.preventDefault();
       const f = e.currentTarget, msg = $(".ea-msg", f), bouton = $("button[type=submit]", f);
@@ -1590,6 +1763,8 @@
       if (error) { bouton.disabled = false; msg.textContent = await erreurFonction(error); return; }
       const r = await client.auth.signInWithPassword({ email: d.email, password: d.motDePasse });
       if (!r.error) await client.rpc("prendre_appareil");
+      const dateConcours = $("#iDate").value;
+      if (!r.error && dateConcours && r.data.user) await client.from("profils").update({ date_concours: dateConcours }).eq("id", r.data.user.id);
       bouton.disabled = false;
       if (r.error) { msg.textContent = messageErreur(r.error); return; }
       history.replaceState(null, "", location.pathname);
@@ -1602,6 +1777,16 @@
     $("#eaSortir").addEventListener("click", async () => { await client.auth.signOut(); toast("Vous êtes déconnecté."); afficher(); });
     $("#eaMonCompte").addEventListener("click", e => {
       const p = $("#eaPanneau"); p.hidden = !p.hidden; e.currentTarget.setAttribute("aria-expanded", !p.hidden);
+    });
+    $("#eaConcoursForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const msg = $(".ea-msg", e.currentTarget), v = $("#mConcours").value;
+      if (!v) { msg.textContent = "Choisissez un concours."; return; }
+      const { error } = await client.from("profils").update({ concours: v }).eq("id", etat.uid);
+      if (error) { msg.textContent = messageErreur(error); return; }
+      etat.profil.concours = v; portee = null; filtre = "tous";
+      toast("Concours enregistré.");
+      afficher();
     });
     $("#eaTel").addEventListener("submit", async e => {
       e.preventDefault();
@@ -1631,6 +1816,7 @@
   // Agent de révision : envoi de la demande, champ de la copie selon le type de demande, bloc ouvert ou fermé
   racine.addEventListener("submit", e => {
     if (e.target.id === "eaTextesForm") { e.preventDefault(); chercherTextes($("#eaTextesQ").value); return; }
+    if (e.target.id === "eaPaiement") { e.preventDefault(); envoyerDemande(e.target); return; }
     if (e.target.id !== "eaAgentForm") return;
     e.preventDefault();
     if (!agentEnCours) lancerAgent(e.target);
@@ -1656,7 +1842,34 @@
   }
 
   // Bibliothèque : filtres et ouverture des contenus (un seul écouteur pour toute la page)
-  racine.addEventListener("click", e => {
+  racine.addEventListener("click", async e => {
+    const po = e.target.closest("[data-portee]");
+    if (po && $(".ea-biblio", racine)) {
+      portee = po.dataset.portee; filtre = "tous";
+      $(".ea-biblio", racine).outerHTML = bibliothequeHTML();
+      return;
+    }
+    if (e.target.closest("[data-reprise]")) {
+      const r = lireReprise();
+      if (r) ouvrirContenu(Object.assign({}, r.c, { page: r.page }), etat.admin && !etat.abo.actif ? "Aperçu administrateur" : marqueDe(etat.profil));
+      return;
+    }
+    const pa = e.target.closest("[data-paiement]");
+    if (pa) {
+      if (pa.dataset.paiement === "modifier") { const z = $("#eaPaiementZone"); if (z) { z.hidden = false; $("#pRef").focus(); } return; }
+      if (!confirm("Annuler votre demande d'activation ?")) return;
+      const { error } = await client.rpc("retirer_demande_activation");
+      if (error) { toast(messageErreur(error)); return; }
+      toast("Demande annulée.");
+      afficher();
+      return;
+    }
+    if (e.target.closest("#eaInstaller") && invitationInstall) {
+      const inv = invitationInstall; invitationInstall = null;
+      e.target.closest("#eaInstaller").hidden = true;
+      inv.prompt();
+      return;
+    }
     const ch = e.target.closest("[data-filtre]");
     if (ch && $(".ea-biblio", racine)) {
       filtre = ch.dataset.filtre;
@@ -1709,5 +1922,46 @@
       .then(r => r.json()).then(r => toast(r.ok ? "C'est noté. Vous ne recevrez plus l'annonce des nouveautés ni les rappels par e-mail." : (r.error || "Lien invalide.")))
       .catch(() => toast("La désinscription n'a pas abouti. Réessayez plus tard."));
   }
-  afficher().then(() => { versFormulaire(); ouvrirDepuisLien(); });
+  // Installation du site comme une application (Android, ordinateur) : bouton dans la barre du compte
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); invitationInstall = e; const b = $("#eaInstaller"); if (b) b.hidden = false; });
+  window.addEventListener("appinstalled", () => { invitationInstall = null; const b = $("#eaInstaller"); if (b) b.hidden = true; toast("Application installée."); });
+
+  // Lien « choisir un nouveau mot de passe » des e-mails (fonction mot-de-passe-oublie) : espace-abonnes/?reinit=<jeton>
+  async function reinitialiser(jeton) {
+    racine.innerHTML = `<div class="ea-auth"><p class="ea-attente">Vérification du lien…</p></div>`;
+    await client.auth.signOut({ scope: "local" }).catch(() => {});
+    const { error } = await client.auth.verifyOtp({ token_hash: jeton, type: "recovery" });
+    if (error) {
+      racine.innerHTML = `<div class="ea-carte-info"><h3>Ce lien n'est plus valable.</h3><p>Il a peut-être déjà servi ou expiré. Demandez-en un nouveau depuis le formulaire de connexion, rubrique « Mot de passe oublié ? ».</p><button class="btn btn-navy" type="button" id="eaRetourConnexion">Revenir à la connexion</button></div>`;
+      $("#eaRetourConnexion").addEventListener("click", () => afficher("connexion"));
+      return false;
+    }
+    await client.rpc("prendre_appareil");
+    return new Promise(tenir => {
+      racine.innerHTML = `<div class="ea-auth"><form class="form ea-form" id="eaNouveauMdp" novalidate>
+          <h3 class="full">Choisissez votre nouveau mot de passe</h3>
+          <div class="field full"><label for="nMdp">Nouveau mot de passe (8 caractères au moins)</label><input id="nMdp" type="password" autocomplete="new-password" minlength="8" required></div>
+          <p class="ea-msg" role="alert"></p>
+          <button class="btn btn-navy" type="submit">Enregistrer et ouvrir mon espace</button>
+        </form></div>`;
+      const f = $("#eaNouveauMdp"), msg = $(".ea-msg", f);
+      $("#nMdp").focus();
+      f.addEventListener("submit", async e => {
+        e.preventDefault();
+        const mdp = $("#nMdp").value;
+        if (mdp.length < 8) { msg.textContent = "8 caractères au moins."; return; }
+        $("button[type=submit]", f).disabled = true;
+        const { error: err } = await client.auth.updateUser({ password: mdp });
+        $("button[type=submit]", f).disabled = false;
+        if (err) { msg.textContent = messageErreur(err); return; }
+        toast("Mot de passe changé.");
+        tenir();
+      });
+    });
+  }
+  const jetonReinit = new URLSearchParams(location.search).get("reinit");
+  if (jetonReinit) {
+    history.replaceState(null, "", location.pathname);
+    reinitialiser(jetonReinit).then(ok => { if (ok !== false) afficher(); });
+  } else afficher().then(() => { versFormulaire(); ouvrirDepuisLien(); });
 })();

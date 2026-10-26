@@ -1096,7 +1096,7 @@ ${vitrine}
     </div>
     <ol class="espace-etapes">
       <li class="espace-etape"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.</span></li>
-      <li class="espace-etape"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis envoyez-nous la référence du paiement sur WhatsApp.${tarifs.length ? "" : " Nous vous indiquons le tarif."}</span></li>
+      <li class="espace-etape"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis saisissez la référence du paiement dans votre espace ou envoyez-la-nous sur WhatsApp.${tarifs.length ? "" : " Nous vous indiquons le tarif."}</span></li>
       <li class="espace-etape"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement. Les ouvrages complets sont compris à partir de la formule d'un mois. Un compte s'utilise sur un appareil à la fois : une connexion sur un autre appareil déconnecte le précédent.</span></li>
     </ol>
   </div>
@@ -1305,7 +1305,7 @@ ${contactCTA(prefix)}`;
     <p>Si votre colis n'arrive pas dans les délais, s'il arrive abîmé ou s'il ne contient pas l'ouvrage commandé, écrivez-nous sur WhatsApp dès que possible, avec une photo si l'ouvrage est abîmé. Nous recherchons le colis auprès du transporteur. S'il est perdu, abîmé ou erroné, nous vous envoyons l'ouvrage commandé sans frais supplémentaires ou, si ce n'est pas possible, nous vous remboursons la somme payée pour cet ouvrage.</p>
 
     <h2 id="abonnement">Abonnement à l'espace abonnés</h2>
-    <p>Vous créez votre compte sur la page <a href="${prefix}espace-abonnes/">Espace abonnés</a>, vous réglez la formule choisie par Mobile Money, puis vous nous envoyez la référence du paiement sur WhatsApp. Nous activons alors votre accès. Les formules en vigueur sont les suivantes :</p>
+    <p>Vous créez votre compte sur la page <a href="${prefix}espace-abonnes/">Espace abonnés</a>, vous réglez la formule choisie par Mobile Money, puis vous nous transmettez la référence du paiement, depuis votre espace ou sur WhatsApp. Nous activons votre accès après vérification du paiement. Les formules en vigueur sont les suivantes :</p>
     ${tarifs.length ? `<div class="table-wrap"><table class="tarifs"><thead><tr><th scope="col">Formule</th><th scope="col">Prix</th><th scope="col">Ouvrages complets</th></tr></thead><tbody>${tarifs.map(t => `<tr><td>${t.duree}</td><td>${t.prix} FCFA</td><td>${longues.includes(t.cle) ? "compris" : "non compris"}</td></tr>`).join("")}</tbody></table></div>` : ""}
     <p>La durée de la formule court à partir de l'activation, et non du paiement : un accès activé plus tard ne vous fait perdre aucun jour. Une prolongation s'ajoute à la fin de l'abonnement en cours. Les formules d'une semaine et de deux semaines donnent accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus. La formule d'un jour donne accès à tous les contenus, sauf les ouvrages complets et les vidéos, réservées aux formules d'une semaine et plus.</p>
 
