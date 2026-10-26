@@ -1,7 +1,8 @@
 // Fonction « emails » : envoi des e-mails aux abonnés par Brevo, depuis infos@coursesesame.com.
 //   { action: "planif" }          appel de la tâche planifiée (en-tête x-planif, vérifié par la base) : bienvenue,
 //                                 rappels de fin d'abonnement (7 et 3 jours avant), relance d'inactivité,
-//                                 annonce quotidienne des nouveautés
+//                                 annonce quotidienne des nouveautés, récapitulatif du lundi, et alertes à
+//                                 l'administrateur (nouvelle demande d'activation, nouveau compte)
 //   { action: "etat" }            administrateur : envoi ouvert ou fermé, clé Brevo enregistrée ou non
 //   { action: "essai" }           administrateur : e-mail d'essai envoyé à sa propre adresse
 //   { action: "desinscrire", jeton } lien des e-mails : l'abonné ne reçoit plus l'annonce des nouveautés
@@ -112,8 +113,17 @@ async function planif(service: SupabaseClient) {
       : l.type === "rappel_fin" ? rappel(l.prenom, l.donnees)
       : l.type === "inactif" ? relance(l.prenom, l.donnees)
       : l.type === "campagne" ? campagne(l.prenom, l.donnees)
-      : nouveautes(l.prenom, l.donnees.contenus as Contenu[], String(l.donnees.jeton ?? ""));
-    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, ["nouveautes", "inactif", "campagne"].includes(l.type) ? String(l.donnees.jeton ?? "") : undefined);
+      : l.type === "hebdo" ? hebdo(l.prenom, l.donnees)
+      : l.type === "alerte_demande" ? alerteDemande(l.donnees)
+      : l.type === "alerte_compte" ? alerteCompte(l.donnees)
+      : l.type === "nouveautes" ? nouveautes(l.prenom, l.donnees.contenus as Contenu[], String(l.donnees.jeton ?? ""))
+      : null;
+    if (!m) {
+      await service.from("emails_envoyes").update({ statut: "erreur", erreur: `Type inconnu : ${l.type}` }).eq("id", id);
+      erreurs++;
+      continue;
+    }
+    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, ["nouveautes", "inactif", "campagne", "hebdo"].includes(l.type) ? String(l.donnees.jeton ?? "") : undefined);
     await service.from("emails_envoyes").update({ statut: echec ? "erreur" : "envoye", erreur: echec }).eq("id", id);
     if (echec) erreurs++; else envoyes++;
     if (l.type === "nouveautes") annonce = true;
@@ -279,4 +289,55 @@ L'équipe des Cours Sésame et SAJ
 
 Ne plus recevoir nos e-mails d'information ${lienDesinscription(jeton)}`;
   return { sujet, html: gabarit(sujet, corps, pied), texte };
+}
+
+// Récapitulatif du lundi : la semaine écoulée, ce qui attend l'abonné cette semaine
+const FORMULES: Record<string, string> = { j1: "1 jour", j7: "1 semaine", j14: "2 semaines", m1: "1 mois", m2: "2 mois", m3: "3 mois", m6: "6 mois", m12: "12 mois" };
+function hebdo(prenom: string, d: Record<string, unknown>) {
+  const jeton = String(d.jeton ?? "");
+  const jours = Number(d.jours_actifs ?? 0), lectures = Number(d.lectures ?? 0), revoir = Number(d.a_revoir ?? 0), nouveaux = Number(d.nouveaux ?? 0);
+  const titres = (d.titres ?? []) as string[];
+  const blanc = d.blanc as { titre: string; debut: string } | null;
+  const auj = new Date().toISOString().slice(0, 10);
+  const jConcours = d.date_concours ? Math.round((new Date(String(d.date_concours) + "T00:00:00Z").getTime() - new Date(auj + "T00:00:00Z").getTime()) / 864e5) : null;
+  const sujet = jours ? `Votre semaine de révision, ${jours} ${jours > 1 ? "jours actifs" : "jour actif"}` : "Votre programme de la semaine";
+  const bilan = jours
+    ? `La semaine dernière, vous avez révisé ${jours} ${jours > 1 ? "jours" : "jour"} sur 7${lectures ? ` et ouvert ${lectures} ${lectures > 1 ? "documents" : "document"}` : ""}. Continuez ainsi.`
+    : "Vous n'avez pas révisé dans votre espace la semaine dernière. Un quart d'heure par jour suffit pour reprendre le rythme.";
+  const points: string[] = [];
+  if (revoir) points.push(`${revoir} ${revoir > 1 ? "questions de QCM vous attendent" : "question de QCM vous attend"} dans la révision du jour`);
+  if (nouveaux) points.push(`${nouveaux > 1 ? `${nouveaux} nouveaux contenus ont été ajoutés` : "un nouveau contenu a été ajouté"} cette semaine${titres.length ? `, notamment ${titres.join(", ")}` : ""}`);
+  if (blanc) points.push(`prochain concours blanc, ${blanc.titre}, le ${new Date(blanc.debut).toLocaleString("fr-FR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: "Africa/Abidjan" })}`);
+  points.push("un nouveau sujet de la semaine, à traiter dans les conditions de l'épreuve");
+  const rebours = jConcours != null && jConcours >= 0 ? `<p><b>J-${jConcours}</b> avant votre concours.</p>` : "";
+  const corps = `<p>Bonjour ${esc(prenom)},</p>
+<p>${esc(bilan)}</p>${rebours}
+<p>Cette semaine dans votre espace</p><ul>${points.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+${bouton("Ouvrir mon espace abonnés", `${SITE}/espace-abonnes/`)}
+<p>Votre abonnement court jusqu'au ${dateFr(d.fin)}.</p>
+<p>Bonne semaine de préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
+  const pied = `${piedService} Vous pouvez <a href="${lienDesinscription(jeton)}" style="color:#5b6475">ne plus recevoir nos e-mails d'information</a>, ou changer ce choix dans votre espace, rubrique Mon compte.`;
+  const texte = `Bonjour ${prenom},\n\n${bilan}\n${jConcours != null && jConcours >= 0 ? `J-${jConcours} avant votre concours.\n` : ""}\nCette semaine dans votre espace\n${points.map((x) => "- " + x).join("\n")}\n\nOuvrir mon espace abonnés ${SITE}/espace-abonnes/\n\nVotre abonnement court jusqu'au ${dateFr(d.fin)}.\n\nL'équipe des Cours Sésame et SAJ\n\nNe plus recevoir nos e-mails d'information ${lienDesinscription(jeton)}`;
+  return { sujet, html: gabarit(sujet, corps, pied), texte };
+}
+
+// Alertes à l'administrateur (sans lien de désinscription : e-mails de service)
+const piedAdmin = "E-mail envoyé à l'administrateur de l'espace abonnés de coursesesame.com.";
+function alerteDemande(d: Record<string, unknown>) {
+  const montant = d.montant != null ? `${String(d.montant).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} FCFA` : "montant non indiqué";
+  const sujet = `Demande d'activation, ${d.client}`;
+  const lignes = [`Abonné : ${d.client} (${d.telephone})`, `Formule : ${FORMULES[String(d.formule)] ?? d.formule}, ${montant}`, `Paiement : ${d.moyen}, référence ${d.reference}`];
+  const corps = `<p>Une nouvelle demande d'activation attend votre vérification.</p><ul>${lignes.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+<p>Vérifiez la référence dans votre application Mobile Money, puis validez la demande dans l'administration.</p>
+${bouton("Ouvrir l'administration", `${SITE}/espace-abonnes/admin/`)}`;
+  const texte = `Une nouvelle demande d'activation attend votre vérification.\n\n${lignes.join("\n")}\n\nOuvrir l'administration ${SITE}/espace-abonnes/admin/`;
+  return { sujet, html: gabarit(sujet, corps, piedAdmin), texte };
+}
+function alerteCompte(d: Record<string, unknown>) {
+  const sujet = `Nouveau compte, ${d.client}`;
+  const lignes = [`${d.client}, ${d.telephone}`, `Concours : ${d.concours ?? "non précisé"}`];
+  const corps = `<p>Un nouveau compte vient d'être créé sur l'espace abonnés.</p><ul>${lignes.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+${bouton("Voir dans l'administration", `${SITE}/espace-abonnes/admin/`)}`;
+  const texte = `Un nouveau compte vient d'être créé sur l'espace abonnés.\n\n${lignes.join("\n")}\n\n${SITE}/espace-abonnes/admin/`;
+  return { sujet, html: gabarit(sujet, corps, piedAdmin), texte };
 }

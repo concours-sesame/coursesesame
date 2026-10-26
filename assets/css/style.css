@@ -1332,3 +1332,51 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
 .cb-corrige{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;line-height:1.6;-webkit-user-select:none;user-select:none}
 @media print{.cb-corrige,.cb-just{display:none}}
 .cb-compose .hero-sub,.cb-compose .cb-charte-section{display:none}
+
+/* ---------- Espace abonnés : demande d'activation, bibliothèque par concours, reprise, favoris ---------- */
+.ea-lien{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--navy);text-decoration:underline;cursor:pointer}
+.ea-paiement{margin-top:1rem;max-width:640px}
+.ea-demande{margin-top:1rem;padding:.9rem 1rem;border-radius:var(--r-sm);background:#eef6ee;border:1px solid #b9dcbc;color:var(--ink)}
+.ea-demande p{margin:0 0 .45rem}
+.ea-demande-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0 0}
+.ea-demande-actions .btn{margin-top:0}
+.ea-wa-secours{margin-top:1rem}
+.ea-wa-secours .btn{margin-top:0;vertical-align:middle}
+.ea-renouvellement{margin-top:calc(-1 * clamp(10px,1.5vw,20px))}
+.ea-portee{display:inline-flex;margin-top:10px;border:1.5px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.ea-portee button{height:38px;padding:0 .9rem;border:0;background:#fff;font-size:.95rem;font-weight:600;color:var(--ink)}
+.ea-portee button+button{border-left:1.5px solid var(--line)}
+.ea-portee button[aria-pressed="true"]{background:var(--gold);color:var(--navy)}
+.ea-portee .n{opacity:.7;margin-left:.35rem;font-weight:400}
+.ea-carte-marques{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+.ea-nouveau{display:inline-block;font-size:.8rem;font-weight:700;padding:.12rem .5rem;border-radius:4px;background:var(--gold);color:var(--navy)}
+.ea-fav{color:var(--gold-ink);font-size:1rem;line-height:1}
+.ea-reprise{display:grid;gap:.15rem;width:100%;margin:0 0 1rem;padding:.9rem 1.1rem;text-align:left;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);background:#fff;color:var(--ink);cursor:pointer}
+.ea-reprise:hover{border-color:var(--navy)}
+.ea-reprise b{font-family:var(--serif);font-size:1.12rem;color:var(--navy)}
+.ea-reprise span:last-child{font-size:.92rem;color:var(--muted)}
+.ea-v-favori{margin-left:.5rem;padding:.2rem .6rem;border:1px solid var(--line);border-radius:4px;background:#fff;font-size:.85rem;font-weight:600;color:var(--gold-ink);vertical-align:middle}
+.ea-v-favori[aria-pressed="true"]{background:#fdf1d8;border-color:#f0d9a8}
+a.ea-outil-carte{text-decoration:none}
+
+/* ---------- Administration : rubriques, « À faire aujourd'hui », demandes d'activation ---------- */
+.ad-groupes{display:flex;margin-bottom:.4rem;background:var(--navy)}
+.ad-groupes button{color:rgba(255,255,255,.8)}
+.ad-groupes button[aria-selected="true"]{background:var(--gold);color:var(--navy)}
+.ad-pastille-n{display:inline-block;min-width:1.4em;margin-left:.4rem;padding:0 .35rem;border-radius:99px;background:#c0392b;color:#fff;font-size:.8rem;line-height:1.4em;text-align:center}
+.ad-afaire{margin:0 0 1.2rem;padding:.9rem 1rem;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);background:#fff}
+.ad-afaire summary{display:flex;align-items:center;gap:.6rem;cursor:pointer;list-style:none}
+.ad-afaire summary::-webkit-details-marker{display:none}
+.ad-afaire summary h3{margin:0;font-family:var(--serif);font-size:1.25rem;color:var(--navy)}
+.ad-afaire summary .n{font-size:.85rem;font-weight:700;padding:.1rem .5rem;border-radius:99px;background:var(--cream);color:var(--navy)}
+.ad-afaire h4{margin:1rem 0 .5rem;font-size:1rem;color:var(--navy)}
+.ad-afaire .ad-direct-retour{margin-top:.8rem;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem}
+.ad-afaire-liste{list-style:none;margin:.9rem 0 0;padding:0;display:grid;gap:.4rem}
+.ad-afaire-liste li{display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding:.5rem .7rem;border-radius:var(--r-sm);background:var(--cream)}
+.ad-ligne-demande{border-left:3px solid #2f8a4a}
+.ad-demande{background:#e6f4e8;color:#1f6b35}
+.ad-demande-ligne{margin:.35rem 0 0;padding:.35rem .6rem;border-left:3px solid #2f8a4a;background:#f1f8f2;font-size:.92rem}
+.ad-alerte-douce{margin:0 0 .6rem;padding:.6rem .8rem;border-radius:6px;background:#f1f8f2;border:1px solid #b9dcbc;font-size:.95rem}
+.ad-jamais summary{cursor:pointer;font-weight:600;color:var(--navy)}
+.ad-jamais ul{margin:.6rem 0 0 1.1rem;display:grid;gap:.3rem}
+.ad-jamais small{display:block;color:var(--muted)}

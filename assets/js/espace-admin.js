@@ -30,6 +30,8 @@
   const TAILLE_MAX = 50 * 1024 * 1024;
 
   let moi = null, abonnes = [], paiements = [], contenus = [];
+  let demandes = []; // demandes d'activation envoyées depuis l'espace abonnés (référence du paiement Mobile Money)
+  let retourAFaire = ""; // message après une action lancée depuis « À faire aujourd'hui »
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [], epreuvesB = [];
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
   let visites = [], visitesJours = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
@@ -82,6 +84,10 @@
     return { cle: "attente", texte: "En attente d'activation" };
   }
   const enCours = a => a.actif || !!a.suspendu_depuis;
+  const NOM_FORMULE = { j1: "1 jour", j7: "1 semaine", j14: "2 semaines", m1: "1 mois", m2: "2 mois", m3: "3 mois", m6: "6 mois", m12: "12 mois" };
+  const demandeDe = uid => demandes.find(d => d.user_id === uid && d.statut === "en_attente") || null;
+  const demandesEnAttente = () => demandes.filter(d => d.statut === "en_attente");
+  const detailDemande = d => `${esc(NOM_FORMULE[d.formule] || d.formule)}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence <b>${esc(d.reference)}</b>`;
   // Compte inscrit depuis plus de 30 jours sans aucun paiement : faux compte ou inscription abandonnée
   const jamaisActive = a => !Number(a.nb_paiements) && !a.fin && joursJusqua(String(a.inscrit_le).slice(0, 10)) < -30;
   // Période en cours (ou, à défaut, prochaine période) d'un compte, d'après l'historique des paiements
@@ -173,7 +179,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -197,7 +203,8 @@
       client.rpc("admin_concours_blancs"),
       client.from("epreuves_blanches").select("id, concours, serie, ordre, epreuve, titre, nature, duree_minutes, publie").order("serie").order("ordre"),
       client.rpc("admin_visites", { p_heures: 48 }),
-      client.rpc("admin_visites_jours", { p_jours: 30 })
+      client.rpc("admin_visites_jours", { p_jours: 30 }),
+      client.from("demandes_activation").select("*").order("cree_le", { ascending: false }).limit(500)
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -209,6 +216,7 @@
     emailsReglages = er.data || null; emailsEnvoyes = ee.data || [];
     blancs = cb.data || []; epreuvesB = eb.data || [];
     visites = vi.data || []; visitesJours = vj.data || [];
+    demandes = da.data || [];
     telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
     agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
     // Appareils utilisés ces 7 derniers jours (un compte ne s'utilise que sur un appareil à la fois)
@@ -555,15 +563,83 @@
         <div><b>${bientot}</b><span>Fin sous 7 jours${suspendus ? ` · ${pluriel(suspendus, "suspendu")}` : ""}</span></div>
         <div><b>${fcfa(encaisseCeMois())}</b><span>Encaissé ce mois-ci</span></div>
       </div>
-      <div class="ea-onglets ad-onglets" role="tablist" aria-label="Administration">
-        ${[["direct", "En direct"], ["visites", "Visites du site"], ["abonnes", `Abonnés (${abonnes.length})`], ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`], ["contenus", `Contenus (${contenus.length})`], ["paiements", "Paiements"], ["stats", "Statistiques"], ["agent", "Agent"], ["blancs", "Concours blancs"], ["telechargements", "Téléchargements"], ["emails", "E-mails"], ["journal", "Journal"]].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
-      </div>
+      ${aFaireHTML()}
+      ${ongletsHTML()}
       <div id="adPanneau">${panneau()}</div>`;
     majIndicateur();
   }
+  // Quatre rubriques, chacune avec ses onglets ; le nombre entre parenthèses signale ce qui attend une action
+  const GROUPES = () => [
+    ["abonnes", "Abonnés", [["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["demandes", `Demandes${demandesEnAttente().length ? ` (${demandesEnAttente().length})` : ""}`],
+      ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["paiements", "Paiements"], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`]], demandesEnAttente().length + nbRelances() + commandesATraiter()],
+    ["contenus", "Contenus", [["contenus", `Contenus (${contenus.length})`], ["blancs", "Concours blancs"], ["telechargements", "Téléchargements"]], 0],
+    ["communication", "Communication", [["emails", "E-mails"], ["agent", "Agent"]], 0],
+    ["pilotage", "Pilotage", [["stats", "Statistiques"], ["visites", "Visites du site"], ["journal", "Journal"]], 0]
+  ];
+  const groupeDe = o => GROUPES().find(g => g[2].some(t => t[0] === o)) || GROUPES()[0];
+  function ongletsHTML() {
+    const groupes = GROUPES(), courant = groupeDe(onglet);
+    return `<div class="ea-onglets ad-groupes" role="tablist" aria-label="Rubriques de l'administration">
+        ${groupes.map(([id, nom, , n]) => `<button type="button" role="tab" data-groupe="${id}" aria-selected="${courant[0] === id}">${nom}${n ? `<span class="ad-pastille-n">${n}</span>` : ""}</button>`).join("")}
+      </div>
+      <div class="ea-onglets ad-onglets" role="tablist" aria-label="${esc(courant[1])}">
+        ${courant[2].map(([v, l]) => `<button type="button" role="tab" data-onglet="${v}" aria-selected="${onglet === v}">${l}</button>`).join("")}
+      </div>`;
+  }
+  // Demande d'activation : ligne avec ses actions (même mécanique que les lignes d'abonnés)
+  function ligneDemande(d) {
+    const a = abonnes.find(x => x.user_id === d.user_id);
+    if (!a) return "";
+    const retour = retours[a.user_id] || "";
+    return `<article class="ad-ligne ad-ligne-demande" data-uid="${esc(a.user_id)}">
+        <div class="ad-ident">
+          <div class="ad-nom"><b>${esc(a.prenom)} ${esc(a.nom)}</b><span class="ad-badge ad-${statut(a).cle}">${esc(statut(a).texte)}</span></div>
+          <small>${detailDemande(d)} · envoyée ${ilYa(d.cree_le)} · <a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a></small>
+        </div>
+        <div class="ad-actions">
+          <button class="btn btn-navy btn-sm" type="button" data-action="activer">Vérifier et activer</button>
+          <button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="refuser-demande">Refuser</button>
+        </div>
+        <div class="ad-zone"${retour ? "" : " hidden"}>${retour}</div>
+      </article>`;
+  }
+  function aFaireHTML() {
+    const att = demandesEnAttente(), m = lireRelances();
+    const sansRelance = l => l.filter(a => !relanceRecente(a.user_id, m));
+    const fin7 = sansRelance(abonnes.filter(a => statut(a).cle === "bientot"));
+    const inactifs = sansRelance(abonnes.filter(a => statut(a).cle === "actif" && inactif(a)));
+    const nouveaux = abonnes.filter(a => statut(a).cle === "attente" && !demandeDe(a.user_id) && Date.now() - new Date(a.inscrit_le) < 2 * 864e5);
+    const cmd = commandesATraiter();
+    const rappels = [
+      [fin7.length, fin7.length > 1 ? `${fin7.length} abonnements finissent dans les 7 jours, sans relance récente` : "1 abonnement finit dans les 7 jours, sans relance récente", "relances"],
+      [inactifs.length, inactifs.length > 1 ? `${inactifs.length} abonnés payants ne sont pas passés depuis ${JOURS_INACTIF} jours ou plus` : `1 abonné payant n'est pas passé depuis ${JOURS_INACTIF} jours ou plus`, "relances"],
+      [nouveaux.length, nouveaux.length > 1 ? `${nouveaux.length} comptes créés depuis 48 heures, sans demande d'activation` : "1 compte créé depuis 48 heures, sans demande d'activation", "abonnes:attente"],
+      [cmd, cmd > 1 ? `${cmd} commandes d'ouvrages à traiter` : "1 commande d'ouvrages à traiter", "commandes"]
+    ].filter(x => x[0]);
+    const total = att.length + rappels.length;
+    return `<details class="ad-afaire"${total || retourAFaire ? " open" : ""}>
+        <summary><h3>À faire aujourd'hui</h3><span class="n">${total ? `${att.length + rappels.reduce((n, x) => n + x[0], 0)}` : "0"}</span></summary>
+        ${retourAFaire ? `<div class="ad-direct-retour">${retourAFaire}<button class="btn btn-ghost btn-sm" type="button" data-action="masquer-retour">Masquer</button></div>` : ""}
+        ${att.length ? `<h4>${att.length > 1 ? `${att.length} demandes d'activation à vérifier` : "1 demande d'activation à vérifier"}</h4><div class="ad-liste">${att.map(ligneDemande).join("")}</div>` : ""}
+        ${rappels.length ? `<ul class="ad-afaire-liste">${rappels.map(([, t, o]) => `<li><span>${t}</span><button class="btn btn-ghost btn-sm" type="button" data-aller="${o}">Voir</button></li>`).join("")}</ul>` : ""}
+        ${total ? "" : `<p class="ea-vide">Rien d'urgent. Tout est à jour.</p>`}
+      </details>`;
+  }
+  // Onglet Demandes : toutes les demandes d'activation, les plus récentes d'abord
+  function panneauDemandes() {
+    const att = demandesEnAttente(), autres = demandes.filter(d => d.statut !== "en_attente");
+    const nomStatut = { validee: ["actif", "Validée"], refusee: ["partage", "Refusée"] };
+    return `<p class="ad-note">Les abonnés envoient leur demande depuis leur espace, avec la formule choisie et la référence de leur paiement Mobile Money. Vérifiez le paiement dans votre application avant de valider. Une demande est marquée « Validée » dès qu'une période d'abonnement est enregistrée pour le compte.</p>
+      <section class="ad-bloc"><h3>En attente <span class="n">${att.length}</span></h3>${att.length ? `<div class="ad-liste">${att.map(ligneDemande).join("")}</div>` : `<p class="ea-vide">Aucune demande en attente.</p>`}</section>
+      <section class="ad-bloc"><h3>Traitées <span class="n">${autres.length}</span></h3>${autres.length ? `<div class="ad-tableau" role="region" aria-label="Demandes traitées" tabindex="0"><table>
+        <thead><tr><th>Envoyée le</th><th>Abonné</th><th>Demande</th><th>État</th><th>Traitée le</th></tr></thead>
+        <tbody>${autres.map(d => { const a = abonnes.find(x => x.user_id === d.user_id); const st = nomStatut[d.statut] || ["avenir", d.statut]; return `<tr><td>${dateFr(d.cree_le)}</td><td>${a ? `${esc(a.prenom)} ${esc(a.nom)}` : "Compte supprimé"}</td><td>${detailDemande(d)}</td><td><span class="ad-badge ad-${st[0]}">${st[1]}</span>${d.motif ? `<small>${esc(d.motif)}</small>` : ""}</td><td>${d.traitee_le ? dateFr(d.traitee_le) : ""}</td></tr>`; }).join("")}</tbody>
+      </table></div>` : `<p class="ea-vide">Aucune demande traitée pour le moment.</p>`}</section>`;
+  }
+
   // Redessine la page (onglets compris) sans bouger la position de lecture
   const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
-  const PANNEAUX = { direct: () => panneauDirect(), visites: () => panneauVisites(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
+  const PANNEAUX = { demandes: () => panneauDemandes(), direct: () => panneauDirect(), visites: () => panneauVisites(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
     contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), blancs: () => panneauBlancs(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
   const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
 
@@ -696,14 +772,16 @@
     const retour = retours[a.user_id] || "";
     return `<article class="ad-ligne" data-uid="${esc(a.user_id)}">
         <div class="ad-ident">
-          <div class="ad-nom"><b>${esc(a.prenom)} ${esc(a.nom)}</b><span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span>${a.appareils >= SEUIL_PARTAGE ? `<span class="ad-badge ad-partage" title="Chaque nouvel appareil déconnecte le précédent. Un nombre élevé peut signaler un compte partagé.">${a.appareils} appareils en 7 jours</span>` : ""}</div>
+          <div class="ad-nom"><b>${esc(a.prenom)} ${esc(a.nom)}</b><span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span>${demandeDe(a.user_id) ? `<span class="ad-badge ad-demande">Demande d'activation</span>` : ""}${a.appareils >= SEUIL_PARTAGE ? `<span class="ad-badge ad-partage" title="Chaque nouvel appareil déconnecte le précédent. Un nombre élevé peut signaler un compte partagé.">${a.appareils} appareils en 7 jours</span>` : ""}</div>
           <small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a> · ${esc(a.email)}${a.concours ? " · " + esc(nomConcours(a.concours)) : ""} · inscrit le ${dateFr(a.inscrit_le)}${Number(a.nb_paiements) ? ` · ${a.nb_paiements} paiement${a.nb_paiements > 1 ? "s" : ""}, ${fcfa(a.total_paye)}` : ""} · ${enLigne(a) ? "<b class=\"ad-vert\">en ligne</b>" : `dernier passage : ${ilYa(a.vu_le || a.derniere_connexion)}`}${lecturesRecentes(l => l.user_id === a.user_id) ? ` · ${pluriel(lecturesRecentes(l => l.user_id === a.user_id), "ouverture")} en 30 jours` : ""}</small>
           ${notes.get(a.user_id) ? `<p class="ad-note-privee"><b>Note</b> ${esc(notes.get(a.user_id))}</p>` : ""}
+          ${demandeDe(a.user_id) ? `<p class="ad-demande-ligne">Demande du ${dateFr(demandeDe(a.user_id).cree_le)}, ${detailDemande(demandeDe(a.user_id))}</p>` : ""}
         </div>
         <div class="ad-actions">
           ${a.suspendu_depuis
             ? `<button class="btn btn-navy btn-sm" type="button" data-action="reactiver">Réactiver</button>`
-            : `<button class="btn btn-navy btn-sm" type="button" data-action="activer">${a.actif ? "Prolonger" : "Activer"}</button>`}
+            : `<button class="btn btn-navy btn-sm" type="button" data-action="activer">${demandeDe(a.user_id) ? "Vérifier la demande" : a.actif ? "Prolonger" : "Activer"}</button>`}
+          ${demandeDe(a.user_id) ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="refuser-demande">Refuser la demande</button>` : ""}
           ${a.actif && !a.suspendu_depuis ? `<button class="btn btn-ghost btn-sm" type="button" data-action="suspendre">Suspendre</button><button class="btn btn-ghost btn-sm" type="button" data-action="couper">Couper l'accès</button>` : ""}
           ${enCours(a) ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="supprimer">Supprimer l'abonnement</button>` : ""}
           <a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), messageRelance(a))}" target="_blank" rel="noopener">${icone("i-wa")}${["attente", "bientot", "expire", "suspendu"].includes(s.cle) ? "Relancer" : "Écrire"}</a>
@@ -718,13 +796,15 @@
   }
   function formulaireActivation(a) {
     const debut = a.actif ? lendemain(a.fin) : auj();
+    const d = demandeDe(a.user_id), formule = d && PRIX[d.formule] !== undefined ? d.formule : "m1";
     return `<form class="form ad-form" data-form="activer" data-debut="${debut}" data-suite="${a.actif ? 1 : 0}" novalidate>
+        ${d ? `<p class="ad-alerte-douce full">Demande de ${esc(a.prenom)} du ${dateFr(d.cree_le)}, ${detailDemande(d)}. Vérifiez dans votre application ${esc(d.moyen)} que ce paiement a bien été reçu, au bon montant, avant de valider.</p>` : ""}
         <p class="ad-note full">${a.actif ? `La prolongation commence le ${dateFr(debut)}, à la suite de l'abonnement en cours.` : "L'abonnement commence aujourd'hui. Pour les formules en jours ou en semaines, le jour de l'activation est offert."} Les vidéos ne s'ouvrent qu'avec une période d'au moins 7 jours (formules d'une semaine et plus), les ouvrages complets qu'avec une période d'au moins 28 jours (formules d'un mois et plus).</p>
-        <div class="field"><label>Durée</label><select name="duree">${DUREES.map(([v, l]) => `<option value="${v}"${v === "m1" ? " selected" : ""}>${l}${PRIX[v] ? ` · ${fcfa(+PRIX[v])}` : ""}</option>`).join("")}</select></div>
+        <div class="field"><label>Durée</label><select name="duree">${DUREES.map(([v, l]) => `<option value="${v}"${v === formule ? " selected" : ""}>${l}${PRIX[v] ? ` · ${fcfa(+PRIX[v])}` : ""}</option>`).join("")}</select></div>
         <div class="field" data-jusqua hidden><label>Jusqu'au (inclus)</label><input type="date" name="jusqua" min="${debut}"></div>
-        <div class="field"><label>Montant reçu (FCFA)</label><input type="number" name="montant" min="0" step="50" inputmode="numeric" value="${PRIX.m1 || ""}"></div>
-        <div class="field"><label>Moyen de paiement</label><select name="moyen">${MOYENS.map(m => `<option>${m}</option>`).join("")}</select></div>
-        <div class="field full"><label>Référence du paiement ou note (contrôlée contre les doublons)</label><input name="note" maxlength="300"></div>
+        <div class="field"><label>Montant reçu (FCFA)</label><input type="number" name="montant" min="0" step="50" inputmode="numeric" value="${d && d.montant != null ? d.montant : PRIX[formule] || ""}"></div>
+        <div class="field"><label>Moyen de paiement</label><select name="moyen">${MOYENS.map(m => `<option${d && d.moyen === m ? " selected" : ""}>${m}</option>`).join("")}</select></div>
+        <div class="field full"><label>Référence du paiement ou note (contrôlée contre les doublons)</label><input name="note" maxlength="300" value="${d ? esc(d.reference) : ""}"></div>
         <p class="ea-msg full" role="alert"></p>
         <button class="btn btn-gold" type="submit">Valider ${a.actif ? "la prolongation" : "l'activation"}</button>
       </form>`;
@@ -872,7 +952,7 @@
   const relanceRecente = (uid, m) => !!m[uid] && joursJusqua(m[uid]) >= -3;
   const groupesRelance = () => [
     ["Fin dans les 7 jours", abonnes.filter(a => statut(a).cle === "bientot")],
-    [`En cours, sans passage depuis ${JOURS_INACTIF} jours ou plus`, abonnes.filter(a => statut(a).cle === "actif" && inactif(a))],
+    [`Abonnés payants sans passage depuis ${JOURS_INACTIF} jours ou plus`, abonnes.filter(a => statut(a).cle === "actif" && inactif(a))],
     ["Terminés depuis moins de 30 jours", abonnes.filter(a => statut(a).cle === "expire" && joursJusqua(a.fin) >= -30)],
     ["Inscrits sans abonnement", abonnes.filter(a => statut(a).cle === "attente" && !jamaisActive(a))]
   ];
@@ -1088,12 +1168,26 @@
       .map(([cid, v]) => [(contenus.find(c => c.id === cid) || {}).titre || "Contenu supprimé", v[0]]);
     const ventes = new Map();
     commandes.filter(k => k.statut !== "annulee").forEach(k => (k.lignes || []).forEach(l => ventes.set(l.ouvrage, (ventes.get(l.ouvrage) || 0) + l.qte)));
+    // Usage : abonnés en cours (hors suspension) qui ont ouvert au moins un contenu ces 7 derniers jours
+    const il7j = Date.now() - 7 * 864e5;
+    const enCoursU = abonnes.filter(a => a.actif && !a.suspendu_depuis);
+    const lecteurs7 = new Set(lectures.filter(l => new Date(l.ouvert_le) >= il7j).map(l => l.user_id));
+    const usage = { total: enCoursU.length, lecteurs: enCoursU.filter(a => lecteurs7.has(a.user_id)).length };
+    const payants = abonnes.filter(a => Number(a.nb_paiements) > 0).length;
+    const ouverts90 = new Set(lectures.map(l => l.contenu_id));
+    const jamaisOuverts = contenus.filter(c => c.publie && c.publie_le && Date.now() - new Date(c.publie_le) > 30 * 864e5 && !ouverts90.has(c.id));
     const enCoursParConcours = regrouper(abonnes.filter(a => a.actif), a => a.concours ? nomConcours(a.concours) : "Non précisé", () => 1).map(([k, v]) => [k, v[0]]);
     return `<div class="ad-stats ad-stats-3">
         <div><b>${fcfa(paiements.reduce((t, p) => t + (p.montant || 0), 0) + vendues.reduce((t, k) => t + k.montant, 0))}</b><span>Recettes depuis l'ouverture (abonnements et ouvrages)</span></div>
         <div><b>${taux == null ? "–" : taux + " %"}</b><span>Renouvellement${eligibles.length ? ` (${renouveles} sur ${eligibles.length} comptes arrivés au terme d'une période)` : " : pas encore de période terminée"}</span></div>
         <div><b>${abonnes.filter(a => a.actif).length}</b><span>Abonnements en cours</span></div>
       </div>
+      <div class="ad-stats ad-stats-3">
+        <div><b>${usage.total ? Math.round(usage.lecteurs * 100 / usage.total) + " %" : "–"}</b><span>Abonnés en cours qui ont ouvert un contenu ces 7 derniers jours (${usage.lecteurs} sur ${usage.total})</span></div>
+        <div><b>${abonnes.length ? Math.round(payants * 100 / abonnes.length) + " %" : "–"}</b><span>Comptes devenus payants (${payants} sur ${abonnes.length})</span></div>
+        <div><b>${jamaisOuverts.length}</b><span>Contenus publiés depuis plus de 30 jours, jamais ouverts en 90 jours</span></div>
+      </div>
+      ${jamaisOuverts.length ? `<details class="ad-bloc ad-jamais"><summary>Voir les contenus jamais ouverts</summary><ul>${jamaisOuverts.slice(0, 60).map(c => `<li>${esc(c.titre)}<small>${esc(c.matiere || "")}</small></li>`).join("")}</ul></details>` : ""}
       ${barres("Recettes des 12 derniers mois", parMois)}
       ${barres("Abonnements par formule", regrouper(paiements, formuleDe, p => p.montant || 0).map(([k, v]) => [k, v[0], pluriel(v[1], "paiement")]))}
       ${barres("Par moyen de paiement", regrouper([...paiements, ...vendues], x => x.moyen || "Non précisé", x => x.montant || 0).map(([k, v]) => [k, v[0], pluriel(v[1], "paiement")]))}
@@ -1294,6 +1388,7 @@
       .on("postgres_changes", { event: "*", schema: "public", table: "abonnements" }, signal)
       .on("postgres_changes", { event: "*", schema: "public", table: "suspensions" }, signal)
       .on("postgres_changes", { event: "*", schema: "public", table: "profils" }, signal)
+      .on("postgres_changes", { event: "*", schema: "public", table: "demandes_activation" }, signal)
       .subscribe(etat => { enDirect = etat === "SUBSCRIBED"; majIndicateur(); });
   }
   function debrancherDirect() {
@@ -1325,14 +1420,23 @@
   racine.addEventListener("click", async e => {
     const lienRelance = e.target.closest("a[data-relance]");
     if (lienRelance) { marquerRelance(lienRelance.dataset.relance); setTimeout(() => { if (onglet === "relances" && !occupe()) redessiner(); }, 600); return; }
-    const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-filtre], button[data-filtrec], button[data-filtrev]");
+    const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-groupe], button[data-aller], button[data-filtre], button[data-filtrec], button[data-filtrev]");
     if (!b) return;
     if (b.dataset.onglet) { onglet = b.dataset.onglet; afficher(); return; }
+    if (b.dataset.groupe) { onglet = GROUPES().find(g => g[0] === b.dataset.groupe)[2][0][0]; afficher(); return; }
+    if (b.dataset.aller) {
+      const [o, f] = b.dataset.aller.split(":");
+      onglet = o; if (f) filtre = f;
+      afficher();
+      const p = $("#adPanneau"); if (p) p.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
     if (b.dataset.filtre) { filtre = b.dataset.filtre; $("#adPanneau").innerHTML = panneauAbonnes(); return; }
     if (b.dataset.filtrec) { filtreC = b.dataset.filtrec; $("#adZoneC").innerHTML = zoneContenus(); return; }
     if (b.dataset.filtrev) { filtreV = b.dataset.filtrev; $("#adPanneau").innerHTML = panneauVisites(); return; }
     const act = b.dataset.action;
     if (act === "sortir") { debrancherDirect(); await client.auth.signOut(); connexion(); return; }
+    if (act === "masquer-retour") { retourAFaire = ""; redessiner(); return; }
     if (act === "emails-basculer") {
       const actif = !emailsReglages.actif;
       if (actif && !confirm("Ouvrir l'envoi des e-mails ? Les bienvenues, rappels et annonces partiront automatiquement.")) return;
@@ -1432,6 +1536,21 @@
       // Message de retour : sous la ligne (onglet Abonnés) et en tête du suivi en direct
       const retour = html => { retours[a.user_id] = html; retourDirect = html; };
       if (act === "relance-faite") { marquerRelance(a.user_id); redessiner(); return; }
+      if (act === "refuser-demande") {
+        const d = demandeDe(a.user_id);
+        if (!d) return;
+        const motif = prompt(`Refuser la demande de ${a.prenom} ${a.nom} (${NOM_FORMULE[d.formule] || d.formule}, ${d.moyen}, référence ${d.reference}) ?\n\nMotif, affiché à l'abonné dans son espace (facultatif)`, "Paiement introuvable");
+        if (motif === null) return;
+        b.disabled = true;
+        const { error } = await client.rpc("admin_refuser_demande", { p_id: d.id, p_motif: motif });
+        b.disabled = false;
+        if (error) return toast(messageErreur(error));
+        const texte = `Bonjour ${a.prenom},\n\nNous n'avons pas pu valider votre demande d'activation (${d.moyen}, référence ${d.reference})${motif.trim() ? ` : ${motif.trim()}` : ""}. Pouvez-vous vérifier la référence du paiement et nous la renvoyer ?\n\n${URL_ESPACE}`;
+        const html = `<div class="ad-retour"><p>Demande de ${esc(a.prenom)} refusée.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), texte)}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`;
+        retour(html); retourAFaire = html;
+        recharger("Demande refusée.");
+        return;
+      }
       if (act === "note") { basculerZone(b, formulaireNote(a)); return; }
       if (act === "deconnecter") {
         if (!confirm(`Déconnecter ${a.prenom} ${a.nom} de tous ses appareils ?\n\nSa session est fermée tout de suite. Son abonnement n'est pas touché : il pourra se reconnecter avec son mot de passe, sur un seul appareil.`)) return;
@@ -1616,6 +1735,7 @@
       if (error) { msg.textContent = messageErreur(error); return; }
       const texte = `Bonjour ${a.prenom},\n\nVotre abonnement à l'espace abonnés des Cours Sésame et SAJ est activé jusqu'au ${dateFr(fin)}.\nConnectez-vous ici : ${URL_ESPACE}\n\nBonne préparation !`;
       retours[a.user_id] = `<div class="ad-retour"><p>Abonnement de ${esc(a.prenom)} actif jusqu'au <b>${dateFr(fin)}</b>.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), texte)}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`;
+      if (f.closest(".ad-afaire")) retourAFaire = retours[a.user_id];
       recharger("Abonnement enregistré.");
       return;
     }
