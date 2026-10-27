@@ -90,7 +90,7 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   caractères Tesseract (français) pour les pages scannées, puis `refresh materialized view public.passages_lexiques`.
 - `functions/facebook` : publication sur la page Facebook « LES Cours Sesame et Saj » (voir l'en-tête du fichier),
   appelable par la base seule (même clé `textes_import`). Actions : `verifier`, `televersement` (image
-  `exclusif/facebook/<nom>.png`), `publier` (tout de suite ou programmé, avec lien, image, carrousel ou vidéo du site),
+  `exclusif/facebook/<nom>.png`, ou lot `facebook/lots/<nom>.pdf`), `deballer` (images d'un lot), `plan` (lignes d'un lot), `publier` (tout de suite ou programmé, avec lien, image, carrousel ou vidéo du site),
   `planif`, `essai`, `programmes`, `statistiques`, `supprimer`. Plan de publication : table `facebook_publications`
   (une ligne par post, `prevue_le`, `statut` programmee, publiee, erreur ou manquee), publiée à l'heure par la tâche
   pg_cron `facebook-publications` (toutes les cinq minutes, action `planif`). La clé permanente de la page est le secret

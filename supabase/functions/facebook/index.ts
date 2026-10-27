@@ -4,8 +4,11 @@
 // fonctions : elle ne va jamais dans le site ni dans le dépôt.
 // Requêtes : POST { action, ... }
 //   verifier                                  : type, expiration et autorisations de la clé, nom et abonnés de la page
-//   televersement { nom }                     : adresse de dépôt signée (deux heures) pour l'image facebook/<nom>.png
-//                                               du stockage privé exclusif (Content-Type image/png)
+//   televersement { nom, format? }            : adresse de dépôt signée (deux heures) pour l'image facebook/<nom>.png
+//                                               du stockage privé exclusif (Content-Type image/png) ; format "lot" :
+//                                               lot d'images facebook/lots/<nom>.pdf (JSON, Content-Type application/pdf)
+//   deballer { nom, debut?, fin? }            : range les images d'un lot sous facebook/<nom>.png, puis efface le lot
+//   plan { nom }                              : insère dans facebook_publications les lignes d'un lot, puis efface le lot
 //   publier { message, lien?, image?, images?, video?, video_titre?, programme? } : publie tout de suite, ou à la date ISO « programme »
 //                                               (entre 10 minutes et 30 jours plus tard) ; « image » = adresse https
 //                                               publique d'une image ; « images » = noms d'images déposées par
@@ -140,9 +143,45 @@ Deno.serve(async (req) => {
   if (action === "televersement") {
     const nom = String(d.nom ?? "");
     if (!/^[a-z0-9-]{1,80}$/.test(nom)) return json({ error: "Nom invalide (minuscules, chiffres et tirets)" }, 400);
-    const { data, error } = await service.storage.from("exclusif").createSignedUploadUrl(`facebook/${nom}.png`);
+    // Un lot d'images (JSON déposé sous l'extension .pdf, seul type de document admis par le stockage) ou une image
+    const chemin = d.format === "lot" ? `facebook/lots/${nom}.pdf` : `facebook/${nom}.png`;
+    const { data, error } = await service.storage.from("exclusif").createSignedUploadUrl(chemin);
     if (error) return json({ error: error.message }, 500);
-    return json({ chemin: `facebook/${nom}.png`, url: data.signedUrl });
+    return json({ chemin, url: data.signedUrl });
+  }
+
+  if (action === "deballer") {
+    // Lot déposé par televersement (format "lot") : [{ nom, png (base64) }], images rangées sous facebook/<nom>.png ;
+    // « debut » et « fin » limitent le travail d'un appel ; le lot est effacé après la dernière image
+    const nom = String(d.nom ?? "");
+    if (!/^[a-z0-9-]{1,80}$/.test(nom)) return json({ error: "Nom invalide" }, 400);
+    const { data: f, error } = await service.storage.from("exclusif").download(`facebook/lots/${nom}.pdf`);
+    if (error || !f) return json({ error: "Lot introuvable" }, 404);
+    const lot = JSON.parse(await f.text()) as { nom: string; png: string }[];
+    const debut = Number(d.debut ?? 0), fin = Math.min(Number(d.fin ?? lot.length), lot.length);
+    const faites: string[] = [];
+    for (const im of lot.slice(debut, fin)) {
+      if (!/^[a-z0-9-]{1,80}$/.test(im.nom)) continue;
+      const octets = Uint8Array.from(atob(im.png), (c) => c.charCodeAt(0));
+      const { error: e } = await service.storage.from("exclusif").upload(`facebook/${im.nom}.png`, octets, { contentType: "image/png", upsert: true });
+      if (!e) faites.push(im.nom);
+    }
+    if (fin >= lot.length) await service.storage.from("exclusif").remove([`facebook/lots/${nom}.pdf`]);
+    return json({ total: lot.length, debut, fin, rangees: faites.length });
+  }
+
+  if (action === "plan") {
+    // Lot de publications déposé par televersement (format "lot") : lignes de facebook_publications, insérées puis le
+    // fichier effacé
+    const nom = String(d.nom ?? "");
+    if (!/^[a-z0-9-]{1,80}$/.test(nom)) return json({ error: "Nom invalide" }, 400);
+    const { data: f, error } = await service.storage.from("exclusif").download(`facebook/lots/${nom}.pdf`);
+    if (error || !f) return json({ error: "Lot introuvable" }, 404);
+    const lignes = JSON.parse(await f.text());
+    const { data: ok, error: e } = await service.from("facebook_publications").insert(lignes).select("id");
+    if (e) return json({ error: e.message }, 500);
+    await service.storage.from("exclusif").remove([`facebook/lots/${nom}.pdf`]);
+    return json({ inserees: ok?.length ?? 0 });
   }
 
   if (action === "publier") {
