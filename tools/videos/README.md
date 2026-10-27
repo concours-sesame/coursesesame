@@ -19,3 +19,12 @@ Règles de fond : citation d'article mot pour mot, vérifiée dans le texte offi
 5. Contrôle de la voix (`pip install faster-whisper`) : `python controle.py scripts/X.json travail/X/video.mp4` transcrit la vidéo et signale les écarts avec le script.
 
 Mise en ligne : copier la vidéo dans `assets/video/<fichier>.mp4`, une image de l'introduction en 540 × 960 dans `assets/img/videos/<fichier>.jpg`, déclarer la vidéo dans `VIDEOS` (assets/js/data.js), puis `node tools/build.js`.
+
+## Vidéo réservée aux abonnés
+
+Le fichier ne va jamais dans le dépôt, qui est public : il est déposé dans le stockage privé `exclusif` de l'espace abonnés, et seule l'affiche est publique. Les abonnés la lisent par une adresse signée de quatre heures, à partir de la formule d'une semaine.
+
+1. Adresse de dépôt : appeler la fonction `import-texte` depuis la base (en-tête `x-import`, clé du coffre `textes_import`) avec `{ "action": "televersement", "nom": "<fichier>", "format": "mp4" }`. Elle renvoie une adresse signée, valable deux heures, pour `exclusif/videos/<fichier>.mp4` (sans remplacement d'un fichier existant).
+2. Envoi : `curl -X PUT -H 'Content-Type: video/mp4' --data-binary @travail/X/video.mp4 '<adresse>'`.
+3. Contenu de l'espace abonnés, en SQL : `insert into contenus (titre, description, type, fichier, matiere, concours, publie)` avec le titre « Une notion, une minute : … », une description qui donne la durée et les articles cités, le type `video`, le fichier `videos/<fichier>.mp4`, la matière seule (« Droit pénal », « Procédure pénale », « Droit civil », « Droit administratif », « Droit OHADA ») et `publie` à `true`.
+4. Aperçu public : l'image de l'introduction en 540 × 960 dans `assets/img/videos/<fichier>.jpg`, une entrée dans `VIDEOS_ABONNES` (assets/js/data.js : `fichier`, `duree`, `tag`, `titre`, `desc`, `concours`), puis `node tools/build.js`. La carte, avec un cadenas, mène à l'inscription ; la vidéo ne figure pas dans les données structurées pour Google.
