@@ -55,14 +55,18 @@
   function lire(id) { try { return JSON.parse(localStorage.getItem(cle(id))) || null; } catch (e) { return null; } }
   function ecrire(id, c) { try { localStorage.setItem(cle(id), JSON.stringify(c)); } catch (e) { /* stockage plein ou bloqué */ } }
 
-  let epreuves = [], acces = null, session = null, marque = "", choix = "magistrature";
+  let epreuves = [], acces = null, session = null, marque = "", choix = "magistrature", autreAppareil = false;
   let ouverte = null; // { e, copie, debutTic, minuteur }
 
   async function chargerAcces() {
     const { data: { session: s } } = await client.auth.getSession();
     session = s;
     acces = null;
+    autreAppareil = false;
     if (!s) return;
+    // Un seul appareil par compte : si le compte a été ouvert ailleurs depuis, la base refuse l'accès sur celui-ci
+    const v = await client.rpc("verifier_appareil");
+    if (!v.error && v.data === false) { autreAppareil = true; return; }
     const [a, p] = await Promise.all([
       client.rpc("acces_corriges_blancs"),
       client.from("profils").select("prenom, nom, telephone").eq("id", s.user.id).maybeSingle()
@@ -209,6 +213,12 @@
     const passe = Math.round(o.copie.ecoule / 60000);
     const bilan = `<p class="cb-temps">Temps de composition : ${passe} minute${passe > 1 ? "s" : ""} sur ${o.e.duree_minutes}.</p>`;
     if (!session || !acces) {
+      if (session && autreAppareil) {
+        zone.innerHTML = `${bilan}<div class="cb-verrou"><h3>Votre compte est ouvert sur un autre appareil</h3>
+        <p>Pour protéger les abonnements, un compte ne peut être utilisé que sur un seul appareil à la fois. Reconnectez-vous ici depuis l'espace abonnés pour retrouver vos corrigés ; l'autre appareil sera alors déconnecté.</p>
+        <div class="hero-ctas"><a class="btn btn-gold" href="${ROOT}espace-abonnes/#connexion" data-retour="concours-blancs/#epreuve-${o.e.id}">Me reconnecter sur cet appareil</a></div></div>`;
+        return;
+      }
       zone.innerHTML = `${bilan}<div class="cb-verrou"><h3>Le corrigé est réservé aux abonnés</h3>
         <p>${session ? "Votre formule actuelle ne comprend pas les corrigés des concours blancs." : "Connectez-vous à votre compte abonné pour lire le corrigé."} Les corrigés ${o.pre ? `(réponses et justifications de chaque ${o.e.epreuve === "cmc" ? "question" : "affirmation"}, avec votre note)` : "(corrigé-type intégral et grille de notation sur 20)"} sont ouverts aux formules d'une semaine et plus, dès 2 000 FCFA.</p>
         <div class="hero-ctas"><a class="btn btn-gold" href="${ROOT}espace-abonnes/#inscription">S'abonner</a>${session ? "" : `<a class="btn btn-ghost" href="${ROOT}espace-abonnes/#connexion" data-retour="concours-blancs/#epreuve-${o.e.id}">Se connecter</a>`}</div></div>`;
