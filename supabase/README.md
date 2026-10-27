@@ -88,6 +88,11 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   PDF « Texte officiel » ou « Jurisprudence ») et `passages` (remplace le texte, page par page, de ces contenus).
   Le texte des textes officiels est ainsi préparé hors du navigateur : extraction par `pdftotext`, reconnaissance de
   caractères Tesseract (français) pour les pages scannées, puis `refresh materialized view public.passages_lexiques`.
+- `functions/facebook` : publication sur la page Facebook « LES Cours Sesame et Saj » (voir l'en-tête du fichier),
+  appelable par la base seule (même clé `textes_import`). Actions : `verifier`, `publier` (tout de suite ou programmé,
+  avec lien ou image), `essai`, `programmes`, `statistiques`, `supprimer`. La clé permanente de la page est le secret
+  des fonctions `FB_PAGE_TOKEN` (application Meta « Sésame Publication », cas d'utilisation « Tout gérer sur votre
+  Page », autorisations `pages_manage_posts`, `pages_read_engagement`, `pages_show_list`, `read_insights`).
 - Recherche dans les textes : `rechercher_textes` (abonnés en cours et administrateur) cherche dans `passages`, pour
   les seuls contenus « Texte officiel » et « Jurisprudence », et renvoie un court extrait par page trouvée. Elle ne
   donne des résultats qu'après « Préparer le texte pour l'agent de révision » dans l'administration.
