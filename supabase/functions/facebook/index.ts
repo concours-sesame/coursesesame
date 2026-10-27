@@ -6,11 +6,15 @@
 //   verifier                                  : type, expiration et autorisations de la clé, nom et abonnés de la page
 //   televersement { nom }                     : adresse de dépôt signée (deux heures) pour l'image facebook/<nom>.png
 //                                               du stockage privé exclusif (Content-Type image/png)
-//   publier { message, lien?, image?, images?, programme? } : publie tout de suite, ou à la date ISO « programme »
+//   publier { message, lien?, image?, images?, video?, video_titre?, programme? } : publie tout de suite, ou à la date ISO « programme »
 //                                               (entre 10 minutes et 30 jours plus tard) ; « image » = adresse https
 //                                               publique d'une image ; « images » = noms d'images déposées par
 //                                               televersement (carrousel, dix au plus) ; avec une image, le lien va
-//                                               dans le texte
+//                                               dans le texte ; « video » = adresse https publique d'un MP4 (vidéo
+//                                               publiée directement sur la page)
+//   planif                                    : publie les lignes de facebook_publications arrivées à leur heure
+//                                               (appelée toutes les cinq minutes par pg_cron ; plus de trois heures de
+//                                               retard : « manquee »)
 //   essai                                     : crée une publication non publiée (invisible) puis la supprime
 //   programmes                                : publications programmées
 //   statistiques { nombre? }                  : dernières publications avec réactions, commentaires et partages
@@ -45,6 +49,64 @@ async function graph(chemin: string, methode = "GET", params: Record<string, str
   const donnees = masquer(await rep.json().catch(() => ({})));
   // La clé n'est jamais renvoyée : seules les données de Facebook (ou son message d'erreur, clé masquée) le sont
   return { ok: rep.ok, statut: rep.status, donnees };
+}
+
+// Publication immédiate ou programmée chez Facebook : texte seul (avec aperçu du lien), image par adresse, ou
+// carrousel d'images déposées dans le stockage privé (facebook/<nom>.png)
+// deno-lint-ignore no-explicit-any
+async function publier(service: any, d: Record<string, unknown>): Promise<{ statut: number; donnees: unknown }> {
+  const message = String(d.message ?? "").trim();
+  if (!message) return { statut: 400, donnees: { error: "Message vide" } };
+  const params: Record<string, string> = {};
+  if (d.programme) {
+    const t = Math.floor(new Date(String(d.programme)).getTime() / 1000);
+    const maintenant = Math.floor(Date.now() / 1000);
+    if (!Number.isFinite(t) || t < maintenant + 600 || t > maintenant + 30 * 86400) {
+      return { statut: 400, donnees: { error: "La date doit être comprise entre 10 minutes et 30 jours à partir de maintenant" } };
+    }
+    params.published = "false";
+    params.scheduled_publish_time = String(t);
+  }
+  const images = Array.isArray(d.images) ? d.images.map(String) : [];
+  if (images.length > 10) return { statut: 400, donnees: { error: "Dix images au plus" } };
+  let r;
+  if (d.video) {
+    // Vidéo publiée directement sur la page : Facebook la télécharge depuis son adresse publique (site)
+    const video = String(d.video);
+    if (!video.startsWith("https://")) return { statut: 400, donnees: { error: "Vidéo : adresse https attendue" } };
+    const corps = new URLSearchParams({ ...params, access_token: JETON, file_url: video,
+      description: d.lien ? `${message}\n\n${d.lien}` : message, ...(d.video_titre ? { title: String(d.video_titre) } : {}) });
+    const rep = await fetch(`https://graph-video.facebook.com/v26.0/${PAGE}/videos`, { method: "POST", body: corps });
+    return { statut: rep.ok ? 200 : 502, donnees: masquer(await rep.json().catch(() => ({}))) };
+  }
+  if (images.length) {
+    // Chaque image est d'abord envoyée sans être publiée, puis toutes sont jointes à une seule publication
+    const ids: string[] = [];
+    for (const nom of images) {
+      if (!/^[a-z0-9-]{1,80}$/.test(nom)) return { statut: 400, donnees: { error: `Nom d'image invalide : ${nom}` } };
+      const { data: fichier, error } = await service.storage.from("exclusif").download(`facebook/${nom}.png`);
+      if (error || !fichier) return { statut: 404, donnees: { error: `Image introuvable : ${nom}` } };
+      const form = new FormData();
+      form.append("access_token", JETON);
+      form.append("published", "false");
+      if (params.scheduled_publish_time) form.append("temporary", "true");
+      form.append("source", fichier, `${nom}.png`);
+      const rep = await fetch(`${GRAPH}/${PAGE}/photos`, { method: "POST", body: form });
+      const photo = masquer(await rep.json().catch(() => ({})));
+      if (!rep.ok) return { statut: 502, donnees: { etape: `image ${nom}`, ...photo } };
+      ids.push(String(photo.id));
+    }
+    const media: Record<string, string> = {};
+    ids.forEach((id, i) => media[`attached_media[${i}]`] = JSON.stringify({ media_fbid: id }));
+    r = await graph(`${PAGE}/feed`, "POST", { ...params, ...media, message: d.lien ? `${message}\n\n${d.lien}` : message });
+  } else if (d.image) {
+    const image = String(d.image);
+    if (!image.startsWith("https://")) return { statut: 400, donnees: { error: "Image : adresse https attendue" } };
+    r = await graph(`${PAGE}/photos`, "POST", { ...params, url: image, caption: d.lien ? `${message}\n\n${d.lien}` : message });
+  } else {
+    r = await graph(`${PAGE}/feed`, "POST", { ...params, message, ...(d.lien ? { link: String(d.lien) } : {}) });
+  }
+  return { statut: r.ok ? 200 : 502, donnees: r.donnees };
 }
 
 Deno.serve(async (req) => {
@@ -84,49 +146,36 @@ Deno.serve(async (req) => {
   }
 
   if (action === "publier") {
-    const message = String(d.message ?? "").trim();
-    if (!message) return json({ error: "Message vide" }, 400);
-    const params: Record<string, string> = {};
-    if (d.programme) {
-      const t = Math.floor(new Date(String(d.programme)).getTime() / 1000);
-      const maintenant = Math.floor(Date.now() / 1000);
-      if (!Number.isFinite(t) || t < maintenant + 600 || t > maintenant + 30 * 86400) {
-        return json({ error: "La date doit être comprise entre 10 minutes et 30 jours à partir de maintenant" }, 400);
+    const r = await publier(service, d);
+    return json(r.donnees, r.statut);
+  }
+
+  if (action === "planif") {
+    // Appelée toutes les cinq minutes par pg_cron : publie les publications du plan arrivées à leur heure
+    const { data: dues } = await service.from("facebook_publications").select("id, prevue_le, message, lien, images, video, video_titre")
+      .eq("statut", "programmee").lte("prevue_le", new Date().toISOString()).order("prevue_le").limit(3);
+    const bilan = [];
+    for (const p of dues ?? []) {
+      // Réservation de la ligne : une autre exécution ne la reprendra pas
+      const { data: prise } = await service.from("facebook_publications").update({ statut: "en_cours" })
+        .eq("id", p.id).eq("statut", "programmee").select("id");
+      if (!prise?.length) continue;
+      if (Date.now() - new Date(p.prevue_le).getTime() > 3 * 3600 * 1000) {
+        await service.from("facebook_publications").update({ statut: "manquee", erreur: "Plus de trois heures de retard" }).eq("id", p.id);
+        bilan.push({ id: p.id, statut: "manquee" });
+        continue;
       }
-      params.published = "false";
-      params.scheduled_publish_time = String(t);
-    }
-    let r;
-    const images = Array.isArray(d.images) ? d.images.map(String) : [];
-    if (images.length > 10) return json({ error: "Dix images au plus" }, 400);
-    if (images.length) {
-      // Chaque image est d'abord envoyée sans être publiée, puis toutes sont jointes à une seule publication
-      const ids: string[] = [];
-      for (const nom of images) {
-        if (!/^[a-z0-9-]{1,80}$/.test(nom)) return json({ error: `Nom d'image invalide : ${nom}` }, 400);
-        const { data: fichier, error } = await service.storage.from("exclusif").download(`facebook/${nom}.png`);
-        if (error || !fichier) return json({ error: `Image introuvable : ${nom}` }, 404);
-        const form = new FormData();
-        form.append("access_token", JETON);
-        form.append("published", "false");
-        if (params.scheduled_publish_time) form.append("temporary", "true");
-        form.append("source", fichier, `${nom}.png`);
-        const rep = await fetch(`${GRAPH}/${PAGE}/photos`, { method: "POST", body: form });
-        const photo = masquer(await rep.json().catch(() => ({})));
-        if (!rep.ok) return json({ etape: `image ${nom}`, ...photo }, 502);
-        ids.push(String(photo.id));
+      const r = await publier(service, { message: p.message, lien: p.lien, images: p.images, video: p.video, video_titre: p.video_titre });
+      const id = (r.donnees as { id?: string }).id;
+      if (r.statut === 200 && id) {
+        await service.from("facebook_publications").update({ statut: "publiee", fb_id: id, publiee_le: new Date().toISOString() }).eq("id", p.id);
+        bilan.push({ id: p.id, statut: "publiee" });
+      } else {
+        await service.from("facebook_publications").update({ statut: "erreur", erreur: JSON.stringify(r.donnees).slice(0, 1000) }).eq("id", p.id);
+        bilan.push({ id: p.id, statut: "erreur" });
       }
-      const media: Record<string, string> = {};
-      ids.forEach((id, i) => media[`attached_media[${i}]`] = JSON.stringify({ media_fbid: id }));
-      r = await graph(`${PAGE}/feed`, "POST", { ...params, ...media, message: d.lien ? `${message}\n\n${d.lien}` : message });
-    } else if (d.image) {
-      const image = String(d.image);
-      if (!image.startsWith("https://")) return json({ error: "Image : adresse https attendue" }, 400);
-      r = await graph(`${PAGE}/photos`, "POST", { ...params, url: image, caption: d.lien ? `${message}\n\n${d.lien}` : message });
-    } else {
-      r = await graph(`${PAGE}/feed`, "POST", { ...params, message, ...(d.lien ? { link: String(d.lien) } : {}) });
     }
-    return json(r.donnees, r.ok ? 200 : 502);
+    return json({ traitees: bilan });
   }
 
   if (action === "essai") {
