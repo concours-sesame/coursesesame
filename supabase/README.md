@@ -88,6 +88,9 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   PDF « Texte officiel » ou « Jurisprudence ») et `passages` (remplace le texte, page par page, de ces contenus).
   Le texte des textes officiels est ainsi préparé hors du navigateur : extraction par `pdftotext`, reconnaissance de
   caractères Tesseract (français) pour les pages scannées, puis `refresh materialized view public.passages_lexiques`.
+- Textes de loidici.biz : `sources_loidici` (table privée, 5 879 pages relevées le 27 octobre 2026 par pg_net, voir la
+  migration `20261027150000_sources_loidici.sql`), pour la rédaction des fiches de révision (`tools/fiches/README.md`).
+  Recherche : `select id, titre from sources_loidici where to_tsvector('french', titre || ' ' || texte) @@ websearch_to_tsquery('french', '…')`.
 - `functions/facebook` : publication sur la page Facebook « LES Cours Sesame et Saj » (voir l'en-tête du fichier),
   appelable par la base seule (même clé `textes_import`). Actions : `verifier`, `televersement` (image
   `exclusif/facebook/<nom>.png`, ou lot `facebook/lots/<nom>.pdf`), `deballer` (images d'un lot), `plan` (lignes d'un lot), `publier` (tout de suite ou programmé, avec lien, image, carrousel ou vidéo du site),
