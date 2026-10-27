@@ -15,7 +15,7 @@
 //   planif                                    : publie les lignes de facebook_publications arrivées à leur heure
 //                                               (appelée toutes les cinq minutes par pg_cron ; plus de trois heures de
 //                                               retard : « manquee »)
-//   essai                                     : crée une publication non publiée (invisible) puis la supprime
+//   essai { video? }                          : crée une publication (ou une vidéo) non publiée, invisible, puis la supprime
 //   programmes                                : publications programmées
 //   statistiques { nombre? }                  : dernières publications avec réactions, commentaires et partages
 //   supprimer { id }                          : supprime une publication de la page
@@ -179,6 +179,15 @@ Deno.serve(async (req) => {
   }
 
   if (action === "essai") {
+    if (d.video) {
+      // Essai de vidéo : envoi sans publication (invisible), puis suppression
+      const corps = new URLSearchParams({ access_token: JETON, file_url: String(d.video), published: "false", description: "Essai" });
+      const rep = await fetch(`https://graph-video.facebook.com/v26.0/${PAGE}/videos`, { method: "POST", body: corps });
+      const v = masquer(await rep.json().catch(() => ({})));
+      if (!rep.ok || !v.id) return json({ etape: "creation", ...v }, 502);
+      const s = await graph(String(v.id), "DELETE");
+      return json({ creation: "ok", id: v.id, suppression: s.ok ? "ok" : s.donnees });
+    }
     const r = await graph(`${PAGE}/feed`, "POST", { message: "Essai de connexion (publication non publiée)", published: "false" });
     if (!r.ok) return json({ etape: "creation", ...r.donnees as object }, 502);
     const id = String((r.donnees as { id?: string }).id ?? "");
