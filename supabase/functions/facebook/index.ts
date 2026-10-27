@@ -4,9 +4,13 @@
 // fonctions : elle ne va jamais dans le site ni dans le dépôt.
 // Requêtes : POST { action, ... }
 //   verifier                                  : type, expiration et autorisations de la clé, nom et abonnés de la page
-//   publier { message, lien?, image?, programme? } : publie tout de suite, ou à la date ISO « programme »
+//   televersement { nom }                     : adresse de dépôt signée (deux heures) pour l'image facebook/<nom>.png
+//                                               du stockage privé exclusif (Content-Type image/png)
+//   publier { message, lien?, image?, images?, programme? } : publie tout de suite, ou à la date ISO « programme »
 //                                               (entre 10 minutes et 30 jours plus tard) ; « image » = adresse https
-//                                               publique d'une image, le lien va alors dans le texte
+//                                               publique d'une image ; « images » = noms d'images déposées par
+//                                               televersement (carrousel, dix au plus) ; avec une image, le lien va
+//                                               dans le texte
 //   essai                                     : crée une publication non publiée (invisible) puis la supprime
 //   programmes                                : publications programmées
 //   statistiques { nombre? }                  : dernières publications avec réactions, commentaires et partages
@@ -71,6 +75,14 @@ Deno.serve(async (req) => {
     });
   }
 
+  if (action === "televersement") {
+    const nom = String(d.nom ?? "");
+    if (!/^[a-z0-9-]{1,80}$/.test(nom)) return json({ error: "Nom invalide (minuscules, chiffres et tirets)" }, 400);
+    const { data, error } = await service.storage.from("exclusif").createSignedUploadUrl(`facebook/${nom}.png`);
+    if (error) return json({ error: error.message }, 500);
+    return json({ chemin: `facebook/${nom}.png`, url: data.signedUrl });
+  }
+
   if (action === "publier") {
     const message = String(d.message ?? "").trim();
     if (!message) return json({ error: "Message vide" }, 400);
@@ -85,7 +97,29 @@ Deno.serve(async (req) => {
       params.scheduled_publish_time = String(t);
     }
     let r;
-    if (d.image) {
+    const images = Array.isArray(d.images) ? d.images.map(String) : [];
+    if (images.length > 10) return json({ error: "Dix images au plus" }, 400);
+    if (images.length) {
+      // Chaque image est d'abord envoyée sans être publiée, puis toutes sont jointes à une seule publication
+      const ids: string[] = [];
+      for (const nom of images) {
+        if (!/^[a-z0-9-]{1,80}$/.test(nom)) return json({ error: `Nom d'image invalide : ${nom}` }, 400);
+        const { data: fichier, error } = await service.storage.from("exclusif").download(`facebook/${nom}.png`);
+        if (error || !fichier) return json({ error: `Image introuvable : ${nom}` }, 404);
+        const form = new FormData();
+        form.append("access_token", JETON);
+        form.append("published", "false");
+        if (params.scheduled_publish_time) form.append("temporary", "true");
+        form.append("source", fichier, `${nom}.png`);
+        const rep = await fetch(`${GRAPH}/${PAGE}/photos`, { method: "POST", body: form });
+        const photo = masquer(await rep.json().catch(() => ({})));
+        if (!rep.ok) return json({ etape: `image ${nom}`, ...photo }, 502);
+        ids.push(String(photo.id));
+      }
+      const media: Record<string, string> = {};
+      ids.forEach((id, i) => media[`attached_media[${i}]`] = JSON.stringify({ media_fbid: id }));
+      r = await graph(`${PAGE}/feed`, "POST", { ...params, ...media, message: d.lien ? `${message}\n\n${d.lien}` : message });
+    } else if (d.image) {
       const image = String(d.image);
       if (!image.startsWith("https://")) return json({ error: "Image : adresse https attendue" }, 400);
       r = await graph(`${PAGE}/photos`, "POST", { ...params, url: image, caption: d.lien ? `${message}\n\n${d.lien}` : message });
