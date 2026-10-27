@@ -62,6 +62,9 @@ def lire(f):
     meta = dict(l.split(': ', 1) for l in tete.strip().split('\n'))
     return meta, md
 
+# Mention de bas de fiche par défaut ; une fiche peut la remplacer par une ligne « note: … » dans son en-tête
+NOTE = "Les articles sont cités d'après le texte publié au Journal officiel et, pour les dispositions modifiées, d'après la loi modificative."
+
 CONCOURS = {'infj': 'Magistrature', 'greffe': 'Greffe', 'penitentiaire': 'Pénitentiaire', 'eppjej': 'EPPJEJ', 'ena': 'ENA'}
 
 def page(meta, md):
@@ -98,7 +101,8 @@ td{{padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top}}
 tr:nth-child(even) td{{background:var(--cream)}}
 b{{font-weight:700}}
 h2+p,h2+ul,h2+ol,h2+blockquote{{break-before:avoid}}
-.fin{{margin-top:18px;padding-top:8px;border-top:1px solid var(--line);font-size:8.6pt;color:var(--muted)}}
+.fin{{margin-top:12px;padding-top:6px;border-top:1px solid var(--line);font-size:8.2pt;color:var(--muted);break-before:avoid;break-inside:avoid}}
+ol:last-of-type li:last-child,p:has(+ .fin){{break-after:avoid}}
 </style></head><body>
 <div class="bandeau">{LOGO}<div><div class="nom">Les Cours Sésame et SAJ</div><div class="base">Formation juridique · Concours &amp; excellence</div></div><div class="num">Fiche n°&nbsp;{meta['numero']}<br>Fiches de révision</div></div>
 <div class="matiere">{html.escape(meta['matiere'])}</div>
@@ -107,7 +111,7 @@ h2+p,h2+ul,h2+ol,h2+blockquote{{break-before:avoid}}
 <p class="meta"><b>Concours :</b> {concours}</p>
 <p class="meta"><b>Sources :</b> {enligne(meta['sources'])}</p>
 {corps(md)}
-<p class="fin">Fiche réservée aux abonnés des Cours Sésame et SAJ, pour un usage personnel. Les articles sont cités d'après le texte publié au Journal officiel et, pour les dispositions modifiées, d'après la loi modificative.</p>
+<p class="fin">Fiche réservée aux abonnés des Cours Sésame et SAJ, pour un usage personnel. {enligne(meta.get('note', NOTE))}</p>
 </body></html>'''
 
 if __name__ == '__main__':
