@@ -27,14 +27,19 @@ function cleJson(nom: string, ancien: string): string {
 }
 const json = (corps: unknown, statut = 200) => new Response(JSON.stringify(corps), { status: statut, headers: { "Content-Type": "application/json" } });
 
+// Clé de la page, débarrassée de ce qu'un copier-coller depuis l'Explorateur de l'API Graph peut y ajouter (guillemets,
+// virgule, ligne suivante)
+const JETON = (Deno.env.get("FB_PAGE_TOKEN") ?? "").trim().replace(/^"/, "").split(/["\s,]/)[0];
+// Facebook recopie la clé dans certains messages d'erreur : elle est masquée avant toute réponse
+const masquer = (x: unknown) => JSON.parse(JSON.stringify(x ?? {}).split(JETON || "\u0000").join("[clé masquée]"));
+
 async function graph(chemin: string, methode = "GET", params: Record<string, string> = {}) {
-  const jeton = Deno.env.get("FB_PAGE_TOKEN") ?? "";
-  const corps = new URLSearchParams({ ...params, access_token: jeton });
+  const corps = new URLSearchParams({ ...params, access_token: JETON });
   const rep = methode === "GET"
     ? await fetch(`${GRAPH}/${chemin}${chemin.includes("?") ? "&" : "?"}${corps}`)
     : await fetch(`${GRAPH}/${chemin}`, { method: methode, body: corps });
-  const donnees = await rep.json().catch(() => ({}));
-  // La clé n'est jamais renvoyée : seules les données de Facebook (ou son message d'erreur) le sont
+  const donnees = masquer(await rep.json().catch(() => ({})));
+  // La clé n'est jamais renvoyée : seules les données de Facebook (ou son message d'erreur, clé masquée) le sont
   return { ok: rep.ok, statut: rep.status, donnees };
 }
 
@@ -45,7 +50,7 @@ Deno.serve(async (req) => {
   });
   const { data: valide } = await service.rpc("textes_verifier_import", { p_cle: req.headers.get("x-import") ?? "" });
   if (valide !== true) return json({ error: "Accès refusé" }, 403);
-  if (!Deno.env.get("FB_PAGE_TOKEN")) return json({ error: "Secret FB_PAGE_TOKEN absent" }, 500);
+  if (!JETON) return json({ error: "Secret FB_PAGE_TOKEN absent" }, 500);
 
   let d: Record<string, unknown>;
   try {
@@ -56,8 +61,7 @@ Deno.serve(async (req) => {
   const action = String(d.action ?? "");
 
   if (action === "verifier") {
-    const jeton = Deno.env.get("FB_PAGE_TOKEN")!;
-    const debug = await graph(`debug_token?input_token=${encodeURIComponent(jeton)}`);
+    const debug = await graph(`debug_token?input_token=${encodeURIComponent(JETON)}`);
     const info = (debug.donnees as { data?: Record<string, unknown> }).data ?? {};
     const page = await graph(`${PAGE}?fields=name,link,fan_count,followers_count`);
     return json({
