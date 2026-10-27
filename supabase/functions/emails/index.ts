@@ -1,6 +1,7 @@
 // Fonction « emails » : envoi des e-mails aux abonnés par Brevo, depuis infos@coursesesame.com.
 //   { action: "planif" }          appel de la tâche planifiée (en-tête x-planif, vérifié par la base) : bienvenue,
-//                                 rappels de fin d'abonnement (7 et 3 jours avant), relance d'inactivité,
+//                                 invitation à renouveler (10 jours avant la fin), rappels de fin d'abonnement
+//                                 (7 et 3 jours avant), relance d'inactivité,
 //                                 annonce quotidienne des nouveautés, récapitulatif du lundi, et alertes à
 //                                 l'administrateur (nouvelle demande d'activation, nouveau compte)
 //   { action: "etat" }            administrateur : envoi ouvert ou fermé, clé Brevo enregistrée ou non
@@ -111,6 +112,7 @@ async function planif(service: SupabaseClient) {
     if (!id) continue;
     const m = l.type === "bienvenue" ? bienvenue(l.prenom, l.donnees)
       : l.type === "rappel_fin" ? rappel(l.prenom, l.donnees)
+      : l.type === "renouvellement" ? renouvellement(l.prenom, l.donnees)
       : l.type === "inactif" ? relance(l.prenom, l.donnees)
       : l.type === "campagne" ? campagne(l.prenom, l.donnees)
       : l.type === "hebdo" ? hebdo(l.prenom, l.donnees)
@@ -123,7 +125,7 @@ async function planif(service: SupabaseClient) {
       erreurs++;
       continue;
     }
-    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, ["nouveautes", "inactif", "campagne", "hebdo"].includes(l.type) ? String(l.donnees.jeton ?? "") : undefined);
+    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, ["nouveautes", "inactif", "campagne", "hebdo", "renouvellement"].includes(l.type) ? String(l.donnees.jeton ?? "") : undefined);
     await service.from("emails_envoyes").update({ statut: echec ? "erreur" : "envoye", erreur: echec }).eq("id", id);
     if (echec) erreurs++; else envoyes++;
     if (l.type === "nouveautes") annonce = true;
@@ -196,11 +198,47 @@ function rappel(prenom: string, d: Record<string, unknown>) {
   const message = encodeURIComponent(`Bonjour, je souhaite prolonger mon abonnement à l'espace abonnés (fin le ${fin}).`);
   const corps = `<p>Bonjour ${esc(prenom)},</p>
 <p>Votre abonnement à l'espace abonnés se termine le <b>${fin}</b> au soir.</p>
-<p>Pour continuer sans interruption, réglez la formule de votre choix par Mobile Money, puis envoyez-nous la référence du paiement sur WhatsApp. La prolongation s'ajoute à la suite de votre abonnement en cours, vous ne perdez donc aucun jour.</p>
+<p>Pour continuer sans interruption, réglez la formule de votre choix par Mobile Money, puis saisissez la référence du paiement dans votre espace, en haut de la page, rubrique « Renouveler en ligne ». Vous pouvez aussi nous l'envoyer sur WhatsApp. La prolongation s'ajoute à la suite de votre abonnement en cours, vous ne perdez donc aucun jour.</p>
+${bouton("Renouveler dans mon espace", `${SITE}/espace-abonnes/`)}
 ${bouton("Prolonger sur WhatsApp", `https://wa.me/${WA}?text=${message}`, "#25d366", "#ffffff")}
 <p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
-  const texte = `Bonjour ${prenom},\n\nVotre abonnement à l'espace abonnés se termine le ${fin} au soir.\n\nPour continuer sans interruption, réglez la formule de votre choix par Mobile Money, puis envoyez-nous la référence du paiement sur WhatsApp au ${WHATSAPP}. La prolongation s'ajoute à la suite de votre abonnement en cours, vous ne perdez donc aucun jour.\n\nL'équipe des Cours Sésame et SAJ`;
+  const texte = `Bonjour ${prenom},\n\nVotre abonnement à l'espace abonnés se termine le ${fin} au soir.\n\nPour continuer sans interruption, réglez la formule de votre choix par Mobile Money, puis saisissez la référence du paiement dans votre espace, en haut de la page, rubrique « Renouveler en ligne » (${SITE}/espace-abonnes/). Vous pouvez aussi nous l'envoyer sur WhatsApp au ${WHATSAPP}. La prolongation s'ajoute à la suite de votre abonnement en cours, vous ne perdez donc aucun jour.\n\nL'équipe des Cours Sésame et SAJ`;
   return { sujet, html: gabarit(sujet, corps, piedService), texte };
+}
+
+// Invitation à renouveler, dix jours avant la fin : ce que l'abonné a dans son espace, les formules longues et leur
+// économie par rapport à des mois pris un à un, le parrainage
+const PRIX_MOIS = 5000;
+const LONGUES: [string, number, number][] = [["3 mois", 12500, 3], ["6 mois", 22500, 6], ["12 mois", 40000, 12]];
+const fcfa = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} FCFA`;
+function renouvellement(prenom: string, d: Record<string, unknown>) {
+  const fin = dateFr(d.fin), jeton = String(d.jeton ?? "");
+  const nouveaux = Number(d.nouveaux ?? 0), titres = (d.titres ?? []) as string[];
+  const sujet = `Votre préparation continue après le ${fin} ?`;
+  const message = encodeURIComponent(`Bonjour, je souhaite renouveler mon abonnement à l'espace abonnés (fin le ${fin}).`);
+  const atouts = [
+    "70 séries de concours blancs chronométrées (magistrature, Greffe, pénitentiaire, EPPJEJ, ENA), avec le corrigé-type et la grille sur 20 de chacune des 315 épreuves",
+    "les vidéos « Une notion, une minute » réservées aux abonnés",
+    "plus de 50 textes officiels et décisions, avec une recherche dans le texte",
+    "la révision du jour, le simulateur de grand oral et le sujet de la semaine",
+    "nos ouvrages complets, à partir de la formule d'un mois",
+  ];
+  const formules = LONGUES.map(([nom, prix, mois]) => `${nom} : ${fcfa(prix)}, au lieu de ${fcfa(PRIX_MOIS * mois)} en prenant ${mois} mois un à un`);
+  const nouv = nouveaux
+    ? `<p>Depuis le début de votre abonnement, ${nouveaux === 1 ? "un nouveau contenu a été ajouté" : `${nouveaux} nouveaux contenus ont été ajoutés`}, notamment</p><ul>${titres.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`
+    : "";
+  const corps = `<p>Bonjour ${esc(prenom)},</p>
+<p>Votre abonnement à l'espace abonnés se termine le <b>${fin}</b>. Pour ne pas interrompre votre préparation, vous pouvez le renouveler dès maintenant : la nouvelle période s'ajoute à la suite de l'abonnement en cours, vous ne perdez aucun jour.</p>
+${nouv}<p>En renouvelant, vous gardez</p><ul>${atouts.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+<p>Le mois coûte ${fcfa(PRIX_MOIS)}. Les formules longues reviennent moins cher :</p><ul>${formules.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+<p>Pour renouveler, réglez la formule choisie par Mobile Money, puis saisissez la référence du paiement dans votre espace, en haut de la page, rubrique « Renouveler en ligne ». Vous pouvez aussi nous l'envoyer sur WhatsApp.</p>
+${bouton("Renouveler dans mon espace", `${SITE}/espace-abonnes/`)}
+${bouton("Renouveler sur WhatsApp", `https://wa.me/${WA}?text=${message}`, "#25d366", "#ffffff")}
+<p>Un ami prépare aussi un concours ? Donnez-lui votre code de parrainage, visible dans votre espace : à son premier abonnement, vous recevez 7 jours offerts.</p>
+<p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
+  const pied = `${piedService} Vous pouvez <a href="${lienDesinscription(jeton)}" style="color:#5b6475">ne plus recevoir nos e-mails d'information</a>, ou changer ce choix dans votre espace, rubrique Mon compte.`;
+  const texte = `Bonjour ${prenom},\n\nVotre abonnement à l'espace abonnés se termine le ${fin}. Pour ne pas interrompre votre préparation, vous pouvez le renouveler dès maintenant : la nouvelle période s'ajoute à la suite de l'abonnement en cours, vous ne perdez aucun jour.\n\n${nouveaux ? `Depuis le début de votre abonnement, ${nouveaux === 1 ? "un nouveau contenu a été ajouté" : `${nouveaux} nouveaux contenus ont été ajoutés`}, notamment\n${titres.map((t) => "- " + t).join("\n")}\n\n` : ""}En renouvelant, vous gardez\n${atouts.map((x) => "- " + x).join("\n")}\n\nLe mois coûte ${fcfa(PRIX_MOIS)}. Les formules longues reviennent moins cher :\n${formules.map((x) => "- " + x).join("\n")}\n\nPour renouveler, réglez la formule choisie par Mobile Money, puis saisissez la référence du paiement dans votre espace, rubrique « Renouveler en ligne » (${SITE}/espace-abonnes/), ou envoyez-la-nous sur WhatsApp au ${WHATSAPP}.\n\nUn ami prépare aussi un concours ? Donnez-lui votre code de parrainage, visible dans votre espace : à son premier abonnement, vous recevez 7 jours offerts.\n\nL'équipe des Cours Sésame et SAJ\n\nNe plus recevoir nos e-mails d'information ${lienDesinscription(jeton)}`;
+  return { sujet, html: gabarit(sujet, corps, pied), texte };
 }
 
 function relance(prenom: string, d: Record<string, unknown>) {

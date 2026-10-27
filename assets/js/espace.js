@@ -865,6 +865,8 @@
     afficher();
   }
 
+  // Le renouvellement en ligne s'affiche dix jours avant la fin, quand part l'e-mail de renouvellement
+  const JOURS_RENOUVELLEMENT = 10;
   function statutHTML() {
     const { profil, abo, email } = etat;
     const msg = (debut) => `Bonjour Les Cours Sésame & SAJ,\n\n${debut}\n👤 ${profil.prenom} ${profil.nom}\n📧 ${email}\n📞 ${profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
@@ -873,10 +875,10 @@
       return `<div class="ea-statut ea-statut-ok">
           <div><span class="eyebrow">Abonnement actif</span>
           <h3>Votre accès est ouvert jusqu'au ${dateFr(abo.fin)}.</h3>
-          ${j <= 7 ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
+          ${j <= JOURS_RENOUVELLEMENT ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
           ${!etat.videos ? `<p>Votre formule donne accès à tous les contenus, sauf les vidéos, réservées aux formules d'une semaine et plus, et les ouvrages complets, réservés aux formules d'un mois et plus.</p>` : etat.ouvrages ? "" : `<p>Votre formule donne accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus.</p>`}</div>
-          ${j <= 7 ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler sur WhatsApp</a>` : ""}
-        </div>${j <= 7 && tarifsAbo().length ? `<div class="ea-statut ea-statut-attente ea-renouvellement"><span class="eyebrow">Renouveler en ligne</span>${paiementHTML(true)}</div>` : ""}`;
+          ${j <= JOURS_RENOUVELLEMENT ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler sur WhatsApp</a>` : ""}
+        </div>${j <= JOURS_RENOUVELLEMENT && tarifsAbo().length ? `<div class="ea-statut ea-statut-attente ea-renouvellement"><span class="eyebrow">Renouveler en ligne</span>${paiementHTML(true)}</div>` : ""}`;
     }
     if (etat.suspendu) {
       const reste = abo.fin ? Math.max(0, Math.round((versDate(abo.fin) - versDate(etat.suspendu)) / 864e5) + 1) : 0;
