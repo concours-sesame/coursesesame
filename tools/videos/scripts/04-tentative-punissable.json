@@ -37,8 +37,8 @@
    "items": [
     {
      "n": "1",
-     "t": "Un commencement d'exécution",
-     "d": "Un acte qui révèle, sans équivoque, l'intention irrévocable",
+     "t": "Un acte sans équivoque",
+     "d": "Il révèle l'intention irrévocable de commettre l'infraction",
      "cue": 1
     },
     {
@@ -50,7 +50,7 @@
    ],
    "dit": [
     "Deux conditions, donc.",
-    "Un *commencement d'exécution* : un acte qui révèle, sans équivoque, l'intention irrévocable de commettre l'infraction.",
+    "Un acte *sans équivoque* : il révèle l'intention irrévocable de commettre l'infraction.",
     "Et l'absence de *désistement volontaire* : l'échec tient à une circonstance indépendante de la volonté de l'auteur."
    ]
   },
@@ -111,7 +111,7 @@
    "items": [
     {
      "t": "Les actes préparatoires",
-     "d": "Le simple achat d'une arme ne suffit pas : il faut un acte qui engage l'exécution.",
+     "d": "Le simple achat d'une arme ne suffit pas : il faut un acte qui révèle, sans équivoque, l'intention irrévocable.",
      "cue": 0
     }
    ],
