@@ -1,0 +1,111 @@
+[
+{
+ "n": "s01-01", "prevue": "2026-10-28T07:30:00Z", "creneau": "matin", "rubrique": "QCM du jour", "concours": ["infj","greffe","penitentiaire","eppjej"],
+ "titre": "QCM : durée de la garde à vue",
+ "visuel": {"fond": "navy", "etiquette": "QCM du jour, procédure pénale", "titre": "Quelle est la durée de la garde à vue d'un majeur ?",
+   "options": ["Vingt-quatre heures, sans prolongation", "Quarante-huit heures, prolongeable de quarante-huit heures par le procureur", "Soixante-douze heures", "Huit jours"],
+   "pied": "Réponse ce soir à 19 h 30"},
+ "message": "QCM du jour, procédure pénale.\n\nQuelle est la durée de la garde à vue d'un majeur ?\n\nA. Vingt-quatre heures, sans prolongation\nB. Quarante-huit heures, prolongeable de quarante-huit heures par le procureur\nC. Soixante-douze heures\nD. Huit jours\n\nDonnez votre réponse en commentaire. La correction arrive ce soir à 19 h 30.\n\nLes Cours Sésame et SAJ"
+},
+{
+ "n": "s01-02", "prevue": "2026-10-28T19:30:00Z", "creneau": "soir", "rubrique": "Correction du QCM", "concours": ["infj","greffe","penitentiaire","eppjej"],
+ "titre": "Correction du QCM : garde à vue",
+ "visuel": {"fond": "cream", "etiquette": "Correction du QCM de ce matin", "titre": "Réponse B : quarante-huit heures, prolongeables de quarante-huit heures",
+   "points": [["La règle", "L'officier de police judiciaire ne peut retenir la personne plus de quarante-huit heures. Le procureur peut autoriser une prolongation de quarante-huit heures (article 72 du Code de procédure pénale)."], ["Le point de départ", "La garde à vue court de l'heure de l'appréhension ou de la présentation dans les locaux (article 73)."]],
+   "pied": "Dix questions gratuites : coursesesame.com/qcm/droit-penal"},
+ "message": "Correction du QCM de ce matin : la bonne réponse est la B.\n\nL'officier de police judiciaire ne peut retenir la personne plus de quarante-huit heures. Le procureur peut autoriser une prolongation de quarante-huit heures (article 72 du Code de procédure pénale).\n\nÀ retenir aussi : la garde à vue court de l'heure de l'appréhension ou de la présentation dans les locaux, et non de la notification des droits (article 73).\n\nTestez-vous sur les dix questions du QCM gratuit de droit pénal et de procédure pénale, avec la correction expliquée de chaque réponse :",
+ "lien": "https://coursesesame.com/qcm/droit-penal/"
+},
+{
+ "n": "s01-03", "prevue": "2026-10-29T07:30:00Z", "creneau": "matin", "rubrique": "Le piège des concours", "concours": ["infj","greffe","penitentiaire","eppjej"],
+ "titre": "Piège : légitime défense ou vengeance",
+ "visuel": {"fond": "navy", "etiquette": "Le piège des concours", "titre": "Défense ou vengeance ?",
+   "etapes": [["Une attaque injuste", ""], ["Impossible à écarter autrement", ""], ["Une défense concomitante", "Pendant l'attaque, pas après"], ["Une défense proportionnée", "Au danger et à la gravité de l'attaque"]],
+   "pied": "Article 97 du Code pénal"},
+ "message": "Le piège des concours : confondre la défense et la vengeance.\n\nSelon l'article 97 du Code pénal, il n'y a pas d'infraction lorsque les faits sont commandés par la nécessité actuelle de défense de soi-même, d'autrui ou d'un bien juridiquement protégé, contre une attaque injuste.\n\nQuatre conditions doivent être réunies :\n1. une attaque injuste ;\n2. qu'il était impossible d'écarter autrement ;\n3. une défense concomitante, pendant l'attaque et non après ;\n4. une défense proportionnée au danger.\n\nExemple : Madame Zéhilo repousse un voleur armé qui la menace, c'est la légitime défense. Si elle le frappe alors qu'il s'enfuit, l'attaque a cessé : l'infraction demeure.\n\nUne riposte tardive ou disproportionnée reste punissable.\n\nLes Cours Sésame et SAJ"
+},
+{
+ "n": "s01-04", "prevue": "2026-10-29T19:30:00Z", "creneau": "soir", "rubrique": "Vidéo", "concours": ["infj","greffe","penitentiaire","eppjej"],
+ "titre": "Vidéo : la légitime défense",
+ "video": "https://coursesesame.com/assets/video/notion-legitime-defense.mp4", "video_titre": "Une notion, une minute : la légitime défense",
+ "message": "Une notion, une minute : la légitime défense.\n\nLes articles 97 et 98 du Code pénal en une minute : les quatre conditions, un exemple, la présomption de légitime défense pendant la nuit, et le piège de la vengeance.\n\nToutes nos vidéos gratuites sont sur le site : https://coursesesame.com/#videos\n\nLes Cours Sésame et SAJ"
+},
+{
+ "n": "s01-05", "prevue": "2026-10-30T07:30:00Z", "creneau": "matin", "rubrique": "Une notion de droit", "concours": ["infj","greffe","penitentiaire","eppjej"],
+ "titre": "Notion : auteur ou complice",
+ "visuel": {"fond": "navy", "etiquette": "Une notion de droit pénal", "titre": "Auteur ou complice ?",
+   "points": [["Auteur (article 29)", "Celui qui commet matériellement l'infraction, qui y participe avec l'auteur matériel, ou qui incite sciemment un tiers à la commettre."], ["Complice (article 30)", "Sans part directe et en connaissance de cause, il procure un moyen ou aide l'auteur."], ["Le piège", "Le complice encourt les mêmes peines que l'auteur (article 32)."]],
+   "pied": "Code pénal"},
+ "message": "Une notion de droit pénal : auteur ou complice ?\n\nLe Code pénal ne connaît que deux qualités : l'auteur et le complice.\n\nEst auteur, selon l'article 29 :\n1. celui qui commet matériellement l'infraction ;\n2. celui qui participe à sa commission avec l'auteur matériel, se sert d'une personne pénalement irresponsable, ou contraint en connaissance de cause une autre personne à la commettre ;\n3. celui qui incite en connaissance de cause un tiers à la commettre, par des instructions, des dons, des promesses ou des menaces.\n\nEst complice, selon l'article 30, celui qui, sans prendre de part directe à la réalisation et en connaissance de cause, procure un moyen (une arme, un instrument, un renseignement) ou aide l'auteur dans les faits qui préparent ou consomment l'infraction.\n\nExemple : Gnangoré frappe la victime, il est auteur. Sabéla lui a prêté le bâton en sachant à quoi il servirait : elle est complice.\n\nDeux pièges : le mot « coauteur » n'existe pas dans le Code pénal, et le complice encourt les mêmes peines que l'auteur (article 32).\n\nLes Cours Sésame et SAJ"
+},
+{
+ "n": "s01-06", "prevue": "2026-10-30T19:30:00Z", "creneau": "soir", "rubrique": "Espace abonnés", "concours": ["infj","greffe","penitentiaire","eppjej","ena"],
+ "titre": "L'espace abonnés",
+ "visuel": {"fond": "cream", "etiquette": "L'espace abonnés", "titre": "Tout pour réviser, au même endroit",
+   "points": [["Corrigés", "Sujets corrigés, fiches de révision, QCM, et les corrigés des 315 épreuves de concours blancs."], ["Vidéos", "Les vidéos « Une notion, une minute » réservées aux abonnés."], ["Textes officiels", "Codes, lois et jurisprudence, avec une recherche dans le texte."], ["Ouvrages complets", "À partir de la formule d'un mois."]],
+   "pied": "Dès 500 FCFA la journée"},
+ "message": "Vous révisez un concours de la justice ou de l'administration ? L'espace abonnés des Cours Sésame et SAJ réunit tout au même endroit :\n\n• les sujets corrigés, les fiches de révision et les QCM ;\n• les corrigés-types et grilles de notation des 315 épreuves de concours blancs ;\n• les vidéos « Une notion, une minute » réservées aux abonnés ;\n• les textes officiels et la jurisprudence, avec une recherche dans le texte ;\n• nos ouvrages complets, à partir de la formule d'un mois.\n\nLes formules : 1 jour 500 FCFA, 1 semaine 2 000 FCFA, 1 mois 5 000 FCFA, 3 mois 12 500 FCFA, 12 mois 40 000 FCFA. Les vidéos et les corrigés des concours blancs sont ouverts à partir de la formule d'une semaine.\n\nCréez votre compte en une minute :",
+ "lien": "https://coursesesame.com/espace-abonnes/"
+},
+{
+ "n": "s01-07", "prevue": "2026-10-31T07:30:00Z", "creneau": "matin", "rubrique": "Sujet de SOG", "concours": ["infj","ena","greffe","penitentiaire","eppjej"],
+ "titre": "SOG : la migration clandestine (magistrature 2018)",
+ "visuel": {"fond": "navy", "etiquette": "Le sujet de SOG du week-end", "titre": "« Nous bravons les déserts et les mers au risque de nos vies parce que, dans nos pays respectifs, les gouvernements ont échoué. »",
+   "sous": "Partagez-vous l'avis de ce migrant clandestin africain ?",
+   "pied": "Concours direct de la magistrature, session de juin 2018"},
+ "message": "Le sujet de SOG du week-end, tombé au concours direct de l'École de la magistrature en juin 2018 :\n\n« Nous bravons les déserts et les mers au risque de nos vies parce que, dans nos pays respectifs, les gouvernements ont échoué. »\nPartagez-vous l'avis de ce migrant clandestin africain ?\n\nAvant de lire le corrigé, prenez vingt minutes : relevez les termes clés, identifiez le type de sujet, puis formulez le problème qu'il soulève.\n\nLa fiche d'analyse et le devoir intégralement rédigé sont en accès libre :",
+ "lien": "https://coursesesame.com/sujets/sog-migration-clandestine/"
+},
+{
+ "n": "s01-08", "prevue": "2026-10-31T19:30:00Z", "creneau": "soir", "rubrique": "Sujet corrigé gratuit", "concours": ["infj"],
+ "titre": "Commentaire de l'article 28 du Code pénal",
+ "message": "Un sujet corrigé gratuit pour votre week-end : le commentaire de l'article 28 du Code pénal, sur la tentative punissable.\n\nLa constitution de la tentative punissable, puis sa répression : un commentaire entièrement rédigé, tiré du Sésame de Droit Pénal au Concours de la Magistrature.\n\nÀ lire en accès libre :",
+ "lien": "https://coursesesame.com/sujets/commentaire-article-28-code-penal-tentative/"
+},
+{
+ "n": "s01-09", "prevue": "2026-11-01T07:30:00Z", "creneau": "matin", "rubrique": "Conseil de préparation", "concours": ["infj","greffe","penitentiaire","eppjej","ena"],
+ "titre": "Conseil : composer en temps réel",
+ "visuel": {"fond": "cream", "etiquette": "Le conseil du dimanche", "titre": "Entraînez-vous en temps réel",
+   "etapes": [["Une épreuve complète par semaine", "Chronomètre lancé, sans notes ni téléphone"], ["Comparez avec le corrigé", "Et la grille de notation"], ["Relevez trois erreurs", "Ce sont vos chantiers de la semaine suivante"]],
+   "pied": "coursesesame.com/concours-blancs"},
+ "message": "Le conseil du dimanche : entraînez-vous en temps réel.\n\nLire des corrigés ne suffit pas. Le jour du concours, la gestion du temps fait souvent la différence.\n\n1. Une fois par semaine, composez une épreuve complète, chronomètre lancé, sans notes ni téléphone.\n2. Comparez ensuite votre copie au corrigé et à la grille de notation.\n3. Relevez vos trois erreurs principales : ce sont vos chantiers de la semaine suivante.\n\nNos 70 séries de concours blancs sont gratuites, avec les durées officielles et le chronomètre :",
+ "lien": "https://coursesesame.com/concours-blancs/"
+},
+{
+ "n": "s01-10", "prevue": "2026-11-01T19:30:00Z", "creneau": "soir", "rubrique": "Ouvrage", "concours": ["infj"],
+ "titre": "Ouvrage : Le Guide Méthodologique Magistrature, Édition 2027",
+ "message": "L'ouvrage de la semaine : Le Guide Méthodologique Magistrature, Édition 2027.\n\nToutes les méthodes pour réussir le cas pratique, la dissertation et le commentaire d'arrêt au concours de la magistrature : structuration, argumentation et rédaction expliquées pas à pas.\n\nPrix : 10 000 FCFA. Un extrait gratuit est à lire sur la page de l'ouvrage. Il est aussi compris dans l'espace abonnés, à partir de la formule d'un mois.\n\nCommande sur WhatsApp : +225 01 60 86 05 37\n\nLa page de l'ouvrage :",
+ "lien": "https://coursesesame.com/ouvrages/le-guide-methodologique-magistrature/"
+},
+{
+ "n": "s01-11", "prevue": "2026-11-02T07:30:00Z", "creneau": "matin", "rubrique": "Une notion de droit", "concours": ["infj","greffe","penitentiaire","eppjej"],
+ "titre": "Notion : la tentative punissable",
+ "visuel": {"fond": "navy", "etiquette": "Une notion de droit pénal", "titre": "La tentative punissable",
+   "points": [["Un acte sans équivoque", "Il révèle l'intention irrévocable de commettre l'infraction (article 28)."], ["Un échec involontaire", "La tentative n'a échoué que par des circonstances indépendantes de la volonté de l'auteur."], ["Crime ou délit", "La tentative de crime est toujours punissable ; celle de délit, seulement si un texte le prévoit."]],
+   "pied": "Article 28 du Code pénal"},
+ "message": "Une notion de droit pénal : la tentative punissable.\n\nGbadjéli tire sur son voisin et le manque. Peut-il être puni comme s'il l'avait tué ? Oui, selon l'article 28 du Code pénal : « Toute tentative de crime manifestée par un acte impliquant, sans équivoque, l'intention irrévocable de son auteur de commettre l'infraction est considérée comme le crime lui-même si elle n'a été suspendue ou si elle n'a manqué son effet que par des circonstances indépendantes de la volonté dudit auteur. »\n\nDeux conditions :\n1. un acte qui révèle, sans équivoque, l'intention irrévocable de commettre l'infraction ;\n2. un échec dû à une circonstance indépendante de la volonté de l'auteur, et non à son désistement volontaire.\n\nExemple : si Gbadjéli renonce de lui-même et range son arme, il n'y a pas de tentative punissable. Si un passant le désarme au moment où il vise, la tentative est punissable.\n\nÀ retenir : la tentative de délit n'est punissable que dans les cas prévus par un texte, et la tentative reste punissable même si le but ne pouvait pas être atteint.\n\nLe piège : le simple achat d'une arme est un acte préparatoire, il ne suffit pas.\n\nLes Cours Sésame et SAJ"
+},
+{
+ "n": "s01-12", "prevue": "2026-11-02T19:30:00Z", "creneau": "soir", "rubrique": "Ouvrage", "concours": ["infj"],
+ "titre": "Ouvrage : Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026",
+ "message": "Le cas pratique vous fait peur ? Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026.\n\n50 cas pratiques intégralement corrigés en droit civil, droit commercial OHADA, droit pénal et droit administratif, selon le syllogisme juridique et, en droit pénal, le quadriptyque. Textes en vigueur en 2026.\n\nPrix : 15 000 FCFA. Un extrait gratuit est à lire sur la page de l'ouvrage. Il est aussi compris dans l'espace abonnés, à partir de la formule d'un mois.\n\nCommande sur WhatsApp : +225 01 60 86 05 37\n\nLa page de l'ouvrage :",
+ "lien": "https://coursesesame.com/ouvrages/les-50-cas-pratiques-corriges-de-la-magistrature/"
+},
+{
+ "n": "s01-13", "prevue": "2026-11-03T07:30:00Z", "creneau": "matin", "rubrique": "Méthode", "concours": ["infj","greffe","penitentiaire","eppjej","ena"],
+ "titre": "Méthode : le syllogisme juridique",
+ "visuel": {"fond": "cream", "etiquette": "La méthode du mardi", "titre": "Le syllogisme juridique",
+   "etapes": [["La majeure", "La règle de droit, avec l'article exact"], ["La mineure", "L'application aux faits : « En l'espèce »"], ["La conclusion", "La solution : « Par conséquent »"]],
+   "pied": "Le correcteur note le raisonnement, pas seulement la solution"},
+ "message": "La méthode du mardi : le syllogisme juridique.\n\nAu concours, une bonne réponse sans raisonnement rapporte peu de points. Le correcteur attend un syllogisme, en trois temps :\n\n1. La majeure : la règle de droit, avec l'article exact.\n2. La mineure : l'application de la règle aux faits, en commençant par « en l'espèce ».\n3. La conclusion : la solution, « par conséquent ».\n\nExemple. Majeure : selon l'article 97 du Code pénal, il n'y a pas d'infraction lorsque la défense contre une attaque injuste est nécessaire, concomitante et proportionnée. Mineure : en l'espèce, Monsieur Zakobé repousse à mains nues un agresseur armé d'un couteau, au moment même de l'attaque. Conclusion : par conséquent, Monsieur Zakobé n'a commis aucune infraction.\n\nDeux pièges : sauter la majeure, car une solution sans règle de droit est sanctionnée, et recopier les faits, car la mineure confronte chaque fait à chaque condition.\n\nLes Cours Sésame et SAJ"
+},
+{
+ "n": "s01-14", "prevue": "2026-11-03T19:30:00Z", "creneau": "soir", "rubrique": "Concours blancs", "concours": ["infj"],
+ "titre": "Concours blancs de la magistrature",
+ "visuel": {"fond": "navy", "etiquette": "Concours blancs gratuits", "titre": "Magistrature : 10 séries complètes",
+   "etapes": [["La présélection", "En 2 heures"], ["Cinq épreuves écrites", "En 4 heures chacune"], ["Le corrigé et la grille sur 20", "Pour les abonnés, dès 2 000 FCFA la semaine"]],
+   "pied": "coursesesame.com/concours-blancs"},
+ "message": "Concours de la magistrature : entraînez-vous gratuitement sur 10 séries complètes de concours blancs.\n\nChaque série suit le concours direct : la présélection en 2 heures, puis cinq épreuves écrites de 4 heures (sujet d'ordre général, droit civil, droit commercial et OHADA, droit pénal et procédure pénale, droit administratif).\n\nVous composez sans créer de compte, avec le chronomètre. Le corrigé-type et la grille de notation sur 20 sont réservés aux abonnés, dès 2 000 FCFA la semaine.\n\nChoisissez votre série :",
+ "lien": "https://coursesesame.com/concours-blancs/"
+}
+]
