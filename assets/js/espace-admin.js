@@ -1699,11 +1699,15 @@
         if (!confirm(ajout
           ? `Passer ${a.prenom} ${a.nom} en VIP ?\n\nSes périodes en cours et à venir deviennent VIP, sans changer leurs dates : l'espace VIP (ouvrages complets, vidéos réservées, documents VIP, copie corrigée du mois) s'ouvre tout de suite. Pensez à encaisser la différence de tarif si besoin.`
           : `Retirer le VIP à ${a.prenom} ${a.nom} ?\n\nSes périodes en cours et à venir redeviennent normales, sans changer leurs dates : l'espace VIP se ferme tout de suite, le reste de l'abonnement continue.`)) return;
+        // Passage en VIP : WhatsApp s'ouvre de lui-même, message prêt ; la fenêtre est ouverte dès le clic, avant
+        // la réponse du serveur, sinon les téléphones la bloquent
+        const fenWa = ajout ? window.open("", "_blank") : null;
         b.disabled = true;
         const { error } = await client.rpc(ajout ? "admin_passer_vip" : "admin_retirer_vip", { p_user: a.user_id });
         b.disabled = false;
-        if (error) return toast(messageErreur(error));
-        retour(`<div class="ad-retour"><p>${esc(a.prenom)} ${esc(a.nom)} ${ajout ? "<b>est passé en VIP</b>" : "<b>n'est plus VIP</b>"}.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), ajout ? messageVip(a) : messageFinVip(a))}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`);
+        if (error) { if (fenWa) fenWa.close(); return toast(messageErreur(error)); }
+        if (fenWa) fenWa.location.href = lienWa(numeroWa(a.telephone), messageVip(a));
+        retour(`<div class="ad-retour"><p>${esc(a.prenom)} ${esc(a.nom)} ${ajout ? "<b>est passé en VIP</b>. L'e-mail « Votre espace VIP est ouvert » lui part automatiquement dans les 15 minutes ; WhatsApp s'est ouvert avec le message prêt, il ne reste qu'à l'envoyer" : "<b>n'est plus VIP</b>"}.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), ajout ? messageVip(a) : messageFinVip(a))}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`);
         recharger(ajout ? "Abonné passé en VIP." : "VIP retiré.");
         return;
       }
@@ -1855,14 +1859,16 @@
       if (!mois && !jusqua) { msg.textContent = "Choisissez la date de fin."; return; }
       const deja = paiementsMemeReference(v("note"))[0];
       if (deja && !confirm(`Attention : la référence « ${v("note")} » a déjà servi le ${dateFr(deja.cree_le)} pour ${deja.prenom} ${deja.nom}${deja.montant != null ? ` (${fcfa(deja.montant)})` : ""}.\n\nUne même référence Mobile Money ne correspond normalement qu'à un seul paiement. Enregistrer quand même ?`)) return;
+      const fenWa = vip ? window.open("", "_blank") : null;
       bouton.disabled = true;
       const { data: fin, error } = await client.rpc("admin_activer_periode", {
         p_user: a.user_id, p_mois: mois || null, p_jusqu_au: mois ? null : jusqua,
         p_montant: montant === "" ? null : Math.round(Number(montant)), p_moyen: v("moyen") || null, p_note: v("note") || null, p_vip: vip
       });
       bouton.disabled = false;
-      if (error) { msg.textContent = messageErreur(error); return; }
+      if (error) { if (fenWa) fenWa.close(); msg.textContent = messageErreur(error); return; }
       const texte = `Bonjour ${a.prenom},\n\nVotre abonnement ${vip ? "VIP " : ""}à l'espace abonnés des Cours Sésame et SAJ est activé jusqu'au ${dateFr(fin)}.${vip ? " Les ouvrages complets et les vidéos réservées de l'espace VIP vous sont ouverts." : ""}\nConnectez-vous ici : ${URL_ESPACE}\n\nBonne préparation !`;
+      if (fenWa) fenWa.location.href = lienWa(numeroWa(a.telephone), texte);
       retours[a.user_id] = `<div class="ad-retour"><p>Abonnement ${vip ? "VIP " : ""}de ${esc(a.prenom)} actif jusqu'au <b>${dateFr(fin)}</b>.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), texte)}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`;
       if (f.closest(".ad-afaire")) retourAFaire = retours[a.user_id];
       recharger("Abonnement enregistré.");
