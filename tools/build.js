@@ -1049,6 +1049,32 @@ ${contactCTA(prefix)}`;
         <span class="ep-card-go">Lire l'essentiel</span>
       </a>`;
   const prix = TARIF_JOUR ? `${TARIF_JOUR.prix} FCFA la journée` : "quelques centaines de francs";
+  // Fiches remises en entier contre un prénom et un contact (fonction fiche-offerte, qui tient la même liste)
+  const OFFERTES = [1, 23].map(n => FICHES.find(f => f.numero === n));
+  const SCRIPTS_OFFERTE = ["assets/js/espace-config.js", "assets/js/fiche-offerte.js"];
+  const offerteForm = (f, prefix) => `<div class="offerte" id="offerte">
+      <p class="eyebrow">Fiche offerte</p>
+      <h2 class="h-section">Recevez cette fiche <em>en entier</em></h2>
+      <p>Laissez votre prénom et un e-mail ou un numéro WhatsApp : vous téléchargez aussitôt la fiche complète en PDF, et nous vous l'envoyons aussi par e-mail si vous en indiquez un.</p>
+      <form class="form offerte-form" id="offerteForm" data-fiche="${f.numero}" novalidate>
+        <div class="field"><label for="offPrenom">Prénom</label><input id="offPrenom" name="prenom" autocomplete="given-name" maxlength="60" required></div>
+        <div class="field"><label for="offConcours">Concours préparé</label><select id="offConcours" name="concours"><option value="">Choisir</option>${CONCOURS.map(c => `<option value="${c.id}">${c.court}</option>`).join("")}<option value="autre">Autre</option></select></div>
+        <div class="field"><label for="offEmail">E-mail</label><input id="offEmail" name="email" type="email" autocomplete="email" maxlength="254"></div>
+        <div class="field"><label for="offWa">ou WhatsApp</label><input id="offWa" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="07 00 00 00 00"></div>
+        <label class="offerte-accord"><input type="checkbox" name="accepte_offres" value="1"> J'accepte de recevoir des conseils de révision et des offres des Cours Sésame et SAJ, par e-mail ou sur WhatsApp. Désinscription possible à tout moment.</label>
+        <button class="btn btn-gold" type="submit">Recevoir la fiche</button>
+        <p class="offerte-etat" id="offerteEtat" role="status"></p>
+      </form>
+      <div class="offerte-ok" id="offerteOk" hidden>
+        <p><b>Votre fiche est prête.</b> <span data-email>Nous vous l'avons aussi envoyée par e-mail.</span> Le lien reste valable 7 jours.</p>
+        <a class="btn btn-gold" href="#" target="_blank" rel="noopener">Télécharger la fiche</a>
+      </div>
+      <p class="offerte-mention">Vos coordonnées servent à vous remettre la fiche et, si vous l'acceptez, à vous envoyer nos conseils et offres. Elles ne sont ni vendues ni cédées : voir nos <a href="${prefix}mentions-legales/#fiche-offerte">données personnelles</a>.</p>
+    </div>`;
+  const offerteBand = (prefix, sauf) => {
+    const o = OFFERTES.filter(x => x !== sauf);
+    return `<div class="espace-band offerte-band"><div><b>Essayez avant de vous abonner</b><p>${o.length > 1 ? "Deux fiches sont offertes en entier" : "Une fiche est offerte en entier"} : ${o.map(x => `<a href="${ficheURL(x, prefix)}#offerte">n° ${x.numero}, ${esc(x.titre)}</a>`).join(" et ")}.</p></div></div>`;
+  };
 
   for (const f of FICHES) {
     const prefix = "../../";
@@ -1072,6 +1098,7 @@ ${contactCTA(prefix)}`;
       <div class="fiche-essentiel">${f.essentiel.map(p => `<p>${p}</p>`).join("")}</div>
       <h3>Les textes de référence</h3>
       <p class="fiche-sources">${esc(f.sources)}</p>
+      ${OFFERTES.includes(f) ? offerteForm(f, prefix) : offerteBand(prefix, f)}
     </article>
     <aside class="fiche-plan" aria-label="Au programme de la fiche">
       <h3>Au programme de la fiche</h3>
@@ -1089,7 +1116,7 @@ ${voisines.length ? `<section class="section section-cream">
   </div>
 </section>` : ""}`;
     write(`fiches/${f.slug}/index.html`, page({
-      prefix, url, body,
+      prefix, url, body, scripts: OFFERTES.includes(f) ? SCRIPTS_OFFERTE : [],
       title: [`${f.titre} : fiche de révision, droit ivoirien`, `${f.titre} : fiche de révision`, f.titre],
       description: `${stripTags(f.essentiel[0])} Fiche de révision pour les concours ${courts(f.concours)}.`,
       ld: [breadcrumb([["Accueil", SITE], ["Fiches de révision", SITE + "fiches/"], [`Fiche n° ${f.numero}`, url]]), {
@@ -1116,13 +1143,15 @@ ${voisines.length ? `<section class="section section-cream">
 
 <section class="section" id="matieres">
   <div class="wrap">
+    <p class="desinscription" id="desinscription" role="status" hidden>Désinscription en cours…</p>
+    ${offerteBand(prefix)}
     <nav class="pills fiches-matieres" aria-label="Matières">${MATIERES.map(m => `<a class="pill" href="#${slugify(m)}">${esc(m)} <small>${FICHES.filter(f => f.matiere === m).length}</small></a>`).join("")}</nav>
     ${MATIERES.map(m => `<h2 class="group-title" id="${slugify(m)}">${esc(m)}<small>${plural(FICHES.filter(f => f.matiere === m).length, "fiche")}</small></h2>
     <div class="ep-cards">${FICHES.filter(f => f.matiere === m).map((f, i) => ficheCard(f, prefix, i)).join("")}</div>`).join("\n    ")}
   </div>
 </section>`;
   write("fiches/index.html", page({
-    prefix, url, body,
+    prefix, url, body, scripts: SCRIPTS_OFFERTE,
     title: [`${FICHES.length} fiches de révision de droit ivoirien pour les concours`, `${FICHES.length} fiches de révision de droit ivoirien`],
     description: `${FICHES.length} fiches de révision de droit ivoirien pour les concours ${courts(CONCOURS.map(c => c.id))} : ${MATIERES.join(", ").toLowerCase()}. L'essentiel de chaque fiche en accès libre.`,
     ld: [breadcrumb([["Accueil", SITE], ["Fiches de révision", url]]), {
@@ -1320,7 +1349,7 @@ ${contactCTA(prefix)}`;
     <p>Les commandes se passent sur WhatsApp, depuis le panier ou depuis la page d'un ouvrage. Les prix sont affichés en francs CFA. Le prix, le paiement, la livraison, les incidents de livraison et les abonnements sont régis par nos <a href="${prefix}conditions-de-vente/">conditions de vente et d'abonnement</a>.</p>
 
     <h2>Données personnelles</h2>
-    <p>En dehors de l'espace abonnés, présenté plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
+    <p>En dehors de l'espace abonnés et du formulaire de la fiche offerte, présentés plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
     <p>Votre panier est conservé uniquement dans votre navigateur, sur votre appareil, pour que vous le retrouviez à votre prochaine visite. Nous n'y avons pas accès. Pour le supprimer, videz-le ou effacez les données du site dans votre navigateur.</p>
     <p>Quand vous commandez, les informations que vous saisissez (prénom, nom, téléphone, ville, message) sont placées dans un message WhatsApp que vous envoyez vous-même. Nous ne les utilisons que pour traiter votre commande et vous livrer.</p>
     <p>Le site n'utilise aucun cookie. Les polices de caractères sont hébergées sur le site lui-même. Quelques photographies sont affichées depuis les serveurs d'Unsplash, qui reçoivent à cette occasion l'adresse IP du visiteur, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
@@ -1341,8 +1370,13 @@ ${contactCTA(prefix)}`;
     <p>Un compte ne s'utilise que sur un appareil à la fois. Pour l'assurer, nous enregistrons la date de chaque connexion, l'heure de votre dernier passage sur l'espace abonnés et un identifiant technique de la session ouverte, sans aucune information sur l'appareil lui-même. Ces données servent aussi à repérer les comptes partagés.</p>
     <p>Les documents s'affichent page par page. Chaque page vous est envoyée sous forme d'image portant votre nom, votre numéro de téléphone, votre adresse e-mail, ainsi que la date et l'heure. Nous enregistrons, jour par jour, les pages que vous lisez, pour appliquer la limite quotidienne de lecture. Lorsque vous téléchargez des pages, nous enregistrons la date, le document, les numéros des pages et une référence, qui figure aussi sur les pages téléchargées. Ces informations servent à appliquer les limites prévues par les conditions de vente et à retrouver l'origine d'une diffusion. Elles sont conservées chez Supabase, en Europe, et effacées avec votre compte.</p>
 
+    <h2 id="fiche-offerte">Fiche offerte</h2>
+    <p>Certaines fiches de révision sont offertes en entier. Pour les recevoir, vous indiquez votre prénom et une adresse e-mail ou un numéro WhatsApp, et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi la date, la fiche demandée et l'adresse de la page. Votre adresse IP est notée pour limiter les abus, puis effacée au bout d'un jour.</p>
+    <p>Ces informations servent à vous remettre la fiche, par un lien de téléchargement et, si vous avez indiqué une adresse, par un e-mail envoyé par notre prestataire Brevo. Si vous cochez la case prévue, elles servent aussi à vous envoyer nos conseils de révision et nos offres, par e-mail ou sur WhatsApp ; sans cette case, nous ne vous écrivons pas. Vous pouvez retirer votre accord à tout moment, par le lien figurant dans nos e-mails ou en nous écrivant sur WhatsApp.</p>
+    <p>Elles sont conservées chez Supabase, en Europe, consultables par l'administrateur seulement, et ne sont ni vendues ni cédées. Elles sont effacées sur simple demande sur WhatsApp, et au plus tard trois ans après votre dernier échange avec nous.</p>
+
     <h2 id="emails">E-mails</h2>
-    <p>Nous envoyons aux abonnés, depuis l'adresse infos@coursesesame.com, trois sortes d'e-mails liés à leur abonnement. Le premier souhaite la bienvenue lors du premier abonnement, le deuxième rappelle la fin prochaine d'un abonnement trois jours avant son terme lorsqu'il n'a pas été prolongé, le troisième annonce les contenus mis en ligne dans l'espace abonnés, au plus une fois par jour. L'annonce des nouveautés n'est adressée qu'aux abonnés en cours ; chacun peut la refuser à tout moment, par le lien figurant dans chaque annonce ou dans la rubrique « Mon compte » de l'espace abonnés. Nous n'envoyons pas d'offres commerciales par e-mail.</p>
+    <p>Nous envoyons aux abonnés, depuis l'adresse infos@coursesesame.com, trois sortes d'e-mails liés à leur abonnement. Le premier souhaite la bienvenue lors du premier abonnement, le deuxième rappelle la fin prochaine d'un abonnement trois jours avant son terme lorsqu'il n'a pas été prolongé, le troisième annonce les contenus mis en ligne dans l'espace abonnés, au plus une fois par jour. L'annonce des nouveautés n'est adressée qu'aux abonnés en cours ; chacun peut la refuser à tout moment, par le lien figurant dans chaque annonce ou dans la rubrique « Mon compte » de l'espace abonnés. Nous n'envoyons d'offres commerciales par e-mail qu'aux personnes qui l'ont accepté en demandant une fiche offerte.</p>
     <p>Ces e-mails sont envoyés par notre prestataire Brevo (société Sendinblue SAS, établie en France), qui reçoit à cette fin votre adresse e-mail, votre prénom et le contenu du message. Nous gardons la date, la nature et le résultat de chaque envoi, effacés avec votre compte.</p>
 
     <h2 id="agent-revision">Agent de révision</h2>
