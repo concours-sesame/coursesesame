@@ -452,8 +452,8 @@
     $(".ea-v-fermer", visionneuse).focus();
 
     if (c.verrou) {
-      const video = c.type === "video";
-      corps.innerHTML = `<div class="ea-verrou">${icone("i-lock")}<p><b>${video ? "Cette vidéo est réservée" : "Les ouvrages complets sont réservés"} à l'espace VIP.</b> Votre abonnement donne accès à tous les autres contenus : sujets corrigés, fiches de révision, QCM, textes officiels et jurisprudence. L'abonnement VIP ${vipDes()} ouvre aussi les ouvrages complets et les vidéos réservées.</p>
+      const video = c.type === "video", ouvrage = rubrique(c) === "ouvrages";
+      corps.innerHTML = `<div class="ea-verrou">${icone("i-lock")}<p><b>${video ? "Cette vidéo est réservée" : ouvrage ? "Les ouvrages complets sont réservés" : "Ce document est réservé"} à l'espace VIP.</b> Votre abonnement donne accès à tous les autres contenus : sujets corrigés, fiches de révision, QCM, textes officiels et jurisprudence. L'abonnement VIP ${vipDes()} ouvre aussi les ouvrages complets, les vidéos réservées, les documents VIP et la correction d'une copie par mois.</p>
           <a class="btn btn-gold" href="#eaVip" data-fermer-visionneuse>Passer au VIP</a>
           <a class="btn btn-wa" href="${lienWa(WA_NUM, c.verrou)}" target="_blank" rel="noopener">${icone("i-wa")}Passer au VIP sur WhatsApp</a></div>`;
       $("[data-fermer-visionneuse]", corps).addEventListener("click", () => fermerVisionneuse());
@@ -879,17 +879,80 @@
   // sans attendre la fin de l'abonnement en cours. À dix jours de la fin, le formulaire de renouvellement sert aussi.
   function vipHTML() {
     if (!etat.abo.actif || etat.vip || !tarifsVip().length) return "";
-    const nb = r => contenus.filter(c => r === "videos" ? c.type === "video" : rubrique(c) === r).length;
-    const [o, v] = [nb("ouvrages"), nb("videos")];
+    const nb = r => contenus.filter(c => r === "videos" ? c.type === "video" : r === "docs" ? c.vip : rubrique(c) === r).length;
+    const [o, v, dv] = [nb("ouvrages"), nb("videos"), nb("docs")];
     const renouvellement = joursJusqua(etat.abo.fin) <= JOURS_RENOUVELLEMENT;
     return `<section class="ea-vip" id="eaVip">
         <span class="ea-vip-marque">VIP</span>
         <h3>L'espace VIP</h3>
-        <p>${[o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "", v ? `${v} vidéo${v > 1 ? "s" : ""} réservée${v > 1 ? "s" : ""}` : ""].filter(Boolean).join(" et ")} à lire et à regarder en ligne, en plus de tout votre abonnement. Le VIP coûte le triple de l'abonnement normal${vipDes().replace(/,$/, "")} ; il s'ouvre dès la validation de votre paiement, sans attendre la fin de votre abonnement en cours.</p>
+        <p>${[o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "", v ? `${v} vidéo${v > 1 ? "s" : ""} réservée${v > 1 ? "s" : ""}` : "", dv ? `${dv} document${dv > 1 ? "s" : ""} VIP` : ""].filter(Boolean).join(", ")} à lire et à regarder en ligne, et chaque mois une copie corrigée et notée sur 20 par un correcteur, en plus de tout votre abonnement. Le VIP coûte le triple de l'abonnement normal${vipDes().replace(/,$/, "")} ; il s'ouvre dès la validation de votre paiement, sans attendre la fin de votre abonnement en cours.</p>
         <p class="ea-tarifs ea-tarifs-vip">${tarifsVip().filter(t => ["vip-j1", "vip-j7", "vip-m1", "vip-m12"].includes(t.cle)).map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
         ${renouvellement ? `<p class="ea-aide">Choisissez une formule VIP dans le formulaire de renouvellement ci-dessus.</p>` : paiementHTML(true, "vip-m1")}
       </section>`;
   }
+  /* ---------- Copie corrigée (espace VIP) ---------- */
+  // Une copie par mois civil : texte tapé, ou photos et PDF de la copie manuscrite (dossier exclusif/copies/<abonné>/).
+  // La copie est corrigée et notée sur 20 par un correcteur ; la correction s'affiche ici.
+  const EPREUVES_COPIE = [["dissertation", "Dissertation"], ["cas_pratique", "Cas pratique"], ["commentaire", "Commentaire d'article ou d'arrêt"], ["note_synthese", "Note de synthèse"], ["sog", "Sujet d'ordre général"], ["autre", "Autre épreuve"]];
+  const FICHIERS_COPIE = { "application/pdf": "pdf", "image/jpeg": "jpg", "image/png": "png" };
+  let mesCopies = [];
+  const moisCourant = d => new Date(d).toLocaleDateString("fr-FR", { month: "numeric", year: "numeric", timeZone: "Africa/Abidjan" });
+  function copiesHTML() {
+    if (!etat.vip) return "";
+    const ceMois = mesCopies.find(x => moisCourant(x.cree_le) === moisCourant(Date.now()));
+    const nomEp = k => (EPREUVES_COPIE.find(e => e[0] === k) || [k, k])[1];
+    return `<section class="ea-copie" id="eaCopie">
+        <span class="ea-vip-marque">VIP</span>
+        <h3>Votre copie corrigée du mois</h3>
+        ${ceMois ? `<p>Votre copie de ce mois est déposée. ${ceMois.statut === "corrigee" ? "Elle est corrigée : voyez ci-dessous." : "Elle est entre les mains d'un correcteur ; la correction s'affichera ici."} Vous pourrez déposer la suivante dès le 1er du mois prochain.</p>`
+          : `<p>Composez un sujet dans les conditions de l'épreuve, puis déposez votre copie : tapée ci-dessous, ou en photos (une par page, bien éclairées) ou en PDF. Un correcteur la corrige et la note sur 20. Une copie par mois.</p>
+        <form class="form ea-form" id="eaCopieForm" novalidate>
+          <div class="field"><label for="cpEpreuve">Épreuve</label><select id="cpEpreuve" name="epreuve">${EPREUVES_COPIE.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("")}</select></div>
+          <div class="field full"><label for="cpSujet">Sujet traité</label><textarea id="cpSujet" name="sujet" rows="3" maxlength="4000" required></textarea></div>
+          <div class="field full"><label for="cpFichiers">Photos ou PDF de votre copie (8 au plus, 10 Mo chacun)</label><input id="cpFichiers" name="fichiers" type="file" multiple accept="image/jpeg,image/png,application/pdf"></div>
+          <div class="field full"><label for="cpTexte">Ou votre copie tapée</label><textarea id="cpTexte" name="texte" rows="8" maxlength="60000"></textarea></div>
+          <p class="ea-msg full" role="alert"></p>
+          <button class="btn btn-gold" type="submit">Déposer ma copie</button>
+        </form>`}
+        ${mesCopies.length ? `<div class="ea-copies">${mesCopies.map(x => `<details class="ea-copie-ligne"${x === ceMois ? " open" : ""}>
+            <summary><b>${esc(nomEp(x.epreuve))}</b> · déposée le ${dateFr(String(x.cree_le).slice(0, 10))} · ${x.statut === "corrigee" ? `<b class="ea-copie-note">${String(x.note).replace(".", ",")}/20</b>` : "en correction"}</summary>
+            <p><b>Sujet :</b> ${esc(x.sujet)}</p>
+            ${x.fichiers.length ? `<p class="ea-outil-boutons">${x.fichiers.map((ch, i) => `<button class="btn btn-ghost btn-sm" type="button" data-ma-copie="${esc(ch)}">Ma copie, fichier ${i + 1}</button>`).join("")}</p>` : ""}
+            ${x.statut === "corrigee" ? `${x.appreciation ? `<h4>Appréciation</h4><p>${esc(x.appreciation).replace(/\n/g, "<br>")}</p>` : ""}${x.correction ? `<h4>Correction</h4><div class="ea-copie-correction">${esc(x.correction).replace(/\n/g, "<br>")}</div>` : ""}${x.fichier_corrige ? `<p><button class="btn btn-navy btn-sm" type="button" data-ma-copie="${esc(x.fichier_corrige)}">Ma copie annotée</button></p>` : ""}` : ""}
+          </details>`).join("")}</div>` : ""}
+      </section>`;
+  }
+  async function deposerCopie(f) {
+    const msg = $(".ea-msg", f), bouton = $("button[type=submit]", f);
+    const sujet = f.sujet.value.trim(), texte = f.texte.value.trim(), fichiers = [...f.fichiers.files];
+    if (sujet.length < 5) { msg.textContent = "Indiquez le sujet traité."; f.sujet.focus(); return; }
+    if (!fichiers.length && texte.length < 200) { msg.textContent = "Joignez les photos ou le PDF de votre copie, ou tapez-la (200 caractères au moins)."; return; }
+    if (fichiers.length > 8) { msg.textContent = "Huit fichiers au plus."; return; }
+    const mauvais = fichiers.find(x => !FICHIERS_COPIE[x.type] || x.size > 10 * 1048576);
+    if (mauvais) { msg.textContent = `« ${mauvais.name} » : photo JPEG ou PNG, ou PDF, de 10 Mo au plus.`; return; }
+    bouton.disabled = true;
+    const chemins = [];
+    for (const [i, x] of fichiers.entries()) {
+      msg.textContent = `Envoi du fichier ${i + 1} sur ${fichiers.length}…`;
+      const chemin = `copies/${etat.uid}/${Date.now()}-${i + 1}.${FICHIERS_COPIE[x.type]}`;
+      const { error } = await client.storage.from("exclusif").upload(chemin, x, { contentType: x.type, upsert: false });
+      if (error) { bouton.disabled = false; msg.textContent = "Envoi impossible : " + messageErreur(error); return; }
+      chemins.push(chemin);
+    }
+    msg.textContent = "Enregistrement…";
+    const { error } = await client.rpc("deposer_copie_vip", { p_epreuve: f.epreuve.value, p_sujet: sujet, p_texte: texte || null, p_fichiers: chemins });
+    bouton.disabled = false;
+    if (error) { msg.textContent = messageErreur(error); return; }
+    toast("Copie déposée. Un correcteur va la corriger.");
+    await chargerCopies();
+    const z = $("#eaCopie", racine); if (z) z.outerHTML = copiesHTML();
+  }
+  async function chargerCopies() {
+    if (!etat.vip) { mesCopies = []; return; }
+    const { data } = await client.from("copies_vip").select("*").eq("user_id", etat.uid).order("cree_le", { ascending: false });
+    mesCopies = data || [];
+  }
+
   async function envoyerDemande(f) {
     const msg = $(".ea-msg", f), bouton = $("button[type=submit]", f);
     const formule = f.formule.value, moyen = f.moyen.value, reference = f.reference.value.trim();
@@ -984,8 +1047,10 @@
   // Espace VIP : ouvrages complets et vidéos. Affichés avec un cadenas sans accès (abonnement normal)
   const verrouOuvrage = c => !etat.ouvrages && rubrique(c) === "ouvrages";
   const verrouVideo = c => !etat.videos && c.type === "video";
-  const verrouille = c => verrouOuvrage(c) || verrouVideo(c);
-  const estVip = c => rubrique(c) === "ouvrages" || c.type === "video";
+  // Document réservé à l'espace VIP (contenus.vip) : seule une période VIP l'ouvre
+  const verrouDocVip = c => !!c.vip && !etat.vip;
+  const verrouille = c => verrouOuvrage(c) || verrouVideo(c) || verrouDocVip(c);
+  const estVip = c => !!c.vip || rubrique(c) === "ouvrages" || c.type === "video";
   const noteVerrou = () => "Espace VIP";
   const msgFormule = () => `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à l'abonnement VIP (ouvrages complets et vidéos réservées).\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
   // Bibliothèque centrée sur le concours de l'abonné : par défaut, les contenus de son concours et les contenus
@@ -1593,7 +1658,7 @@
       if (t > fin) client.rpc("corrige_blanc", { p_concours: b.id }).then(async r => {
         if (r.error || !r.data) return;
         corrige = contenus.find(x => x.id === r.data);
-        if (!corrige) { const q = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le").eq("id", r.data).maybeSingle(); corrige = q.data; }
+        if (!corrige) { const q = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip").eq("id", r.data).maybeSingle(); corrige = q.data; }
         const z = $("#eaBlancCorrige");
         if (corrige && z) z.innerHTML = `<div class="ea-outil-boutons"><button class="btn btn-navy" type="button" data-bl="corrige">Lire le corrigé-type et sa grille</button></div>`;
       });
@@ -1731,9 +1796,10 @@
       brancherFormulaires();
     } else if (etat.abo.actif || etat.admin) {
       const [{ data, error }] = await Promise.all([
-        client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le").eq("publie", true).order("publie_le", { ascending: false }),
+        client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip").eq("publie", true).order("publie_le", { ascending: false }),
         chargerAgent().catch(() => { agent = null; }),
-        chargerOutils().catch(() => { /* outils indisponibles : la bibliothèque reste accessible */ })
+        chargerOutils().catch(() => { /* outils indisponibles : la bibliothèque reste accessible */ }),
+        chargerCopies().catch(() => { mesCopies = []; })
       ]);
       contenus = error ? [] : data;
       if (etat.abo.actif) { try { const r = await client.rpc("mes_parrainages"); filleuls = r.error ? null : r.data; } catch (e) { filleuls = null; } }
@@ -1741,7 +1807,7 @@
       if (vuAvant === null) { const v = lu(cleAbonne("visite"), 0); vuAvant = v ? new Date(v) : false; ecrit(cleAbonne("visite"), Date.now()); }
       memoLecture = (c, page) => { if (c && c.id) ecrit(cleAbonne("reprise"), { id: c.id, page: Number(page) || 1 }); };
       favoris = crochetFavoris;
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + outilsHTML() + agentHTML() + bibliothequeHTML() + parrainageHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + outilsHTML() + agentHTML() + bibliothequeHTML() + parrainageHTML();
       brancherCompte();
     } else {
       memoLecture = null; favoris = null;
@@ -1866,6 +1932,7 @@
   racine.addEventListener("submit", e => {
     if (e.target.id === "eaTextesForm") { e.preventDefault(); chercherTextes($("#eaTextesQ").value); return; }
     if (e.target.id === "eaPaiement") { e.preventDefault(); envoyerDemande(e.target); return; }
+    if (e.target.id === "eaCopieForm") { e.preventDefault(); deposerCopie(e.target); return; }
     if (e.target.id !== "eaAgentForm") return;
     e.preventDefault();
     if (!agentEnCours) lancerAgent(e.target);
@@ -1896,6 +1963,15 @@
 
   // Bibliothèque : filtres et ouverture des contenus (un seul écouteur pour toute la page)
   racine.addEventListener("click", async e => {
+    const mc = e.target.closest("[data-ma-copie]");
+    if (mc) {
+      // Fenêtre ouverte tout de suite (sinon bloquée sur téléphone), adresse signée ensuite
+      const w = window.open("", "_blank");
+      const { data, error } = await client.storage.from("exclusif").createSignedUrl(mc.dataset.maCopie, 600);
+      if (error) { if (w) w.close(); toast(messageErreur(error)); return; }
+      if (w) { w.opener = null; w.location = data.signedUrl; } else location.href = data.signedUrl;
+      return;
+    }
     const po = e.target.closest("[data-portee]");
     if (po && $(".ea-biblio", racine)) {
       portee = po.dataset.portee; filtre = "tous"; recherche = "";

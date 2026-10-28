@@ -30,6 +30,7 @@
   const TAILLE_MAX = 50 * 1024 * 1024;
 
   let moi = null, abonnes = [], paiements = [], contenus = [];
+  let copies = []; // copies déposées par les abonnés VIP, à corriger et noter sur 20
   let demandes = []; // demandes d'activation envoyées depuis l'espace abonnés (référence du paiement Mobile Money)
   let retourAFaire = ""; // message après une action lancée depuis « À faire aujourd'hui »
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [], epreuvesB = [];
@@ -180,7 +181,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da, pv, fr, pr, pvip] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da, pv, fr, pr, pvip, cv] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -208,7 +209,8 @@
       client.from("demandes_activation").select("*").order("cree_le", { ascending: false }).limit(500),
       client.rpc("admin_provenances", { p_jours: 30 }), client.rpc("admin_facebook_retombees", { p_jours: 90 }),
       client.from("prospects").select("id, cree_le, prenom, email, whatsapp, concours, fiche, accepte_offres, email_envoye, desinscrit_le").order("cree_le", { ascending: false }).limit(500),
-      client.rpc("admin_periodes_vip")
+      client.rpc("admin_periodes_vip"),
+      client.from("copies_vip").select("*").order("cree_le", { ascending: false }).limit(300)
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -216,6 +218,7 @@
     // Périodes VIP (admin_periodes_vip) : marque vip sur chaque paiement
     const vips = new Set((pvip.data || []).map(x => x.id));
     paiements = p.data.map(x => Object.assign(x, { vip: vips.has(x.id) }));
+    copies = cv.data || [];
     // Outils ajoutés en octobre 2026 : tables absentes ou vides, la page fonctionne quand même
     commandes = cmd.data || []; notes = new Map((nt.data || []).map(x => [x.user_id, x.note]));
     lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
@@ -580,7 +583,7 @@
   const GROUPES = () => [
     ["abonnes", "Abonnés", [["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["demandes", `Demandes${demandesEnAttente().length ? ` (${demandesEnAttente().length})` : ""}`],
       ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["paiements", "Paiements"], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`]], demandesEnAttente().length + nbRelances() + commandesATraiter()],
-    ["contenus", "Contenus", [["contenus", `Contenus (${contenus.length})`], ["blancs", "Concours blancs"], ["telechargements", "Téléchargements"]], 0],
+    ["contenus", "Contenus", [["contenus", `Contenus (${contenus.length})`], ["copies", `Copies VIP${copiesACorriger().length ? ` (${copiesACorriger().length})` : ""}`], ["blancs", "Concours blancs"], ["telechargements", "Téléchargements"]], copiesACorriger().length],
     ["communication", "Communication", [["emails", "E-mails"], ["agent", "Agent"]], 0],
     ["pilotage", "Pilotage", [["stats", "Statistiques"], ["visites", "Visites du site"], ["journal", "Journal"]], 0]
   ];
@@ -622,7 +625,8 @@
       [fin7.length, fin7.length > 1 ? `${fin7.length} abonnements finissent dans les 7 jours, sans relance récente` : "1 abonnement finit dans les 7 jours, sans relance récente", "relances"],
       [inactifs.length, inactifs.length > 1 ? `${inactifs.length} abonnés payants ne sont pas passés depuis ${JOURS_INACTIF} jours ou plus` : `1 abonné payant n'est pas passé depuis ${JOURS_INACTIF} jours ou plus`, "relances"],
       [nouveaux.length, nouveaux.length > 1 ? `${nouveaux.length} comptes créés depuis 48 heures, sans demande d'activation` : "1 compte créé depuis 48 heures, sans demande d'activation", "abonnes:attente"],
-      [cmd, cmd > 1 ? `${cmd} commandes d'ouvrages à traiter` : "1 commande d'ouvrages à traiter", "commandes"]
+      [cmd, cmd > 1 ? `${cmd} commandes d'ouvrages à traiter` : "1 commande d'ouvrages à traiter", "commandes"],
+      [copiesACorriger().length, copiesACorriger().length > 1 ? `${copiesACorriger().length} copies VIP à corriger` : "1 copie VIP à corriger", "copies"]
     ].filter(x => x[0]);
     const total = att.length + rappels.length;
     return `<details class="ad-afaire"${total || retourAFaire ? " open" : ""}>
@@ -645,10 +649,47 @@
       </table></div>` : `<p class="ea-vide">Aucune demande traitée pour le moment.</p>`}</section>`;
   }
 
+  // Copies VIP : une par mois et par abonné VIP, à corriger et noter sur 20. Les fichiers (photos ou PDF de la copie)
+  // s'ouvrent par un lien signé de quelques minutes ; le corrigé annoté éventuel est rangé dans le dossier de l'abonné.
+  const EPREUVES_COPIE = { dissertation: "Dissertation", cas_pratique: "Cas pratique", commentaire: "Commentaire", note_synthese: "Note de synthèse", sog: "SOG", autre: "Autre épreuve" };
+  const copiesACorriger = () => copies.filter(x => x.statut === "deposee");
+  const nomFichierCopie = ch => ch.split("/").pop();
+  function ligneCopie(x) {
+    const a = abonnes.find(y => y.user_id === x.user_id);
+    const retour = retours["copie" + x.id] || "";
+    return `<article class="ad-ligne" data-copie="${x.id}">
+        <div class="ad-ident">
+          <div class="ad-nom"><b>${a ? `${esc(a.prenom)} ${esc(a.nom)}` : "Compte supprimé"}</b><span class="ad-badge ${x.statut === "corrigee" ? "ad-actif" : "ad-attente"}">${x.statut === "corrigee" ? `Corrigée · ${String(x.note).replace(".", ",")}/20` : "À corriger"}</span></div>
+          <small>${esc(EPREUVES_COPIE[x.epreuve] || x.epreuve)} · déposée le ${dateFr(String(x.cree_le).slice(0, 10))} (${ilYa(x.cree_le)})${a ? ` · <a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a>` : ""}</small>
+        </div>
+        <details class="ad-copie">
+          <summary>Sujet, copie et correction</summary>
+          <p><b>Sujet :</b> ${esc(x.sujet)}</p>
+          ${x.fichiers.length ? `<p class="ad-outils-ligne">${x.fichiers.map((ch, i) => `<button class="btn btn-ghost btn-sm" type="button" data-copie-fichier="${esc(ch)}">Fichier ${i + 1}</button>`).join("")}</p>` : ""}
+          ${x.texte ? `<div class="ad-copie-texte">${esc(x.texte).replace(/\n/g, "<br>")}</div>` : ""}
+          <form class="form ad-form" data-form="corriger-copie" novalidate>
+            <div class="field"><label>Note sur 20</label><input name="note" type="number" min="0" max="20" step="0.25" inputmode="decimal" value="${x.note ?? ""}" required></div>
+            <div class="field"><label>Corrigé annoté (PDF ou photo, facultatif)</label><input name="fichier" type="file" accept="application/pdf,image/jpeg,image/png">${x.fichier_corrige ? `<small class="ad-note">Déjà joint : ${esc(nomFichierCopie(x.fichier_corrige))}</small>` : ""}</div>
+            <div class="field full"><label>Appréciation générale</label><textarea name="appreciation" maxlength="4000" rows="4">${esc(x.appreciation || "")}</textarea></div>
+            <div class="field full"><label>Correction détaillée (facultatif)</label><textarea name="correction" maxlength="60000" rows="8">${esc(x.correction || "")}</textarea></div>
+            <p class="ea-msg full" role="alert"></p>
+            <button class="btn btn-gold" type="submit">${x.statut === "corrigee" ? "Mettre à jour la correction" : "Envoyer la correction"}</button>
+          </form>
+        </details>
+        <div class="ad-zone"${retour ? "" : " hidden"}>${retour}</div>
+      </article>`;
+  }
+  function panneauCopies() {
+    const att = copiesACorriger(), faites = copies.filter(x => x.statut === "corrigee");
+    return `<p class="ad-note">Chaque abonné VIP peut déposer une copie par mois civil : texte tapé, ou photos et PDF de sa copie manuscrite. Corrigez-la, notez-la sur 20 et, si vous le souhaitez, joignez la copie annotée : l'abonné lit sa correction dans son espace. Prévenez-le ensuite sur WhatsApp.</p>
+      <section class="ad-bloc"><h3>À corriger <span class="n">${att.length}</span></h3>${att.length ? `<div class="ad-liste">${att.slice().reverse().map(ligneCopie).join("")}</div>` : `<p class="ea-vide">Aucune copie en attente.</p>`}</section>
+      <section class="ad-bloc"><h3>Corrigées <span class="n">${faites.length}</span></h3>${faites.length ? `<div class="ad-liste">${faites.map(ligneCopie).join("")}</div>` : `<p class="ea-vide">Aucune copie corrigée pour le moment.</p>`}</section>`;
+  }
+
   // Redessine la page (onglets compris) sans bouger la position de lecture
   const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
   const PANNEAUX = { demandes: () => panneauDemandes(), direct: () => panneauDirect(), visites: () => panneauVisites(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
-    contenus: () => panneauContenus(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), blancs: () => panneauBlancs(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
+    contenus: () => panneauContenus(), copies: () => panneauCopies(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), blancs: () => panneauBlancs(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
   const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
 
   /* ---------- Visites du site public, actualisées toutes les 15 secondes ---------- */
@@ -884,6 +925,7 @@
           <div class="field full" data-pour="video pdf"><label for="nFichier">Fichier</label><input id="nFichier" type="file" name="fichier" accept="video/mp4,video/webm,application/pdf"><small class="ad-note">50 Mo au plus. Vidéos au format MP4 : pour une vidéo plus lourde, demandez-nous de la compresser.</small></div>
           <div class="field full" data-pour="texte" hidden><label for="nTexte">Texte de la fiche</label><textarea id="nTexte" name="texte" rows="10" maxlength="60000"></textarea><small class="ad-note">Une ligne vide entre deux paragraphes. « ## » en début de ligne pour un intertitre, **mots** pour du gras.</small></div>
           <div class="field full" data-pour="lien" hidden><label for="nLien">Adresse du lien</label><input id="nLien" name="lien" type="url" placeholder="https://"></div>
+          <label class="ea-accord full" data-pour="pdf" hidden><input type="checkbox" name="vip"><span><b>Réservé à l'espace VIP</b> (seuls les abonnés VIP ouvrent ce document)</span></label>
           <div class="field full"><label for="nDesc">Présentation (facultatif)</label><textarea id="nDesc" name="description" maxlength="600"></textarea></div>
           <fieldset class="full ad-concours"><legend>Concours concernés</legend>${coches}</fieldset>
           <label class="ea-accord full"><input type="checkbox" name="publie" checked><span>Publier (sinon, le contenu reste en brouillon, invisible des abonnés)</span></label>
@@ -900,7 +942,7 @@
     const retour = retours["c" + c.id] || "";
     return `<article class="ad-ligne" data-cid="${c.id}">
         <div class="ad-ident">
-          <div class="ad-nom"><b>${esc(c.titre)}</b>${programme(c) ? `<span class="ad-badge ad-avenir">Programmé le ${dateHeure(c.publie_le)}</span>` : `<span class="ad-badge ${c.publie ? "ad-actif" : "ad-attente"}">${c.publie ? "Publié" : "Brouillon"}</span>`}</div>
+          <div class="ad-nom"><b>${esc(c.titre)}</b>${c.vip ? `<span class="ea-vip-marque">VIP</span>` : ""}${programme(c) ? `<span class="ad-badge ad-avenir">Programmé le ${dateHeure(c.publie_le)}</span>` : `<span class="ad-badge ${c.publie ? "ad-actif" : "ad-attente"}">${c.publie ? "Publié" : "Brouillon"}</span>`}</div>
           <small>${TYPES[c.type].nom}${c.matiere ? " · " + esc(c.matiere) : ""}${(c.concours || []).length ? " · " + c.concours.map(nomConcours).join(", ") : ""} · ${dateFr(c.publie_le)} · ${pluriel(lecturesRecentes(l => l.contenu_id === c.id), "ouverture")} en 30 jours</small>
         </div>
         <div class="ad-actions">
@@ -925,6 +967,7 @@
         <div class="field full"><label>Présentation</label><textarea name="description" maxlength="600">${esc(c.description || "")}</textarea></div>
         <div class="field"><label>Mis en ligne le</label><input type="datetime-local" name="publie_le" value="${versLocal(c.publie_le)}"><small class="ad-note">Une date future programme la mise en ligne.</small></div>
         <fieldset class="full ad-concours"><legend>Concours concernés</legend>${coches}</fieldset>
+        ${c.type === "pdf" ? `<label class="ea-accord full"><input type="checkbox" name="vip"${c.vip ? " checked" : ""}><span><b>Réservé à l'espace VIP</b></span></label>` : ""}
         <p class="ea-msg full" role="alert"></p>
         <button class="btn btn-gold" type="submit">Enregistrer</button>
       </form>`;
@@ -1473,6 +1516,15 @@
   racine.addEventListener("click", async e => {
     const lienRelance = e.target.closest("a[data-relance]");
     if (lienRelance) { marquerRelance(lienRelance.dataset.relance); setTimeout(() => { if (onglet === "relances" && !occupe()) redessiner(); }, 600); return; }
+    const fc = e.target.closest("[data-copie-fichier]");
+    if (fc) {
+      // Fenêtre ouverte tout de suite (sinon bloquée sur téléphone), adresse signée ensuite
+      const w = window.open("", "_blank");
+      const { data, error } = await client.storage.from("exclusif").createSignedUrl(fc.dataset.copieFichier, 600);
+      if (error) { if (w) w.close(); toast(messageErreur(error)); return; }
+      if (w) { w.opener = null; w.location = data.signedUrl; } else location.href = data.signedUrl;
+      return;
+    }
     const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-groupe], button[data-aller], button[data-filtre], button[data-filtrec], button[data-filtrev]");
     if (!b) return;
     if (b.dataset.onglet) { onglet = b.dataset.onglet; afficher(); return; }
@@ -1885,11 +1937,40 @@
       return;
     }
 
+    if (f.dataset.form === "corriger-copie") {
+      const x = copies.find(y => String(y.id) === f.closest(".ad-ligne").dataset.copie);
+      const note = Number(String(v("note")).replace(",", "."));
+      if (v("note") === "" || !(note >= 0 && note <= 20)) { msg.textContent = "Indiquez une note entre 0 et 20."; return; }
+      const fichier = f.elements.fichier.files[0];
+      let chemin = null;
+      bouton.disabled = true;
+      if (fichier) {
+        const mime = fichier.type;
+        if (!["application/pdf", "image/jpeg", "image/png"].includes(mime)) { bouton.disabled = false; msg.textContent = "Le corrigé doit être un PDF, un JPEG ou un PNG."; return; }
+        if (fichier.size > TAILLE_MAX) { bouton.disabled = false; msg.textContent = "Fichier trop lourd : 50 Mo au plus."; return; }
+        chemin = `copies/${x.user_id}/corrige-${x.id}-${Date.now()}.${{ "application/pdf": "pdf", "image/jpeg": "jpg", "image/png": "png" }[mime]}`;
+        msg.textContent = "Envoi du corrigé annoté…";
+        const { error } = await client.storage.from("exclusif").upload(chemin, fichier, { contentType: mime, upsert: false });
+        if (error) { bouton.disabled = false; msg.textContent = "Envoi impossible : " + messageErreur(error); return; }
+      }
+      const { error } = await client.rpc("admin_corriger_copie", { p_id: x.id, p_note: note, p_appreciation: v("appreciation") || null, p_correction: f.elements.correction.value.trim() || null, p_fichier_corrige: chemin });
+      bouton.disabled = false;
+      if (error) { msg.textContent = messageErreur(error); return; }
+      const a = abonnes.find(y => y.user_id === x.user_id);
+      if (a) {
+        const texte = `Bonjour ${a.prenom},\n\nVotre copie (${EPREUVES_COPIE[x.epreuve] || x.epreuve}) est corrigée : ${String(note).replace(".", ",")}/20. Retrouvez la correction dans votre espace VIP : ${URL_ESPACE}\n\nBonne préparation !`;
+        retours["copie" + x.id] = `<div class="ad-retour"><p>Correction enregistrée.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), texte)}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`;
+      }
+      recharger("Correction enregistrée.");
+      return;
+    }
+
     if (f.dataset.form === "modifier") {
       const c = contenus.find(x => String(x.id) === f.closest(".ad-ligne").dataset.cid);
       const maj = { titre: v("titre"), matiere: v("matiere") || null, description: v("description") || null, concours: coches() };
       if (v("publie_le")) maj.publie_le = new Date(v("publie_le")).toISOString();
       if (c.type === "texte") maj.texte = f.elements.texte.value;
+      if (c.type === "pdf") maj.vip = f.elements.vip.checked;
       if (c.type === "lien") { maj.lien = v("lien"); if (!lienSur(maj.lien)) { msg.textContent = "L'adresse doit commencer par https://"; return; } }
       if (maj.titre.length < 2) { msg.textContent = "Indiquez un titre."; return; }
       bouton.disabled = true;
@@ -1902,7 +1983,7 @@
 
     if (f.id === "adNouveau") {
       const type = v("type"), titre = v("titre");
-      const ligne = { titre, type, matiere: v("matiere") || null, description: v("description") || null, concours: coches(), publie: f.elements.publie.checked };
+      const ligne = { titre, type, matiere: v("matiere") || null, description: v("description") || null, concours: coches(), publie: f.elements.publie.checked, vip: type === "pdf" && f.elements.vip.checked };
       if (v("publie_le")) ligne.publie_le = new Date(v("publie_le")).toISOString();
       if (titre.length < 2) { msg.textContent = "Indiquez un titre."; f.elements.titre.focus(); return; }
       let fichier = null;
