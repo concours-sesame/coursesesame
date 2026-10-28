@@ -806,12 +806,14 @@
     const ligne = a => {
       const s = statut(a), p = periodeCourante(a), n = joursRestants(a);
       return `<tr data-uid="${esc(a.user_id)}">
-          <td><b>${esc(a.prenom)} ${esc(a.nom)}</b>${enLigne(a) ? ` <span class="ad-point" title="En ligne">En ligne</span>` : ""}<small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a></small></td>
+          <td><b>${esc(a.prenom)} ${esc(a.nom)}</b>${estVipAbonne(a) ? ` <span class="ea-vip-marque">VIP</span>` : ""}${enLigne(a) ? ` <span class="ad-point" title="En ligne">En ligne</span>` : ""}<small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a></small></td>
           <td>${p ? `du ${dateFr(p.debut)}<br>au ${dateFr(p.fin)}` : ""}${a.fin && p && a.fin !== p.fin ? `<small>prolongé jusqu'au ${dateFr(a.fin)}</small>` : ""}</td>
           <td><b>${pluriel(n, "jour")}</b>${a.suspendu_depuis ? "<small>en réserve</small>" : ""}</td>
           <td><span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span></td>
           <td>${a.vu_le ? ilYa(a.vu_le) : a.derniere_connexion ? ilYa(a.derniere_connexion) : "jamais"}</td>
-          <td class="ad-td-actions">${a.suspendu_depuis
+          <td class="ad-td-actions">${estVipAbonne(a) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="retirer-vip">Retirer le VIP</button>`
+            : `<button class="btn btn-gold btn-sm" type="button" data-action="passer-vip">Ajouter à l'espace VIP</button>`}
+            ${a.suspendu_depuis
             ? `<button class="btn btn-navy btn-sm" type="button" data-action="reactiver">Réactiver</button>`
             : `<button class="btn btn-ghost btn-sm" type="button" data-action="suspendre">Suspendre</button>`}
             <button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="supprimer">Supprimer</button></td>
