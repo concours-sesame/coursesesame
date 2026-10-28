@@ -85,6 +85,10 @@
     return { cle: "attente", texte: "En attente d'activation" };
   }
   const enCours = a => a.actif || !!a.suspendu_depuis;
+  // VIP : période VIP en cours ou à venir (les paiements sont marqués par admin_periodes_vip)
+  const jourAuj = () => new Date().toISOString().slice(0, 10);
+  const estVipAbonne = a => paiements.some(x => x.user_id === a.user_id && x.vip && x.fin >= jourAuj());
+  const aPeriodeOuverte = a => paiements.some(x => x.user_id === a.user_id && x.fin >= jourAuj());
   const NOM_FORMULE = { j1: "1 jour", j7: "1 semaine", j14: "2 semaines", m1: "1 mois", m2: "2 mois", m3: "3 mois", m6: "6 mois", m12: "12 mois" };
   const nomFormule = k => { const b = String(k || "").replace(/^vip-/, ""); return NOM_FORMULE[b] ? (b !== k ? "VIP, " : "") + NOM_FORMULE[b] : k; };
   const demandeDe = uid => demandes.find(d => d.user_id === uid && d.statut === "en_attente") || null;
@@ -99,7 +103,7 @@
     return p.find(x => x.debut <= jour && jour <= x.fin) || p.find(x => x.debut > jour) || null;
   }
   const FILTRES = [["tous", "Tous", () => true], ["attente", "En attente", a => statut(a).cle === "attente"],
-    ["actif", "En cours", a => a.actif && !a.suspendu_depuis], ["enligne", "En ligne", a => enLigne(a)],
+    ["actif", "En cours", a => a.actif && !a.suspendu_depuis], ["vip", "VIP", a => estVipAbonne(a)], ["enligne", "En ligne", a => enLigne(a)],
     ["bientot", "Fin sous 7 jours", a => statut(a).cle === "bientot"], ["inactif", "Inactifs", a => inactif(a)], ["suspendu", "Suspendus", a => !!a.suspendu_depuis],
     ["expire", "Terminés", a => statut(a).cle === "expire"], ["anciens", "Jamais activés, +30 jours", a => jamaisActive(a)]];
   const estOuvrage = c => /^ouvrage/i.test(c.matiere || "");
@@ -142,6 +146,8 @@
     return debut;
   }
   const messageSuspension = a => `Bonjour ${a.prenom},\n\nVotre abonnement à l'espace abonnés des Cours Sésame et SAJ est suspendu à partir d'aujourd'hui. Vos ${pluriel(joursRestants(a), "jour")} restants sont conservés : ils reprendront le jour de la réactivation.`;
+  const messageVip = a => `Bonjour ${a.prenom},\n\nVotre abonnement passe en VIP : l'espace VIP des Cours Sésame et SAJ vous est ouvert jusqu'à la fin de votre abonnement, avec nos ouvrages complets, nos vidéos réservées et les documents VIP.\nConnectez-vous ici : ${URL_ESPACE}`;
+  const messageFinVip = a => `Bonjour ${a.prenom},\n\nL'accès VIP de votre abonnement aux Cours Sésame et SAJ est retiré à partir d'aujourd'hui. Votre abonnement continue normalement jusqu'à son terme : sujets corrigés, fiches de révision, QCM, textes et jurisprudence.`;
   const messageReactivation = (a, fin) => `Bonjour ${a.prenom},\n\nVotre abonnement à l'espace abonnés des Cours Sésame et SAJ est réactivé. Votre accès est ouvert jusqu'au ${dateFr(fin)}.\nConnectez-vous ici : ${URL_ESPACE}`;
   const moisCourant = auj().slice(0, 7);
   const encaisseCeMois = () => paiements.filter(p => p.cree_le.slice(0, 7) === moisCourant).reduce((s, p) => s + (p.montant || 0), 0);
@@ -860,7 +866,7 @@
     const retour = retours[a.user_id] || "";
     return `<article class="ad-ligne" data-uid="${esc(a.user_id)}">
         <div class="ad-ident">
-          <div class="ad-nom"><b>${esc(a.prenom)} ${esc(a.nom)}</b><span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span>${demandeDe(a.user_id) ? `<span class="ad-badge ad-demande">Demande d'activation</span>` : ""}${a.appareils >= SEUIL_PARTAGE ? `<span class="ad-badge ad-partage" title="Chaque nouvel appareil déconnecte le précédent. Un nombre élevé peut signaler un compte partagé.">${a.appareils} appareils en 7 jours</span>` : ""}</div>
+          <div class="ad-nom"><b>${esc(a.prenom)} ${esc(a.nom)}</b>${estVipAbonne(a) ? `<span class="ea-vip-marque">VIP</span>` : ""}<span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span>${demandeDe(a.user_id) ? `<span class="ad-badge ad-demande">Demande d'activation</span>` : ""}${a.appareils >= SEUIL_PARTAGE ? `<span class="ad-badge ad-partage" title="Chaque nouvel appareil déconnecte le précédent. Un nombre élevé peut signaler un compte partagé.">${a.appareils} appareils en 7 jours</span>` : ""}</div>
           <small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a> · ${esc(a.email)}${a.concours ? " · " + esc(nomConcours(a.concours)) : ""} · inscrit le ${dateFr(a.inscrit_le)}${Number(a.nb_paiements) ? ` · ${a.nb_paiements} paiement${a.nb_paiements > 1 ? "s" : ""}, ${fcfa(a.total_paye)}` : ""} · ${enLigne(a) ? "<b class=\"ad-vert\">en ligne</b>" : `dernier passage : ${ilYa(a.vu_le || a.derniere_connexion)}`}${lecturesRecentes(l => l.user_id === a.user_id) ? ` · ${pluriel(lecturesRecentes(l => l.user_id === a.user_id), "ouverture")} en 30 jours` : ""}</small>
           ${notes.get(a.user_id) ? `<p class="ad-note-privee"><b>Note</b> ${esc(notes.get(a.user_id))}</p>` : ""}
           ${demandeDe(a.user_id) ? `<p class="ad-demande-ligne">Demande du ${dateFr(demandeDe(a.user_id).cree_le)}, ${detailDemande(demandeDe(a.user_id))}</p>` : ""}
@@ -871,6 +877,8 @@
             : `<button class="btn btn-navy btn-sm" type="button" data-action="activer">${demandeDe(a.user_id) ? "Vérifier la demande" : a.actif ? "Prolonger" : "Activer"}</button>`}
           ${demandeDe(a.user_id) ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="refuser-demande">Refuser la demande</button>` : ""}
           ${a.actif && !a.suspendu_depuis ? `<button class="btn btn-ghost btn-sm" type="button" data-action="suspendre">Suspendre</button><button class="btn btn-ghost btn-sm" type="button" data-action="couper">Couper l'accès</button>` : ""}
+          ${estVipAbonne(a) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="retirer-vip">Retirer le VIP</button>`
+            : aPeriodeOuverte(a) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="passer-vip">Passer en VIP</button>` : ""}
           ${enCours(a) ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="supprimer">Supprimer l'abonnement</button>` : ""}
           <a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), messageRelance(a))}" target="_blank" rel="noopener">${icone("i-wa")}${["attente", "bientot", "expire", "suspendu"].includes(s.cle) ? "Relancer" : "Écrire"}</a>
           <button class="btn btn-ghost btn-sm" type="button" data-action="mdp">Mot de passe</button>
@@ -1299,11 +1307,11 @@
     contenu_publie: "Contenu publié", contenu_retire: "Contenu retiré", contenu_modifie: "Contenu modifié", commande_ajoutee: "Commande enregistrée",
     commande_supprimee: "Commande supprimée", commande_payee: "Commande payée", commande_expediee: "Commande expédiée", commande_livree: "Commande livrée",
     commande_annulee: "Commande annulée", commande_nouvelle: "Commande remise en « nouvelle »", commande_modifiee: "Commande modifiée",
-    compte_deconnecte: "Abonné déconnecté de ses appareils", compte_supprime: "Compte supprimé"
+    compte_deconnecte: "Abonné déconnecté de ses appareils", compte_supprime: "Compte supprimé", vip_ajoute: "Passage en VIP", vip_retire: "VIP retiré"
   };
   function detailJournal(j) {
     const x = j.details || {};
-    if (j.action.startsWith("abonnement") || j.action === "acces_coupe") return `${esc(nomAbonne(j.cible))}${x.debut ? ` · du ${dateFr(x.debut)} au ${dateFr(x.fin)}` : ""}${x.montant != null && j.action === "abonnement_active" ? ` · ${fcfa(x.montant)}` : ""}${x.moyen && j.action === "abonnement_active" ? ` · ${esc(x.moyen)}` : ""}`;
+    if (j.action.startsWith("abonnement") || j.action === "acces_coupe" || j.action.startsWith("vip_")) return `${esc(nomAbonne(j.cible))}${x.debut ? ` · du ${dateFr(x.debut)} au ${dateFr(x.fin)}` : ""}${x.montant != null && j.action === "abonnement_active" ? ` · ${fcfa(x.montant)}` : ""}${x.moyen && j.action === "abonnement_active" ? ` · ${esc(x.moyen)}` : ""}`;
     if (j.action.startsWith("contenu")) return esc(x.titre || "");
     if (j.action.startsWith("commande")) return `${esc(x.client || "")}${x.montant != null ? ` · ${fcfa(x.montant)}` : ""}`;
     if (j.action === "compte_deconnecte") return esc(nomAbonne(j.cible));
@@ -1684,6 +1692,19 @@
         if (error) return toast(messageErreur(error));
         retour(`<div class="ad-retour"><p>Abonnement de ${esc(a.prenom)} ${esc(a.nom)} <b>suspendu</b>.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), texte)}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`);
         recharger("Abonnement suspendu.");
+        return;
+      }
+      if (act === "passer-vip" || act === "retirer-vip") {
+        const ajout = act === "passer-vip";
+        if (!confirm(ajout
+          ? `Passer ${a.prenom} ${a.nom} en VIP ?\n\nSes périodes en cours et à venir deviennent VIP, sans changer leurs dates : l'espace VIP (ouvrages complets, vidéos réservées, documents VIP, copie corrigée du mois) s'ouvre tout de suite. Pensez à encaisser la différence de tarif si besoin.`
+          : `Retirer le VIP à ${a.prenom} ${a.nom} ?\n\nSes périodes en cours et à venir redeviennent normales, sans changer leurs dates : l'espace VIP se ferme tout de suite, le reste de l'abonnement continue.`)) return;
+        b.disabled = true;
+        const { error } = await client.rpc(ajout ? "admin_passer_vip" : "admin_retirer_vip", { p_user: a.user_id });
+        b.disabled = false;
+        if (error) return toast(messageErreur(error));
+        retour(`<div class="ad-retour"><p>${esc(a.prenom)} ${esc(a.nom)} ${ajout ? "<b>est passé en VIP</b>" : "<b>n'est plus VIP</b>"}.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), ajout ? messageVip(a) : messageFinVip(a))}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`);
+        recharger(ajout ? "Abonné passé en VIP." : "VIP retiré.");
         return;
       }
       if (act === "reactiver") {
