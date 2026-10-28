@@ -728,7 +728,7 @@
       client.rpc("acces_ouvrages"),
       client.rpc("acces_videos"),
       client.rpc("ma_suspension"),
-      client.from("demandes_activation").select("id, formule, montant, moyen, reference, statut, motif, cree_le").eq("user_id", uid).order("cree_le", { ascending: false }).limit(1),
+      client.from("demandes_activation").select("id, formule, vip, montant, moyen, reference, statut, motif, cree_le").eq("user_id", uid).order("cree_le", { ascending: false }).limit(1),
       client.rpc("acces_vip")
     ]);
     if (p.error || a.error) throw p.error || a.error;
@@ -836,6 +836,8 @@
   const numerosPaiement = () => (typeof NUMEROS_PAIEMENT !== "undefined" ? NUMEROS_PAIEMENT : []).filter(n => n.moyen && n.numero);
   const prixDe = cle => { const t = tarifsTous().find(x => x.cle === cle); return t ? Number(String(t.prix).replace(/\D/g, "")) || null : null; };
   const nomFormule = cle => { const t = tarifsTous().find(x => x.cle === cle); return t ? (/^vip-/.test(cle) ? "VIP, " : "") + t.duree : cle; };
+  // Clé de formule d'une demande : durée (j1… m12), précédée de « vip- » pour une demande VIP
+  const cleDemande = d => (d.vip ? "vip-" : "") + d.formule;
   const demandeEnAttente = () => etat.demande && etat.demande.statut === "en_attente" ? etat.demande : null;
   function etapesPaiement(renouveler) {
     const nums = numerosPaiement();
@@ -848,7 +850,7 @@
   function formulairePaiement(renouveler, defaut = "m1") {
     const d = demandeEnAttente();
     return `<form class="form ea-form ea-paiement" id="eaPaiement" novalidate>
-        <div class="field"><label for="pFormule">Formule</label><select id="pFormule" name="formule">${[["Abonnement", tarifsAbo()], ["VIP : avec les ouvrages complets et les vidéos", tarifsVip()]].filter(([, l]) => l.length).map(([nom, l]) => `<optgroup label="${esc(nom)}">${l.map(t => `<option value="${esc(t.cle)}"${(d ? d.formule === t.cle : t.cle === defaut) ? " selected" : ""}>${/^vip-/.test(t.cle) ? "VIP, " : ""}${esc(t.duree)}, ${esc(t.prix)} FCFA</option>`).join("")}</optgroup>`).join("")}</select></div>
+        <div class="field"><label for="pFormule">Formule</label><select id="pFormule" name="formule">${[["Abonnement", tarifsAbo()], ["VIP : avec les ouvrages complets et les vidéos", tarifsVip()]].filter(([, l]) => l.length).map(([nom, l]) => `<optgroup label="${esc(nom)}">${l.map(t => `<option value="${esc(t.cle)}"${(d ? cleDemande(d) === t.cle : t.cle === defaut) ? " selected" : ""}>${/^vip-/.test(t.cle) ? "VIP, " : ""}${esc(t.duree)}, ${esc(t.prix)} FCFA</option>`).join("")}</optgroup>`).join("")}</select></div>
         <div class="field"><label for="pMoyen">Moyen de paiement</label><select id="pMoyen" name="moyen">${MOYENS_PAIEMENT.map(m => `<option${d && d.moyen === m ? " selected" : ""}>${m}</option>`).join("")}</select></div>
         <div class="field full"><label for="pRef">Référence du paiement</label><input id="pRef" name="reference" maxlength="80" autocomplete="off" value="${d ? esc(d.reference) : ""}"></div>
         <p class="ea-msg full" role="alert"></p>
@@ -859,7 +861,7 @@
     const d = etat.demande;
     if (!d) return "";
     if (d.statut === "en_attente") return `<div class="ea-demande" role="status">
-        <p><b>Demande envoyée le ${dateFr(d.cree_le)}.</b> ${esc(nomFormule(d.formule))}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence ${esc(d.reference)}.</p>
+        <p><b>Demande envoyée le ${dateFr(d.cree_le)}.</b> ${esc(nomFormule(cleDemande(d)))}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence ${esc(d.reference)}.</p>
         <p>Nous vérifions votre paiement. Votre accès s'ouvrira dès la validation, et cette page se mettra à jour d'elle-même.</p>
         <p class="ea-demande-actions"><button class="btn btn-ghost btn-sm" type="button" data-paiement="modifier">Corriger la demande</button><button class="btn btn-ghost btn-sm" type="button" data-paiement="retirer">Annuler la demande</button></p>
       </div>`;
@@ -893,7 +895,7 @@
     const formule = f.formule.value, moyen = f.moyen.value, reference = f.reference.value.trim();
     if (reference.replace(/[^A-Za-z0-9]/g, "").length < 4) { msg.textContent = "Indiquez la référence complète de votre paiement."; f.reference.focus(); return; }
     bouton.disabled = true; msg.textContent = "";
-    const { error } = await client.rpc("demander_activation", { p_formule: formule, p_moyen: moyen, p_reference: reference, p_montant: prixDe(formule) });
+    const { error } = await client.rpc("demander_activation_vip", { p_formule: formule.replace(/^vip-/, ""), p_moyen: moyen, p_reference: reference, p_montant: prixDe(formule), p_vip: /^vip-/.test(formule) });
     bouton.disabled = false;
     if (error) { msg.textContent = messageErreur(error); return; }
     toast("Demande envoyée. Nous vérifions votre paiement.");

@@ -88,7 +88,7 @@
   const nomFormule = k => { const b = String(k || "").replace(/^vip-/, ""); return NOM_FORMULE[b] ? (b !== k ? "VIP, " : "") + NOM_FORMULE[b] : k; };
   const demandeDe = uid => demandes.find(d => d.user_id === uid && d.statut === "en_attente") || null;
   const demandesEnAttente = () => demandes.filter(d => d.statut === "en_attente");
-  const detailDemande = d => `${esc(nomFormule(d.formule))}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence <b>${esc(d.reference)}</b>`;
+  const detailDemande = d => `${esc(nomFormule((d.vip ? "vip-" : "") + d.formule))}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence <b>${esc(d.reference)}</b>`;
   // Compte inscrit depuis plus de 30 jours sans aucun paiement : faux compte ou inscription abandonnée
   const jamaisActive = a => !Number(a.nb_paiements) && !a.fin && joursJusqua(String(a.inscrit_le).slice(0, 10)) < -30;
   // Période en cours (ou, à défaut, prochaine période) d'un compte, d'après l'historique des paiements
@@ -180,7 +180,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da, pv, fr, pr] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da, pv, fr, pr, pvip] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -207,11 +207,15 @@
       client.rpc("admin_visites_jours", { p_jours: 30 }),
       client.from("demandes_activation").select("*").order("cree_le", { ascending: false }).limit(500),
       client.rpc("admin_provenances", { p_jours: 30 }), client.rpc("admin_facebook_retombees", { p_jours: 90 }),
-      client.from("prospects").select("id, cree_le, prenom, email, whatsapp, concours, fiche, accepte_offres, email_envoye, desinscrit_le").order("cree_le", { ascending: false }).limit(500)
+      client.from("prospects").select("id, cree_le, prenom, email, whatsapp, concours, fiche, accepte_offres, email_envoye, desinscrit_le").order("cree_le", { ascending: false }).limit(500),
+      client.rpc("admin_periodes_vip")
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
-    abonnes = a.data; paiements = p.data; contenus = c.data;
+    abonnes = a.data; contenus = c.data;
+    // Périodes VIP (admin_periodes_vip) : marque vip sur chaque paiement
+    const vips = new Set((pvip.data || []).map(x => x.id));
+    paiements = p.data.map(x => Object.assign(x, { vip: vips.has(x.id) }));
     // Outils ajoutés en octobre 2026 : tables absentes ou vides, la page fonctionne quand même
     commandes = cmd.data || []; notes = new Map((nt.data || []).map(x => [x.user_id, x.note]));
     lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
@@ -841,10 +845,10 @@
   const finVip = uid => paiements.filter(x => x.user_id === uid && x.vip).reduce((m, x) => (!m || x.fin > m ? x.fin : m), null);
   function formulaireActivation(a) {
     const debut = a.actif ? lendemain(a.fin) : auj();
-    // Une période VIP s'enchaîne après la dernière période VIP seulement (règle de admin_activer)
+    // Une période VIP s'enchaîne après la dernière période VIP seulement (règle de admin_activer_periode)
     const fv = finVip(a.user_id), vipEnCours = !!fv && fv >= auj(), debutVip = vipEnCours ? lendemain(fv) : auj();
-    const d = demandeDe(a.user_id), vip = !!d && /^vip-/.test(d.formule);
-    const formule = d && NOM_FORMULE[d.formule.replace(/^vip-/, "")] ? d.formule.replace(/^vip-/, "") : "m1";
+    const d = demandeDe(a.user_id), vip = !!d && !!d.vip;
+    const formule = d && NOM_FORMULE[d.formule] ? d.formule : "m1";
     return `<form class="form ad-form" data-form="activer" data-debut="${debut}" data-suite="${a.actif ? 1 : 0}" data-debut-vip="${debutVip}" data-suite-vip="${vipEnCours ? 1 : 0}" novalidate>
         ${d ? `<p class="ad-alerte-douce full">Demande de ${esc(a.prenom)} du ${dateFr(d.cree_le)}, ${detailDemande(d)}. Vérifiez dans votre application ${esc(d.moyen)} que ce paiement a bien été reçu, au bon montant, avant de valider.</p>` : ""}
         <p class="ad-note full">${a.actif ? `La prolongation commence le ${dateFr(debut)}, à la suite de l'abonnement en cours.` : "L'abonnement commence aujourd'hui. Pour les formules en jours ou en semaines, le jour de l'activation est offert."} Les ouvrages complets et les vidéos réservées ne s'ouvrent qu'avec une période VIP. Une période VIP commence ${vipEnCours ? `le ${dateFr(debutVip)}, à la suite du VIP en cours` : "aujourd'hui, même si un abonnement normal est en cours"}.</p>
@@ -1588,7 +1592,7 @@
       if (act === "refuser-demande") {
         const d = demandeDe(a.user_id);
         if (!d) return;
-        const motif = prompt(`Refuser la demande de ${a.prenom} ${a.nom} (${nomFormule(d.formule)}, ${d.moyen}, référence ${d.reference}) ?\n\nMotif, affiché à l'abonné dans son espace (facultatif)`, "Paiement introuvable");
+        const motif = prompt(`Refuser la demande de ${a.prenom} ${a.nom} (${nomFormule((d.vip ? "vip-" : "") + d.formule)}, ${d.moyen}, référence ${d.reference}) ?\n\nMotif, affiché à l'abonné dans son espace (facultatif)`, "Paiement introuvable");
         if (motif === null) return;
         b.disabled = true;
         const { error } = await client.rpc("admin_refuser_demande", { p_id: d.id, p_motif: motif });
@@ -1779,7 +1783,7 @@
       const deja = paiementsMemeReference(v("note"))[0];
       if (deja && !confirm(`Attention : la référence « ${v("note")} » a déjà servi le ${dateFr(deja.cree_le)} pour ${deja.prenom} ${deja.nom}${deja.montant != null ? ` (${fcfa(deja.montant)})` : ""}.\n\nUne même référence Mobile Money ne correspond normalement qu'à un seul paiement. Enregistrer quand même ?`)) return;
       bouton.disabled = true;
-      const { data: fin, error } = await client.rpc("admin_activer", {
+      const { data: fin, error } = await client.rpc("admin_activer_periode", {
         p_user: a.user_id, p_mois: mois || null, p_jusqu_au: mois ? null : jusqua,
         p_montant: montant === "" ? null : Math.round(Number(montant)), p_moyen: v("moyen") || null, p_note: v("note") || null, p_vip: vip
       });
