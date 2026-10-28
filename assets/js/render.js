@@ -37,7 +37,7 @@
   const ouvrageSlug = o => slugify(o.titre.replace(EDITION, ""));
   const ouvrageURL = o => `${root}ouvrages/${ouvrageSlug(o)}/`;
   // Mention des ouvrages dont la version intégrale se lit dans l'espace abonnés ("abonnement":true dans data.js)
-  const ABO_MENTION = "Inclus dans l'abonnement d'un mois";
+  const ABO_MENTION = "Inclus dans l'espace VIP";
 
   function coverParts(titre) {
     const t = titre.replace(EDITION, "").replace(/ aux? Concours (?:Administratifs|de la Magistrature)$/i, "");

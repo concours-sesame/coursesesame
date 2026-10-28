@@ -33,7 +33,7 @@ const write = (f, s) => { fs.mkdirSync(path.dirname(path.join(DIR, f)), { recurs
 /* ---------- Données ---------- */
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,WA2,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM,VIDEOS,VIDEOS_ABONNES,TARIFS_ABONNEMENT};", ctx);
+vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,WA2,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM,VIDEOS,VIDEOS_ABONNES,TARIFS_ABONNEMENT,TARIFS_VIP};", ctx);
 vm.runInContext(read("assets/js/render.js"), ctx);
 const { WA, OUVRAGES, FAQ, METHODO, EPREUVES, SUJETS, VIDEOS, VIDEOS_ABONNES } = ctx.D;
 const R = ctx.SESAME;
@@ -42,7 +42,11 @@ const byCat = id => OUVRAGES.filter(o => o.categorie === id);
 // Ouvrages du catalogue dont la version intégrale se lit dans l'espace abonnés ("abonnement":true dans data.js).
 // Chaque livre une seule fois : deux titres qui partagent le même extrait sont le même livre. Pour la valeur
 // au catalogue, on retient le prix le plus bas du livre.
-const TARIF_MOIS = (ctx.D.TARIFS_ABONNEMENT || []).find(t => t.cle === "m1");
+// Espace VIP : ouvrages complets et vidéos réservées, au triple du tarif normal (TARIFS_VIP dans data.js)
+const TARIFS_VIP = ctx.D.TARIFS_VIP || [];
+const VIP_JOUR = TARIFS_VIP.find(t => t.cle === "vip-j1");
+const VIP_MOIS = TARIFS_VIP.find(t => t.cle === "vip-m1");
+const vipDes = VIP_JOUR ? `dès ${VIP_JOUR.prix} FCFA la journée` : "sur abonnement VIP";
 const LIVRES_ABONNEMENT = (() => {
   const livres = new Map();
   for (const o of OUVRAGES.filter(x => x.abonnement)) {
@@ -107,19 +111,18 @@ function selectionHTML() {
   return `<div class="books">${sel.map(o => R.bookHTML(horsConcours(livreDe(o)), OUVRAGES.indexOf(o), false)).join("")}</div>`;
 }
 
-// Accueil : ce que donne l'abonnement et quatre formules, d'après TARIFS_ABONNEMENT (data.js)
+// Accueil : deux formules normales et deux formules VIP, d'après TARIFS_ABONNEMENT et TARIFS_VIP (data.js)
 function abonnementHTML() {
-  const t = cle => (ctx.D.TARIFS_ABONNEMENT || []).find(x => x.cle === cle);
-  const [j1, j7, m1, m3] = ["j1", "j7", "m1", "m3"].map(t);
-  if (!j1 || !j7 || !m1 || !m3) throw new Error("accueil : formules j1, j7, m1 et m3 attendues dans TARIFS_ABONNEMENT");
-  const eco = 3 * parsePrice(m1.prix) - parsePrice(m3.prix);
-  const carte = (f, quoi, extra = "", cls = "") => `<li class="formule${cls}"><span class="formule-duree">${f.duree}</span><b>${f.prix} <small>FCFA</small></b><span class="formule-quoi">${quoi}</span>${extra}</li>`;
+  const t = cle => [...(ctx.D.TARIFS_ABONNEMENT || []), ...TARIFS_VIP].find(x => x.cle === cle);
+  const [j1, m1, vj1, vm1] = ["j1", "m1", "vip-j1", "vip-m1"].map(t);
+  if (!j1 || !m1 || !vj1 || !vm1) throw new Error("accueil : formules j1, m1, vip-j1 et vip-m1 attendues dans data.js");
+  const carte = (f, nom, quoi, cls = "") => `<li class="formule${cls}"><span class="formule-duree">${nom}</span><b>${f.prix} <small>FCFA</small></b><span class="formule-quoi">${quoi}</span></li>`;
   return `
       <ul class="formules">
-        ${carte(j1, "Sujets corrigés, fiches de révision et QCM")}
-        ${carte(j7, "Tout cela, plus les vidéos réservées")}
-        ${carte(m1, "Tout cela, plus nos ouvrages complets à lire en ligne", "", " formule-mise")}
-        ${carte(m3, "Les ouvrages complets pendant trois mois", eco > 0 ? `<span class="formule-eco">${fmt(eco)} FCFA d'économie sur trois mois pris un à un</span>` : "")}
+        ${carte(j1, "1 jour", "Sujets corrigés, fiches de révision, QCM, textes et jurisprudence")}
+        ${carte(m1, "1 mois", "Tout cela pendant un mois, avec les corrigés des concours blancs")}
+        ${carte(vj1, "VIP · 1 jour", "Tout l'abonnement, plus l'espace VIP : ouvrages complets et vidéos réservées", " formule-vip")}
+        ${carte(vm1, "VIP · 1 mois", "Tout l'abonnement et l'espace VIP pendant un mois", " formule-mise")}
       </ul>
     `;
 }
@@ -473,7 +476,7 @@ function videosSection(list, prefix, { id = "videos", h2, eyebrow = "", lead, ic
     </div>
     ${feat ? videoFeature(feat, prefix, ici) : ""}
     ${rest.length ? `<div class="v-rail${feat ? " v-rail-after" : ""}">${rest.map((v, i) => videoCard(v, prefix, i, ici)).join("")}</div>` : ""}
-    ${abo.length ? `<div class="v-abo-head reveal"><h3>${svg("i-lock")}Réservées aux abonnés</h3><p>D'autres notions expliquées en une minute, à regarder dans l'espace abonnés dès la formule d'une semaine.</p></div>
+    ${abo.length ? `<div class="v-abo-head reveal"><h3>${svg("i-lock")}Réservées aux abonnés VIP</h3><p>D'autres notions expliquées en une minute, à regarder dans l'espace VIP de l'espace abonnés.</p></div>
     <div class="v-rail">${abo.map((v, i) => videoAboCard(v, prefix, i)).join("")}</div>` : ""}
     ${band}
   </div>
@@ -482,7 +485,7 @@ function videosSection(list, prefix, { id = "videos", h2, eyebrow = "", lead, ic
 // Invitation à l'espace abonnés
 function espaceBand(prefix) {
   return `<div class="espace-band reveal">
-      <div><b>Allez plus loin avec l'espace abonnés</b><p>Sujets corrigés, fiches de révision et QCM chronométrés, et dès la formule d'un mois, nos ouvrages complets à lire en ligne. Créez votre compte en une minute, réglez votre formule, et votre accès s'ouvre.</p></div>
+      <div><b>Allez plus loin avec l'espace abonnés</b><p>Sujets corrigés, fiches de révision et QCM chronométrés, et dans l'espace VIP, nos ouvrages complets à lire en ligne. Créez votre compte en une minute, réglez votre formule, et votre accès s'ouvre.</p></div>
       <div class="espace-band-actions"><a class="btn btn-navy" href="${prefix}espace-abonnes/#inscription">Créer mon compte${arrow}</a><a class="btn btn-ghost" href="${prefix}espace-abonnes/#connexion">Se connecter</a></div>
     </div>`;
 }
@@ -692,7 +695,7 @@ function ouvragePage(l) {
           <a class="btn btn-wa" href="${WA_URL}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener">${waIcon}Commander sur WhatsApp</a>
           ${pdf ? `<a class="btn btn-ghost" href="${pdf}" target="_blank" rel="noopener">${bookIcon}Lire un extrait gratuit</a>` : ""}
         </div>
-        ${o.abonnement ? `<p class="product-abo">${svg("i-book", 'fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"')}<span><b>${R.ABO_MENTION}.</b> La version intégrale de cet ouvrage se lit aussi en ligne dans l'espace abonnés, dès la formule d'un mois${TARIF_MOIS ? ` (${TARIF_MOIS.prix} FCFA)` : ""}. <a href="${prefix}espace-abonnes/#inclus">Voir ce que comprend l'abonnement</a></span></p>` : ""}
+        ${o.abonnement ? `<p class="product-abo">${svg("i-book", 'fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"')}<span><b>${R.ABO_MENTION}.</b> La version intégrale de cet ouvrage se lit aussi en ligne dans l'espace VIP de l'espace abonnés, ${vipDes}. <a href="${prefix}espace-abonnes/#inclus">Voir ce que comprend l'espace VIP</a></span></p>` : ""}
         <div class="product-foot">
           <button class="share-btn" data-share="${url}" data-title="${attr(o.titre)}">${shareIcon}Partager cet ouvrage</button>
           <span>-10 % dès 3 ouvrages, appliqué au panier</span>
@@ -854,7 +857,7 @@ ${x.corrige}
       <div class="verrou">
         <span class="eyebrow">Espace abonnés</span>
         <h2>La suite du corrigé est réservée aux abonnés</h2>
-        <p>Le corrigé intégral de ce sujet, avec tous nos autres corrigés, se lit dans l'espace abonnés. Abonnement dès 500 FCFA la journée, par Mobile Money. Nos ouvrages complets y sont compris à partir de la formule d'un mois.</p>
+        <p>Le corrigé intégral de ce sujet, avec tous nos autres corrigés, se lit dans l'espace abonnés. Abonnement dès 500 FCFA la journée, par Mobile Money. Nos ouvrages complets se lisent dans l'espace VIP.</p>
         <div class="verrou-actions"><a class="btn btn-gold" href="${prefix}espace-abonnes/#corrige-${x.adresse}">Lire le corrigé complet${arrow}</a><a class="btn btn-ghost" href="${prefix}espace-abonnes/#inscription">Créer mon compte</a></div>
       </div>` : `<div class="copie" id="corrige">
 ${x.corrige}
@@ -1195,20 +1198,20 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">${R.ABO_MENTION}</span><h2 class="h-section">${LIVRES_ABONNEMENT.length} ouvrages du catalogue à lire en ligne</h2></div>
-      <p class="lead">Dès la formule d'un mois${TARIF_MOIS ? ` (${TARIF_MOIS.prix} FCFA)` : ""}, vous lisez la version intégrale de ces ouvrages dans l'espace abonnés. Au catalogue, ils représentent ensemble ${fmt(valeur)} FCFA. S'y ajoutent des ouvrages réservés aux abonnés, des sujets corrigés, des fiches de révision et des QCM chronométrés : <a href="#espace-app">voir la liste complète</a>.</p>
+      <p class="lead">Avec l'abonnement VIP, ${vipDes}${VIP_MOIS ? ` ou ${VIP_MOIS.prix} FCFA le mois` : ""}, vous lisez la version intégrale de ces ouvrages dans l'espace VIP, avec nos vidéos réservées. Au catalogue, ils représentent ensemble ${fmt(valeur)} FCFA. S'y ajoutent des ouvrages réservés aux abonnés VIP et tout l'abonnement normal : sujets corrigés, fiches de révision, QCM chronométrés. <a href="#espace-app">Voir la liste complète</a>.</p>
     </div>
     <ul class="abo-livres">${LIVRES_ABONNEMENT.map(({ o, cats }, i) => `
       <li class="abo-livre reveal reveal-d${i % 4}"><a href="${R.ouvrageURL(o)}">${R.coverHTML(o)}<span class="abo-livre-txt"><b>${o.titre}</b><small>${cats.map(nomCourt).join(", ")}</small></span></a></li>`).join("")}
     </ul>
-    <p class="abo-note">Les formules d'un jour, d'une semaine et de deux semaines donnent accès à tous les autres contenus, mais pas aux ouvrages complets. Les ouvrages se lisent en ligne, sur un appareil à la fois, pendant la durée de l'abonnement. Pour garder un ouvrage, commandez-le dans <a href="${prefix}ouvrages/">notre catalogue</a>.</p>
+    <p class="abo-note">L'abonnement normal donne accès à tous les autres contenus, mais pas à l'espace VIP. Les ouvrages se lisent en ligne, sur un appareil à la fois, pendant la durée de l'abonnement. Pour garder un ouvrage, commandez-le dans <a href="${prefix}ouvrages/">notre catalogue</a>.</p>
   </div>
 </section>` : "";
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Espace abonnés", ""]],
     h1: `L'espace abonnés`,
-    lead: "Sujets corrigés, fiches de révision, QCM chronométrés, révision du jour et simulateur de grand oral et, dès la formule d'un mois, nos ouvrages complets à lire en ligne. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.",
-    ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${LIVRES_ABONNEMENT.length ? `<a href="#inclus" class="btn btn-ghost">Ce que comprend l'abonnement</a>` : ""}`,
-    facts: tarifs.filter(t => ["j1", "j7", "m1", "m12"].includes(t.cle)).map(t => `${t.duree} : <b>${t.prix} FCFA</b>`)
+    lead: `Sujets corrigés, fiches de révision, QCM chronométrés, révision du jour et simulateur de grand oral et, dans l'espace VIP, nos ouvrages complets et nos vidéos réservées. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.`,
+    ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${LIVRES_ABONNEMENT.length ? `<a href="#inclus" class="btn btn-ghost">L'espace VIP</a>` : ""}`,
+    facts: [...tarifs.filter(t => ["j1", "j7", "m1", "m12"].includes(t.cle)).map(t => `${t.duree} : <b>${t.prix} FCFA</b>`), ...(VIP_JOUR && VIP_MOIS ? [`VIP : <b>${VIP_JOUR.prix} FCFA</b> le jour, <b>${VIP_MOIS.prix} FCFA</b> le mois`] : [])]
   })}
 
 <section class="section espace-section" id="espace-app">
@@ -1246,7 +1249,7 @@ ${vitrine}
     <ol class="espace-etapes">
       <li class="espace-etape"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.</span></li>
       <li class="espace-etape"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis saisissez la référence du paiement dans votre espace ou envoyez-la-nous sur WhatsApp.${tarifs.length ? "" : " Nous vous indiquons le tarif."}</span></li>
-      <li class="espace-etape"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement. Les ouvrages complets sont compris à partir de la formule d'un mois. Un compte s'utilise sur un appareil à la fois : une connexion sur un autre appareil déconnecte le précédent.</span></li>
+      <li class="espace-etape"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement. Les ouvrages complets et les vidéos réservées se lisent avec l'abonnement VIP. Un compte s'utilise sur un appareil à la fois : une connexion sur un autre appareil déconnecte le précédent.</span></li>
     </ol>
   </div>
 </section>
@@ -1254,8 +1257,8 @@ ${vitrine}
 ${contactCTA(prefix)}`;
   write("espace-abonnes/index.html", page({
     prefix, url, body, scripts: SCRIPTS_ESPACE,
-    title: "Espace abonnés : ouvrages complets, corrigés, fiches et QCM",
-    description: "Nos ouvrages complets à lire en ligne dès la formule d'un mois, des sujets corrigés, des fiches de révision et des QCM chronométrés. Abonnement dès 500 FCFA la journée.",
+    title: "Espace abonnés : corrigés, fiches, QCM et espace VIP",
+    description: "Des sujets corrigés, des fiches de révision et des QCM chronométrés dès 500 FCFA la journée, et nos ouvrages complets à lire en ligne dans l'espace VIP.",
     ld: [breadcrumb([["Accueil", SITE], ["Espace abonnés", url]])]
   }));
   urls.push(url);
@@ -1431,7 +1434,6 @@ ${contactCTA(prefix)}`;
   R.setRoot(prefix);
   const url = SITE + "conditions-de-vente/";
   const tarifs = ctx.D.TARIFS_ABONNEMENT || [];
-  const longues = ["m1", "m2", "m3", "m6", "m12"];
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Conditions de vente", ""]],
     h1: `Conditions de vente et d'abonnement`,
@@ -1460,8 +1462,8 @@ ${contactCTA(prefix)}`;
 
     <h2 id="abonnement">Abonnement à l'espace abonnés</h2>
     <p>Vous créez votre compte sur la page <a href="${prefix}espace-abonnes/">Espace abonnés</a>, vous réglez la formule choisie par Mobile Money, puis vous nous transmettez la référence du paiement, depuis votre espace ou sur WhatsApp. Nous activons votre accès après vérification du paiement. Les formules en vigueur sont les suivantes :</p>
-    ${tarifs.length ? `<div class="table-wrap"><table class="tarifs"><thead><tr><th scope="col">Formule</th><th scope="col">Prix</th><th scope="col">Ouvrages complets</th></tr></thead><tbody>${tarifs.map(t => `<tr><td>${t.duree}</td><td>${t.prix} FCFA</td><td>${longues.includes(t.cle) ? "compris" : "non compris"}</td></tr>`).join("")}</tbody></table></div>` : ""}
-    <p>La durée de la formule court à partir de l'activation, et non du paiement : un accès activé plus tard ne vous fait perdre aucun jour. Une prolongation s'ajoute à la fin de l'abonnement en cours. Les formules d'une semaine et de deux semaines donnent accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus. La formule d'un jour donne accès à tous les contenus, sauf les ouvrages complets et les vidéos, réservées aux formules d'une semaine et plus.</p>
+    ${tarifs.length ? `<div class="table-wrap"><table class="tarifs"><thead><tr><th scope="col">Durée</th><th scope="col">Abonnement</th><th scope="col">Abonnement VIP</th></tr></thead><tbody>${tarifs.map(t => { const v = TARIFS_VIP.find(x => x.cle === "vip-" + t.cle); return `<tr><td>${t.duree}</td><td>${t.prix} FCFA</td><td>${v ? v.prix + " FCFA" : "non proposé"}</td></tr>`; }).join("")}</tbody></table></div>` : ""}
+    <p>La durée de la formule court à partir de l'activation, et non du paiement : un accès activé plus tard ne vous fait perdre aucun jour. Une prolongation s'ajoute à la fin de l'abonnement en cours. L'abonnement donne accès aux sujets corrigés, aux fiches de révision, aux QCM, aux textes officiels, à la jurisprudence et, à partir d'une semaine, aux corrigés des concours blancs. L'abonnement VIP donne accès, en plus, à l'espace VIP : les ouvrages complets et les vidéos réservées, quelle que soit sa durée. Les abonnements enregistrés avant l'ouverture de l'espace VIP, le 28 octobre 2026, gardent jusqu'à leur terme l'accès qu'ils donnaient alors (ouvrages complets pour les formules d'un mois et plus, vidéos pour les formules d'une semaine et plus).</p>
 
     <h2 id="non-active">Abonnement payé mais pas encore activé</h2>
     <p>L'activation se fait à la main, dès que nous avons reçu votre paiement et sa référence. Si votre accès n'est pas encore ouvert, relancez-nous sur WhatsApp avec la référence du paiement. Si l'abonnement ne peut pas être activé, par exemple parce que le paiement n'a pas abouti chez l'opérateur, la somme reçue vous est remboursée.</p>
@@ -1481,7 +1483,7 @@ ${contactCTA(prefix)}`;
     <p>Les contenus sont accessibles dès l'activation : un abonnement activé n'est donc pas remboursable, même s'il n'a pas été utilisé jusqu'à son terme.</p>
 
     <h2 id="agent-revision">Agent de révision</h2>
-    <p>Lorsqu'il est ouvert, l'agent de révision est compris sans supplément dans les formules d'un mois et plus. Il rédige un corrigé de cas pratique, de dissertation ou de commentaire d'article, ou corrige la copie de l'abonné et lui attribue une note sur 20. Le nombre de demandes est limité par jour et par mois ; la limite en vigueur est affichée dans l'espace abonnés. L'agent peut être interrompu, notamment pour maintenance ou lorsque sa limite mensuelle de fonctionnement est atteinte ; cette interruption ne modifie ni le prix ni la durée de l'abonnement.</p>
+    <p>Lorsqu'il est ouvert, l'agent de révision est compris sans supplément dans l'abonnement VIP. Il rédige un corrigé de cas pratique, de dissertation ou de commentaire d'article, ou corrige la copie de l'abonné et lui attribue une note sur 20. Le nombre de demandes est limité par jour et par mois ; la limite en vigueur est affichée dans l'espace abonnés. L'agent peut être interrompu, notamment pour maintenance ou lorsque sa limite mensuelle de fonctionnement est atteinte ; cette interruption ne modifie ni le prix ni la durée de l'abonnement.</p>
     <p>Les réponses de l'agent sont produites automatiquement par un service d'intelligence artificielle, à partir de nos ouvrages et de notre méthode. Elles constituent une aide à la révision et peuvent comporter des erreurs. Elles ne sont ni des corrigés officiels ni une consultation juridique, et la note attribuée est indicative : elle ne préjuge pas de celle d'un jury. Vérifiez les références avant de les apprendre. Les réponses sont réservées à votre usage personnel, dans les mêmes conditions que les autres contenus. Les données transmises à l'agent sont traitées comme indiqué dans les <a href="${prefix}mentions-legales/#agent-revision">mentions légales</a>.</p>
 
     <h2 id="contenus">Nature des contenus</h2>

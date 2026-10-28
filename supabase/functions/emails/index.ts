@@ -173,10 +173,11 @@ function gabarit(titre: string, corps: string, pied: string): string {
 const piedService = "Vous recevez cet e-mail parce que vous avez un compte sur l'espace abonnés de coursesesame.com.";
 
 function bienvenue(prenom: string, d: Record<string, unknown>) {
-  const ouvrages = d.ouvrages === true;
-  const sujet = "Bienvenue dans votre espace abonnés";
+  const ouvrages = d.ouvrages === true, vip = d.vip === true;
+  const sujet = vip ? "Bienvenue dans votre espace VIP" : "Bienvenue dans votre espace abonnés";
   const points = [
-    ouvrages ? "les ouvrages complets compris dans votre formule" : "les sujets corrigés, les fiches de révision et les QCM chronométrés (les ouvrages complets sont réservés aux formules d'un mois et plus)",
+    "les sujets corrigés, les fiches de révision, les QCM chronométrés, les textes officiels et la jurisprudence",
+    vip ? "l'espace VIP : nos ouvrages complets et nos vidéos réservées" : ouvrages ? "les ouvrages complets compris dans votre formule" : "l'espace VIP, si vous le souhaitez : nos ouvrages complets et nos vidéos réservées, avec une formule VIP",
     "la révision du jour, qui fait revenir les questions de QCM au bon moment",
     "le simulateur de grand oral et le sujet de la semaine",
     ...(ouvrages ? ["l'agent de révision, qui rédige un corrigé ou note votre copie sur 20, lorsqu'il est ouvert"] : []),
@@ -210,6 +211,8 @@ ${bouton("Prolonger sur WhatsApp", `https://wa.me/${WA}?text=${message}`, "#25d3
 // économie par rapport à des mois pris un à un, le parrainage
 const PRIX_MOIS = 5000;
 const LONGUES: [string, number, number][] = [["3 mois", 12500, 3], ["6 mois", 22500, 6], ["12 mois", 40000, 12]];
+// Espace VIP (depuis le 28 octobre 2026) : ouvrages complets et vidéos réservées, au triple du prix normal
+const VIP_TEXTE = "Les ouvrages complets et les vidéos réservées sont désormais réunis dans l'espace VIP, au triple du prix de l'abonnement normal (15 000 FCFA le mois). Pour les garder après votre abonnement en cours, choisissez une formule VIP en renouvelant.";
 const fcfa = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} FCFA`;
 function renouvellement(prenom: string, d: Record<string, unknown>) {
   const fin = dateFr(d.fin), jeton = String(d.jeton ?? "");
@@ -218,10 +221,9 @@ function renouvellement(prenom: string, d: Record<string, unknown>) {
   const message = encodeURIComponent(`Bonjour, je souhaite renouveler mon abonnement à l'espace abonnés (fin le ${fin}).`);
   const atouts = [
     "70 séries de concours blancs chronométrées (magistrature, Greffe, pénitentiaire, EPPJEJ, ENA), avec le corrigé-type et la grille sur 20 de chacune des 315 épreuves",
-    "les vidéos « Une notion, une minute » réservées aux abonnés",
     "plus de 50 textes officiels et décisions, avec une recherche dans le texte",
     "la révision du jour, le simulateur de grand oral et le sujet de la semaine",
-    "nos ouvrages complets, à partir de la formule d'un mois",
+    "avec une formule VIP, l'espace VIP : nos ouvrages complets et les vidéos « Une notion, une minute »",
   ];
   const formules = LONGUES.map(([nom, prix, mois]) => `${nom} : ${fcfa(prix)}, au lieu de ${fcfa(PRIX_MOIS * mois)} en prenant ${mois} mois un à un`);
   const nouv = nouveaux
@@ -231,13 +233,14 @@ function renouvellement(prenom: string, d: Record<string, unknown>) {
 <p>Votre abonnement à l'espace abonnés se termine le <b>${fin}</b>. Pour ne pas interrompre votre préparation, vous pouvez le renouveler dès maintenant : la nouvelle période s'ajoute à la suite de l'abonnement en cours, vous ne perdez aucun jour.</p>
 ${nouv}<p>En renouvelant, vous gardez</p><ul>${atouts.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
 <p>Le mois coûte ${fcfa(PRIX_MOIS)}. Les formules longues reviennent moins cher :</p><ul>${formules.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+<p>${esc(VIP_TEXTE)}</p>
 <p>Pour renouveler, réglez la formule choisie par Mobile Money, puis saisissez la référence du paiement dans votre espace, en haut de la page, rubrique « Renouveler en ligne ». Vous pouvez aussi nous l'envoyer sur WhatsApp.</p>
 ${bouton("Renouveler dans mon espace", `${SITE}/espace-abonnes/`)}
 ${bouton("Renouveler sur WhatsApp", `https://wa.me/${WA}?text=${message}`, "#25d366", "#ffffff")}
 <p>Un ami prépare aussi un concours ? Donnez-lui votre code de parrainage, visible dans votre espace : à son premier abonnement, vous recevez 7 jours offerts.</p>
 <p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
   const pied = `${piedService} Vous pouvez <a href="${lienDesinscription(jeton)}" style="color:#5b6475">ne plus recevoir nos e-mails d'information</a>, ou changer ce choix dans votre espace, rubrique Mon compte.`;
-  const texte = `Bonjour ${prenom},\n\nVotre abonnement à l'espace abonnés se termine le ${fin}. Pour ne pas interrompre votre préparation, vous pouvez le renouveler dès maintenant : la nouvelle période s'ajoute à la suite de l'abonnement en cours, vous ne perdez aucun jour.\n\n${nouveaux ? `Depuis le début de votre abonnement, ${nouveaux === 1 ? "un nouveau contenu a été ajouté" : `${nouveaux} nouveaux contenus ont été ajoutés`}, notamment\n${titres.map((t) => "- " + t).join("\n")}\n\n` : ""}En renouvelant, vous gardez\n${atouts.map((x) => "- " + x).join("\n")}\n\nLe mois coûte ${fcfa(PRIX_MOIS)}. Les formules longues reviennent moins cher :\n${formules.map((x) => "- " + x).join("\n")}\n\nPour renouveler, réglez la formule choisie par Mobile Money, puis saisissez la référence du paiement dans votre espace, rubrique « Renouveler en ligne » (${SITE}/espace-abonnes/), ou envoyez-la-nous sur WhatsApp au ${WHATSAPP}.\n\nUn ami prépare aussi un concours ? Donnez-lui votre code de parrainage, visible dans votre espace : à son premier abonnement, vous recevez 7 jours offerts.\n\nL'équipe des Cours Sésame et SAJ\n\nNe plus recevoir nos e-mails d'information ${lienDesinscription(jeton)}`;
+  const texte = `Bonjour ${prenom},\n\nVotre abonnement à l'espace abonnés se termine le ${fin}. Pour ne pas interrompre votre préparation, vous pouvez le renouveler dès maintenant : la nouvelle période s'ajoute à la suite de l'abonnement en cours, vous ne perdez aucun jour.\n\n${nouveaux ? `Depuis le début de votre abonnement, ${nouveaux === 1 ? "un nouveau contenu a été ajouté" : `${nouveaux} nouveaux contenus ont été ajoutés`}, notamment\n${titres.map((t) => "- " + t).join("\n")}\n\n` : ""}En renouvelant, vous gardez\n${atouts.map((x) => "- " + x).join("\n")}\n\nLe mois coûte ${fcfa(PRIX_MOIS)}. Les formules longues reviennent moins cher :\n${formules.map((x) => "- " + x).join("\n")}\n\n${VIP_TEXTE}\n\nPour renouveler, réglez la formule choisie par Mobile Money, puis saisissez la référence du paiement dans votre espace, rubrique « Renouveler en ligne » (${SITE}/espace-abonnes/), ou envoyez-la-nous sur WhatsApp au ${WHATSAPP}.\n\nUn ami prépare aussi un concours ? Donnez-lui votre code de parrainage, visible dans votre espace : à son premier abonnement, vous recevez 7 jours offerts.\n\nL'équipe des Cours Sésame et SAJ\n\nNe plus recevoir nos e-mails d'information ${lienDesinscription(jeton)}`;
   return { sujet, html: gabarit(sujet, corps, pied), texte };
 }
 
@@ -364,7 +367,7 @@ const piedAdmin = "E-mail envoyé à l'administrateur de l'espace abonnés de co
 function alerteDemande(d: Record<string, unknown>) {
   const montant = d.montant != null ? `${String(d.montant).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} FCFA` : "montant non indiqué";
   const sujet = `Demande d'activation, ${d.client}`;
-  const lignes = [`Abonné : ${d.client} (${d.telephone})`, `Formule : ${FORMULES[String(d.formule)] ?? d.formule}, ${montant}`, `Paiement : ${d.moyen}, référence ${d.reference}`];
+  const lignes = [`Abonné : ${d.client} (${d.telephone})`, `Formule : ${/^vip-/.test(String(d.formule)) ? "VIP, " : ""}${FORMULES[String(d.formule).replace(/^vip-/, "")] ?? d.formule}, ${montant}`, `Paiement : ${d.moyen}, référence ${d.reference}`];
   const corps = `<p>Une nouvelle demande d'activation attend votre vérification.</p><ul>${lignes.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
 <p>Vérifiez la référence dans votre application Mobile Money, puis validez la demande dans l'administration.</p>
 ${bouton("Ouvrir l'administration", `${SITE}/espace-abonnes/admin/`)}`;

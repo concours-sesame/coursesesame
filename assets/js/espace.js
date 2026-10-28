@@ -452,11 +452,11 @@
     $(".ea-v-fermer", visionneuse).focus();
 
     if (c.verrou) {
-      const video = c.type === "video" && !etat.videos;
-      corps.innerHTML = `<div class="ea-verrou">${icone("i-lock")}<p>${video
-        ? "<b>Les vidéos sont réservées aux formules d'une semaine et plus.</b> Votre formule actuelle donne accès aux sujets corrigés, aux fiches de révision et aux QCM."
-        : `<b>Les ouvrages complets sont réservés aux formules d'un mois et plus.</b> Votre formule actuelle donne accès à tous les autres contenus : sujets corrigés, fiches de révision${etat.videos ? ", QCM et vidéos" : " et QCM"}.`}</p>
-          <a class="btn btn-wa" href="${lienWa(WA_NUM, c.verrou)}" target="_blank" rel="noopener">${icone("i-wa")}${video ? "Passer à une formule d'une semaine" : "Passer à une formule d'un mois"}</a></div>`;
+      const video = c.type === "video";
+      corps.innerHTML = `<div class="ea-verrou">${icone("i-lock")}<p><b>${video ? "Cette vidéo est réservée" : "Les ouvrages complets sont réservés"} à l'espace VIP.</b> Votre abonnement donne accès à tous les autres contenus : sujets corrigés, fiches de révision, QCM, textes officiels et jurisprudence. L'abonnement VIP ${vipDes()} ouvre aussi les ouvrages complets et les vidéos réservées.</p>
+          <a class="btn btn-gold" href="#eaVip" data-fermer-visionneuse>Passer au VIP</a>
+          <a class="btn btn-wa" href="${lienWa(WA_NUM, c.verrou)}" target="_blank" rel="noopener">${icone("i-wa")}Passer au VIP sur WhatsApp</a></div>`;
+      $("[data-fermer-visionneuse]", corps).addEventListener("click", () => fermerVisionneuse());
       return;
     }
     if (c.agent) { afficherReponseAgent(c.agent, corps, marque); return; }
@@ -721,14 +721,15 @@
     if (v.error) throw v.error;
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
-    const [p, a, adm, ouv, vid, sus, dem] = await Promise.all([
+    const [p, a, adm, ouv, vid, sus, dem, vip] = await Promise.all([
       client.from("profils").select("prenom, nom, telephone, concours, date_concours, emails_nouveautes, code_parrain").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
       client.rpc("acces_ouvrages"),
       client.rpc("acces_videos"),
       client.rpc("ma_suspension"),
-      client.from("demandes_activation").select("id, formule, montant, moyen, reference, statut, motif, cree_le").eq("user_id", uid).order("cree_le", { ascending: false }).limit(1)
+      client.from("demandes_activation").select("id, formule, vip, montant, moyen, reference, statut, motif, cree_le").eq("user_id", uid).order("cree_le", { ascending: false }).limit(1),
+      client.rpc("acces_vip")
     ]);
     if (p.error || a.error) throw p.error || a.error;
     const profil = p.data || { prenom: "", nom: "", telephone: "" };
@@ -743,10 +744,11 @@
       // Dernière demande d'activation envoyée depuis l'espace (en attente, validée ou refusée)
       demande: (!dem.error && dem.data && dem.data[0]) || null,
       admin: !!adm.data,
-      // Ouvrages complets : formules d'un mois et plus seulement (règle appliquée par la base)
+      // Ouvrages complets et vidéos : abonnement VIP, ou période enregistrée avant l'espace VIP (règles de la base)
       ouvrages: !!adm.data || ouv.data === true,
-      // Vidéos : formules d'une semaine et plus seulement (règle appliquée par la base)
-      videos: !!adm.data || vid.data === true
+      videos: !!adm.data || vid.data === true,
+      // Période VIP en cours (sans elle, un abonné peut encore lire ouvrages et vidéos au titre de l'ancien régime)
+      vip: !!adm.data || vip.data === true
     };
   }
 
@@ -779,7 +781,7 @@
         <h3>Au programme</h3>
         <p class="ea-apercu-intro">Tous les contenus de l'espace, à lire dès l'ouverture de votre accès. Touchez une rubrique pour voir les titres.</p>
         ${groupes.map(([r, l]) => `<details class="ea-groupe">
-          <summary><span class="ea-groupe-nom">${RUBRIQUES[r]}</span><span class="ea-groupe-n">${l.length}<span class="sr-only"> ${COMPTES[r][l.length > 1 ? 1 : 0]}</span></span>${r === "ouvrages" ? `<span class="ea-groupe-note">Formules d'un mois et plus</span>` : r === "videos" ? `<span class="ea-groupe-note">Formules d'une semaine et plus</span>` : ""}</summary>
+          <summary><span class="ea-groupe-nom">${RUBRIQUES[r]}</span><span class="ea-groupe-n">${l.length}<span class="sr-only"> ${COMPTES[r][l.length > 1 ? 1 : 0]}</span></span>${r === "ouvrages" || r === "videos" ? `<span class="ea-groupe-note">Espace VIP</span>` : ""}</summary>
           <ul class="ea-liste">${l.map(x => `<li class="ea-item">${cadenas}<span><b>${esc(x.titre)}</b><small>${detail(x)}</small></span></li>`).join("")}</ul>
         </details>`).join("")}
       </div>`;
@@ -828,9 +830,14 @@
   // l'administration, qui vérifie le paiement et active l'accès. La page se met à jour d'elle-même à l'activation.
   const MOYENS_PAIEMENT = ["Orange Money", "MTN MoMo", "Wave", "Moov Money"];
   const tarifsAbo = () => (typeof TARIFS_ABONNEMENT !== "undefined" ? TARIFS_ABONNEMENT : []).filter(t => t.cle);
+  const tarifsVip = () => (typeof TARIFS_VIP !== "undefined" ? TARIFS_VIP : []).filter(t => t.cle);
+  const tarifsTous = () => [...tarifsAbo(), ...tarifsVip()];
+  const vipDes = () => { const t = tarifsVip().find(x => x.cle === "vip-j1"); return t ? `, dès ${t.prix} FCFA la journée,` : ""; };
   const numerosPaiement = () => (typeof NUMEROS_PAIEMENT !== "undefined" ? NUMEROS_PAIEMENT : []).filter(n => n.moyen && n.numero);
-  const prixDe = cle => { const t = tarifsAbo().find(x => x.cle === cle); return t ? Number(String(t.prix).replace(/\D/g, "")) || null : null; };
-  const nomFormule = cle => { const t = tarifsAbo().find(x => x.cle === cle); return t ? t.duree : cle; };
+  const prixDe = cle => { const t = tarifsTous().find(x => x.cle === cle); return t ? Number(String(t.prix).replace(/\D/g, "")) || null : null; };
+  const nomFormule = cle => { const t = tarifsTous().find(x => x.cle === cle); return t ? (/^vip-/.test(cle) ? "VIP, " : "") + t.duree : cle; };
+  // Clé de formule d'une demande : durée (j1… m12), précédée de « vip- » pour une demande VIP
+  const cleDemande = d => (d.vip ? "vip-" : "") + d.formule;
   const demandeEnAttente = () => etat.demande && etat.demande.statut === "en_attente" ? etat.demande : null;
   function etapesPaiement(renouveler) {
     const nums = numerosPaiement();
@@ -840,10 +847,10 @@
         <li>${renouveler ? "La nouvelle période s'ajoute à la suite de l'abonnement en cours" : "Votre accès s'ouvre"} dès la vérification du paiement. Cette page se met à jour d'elle-même.</li>
       </ol>`;
   }
-  function formulairePaiement(renouveler) {
+  function formulairePaiement(renouveler, defaut = "m1") {
     const d = demandeEnAttente();
     return `<form class="form ea-form ea-paiement" id="eaPaiement" novalidate>
-        <div class="field"><label for="pFormule">Formule</label><select id="pFormule" name="formule">${tarifsAbo().map(t => `<option value="${esc(t.cle)}"${(d ? d.formule === t.cle : t.cle === "m1") ? " selected" : ""}>${esc(t.duree)}, ${esc(t.prix)} FCFA</option>`).join("")}</select></div>
+        <div class="field"><label for="pFormule">Formule</label><select id="pFormule" name="formule">${[["Abonnement", tarifsAbo()], ["VIP : avec les ouvrages complets et les vidéos", tarifsVip()]].filter(([, l]) => l.length).map(([nom, l]) => `<optgroup label="${esc(nom)}">${l.map(t => `<option value="${esc(t.cle)}"${(d ? cleDemande(d) === t.cle : t.cle === defaut) ? " selected" : ""}>${/^vip-/.test(t.cle) ? "VIP, " : ""}${esc(t.duree)}, ${esc(t.prix)} FCFA</option>`).join("")}</optgroup>`).join("")}</select></div>
         <div class="field"><label for="pMoyen">Moyen de paiement</label><select id="pMoyen" name="moyen">${MOYENS_PAIEMENT.map(m => `<option${d && d.moyen === m ? " selected" : ""}>${m}</option>`).join("")}</select></div>
         <div class="field full"><label for="pRef">Référence du paiement</label><input id="pRef" name="reference" maxlength="80" autocomplete="off" value="${d ? esc(d.reference) : ""}"></div>
         <p class="ea-msg full" role="alert"></p>
@@ -854,7 +861,7 @@
     const d = etat.demande;
     if (!d) return "";
     if (d.statut === "en_attente") return `<div class="ea-demande" role="status">
-        <p><b>Demande envoyée le ${dateFr(d.cree_le)}.</b> ${esc(nomFormule(d.formule))}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence ${esc(d.reference)}.</p>
+        <p><b>Demande envoyée le ${dateFr(d.cree_le)}.</b> ${esc(nomFormule(cleDemande(d)))}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence ${esc(d.reference)}.</p>
         <p>Nous vérifions votre paiement. Votre accès s'ouvrira dès la validation, et cette page se mettra à jour d'elle-même.</p>
         <p class="ea-demande-actions"><button class="btn btn-ghost btn-sm" type="button" data-paiement="modifier">Corriger la demande</button><button class="btn btn-ghost btn-sm" type="button" data-paiement="retirer">Annuler la demande</button></p>
       </div>`;
@@ -862,18 +869,33 @@
     return "";
   }
   // Bloc complet : demande en cours, ou étapes et formulaire ; à défaut de tarifs publiés, la seule voie WhatsApp
-  function paiementHTML(renouveler) {
+  function paiementHTML(renouveler, defaut) {
     if (!tarifsAbo().length) return "";
     return demandeEnAttente()
-      ? `${demandeHTML()}<div id="eaPaiementZone" hidden>${formulairePaiement(renouveler)}</div>`
-      : `${demandeHTML()}${etapesPaiement(renouveler)}${formulairePaiement(renouveler)}`;
+      ? `${demandeHTML()}<div id="eaPaiementZone" hidden>${formulairePaiement(renouveler, defaut)}</div>`
+      : `${demandeHTML()}${etapesPaiement(renouveler)}${formulairePaiement(renouveler, defaut)}`;
+  }
+  // Espace VIP : invitation pour l'abonné en cours sans VIP. La période VIP commence dès la validation du paiement,
+  // sans attendre la fin de l'abonnement en cours. À dix jours de la fin, le formulaire de renouvellement sert aussi.
+  function vipHTML() {
+    if (!etat.abo.actif || etat.vip || !tarifsVip().length) return "";
+    const nb = r => contenus.filter(c => r === "videos" ? c.type === "video" : rubrique(c) === r).length;
+    const [o, v] = [nb("ouvrages"), nb("videos")];
+    const renouvellement = joursJusqua(etat.abo.fin) <= JOURS_RENOUVELLEMENT;
+    return `<section class="ea-vip" id="eaVip">
+        <span class="ea-vip-marque">VIP</span>
+        <h3>L'espace VIP</h3>
+        <p>${[o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "", v ? `${v} vidéo${v > 1 ? "s" : ""} réservée${v > 1 ? "s" : ""}` : ""].filter(Boolean).join(" et ")} à lire et à regarder en ligne, en plus de tout votre abonnement. Le VIP coûte le triple de l'abonnement normal${vipDes().replace(/,$/, "")} ; il s'ouvre dès la validation de votre paiement, sans attendre la fin de votre abonnement en cours.</p>
+        <p class="ea-tarifs ea-tarifs-vip">${tarifsVip().filter(t => ["vip-j1", "vip-j7", "vip-m1", "vip-m12"].includes(t.cle)).map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
+        ${renouvellement ? `<p class="ea-aide">Choisissez une formule VIP dans le formulaire de renouvellement ci-dessus.</p>` : paiementHTML(true, "vip-m1")}
+      </section>`;
   }
   async function envoyerDemande(f) {
     const msg = $(".ea-msg", f), bouton = $("button[type=submit]", f);
     const formule = f.formule.value, moyen = f.moyen.value, reference = f.reference.value.trim();
     if (reference.replace(/[^A-Za-z0-9]/g, "").length < 4) { msg.textContent = "Indiquez la référence complète de votre paiement."; f.reference.focus(); return; }
     bouton.disabled = true; msg.textContent = "";
-    const { error } = await client.rpc("demander_activation", { p_formule: formule, p_moyen: moyen, p_reference: reference, p_montant: prixDe(formule) });
+    const { error } = await client.rpc("demander_activation_vip", { p_formule: formule.replace(/^vip-/, ""), p_moyen: moyen, p_reference: reference, p_montant: prixDe(formule), p_vip: /^vip-/.test(formule) });
     bouton.disabled = false;
     if (error) { msg.textContent = messageErreur(error); return; }
     toast("Demande envoyée. Nous vérifions votre paiement.");
@@ -891,7 +913,7 @@
           <div><span class="eyebrow">Abonnement actif</span>
           <h3>Votre accès est ouvert jusqu'au ${dateFr(abo.fin)}.</h3>
           ${j <= JOURS_RENOUVELLEMENT ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
-          ${!etat.videos ? `<p>Votre formule donne accès à tous les contenus, sauf les vidéos, réservées aux formules d'une semaine et plus, et les ouvrages complets, réservés aux formules d'un mois et plus.</p>` : etat.ouvrages ? "" : `<p>Votre formule donne accès à tous les contenus, sauf les ouvrages complets, réservés aux formules d'un mois et plus.</p>`}</div>
+          ${etat.vip ? `<p><b>Espace VIP ouvert</b> : ouvrages complets et vidéos réservées compris.</p>` : etat.ouvrages ? `<p>Votre abonnement, pris avant l'ouverture de l'espace VIP, comprend les ouvrages complets jusqu'à son terme. Pour les garder ensuite, choisissez une formule VIP.</p>` : `<p>Votre abonnement donne accès à tous les contenus, sauf l'espace VIP (ouvrages complets et vidéos réservées).</p>`}</div>
           ${j <= JOURS_RENOUVELLEMENT ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler sur WhatsApp</a>` : ""}
         </div>${j <= JOURS_RENOUVELLEMENT && tarifsAbo().length ? `<div class="ea-statut ea-statut-attente ea-renouvellement"><span class="eyebrow">Renouveler en ligne</span>${paiementHTML(true)}</div>` : ""}`;
     }
@@ -909,7 +931,8 @@
         <span class="eyebrow">${abo.deja_abonne ? "Abonnement terminé" : "Activation en attente"}</span>
         <h3>${abo.deja_abonne ? `Votre abonnement a pris fin le ${dateFr(abo.fin)}.` : `Bienvenue, ${esc(profil.prenom)}. Votre compte est prêt.`}</h3>
         ${tarifs.length ? `<p class="ea-tarifs">${tarifs.map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
-        <p class="ea-aide">Les vidéos sont comprises à partir de la formule d'une semaine, les ouvrages complets à partir de la formule d'un mois. Toutes les formules donnent accès aux sujets corrigés, aux fiches de révision et aux QCM.</p>` : ""}
+        ${tarifsVip().length ? `<p class="ea-tarifs ea-tarifs-vip"><span class="ea-vip-marque">VIP</span>${tarifsVip().filter(t => ["vip-j1", "vip-j7", "vip-m1", "vip-m12"].includes(t.cle)).map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>` : ""}
+        <p class="ea-aide">Toutes les formules donnent accès aux sujets corrigés, aux fiches de révision, aux QCM, aux textes officiels et à la jurisprudence. Les formules VIP ouvrent aussi l'espace VIP : nos ouvrages complets et nos vidéos réservées.</p>` : ""}
         ${tarifsAbo().length ? paiementHTML(false) : `<ol class="ea-etapes">
           <li>Réglez ${abo.deja_abonne ? "votre renouvellement" : "votre abonnement"} par Mobile Money : Orange Money, MTN MoMo, Wave ou Moov Money. Nous vous indiquons le tarif sur WhatsApp.</li>
           <li>Envoyez-nous le message ci-dessous sur WhatsApp, avec la référence de votre paiement.</li>
@@ -958,12 +981,13 @@
   const RUBRIQUES = { ouvrages: "Ouvrages complets", fiches: "Fiches de révision", corriges: "Sujets corrigés", qcm: "QCM", videos: "Vidéos", textes: "Textes officiels", jurisprudence: "Jurisprudence", autres: "Autres contenus" };
   const rubrique = c => /^\s*Texte officiel/i.test(c.matiere || "") ? "textes" : /^\s*Jurisprudence/i.test(c.matiere || "") ? "jurisprudence" : /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Fiches/i.test(c.matiere || "") ? "fiches" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : c.type === "video" ? "videos" : "autres";
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  // Affichés avec un cadenas : un ouvrage complet avec une formule de moins d'un mois, une vidéo avec une formule de moins d'une semaine
+  // Espace VIP : ouvrages complets et vidéos. Affichés avec un cadenas sans accès (abonnement normal)
   const verrouOuvrage = c => !etat.ouvrages && rubrique(c) === "ouvrages";
   const verrouVideo = c => !etat.videos && c.type === "video";
   const verrouille = c => verrouOuvrage(c) || verrouVideo(c);
-  const noteVerrou = c => verrouOuvrage(c) ? "Formules d'un mois et plus" : "Formules d'une semaine et plus";
-  const msgFormule = c => c && !verrouOuvrage(c) && verrouVideo(c) ? `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à une formule d'une semaine ou plus pour accéder aux vidéos.\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : ` : `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à une formule d'un mois ou plus pour accéder aux ouvrages complets.\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
+  const estVip = c => rubrique(c) === "ouvrages" || c.type === "video";
+  const noteVerrou = () => "Espace VIP";
+  const msgFormule = () => `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à l'abonnement VIP (ouvrages complets et vidéos réservées).\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
   // Bibliothèque centrée sur le concours de l'abonné : par défaut, les contenus de son concours et les contenus
   // communs à tous les concours ; un bouton montre tout. Favoris, pastille « Nouveau » et reprise de la lecture
   // sont mémorisés sur cet appareil (un compte ne s'utilise que sur un appareil à la fois).
@@ -994,11 +1018,12 @@
     const moi = porteeActive() === "moi", base = moi ? contenus.filter(pourMoi) : contenus;
     const favs = new Set(listeFavoris()), nbFavs = base.filter(c => favs.has(c.id)).length;
     const rubs = Object.keys(RUBRIQUES).filter(r => base.some(c => rubrique(c) === r));
-    if (filtre !== "tous" && !(filtre === "favoris" ? nbFavs : rubs.includes(filtre))) filtre = "tous";
+    const nbVip = base.filter(estVip).length;
+    if (filtre !== "tous" && !(filtre === "favoris" ? nbFavs : filtre === "vip" ? nbVip : rubs.includes(filtre))) filtre = "tous";
     const mots = motsRecherche();
     const liste = mots.length ? contenus.filter(c => mots.every(m => texteCarte(c).includes(m)))
-      : filtre === "tous" ? base : filtre === "favoris" ? base.filter(c => favs.has(c.id)) : base.filter(c => rubrique(c) === filtre);
-    const chips = [["tous", "Tous", base.length], ...(nbFavs ? [["favoris", "★ Mes favoris", nbFavs]] : []), ...rubs.map(r => [r, RUBRIQUES[r], base.filter(c => rubrique(c) === r).length])];
+      : filtre === "tous" ? base : filtre === "favoris" ? base.filter(c => favs.has(c.id)) : filtre === "vip" ? base.filter(estVip) : base.filter(c => rubrique(c) === filtre);
+    const chips = [["tous", "Tous", base.length], ...(nbVip ? [["vip", "Espace VIP", nbVip]] : []), ...(nbFavs ? [["favoris", "★ Mes favoris", nbFavs]] : []), ...rubs.map(r => [r, RUBRIQUES[r], base.filter(c => rubrique(c) === r).length])];
     const nomMoi = monConcours() ? nomConcours(monConcours()) : "";
     return `<div class="ea-biblio">
         <div class="ea-biblio-tete"><h3>Vos contenus exclusifs</h3>
@@ -1006,13 +1031,13 @@
             <button type="button" data-portee="moi" aria-pressed="${moi}">${esc(nomMoi)}<span class="n">${contenus.filter(pourMoi).length}</span></button>
             <button type="button" data-portee="tous" aria-pressed="${!moi}">Tous les concours<span class="n">${contenus.length}</span></button>
           </div>` : ""}
-          ${chips.length > 2 ? `<div class="chips" role="group" aria-label="Filtrer par rubrique">${chips.map(([v, l, n]) => `<button class="chip" type="button" data-filtre="${v}" aria-pressed="${filtre === v}">${l}<span class="n">${n}</span></button>`).join("")}</div>` : ""}
+          ${chips.length > 2 ? `<div class="chips" role="group" aria-label="Filtrer par rubrique">${chips.map(([v, l, n]) => `<button class="chip${v === "vip" ? " chip-vip" : ""}" type="button" data-filtre="${v}" aria-pressed="${filtre === v}">${l}<span class="n">${n}</span></button>`).join("")}</div>` : ""}
           <label class="ea-cherche"><span class="sr-only">Rechercher dans toute la bibliothèque</span><input type="search" id="eaCherche" value="${esc(recherche)}" placeholder="Rechercher : garde à vue, fiche n° 23, SOG, OHADA…" autocomplete="off"></label>
         </div>
         ${mots.length ? `<p class="ea-cherche-bilan" role="status">${liste.length ? `${liste.length} résultat${liste.length > 1 ? "s" : ""} dans toute la bibliothèque, tous concours confondus.` : "Aucun contenu ne correspond à cette recherche."}${["textes", "jurisprudence"].some(r => contenus.some(c => rubrique(c) === r)) ? ` Pour chercher dans le texte même des lois et des décisions, ouvrez la rubrique Textes officiels ou Jurisprudence.` : ""}</p>`
           : ["textes", "jurisprudence"].includes(filtre) ? rechercheTextesHTML() : ""}
         <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}">
-            <span class="ea-carte-marques"><span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
+            <span class="ea-carte-marques">${estVip(c) ? `<span class="ea-vip-marque">VIP</span>` : ""}<span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
             <small>${[c.matiere ? esc(c.matiere) : "", (c.concours || []).map(nomConcours).join(", "), dateFr(c.publie_le)].filter(Boolean).join(" · ")}</small>
@@ -1066,7 +1091,7 @@
   /* ---------- Agent de révision ---------- */
   // Rédaction intégrale ou correction notée sur 20 d'un cas pratique, d'une dissertation ou d'un commentaire d'article,
   // par la fonction Supabase « agent-revision », à partir des ouvrages de l'espace abonnés et de la méthode de l'éditeur.
-  // Réservé aux formules d'un mois et plus, dans la limite d'un quota. Pendant la rédaction, seule la progression
+  // Réservé à l'abonnement VIP, dans la limite d'un quota. Pendant la rédaction, seule la progression
   // s'affiche ; la réponse s'ouvre ensuite dans la visionneuse protégée (filigrane, voile, copie bloquée).
   const EXERCICES = { cas_pratique: "Cas pratique", dissertation: "Dissertation juridique", commentaire: "Commentaire d'article" };
   const MATIERES_AGENT = ["Droit civil", "Droit pénal", "Procédure pénale", "Droit administratif", "Droit commercial OHADA", "Organisation judiciaire", "Droits de l'enfant"];
@@ -1100,7 +1125,7 @@
       <div class="ea-agent-sortie" id="eaAgentSortie" aria-live="polite" hidden></div>`;
     return `<details class="ea-agent" id="eaAgent"${agentOuvert ? " open" : ""}>
         <summary><span class="eyebrow">Agent de révision</span><b>Un corrigé rédigé ou votre copie corrigée et notée sur 20</b><span>Cas pratique, dissertation ou commentaire d'article, à partir des ouvrages de l'espace abonnés et de la méthode des Cours Sésame et SAJ.</span></summary>
-        ${!agent.acces ? `<div class="ea-agent-verrou"><p>L'agent de révision est compris dans les formules d'un mois et plus.</p><a class="btn btn-wa" href="${lienWa(WA_NUM, msgFormule())}" target="_blank" rel="noopener">${icone("i-wa")}Passer à une formule d'un mois</a></div>` : formulaire}
+        ${!agent.acces ? `<div class="ea-agent-verrou"><p>L'agent de révision est compris dans l'abonnement VIP.</p><a class="btn btn-wa" href="${lienWa(WA_NUM, msgFormule())}" target="_blank" rel="noopener">${icone("i-wa")}Passer au VIP</a></div>` : formulaire}
         ${echanges.length ? `<div class="ea-agent-histo"><h4>Vos dernières demandes</h4>${echanges.map(e => `<button type="button" class="ea-agent-ligne" data-echange="${e.id}"><b>${titreEchange(e)}${e.note != null ? ` · ${noteFr(e.note)}/20` : ""}</b><small>${dateFr(e.cree_le)} · ${esc(e.sujet.slice(0, 110))}${e.sujet.length > 110 ? "…" : ""}</small></button>`).join("")}</div>` : ""}
       </details>`;
   }
@@ -1560,7 +1585,7 @@
       else if (t <= fin) resultat = `<p>Copie rendue. La correction s'ouvre à la fin de l'épreuve, à ${heureFr(b.fin)}.</p>`;
       else if (b.note != null) resultat = `<div class="ea-blanc-note"><b>${noteFr(b.note)}/20</b><span>Rang ${b.rang} sur ${b.notes} ${b.notes > 1 ? "copies notées" : "copie notée"}. Moyenne ${noteFr(b.moyenne)}, meilleure note ${noteFr(b.meilleure)}.</span></div>${echanges.some(x => x.sujet && x.sujet.trim() === (b.sujet || "").trim() && x.note != null) ? `<div class="ea-outil-boutons"><button class="btn btn-ghost" type="button" data-bl="voir">Relire la correction</button></div>` : ""}`;
       else if (copie.length < 200) resultat = `<p>Votre copie est trop courte pour être corrigée par l'agent (200 caractères au moins).</p>`;
-      else if (!ouvert) resultat = `<p>${agent && agent.acces ? "La correction notée par l'agent de révision n'est pas encore ouverte." : "La correction notée par l'agent de révision est réservée aux formules d'un mois et plus."} Comparez votre copie au corrigé-type et notez-la vous-même avec sa grille d'auto-évaluation.</p>`;
+      else if (!ouvert) resultat = `<p>${agent && agent.acces ? "La correction notée par l'agent de révision n'est pas encore ouverte." : "La correction notée par l'agent de révision est réservée à l'abonnement VIP."} Comparez votre copie au corrigé-type et notez-la vous-même avec sa grille d'auto-évaluation.</p>`;
       else resultat = `<p>L'épreuve est terminée. Faites corriger et noter votre copie, telle que vous l'avez rendue, par l'agent de révision. Votre note entre ensuite dans le classement.</p><div class="ea-outil-boutons"><button class="btn btn-gold" type="button" data-bl="corriger">Faire corriger ma copie</button></div><p class="ea-agent-progres" id="eaBlancProgres"></p>`;
       corps.innerHTML = `<div class="ea-outil">${tete}${sujetHTML}${copie ? `<h4>Votre copie</h4><div class="ea-blanc-rendue">${mettreEnForme(copie)}</div>` : ""}${resultat}<div id="eaBlancCorrige"></div>${pied}</div>`;
       // Corrigé-type de l'épreuve, publié à sa fin (concours_blancs.corrige_id, livré par corrige_blanc)
@@ -1716,7 +1741,7 @@
       if (vuAvant === null) { const v = lu(cleAbonne("visite"), 0); vuAvant = v ? new Date(v) : false; ecrit(cleAbonne("visite"), Date.now()); }
       memoLecture = (c, page) => { if (c && c.id) ecrit(cleAbonne("reprise"), { id: c.id, page: Number(page) || 1 }); };
       favoris = crochetFavoris;
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + outilsHTML() + agentHTML() + bibliothequeHTML() + parrainageHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + outilsHTML() + agentHTML() + bibliothequeHTML() + parrainageHTML();
       brancherCompte();
     } else {
       memoLecture = null; favoris = null;

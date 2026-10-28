@@ -13,14 +13,14 @@
   const ROOT = document.body.dataset.root || "";
   const URL_ESPACE = new URL(ROOT + "espace-abonnes/", location.href).href;
   const MOYENS = ["Orange Money", "MTN MoMo", "Wave", "Moov Money", "Espèces", "Autre"];
-  // Durées proposées : j = jours, m = mois. Les prix servent à préremplir le montant (modifiable).
-  // Formules en jours ou en semaines : sans les ouvrages complets (réservés aux périodes d'au moins 28 jours) ;
-  // la formule d'un jour, sans les vidéos non plus (réservées aux périodes d'au moins 7 jours)
-  const DUREES = [["j1", "1 jour, sans les vidéos ni les ouvrages"], ["j7", "1 semaine, sans les ouvrages"], ["j14", "2 semaines, sans les ouvrages"], ["m1", "1 mois"], ["m2", "2 mois"], ["m3", "3 mois"], ["m6", "6 mois"], ["m12", "12 mois"], ["date", "Jusqu'à une date…"]];
+  // Durées proposées : j = jours, m = mois. Les prix servent à préremplir le montant (modifiable), au tarif VIP quand
+  // la case VIP est cochée : seule une période VIP ouvre les ouvrages complets et les vidéos réservées.
+  const DUREES = [["j1", "1 jour"], ["j7", "1 semaine"], ["j14", "2 semaines"], ["m1", "1 mois"], ["m2", "2 mois"], ["m3", "3 mois"], ["m6", "6 mois"], ["m12", "12 mois"], ["date", "Jusqu'à une date…"]];
   const PRIX = Object.fromEntries((typeof TARIFS_ABONNEMENT !== "undefined" && TARIFS_ABONNEMENT.length ? TARIFS_ABONNEMENT : [
     { cle: "j1", prix: "500" }, { cle: "j7", prix: "2 000" }, { cle: "j14", prix: "3 500" }, { cle: "m1", prix: "5 000" },
     { cle: "m2", prix: "9 000" }, { cle: "m3", prix: "12 500" }, { cle: "m6", prix: "22 500" }, { cle: "m12", prix: "40 000" }
-  ]).filter(t => t.cle).map(t => [t.cle, String(t.prix).replace(/\D/g, "")]));
+  ]).concat(typeof TARIFS_VIP !== "undefined" ? TARIFS_VIP : []).filter(t => t.cle).map(t => [t.cle, String(t.prix).replace(/\D/g, "")]));
+  const prixFormule = (duree, vip) => PRIX[(vip ? "vip-" : "") + duree];
   const plusJours = (d, n) => { const x = new Date(d + "T00:00:00Z"); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
   const MATIERES = ["Droit civil", "Droit pénal", "Procédure pénale", "Droit administratif", "Droit commercial OHADA", "Organisation judiciaire", "Droits de l'enfant", "SOG", "Méthodologie", "Culture générale",
     // Textes publics : lecture sans plafond, texte complet téléchargeable, hors du calcul des 5 % (matière commençant ainsi)
@@ -85,9 +85,10 @@
   }
   const enCours = a => a.actif || !!a.suspendu_depuis;
   const NOM_FORMULE = { j1: "1 jour", j7: "1 semaine", j14: "2 semaines", m1: "1 mois", m2: "2 mois", m3: "3 mois", m6: "6 mois", m12: "12 mois" };
+  const nomFormule = k => { const b = String(k || "").replace(/^vip-/, ""); return NOM_FORMULE[b] ? (b !== k ? "VIP, " : "") + NOM_FORMULE[b] : k; };
   const demandeDe = uid => demandes.find(d => d.user_id === uid && d.statut === "en_attente") || null;
   const demandesEnAttente = () => demandes.filter(d => d.statut === "en_attente");
-  const detailDemande = d => `${esc(NOM_FORMULE[d.formule] || d.formule)}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence <b>${esc(d.reference)}</b>`;
+  const detailDemande = d => `${esc(nomFormule((d.vip ? "vip-" : "") + d.formule))}${d.montant != null ? `, ${fcfa(d.montant)}` : ""}, ${esc(d.moyen)}, référence <b>${esc(d.reference)}</b>`;
   // Compte inscrit depuis plus de 30 jours sans aucun paiement : faux compte ou inscription abandonnée
   const jamaisActive = a => !Number(a.nb_paiements) && !a.fin && joursJusqua(String(a.inscrit_le).slice(0, 10)) < -30;
   // Période en cours (ou, à défaut, prochaine période) d'un compte, d'après l'historique des paiements
@@ -179,7 +180,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da, pv, fr, pr] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da, pv, fr, pr, pvip] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -206,11 +207,15 @@
       client.rpc("admin_visites_jours", { p_jours: 30 }),
       client.from("demandes_activation").select("*").order("cree_le", { ascending: false }).limit(500),
       client.rpc("admin_provenances", { p_jours: 30 }), client.rpc("admin_facebook_retombees", { p_jours: 90 }),
-      client.from("prospects").select("id, cree_le, prenom, email, whatsapp, concours, fiche, accepte_offres, email_envoye, desinscrit_le").order("cree_le", { ascending: false }).limit(500)
+      client.from("prospects").select("id, cree_le, prenom, email, whatsapp, concours, fiche, accepte_offres, email_envoye, desinscrit_le").order("cree_le", { ascending: false }).limit(500),
+      client.rpc("admin_periodes_vip")
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
-    abonnes = a.data; paiements = p.data; contenus = c.data;
+    abonnes = a.data; contenus = c.data;
+    // Périodes VIP (admin_periodes_vip) : marque vip sur chaque paiement
+    const vips = new Set((pvip.data || []).map(x => x.id));
+    paiements = p.data.map(x => Object.assign(x, { vip: vips.has(x.id) }));
     // Outils ajoutés en octobre 2026 : tables absentes ou vides, la page fonctionne quand même
     commandes = cmd.data || []; notes = new Map((nt.data || []).map(x => [x.user_id, x.note]));
     lectures = lec.data || []; annonces = ann.data || []; journal = jr.data || [];
@@ -836,15 +841,21 @@
         <div class="ad-zone"${retour ? "" : " hidden"}>${retour}</div>
       </article>`;
   }
+  // Dernier jour couvert par une période VIP du compte (null s'il n'en a jamais eu)
+  const finVip = uid => paiements.filter(x => x.user_id === uid && x.vip).reduce((m, x) => (!m || x.fin > m ? x.fin : m), null);
   function formulaireActivation(a) {
     const debut = a.actif ? lendemain(a.fin) : auj();
-    const d = demandeDe(a.user_id), formule = d && PRIX[d.formule] !== undefined ? d.formule : "m1";
-    return `<form class="form ad-form" data-form="activer" data-debut="${debut}" data-suite="${a.actif ? 1 : 0}" novalidate>
+    // Une période VIP s'enchaîne après la dernière période VIP seulement (règle de admin_activer_periode)
+    const fv = finVip(a.user_id), vipEnCours = !!fv && fv >= auj(), debutVip = vipEnCours ? lendemain(fv) : auj();
+    const d = demandeDe(a.user_id), vip = !!d && !!d.vip;
+    const formule = d && NOM_FORMULE[d.formule] ? d.formule : "m1";
+    return `<form class="form ad-form" data-form="activer" data-debut="${debut}" data-suite="${a.actif ? 1 : 0}" data-debut-vip="${debutVip}" data-suite-vip="${vipEnCours ? 1 : 0}" novalidate>
         ${d ? `<p class="ad-alerte-douce full">Demande de ${esc(a.prenom)} du ${dateFr(d.cree_le)}, ${detailDemande(d)}. Vérifiez dans votre application ${esc(d.moyen)} que ce paiement a bien été reçu, au bon montant, avant de valider.</p>` : ""}
-        <p class="ad-note full">${a.actif ? `La prolongation commence le ${dateFr(debut)}, à la suite de l'abonnement en cours.` : "L'abonnement commence aujourd'hui. Pour les formules en jours ou en semaines, le jour de l'activation est offert."} Les vidéos ne s'ouvrent qu'avec une période d'au moins 7 jours (formules d'une semaine et plus), les ouvrages complets qu'avec une période d'au moins 28 jours (formules d'un mois et plus).</p>
-        <div class="field"><label>Durée</label><select name="duree">${DUREES.map(([v, l]) => `<option value="${v}"${v === formule ? " selected" : ""}>${l}${PRIX[v] ? ` · ${fcfa(+PRIX[v])}` : ""}</option>`).join("")}</select></div>
+        <p class="ad-note full">${a.actif ? `La prolongation commence le ${dateFr(debut)}, à la suite de l'abonnement en cours.` : "L'abonnement commence aujourd'hui. Pour les formules en jours ou en semaines, le jour de l'activation est offert."} Les ouvrages complets et les vidéos réservées ne s'ouvrent qu'avec une période VIP. Une période VIP commence ${vipEnCours ? `le ${dateFr(debutVip)}, à la suite du VIP en cours` : "aujourd'hui, même si un abonnement normal est en cours"}.</p>
+        <label class="ea-accord full"><input type="checkbox" name="vip"${vip ? " checked" : ""}><span><b>Abonnement VIP</b> (ouvrages complets et vidéos réservées, triple du tarif)</span></label>
+        <div class="field"><label>Durée</label><select name="duree">${DUREES.map(([v, l]) => `<option value="${v}"${v === formule ? " selected" : ""}>${l}${PRIX[v] ? ` · ${fcfa(+PRIX[v])}, VIP ${fcfa(+prixFormule(v, true) || 0)}` : ""}</option>`).join("")}</select></div>
         <div class="field" data-jusqua hidden><label>Jusqu'au (inclus)</label><input type="date" name="jusqua" min="${debut}"></div>
-        <div class="field"><label>Montant reçu (FCFA)</label><input type="number" name="montant" min="0" step="50" inputmode="numeric" value="${d && d.montant != null ? d.montant : PRIX[formule] || ""}"></div>
+        <div class="field"><label>Montant reçu (FCFA)</label><input type="number" name="montant" min="0" step="50" inputmode="numeric" value="${d && d.montant != null ? d.montant : prixFormule(formule, vip) || ""}"></div>
         <div class="field"><label>Moyen de paiement</label><select name="moyen">${MOYENS.map(m => `<option${d && d.moyen === m ? " selected" : ""}>${m}</option>`).join("")}</select></div>
         <div class="field full"><label>Référence du paiement ou note (contrôlée contre les doublons)</label><input name="note" maxlength="300" value="${d ? esc(d.reference) : ""}"></div>
         <p class="ea-msg full" role="alert"></p>
@@ -853,7 +864,7 @@
   }
   function historique(uid) {
     const p = paiements.filter(x => x.user_id === uid);
-    return `<ul class="ad-histo">${p.map(x => `<li><b>${x.montant != null ? fcfa(x.montant) : "Sans montant"}</b> · du ${dateFr(x.debut)} au ${dateFr(x.fin)}${x.moyen ? " · " + esc(x.moyen) : ""}<small>Enregistré le ${dateFr(x.cree_le)}${x.note ? " · " + esc(x.note) : ""}</small>
+    return `<ul class="ad-histo">${p.map(x => `<li>${x.vip ? `<span class="ea-vip-marque">VIP</span> ` : ""}<b>${x.montant != null ? fcfa(x.montant) : "Sans montant"}</b> · du ${dateFr(x.debut)} au ${dateFr(x.fin)}${x.moyen ? " · " + esc(x.moyen) : ""}<small>Enregistré le ${dateFr(x.cree_le)}${x.note ? " · " + esc(x.note) : ""}</small>
         <button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="supprimer-periode" data-pid="${x.id}">Supprimer cette période</button></li>`).join("")}</ul>`;
   }
 
@@ -1119,7 +1130,7 @@
 
   /* ---------- Statistiques ---------- */
   const FORMULES = [[2, "1 jour"], [8, "1 semaine"], [15, "2 semaines"], [32, "1 mois"], [62, "2 mois"], [93, "3 mois"], [186, "6 mois"], [Infinity, "12 mois"]];
-  const formuleDe = p => { const n = Math.round((new Date(p.fin) - new Date(p.debut)) / 864e5) + 1; return FORMULES.find(f => n <= f[0])[1]; };
+  const formuleDe = p => { const n = Math.round((new Date(p.fin) - new Date(p.debut)) / 864e5) + 1; return (p.vip ? "VIP, " : "") + FORMULES.find(f => n <= f[0])[1]; };
   function barres(titre, lignes, format = fcfa) {
     const max = Math.max(1, ...lignes.map(l => l[1]));
     return `<section class="ad-bloc"><h3>${titre}</h3>${lignes.length ? `<ul class="ad-barres">${lignes.map(([nom, val, plus]) => `<li><span class="ad-barre-nom">${esc(nom)}</span><span class="ad-barre"><i style="width:${Math.max(val ? 2 : 0, Math.round(val / max * 100))}%"></i></span><span class="ad-barre-val">${format(val)}${plus ? ` <small>${plus}</small>` : ""}</span></li>`).join("")}</ul>` : `<p class="ea-vide">Pas encore de données.</p>`}</section>`;
@@ -1134,7 +1145,7 @@
     const liste = blancs.length ? `<ul class="ad-facteurs">${blancs.map(b => `<li><span><b>${esc(b.titre)}</b><small>${etatB(b)} · ${EXERCICES_AGENT[b.exercice] || b.exercice}${b.matiere ? ", " + esc(b.matiere) : ""} · ${dateHeure(b.debut)}, ${b.duree_minutes} min · ${pluriel(b.copies, "copie")}, ${b.rendues} rendue${b.rendues > 1 ? "s" : ""}, ${b.notes} notée${b.notes > 1 ? "s" : ""}${b.moyenne != null ? `, moyenne ${String(b.moyenne).replace(".", ",")}/20` : ""}</small></span>
         <span>${!b.publie || new Date(b.debut) > maintenant ? `<button class="btn btn-ghost btn-sm" type="button" data-action="blanc-basculer" data-bid="${b.id}">${b.publie ? "Retirer" : "Publier"}</button>` : ""}</span></li>`).join("")}</ul>` : `<p class="ea-vide">Aucun concours blanc pour le moment.</p>`;
     return `${blocEpreuvesBlanches()}<section class="ad-bloc"><h3>Concours blancs à date fixe <span class="n">${blancs.length}</span></h3>
-        <p class="ad-note">Les abonnés en cours voient l'épreuve publiée dès sa publication, mais le sujet n'apparaît qu'à l'heure du début. La copie s'enregistre seule et part à la fin (5 minutes de tolérance). Ensuite, chacun la fait corriger et noter par l'agent de révision (formules d'un mois et plus) ; le classement est anonyme. Prévenez les abonnés par une annonce.</p>
+        <p class="ad-note">Les abonnés en cours voient l'épreuve publiée dès sa publication, mais le sujet n'apparaît qu'à l'heure du début. La copie s'enregistre seule et part à la fin (5 minutes de tolérance). Ensuite, chacun la fait corriger et noter par l'agent de révision (abonnement VIP) ; le classement est anonyme. Prévenez les abonnés par une annonce.</p>
         ${liste}
         <details class="ad-ajout"><summary>Nouveau concours blanc</summary>
           <form class="form ad-form" id="adBlanc" novalidate>
@@ -1370,7 +1381,7 @@
       <details class="ad-ajout">
         <summary>Réglages de l'agent</summary>
         <form class="form ad-form" id="adAgentReglages" novalidate>
-          <label class="ea-accord full"><input type="checkbox" name="actif"${r.actif ? " checked" : ""}><span>Ouvrir l'agent aux abonnés (formules d'un mois et plus)</span></label>
+          <label class="ea-accord full"><input type="checkbox" name="actif"${r.actif ? " checked" : ""}><span>Ouvrir l'agent aux abonnés VIP</span></label>
           <div class="field"><label for="agModele">Modèle</label><select id="agModele" name="modele">${MODELES.map(([v, l]) => `<option value="${v}"${r.modele === v ? " selected" : ""}>${l}</option>`).join("")}${MODELES.some(([v]) => v === r.modele) ? "" : `<option value="${esc(r.modele)}" selected>${esc(r.modele)}</option>`}</select></div>
           <div class="field"><label for="agJour">Demandes par jour et par abonné</label><input id="agJour" name="quota_jour" type="number" min="0" max="100" value="${r.quota_jour}"></div>
           <div class="field"><label for="agMois">Demandes par mois et par abonné</label><input id="agMois" name="quota_mois" type="number" min="0" max="1000" value="${r.quota_mois}"></div>
@@ -1581,7 +1592,7 @@
       if (act === "refuser-demande") {
         const d = demandeDe(a.user_id);
         if (!d) return;
-        const motif = prompt(`Refuser la demande de ${a.prenom} ${a.nom} (${NOM_FORMULE[d.formule] || d.formule}, ${d.moyen}, référence ${d.reference}) ?\n\nMotif, affiché à l'abonné dans son espace (facultatif)`, "Paiement introuvable");
+        const motif = prompt(`Refuser la demande de ${a.prenom} ${a.nom} (${nomFormule((d.vip ? "vip-" : "") + d.formule)}, ${d.moyen}, référence ${d.reference}) ?\n\nMotif, affiché à l'abonné dans son espace (facultatif)`, "Paiement introuvable");
         if (motif === null) return;
         b.disabled = true;
         const { error } = await client.rpc("admin_refuser_demande", { p_id: d.id, p_motif: motif });
@@ -1719,9 +1730,10 @@
     if (e.target.form && e.target.form.id === "adCommande") { majTotalCommande(e.target.form, e.target); return; }
     const f = e.target.form;
     if (!f) return;
-    if (e.target.name === "duree") {
-      $("[data-jusqua]", f).hidden = e.target.value !== "date";
-      if (PRIX[e.target.value]) f.elements.montant.value = PRIX[e.target.value];
+    if (e.target.name === "duree" || (e.target.name === "vip" && f.dataset.form === "activer")) {
+      const duree = f.elements.duree.value, prix = prixFormule(duree, f.elements.vip && f.elements.vip.checked);
+      $("[data-jusqua]", f).hidden = duree !== "date";
+      if (prix) f.elements.montant.value = prix;
     }
     if (e.target.id === "nType") $$("[data-pour]", f).forEach(x => { x.hidden = !x.dataset.pour.split(" ").includes(e.target.value); });
   });
@@ -1764,19 +1776,21 @@
       // Durées en jours : fin calculée côté site. Pour un nouvel accès, le jour même est offert (activation en
       // cours de journée) : « 1 jour » ouvre jusqu'au lendemain soir. Une prolongation s'enchaîne sans jour offert.
       const nJours = duree[0] === "j" ? Number(duree.slice(1)) : 0;
-      const jusqua = nJours ? plusJours(f.dataset.debut, f.dataset.suite === "1" ? nJours - 1 : nJours) : v("jusqua");
+      const vip = !!(f.elements.vip && f.elements.vip.checked);
+      const debut = vip ? f.dataset.debutVip : f.dataset.debut, suite = vip ? f.dataset.suiteVip : f.dataset.suite;
+      const jusqua = nJours ? plusJours(debut, suite === "1" ? nJours - 1 : nJours) : v("jusqua");
       if (!mois && !jusqua) { msg.textContent = "Choisissez la date de fin."; return; }
       const deja = paiementsMemeReference(v("note"))[0];
       if (deja && !confirm(`Attention : la référence « ${v("note")} » a déjà servi le ${dateFr(deja.cree_le)} pour ${deja.prenom} ${deja.nom}${deja.montant != null ? ` (${fcfa(deja.montant)})` : ""}.\n\nUne même référence Mobile Money ne correspond normalement qu'à un seul paiement. Enregistrer quand même ?`)) return;
       bouton.disabled = true;
-      const { data: fin, error } = await client.rpc("admin_activer", {
+      const { data: fin, error } = await client.rpc("admin_activer_periode", {
         p_user: a.user_id, p_mois: mois || null, p_jusqu_au: mois ? null : jusqua,
-        p_montant: montant === "" ? null : Math.round(Number(montant)), p_moyen: v("moyen") || null, p_note: v("note") || null
+        p_montant: montant === "" ? null : Math.round(Number(montant)), p_moyen: v("moyen") || null, p_note: v("note") || null, p_vip: vip
       });
       bouton.disabled = false;
       if (error) { msg.textContent = messageErreur(error); return; }
-      const texte = `Bonjour ${a.prenom},\n\nVotre abonnement à l'espace abonnés des Cours Sésame et SAJ est activé jusqu'au ${dateFr(fin)}.\nConnectez-vous ici : ${URL_ESPACE}\n\nBonne préparation !`;
-      retours[a.user_id] = `<div class="ad-retour"><p>Abonnement de ${esc(a.prenom)} actif jusqu'au <b>${dateFr(fin)}</b>.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), texte)}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`;
+      const texte = `Bonjour ${a.prenom},\n\nVotre abonnement ${vip ? "VIP " : ""}à l'espace abonnés des Cours Sésame et SAJ est activé jusqu'au ${dateFr(fin)}.${vip ? " Les ouvrages complets et les vidéos réservées de l'espace VIP vous sont ouverts." : ""}\nConnectez-vous ici : ${URL_ESPACE}\n\nBonne préparation !`;
+      retours[a.user_id] = `<div class="ad-retour"><p>Abonnement ${vip ? "VIP " : ""}de ${esc(a.prenom)} actif jusqu'au <b>${dateFr(fin)}</b>.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), texte)}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`;
       if (f.closest(".ad-afaire")) retourAFaire = retours[a.user_id];
       recharger("Abonnement enregistré.");
       return;
