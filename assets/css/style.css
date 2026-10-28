@@ -1415,3 +1415,24 @@ a.ea-outil-carte{text-decoration:none}
 .ad-jamais summary{cursor:pointer;font-weight:600;color:var(--navy)}
 .ad-jamais ul{margin:.6rem 0 0 1.1rem;display:grid;gap:.3rem}
 .ad-jamais small{display:block;color:var(--muted)}
+
+/* ---------- Fiches de révision : vitrine publique (fiches/) ---------- */
+.fiche-vitrine{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:start}
+.fiche-libre .eyebrow{margin-bottom:.7rem}
+.fiche-essentiel{margin:.6rem 0 2rem;padding:1.3rem 1.5rem;background:var(--cream);border-left:3px solid var(--gold);border-radius:0 var(--r) var(--r) 0}
+.fiche-essentiel p{font-family:var(--serif);font-size:clamp(1.1rem,1.8vw,1.25rem);line-height:1.55;color:var(--ink)}
+.fiche-essentiel p+p{margin-top:.8rem}
+.fiche-libre h3,.fiche-plan h3{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink);margin-bottom:.6rem}
+.fiche-sources{color:#3f4a5e}
+.fiche-plan{position:sticky;top:calc(var(--top-h,112px) + 16px);padding:1.4rem;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.fiche-plan ol{list-style:none;display:grid;gap:2px;margin-bottom:1.1rem}
+.fiche-plan li{display:flex;align-items:center;gap:.6rem;padding:.5rem .2rem;border-bottom:1px solid var(--line);font-weight:600;color:var(--navy)}
+.fiche-plan li svg{flex:none;width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;color:var(--wa)}
+.fiche-plan li.ferme{color:var(--muted);font-weight:400}
+.fiche-plan li.ferme svg{color:var(--gold-ink)}
+.fiche-plan p{font-size:.95rem;color:#3f4a5e;margin-bottom:1rem}
+.fiches-matieres{margin-bottom:8px}
+.fiches-matieres .pill{text-decoration:none}
+.fiches-matieres .pill:hover{border-color:var(--navy)}
+.fiches-matieres small{font-weight:400;color:var(--muted);margin-left:.2rem}
+@media (max-width:960px){.fiche-vitrine{grid-template-columns:1fr}.fiche-plan{position:static}}

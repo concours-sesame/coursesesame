@@ -64,6 +64,16 @@ PDF (`PUT`, `Content-Type: application/pdf`), et ligne `contenus` : titre `Fiche
 `textes/fiche-NNNN.pdf`, matière `Fiches · <matière>`, concours, `publie = true`. L'annonce aux abonnés part avec
 l'e-mail quotidien des nouveautés.
 
+## Vitrine publique (fiches/)
+
+Chaque fiche publiée a une page publique `fiches/NNN-titre/` : titre, « L'essentiel en une phrase », sources et plan,
+le reste étant réservé aux abonnés. Après une nouvelle série, régénérer les données puis le site :
+
+```
+python3 tools/fiches/vitrine.py <dossier des sources>   # -> contenu/fiches.js (seulement ce que la vitrine affiche)
+node tools/build.js
+```
+
 ## Fiches publiées
 
 | N° | Thème | Contenus |

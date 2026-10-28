@@ -1031,6 +1031,108 @@ ${contactCTA(prefix)}`;
   urls.push(url);
 }
 
+/* ---------- Fiches de révision : vitrine publique ---------- */
+// contenu/fiches.js (tools/fiches/vitrine.py) ne contient que ce qui s'affiche ici : l'essentiel, les sources et le
+// plan de chaque fiche. La fiche entière se lit dans l'espace abonnés, dès la formule d'un jour.
+{
+  const FICHES = require(path.join(DIR, "contenu/fiches.js"));
+  const TARIF_JOUR = (ctx.D.TARIFS_ABONNEMENT || []).find(t => t.cle === "j1");
+  const MATIERES = [...new Set(FICHES.map(f => f.matiere))];
+  FICHES.forEach(f => f.concours.forEach(id => { if (!CONCOURS.some(c => c.id === id)) throw new Error(`fiche ${f.numero} : concours inconnu ${id}`); }));
+  const ficheURL = (f, prefix) => `${prefix}fiches/${f.slug}/`;
+  const resume = f => { const t = stripTags(f.essentiel[0]); return t.length > 170 ? t.slice(0, t.lastIndexOf(" ", 165)) + "…" : t; };
+  const ficheCard = (f, prefix, i) => `<a class="ep-card" href="${ficheURL(f, prefix)}">
+        <span class="ep-card-tag">Fiche n° ${f.numero}</span>
+        <b>${esc(f.titre)}</b>
+        <span>${esc(resume(f))}</span>
+        <small class="sujet-card-foot">${courts(f.concours)}</small>
+        <span class="ep-card-go">Lire l'essentiel</span>
+      </a>`;
+  const prix = TARIF_JOUR ? `${TARIF_JOUR.prix} FCFA la journée` : "quelques centaines de francs";
+
+  for (const f of FICHES) {
+    const prefix = "../../";
+    R.setRoot(prefix);
+    const url = SITE + `fiches/${f.slug}/`;
+    const voisines = FICHES.filter(x => x.matiere === f.matiere && x !== f)
+      .sort((a, b) => Math.abs(a.numero - f.numero) - Math.abs(b.numero - f.numero)).slice(0, 6).sort((a, b) => a.numero - b.numero);
+    const body = `${subHero({
+      crumbs: [["Accueil", prefix], ["Fiches de révision", prefix + "fiches/"], [`Fiche n° ${f.numero}`, ""]],
+      h1: esc(f.titre),
+      lead: `Fiche de révision n° ${f.numero}, ${f.matiere.charAt(0).toLowerCase() + f.matiere.slice(1)}. L'essentiel est en accès libre ci-dessous ; la fiche entière, avec les textes cités mot pour mot, les exemples, les pièges des correcteurs et ${f.questions} questions corrigées, se lit dans l'espace abonnés.`,
+      ctas: `<a href="${prefix}espace-abonnes/" class="btn btn-gold">Lire la fiche entière</a><a href="${prefix}fiches/" class="btn btn-ghost">Toutes les fiches</a>`,
+      facts: [f.matiere, `pour les concours ${courts(f.concours)}`, `<b>${f.questions}</b> questions corrigées`]
+    })}
+
+<section class="section">
+  <div class="wrap fiche-vitrine">
+    <article class="fiche-libre">
+      <p class="eyebrow">En accès libre</p>
+      <h2 class="h-section">L'essentiel <em>en une phrase</em></h2>
+      <div class="fiche-essentiel">${f.essentiel.map(p => `<p>${p}</p>`).join("")}</div>
+      <h3>Les textes de référence</h3>
+      <p class="fiche-sources">${esc(f.sources)}</p>
+    </article>
+    <aside class="fiche-plan" aria-label="Au programme de la fiche">
+      <h3>Au programme de la fiche</h3>
+      <ol>${f.plan.map((t, i) => `<li${i ? ` class="ferme"` : ""}>${i ? svg("i-lock") : svg("i-check")}<span>${esc(t)}</span></li>`).join("")}</ol>
+      <p>La fiche entière se lit en ligne dans l'espace abonnés, dès ${prix}, avec les ${FICHES.length} fiches, les sujets corrigés et les QCM.</p>
+      <a class="btn btn-navy btn-block" href="${prefix}espace-abonnes/">Accéder à l'espace abonnés</a>
+    </aside>
+  </div>
+</section>
+
+${voisines.length ? `<section class="section section-cream">
+  <div class="wrap">
+    <div class="section-head"><p class="eyebrow">${esc(f.matiere)}</p><h2 class="h-section">Dans la même <em>matière</em></h2></div>
+    <div class="ep-cards">${voisines.map((x, i) => ficheCard(x, prefix, i)).join("")}</div>
+  </div>
+</section>` : ""}`;
+    write(`fiches/${f.slug}/index.html`, page({
+      prefix, url, body,
+      title: [`${f.titre} : fiche de révision, droit ivoirien`, `${f.titre} : fiche de révision`, f.titre],
+      description: `${stripTags(f.essentiel[0])} Fiche de révision pour les concours ${courts(f.concours)}.`,
+      ld: [breadcrumb([["Accueil", SITE], ["Fiches de révision", SITE + "fiches/"], [`Fiche n° ${f.numero}`, url]]), {
+        "@context": "https://schema.org", "@type": "LearningResource", name: f.titre, url, inLanguage: "fr", about: f.matiere,
+        learningResourceType: "Fiche de révision", educationalLevel: "Concours de la fonction publique",
+        isAccessibleForFree: false, hasPart: { "@type": "WebPageElement", isAccessibleForFree: true, cssSelector: ".fiche-libre" },
+        provider: { "@type": "Organization", name: "Les Cours Sésame et SAJ" }
+      }]
+    }));
+    urls.push(url);
+  }
+
+  // Page qui réunit toutes les fiches, par matière
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "fiches/";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Fiches de révision", ""]],
+    h1: `${FICHES.length} fiches de révision de <em>droit ivoirien</em>`,
+    lead: `Une notion par fiche : l'essentiel en une phrase, les textes cités mot pour mot, les exemples, les pièges des correcteurs et des questions corrigées. L'essentiel de chaque fiche est en accès libre ; la fiche entière se lit dans l'espace abonnés, dès ${prix}.`,
+    ctas: `<a href="#matieres" class="btn btn-gold">Parcourir les fiches</a><a href="${prefix}espace-abonnes/" class="btn btn-ghost">Espace abonnés</a>`,
+    facts: [`<b>${FICHES.length}</b> fiches`, `<b>${MATIERES.length}</b> matières`, "citations vérifiées dans les textes officiels"]
+  })}
+
+<section class="section" id="matieres">
+  <div class="wrap">
+    <nav class="pills fiches-matieres" aria-label="Matières">${MATIERES.map(m => `<a class="pill" href="#${slugify(m)}">${esc(m)} <small>${FICHES.filter(f => f.matiere === m).length}</small></a>`).join("")}</nav>
+    ${MATIERES.map(m => `<h2 class="group-title" id="${slugify(m)}">${esc(m)}<small>${plural(FICHES.filter(f => f.matiere === m).length, "fiche")}</small></h2>
+    <div class="ep-cards">${FICHES.filter(f => f.matiere === m).map((f, i) => ficheCard(f, prefix, i)).join("")}</div>`).join("\n    ")}
+  </div>
+</section>`;
+  write("fiches/index.html", page({
+    prefix, url, body,
+    title: [`${FICHES.length} fiches de révision de droit ivoirien pour les concours`, `${FICHES.length} fiches de révision de droit ivoirien`],
+    description: `${FICHES.length} fiches de révision de droit ivoirien pour les concours ${courts(CONCOURS.map(c => c.id))} : ${MATIERES.join(", ").toLowerCase()}. L'essentiel de chaque fiche en accès libre.`,
+    ld: [breadcrumb([["Accueil", SITE], ["Fiches de révision", url]]), {
+      "@context": "https://schema.org", "@type": "ItemList", name: "Fiches de révision",
+      itemListElement: FICHES.map((f, i) => ({ "@type": "ListItem", position: i + 1, url: SITE + `fiches/${f.slug}/`, name: f.titre }))
+    }]
+  }));
+  urls.push(url);
+}
+
 /* ---------- Espace abonnés ---------- */
 // Pages fixes ; tout le reste (connexion, contenus, administration) est affiché par espace.js et espace-admin.js
 const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-config.js", "assets/js/espace.js"];
