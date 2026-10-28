@@ -99,4 +99,5 @@ milliers dans `rendu.py` : « 3.000.000 » s'affichait « 3 000.000 ».
 Les plans de dissertation suivent le même format et la même chaîne, avec trois lignes de plus dans l'en-tête :
 `etiquette: Plan`, `collection: Banque de plans · VIP` et `reserve: Plan réservé aux abonnés VIP…`. Impression :
 `node tools/fiches/pdf.js <dossier> "" 1 Plan`. Dépôt sous `textes/plan-vip-NNNN.pdf`, ligne `contenus` avec la matière
-`Plans · <matière>` (rubrique « Banque de plans ») et `vip = true`. Comme les fiches, leur texte reste hors du dépôt.
+`Plans · <matière>` (rubrique « Banque de plans ») et `vip = true`. Comme les fiches, leur texte reste hors du dépôt : les sources des plans 1 à 10 et du guide « Préparer le grand oral »
+(impression `node tools/fiches/pdf.js <dossier> "" 0.96 Guide`) sont archivées dans `textes/sources-vip-plans-1-10-grand-oral.pdf`.
