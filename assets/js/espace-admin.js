@@ -875,10 +875,10 @@
           ${a.suspendu_depuis
             ? `<button class="btn btn-navy btn-sm" type="button" data-action="reactiver">Réactiver</button>`
             : `<button class="btn btn-navy btn-sm" type="button" data-action="activer">${demandeDe(a.user_id) ? "Vérifier la demande" : a.actif ? "Prolonger" : "Activer"}</button>`}
+          ${estVipAbonne(a) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="retirer-vip">Retirer le VIP</button>`
+            : `<button class="btn btn-gold btn-sm" type="button" data-action="passer-vip" title="${aPeriodeOuverte(a) ? "Ses périodes en cours et à venir deviennent VIP" : "Ouvre l'activation avec la case VIP cochée"}">Ajouter à l'espace VIP</button>`}
           ${demandeDe(a.user_id) ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="refuser-demande">Refuser la demande</button>` : ""}
           ${a.actif && !a.suspendu_depuis ? `<button class="btn btn-ghost btn-sm" type="button" data-action="suspendre">Suspendre</button><button class="btn btn-ghost btn-sm" type="button" data-action="couper">Couper l'accès</button>` : ""}
-          ${estVipAbonne(a) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="retirer-vip">Retirer le VIP</button>`
-            : aPeriodeOuverte(a) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="passer-vip">Passer en VIP</button>` : ""}
           ${enCours(a) ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="supprimer">Supprimer l'abonnement</button>` : ""}
           <a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), messageRelance(a))}" target="_blank" rel="noopener">${icone("i-wa")}${["attente", "bientot", "expire", "suspendu"].includes(s.cle) ? "Relancer" : "Écrire"}</a>
           <button class="btn btn-ghost btn-sm" type="button" data-action="mdp">Mot de passe</button>
@@ -1692,6 +1692,15 @@
         if (error) return toast(messageErreur(error));
         retour(`<div class="ad-retour"><p>Abonnement de ${esc(a.prenom)} ${esc(a.nom)} <b>suspendu</b>.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), texte)}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`);
         recharger("Abonnement suspendu.");
+        return;
+      }
+      if (act === "passer-vip" && !aPeriodeOuverte(a)) {
+        const z = basculerZone(b, formulaireActivation(a));
+        if (!z.hidden) {
+          const c = $('input[name="vip"]', z);
+          if (c && !c.checked) { c.checked = true; c.dispatchEvent(new Event("change", { bubbles: true })); }
+          $("select", z).focus();
+        }
         return;
       }
       if (act === "passer-vip" || act === "retirer-vip") {

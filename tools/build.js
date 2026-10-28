@@ -28,7 +28,18 @@ const GOATCOUNTER = "coursesesame";
 const STATS = `<script data-goatcounter="https://${GOATCOUNTER}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>`;
 const TODAY = new Date().toISOString().slice(0, 10);
 const read = f => fs.readFileSync(path.join(DIR, f), "utf8");
-const write = (f, s) => { fs.mkdirSync(path.dirname(path.join(DIR, f)), { recursive: true }); fs.writeFileSync(path.join(DIR, f), s); console.log("écrit", f); };
+// Feuilles de style et scripts du site appelés avec ?v=<empreinte du fichier> : une mise à jour est chargée tout
+// de suite par les navigateurs, sans attendre la fin de leur cache
+const empreintes = new Map();
+const empreinte = f => {
+  if (!empreintes.has(f)) empreintes.set(f, require("crypto").createHash("sha1").update(fs.readFileSync(path.join(DIR, f))).digest("hex").slice(0, 10));
+  return empreintes.get(f);
+};
+const versionner = html => html.replace(/((?:\.\.\/)*assets\/(?:css|js)\/[\w.-]+\.(?:css|js))(?:\?v=[0-9a-f]+)?"/g, (m, url) => {
+  const f = url.replace(/^(\.\.\/)+/, "");
+  return fs.existsSync(path.join(DIR, f)) ? `${url}?v=${empreinte(f)}"` : m;
+});
+const write = (f, s) => { fs.mkdirSync(path.dirname(path.join(DIR, f)), { recursive: true }); fs.writeFileSync(path.join(DIR, f), f.endsWith(".html") ? versionner(s) : s); console.log("écrit", f); };
 
 /* ---------- Données ---------- */
 const ctx = {};
