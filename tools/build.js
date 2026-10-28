@@ -126,6 +126,34 @@ function abonnementHTML() {
     `;
 }
 
+// Accueil : une vraie question du QCM de méthode, jouable dans le haut de page (app.js, initEssai)
+const ESSAI_QUESTION = "Quel plan est attendu pour une dissertation juridique ?";
+function essaiHTML() {
+  const q = ctx.D.QCM.find(x => x.q === ESSAI_QUESTION);
+  if (!q) throw new Error("accueil : question du QCM introuvable : " + ESSAI_QUESTION);
+  return `<figure class="essai" data-bonne="${q.bonne}" aria-labelledby="essaiQ">
+      <figcaption class="essai-tete">Essayez : une question de notre QCM de méthode</figcaption>
+      <p class="essai-q" id="essaiQ">${q.q}</p>
+      <ol class="essai-opts" type="A">
+        ${q.options.map((o, i) => `<li><button class="essai-opt" type="button" data-i="${i}">${o}</button></li>`).join("\n        ")}
+      </ol>
+      <div class="essai-verdict" aria-live="polite" hidden>
+        <p><b class="essai-resultat"></b> ${q.explication}</p>
+        <div class="essai-actions"><a class="btn btn-gold" href="espace-abonnes/#inscription">Créer mon compte</a><a class="btn btn-ghost" href="methodes/#qcm">Les 10 questions du QCM</a></div>
+      </div>
+      <noscript><p class="essai-noscript">Réponse : ${q.options[q.bonne]}. ${q.explication}</p></noscript>
+    </figure>
+    `;
+}
+
+// Accueil : le prix d'une journée, en chiffre-titre, en tête de l'offre d'abonnement
+function prixJourHTML() {
+  const j1 = (ctx.D.TARIFS_ABONNEMENT || []).find(x => x.cle === "j1");
+  if (!j1) throw new Error("accueil : formule j1 attendue dans data.js");
+  return `<p class="prix-geant"><b>${j1.prix}</b><span>FCFA<br>la journée</span></p>
+        `;
+}
+
 function faqHTML() {
   return FAQ.map((f, i) => `<details class="faq-item"${i === 0 ? " open" : ""}><summary>${f.q}<i></i></summary><p>${f.a}</p></details>`).join("");
 }
@@ -474,7 +502,7 @@ function videosSection(list, prefix, { id = "videos", h2, eyebrow = "", lead, ic
       ${lead ? `<p class="lead">${lead}</p>` : ""}
     </div>
     ${feat ? videoFeature(feat, prefix, ici) : ""}
-    ${rest.length ? `<div class="v-rail${feat ? " v-rail-after" : ""}">${rest.map((v, i) => videoCard(v, prefix, i, ici)).join("")}</div>` : ""}
+    ${rest.length ? `<div class="v-rail${feat ? " v-rail-after" : ""}"${ici === "accueil" ? ` tabindex="0" role="region" aria-label="Vidéos, à faire défiler"` : ""}>${rest.map((v, i) => videoCard(v, prefix, i, ici)).join("")}</div>` : ""}
     ${abo.length ? `<div class="v-abo-head reveal"><h3>${svg("i-lock")}Réservées aux abonnés VIP</h3><p>D'autres notions expliquées en une minute, à regarder dans l'espace VIP de l'espace abonnés.</p></div>
     <div class="v-rail">${abo.map((v, i) => videoAboCard(v, prefix, i)).join("")}</div>` : ""}
     ${band}
@@ -1548,6 +1576,8 @@ R.setRoot("");
 index = inject(index, "concours", "\n      " + CONCOURS.map((c, i) => concoursCard(c, i, "")).join("\n      ") + "\n    ");
 index = inject(index, "books", selectionHTML());
 index = inject(index, "abonnement", abonnementHTML());
+index = inject(index, "essai", essaiHTML());
+index = inject(index, "prixjour", prixJourHTML());
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
   h2: `Nos vidéos`, ici: "accueil",

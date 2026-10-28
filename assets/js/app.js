@@ -467,6 +467,26 @@
     render(0);
   }
 
+  /* ---------- Accueil : la question du QCM jouable dans le haut de page ---------- */
+  function initEssai() {
+    const box = $(".essai");
+    if (!box) return;
+    const bonne = Number(box.dataset.bonne), verdict = $(".essai-verdict", box);
+    box.addEventListener("click", e => {
+      const b = e.target.closest(".essai-opt");
+      if (!b || box.classList.contains("fait")) return;
+      const juste = Number(b.dataset.i) === bonne;
+      box.classList.add("fait");
+      $$(".essai-opt", box).forEach(x => {
+        x.disabled = true;
+        if (Number(x.dataset.i) === bonne) x.classList.add("bonne");
+      });
+      if (!juste) b.classList.add("fausse");
+      $(".essai-resultat", box).textContent = juste ? "Bonne réponse." : "Pas tout à fait.";
+      verdict.hidden = false;
+    });
+  }
+
   /* ---------- QCM : méthode (page Méthodes) ou matière (pages qcm/) ---------- */
   function initQCM() {
     const box = $("#qcmBox");
@@ -663,6 +683,7 @@
   wireFAQ();
   initConseiller();
   initQCM();
+  initEssai();
   initSujetsFiltre();
   initVideos();
   updateCart();
