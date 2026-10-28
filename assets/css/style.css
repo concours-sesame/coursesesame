@@ -1721,3 +1721,60 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
   .header .brand-rule,.header .brand-tag{display:none}
   .header .icon-btn{width:40px;height:40px}
 }
+
+/* ---------- Accueil, deuxième passe (inspirations : Brilliant, Raycast, Stripe, Linear) ---------- */
+
+/* 1. Le haut de page fait essayer le produit : une vraie question du QCM de méthode */
+.accueil .hero-inner{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}
+.essai{margin:0;padding:clamp(22px,2.6vw,34px);background:var(--nuit-2);border-radius:var(--r);box-shadow:var(--ombre-levee)}
+.essai-tete{font-size:.95rem;color:var(--brume);margin-bottom:.9rem}
+.essai-q{font-family:var(--display);font-weight:400;font-stretch:115%;font-size:clamp(1.35rem,2vw,1.7rem);line-height:1.2;letter-spacing:-.01em;color:var(--clair);margin-bottom:1.2rem;text-wrap:balance}
+.essai-opts{list-style:none;display:grid;gap:8px;counter-reset:essai}
+.essai-opt{counter-increment:essai;width:100%;display:grid;grid-template-columns:2rem 1fr;align-items:center;gap:.6rem;min-height:52px;padding:.65rem .9rem;text-align:left;border:1px solid var(--nuit-filet-2);border-radius:var(--r-sm);background:var(--nuit);color:var(--clair);font-weight:500;line-height:1.35;transition:background-color .2s var(--ease),border-color .2s var(--ease)}
+.essai-opt::before{content:counter(essai,upper-alpha);font-family:var(--display);font-stretch:125%;font-weight:400;color:var(--brume)}
+.essai-opt:hover:not(:disabled){background:var(--nuit-3);border-color:var(--clair-2)}
+.essai-opt:disabled{cursor:default;opacity:.55}
+.essai-opt.bonne{opacity:1;border-color:var(--gold);background:var(--nuit-3)}
+.essai-opt.bonne::before{content:"✓";color:var(--gold)}
+.essai-opt.fausse{opacity:1;border-color:var(--brume)}
+.essai-opt.fausse::before{content:"✕";color:var(--brume)}
+.essai-verdict{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--nuit-filet)}
+.essai-verdict p{color:var(--clair-2);font-size:.98rem}
+.essai-resultat{color:var(--clair);font-weight:600}
+.essai.fait .essai-resultat:first-child{color:var(--gold)}
+.essai-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.accueil .essai .btn-gold{background:var(--gold);color:var(--nuit);border-color:var(--gold)}
+.essai-noscript{margin-top:1rem;color:var(--clair-2)}
+@media (prefers-reduced-motion:no-preference){.essai-verdict:not([hidden]){animation:minuit-entree .4s var(--ease) both}}
+
+/* Les couvertures passent en tête de la section des ouvrages */
+.catalogue-tete{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:clamp(28px,5vw,72px);align-items:center;margin-bottom:clamp(36px,5vw,56px)}
+.catalogue-tete .section-head{margin-bottom:0}
+.catalogue-tete .hero-pages{max-width:520px;justify-self:end;width:100%}
+.catalogue-tete .hp-stack img{border:0;border-radius:2px;box-shadow:var(--ombre-levee)}
+.catalogue-tete .hero-pages figcaption{color:var(--brume)}
+
+/* 2. Le prix comme titre */
+.prix-geant{display:flex;align-items:flex-end;gap:.8rem;margin:0 0 1.4rem;line-height:.82}
+.prix-geant b{font-family:var(--display);font-weight:250;font-stretch:125%;font-size:clamp(5rem,12vw,9.5rem);letter-spacing:-.045em;font-variant-numeric:tabular-nums;color:var(--clair)}
+.prix-geant span{font-size:clamp(1rem,1.6vw,1.25rem);line-height:1.25;color:var(--gold);padding-bottom:.35em}
+
+/* 3. Les photos au clair de lune : la nuit leur donne sa teinte */
+.accueil :is(.conseiller-photo,.section-photo figure,.about-photo){background:#3a5a9a;border-radius:var(--r-sm)}
+.accueil :is(.conseiller-photo,.section-photo figure,.about-photo) img{filter:grayscale(1) contrast(1.08) brightness(1.02);mix-blend-mode:luminosity;opacity:.92}
+.accueil :is(.conseiller-photo,.section-photo figure,.about-photo) figcaption{background:var(--nuit);padding-top:.5rem;margin-top:0}
+
+/* 4. Les vidéos sur une rangée qu'on fait défiler */
+.accueil .v-rail.v-rail-after{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:clamp(200px,22vw,260px);gap:clamp(14px,2vw,22px);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gutter);margin-inline:calc(var(--gutter) * -1);padding:0 var(--gutter) 14px;scrollbar-width:thin;scrollbar-color:var(--nuit-filet-2) transparent}
+.accueil .v-rail.v-rail-after>*{scroll-snap-align:start}
+.accueil .v-rail.v-rail-after:focus-visible{outline-offset:-2px}
+@media (min-width:961px){.accueil .v-rail.v-rail-after{margin-inline:0;padding-inline:0;scroll-padding-inline:0}}
+
+/* 5. Un accueil plus court : les avis dans « Qui sommes-nous », le contact avec les questions */
+.h-sub{font-family:var(--display);font-weight:350;font-stretch:120%;font-size:clamp(1.5rem,2.6vw,2rem);letter-spacing:-.015em;line-height:1.1;margin-bottom:1.2rem}
+.accueil .h-sub{color:var(--clair)}
+.about-avis{margin-top:clamp(48px,7vw,80px)}
+.faq-contact{margin-top:clamp(32px,4vw,48px);padding-top:clamp(24px,3vw,32px);border-top:1px solid var(--line);background:none}
+.faq-contact .contact-list{margin-top:1.4rem}
+@media (max-width:960px){.catalogue-tete{grid-template-columns:1fr}.catalogue-tete .hero-pages{justify-self:start}}
+@media (max-width:640px){.prix-geant b{font-size:clamp(4.2rem,22vw,5.5rem)}}

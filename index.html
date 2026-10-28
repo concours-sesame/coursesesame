@@ -157,14 +157,22 @@
         <li><b>-10 %</b><span>dès 3 ouvrages</span></li>
       </ul>
     </div>
-    <figure class="hero-pages">
-      <div class="hp-stack">
-        <img class="hp-1" src="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg" srcset="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg 600w, assets/img/pages/1000-fiches-ecrit-magistrature.jpg 960w" sizes="(max-width:960px) 70vw, 400px" width="600" height="424" alt="Première page des 1 000 fiches pour réussir l'écrit de la magistrature">
-        <img class="hp-2" src="assets/img/pages/resume-droit-civil-600.jpg" srcset="assets/img/pages/resume-droit-civil-600.jpg 600w, assets/img/pages/resume-droit-civil.jpg 960w" sizes="(max-width:960px) 70vw, 400px" width="600" height="424" alt="Première page du résumé de droit civil ivoirien">
-        <img class="hp-3" src="assets/img/pages/annales-magistrature-600.jpg" srcset="assets/img/pages/annales-magistrature-600.jpg 424w, assets/img/pages/annales-magistrature.jpg 679w" sizes="(max-width:960px) 40vw, 220px" width="424" height="600" alt="Première page des annales corrigées du concours direct de la magistrature">
+    <!-- build:essai --><figure class="essai" data-bonne="2" aria-labelledby="essaiQ">
+      <figcaption class="essai-tete">Essayez : une question de notre QCM de méthode</figcaption>
+      <p class="essai-q" id="essaiQ">Quel plan est attendu pour une dissertation juridique ?</p>
+      <ol class="essai-opts" type="A">
+        <li><button class="essai-opt" type="button" data-i="0">Trois parties équilibrées</button></li>
+        <li><button class="essai-opt" type="button" data-i="1">Un plan libre, au choix du candidat</button></li>
+        <li><button class="essai-opt" type="button" data-i="2">Deux parties et deux sous-parties (I/II avec A/B)</button></li>
+        <li><button class="essai-opt" type="button" data-i="3">Thèse, antithèse, synthèse</button></li>
+      </ol>
+      <div class="essai-verdict" aria-live="polite" hidden>
+        <p><b class="essai-resultat"></b> La dissertation juridique exige une problématique claire et un plan en deux parties et deux sous-parties.</p>
+        <div class="essai-actions"><a class="btn btn-gold" href="espace-abonnes/#inscription">Créer mon compte</a><a class="btn btn-ghost" href="methodes/#qcm">Les 10 questions du QCM</a></div>
       </div>
-      <figcaption>Les premières pages de trois de nos ouvrages : les annales corrigées du concours direct de la magistrature, les 1 000 fiches pour l'écrit et le résumé de droit civil ivoirien.</figcaption>
+      <noscript><p class="essai-noscript">Réponse : Deux parties et deux sous-parties (I/II avec A/B). La dissertation juridique exige une problématique claire et un plan en deux parties et deux sous-parties.</p></noscript>
     </figure>
+    <!-- /build:essai -->
   </div>
 </section>
 
@@ -228,6 +236,8 @@
   <div class="wrap">
     <div class="abonnement-grid">
       <div class="section-head">
+        <!-- build:prixjour --><p class="prix-geant"><b>500</b><span>FCFA<br>la journée</span></p>
+        <!-- /build:prixjour -->
         <h2 class="h-section">Révisez tout, en ligne</h2>
         <p class="lead">Un abonnement ouvre l'espace abonnés, sur téléphone comme sur ordinateur : vous payez par Mobile Money et votre accès s'ouvre pour la durée choisie.</p>
         <ul class="abonnement-inclus">
@@ -269,9 +279,19 @@
 <!-- OUVRAGES : sélection, le catalogue entier est sur ouvrages/ -->
 <section class="section" id="catalogue">
   <div class="wrap">
-    <div class="section-head">
+    <div class="catalogue-tete">
+      <div class="section-head">
       <h2 class="h-section">Nos ouvrages, extrait à lire</h2>
       <p class="lead">Touchez la première page d'un ouvrage pour lire sa présentation et son extrait gratuit. Ajoutez vos ouvrages au panier, puis envoyez la commande sur WhatsApp en un seul message.</p>
+    </div>
+      <figure class="hero-pages">
+      <div class="hp-stack">
+        <img class="hp-1" src="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg" srcset="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg 600w, assets/img/pages/1000-fiches-ecrit-magistrature.jpg 960w" sizes="(max-width:960px) 70vw, 400px" width="600" height="424" alt="Première page des 1 000 fiches pour réussir l'écrit de la magistrature">
+        <img class="hp-2" src="assets/img/pages/resume-droit-civil-600.jpg" srcset="assets/img/pages/resume-droit-civil-600.jpg 600w, assets/img/pages/resume-droit-civil.jpg 960w" sizes="(max-width:960px) 70vw, 400px" width="600" height="424" alt="Première page du résumé de droit civil ivoirien">
+        <img class="hp-3" src="assets/img/pages/annales-magistrature-600.jpg" srcset="assets/img/pages/annales-magistrature-600.jpg 424w, assets/img/pages/annales-magistrature.jpg 679w" sizes="(max-width:960px) 40vw, 220px" width="424" height="600" alt="Première page des annales corrigées du concours direct de la magistrature">
+      </div>
+      <figcaption>Les premières pages de trois de nos ouvrages : les annales corrigées du concours direct de la magistrature, les 1 000 fiches pour l'écrit et le résumé de droit civil ivoirien.</figcaption>
+    </figure>
     </div>
     <div id="selection"><!-- build:books --><div class="books"><article class="book">
       <button class="book-cover-btn" data-open="5" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés Magistrature"><div class="cover cover-page"><img src="assets/img/pages/annales-magistrature-600.jpg" srcset="assets/img/pages/annales-magistrature-600.jpg 424w, assets/img/pages/annales-magistrature.jpg 678w" sizes="(max-width:640px) 46vw, 300px" width="424" height="600" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés Magistrature" loading="lazy" decoding="async"></div></button>
@@ -405,7 +425,7 @@
         <div class="v-actions"><a class="btn btn-gold" href="#concours">Choisir mon concours</a></div>
       </div>
     </div>
-    <div class="v-rail v-rail-after"><figure class="v-card">
+    <div class="v-rail v-rail-after" tabindex="0" role="region" aria-label="Vidéos, à faire défiler"><figure class="v-card">
         <div class="v-frame v-vertical">
           <video class="v-media" controls playsinline preload="none" poster="assets/img/videos/resume-droit-civil-2027.jpg" width="720" height="1280" aria-label="Le Résumé de Droit Civil, édition 2027"><source src="assets/video/resume-droit-civil-2027.mp4" type="video/mp4"><a href="assets/video/resume-droit-civil-2027.mp4">Télécharger la vidéo</a></video>
           <span class="v-dur" aria-hidden="true">0:43</span>
@@ -487,16 +507,6 @@
 </section>
 <!-- /build:videos -->
 
-<!-- AVIS -->
-<section class="section" id="avis">
-  <div class="wrap">
-    <div class="section-head">
-      <h2 class="h-section">L'avis de nos élèves</h2>
-    </div>
-    <div class="reviews" id="reviews"></div>
-  </div>
-</section>
-
 <!-- À PROPOS -->
 <section class="section on-dark" id="apropos">
   <div class="wrap">
@@ -519,6 +529,10 @@
         <figcaption class="photo-credit">Le Plateau, à Abidjan, vu de la lagune Ébrié. Photo : <a href="https://unsplash.com/photos/e514SZzfpfM" target="_blank" rel="noopener">djebi abraham philippe, Unsplash</a></figcaption>
       </figure>
     </div>
+    <div class="about-avis" id="avis">
+      <h3 class="h-sub">L'avis de nos élèves</h3>
+      <div class="reviews" id="reviews"></div>
+    </div>
     <div class="promises">
       <div class="promise"><h4>Ouvrages à jour</h4><p>Textes et jurisprudence du droit ivoirien en vigueur.</p></div>
       <div class="promise"><h4>Paiement par Mobile Money</h4><p>Orange Money, MTN MoMo, Wave et Moov Money, ou en espèces à la livraison à Abidjan.</p></div>
@@ -536,16 +550,8 @@
     <div>
       <h2 class="h-section">Questions fréquentes</h2>
       <p class="lead">Vous ne trouvez pas votre réponse ? Écrivez-nous sur WhatsApp, nous répondons rapidement.</p>
-    </div>
-    <div id="faqList"><!-- build:faq --><details class="faq-item" open><summary>Comment passer une commande ?<i></i></summary><p>Vous pouvez ajouter vos ouvrages au panier puis envoyer votre commande via WhatsApp, ou cliquer directement sur le bouton WhatsApp de chaque ouvrage. Notre équipe vous confirmera la disponibilité et les modalités de livraison.</p></details><details class="faq-item"><summary>Quels sont les modes de paiement acceptés ?<i></i></summary><p>Nous acceptons les paiements par Mobile Money (Orange Money, MTN MoMo, Wave et Moov Money) et en espèces à la livraison pour Abidjan. Pour les autres villes, le paiement se fait avant expédition.</p></details><details class="faq-item"><summary>Livrez-vous en dehors d'Abidjan ?<i></i></summary><p>Oui, nous livrons dans toute la Côte d'Ivoire. Pour Abidjan, la livraison se fait sous 24 à 48 heures. Pour les autres villes, comptez 3 à 5 jours ouvrables via transporteur.</p></details><details class="faq-item"><summary>Les ouvrages sont-ils à jour pour la session 2027 ?<i></i></summary><p>L'édition de chaque ouvrage figure dans son titre. Le Guide méthodologique Magistrature et les Annales des anciens sujets corrigés INFJ sont en édition 2027. Les 50 Cas pratiques corrigés de la magistrature, les Fiches d'arrêts de droit administratif et le Guide méthodologique INFJ sont en édition 2026. Pour savoir si un ouvrage intègre un texte récent, écrivez-nous sur WhatsApp avant de commander : nous vous répondons précisément.</p></details><details class="faq-item"><summary>Proposez-vous une remise pour les commandes groupées ?<i></i></summary><p>Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10 % sur le total de votre commande.</p></details><details class="faq-item"><summary>Puis-je consulter un extrait avant d'acheter ?<i></i></summary><p>Oui. La plupart des ouvrages proposent un extrait gratuit à télécharger en PDF : ouvrez la fiche de l'ouvrage et cliquez sur « Lire un extrait gratuit ». Pour les autres, écrivez-nous sur WhatsApp et nous vous enverrons un aperçu.</p></details><details class="faq-item"><summary>Qu'est-ce que l'espace abonnés ?<i></i></summary><p>C'est un espace privé du site, réservé aux abonnés. Vous y lisez nos sujets corrigés en entier, nos fiches de révision, nos QCM chronométrés avec correction détaillée, nos textes officiels et notre jurisprudence. L'espace VIP y ajoute nos ouvrages complets et nos vidéos réservées. Les contenus se lisent en ligne, sur téléphone comme sur ordinateur, et sont réservés à votre usage personnel.</p></details><details class="faq-item"><summary>Combien coûte l'abonnement ?<i></i></summary><p>500 FCFA pour un jour, 2 000 FCFA pour une semaine, 3 500 FCFA pour deux semaines, 5 000 FCFA pour un mois, 9 000 FCFA pour deux mois, 12 500 FCFA pour trois mois, 22 500 FCFA pour six mois et 40 000 FCFA pour douze mois. L'abonnement VIP, qui ajoute les ouvrages complets et les vidéos réservées, coûte le triple : de 1 500 FCFA pour un jour à 120 000 FCFA pour douze mois.</p></details><details class="faq-item"><summary>Comment activer mon abonnement ?<i></i></summary><p>Créez votre compte sur la page Espace abonnés, puis réglez la formule choisie par Orange Money, MTN MoMo, Wave ou Moov Money. Saisissez ensuite la référence du paiement dans votre espace, ou envoyez-la-nous sur WhatsApp. Nous activons votre accès dès la vérification du paiement, pour toute la durée de votre formule.</p></details><details class="faq-item"><summary>Qu'est-ce que l'espace VIP ?<i></i></summary><p>C'est la partie de l'espace abonnés qui réunit nos ouvrages complets, nos vidéos réservées et nos documents VIP, avec chaque mois la correction d'une copie, notée sur 20 par un correcteur. Il est ouvert aux abonnés VIP, quelle que soit la durée choisie, au triple du prix de l'abonnement normal. L'abonnement normal donne accès à tout le reste : sujets corrigés, fiches de révision, QCM, textes officiels, jurisprudence et, à partir d'une semaine, corrigés des concours blancs. Vous pouvez passer au VIP à tout moment depuis votre espace ou sur WhatsApp.</p></details><details class="faq-item"><summary>Quels ouvrages sont compris dans l'espace VIP ?<i></i></summary><p>Dans le catalogue, chaque ouvrage compris porte la mention « Inclus dans l'espace VIP » : annales corrigées, résumés de cours, guide méthodologique, fiches d'arrêts, recueils de dissertations, de cas pratiques et d'articles commentés. S'y ajoutent des ouvrages réservés aux abonnés, comme le Résumé de droit constitutionnel. La liste complète figure sur la page Espace abonnés.</p></details><details class="faq-item"><summary>Puis-je utiliser mon compte sur plusieurs appareils ?<i></i></summary><p>Un compte s'utilise sur un seul appareil à la fois. Si vous vous connectez sur un autre téléphone ou un autre ordinateur, le premier est déconnecté. Vous pouvez donc changer d'appareil, mais un compte ne se partage pas.</p></details><details class="faq-item"><summary>J'ai oublié mon mot de passe. Que faire ?<i></i></summary><p>Sur la page Espace abonnés, touchez « Mot de passe oublié ? » sous le formulaire de connexion et indiquez l'adresse e-mail de votre compte. Vous recevez un lien pour choisir un nouveau mot de passe. Si l'e-mail n'arrive pas, regardez dans les courriers indésirables, ou écrivez-nous sur WhatsApp : nous vous donnons un mot de passe provisoire.</p></details><details class="faq-item"><summary>Puis-je installer le site sur mon téléphone ?<i></i></summary><p>Oui. Sur Android, ouvrez le site dans Chrome, touchez le menu en haut à droite, puis « Ajouter à l'écran d'accueil » ou « Installer l'application ». Sur iPhone, ouvrez-le dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ». Le site s'ouvre alors d'un geste, comme une application, avec notre logo.</p></details><!-- /build:faq --></div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="section contact" id="contact">
-  <div class="wrap contact-inner">
-    <div>
-      <h2>Nous joindre</h2>
+      <div class="faq-contact contact" id="contact">
+      <h3 class="h-sub">Nous joindre</h3>
       <p>Pour une question, un conseil ou une commande, écrivez-nous sur WhatsApp ou appelez-nous.</p>
       <div class="contact-phones">
         <a class="contact-phone" href="tel:+2250160860537"><svg><use href="#i-phone"/></svg>+225 01 60 86 05 37</a>
@@ -553,15 +559,18 @@
       </div>
       <p class="contact-note">Les deux numéros répondent aussi sur WhatsApp.</p>
       <a class="btn btn-wa" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
+        <ul class="contact-list">
+          <li><b>Adresse</b>Abidjan, Côte d'Ivoire</li>
+          <li><b>Livraison</b>À Abidjan sous 24 à 48 heures, dans les autres villes sous 3 à 5 jours ouvrables.</li>
+          <li><b>Paiement</b>Orange Money, MTN MoMo, Wave et Moov Money, ou en espèces à la livraison à Abidjan.</li>
+          <li><b>Remise</b>10 % sur le total dès 3 ouvrages commandés.</li>
+        </ul>
+      </div>
     </div>
-    <ul class="contact-list">
-      <li><b>Adresse</b>Abidjan, Côte d'Ivoire</li>
-      <li><b>Livraison</b>À Abidjan sous 24 à 48 heures, dans les autres villes sous 3 à 5 jours ouvrables.</li>
-      <li><b>Paiement</b>Orange Money, MTN MoMo, Wave et Moov Money, ou en espèces à la livraison à Abidjan.</li>
-      <li><b>Remise</b>10 % sur le total dès 3 ouvrages commandés.</li>
-    </ul>
+    <div id="faqList"><!-- build:faq --><details class="faq-item" open><summary>Comment passer une commande ?<i></i></summary><p>Vous pouvez ajouter vos ouvrages au panier puis envoyer votre commande via WhatsApp, ou cliquer directement sur le bouton WhatsApp de chaque ouvrage. Notre équipe vous confirmera la disponibilité et les modalités de livraison.</p></details><details class="faq-item"><summary>Quels sont les modes de paiement acceptés ?<i></i></summary><p>Nous acceptons les paiements par Mobile Money (Orange Money, MTN MoMo, Wave et Moov Money) et en espèces à la livraison pour Abidjan. Pour les autres villes, le paiement se fait avant expédition.</p></details><details class="faq-item"><summary>Livrez-vous en dehors d'Abidjan ?<i></i></summary><p>Oui, nous livrons dans toute la Côte d'Ivoire. Pour Abidjan, la livraison se fait sous 24 à 48 heures. Pour les autres villes, comptez 3 à 5 jours ouvrables via transporteur.</p></details><details class="faq-item"><summary>Les ouvrages sont-ils à jour pour la session 2027 ?<i></i></summary><p>L'édition de chaque ouvrage figure dans son titre. Le Guide méthodologique Magistrature et les Annales des anciens sujets corrigés INFJ sont en édition 2027. Les 50 Cas pratiques corrigés de la magistrature, les Fiches d'arrêts de droit administratif et le Guide méthodologique INFJ sont en édition 2026. Pour savoir si un ouvrage intègre un texte récent, écrivez-nous sur WhatsApp avant de commander : nous vous répondons précisément.</p></details><details class="faq-item"><summary>Proposez-vous une remise pour les commandes groupées ?<i></i></summary><p>Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10 % sur le total de votre commande.</p></details><details class="faq-item"><summary>Puis-je consulter un extrait avant d'acheter ?<i></i></summary><p>Oui. La plupart des ouvrages proposent un extrait gratuit à télécharger en PDF : ouvrez la fiche de l'ouvrage et cliquez sur « Lire un extrait gratuit ». Pour les autres, écrivez-nous sur WhatsApp et nous vous enverrons un aperçu.</p></details><details class="faq-item"><summary>Qu'est-ce que l'espace abonnés ?<i></i></summary><p>C'est un espace privé du site, réservé aux abonnés. Vous y lisez nos sujets corrigés en entier, nos fiches de révision, nos QCM chronométrés avec correction détaillée, nos textes officiels et notre jurisprudence. L'espace VIP y ajoute nos ouvrages complets et nos vidéos réservées. Les contenus se lisent en ligne, sur téléphone comme sur ordinateur, et sont réservés à votre usage personnel.</p></details><details class="faq-item"><summary>Combien coûte l'abonnement ?<i></i></summary><p>500 FCFA pour un jour, 2 000 FCFA pour une semaine, 3 500 FCFA pour deux semaines, 5 000 FCFA pour un mois, 9 000 FCFA pour deux mois, 12 500 FCFA pour trois mois, 22 500 FCFA pour six mois et 40 000 FCFA pour douze mois. L'abonnement VIP, qui ajoute les ouvrages complets et les vidéos réservées, coûte le triple : de 1 500 FCFA pour un jour à 120 000 FCFA pour douze mois.</p></details><details class="faq-item"><summary>Comment activer mon abonnement ?<i></i></summary><p>Créez votre compte sur la page Espace abonnés, puis réglez la formule choisie par Orange Money, MTN MoMo, Wave ou Moov Money. Saisissez ensuite la référence du paiement dans votre espace, ou envoyez-la-nous sur WhatsApp. Nous activons votre accès dès la vérification du paiement, pour toute la durée de votre formule.</p></details><details class="faq-item"><summary>Qu'est-ce que l'espace VIP ?<i></i></summary><p>C'est la partie de l'espace abonnés qui réunit nos ouvrages complets, nos vidéos réservées et nos documents VIP, avec chaque mois la correction d'une copie, notée sur 20 par un correcteur. Il est ouvert aux abonnés VIP, quelle que soit la durée choisie, au triple du prix de l'abonnement normal. L'abonnement normal donne accès à tout le reste : sujets corrigés, fiches de révision, QCM, textes officiels, jurisprudence et, à partir d'une semaine, corrigés des concours blancs. Vous pouvez passer au VIP à tout moment depuis votre espace ou sur WhatsApp.</p></details><details class="faq-item"><summary>Quels ouvrages sont compris dans l'espace VIP ?<i></i></summary><p>Dans le catalogue, chaque ouvrage compris porte la mention « Inclus dans l'espace VIP » : annales corrigées, résumés de cours, guide méthodologique, fiches d'arrêts, recueils de dissertations, de cas pratiques et d'articles commentés. S'y ajoutent des ouvrages réservés aux abonnés, comme le Résumé de droit constitutionnel. La liste complète figure sur la page Espace abonnés.</p></details><details class="faq-item"><summary>Puis-je utiliser mon compte sur plusieurs appareils ?<i></i></summary><p>Un compte s'utilise sur un seul appareil à la fois. Si vous vous connectez sur un autre téléphone ou un autre ordinateur, le premier est déconnecté. Vous pouvez donc changer d'appareil, mais un compte ne se partage pas.</p></details><details class="faq-item"><summary>J'ai oublié mon mot de passe. Que faire ?<i></i></summary><p>Sur la page Espace abonnés, touchez « Mot de passe oublié ? » sous le formulaire de connexion et indiquez l'adresse e-mail de votre compte. Vous recevez un lien pour choisir un nouveau mot de passe. Si l'e-mail n'arrive pas, regardez dans les courriers indésirables, ou écrivez-nous sur WhatsApp : nous vous donnons un mot de passe provisoire.</p></details><details class="faq-item"><summary>Puis-je installer le site sur mon téléphone ?<i></i></summary><p>Oui. Sur Android, ouvrez le site dans Chrome, touchez le menu en haut à droite, puis « Ajouter à l'écran d'accueil » ou « Installer l'application ». Sur iPhone, ouvrez-le dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ». Le site s'ouvre alors d'un geste, comme une application, avec notre logo.</p></details><!-- /build:faq --></div>
   </div>
 </section>
+
 
 </main>
 
