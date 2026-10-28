@@ -953,6 +953,10 @@
   // communs à tous les concours ; un bouton montre tout. Favoris, pastille « Nouveau » et reprise de la lecture
   // sont mémorisés sur cet appareil (un compte ne s'utilise que sur un appareil à la fois).
   let portee = null; // "moi" ou "tous" ; null : choix automatique
+  // Recherche : dès qu'un mot est saisi, elle porte sur toute la bibliothèque, toutes rubriques et tous concours
+  let recherche = "";
+  const texteCarte = c => sansAccents([c.titre, c.description, c.matiere, (c.concours || []).map(nomConcours).join(" ")].join(" "));
+  const motsRecherche = () => sansAccents(recherche).split(/\s+/).filter(Boolean);
   const monConcours = () => { const id = etat.profil && etat.profil.concours; return CONC.some(c => c.id === id) ? id : null; };
   const pourMoi = c => !(c.concours && c.concours.length) || c.concours.includes(monConcours());
   const porteeActive = () => !monConcours() ? "tous" : portee || (contenus.some(pourMoi) ? "moi" : "tous");
@@ -976,7 +980,9 @@
     const favs = new Set(listeFavoris()), nbFavs = base.filter(c => favs.has(c.id)).length;
     const rubs = Object.keys(RUBRIQUES).filter(r => base.some(c => rubrique(c) === r));
     if (filtre !== "tous" && !(filtre === "favoris" ? nbFavs : rubs.includes(filtre))) filtre = "tous";
-    const liste = filtre === "tous" ? base : filtre === "favoris" ? base.filter(c => favs.has(c.id)) : base.filter(c => rubrique(c) === filtre);
+    const mots = motsRecherche();
+    const liste = mots.length ? contenus.filter(c => mots.every(m => texteCarte(c).includes(m)))
+      : filtre === "tous" ? base : filtre === "favoris" ? base.filter(c => favs.has(c.id)) : base.filter(c => rubrique(c) === filtre);
     const chips = [["tous", "Tous", base.length], ...(nbFavs ? [["favoris", "★ Mes favoris", nbFavs]] : []), ...rubs.map(r => [r, RUBRIQUES[r], base.filter(c => rubrique(c) === r).length])];
     const nomMoi = monConcours() ? nomConcours(monConcours()) : "";
     return `<div class="ea-biblio">
@@ -986,11 +992,11 @@
             <button type="button" data-portee="tous" aria-pressed="${!moi}">Tous les concours<span class="n">${contenus.length}</span></button>
           </div>` : ""}
           ${chips.length > 2 ? `<div class="chips" role="group" aria-label="Filtrer par rubrique">${chips.map(([v, l, n]) => `<button class="chip" type="button" data-filtre="${v}" aria-pressed="${filtre === v}">${l}<span class="n">${n}</span></button>`).join("")}</div>` : ""}
-          ${base.length > 8 ? `<label class="ea-cherche"><span class="sr-only">Rechercher un contenu</span><input type="search" id="eaCherche" placeholder="Rechercher : titre, matière, concours…" autocomplete="off"></label>` : ""}
+          <label class="ea-cherche"><span class="sr-only">Rechercher dans toute la bibliothèque</span><input type="search" id="eaCherche" value="${esc(recherche)}" placeholder="Rechercher : garde à vue, fiche n° 23, SOG, OHADA…" autocomplete="off"></label>
         </div>
-        ${["textes", "jurisprudence"].includes(filtre) ? rechercheTextesHTML() : ""}
-        <p class="ea-vide" id="eaAucun" hidden>Aucun contenu ne correspond à cette recherche.</p>
-        <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}" data-texte="${esc(sansAccents([c.titre, c.description, c.matiere, (c.concours || []).map(nomConcours).join(" ")].join(" ")))}">
+        ${mots.length ? `<p class="ea-cherche-bilan" role="status">${liste.length ? `${liste.length} résultat${liste.length > 1 ? "s" : ""} dans toute la bibliothèque, tous concours confondus.` : "Aucun contenu ne correspond à cette recherche."}${["textes", "jurisprudence"].some(r => contenus.some(c => rubrique(c) === r)) ? ` Pour chercher dans le texte même des lois et des décisions, ouvrez la rubrique Textes officiels ou Jurisprudence.` : ""}</p>`
+          : ["textes", "jurisprudence"].includes(filtre) ? rechercheTextesHTML() : ""}
+        <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}">
             <span class="ea-carte-marques"><span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
@@ -1830,10 +1836,14 @@
   // Recherche dans la bibliothèque
   racine.addEventListener("input", e => {
     if (e.target.id !== "eaCherche") return;
-    const mots = sansAccents(e.target.value).split(/\s+/).filter(Boolean);
-    let n = 0;
-    $$(".ea-grille .ea-carte", racine).forEach(c => { const ok = mots.every(m => c.dataset.texte.includes(m)); c.hidden = !ok; if (ok) n++; });
-    $("#eaAucun").hidden = n > 0;
+    recherche = e.target.value;
+    const b = $(".ea-biblio", racine);
+    if (!b) return;
+    const pos = e.target.selectionStart;
+    b.outerHTML = bibliothequeHTML();
+    const champ = $("#eaCherche", racine);
+    champ.focus();
+    champ.setSelectionRange(pos, pos);
   });
   // Lien direct vers un contenu depuis le site public : espace-abonnes/#corrige-<adresse du sujet>
   function ouvrirDepuisLien() {
@@ -1847,7 +1857,7 @@
   racine.addEventListener("click", async e => {
     const po = e.target.closest("[data-portee]");
     if (po && $(".ea-biblio", racine)) {
-      portee = po.dataset.portee; filtre = "tous";
+      portee = po.dataset.portee; filtre = "tous"; recherche = "";
       $(".ea-biblio", racine).outerHTML = bibliothequeHTML();
       return;
     }
@@ -1874,7 +1884,7 @@
     }
     const ch = e.target.closest("[data-filtre]");
     if (ch && $(".ea-biblio", racine)) {
-      filtre = ch.dataset.filtre;
+      filtre = ch.dataset.filtre; recherche = "";
       $(".ea-biblio", racine).outerHTML = bibliothequeHTML();
       return;
     }
