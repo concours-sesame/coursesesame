@@ -1436,3 +1436,18 @@ a.ea-outil-carte{text-decoration:none}
 .fiches-matieres .pill:hover{border-color:var(--navy)}
 .fiches-matieres small{font-weight:400;color:var(--muted);margin-left:.2rem}
 @media (max-width:960px){.fiche-vitrine{grid-template-columns:1fr}.fiche-plan{position:static}}
+/* Fiche offerte : formulaire (fiches n° 1 et 23) et bandeau d'invitation sur les autres fiches */
+.offerte{margin-top:2.4rem;padding:clamp(20px,3vw,28px);border:1px solid var(--line);border-radius:var(--r);background:#fff;scroll-margin-top:calc(var(--top-h,112px) + 16px)}
+.offerte .h-section{font-size:clamp(1.5rem,2.6vw,2rem)}
+.offerte-form .btn{justify-self:start}
+.offerte-accord{grid-column:1/-1;display:flex;gap:.6rem;align-items:flex-start;font-size:.92rem;color:#3f4a5e}
+.offerte-accord input{margin-top:.3rem;accent-color:var(--navy);flex:none}
+.offerte-etat{grid-column:1/-1;font-size:.95rem;font-weight:600;color:var(--navy);min-height:1.4em}
+.offerte-ok{margin-top:1rem;padding:1rem 1.2rem;border-radius:var(--r);background:var(--cream)}
+.offerte-ok p{margin-bottom:.8rem}
+.offerte-mention{margin-top:1rem;font-size:.85rem;color:var(--muted)}
+.offerte-mention a{color:inherit}
+.offerte-band{margin:2.4rem 0 0}
+.offerte-band a{color:var(--gold);font-weight:600}
+#matieres .offerte-band{margin:0 0 28px}
+.desinscription{margin-bottom:20px;padding:.9rem 1.1rem;border-radius:var(--r);background:var(--cream);font-weight:600;color:var(--navy)}

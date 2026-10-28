@@ -34,7 +34,7 @@
   let retourAFaire = ""; // message après une action lancée depuis « À faire aujourd'hui »
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [], epreuvesB = [];
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
-  let visites = [], visitesJours = [], provenances = [], retombeesFb = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
+  let visites = [], visitesJours = [], provenances = [], retombeesFb = [], prospects = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
   let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
@@ -179,7 +179,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da, pv, fr] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da, pv, fr, pr] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -205,7 +205,8 @@
       client.rpc("admin_visites", { p_heures: 48 }),
       client.rpc("admin_visites_jours", { p_jours: 30 }),
       client.from("demandes_activation").select("*").order("cree_le", { ascending: false }).limit(500),
-      client.rpc("admin_provenances", { p_jours: 30 }), client.rpc("admin_facebook_retombees", { p_jours: 90 })
+      client.rpc("admin_provenances", { p_jours: 30 }), client.rpc("admin_facebook_retombees", { p_jours: 90 }),
+      client.from("prospects").select("id, cree_le, prenom, email, whatsapp, concours, fiche, accepte_offres, email_envoye, desinscrit_le").order("cree_le", { ascending: false }).limit(500)
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -217,7 +218,7 @@
     emailsReglages = er.data || null; emailsEnvoyes = ee.data || [];
     blancs = cb.data || []; epreuvesB = eb.data || [];
     visites = vi.data || []; visitesJours = vj.data || [];
-    provenances = pv.data || []; retombeesFb = fr.data || [];
+    provenances = pv.data || []; retombeesFb = fr.data || []; prospects = pr.data || [];
     demandes = da.data || [];
     telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
     agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
@@ -708,12 +709,30 @@
           <tbody>${retombeesFb.map(x => `<tr><td><b>${esc(x.titre)}</b><small>n° ${Number(x.id)} · ${esc(x.rubrique)} · ${x.publiee_le ? dateFr(String(x.publiee_le).slice(0, 10)) : ""}${x.lien ? "" : " · sans lien vers le site"}</small></td><td><b>${Number(x.visiteurs)}</b></td><td>${Number(x.pages)}</td><td>${Number(x.comptes)}</td></tr>`).join("")}</tbody></table></div>`
           : `<p class="ea-vide">Aucune publication Facebook publiée depuis 90 jours.</p>`}
       </section>
+      ${blocProspects()}
       <section class="ad-bloc">
         <h3>Les 30 derniers jours</h3>
         ${visitesJours.length ? `<div class="ad-tableau" role="region" aria-label="Visites par jour" tabindex="0"><table>
           <thead><tr><th>Jour</th><th>Visiteurs</th><th>Pages vues</th><th>Comptes connectés</th><th><span class="sr-only">Graphique</span></th></tr></thead>
           <tbody>${visitesJours.map(x => `<tr><td>${dateFr(x.jour)}</td><td><b>${Number(x.visiteurs)}</b></td><td>${Number(x.pages)}</td><td>${Number(x.comptes)}</td><td><span class="ad-barre-v" style="width:${Math.round(100 * Number(x.visiteurs) / max)}%"></span></td></tr>`).join("")}</tbody></table></div>`
           : `<p class="ea-vide">Les visites s'afficheront ici dès les premières pages vues.</p>`}
+      </section>`;
+  }
+  // Fiche offerte (pages fiches/) : contacts laissés par les visiteurs ; « déjà inscrit » si l'e-mail ou le numéro
+  // correspond à un compte de l'espace
+  function blocProspects() {
+    const emails = new Set(abonnes.map(a => String(a.email || "").toLowerCase()));
+    const numeros = new Set(abonnes.map(a => numeroWa(a.telephone)));
+    const inscrit = x => (x.email && emails.has(x.email)) || (x.whatsapp && numeros.has(numeroWa(x.whatsapp)));
+    const accord = prospects.filter(x => x.accepte_offres).length;
+    return `<section class="ad-bloc">
+        <h3>Fiches offertes : contacts recueillis <span class="n">${prospects.length}</span></h3>
+        ${prospects.length ? `<p class="ad-note">${pluriel(accord, "personne")} ${accord > 1 ? "acceptent" : "accepte"} de recevoir conseils et offres ; ${pluriel(prospects.filter(inscrit).length, "contact")} ${prospects.filter(inscrit).length > 1 ? "correspondent" : "correspond"} déjà à un compte.</p>
+        <div class="ad-tableau" role="region" aria-label="Contacts des fiches offertes" tabindex="0"><table>
+          <thead><tr><th>Quand</th><th>Qui</th><th>Fiche</th><th>Conseils et offres</th></tr></thead>
+          <tbody>${prospects.map(x => `<tr><td>${dateFr(String(x.cree_le).slice(0, 10))}<small>${ilYa(x.cree_le)}</small></td><td><b>${esc(x.prenom)}</b>${inscrit(x) ? ` <span class="ad-vert">déjà inscrit</span>` : ""}<small>${[x.whatsapp ? `<a href="https://wa.me/${numeroWa(x.whatsapp)}" target="_blank" rel="noopener">${esc(x.whatsapp)}</a>` : "", x.email ? esc(x.email) + (x.email_envoye ? " (fiche envoyée)" : " (e-mail non parti)") : "", x.concours ? esc(nomConcours(x.concours)) : ""].filter(Boolean).join(" · ")}</small></td><td>n° ${Number(x.fiche)}</td><td>${x.desinscrit_le ? "désinscrit" : x.accepte_offres ? "<b>oui</b>" : "non"}</td></tr>`).join("")}</tbody></table></div>
+        <p class="ad-note">N'écrivez pour proposer une offre qu'aux personnes qui l'ont accepté (« oui »). Les autres n'ont demandé que la fiche.</p>`
+          : `<p class="ea-vide">Personne n'a encore demandé de fiche offerte.</p>`}
       </section>`;
   }
   async function rafraichirVisites() {

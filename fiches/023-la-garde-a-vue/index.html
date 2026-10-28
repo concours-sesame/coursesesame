@@ -133,6 +133,25 @@
       <div class="fiche-essentiel"><p>La garde à vue est la mesure par laquelle un officier de police judiciaire retient, pour les nécessités de l'enquête, une personne contre laquelle existent des indices graves et concordants de participation à une infraction. Elle est limitée à 48 heures, renouvelable une fois par le procureur.</p></div>
       <h3>Les textes de référence</h3>
       <p class="fiche-sources">Code de procédure pénale (loi n° 2018-975 du 27 décembre 2018, modifiée par la loi n° 2024-359 du 11 juin 2024), articles 3, 33, 71 à 76, 90 à 92, 790 à 792.</p>
+      <div class="offerte" id="offerte">
+      <p class="eyebrow">Fiche offerte</p>
+      <h2 class="h-section">Recevez cette fiche <em>en entier</em></h2>
+      <p>Laissez votre prénom et un e-mail ou un numéro WhatsApp : vous téléchargez aussitôt la fiche complète en PDF, et nous vous l'envoyons aussi par e-mail si vous en indiquez un.</p>
+      <form class="form offerte-form" id="offerteForm" data-fiche="23" novalidate>
+        <div class="field"><label for="offPrenom">Prénom</label><input id="offPrenom" name="prenom" autocomplete="given-name" maxlength="60" required></div>
+        <div class="field"><label for="offConcours">Concours préparé</label><select id="offConcours" name="concours"><option value="">Choisir</option><option value="infj">Magistrature</option><option value="greffe">Greffe</option><option value="penitentiaire">Pénitentiaire</option><option value="eppjej">EPPJEJ</option><option value="ena">ENA</option><option value="autre">Autre</option></select></div>
+        <div class="field"><label for="offEmail">E-mail</label><input id="offEmail" name="email" type="email" autocomplete="email" maxlength="254"></div>
+        <div class="field"><label for="offWa">ou WhatsApp</label><input id="offWa" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="07 00 00 00 00"></div>
+        <label class="offerte-accord"><input type="checkbox" name="accepte_offres" value="1"> J'accepte de recevoir des conseils de révision et des offres des Cours Sésame et SAJ, par e-mail ou sur WhatsApp. Désinscription possible à tout moment.</label>
+        <button class="btn btn-gold" type="submit">Recevoir la fiche</button>
+        <p class="offerte-etat" id="offerteEtat" role="status"></p>
+      </form>
+      <div class="offerte-ok" id="offerteOk" hidden>
+        <p><b>Votre fiche est prête.</b> <span data-email>Nous vous l'avons aussi envoyée par e-mail.</span> Le lien reste valable 7 jours.</p>
+        <a class="btn btn-gold" href="#" target="_blank" rel="noopener">Télécharger la fiche</a>
+      </div>
+      <p class="offerte-mention">Vos coordonnées servent à vous remettre la fiche et, si vous l'acceptez, à vous envoyer nos conseils et offres. Elles ne sont ni vendues ni cédées : voir nos <a href="../../mentions-legales/#fiche-offerte">données personnelles</a>.</p>
+    </div>
     </article>
     <aside class="fiche-plan" aria-label="Au programme de la fiche">
       <h3>Au programme de la fiche</h3>
@@ -266,6 +285,8 @@
 
 <script src="../../assets/js/data.js"></script>
 <script src="../../assets/js/render.js"></script>
+<script src="../../assets/js/espace-config.js"></script>
+<script src="../../assets/js/fiche-offerte.js"></script>
 <script src="../../assets/js/app.js"></script>
 </body>
 </html>
