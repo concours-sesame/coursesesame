@@ -96,7 +96,6 @@ function concoursCard(c, i, prefix) {
   const items = byCat(c.id);
   const min = Math.min(...items.map(o => parsePrice(o.prix)));
   return `<a class="concours-card" href="${prefix}concours/${c.slug}/">
-        <span class="cc-num" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
         <span class="cc-name">${c.court}</span>
         <span class="cc-sub">${c.long}, ${plural(items.length, "ouvrage")} dès ${fmt(min)} FCFA</span>
         <span class="cc-go">Voir la page${svg("i-arrow")}</span>
@@ -121,8 +120,8 @@ function abonnementHTML() {
       <ul class="formules">
         ${carte(j1, "1 jour", "Sujets corrigés, fiches de révision, QCM, textes et jurisprudence")}
         ${carte(m1, "1 mois", "Tout cela pendant un mois, avec les corrigés des concours blancs")}
-        ${carte(vj1, "VIP · 1 jour", "Tout l'abonnement, plus l'espace VIP : ouvrages complets, vidéos et documents VIP", " formule-vip")}
-        ${carte(vm1, "VIP · 1 mois", "Tout l'espace VIP pendant un mois, et une copie corrigée et notée sur 20", " formule-mise")}
+        ${carte(vj1, "VIP, 1 jour", "Tout l'abonnement, plus l'espace VIP : ouvrages complets, vidéos et documents VIP", " formule-vip")}
+        ${carte(vm1, "VIP, 1 mois", "Tout l'espace VIP pendant un mois, et une copie corrigée et notée sur 20", " formule-mise")}
       </ul>
     `;
 }
@@ -521,7 +520,7 @@ for (const c of CONCOURS) {
 <section class="section" id="epreuves">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Les épreuves</span><h2 class="h-section">Les épreuves</h2></div>
+      <div><h2 class="h-section">Les épreuves</h2></div>
       <p class="lead">Les épreuves principales du ${c.nom}${fiches.length ? ", et nos fiches méthode pour les aborder" : ""}.</p>
     </div>
     <div class="pills pills-light reveal">${epreuves.map(e => `<span class="pill">${e}</span>`).join("")}</div>
@@ -532,7 +531,7 @@ for (const c of CONCOURS) {
 <section class="section concours-books" id="ouvrages">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Les ouvrages · ${c.long}</span><h2 class="h-section">Les ouvrages pour ce concours</h2></div>
+      <div><span class="eyebrow">Les ouvrages, ${c.long}</span><h2 class="h-section">Les ouvrages pour ce concours</h2></div>
       <p class="lead">Ajoutez un ouvrage ou un pack complet au panier, puis commandez en un message WhatsApp. La remise de 10 % s'applique dès 3 ouvrages.</p>
     </div>
     <div id="books">${R.groupHTML(items, OUVRAGES, [], true)}</div>
@@ -628,7 +627,7 @@ ${contactCTA(prefix)}`;
 <section class="section sujets" id="qcm">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">QCM · ${ctx.D.QCM.length} questions</span><h2 class="h-section">Testez votre <em>méthode</em></h2></div>
+      <div><span class="eyebrow">QCM, ${ctx.D.QCM.length} questions</span><h2 class="h-section">Testez votre <em>méthode</em></h2></div>
       <p class="lead">Répondez, découvrez l'explication, puis défiez vos amis sur WhatsApp. Toutes les réponses se trouvent dans les fiches ci-dessous. Pour tester vos connaissances, voyez aussi nos <a href="${prefix}qcm/">QCM de droit par matière</a>.</p>
     </div>
     <div class="qcm-wrap reveal"><div id="qcmBox"><p class="lead">Activez JavaScript pour lancer le QCM.</p></div></div>
@@ -976,7 +975,7 @@ ${contactCTA(prefix)}`;
 <section class="section sujets" id="qcm">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">QCM · ${plural(t.questions.length, "question")}</span><h2 class="h-section">Testez vos <em>connaissances</em></h2></div>
+      <div><span class="eyebrow">QCM, ${plural(t.questions.length, "question")}</span><h2 class="h-section">Testez vos <em>connaissances</em></h2></div>
       <p class="lead">Choisissez une réponse, lisez l'explication, puis passez à la question suivante. ${t.sources ? "Chaque réponse a été vérifiée sur les sources citées sous le QCM." : "Les réponses s'appuient sur le contenu de nos ouvrages, textes à l'appui."}</p>
     </div>
     <div class="qcm-wrap reveal"><div id="qcmBox" data-theme="${t.slug}"><p class="lead">Activez JavaScript pour lancer le QCM.</p></div></div>
@@ -997,7 +996,7 @@ ${contactCTA(prefix)}`;
 ${sujets.length ? `<section class="section">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">En accès libre · ${t.nom}</span><h2 class="h-section">Des sujets <em>corrigés</em></h2></div>
+      <div><span class="eyebrow">En accès libre, ${t.nom}</span><h2 class="h-section">Des sujets <em>corrigés</em></h2></div>
     </div>
     <div class="ep-cards">${sujets.slice(0, 6).map((x, i) => sujetCard(x, prefix, i)).join("")}</div>
   </div>
@@ -1243,7 +1242,7 @@ ${vitrine}
 <section class="section${LIVRES_ABONNEMENT.length ? "" : " section-cream"}">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Comment s'abonner</span><h2 class="h-section">Comment s'abonner</h2></div>
+      <div><h2 class="h-section">Comment s'abonner</h2></div>
       <p class="lead">Le paiement se fait comme pour nos ouvrages : par Mobile Money, avec une confirmation sur WhatsApp.</p>
     </div>
     <ol class="espace-etapes">
@@ -1551,7 +1550,7 @@ index = inject(index, "books", selectionHTML());
 index = inject(index, "abonnement", abonnementHTML());
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
-  h2: `Nos <em>vidéos</em>`, eyebrow: "06 · Vidéos", ici: "accueil",
+  h2: `Nos vidéos`, ici: "accueil",
   lead: "Notre présentation, un ouvrage en vidéo, des notions et un article de loi expliqués en une minute, et des sujets de SOG décryptés.",
   band: espaceBand("")
 }) + "\n");
