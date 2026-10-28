@@ -4,6 +4,7 @@
 // de Supabase ne sert qu'aux tests). L'abonnement, lui, n'est activé qu'après paiement, depuis la page
 // d'administration. Pour limiter les abus : au plus 60 inscriptions par heure depuis une même adresse IP
 // (plafond large : les opérateurs mobiles et les réseaux Wi-Fi d'une salle de cours partagent une même adresse).
+// Mot de passe refusé s'il figure dans une fuite de données connue (Pwned Passwords).
 // Code de parrainage facultatif (profils.code_parrain d'un autre compte) : il est enregistré dans profils.parrain_id ;
 // un code inconnu est ignoré sans bloquer l'inscription.
 //
@@ -27,6 +28,19 @@ function cleSecrete(): string {
     // ancienne forme seulement
   }
   return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+}
+// Mot de passe paru dans une fuite de données connue (Pwned Passwords) : seuls les 5 premiers caractères de son
+// empreinte SHA-1 sont envoyés. Sans réponse du service, l'inscription n'est pas bloquée.
+async function motDePasseFuite(mdp: string): Promise<boolean> {
+  try {
+    const h = [...new Uint8Array(await crypto.subtle.digest("SHA-1", new TextEncoder().encode(mdp)))]
+      .map((o) => o.toString(16).padStart(2, "0")).join("").toUpperCase();
+    const rep = await fetch(`https://api.pwnedpasswords.com/range/${h.slice(0, 5)}`, { headers: { "Add-Padding": "true" }, signal: AbortSignal.timeout(4000) });
+    if (!rep.ok) return false;
+    return (await rep.text()).split("\n").some((l) => { const [suite, n] = l.trim().split(":"); return suite === h.slice(5) && Number(n) > 0; });
+  } catch {
+    return false;
+  }
 }
 const reponse = (corps: unknown, statut = 200) =>
   new Response(JSON.stringify(corps), { status: statut, headers: { ...CORS, "Content-Type": "application/json" } });
@@ -56,6 +70,7 @@ Deno.serve(async (req) => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return erreur("Adresse e-mail invalide.");
   if (!/^\+?[0-9]{8,15}$/.test(telephone)) return erreur("Numéro de téléphone invalide.");
   if (motDePasse.length < 8 || motDePasse.length > 72) return erreur("Le mot de passe doit compter au moins 8 caractères.");
+  if (await motDePasseFuite(motDePasse)) return erreur("Ce mot de passe figure dans des fuites de données connues. Choisissez-en un autre.");
 
   const admin = createClient(Deno.env.get("SUPABASE_URL")!, cleSecrete(), {
     auth: { persistSession: false, autoRefreshToken: false },
