@@ -92,9 +92,10 @@ function concoursCard(c, i, prefix) {
   const items = byCat(c.id);
   const min = Math.min(...items.map(o => parsePrice(o.prix)));
   return `<a class="concours-card" href="${prefix}concours/${c.slug}/">
+        <span class="cc-num" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
         <span class="cc-name">${c.court}</span>
         <span class="cc-sub">${c.long}, ${plural(items.length, "ouvrage")} dès ${fmt(min)} FCFA</span>
-        <span class="cc-go">Voir la page</span>
+        <span class="cc-go">Voir la page${svg("i-arrow")}</span>
       </a>`;
 }
 
@@ -189,8 +190,6 @@ function productList(items) {
 /* ---------- Gabarit des pages intérieures ---------- */
 function cleanHTML(h) {
   return h
-    .replace(/(<h[12][^>]*>)([\s\S]*?)(<\/h[12]>)/g, (m, a, t, b) => a + t.replace(/<\/?em>/g, "") + b)
-    .replace(/<div><span class="eyebrow">[^<]*<\/span>(<h2 class="h-section">[\s\S]*?<\/h2>)<\/div>/g, "$1")
     .replace(/class="section-head reveal"/g, 'class="section-head"')
     .replace(/ reveal reveal-d\d/g, "").replace(/ class="reveal"/g, "").replace(/ reveal(?=")/g, "");
 }
@@ -443,14 +442,15 @@ function videoFeature(v, prefix, ici, titre, actions = "") {
     </div>`;
 }
 // Section « En vidéo » : la vidéo carrée en avant, les vidéos verticales en rangée
-function videosSection(list, prefix, { id = "videos", h2, lead, ici, cls = "", band = "", abo = [] }) {
+function videosSection(list, prefix, { id = "videos", h2, eyebrow = "", lead, ici, cls = "", band = "", abo = [] }) {
   if (!list.length) return "";
   const feat = list.find(v => v.format === "carre") || (list.length === 1 ? list[0] : null);
   const rest = list.filter(v => v !== feat);
   return `<section class="section ${cls} videos" id="${id}">
   <div class="wrap">
     <div class="section-head">
-      <h2 class="h-section">${h2}</h2>
+      ${eyebrow ? `<p class="eyebrow">${eyebrow}</p>
+      ` : ""}<h2 class="h-section">${h2}</h2>
       ${lead ? `<p class="lead">${lead}</p>` : ""}
     </div>
     ${feat ? videoFeature(feat, prefix, ici) : ""}
@@ -1394,7 +1394,7 @@ index = inject(index, "concours", "\n      " + CONCOURS.map((c, i) => concoursCa
 index = inject(index, "books", catalogueHTML());
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
-  h2: `Nos vidéos`, ici: "accueil",
+  h2: `Nos <em>vidéos</em>`, eyebrow: "06 · Vidéos", ici: "accueil",
   lead: "Notre présentation, un ouvrage en vidéo, des notions et un article de loi expliqués en une minute, et des sujets de SOG décryptés.",
   band: espaceBand(""), abo: VIDS_ABO
 }) + "\n");
