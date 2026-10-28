@@ -1,6 +1,7 @@
 /* Suivi des visites, affiché en temps réel dans l'administration (onglet Visites).
    Chaque page vue est enregistrée avec un identifiant anonyme tiré au hasard et gardé dans ce navigateur,
-   la page, le site de provenance et le type d'appareil. Si le visiteur est connecté à son compte abonné,
+   la page, le site de provenance (ou la marque de l'adresse, comme « fb=12 » pour une publication Facebook)
+   et le type d'appareil. Si le visiteur est connecté à son compte abonné,
    la visite est rattachée à son compte. Aucune adresse IP n'est conservée. Les robots ne sont pas comptés. */
 (function () {
   try {
@@ -15,8 +16,12 @@
     }
     var ref = document.referrer, prov = "";
     if (ref) { try { var h = new URL(ref).hostname; prov = h === location.hostname ? "(site)" : h.replace(/^www\./, ""); } catch (e) { prov = ""; } }
-    var p = new URLSearchParams(location.search);
-    if (!prov && p.get("utm_source")) prov = p.get("utm_source");
+    // Une marque dans l'adresse l'emporte sur la page d'origine, que les applications (Facebook, WhatsApp) ne
+    // transmettent pas toujours : « fb=<numéro> » vient d'une publication de la page Facebook, « utm_source » d'un
+    // autre lien marqué
+    var p = new URLSearchParams(location.search), fb = p.get("fb");
+    if (fb !== null) prov = /^\d{1,9}$/.test(fb) ? "fb-" + fb : "facebook";
+    else if (p.get("utm_source")) prov = p.get("utm_source").slice(0, 60);
     var appareil = /iPad|Tablet/i.test(navigator.userAgent) ? "tablette" : /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "téléphone" : "ordinateur";
     var entetes = { "apikey": CLE, "Content-Type": "application/json" };
     // Session de l'espace abonnés, si elle est ouverte et encore valable

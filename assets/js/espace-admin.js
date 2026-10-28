@@ -34,7 +34,7 @@
   let retourAFaire = ""; // message après une action lancée depuis « À faire aujourd'hui »
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [], epreuvesB = [];
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
-  let visites = [], visitesJours = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
+  let visites = [], visitesJours = [], provenances = [], retombeesFb = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
   let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
@@ -179,7 +179,7 @@
     racine.removeAttribute("aria-busy");
   }
   async function toutCharger() {
-    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da] = await Promise.all([
+    const [a, p, c, ap, act, cmd, nt, lec, ann, jr, bil, ar, ac, ae, tl, pl, lt, er, ee, cb, eb, vi, vj, da, pv, fr] = await Promise.all([
       client.rpc("admin_liste_abonnes"),
       client.rpc("admin_paiements"),
       client.from("contenus").select("*").order("publie_le", { ascending: false }),
@@ -204,7 +204,8 @@
       client.from("epreuves_blanches").select("id, concours, serie, ordre, epreuve, titre, nature, duree_minutes, publie").order("serie").order("ordre"),
       client.rpc("admin_visites", { p_heures: 48 }),
       client.rpc("admin_visites_jours", { p_jours: 30 }),
-      client.from("demandes_activation").select("*").order("cree_le", { ascending: false }).limit(500)
+      client.from("demandes_activation").select("*").order("cree_le", { ascending: false }).limit(500),
+      client.rpc("admin_provenances", { p_jours: 30 }), client.rpc("admin_facebook_retombees", { p_jours: 90 })
     ]);
     const err = a.error || p.error || c.error;
     if (err) throw err;
@@ -216,6 +217,7 @@
     emailsReglages = er.data || null; emailsEnvoyes = ee.data || [];
     blancs = cb.data || []; epreuvesB = eb.data || [];
     visites = vi.data || []; visitesJours = vj.data || [];
+    provenances = pv.data || []; retombeesFb = fr.data || [];
     demandes = da.data || [];
     telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
     agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
@@ -652,6 +654,9 @@
   const quiVisite = v => v.user_id
     ? `<b>${esc(`${v.prenom || ""} ${v.nom || ""}`.trim() || "Compte sans nom")}</b> <span class="ad-badge ad-${v.abonne ? "actif" : "attente"}">${v.abonne ? "Abonné" : "Compte sans abonnement"}</span>`
     : `<b>Visiteur ${esc(visiteurCourt(v))}</b> <span class="ad-badge ad-avenir">Non connecté</span>`;
+  // « fb-12 » : arrivé par le lien de la publication Facebook n° 12 du plan (marque ajoutée par la fonction facebook)
+  const libelleProvenance = pr => pr === "(site)" ? "page précédente du site" : /^fb-\d+$/.test(pr || "")
+    ? `Facebook, publication n° ${pr.slice(3)}` : pr || "accès direct";
   const FILTRES_V = [["tous", "Tous", () => true], ["abonnes", "Abonnés", v => v.user_id && v.abonne], ["comptes", "Comptes sans abonnement", v => v.user_id && !v.abonne], ["anonymes", "Non connectés", v => !v.user_id]];
   function panneauVisites() {
     const t = Date.now(), filtreF = (FILTRES_V.find(f => f[0] === filtreV) || FILTRES_V[0])[2];
@@ -684,9 +689,24 @@
         <div class="chips" role="group" aria-label="Filtrer les visites">${FILTRES_V.map(([v, l, f]) => `<button class="chip" type="button" data-filtrev="${v}" aria-pressed="${filtreV === v}">${l}<span class="n">${visites.filter(f).length}</span></button>`).join("")}</div>
         ${liste.length ? `<div class="ad-tableau" role="region" aria-label="Dernières pages vues" tabindex="0"><table>
           <thead><tr><th>Quand</th><th>Qui</th><th>Page</th><th>Provenance</th><th>Appareil</th></tr></thead>
-          <tbody>${liste.map(v => `<tr><td>${heure(new Date(v.quand))}<small>${ilYa(v.quand)}</small></td><td>${quiVisite(v)}${v.telephone ? `<small><a href="https://wa.me/${numeroWa(v.telephone)}" target="_blank" rel="noopener">${esc(v.telephone)}</a></small>` : ""}</td><td>${esc(nomPage(v.page))}</td><td>${esc(v.provenance === "(site)" ? "page précédente du site" : v.provenance || "accès direct")}</td><td>${esc(v.appareil || "")}</td></tr>`).join("")}</tbody></table></div>`
+          <tbody>${liste.map(v => `<tr><td>${heure(new Date(v.quand))}<small>${ilYa(v.quand)}</small></td><td>${quiVisite(v)}${v.telephone ? `<small><a href="https://wa.me/${numeroWa(v.telephone)}" target="_blank" rel="noopener">${esc(v.telephone)}</a></small>` : ""}</td><td>${esc(nomPage(v.page))}</td><td>${esc(libelleProvenance(v.provenance))}</td><td>${esc(v.appareil || "")}</td></tr>`).join("")}</tbody></table></div>`
           : `<p class="ea-vide">Aucune visite dans cette catégorie depuis 48 heures.</p>`}
         <p class="ad-note">Un visiteur non connecté est désigné par les quatre premiers caractères d'un identifiant anonyme propre à son navigateur : le même code d'une visite à l'autre signale le même navigateur. Son identité n'est pas connue. Un abonné est reconnu lorsqu'il est connecté à son compte.</p>
+      </section>
+      <section class="ad-bloc">
+        <h3>D'où viennent les visiteurs (30 jours)</h3>
+        ${provenances.length ? `<div class="ad-tableau" role="region" aria-label="Provenance des visiteurs" tabindex="0"><table>
+          <thead><tr><th>Provenance</th><th>Visiteurs</th><th>Pages vues</th><th>Connectés à un compte</th></tr></thead>
+          <tbody>${provenances.map(x => `<tr><td>${esc(x.provenance)}</td><td><b>${Number(x.visiteurs)}</b></td><td>${Number(x.pages)}</td><td>${Number(x.comptes)}</td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="ea-vide">Le bilan des provenances s'affichera ici dès les premières visites.</p>`}
+        <p class="ad-note">Chaque visiteur est compté une fois, d'après la première page qu'il a vue sur la période. « Accès direct » regroupe les adresses tapées, les favoris et les applications qui ne disent pas d'où vient le visiteur. Les liens publiés par la page Facebook portent la marque « ?fb=… » : ces visites sont reconnues même quand l'application Facebook ne le dit pas.</p>
+      </section>
+      <section class="ad-bloc">
+        <h3>Retombées des publications Facebook (90 jours)</h3>
+        ${retombeesFb.length ? `<div class="ad-tableau" role="region" aria-label="Retombées des publications Facebook" tabindex="0"><table>
+          <thead><tr><th>Publication</th><th>Visiteurs venus par son lien</th><th>Pages vues ensuite</th><th>Connectés à un compte</th></tr></thead>
+          <tbody>${retombeesFb.map(x => `<tr><td><b>${esc(x.titre)}</b><small>n° ${Number(x.id)} · ${esc(x.rubrique)} · ${x.publiee_le ? dateFr(String(x.publiee_le).slice(0, 10)) : ""}${x.lien ? "" : " · sans lien vers le site"}</small></td><td><b>${Number(x.visiteurs)}</b></td><td>${Number(x.pages)}</td><td>${Number(x.comptes)}</td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="ea-vide">Aucune publication Facebook publiée depuis 90 jours.</p>`}
       </section>
       <section class="ad-bloc">
         <h3>Les 30 derniers jours</h3>
@@ -698,9 +718,12 @@
   }
   async function rafraichirVisites() {
     if (!moi || document.hidden || onglet !== "visites" || occupe()) return;
-    const [vi, vj] = await Promise.all([client.rpc("admin_visites", { p_heures: 48 }), client.rpc("admin_visites_jours", { p_jours: 30 })]);
+    const [vi, vj, pv, fr] = await Promise.all([client.rpc("admin_visites", { p_heures: 48 }), client.rpc("admin_visites_jours", { p_jours: 30 }),
+      client.rpc("admin_provenances", { p_jours: 30 }), client.rpc("admin_facebook_retombees", { p_jours: 90 })]);
     if (vi.error || vj.error) return;
     visites = vi.data || []; visitesJours = vj.data || []; derniereMaj = new Date();
+    // Bilans ajoutés en octobre 2026 : sans eux, l'onglet s'affiche quand même
+    provenances = pv.data || []; retombeesFb = fr.data || [];
     const z = $("#adPanneau");
     if (z && onglet === "visites") { const y = scrollY; z.innerHTML = panneauVisites(); scrollTo(0, y); }
   }

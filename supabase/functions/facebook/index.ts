@@ -14,7 +14,9 @@
 //                                               publique d'une image ; « images » = noms d'images déposées par
 //                                               televersement (carrousel, dix au plus) ; avec une image, le lien va
 //                                               dans le texte ; « video » = adresse https publique d'un MP4 (vidéo
-//                                               publiée directement sur la page)
+//                                               publiée directement sur la page) ; un lien vers coursesesame.com reçoit
+//                                               la marque « ?fb=… » (numéro de la ligne du plan, « p » sinon), que le
+//                                               suivi des visites du site lit pour rattacher la visite à la publication
 //   planif                                    : publie les lignes de facebook_publications arrivées à leur heure
 //                                               (appelée toutes les cinq minutes par pg_cron ; plus de trois heures de
 //                                               retard : « manquee »)
@@ -44,6 +46,22 @@ const JETON = (Deno.env.get("FB_PAGE_TOKEN") ?? "").trim().replace(/^"/, "").spl
 // Facebook recopie la clé dans certains messages d'erreur : elle est masquée avant toute réponse
 const masquer = (x: unknown) => JSON.parse(JSON.stringify(x ?? {}).split(JETON || "\u0000").join("[clé masquée]"));
 
+// Marque de provenance ajoutée aux liens vers le site : « fb=<numéro de la publication du plan> », lue par
+// assets/js/visite.js. Les applications Facebook ne transmettent pas toujours la page d'origine : sans cette marque,
+// la visite passerait pour un accès direct.
+function marquer(lien: unknown, marque: unknown): string {
+  const brut = String(lien ?? "").trim();
+  if (!brut) return "";
+  try {
+    const u = new URL(brut);
+    if (!/(^|\.)coursesesame\.com$/.test(u.hostname) || u.searchParams.has("fb")) return brut;
+    u.searchParams.set("fb", /^\d{1,9}$/.test(String(marque ?? "")) ? String(marque) : "p");
+    return u.toString();
+  } catch {
+    return brut;
+  }
+}
+
 async function graph(chemin: string, methode = "GET", params: Record<string, string> = {}) {
   const corps = new URLSearchParams({ ...params, access_token: JETON });
   const rep = methode === "GET"
@@ -60,6 +78,7 @@ async function graph(chemin: string, methode = "GET", params: Record<string, str
 async function publier(service: any, d: Record<string, unknown>): Promise<{ statut: number; donnees: unknown }> {
   const message = String(d.message ?? "").trim();
   if (!message) return { statut: 400, donnees: { error: "Message vide" } };
+  d = { ...d, lien: marquer(d.lien, d.marque) };
   const params: Record<string, string> = {};
   if (d.programme) {
     const t = Math.floor(new Date(String(d.programme)).getTime() / 1000);
@@ -204,7 +223,7 @@ Deno.serve(async (req) => {
         bilan.push({ id: p.id, statut: "manquee" });
         continue;
       }
-      const r = await publier(service, { message: p.message, lien: p.lien, images: p.images, video: p.video, video_titre: p.video_titre });
+      const r = await publier(service, { message: p.message, lien: p.lien, marque: p.id, images: p.images, video: p.video, video_titre: p.video_titre });
       const id = (r.donnees as { id?: string }).id;
       if (r.statut === 200 && id) {
         await service.from("facebook_publications").update({ statut: "publiee", fb_id: id, publiee_le: new Date().toISOString() }).eq("id", p.id);
