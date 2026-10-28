@@ -93,3 +93,10 @@ node tools/build.js
 
 Les fiches 2, 13, 14 et 16 ont été republiées en version 2 (`fiche-NNNN-v2.pdf`) après correction de l'espace des
 milliers dans `rendu.py` : « 3.000.000 » s'affichait « 3 000.000 ».
+
+## Banque de plans (espace VIP)
+
+Les plans de dissertation suivent le même format et la même chaîne, avec trois lignes de plus dans l'en-tête :
+`etiquette: Plan`, `collection: Banque de plans · VIP` et `reserve: Plan réservé aux abonnés VIP…`. Impression :
+`node tools/fiches/pdf.js <dossier> "" 1 Plan`. Dépôt sous `textes/plan-vip-NNNN.pdf`, ligne `contenus` avec la matière
+`Plans · <matière>` (rubrique « Banque de plans ») et `vip = true`. Comme les fiches, leur texte reste hors du dépôt.
