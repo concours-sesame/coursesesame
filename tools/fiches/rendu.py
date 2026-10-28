@@ -68,9 +68,12 @@ NOTE = "Les articles sont cités d'après le texte publié au Journal officiel e
 CONCOURS = {'infj': 'Magistrature', 'greffe': 'Greffe', 'penitentiaire': 'Pénitentiaire', 'eppjej': 'EPPJEJ', 'ena': 'ENA'}
 
 def page(meta, md):
+    # Une autre collection (banque de plans VIP par exemple) peut changer l'étiquette, le bandeau et la mention de réserve
+    etiquette, collection = meta.get('etiquette', 'Fiche'), meta.get('collection', 'Fiches de révision')
+    reserve = meta.get('reserve', 'Fiche réservée aux abonnés des Cours Sésame et SAJ, pour un usage personnel.')
     police = lambda nom, f, w, s='normal': f'@font-face{{font-family:"{nom}";font-weight:{w};font-style:{s};src:url("file://{FONTS / f}")}}'
     concours = ' · '.join(CONCOURS[c.strip()] for c in meta['concours'].split(','))
-    return f'''<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Fiche n° {meta['numero']} · {html.escape(meta['titre'])}</title><style>
+    return f'''<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>{etiquette} n° {meta['numero']} · {html.escape(meta['titre'])}</title><style>
 {police('Serif', 'source-serif-4-latin-400-normal.woff2', 400)}{police('Serif', 'source-serif-4-latin-600-normal.woff2', 600)}
 {police('Serif', 'source-serif-4-latin-700-normal.woff2', 700)}{police('Serif', 'source-serif-4-latin-400-italic.woff2', 400, 'italic')}
 {police('Sans', 'source-sans-3-latin-400-normal.woff2', 400)}{police('Sans', 'source-sans-3-latin-600-normal.woff2', 600)}
@@ -100,18 +103,20 @@ th{{background:var(--navy);color:#fff;text-align:left;font-weight:600;padding:5p
 td{{padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top}}
 tr:nth-child(even) td{{background:var(--cream)}}
 b{{font-weight:700}}
+p:not(.meta):has(> b:only-child){{margin:11px 0 3px;font:700 11pt/1.3 "Serif",serif;color:var(--navy);break-after:avoid}}
+p:not(.meta):has(> b:only-child)+ul{{break-before:avoid}}
 h2+p,h2+ul,h2+ol,h2+blockquote{{break-before:avoid}}
 .fin{{margin-top:12px;padding-top:6px;border-top:1px solid var(--line);font-size:8.2pt;color:var(--muted);break-before:avoid;break-inside:avoid}}
 ol:last-of-type li:last-child,p:has(+ .fin){{break-after:avoid}}
 </style></head><body>
-<div class="bandeau">{LOGO}<div><div class="nom">Les Cours Sésame et SAJ</div><div class="base">Formation juridique · Concours &amp; excellence</div></div><div class="num">Fiche n°&nbsp;{meta['numero']}<br>Fiches de révision</div></div>
+<div class="bandeau">{LOGO}<div><div class="nom">Les Cours Sésame et SAJ</div><div class="base">Formation juridique · Concours &amp; excellence</div></div><div class="num">{etiquette} n°&nbsp;{meta['numero']}<br>{html.escape(collection)}</div></div>
 <div class="matiere">{html.escape(meta['matiere'])}</div>
 <h1>{enligne(meta['titre'])}</h1>
 <div class="filet"></div>
 <p class="meta"><b>Concours :</b> {concours}</p>
 <p class="meta"><b>Sources :</b> {enligne(meta['sources'])}</p>
 {corps(md)}
-<p class="fin">Fiche réservée aux abonnés des Cours Sésame et SAJ, pour un usage personnel. {enligne(meta.get('note', NOTE))}</p>
+<p class="fin">{enligne(reserve)} {enligne(meta.get('note', NOTE))}</p>
 </body></html>'''
 
 if __name__ == '__main__':
