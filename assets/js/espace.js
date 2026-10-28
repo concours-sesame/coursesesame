@@ -57,6 +57,21 @@
     try { const j = await error.context.json(); return j.error || messageErreur(error); } catch (e) { return messageErreur(error); }
   }
   let toastTimer;
+  // Mot de passe paru dans une fuite de données connue (service Pwned Passwords de HaveIBeenPwned) : seuls les
+  // 5 premiers caractères de son empreinte SHA-1 quittent l'appareil. Sans réponse du service sous 4 secondes, on laisse passer.
+  const MSG_FUITE = "Ce mot de passe figure dans des fuites de données connues. Choisissez-en un autre.";
+  async function motDePasseFuite(mdp) {
+    try {
+      const h = [...new Uint8Array(await crypto.subtle.digest("SHA-1", new TextEncoder().encode(mdp)))].map(o => o.toString(16).padStart(2, "0")).join("").toUpperCase();
+      const arret = new AbortController(), minuterie = setTimeout(() => arret.abort(), 4000);
+      const rep = await fetch("https://api.pwnedpasswords.com/range/" + h.slice(0, 5), { headers: { "Add-Padding": "true" }, signal: arret.signal });
+      clearTimeout(minuterie);
+      if (!rep.ok) return false;
+      return (await rep.text()).split("\n").some(l => { const [suite, n] = l.trim().split(":"); return suite === h.slice(5) && Number(n) > 0; });
+    } catch (e) {
+      return false;
+    }
+  }
   function toast(texte) {
     const t = $("#toast");
     if (!t) return;
@@ -1815,6 +1830,7 @@
       e.preventDefault();
       const msg = $(".ea-msg", e.currentTarget), mdp = $("#mMdp").value;
       if (mdp.length < 8) { msg.textContent = "8 caractères au moins."; return; }
+      if (await motDePasseFuite(mdp)) { msg.textContent = MSG_FUITE; return; }
       const { error } = await client.auth.updateUser({ password: mdp });
       msg.textContent = error ? messageErreur(error) : "Mot de passe changé.";
       if (!error) $("#mMdp").value = "";
@@ -1963,6 +1979,7 @@
         const mdp = $("#nMdp").value;
         if (mdp.length < 8) { msg.textContent = "8 caractères au moins."; return; }
         $("button[type=submit]", f).disabled = true;
+        if (await motDePasseFuite(mdp)) { $("button[type=submit]", f).disabled = false; msg.textContent = MSG_FUITE; return; }
         const { error: err } = await client.auth.updateUser({ password: mdp });
         $("button[type=submit]", f).disabled = false;
         if (err) { msg.textContent = messageErreur(err); return; }
