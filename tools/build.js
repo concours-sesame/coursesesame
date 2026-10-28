@@ -99,11 +99,29 @@ function concoursCard(c, i, prefix) {
       </a>`;
 }
 
-function catalogueHTML() {
-  return CONCOURS.map(c => {
-    const items = byCat(c.id);
-    return `<h3 class="group-title">${c.court}<small>${plural(items.length, "ouvrage")}</small><a class="group-link" href="concours/${c.slug}/">Page du concours</a></h3>${R.groupHTML(items, OUVRAGES, [], false)}`;
-  }).join("");
+// Accueil : quelques ouvrages dont l'extrait gratuit se lit en ligne, le catalogue entier étant sur ouvrages/
+const ACCUEIL_EXTRAITS = ["annales-magistrature.pdf", "annales-anciens-sujets-infj-2027.pdf", "guide-methodologique-magistrature-2027.pdf", "resume-droit-civil.pdf",
+  "sesame-droit-penal.pdf", "50-cas-pratiques-corriges.pdf", "annales-sog.pdf", "resume-droits-enfant.pdf"];
+function selectionHTML() {
+  const sel = ACCUEIL_EXTRAITS.map(e => { const o = OUVRAGES.find(x => x.extrait === e); if (!o) throw new Error("accueil : extrait introuvable : " + e); return o; });
+  return `<div class="books">${sel.map(o => R.bookHTML(horsConcours(livreDe(o)), OUVRAGES.indexOf(o), false)).join("")}</div>`;
+}
+
+// Accueil : ce que donne l'abonnement et quatre formules, d'après TARIFS_ABONNEMENT (data.js)
+function abonnementHTML() {
+  const t = cle => (ctx.D.TARIFS_ABONNEMENT || []).find(x => x.cle === cle);
+  const [j1, j7, m1, m3] = ["j1", "j7", "m1", "m3"].map(t);
+  if (!j1 || !j7 || !m1 || !m3) throw new Error("accueil : formules j1, j7, m1 et m3 attendues dans TARIFS_ABONNEMENT");
+  const eco = 3 * parsePrice(m1.prix) - parsePrice(m3.prix);
+  const carte = (f, quoi, extra = "", cls = "") => `<li class="formule${cls}"><span class="formule-duree">${f.duree}</span><b>${f.prix} <small>FCFA</small></b><span class="formule-quoi">${quoi}</span>${extra}</li>`;
+  return `
+      <ul class="formules">
+        ${carte(j1, "Sujets corrigés, fiches de révision et QCM")}
+        ${carte(j7, "Tout cela, plus les vidéos réservées")}
+        ${carte(m1, "Tout cela, plus nos ouvrages complets à lire en ligne", "", " formule-mise")}
+        ${carte(m3, "Les ouvrages complets pendant trois mois", eco > 0 ? `<span class="formule-eco">${fmt(eco)} FCFA d'économie sur trois mois pris un à un</span>` : "")}
+      </ul>
+    `;
 }
 
 function faqHTML() {
@@ -1527,12 +1545,13 @@ ${contactCTA(prefix)}`;
 /* ---------- Accueil ---------- */
 R.setRoot("");
 index = inject(index, "concours", "\n      " + CONCOURS.map((c, i) => concoursCard(c, i, "")).join("\n      ") + "\n    ");
-index = inject(index, "books", catalogueHTML());
+index = inject(index, "books", selectionHTML());
+index = inject(index, "abonnement", abonnementHTML());
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
   h2: `Nos <em>vidéos</em>`, eyebrow: "06 · Vidéos", ici: "accueil",
   lead: "Notre présentation, un ouvrage en vidéo, des notions et un article de loi expliqués en une minute, et des sujets de SOG décryptés.",
-  band: espaceBand(""), abo: VIDS_ABO
+  band: espaceBand("")
 }) + "\n");
 // Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
 index = index.replace(/(data-count-from="ouvrages">)[^<]*(<)/g, `$1${LIVRES.length}$2`).replace(/(data-count-from="concours">)[^<]*(<)/g, `$1${CONCOURS.length}$2`);
