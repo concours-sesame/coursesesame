@@ -3,9 +3,9 @@
    Champs facultatifs : "phase" (ex. "Présélection", "Écrit") et "numerique":true
    pour un ouvrage vendu uniquement en version numérique, "extrait" (nom d'un PDF
    placé dans assets/extraits/) pour proposer un extrait gratuit, "abonnement":true
-   pour un ouvrage dont la version intégrale se lit aussi dans l'espace abonnés
-   (formules d'un mois et plus) : la fiche porte alors la mention « Inclus dans
-   l'abonnement d'un mois » et l'ouvrage figure sur la page de l'espace abonnés. */
+   pour un ouvrage dont la version intégrale se lit aussi dans l'espace VIP de
+   l'espace abonnés : la fiche porte alors la mention « Inclus dans l'espace VIP »
+   et l'ouvrage figure sur la page de l'espace abonnés. */
 const WA="2250160860537";
 // Second numéro, lui aussi joignable sur WhatsApp
 const WA2="2250506600332";
@@ -21,6 +21,19 @@ const TARIFS_ABONNEMENT=[
 {"cle":"m3","prix":"12 500","duree":"3 mois"},
 {"cle":"m6","prix":"22 500","duree":"6 mois"},
 {"cle":"m12","prix":"40 000","duree":"12 mois"}
+];
+
+/* Espace VIP : ouvrages complets et vidéos réservées, en plus de tout l'abonnement normal, au triple du tarif normal.
+   Clé = « vip- » + clé de la formule normale de même durée. */
+const TARIFS_VIP=[
+{"cle":"vip-j1","prix":"1 500","duree":"1 jour"},
+{"cle":"vip-j7","prix":"6 000","duree":"1 semaine"},
+{"cle":"vip-j14","prix":"10 500","duree":"2 semaines"},
+{"cle":"vip-m1","prix":"15 000","duree":"1 mois"},
+{"cle":"vip-m2","prix":"27 000","duree":"2 mois"},
+{"cle":"vip-m3","prix":"37 500","duree":"3 mois"},
+{"cle":"vip-m6","prix":"67 500","duree":"6 mois"},
+{"cle":"vip-m12","prix":"120 000","duree":"12 mois"}
 ];
 
 /* Numéros Mobile Money affichés dans l'espace abonnés, au moment du paiement de l'abonnement (laisser vide pour
@@ -101,11 +114,11 @@ const FAQ=[
 {"q":"Les ouvrages sont-ils à jour pour la session 2027 ?","a":"L'édition de chaque ouvrage figure dans son titre. Le Guide méthodologique Magistrature et les Annales des anciens sujets corrigés INFJ sont en édition 2027. Les 50 Cas pratiques corrigés de la magistrature, les Fiches d'arrêts de droit administratif et le Guide méthodologique INFJ sont en édition 2026. Pour savoir si un ouvrage intègre un texte récent, écrivez-nous sur WhatsApp avant de commander : nous vous répondons précisément."},
 {"q":"Proposez-vous une remise pour les commandes groupées ?","a":"Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10 % sur le total de votre commande."},
 {"q":"Puis-je consulter un extrait avant d'acheter ?","a":"Oui. La plupart des ouvrages proposent un extrait gratuit à télécharger en PDF : ouvrez la fiche de l'ouvrage et cliquez sur « Lire un extrait gratuit ». Pour les autres, écrivez-nous sur WhatsApp et nous vous enverrons un aperçu."},
-{"q": "Qu'est-ce que l'espace abonnés ?", "a": "C'est un espace privé du site, réservé aux abonnés. Vous y lisez nos sujets corrigés en entier, nos fiches de révision, nos QCM chronométrés avec correction détaillée et, à partir de la formule d'un mois, nos ouvrages complets. Les contenus se lisent en ligne, sur téléphone comme sur ordinateur, et sont réservés à votre usage personnel."},
-{"q": "Combien coûte l'abonnement ?", "a": "500 FCFA pour un jour, 2 000 FCFA pour une semaine, 3 500 FCFA pour deux semaines, 5 000 FCFA pour un mois, 9 000 FCFA pour deux mois, 12 500 FCFA pour trois mois, 22 500 FCFA pour six mois et 40 000 FCFA pour douze mois."},
+{"q": "Qu'est-ce que l'espace abonnés ?", "a": "C'est un espace privé du site, réservé aux abonnés. Vous y lisez nos sujets corrigés en entier, nos fiches de révision, nos QCM chronométrés avec correction détaillée, nos textes officiels et notre jurisprudence. L'espace VIP y ajoute nos ouvrages complets et nos vidéos réservées. Les contenus se lisent en ligne, sur téléphone comme sur ordinateur, et sont réservés à votre usage personnel."},
+{"q": "Combien coûte l'abonnement ?", "a": "500 FCFA pour un jour, 2 000 FCFA pour une semaine, 3 500 FCFA pour deux semaines, 5 000 FCFA pour un mois, 9 000 FCFA pour deux mois, 12 500 FCFA pour trois mois, 22 500 FCFA pour six mois et 40 000 FCFA pour douze mois. L'abonnement VIP, qui ajoute les ouvrages complets et les vidéos réservées, coûte le triple : de 1 500 FCFA pour un jour à 120 000 FCFA pour douze mois."},
 {"q": "Comment activer mon abonnement ?", "a": "Créez votre compte sur la page Espace abonnés, puis réglez la formule choisie par Orange Money, MTN MoMo, Wave ou Moov Money. Saisissez ensuite la référence du paiement dans votre espace, ou envoyez-la-nous sur WhatsApp. Nous activons votre accès dès la vérification du paiement, pour toute la durée de votre formule."},
-{"q": "Les ouvrages complets sont-ils compris dans toutes les formules ?", "a": "Non. Ils sont compris à partir de la formule d'un mois. Les formules d'une semaine et de deux semaines donnent accès à tout le reste : sujets corrigés, fiches de révision, QCM et vidéos. La formule d'un jour donne accès aux sujets corrigés, aux fiches de révision et aux QCM, sans les vidéos, comprises à partir de la formule d'une semaine. Vous pouvez passer à une formule plus longue à tout moment en nous écrivant sur WhatsApp."},
-{"q": "Quels ouvrages sont compris dans l'abonnement ?", "a": "Dans le catalogue, chaque ouvrage compris porte la mention « Inclus dans l'abonnement d'un mois » : annales corrigées, résumés de cours, guide méthodologique, fiches d'arrêts, recueils de dissertations, de cas pratiques et d'articles commentés. S'y ajoutent des ouvrages réservés aux abonnés, comme le Résumé de droit constitutionnel. La liste complète figure sur la page Espace abonnés."},
+{"q": "Qu'est-ce que l'espace VIP ?", "a": "C'est la partie de l'espace abonnés qui réunit nos ouvrages complets et nos vidéos réservées. Il est ouvert aux abonnés VIP, quelle que soit la durée choisie, au triple du prix de l'abonnement normal. L'abonnement normal donne accès à tout le reste : sujets corrigés, fiches de révision, QCM, textes officiels, jurisprudence et, à partir d'une semaine, corrigés des concours blancs. Vous pouvez passer au VIP à tout moment depuis votre espace ou sur WhatsApp."},
+{"q": "Quels ouvrages sont compris dans l'espace VIP ?", "a": "Dans le catalogue, chaque ouvrage compris porte la mention « Inclus dans l'espace VIP » : annales corrigées, résumés de cours, guide méthodologique, fiches d'arrêts, recueils de dissertations, de cas pratiques et d'articles commentés. S'y ajoutent des ouvrages réservés aux abonnés, comme le Résumé de droit constitutionnel. La liste complète figure sur la page Espace abonnés."},
 {"q": "Puis-je utiliser mon compte sur plusieurs appareils ?", "a": "Un compte s'utilise sur un seul appareil à la fois. Si vous vous connectez sur un autre téléphone ou un autre ordinateur, le premier est déconnecté. Vous pouvez donc changer d'appareil, mais un compte ne se partage pas."},
 {"q": "J'ai oublié mon mot de passe. Que faire ?", "a": "Sur la page Espace abonnés, touchez « Mot de passe oublié ? » sous le formulaire de connexion et indiquez l'adresse e-mail de votre compte. Vous recevez un lien pour choisir un nouveau mot de passe. Si l'e-mail n'arrive pas, regardez dans les courriers indésirables, ou écrivez-nous sur WhatsApp : nous vous donnons un mot de passe provisoire."},
 {"q": "Puis-je installer le site sur mon téléphone ?", "a": "Oui. Sur Android, ouvrez le site dans Chrome, touchez le menu en haut à droite, puis « Ajouter à l'écran d'accueil » ou « Installer l'application ». Sur iPhone, ouvrez-le dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ». Le site s'ouvre alors d'un geste, comme une application, avec notre logo."}

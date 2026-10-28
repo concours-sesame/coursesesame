@@ -176,7 +176,7 @@ def ouvrage(t, premier):
     if o["extrait"]:
         extra.append("Un extrait gratuit est à lire sur la page de l'ouvrage.")
     if o["abo"]:
-        extra.append("Il est aussi compris dans l'espace abonnés, à partir de la formule d'un mois.")
+        extra.append("Il est aussi compris dans l'espace VIP de l'espace abonnés.")
     if extra:
         l.append(" ".join(extra))
     l += [WA, "La page de l'ouvrage :"]
@@ -227,7 +227,7 @@ ESPACE = [
   "Vous avez composé un concours blanc ? Dans l'espace abonnés, le corrigé s'ouvre dès votre copie rendue ou le temps écoulé : le corrigé-type intégral et la grille de notation sur 20 pour les épreuves écrites, les réponses justifiées et votre note pour la présélection.\n\nC'est le cas pour les 315 épreuves des cinq concours, à partir de la formule d'une semaine (2 000 FCFA).",
   [["Épreuves écrites", "Corrigé-type intégral et grille sur 20"], ["Présélection", "Réponses justifiées et note calculée"], ["315 épreuves", "Dès la formule d'une semaine"]]),
  ("Vidéos réservées", "Une notion, une minute",
-  "Onze vidéos « Une notion, une minute » sont réservées aux abonnés : la tentative punissable, l'immunité familiale, la récidive, la prescription de l'action publique, les vices du consentement, l'autorité parentale, les trois principes du service public, le recours pour excès de pouvoir, la police administrative, l'injonction de payer et le cautionnement.\n\nChaque vidéo cite le texte mot pour mot, avec un exemple et le piège à éviter. Elles sont ouvertes à partir de la formule d'une semaine (2 000 FCFA).",
+  "Onze vidéos « Une notion, une minute » sont réservées aux abonnés VIP : la tentative punissable, l'immunité familiale, la récidive, la prescription de l'action publique, les vices du consentement, l'autorité parentale, les trois principes du service public, le recours pour excès de pouvoir, la police administrative, l'injonction de payer et le cautionnement.\n\nChaque vidéo cite le texte mot pour mot, avec un exemple et le piège à éviter. Elles se regardent dans l'espace VIP, dès 1 500 FCFA la journée.",
   [["Onze vidéos", "Droit pénal, civil, administratif et OHADA"], ["Le texte exact", "Cité mot pour mot"], ["Un exemple et un piège", "Dans chaque vidéo"]]),
  ("Révision du jour", "La révision du jour",
   "Chaque jour, l'espace abonnés vous propose quelques questions de QCM à travailler. Une question bien réussie revient de plus en plus tard ; une question manquée revient dès le lendemain. C'est la méthode des boîtes : vous révisez ce que vous oubliez, pas ce que vous savez déjà.",
@@ -245,16 +245,16 @@ ESPACE = [
   "Chaque abonné a un code de parrainage. Quand une personne s'inscrit avec votre code puis prend son premier abonnement, vous recevez 7 jours d'accès offerts, ajoutés à la fin de votre abonnement. Une récompense par filleul.",
   [["Votre code", "Dans votre espace abonné"], ["Un filleul s'abonne", "Pour la première fois"], ["7 jours offerts", "Pour vous, à chaque filleul"]]),
  ("Ouvrages complets", "Nos ouvrages, en entier, en ligne",
-  "À partir de la formule d'un mois (5 000 FCFA), vous lisez en ligne la version intégrale de nos ouvrages : guides méthodologiques, annales corrigées, résumés, cas pratiques corrigés et fiches d'arrêts, selon votre concours.",
-  [["Version intégrale", "Lecture en ligne"], ["Méthodes, annales, résumés", "Selon votre concours"], ["Dès 5 000 FCFA", "La formule d'un mois"]]),
+  "Avec l'abonnement VIP, dès 1 500 FCFA la journée ou 15 000 FCFA le mois, vous lisez en ligne la version intégrale de nos ouvrages : guides méthodologiques, annales corrigées, résumés, cas pratiques corrigés et fiches d'arrêts, selon votre concours.",
+  [["Version intégrale", "Lecture en ligne"], ["Méthodes, annales, résumés", "Selon votre concours"], ["Dès 1 500 FCFA", "L'abonnement VIP, à la journée"]]),
  ("Formules", "Une formule pour chaque besoin",
-  "Les formules de l'espace abonnés :\n\n• 1 jour : 500 FCFA\n• 1 semaine : 2 000 FCFA\n• 2 semaines : 3 500 FCFA\n• 1 mois : 5 000 FCFA\n• 2 mois : 9 000 FCFA\n• 3 mois : 12 500 FCFA\n• 6 mois : 22 500 FCFA\n• 12 mois : 40 000 FCFA\n\nLes vidéos et les corrigés des concours blancs sont ouverts à partir d'une semaine, les ouvrages complets à partir d'un mois. La durée court à partir de l'activation, pas du paiement.",
-  [["Dès 500 FCFA", "La journée"], ["Dès 2 000 FCFA", "Vidéos et corrigés des concours blancs"], ["Dès 5 000 FCFA", "Les ouvrages complets"]]),
+  "Les formules de l'espace abonnés :\n\n• 1 jour : 500 FCFA\n• 1 semaine : 2 000 FCFA\n• 2 semaines : 3 500 FCFA\n• 1 mois : 5 000 FCFA\n• 2 mois : 9 000 FCFA\n• 3 mois : 12 500 FCFA\n• 6 mois : 22 500 FCFA\n• 12 mois : 40 000 FCFA\n\nLes corrigés des concours blancs sont ouverts à partir d'une semaine. L'abonnement VIP, avec les ouvrages complets et les vidéos réservées, coûte le triple : de 1 500 FCFA pour un jour à 120 000 FCFA pour douze mois. La durée court à partir de l'activation, pas du paiement.",
+  [["Dès 500 FCFA", "La journée"], ["Dès 2 000 FCFA", "Les corrigés des concours blancs"], ["VIP dès 1 500 FCFA", "Ouvrages complets et vidéos"]]),
  ("Bibliothèque", "Une bibliothèque rangée pour vous",
   "Votre bibliothèque est classée par concours et par rubrique : ouvrages complets, sujets corrigés, fiches de révision, QCM, vidéos, textes officiels et jurisprudence. Et quand vous rouvrez un document, la lecture reprend là où vous vous étiez arrêté.",
   [["Par concours", "Ce qui vous concerne d'abord"], ["Par rubrique", "Ouvrages, sujets, fiches, QCM, vidéos, textes"], ["Reprise de lecture", "À la page où vous étiez"]]),
  ("Tout l'espace", "Tout pour réviser, au même endroit",
-  "Un résumé de l'espace abonnés : sujets corrigés, fiches de révision et QCM, révision du jour, simulateur de grand oral, sujet de la semaine, corrigés des 315 épreuves de concours blancs, vidéos réservées, textes officiels et jurisprudence, et nos ouvrages complets dès la formule d'un mois.\n\nDès 500 FCFA la journée.",
+  "Un résumé de l'espace abonnés : sujets corrigés, fiches de révision et QCM, révision du jour, simulateur de grand oral, sujet de la semaine, corrigés des 315 épreuves de concours blancs, textes officiels et jurisprudence, et dans l'espace VIP, nos ouvrages complets et les vidéos réservées.\n\nDès 500 FCFA la journée.",
   [["Réviser", "Sujets, fiches, QCM, révision du jour"], ["S'entraîner", "Concours blancs corrigés, grand oral"], ["Approfondir", "Textes officiels, vidéos, ouvrages"]]),
 ]
 def espace(i):

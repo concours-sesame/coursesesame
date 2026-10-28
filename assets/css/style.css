@@ -1477,3 +1477,16 @@ a.ea-outil-carte{text-decoration:none}
 @media (max-width:960px){.abonnement-grid{grid-template-columns:1fr}}
 @media (max-width:420px){.formule{padding:1rem .9rem}.formule b{font-size:1.5rem}}
 .ea-cherche-bilan{margin:0 0 14px;font-size:.95rem;color:var(--muted)}
+.formule-vip{border-color:var(--gold);background:#fffaf0}
+.formule-vip .formule-duree{color:var(--gold-ink)}
+
+/* ---------- Espace VIP (espace abonnés) ---------- */
+.ea-vip-marque{display:inline-flex;align-items:center;padding:.05rem .45rem;border-radius:4px;background:var(--navy);color:var(--gold);font-size:.72rem;font-weight:700;letter-spacing:.12em;line-height:1.5}
+.ea-vip{position:relative;margin:0 0 20px;padding:clamp(18px,3vw,26px);border:1.5px solid var(--gold);border-radius:var(--r);background:#fffaf0}
+.ea-vip h3{font-family:var(--serif);font-size:clamp(1.3rem,2.4vw,1.6rem);color:var(--navy);margin:.5rem 0 .4rem}
+.ea-vip>p{color:#3f4a5e;margin-bottom:.8rem}
+.ea-tarifs-vip{align-items:center}
+.ea-carte-marques .ea-vip-marque{margin-right:.35rem}
+.chip.chip-vip{border-color:var(--gold)}
+.chip.chip-vip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--gold)}
+.ea-tarifs .ea-vip-marque{padding:.05rem .45rem;background:var(--navy);font-size:.72rem}
