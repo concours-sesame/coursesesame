@@ -633,6 +633,25 @@
     });
   }
 
+  /* ---------- Apparition des blocs au défilement ---------- */
+  function initApparitions() {
+    if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const blocs = $$(".section-head, .concours-card, .annonce-series li, .book, .review, .promise, .faq-item, .v-card, .ep-card, .hero-pages")
+      .filter(el => el.getBoundingClientRect().top > innerHeight);
+    const vus = new IntersectionObserver(entrees => entrees.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("vu");
+      vus.unobserve(e.target);
+    }), { rootMargin: "0px 0px -8% 0px" });
+    blocs.forEach(el => {
+      // Décalage entre voisins d'une même grille, plafonné pour ne pas faire attendre
+      const rang = [...el.parentElement.children].indexOf(el) % 4;
+      el.style.setProperty("--rv-i", rang);
+      el.classList.add("rv");
+      vus.observe(el);
+    });
+  }
+
   /* ---------- Démarrage ---------- */
   initInstallation();
   renderChips();
@@ -649,6 +668,7 @@
   updateCart();
   syncAddButtons();
   syncTopHeight();
+  initApparitions();
   window.addEventListener("resize", () => { syncTopHeight(); updateCart(); });
   const y = $("#year"); if (y) y.textContent = new Date().getFullYear();
 })();
