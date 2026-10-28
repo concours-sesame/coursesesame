@@ -2,7 +2,8 @@
 //   { action: "planif" }          appel de la tâche planifiée (en-tête x-planif, vérifié par la base) : bienvenue,
 //                                 invitation à renouveler (10 jours avant la fin), rappels de fin d'abonnement
 //                                 (7 et 3 jours avant), relance d'inactivité,
-//                                 annonce quotidienne des nouveautés, récapitulatif du lundi, et alertes à
+//                                 annonce quotidienne des nouveautés, récapitulatif du lundi, passage en VIP
+//                                 (emails_file_vip), et alertes à
 //                                 l'administrateur (nouvelle demande d'activation, nouveau compte)
 //   { action: "etat" }            administrateur : envoi ouvert ou fermé, clé Brevo enregistrée ou non
 //   { action: "essai" }           administrateur : e-mail d'essai envoyé à sa propre adresse
@@ -96,8 +97,9 @@ async function planif(service: SupabaseClient) {
   const { data: r } = await service.from("emails_reglages").select("actif").maybeSingle();
   if (!r?.actif) return { actif: false };
   if (!Deno.env.get("BREVO_API_KEY")) return { actif: true, cle: false };
-  const { data: file, error } = await service.rpc("emails_file");
+  const [{ data: fileBase, error }, { data: fileVip }] = await Promise.all([service.rpc("emails_file"), service.rpc("emails_file_vip")]);
   if (error) return { erreur: error.message };
+  const file = [...(fileBase ?? []), ...(fileVip ?? [])];
   let envoyes = 0, erreurs = 0, annonce = false;
   for (const l of (file ?? []) as Ligne[]) {
     if (envoyes + erreurs >= ENVOIS_MAX) break;
@@ -116,6 +118,7 @@ async function planif(service: SupabaseClient) {
       : l.type === "inactif" ? relance(l.prenom, l.donnees)
       : l.type === "campagne" ? campagne(l.prenom, l.donnees)
       : l.type === "hebdo" ? hebdo(l.prenom, l.donnees)
+      : l.type === "passage_vip" ? passageVip(l.prenom, l.donnees)
       : l.type === "alerte_demande" ? alerteDemande(l.donnees)
       : l.type === "alerte_compte" ? alerteCompte(l.donnees)
       : l.type === "nouveautes" ? nouveautes(l.prenom, l.donnees.contenus as Contenu[], String(l.donnees.jeton ?? ""))
@@ -190,6 +193,26 @@ ${bouton("Ouvrir mon espace abonnés", `${SITE}/espace-abonnes/`)}
 <p>Votre compte est personnel et s'ouvre sur un seul appareil à la fois. Chaque page porte votre nom ; les contenus sont réservés à votre usage personnel.</p>
 <p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
   const texte = `Bonjour ${prenom},\n\nVotre abonnement est actif du ${dateFr(d.debut)} au ${dateFr(d.fin)} inclus. Merci de votre confiance.\n\nDans votre espace, vous trouverez\n${points.map((x) => "- " + x).join("\n")}\n\nOuvrir mon espace abonnés ${SITE}/espace-abonnes/\n\nVotre compte est personnel et s'ouvre sur un seul appareil à la fois. Chaque page porte votre nom ; les contenus sont réservés à votre usage personnel.\n\nBonne préparation,\nL'équipe des Cours Sésame et SAJ\n\nPour nous écrire, utilisez WhatsApp au ${WHATSAPP}.`;
+  return { sujet, html: gabarit(sujet, corps, piedService), texte };
+}
+
+// Passage en VIP en cours d'abonnement (« Passer en VIP » dans l'administration, ou période VIP activée)
+function passageVip(prenom: string, d: Record<string, unknown>) {
+  const sujet = "Votre espace VIP est ouvert";
+  const points = [
+    "nos ouvrages complets, à lire en ligne",
+    "nos vidéos réservées : une notion expliquée en une minute",
+    "les documents VIP, dont la banque de plans de dissertation et le guide de préparation au grand oral",
+    "chaque mois, une copie corrigée et notée sur 20 : déposez-la dans votre espace, encadré « Votre copie corrigée du mois »",
+  ];
+  const fin = d.fin ? dateFr(d.fin) : "";
+  const corps = `<p>Bonjour ${esc(prenom)},</p>
+<p>Votre abonnement passe en VIP${fin ? ` : l'espace VIP vous est ouvert jusqu'au <b>${fin}</b> inclus` : ""}. Merci de votre confiance.</p>
+<p>Vous y trouverez</p><ul>${points.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+${bouton("Ouvrir mon espace VIP", `${SITE}/espace-abonnes/`)}
+<p>Le reste de votre abonnement ne change pas : sujets corrigés, fiches de révision, QCM, textes et jurisprudence.</p>
+<p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
+  const texte = `Bonjour ${prenom},\n\nVotre abonnement passe en VIP${fin ? ` : l'espace VIP vous est ouvert jusqu'au ${fin} inclus` : ""}. Merci de votre confiance.\n\nVous y trouverez\n${points.map((x) => "- " + x).join("\n")}\n\nOuvrir mon espace VIP ${SITE}/espace-abonnes/\n\nLe reste de votre abonnement ne change pas : sujets corrigés, fiches de révision, QCM, textes et jurisprudence.\n\nBonne préparation,\nL'équipe des Cours Sésame et SAJ\n\nPour nous écrire, utilisez WhatsApp au ${WHATSAPP}.`;
   return { sujet, html: gabarit(sujet, corps, piedService), texte };
 }
 
