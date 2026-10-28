@@ -13,7 +13,7 @@ def typo(t):
     t = re.sub(r'\s+([;?!])', '\u202f\\1', t)
     t = re.sub(r'(?<=\S) :', '\u00a0:', t)
     t = re.sub(r'n° ', 'n°\u00a0', t)
-    t = re.sub(r'(\d)\.(\d{3})', '\\1\u202f\\2', t)  # 360.000 -> 360 000 (espace fine)
+    t = re.sub(r'(?<=\d)\.(?=\d{3})', '\u202f', t)  # 3.000.000 -> 3 000 000 (espace fine)
     return t
 
 def enligne(t):
