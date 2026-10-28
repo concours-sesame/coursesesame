@@ -1490,3 +1490,16 @@ a.ea-outil-carte{text-decoration:none}
 .chip.chip-vip{border-color:var(--gold)}
 .chip.chip-vip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--gold)}
 .ea-tarifs .ea-vip-marque{padding:.05rem .45rem;background:var(--navy);font-size:.72rem}
+/* Copie corrigée du mois (espace VIP) */
+.ea-copie{margin:0 0 20px;padding:clamp(18px,3vw,26px);border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.ea-copie h3{font-family:var(--serif);font-size:clamp(1.25rem,2.2vw,1.5rem);color:var(--navy);margin:.5rem 0 .4rem}
+.ea-copie>p{color:#3f4a5e}
+.ea-copies{display:grid;gap:8px;margin-top:1rem}
+.ea-copie-ligne{border:1px solid var(--line);border-radius:var(--r-sm);padding:.7rem .9rem}
+.ea-copie-ligne summary{cursor:pointer}
+.ea-copie-ligne h4{margin:.8rem 0 .3rem;color:var(--navy)}
+.ea-copie-note{color:var(--navy)}
+.ea-copie-correction{white-space:normal;line-height:1.6}
+.ad-copie{margin-top:.6rem}
+.ad-copie summary{cursor:pointer;font-weight:600;color:var(--navy)}
+.ad-copie-texte{max-height:420px;overflow:auto;padding:.8rem 1rem;margin:.6rem 0;border-radius:var(--r-sm);background:var(--cream);line-height:1.6}

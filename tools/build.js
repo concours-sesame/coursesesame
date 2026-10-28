@@ -121,8 +121,8 @@ function abonnementHTML() {
       <ul class="formules">
         ${carte(j1, "1 jour", "Sujets corrigés, fiches de révision, QCM, textes et jurisprudence")}
         ${carte(m1, "1 mois", "Tout cela pendant un mois, avec les corrigés des concours blancs")}
-        ${carte(vj1, "VIP · 1 jour", "Tout l'abonnement, plus l'espace VIP : ouvrages complets et vidéos réservées", " formule-vip")}
-        ${carte(vm1, "VIP · 1 mois", "Tout l'abonnement et l'espace VIP pendant un mois", " formule-mise")}
+        ${carte(vj1, "VIP · 1 jour", "Tout l'abonnement, plus l'espace VIP : ouvrages complets, vidéos et documents VIP", " formule-vip")}
+        ${carte(vm1, "VIP · 1 mois", "Tout l'espace VIP pendant un mois, et une copie corrigée et notée sur 20", " formule-mise")}
       </ul>
     `;
 }
@@ -1463,7 +1463,7 @@ ${contactCTA(prefix)}`;
     <h2 id="abonnement">Abonnement à l'espace abonnés</h2>
     <p>Vous créez votre compte sur la page <a href="${prefix}espace-abonnes/">Espace abonnés</a>, vous réglez la formule choisie par Mobile Money, puis vous nous transmettez la référence du paiement, depuis votre espace ou sur WhatsApp. Nous activons votre accès après vérification du paiement. Les formules en vigueur sont les suivantes :</p>
     ${tarifs.length ? `<div class="table-wrap"><table class="tarifs"><thead><tr><th scope="col">Durée</th><th scope="col">Abonnement</th><th scope="col">Abonnement VIP</th></tr></thead><tbody>${tarifs.map(t => { const v = TARIFS_VIP.find(x => x.cle === "vip-" + t.cle); return `<tr><td>${t.duree}</td><td>${t.prix} FCFA</td><td>${v ? v.prix + " FCFA" : "non proposé"}</td></tr>`; }).join("")}</tbody></table></div>` : ""}
-    <p>La durée de la formule court à partir de l'activation, et non du paiement : un accès activé plus tard ne vous fait perdre aucun jour. Une prolongation s'ajoute à la fin de l'abonnement en cours. L'abonnement donne accès aux sujets corrigés, aux fiches de révision, aux QCM, aux textes officiels, à la jurisprudence et, à partir d'une semaine, aux corrigés des concours blancs. L'abonnement VIP donne accès, en plus, à l'espace VIP : les ouvrages complets et les vidéos réservées, quelle que soit sa durée. Les abonnements enregistrés avant l'ouverture de l'espace VIP, le 28 octobre 2026, gardent jusqu'à leur terme l'accès qu'ils donnaient alors (ouvrages complets pour les formules d'un mois et plus, vidéos pour les formules d'une semaine et plus).</p>
+    <p>La durée de la formule court à partir de l'activation, et non du paiement : un accès activé plus tard ne vous fait perdre aucun jour. Une prolongation s'ajoute à la fin de l'abonnement en cours. L'abonnement donne accès aux sujets corrigés, aux fiches de révision, aux QCM, aux textes officiels, à la jurisprudence et, à partir d'une semaine, aux corrigés des concours blancs. L'abonnement VIP donne accès, en plus, à l'espace VIP : les ouvrages complets, les vidéos réservées et les documents réservés au VIP, quelle que soit sa durée, ainsi qu'à la correction d'une copie par mois civil, notée sur 20 par un correcteur. Les abonnements enregistrés avant l'ouverture de l'espace VIP, le 28 octobre 2026, gardent jusqu'à leur terme l'accès qu'ils donnaient alors (ouvrages complets pour les formules d'un mois et plus, vidéos pour les formules d'une semaine et plus).</p>
 
     <h2 id="non-active">Abonnement payé mais pas encore activé</h2>
     <p>L'activation se fait à la main, dès que nous avons reçu votre paiement et sa référence. Si votre accès n'est pas encore ouvert, relancez-nous sur WhatsApp avec la référence du paiement. Si l'abonnement ne peut pas être activé, par exemple parce que le paiement n'a pas abouti chez l'opérateur, la somme reçue vous est remboursée.</p>
