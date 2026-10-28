@@ -168,6 +168,7 @@
         <a href="#catalogue" class="btn btn-navy">Voir les ouvrages</a>
         <a href="https://wa.me/2250160860537" target="_blank" rel="noopener" class="btn btn-wa"><svg fill="currentColor"><use href="#i-wa"/></svg>Commander sur WhatsApp</a>
       </div>
+      <p class="hero-abo">Ou lisez tout en ligne : <a href="#abonnement">abonnement dès 500 FCFA la journée</a>.</p>
       <ul class="hero-stats">
         <li><b data-count-from="ouvrages">32</b><span>ouvrages</span></li>
         <li><b>500+</b><span>candidats accompagnés</span></li>
@@ -229,11 +230,40 @@
   </div>
 </section>
 
+<!-- ABONNEMENT -->
+<section class="section on-dark abonnement-section" id="abonnement">
+  <div class="wrap">
+    <div class="abonnement-grid">
+      <div class="section-head">
+        <p class="eyebrow">02 · Espace abonnés</p>
+        <h2 class="h-section">Révisez tout, <em>en ligne</em></h2>
+        <p class="lead">Un abonnement ouvre l'espace abonnés, sur téléphone comme sur ordinateur : vous payez par Mobile Money et votre accès s'ouvre pour la durée choisie.</p>
+        <ul class="abonnement-inclus">
+          <li><a href="fiches/">Les fiches de révision</a>, une notion par fiche</li>
+          <li><a href="sujets/">Les sujets corrigés</a> en entier</li>
+          <li>Les QCM chronométrés, avec correction détaillée</li>
+          <li>Les corrigés des <a href="concours-blancs/">concours blancs</a></li>
+          <li>Les vidéos réservées et, dès un mois, nos ouvrages complets</li>
+        </ul>
+        <div class="hero-ctas"><a class="btn btn-gold" href="espace-abonnes/">Créer mon compte</a><a class="btn btn-ghost" href="espace-abonnes/#inclus">Tout ce qui est compris</a></div>
+      </div>
+      <div><!-- build:abonnement -->
+      <ul class="formules">
+        <li class="formule"><span class="formule-duree">1 jour</span><b>500 <small>FCFA</small></b><span class="formule-quoi">Sujets corrigés, fiches de révision et QCM</span></li>
+        <li class="formule"><span class="formule-duree">1 semaine</span><b>2 000 <small>FCFA</small></b><span class="formule-quoi">Tout cela, plus les vidéos réservées</span></li>
+        <li class="formule formule-mise"><span class="formule-duree">1 mois</span><b>5 000 <small>FCFA</small></b><span class="formule-quoi">Tout cela, plus nos ouvrages complets à lire en ligne</span></li>
+        <li class="formule"><span class="formule-duree">3 mois</span><b>12 500 <small>FCFA</small></b><span class="formule-quoi">Les ouvrages complets pendant trois mois</span><span class="formule-eco">2 500 FCFA d'économie sur trois mois pris un à un</span></li>
+      </ul>
+    <!-- /build:abonnement --></div>
+    </div>
+  </div>
+</section>
+
 <!-- CONSEILLER -->
 <section class="section conseiller-section" id="conseiller">
   <div class="wrap conseiller-grid">
     <div>
-      <p class="eyebrow">02 · Conseil</p>
+      <p class="eyebrow">03 · Conseil</p>
       <h2 class="h-section">Vous ne savez pas quels ouvrages <em>prendre</em> ?</h2>
       <p class="lead">Répondez à quelques questions : votre concours, l'étape que vous préparez, la matière à renforcer et le temps qu'il vous reste. Nous vous proposons une sélection, à mettre au panier en une fois.</p>
       <figure class="conseiller-photo">
@@ -245,99 +275,15 @@
   </div>
 </section>
 
-<!-- CATALOGUE -->
+<!-- OUVRAGES : sélection, le catalogue entier est sur ouvrages/ -->
 <section class="section" id="catalogue">
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow">03 · Catalogue</p>
-      <h2 class="h-section">Tous les ouvrages, <em>par concours</em></h2>
-      <p class="lead">Touchez la première page d'un ouvrage pour lire sa présentation. Ajoutez vos ouvrages au panier, puis envoyez la commande sur WhatsApp en un seul message.</p>
+      <p class="eyebrow">04 · Ouvrages</p>
+      <h2 class="h-section">Nos ouvrages, <em>extrait à lire</em></h2>
+      <p class="lead">Touchez la première page d'un ouvrage pour lire sa présentation et son extrait gratuit. Ajoutez vos ouvrages au panier, puis envoyez la commande sur WhatsApp en un seul message.</p>
     </div>
-    <div class="toolbar" id="toolbar">
-      <div class="toolbar-row">
-        <label class="search"><span class="sr-only">Rechercher un ouvrage</span><svg><use href="#i-search"/></svg><input type="search" id="search" placeholder="Rechercher : SOG, pénal, annales…" autocomplete="off"></label>
-        <label class="sr-only" for="sort">Trier</label>
-        <select class="select" id="sort"><option value="default">Trier</option><option value="price-asc">Prix croissant</option><option value="price-desc">Prix décroissant</option><option value="alpha">De A à Z</option></select>
-      </div>
-      <div class="chips" id="chips" role="group" aria-label="Filtrer par concours"></div>
-    </div>
-    <p class="result-info" id="resultInfo" aria-live="polite"></p>
-    <div id="books"><!-- build:books --><h3 class="group-title">Magistrature<small>20 ouvrages</small><a class="group-link" href="concours/magistrature/">Page du concours</a></h3><h4 class="phase-title">Présélection<small>5 ouvrages</small></h4><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="0" aria-label="Voir le détail : Le Petit Manuel de Droit Civil"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Civil</span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-petit-manuel-de-droit-civil/">Le Petit Manuel de Droit Civil</a></h3>
-        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">12 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="0"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="1" aria-label="Voir le détail : Le Petit Manuel de Droit Commercial"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Commercial</span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-petit-manuel-de-droit-commercial/">Le Petit Manuel de Droit Commercial</a></h3>
-        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">12 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="1"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="2" aria-label="Voir le détail : Le Petit Manuel de Droit Pénal"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Pénal</span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-petit-manuel-de-droit-penal/">Le Petit Manuel de Droit Pénal</a></h3>
-        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">12 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="2"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="3" aria-label="Voir le détail : Le Petit Manuel de Droit Administratif"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Droit Administratif</span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-petit-manuel-de-droit-administratif/">Le Petit Manuel de Droit Administratif</a></h3>
-        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">12 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="3"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="4" aria-label="Voir le détail : Le Petit Manuel d'Organisation Judiciaire et Informatique"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Petit Manuel</span><span class="cover-title">Organisation Judiciaire et Informatique</span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-petit-manuel-d-organisation-judiciaire-et-informatique/">Le Petit Manuel d'Organisation Judiciaire et Informatique</a></h3>
-        <span class="book-niveau">Présélection, niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">12 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="4"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article></div><h4 class="phase-title">Écrit<small>15 ouvrages</small></h4><div class="books"><article class="book">
+    <div id="selection"><!-- build:books --><div class="books"><article class="book">
       <button class="book-cover-btn" data-open="5" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés Magistrature"><div class="cover cover-page"><img src="assets/img/pages/annales-magistrature-600.jpg" srcset="assets/img/pages/annales-magistrature-600.jpg 424w, assets/img/pages/annales-magistrature.jpg 678w" sizes="(max-width:640px) 46vw, 300px" width="424" height="600" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés Magistrature" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
@@ -349,14 +295,14 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="6" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/annales-sog-600.jpg" srcset="assets/img/pages/annales-sog-600.jpg 600w, assets/img/pages/annales-sog.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
+      <button class="book-cover-btn" data-open="20" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg" srcset="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg 600w, assets/img/pages/annales-anciens-sujets-infj-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-de-sog-aux-concours-administratifs/">Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
+        <span class="book-concours">Greffe, Pénitentiaire, EPPJEJ</span>
+        <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-infj/">Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027</a></h3>
+        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
         <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="6"><svg ><use href="#i-plus"/></svg>Panier</button>
+          <span class="price">10 000<small>FCFA</small></span>
+          <button class="add-btn" data-add="20"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
@@ -382,21 +328,6 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="9" aria-label="Voir le détail : Le Résumé de Droit Commercial au Concours de la Magistrature"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Commercial</span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-commercial-au-concours-de-la-magistrature/">Le Résumé de Droit Commercial au Concours de la Magistrature</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">13 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="9"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
       <button class="book-cover-btn" data-open="10" aria-label="Voir le détail : Le Sésame de Droit Pénal au Concours de la Magistrature"><div class="cover cover-page"><img src="assets/img/pages/sesame-droit-penal-600.jpg" srcset="assets/img/pages/sesame-droit-penal-600.jpg 600w, assets/img/pages/sesame-droit-penal.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Sésame de Droit Pénal au Concours de la Magistrature" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
@@ -419,165 +350,20 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="12" aria-label="Voir le détail : Le Résumé de Droit Administratif au Concours de la Magistrature"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif au Concours de la Magistrature" loading="lazy" decoding="async"></div></button>
+      <button class="book-cover-btn" data-open="6" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/annales-sog-600.jpg" srcset="assets/img/pages/annales-sog-600.jpg 600w, assets/img/pages/annales-sog.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-au-concours-de-la-magistrature/">Le Résumé de Droit Administratif au Concours de la Magistrature</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">13 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="12"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="13" aria-label="Voir le détail : Les Fiches d'Arrêts de Droit Administratif, Édition 2026"><div class="cover cover-page"><img src="assets/img/pages/fiches-arrets-droit-administratif-600.jpg" srcset="assets/img/pages/fiches-arrets-droit-administratif-600.jpg 600w, assets/img/pages/fiches-arrets-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Fiches d'Arrêts de Droit Administratif, Édition 2026" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/les-fiches-d-arrets-de-droit-administratif/">Les Fiches d'Arrêts de Droit Administratif, Édition 2026</a></h3>
+        <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-de-sog-aux-concours-administratifs/">Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs</a></h3>
         <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
         <div class="book-buy">
           <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="13"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="14" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome I"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">125 dissertations · Droit administratif</span><span class="cover-title">Tome I</span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-droit-administratif-en-125-dissertations-corrigees-tome-i/">Le Droit Administratif en 125 Dissertations Corrigées, Tome I</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="14"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="15" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome II"><div class="cover cover-page"><img src="assets/img/pages/125-dissertations-droit-administratif-tome-2-600.jpg" srcset="assets/img/pages/125-dissertations-droit-administratif-tome-2-600.jpg 600w, assets/img/pages/125-dissertations-droit-administratif-tome-2.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Droit Administratif en 125 Dissertations Corrigées, Tome II" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-droit-administratif-en-125-dissertations-corrigees-tome-ii/">Le Droit Administratif en 125 Dissertations Corrigées, Tome II</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="15"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="16" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-sog-aux-concours-administratifs/">Le Résumé de SOG aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="16"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="17" aria-label="Voir le détail : Le Concours de la Magistrature en 1200 Dissertations Corrigées"><div class="cover cover-page"><img src="assets/img/pages/1200-dissertations-magistrature-600.jpg" srcset="assets/img/pages/1200-dissertations-magistrature-600.jpg 600w, assets/img/pages/1200-dissertations-magistrature.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Concours de la Magistrature en 1200 Dissertations Corrigées" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-concours-de-la-magistrature-en-1200-dissertations-corrigees/">Le Concours de la Magistrature en 1200 Dissertations Corrigées</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><span class="book-num">Version numérique uniquement</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">25 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="17"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="18" aria-label="Voir le détail : Le Concours de la Magistrature en 2000 Articles Commentés"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Magistrature</span><span class="cover-title">2000 Articles Commentés</span></div>
-      <div class="cover-foot">Magistrature</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/le-concours-de-la-magistrature-en-2000-articles-commentes/">Le Concours de la Magistrature en 2000 Articles Commentés</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-num">Version numérique uniquement</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">25 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="18"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="19" aria-label="Voir le détail : 1000 Fiches de Cours pour Réussir l'Écrit de la Magistrature"><div class="cover cover-page"><img src="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg" srcset="assets/img/pages/1000-fiches-ecrit-magistrature-600.jpg 600w, assets/img/pages/1000-fiches-ecrit-magistrature.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage 1000 Fiches de Cours pour Réussir l'Écrit de la Magistrature" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/1000-fiches-de-cours-pour-reussir-l-ecrit-de-la-magistrature/">1000 Fiches de Cours pour Réussir l'Écrit de la Magistrature</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><span class="book-num">Version numérique uniquement</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">25 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="19"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article></div><h3 class="group-title">Greffe<small>9 ouvrages</small><a class="group-link" href="concours/greffe/">Page du concours</a></h3><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="20" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg" srcset="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg 600w, assets/img/pages/annales-anciens-sujets-infj-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Greffe</span>
-        <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-infj/">Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="20"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="21" aria-label="Voir le détail : Le Guide Méthodologique INFJ, Édition 2026"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Greffe</span>
-        <h3 class="book-title"><a href="ouvrages/le-guide-methodologique-infj/">Le Guide Méthodologique INFJ, Édition 2026</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="21"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="22" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Greffe</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-organisation-judiciaire-aux-concours-administratifs/">Le Résumé d'Organisation Judiciaire aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="22"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="23" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Greffe</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-sog-aux-concours-administratifs/">Le Résumé de SOG aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="23"><svg ><use href="#i-plus"/></svg>Panier</button>
+          <button class="add-btn" data-add="6"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
     </article><article class="book">
       <button class="book-cover-btn" data-open="24" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droits-enfant-600.jpg" srcset="assets/img/pages/resume-droits-enfant-600.jpg 600w, assets/img/pages/resume-droits-enfant.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé des Droits de l'Enfant aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
       <div class="book-meta">
-        <span class="book-concours">INFJ Greffe</span>
+        <span class="book-concours">Greffe, Pénitentiaire, EPPJEJ</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs/">Le Résumé des Droits de l'Enfant aux Concours Administratifs</a></h3>
         <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
         <div class="book-buy">
@@ -585,419 +371,8 @@
           <button class="add-btn" data-add="24"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="25" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Greffe</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-aux-concours-administratifs/">Le Résumé de Droit Administratif aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="25"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="26" aria-label="Voir le détail : Les Fiches d'Arrêts de Droit Administratif, Édition 2026"><div class="cover cover-page"><img src="assets/img/pages/fiches-arrets-droit-administratif-600.jpg" srcset="assets/img/pages/fiches-arrets-droit-administratif-600.jpg 600w, assets/img/pages/fiches-arrets-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Fiches d'Arrêts de Droit Administratif, Édition 2026" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Greffe</span>
-        <h3 class="book-title"><a href="ouvrages/les-fiches-d-arrets-de-droit-administratif/">Les Fiches d'Arrêts de Droit Administratif, Édition 2026</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="26"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="27" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Greffe</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-informatique-aux-concours-administratifs/">Le Résumé d'Informatique aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="27"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="28" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span></div>
-      <div class="cover-foot">Greffe</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Greffe</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-opeaj-aux-concours-administratifs/">Le Résumé d'OPEAJ aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="28"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article></div><h3 class="group-title">Pénitentiaire<small>8 ouvrages</small><a class="group-link" href="concours/penitentiaire/">Page du concours</a></h3><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="29" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg" srcset="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg 600w, assets/img/pages/annales-anciens-sujets-infj-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Pénitentiaire</span>
-        <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-infj/">Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="29"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="30" aria-label="Voir le détail : Le Guide Méthodologique INFJ, Édition 2026"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">INFJ</span></div>
-      <div class="cover-foot">Pénitentiaire</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Pénitentiaire</span>
-        <h3 class="book-title"><a href="ouvrages/le-guide-methodologique-infj/">Le Guide Méthodologique INFJ, Édition 2026</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="30"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="31" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span></div>
-      <div class="cover-foot">Pénitentiaire</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Pénitentiaire</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-organisation-judiciaire-aux-concours-administratifs/">Le Résumé d'Organisation Judiciaire aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="31"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="32" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droits-enfant-600.jpg" srcset="assets/img/pages/resume-droits-enfant-600.jpg 600w, assets/img/pages/resume-droits-enfant.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé des Droits de l'Enfant aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Pénitentiaire</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs/">Le Résumé des Droits de l'Enfant aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><span class="book-extrait">Extrait gratuit à lire</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="32"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="33" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Pénitentiaire</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-aux-concours-administratifs/">Le Résumé de Droit Administratif aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="33"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="34" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
-      <div class="cover-foot">Pénitentiaire</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Pénitentiaire</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-sog-aux-concours-administratifs/">Le Résumé de SOG aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="34"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="35" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span></div>
-      <div class="cover-foot">Pénitentiaire</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Pénitentiaire</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-informatique-aux-concours-administratifs/">Le Résumé d'Informatique aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="35"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="36" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span></div>
-      <div class="cover-foot">Pénitentiaire</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Pénitentiaire</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-opeaj-aux-concours-administratifs/">Le Résumé d'OPEAJ aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM / Agents d'encadrement</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="36"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article></div><h3 class="group-title">EPPJEJ<small>7 ouvrages</small><a class="group-link" href="concours/eppjej/">Page du concours</a></h3><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="37" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg" srcset="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg 600w, assets/img/pages/annales-anciens-sujets-infj-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ EPPJEJ</span>
-        <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-infj/">Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="37"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="38" aria-label="Voir le détail : Le Résumé d'Organisation Judiciaire aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Organisation Judiciaire</span></div>
-      <div class="cover-foot">EPPJEJ</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ EPPJEJ</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-organisation-judiciaire-aux-concours-administratifs/">Le Résumé d'Organisation Judiciaire aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="38"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="39" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droits-enfant-600.jpg" srcset="assets/img/pages/resume-droits-enfant-600.jpg 600w, assets/img/pages/resume-droits-enfant.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé des Droits de l'Enfant aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ EPPJEJ</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs/">Le Résumé des Droits de l'Enfant aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="39"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="40" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ EPPJEJ</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-aux-concours-administratifs/">Le Résumé de Droit Administratif aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="40"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="41" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
-      <div class="cover-foot">EPPJEJ</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ EPPJEJ</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-sog-aux-concours-administratifs/">Le Résumé de SOG aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="41"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="42" aria-label="Voir le détail : Le Résumé d'Informatique aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Informatique</span></div>
-      <div class="cover-foot">EPPJEJ</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ EPPJEJ</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-informatique-aux-concours-administratifs/">Le Résumé d'Informatique aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="42"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="43" aria-label="Voir le détail : Le Résumé d'OPEAJ aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">OPEAJ</span></div>
-      <div class="cover-foot">EPPJEJ</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ EPPJEJ</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-opeaj-aux-concours-administratifs/">Le Résumé d'OPEAJ aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="43"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article></div><h3 class="group-title">ENA<small>10 ouvrages</small><a class="group-link" href="concours/ena/">Page du concours</a></h3><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="44" aria-label="Voir le détail : La Logique aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Entraînement</span><span class="cover-title">Logique</span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/la-logique-aux-concours-administratifs/">La Logique aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="44"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="45" aria-label="Voir le détail : Le Résumé d'Aptitude Verbale aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Aptitude Verbale</span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-d-aptitude-verbale-aux-concours-administratifs/">Le Résumé d'Aptitude Verbale aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="45"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="46" aria-label="Voir le détail : Le Résumé de SOG aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">SOG</span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-sog-aux-concours-administratifs/">Le Résumé de SOG aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="46"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="47" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG"><div class="cover cover-page"><img src="assets/img/pages/annales-sog-600.jpg" srcset="assets/img/pages/annales-sog-600.jpg 600w, assets/img/pages/annales-sog.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés de SOG" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-de-sog/">Les Annales des Anciens Sujets Corrigés de SOG</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="47"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="48" aria-label="Voir le détail : Le Résumé de PECOS aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">PECOS</span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-pecos-aux-concours-administratifs/">Le Résumé de PECOS aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="48"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="49" aria-label="Voir le détail : Le Résumé de Note de Synthèse aux Concours Administratifs"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Note de Synthèse</span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-note-de-synthese-aux-concours-administratifs/">Le Résumé de Note de Synthèse aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="49"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="50" aria-label="Voir le détail : Le Résumé de Droit Administratif aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-administratif-600.jpg" srcset="assets/img/pages/resume-droit-administratif-600.jpg 600w, assets/img/pages/resume-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Administratif aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-administratif-aux-concours-administratifs/">Le Résumé de Droit Administratif aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="50"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="51" aria-label="Voir le détail : Les Fiches d'Arrêts de Droit Administratif, Édition 2026"><div class="cover cover-page"><img src="assets/img/pages/fiches-arrets-droit-administratif-600.jpg" srcset="assets/img/pages/fiches-arrets-droit-administratif-600.jpg 600w, assets/img/pages/fiches-arrets-droit-administratif.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Fiches d'Arrêts de Droit Administratif, Édition 2026" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/les-fiches-d-arrets-de-droit-administratif/">Les Fiches d'Arrêts de Droit Administratif, Édition 2026</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="51"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="52" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome I"><div class="cover cover-made">
-      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band"><span class="cover-series">125 dissertations · Droit administratif</span><span class="cover-title">Tome I</span></div>
-      <div class="cover-foot">ENA</div>
-    </div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/le-droit-administratif-en-125-dissertations-corrigees-tome-i/">Le Droit Administratif en 125 Dissertations Corrigées, Tome I</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="52"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="53" aria-label="Voir le détail : Le Droit Administratif en 125 Dissertations Corrigées, Tome II"><div class="cover cover-page"><img src="assets/img/pages/125-dissertations-droit-administratif-tome-2-600.jpg" srcset="assets/img/pages/125-dissertations-droit-administratif-tome-2-600.jpg 600w, assets/img/pages/125-dissertations-droit-administratif-tome-2.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Droit Administratif en 125 Dissertations Corrigées, Tome II" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">ENA</span>
-        <h3 class="book-title"><a href="ouvrages/le-droit-administratif-en-125-dissertations-corrigees-tome-ii/">Le Droit Administratif en 125 Dissertations Corrigées, Tome II</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'abonnement d'un mois</a>
-        <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="53"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
     </article></div><!-- /build:books --></div>
-  </div>
-</section>
-
-<!-- MÉTHODOLOGIE -->
-<section class="section on-dark" id="methodologie">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">04 · Méthode</p>
-      <h2 class="h-section">Les épreuves de <em>chaque concours</em></h2>
-      <p class="lead">Ce qui vous attend, concours par concours, et la démarche que nos ouvrages vous apprennent.</p>
-    </div>
-    <div class="methodo-layout">
-      <div class="m-tabs" id="mTabs" role="tablist" aria-label="Concours"></div>
-      <div id="mPanel"></div>
-    </div>
-    <div class="ep-block">
-      <h3>La méthode, épreuve par épreuve</h3>
-      <p class="lead">Choisissez une épreuve pour voir la démarche, étape par étape.</p>
-      <div class="ep-tabs" id="epTabs" role="tablist" aria-label="Épreuves"></div>
-      <div id="epPanel"></div>
-    </div>
-    <a class="qcm-band" href="qcm/">
-      <span><b>Testez-vous avec nos QCM gratuits</b>Six QCM corrigés : méthode des épreuves, droit civil, droit pénal, droit administratif, droits de l'enfant et organisation judiciaire.</span>
-      <span class="btn btn-gold">Choisir un QCM</span>
-    </a>
+    <p class="section-suite"><a class="btn btn-navy" href="ouvrages/"><span>Voir tout le catalogue (<span data-count-from="ouvrages">32</span> ouvrages)</span></a></p>
   </div>
 </section>
 
@@ -1115,41 +490,7 @@
         </div>
         <figcaption><span class="v-tag">Annales décryptées</span><b>SOG Pénitentiaire 2019</b><span class="v-desc">Le sujet du cycle supérieur de septembre 2019 décrypté, des mots clés au plan, avec les pièges à éviter.</span><a class="v-link" href="methodes/#sog-sujet-d-ordre-general">Lire la fiche méthode</a></figcaption>
       </figure></div>
-    <div class="v-abo-head"><h3><svg ><use href="#i-lock"/></svg>Réservées aux abonnés</h3><p>D'autres notions expliquées en une minute, à regarder dans l'espace abonnés dès la formule d'une semaine.</p></div>
-    <div class="v-rail"><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-cautionnement.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:31</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>Le cautionnement</b><span class="v-desc">L'Acte uniforme OHADA portant organisation des sûretés : la définition, la mention manuscrite, les effets, un exemple et le piège du cautionnement solidaire.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-injonction-de-payer.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:25</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>L'injonction de payer</b><span class="v-desc">L'Acte uniforme OHADA sur les procédures simplifiées de recouvrement : les conditions, la procédure, l'opposition dans les dix jours, un exemple et le piège de la charge de la preuve.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-police-administrative.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:39</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>La police administrative</b><span class="v-desc">La prévention des troubles à l'ordre public, police générale et polices spéciales, les limites contrôlées par le juge, un exemple et le piège de la police judiciaire.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-recours-exces-de-pouvoir.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:40</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>Le recours pour excès de pouvoir</b><span class="v-desc">La loi organique relative au Conseil d'État : l'objet du recours, le recours préalable et les délais de deux mois, les cas d'ouverture, un exemple et le piège du recours parallèle.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-principes-du-service-public.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:39</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>Les trois principes du service public</b><span class="v-desc">Continuité, égalité, mutabilité : les lois de Rolland, leurs conséquences au regard de la Constitution, un exemple et le piège de l'uniformité.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-autorite-parentale.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:27</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>L'autorité parentale</b><span class="v-desc">La loi relative à la minorité : la définition de l'article 3, le contenu de l'autorité parentale, qui l'exerce selon la situation des parents, un exemple et le piège de la délégation.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-vices-du-consentement.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:32</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>Les vices du consentement</b><span class="v-desc">Les articles 1109 à 1117 du Code civil : l'erreur, le dol et la violence, un exemple, la sanction et le piège de la crainte révérentielle.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-prescription-action-publique.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:34</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>La prescription de l'action publique</b><span class="v-desc">L'article 12 du Code de procédure pénale : les trois délais, l'effet des actes de poursuite, les crimes imprescriptibles, un exemple et le piège de la prescription de la peine.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-recidive.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:42</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>La récidive</b><span class="v-desc">L'article 12 du Code pénal, les effets sur la peine selon les articles 122 et 123, le délai de cinq ans, les délits assimilés, un exemple et le piège du concours d'infractions.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-immunite-familiale.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:26</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>L'immunité familiale</b><span class="v-desc">L'article 103 du Code pénal : les trois cercles de proches, les limites de l'immunité, un exemple et le piège de la volonté de la victime.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a><a class="v-card v-abo" href="espace-abonnes/#inscription">
-        <span class="v-frame v-vertical"><img class="v-media" src="assets/img/videos/notion-tentative-punissable.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"><span class="v-dur" aria-hidden="true">1:38</span><span class="v-abo-pill"><svg ><use href="#i-lock"/></svg>Réservée aux abonnés</span></span>
-        <span class="v-cap"><span class="v-tag">Une notion, une minute</span><b>La tentative punissable</b><span class="v-desc">L'article 28 du Code pénal : les deux conditions, un exemple, la tentative de crime et de délit, le but impossible et le piège des actes préparatoires.</span><span class="v-link">S'abonner pour la regarder</span></span>
-      </a></div>
+    
     <div class="espace-band">
       <div><b>Allez plus loin avec l'espace abonnés</b><p>Sujets corrigés, fiches de révision et QCM chronométrés, et dès la formule d'un mois, nos ouvrages complets à lire en ligne. Créez votre compte en une minute, réglez votre formule, et votre accès s'ouvre.</p></div>
       <div class="espace-band-actions"><a class="btn btn-navy" href="espace-abonnes/#inscription">Créer mon compte</a><a class="btn btn-ghost" href="espace-abonnes/#connexion">Se connecter</a></div>

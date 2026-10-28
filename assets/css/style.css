@@ -261,7 +261,7 @@ a.concours-card{text-decoration:none}
 .pack .btn-gold:hover{background:var(--navy-3)}
 
 /* ---------- Test « Quel ouvrage pour moi ? » ---------- */
-.conseiller-section{background:var(--cream)}
+.conseiller-section{background:var(--paper)}
 .conseiller-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,64px);align-items:start}
 .conseiller-photo{margin-top:1.6rem}
 .conseiller-photo img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r-sm);background:var(--cream-2)}
@@ -1451,3 +1451,28 @@ a.ea-outil-carte{text-decoration:none}
 .offerte-band a{color:var(--gold);font-weight:600}
 #matieres .offerte-band{margin:0 0 28px}
 .desinscription{margin-bottom:20px;padding:.9rem 1.1rem;border-radius:var(--r);background:var(--cream);font-weight:600;color:var(--navy)}
+
+/* ---------- Accueil : abonnement et sélection d'ouvrages ---------- */
+.hero-abo{margin-top:1rem;font-size:.98rem;color:#3f4a5e}
+.hero-abo a{color:var(--navy);font-weight:700;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:3px}
+.abonnement-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
+.abonnement-grid .section-head{margin-bottom:0}
+.abonnement-inclus{list-style:none;display:grid;gap:.55rem;margin:1.2rem 0 1.6rem}
+.abonnement-inclus li{position:relative;padding-left:1.6rem;color:var(--ink)}
+.abonnement-inclus li::before{content:"";position:absolute;left:.15rem;top:.45em;width:.7rem;height:.38rem;border-left:2px solid var(--gold-ink);border-bottom:2px solid var(--gold-ink);rotate:-45deg}
+.abonnement-inclus a{color:var(--navy);font-weight:700;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:3px}
+.formules{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.formule{display:flex;flex-direction:column;gap:.3rem;padding:1.3rem 1.2rem;border:1px solid var(--line);border-radius:var(--r);background:#fff;transition:border-color .25s,transform .35s var(--ease)}
+.formule:hover{border-color:var(--navy);transform:translateY(-3px)}
+.formule-duree{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink)}
+.formule b{font-family:var(--serif);font-size:clamp(1.7rem,3vw,2.2rem);line-height:1.05;letter-spacing:-.02em;color:var(--navy)}
+.formule b small{font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:0;color:var(--muted)}
+.formule-quoi{font-size:.93rem;line-height:1.4;color:#3f4a5e}
+.formule-eco{margin-top:.2rem;font-size:.85rem;font-weight:700;color:var(--wa-2)}
+.formule-mise{background:var(--navy);border-color:var(--navy)}
+.formule-mise b,.formule-mise .formule-quoi{color:#fff}
+.formule-mise b small{color:rgba(255,255,255,.7)}
+.formule-mise .formule-duree{color:var(--gold)}
+.section-suite{margin-top:clamp(28px,4vw,40px);text-align:center}
+@media (max-width:960px){.abonnement-grid{grid-template-columns:1fr}}
+@media (max-width:420px){.formule{padding:1rem .9rem}.formule b{font-size:1.5rem}}
