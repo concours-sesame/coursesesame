@@ -2,10 +2,10 @@
    Pages publiques : réseau d'abord, copie gardée si le réseau manque, sinon la page /hors-ligne/.
    Fichiers du site : copie d'abord (leurs adresses changent à chaque version). Rien pour Supabase, les vidéos
    ni l'espace abonnés, dont les contenus restent en ligne. */
-const VERSION = "00c6e6182c";
+const VERSION = "320659f393";
 // Les pages gardent le même cache d'une version à l'autre ; les fichiers changent de cache à chaque version
 const PAGES = "pages", FICHIERS = "fichiers-" + VERSION, MAX_PAGES = 80;
-const AVANCE = ["/","/hors-ligne/","/assets/css/style.css?v=b8568c7087","/assets/js/data.js?v=9c05de60a4","/assets/js/render.js?v=e1bb10e093","/assets/js/app.js?v=26d12de608","/assets/js/hors-ligne.js?v=486349bb1c","/assets/img/favicon.svg","/assets/img/icone-192.png","/assets/fonts/mona-sans-latin-wdth-normal.woff2","/assets/fonts/source-sans-3-latin-400-italic.woff2","/assets/fonts/source-sans-3-latin-400-normal.woff2","/assets/fonts/source-sans-3-latin-600-normal.woff2","/assets/fonts/source-sans-3-latin-700-normal.woff2","/assets/fonts/source-serif-4-latin-400-italic.woff2","/assets/fonts/source-serif-4-latin-400-normal.woff2","/assets/fonts/source-serif-4-latin-600-normal.woff2","/assets/fonts/source-serif-4-latin-700-normal.woff2"];
+const AVANCE = ["/","/hors-ligne/","/assets/css/style.css?v=b8568c7087","/assets/js/data.js?v=ea6090f11a","/assets/js/render.js?v=e1bb10e093","/assets/js/app.js?v=26d12de608","/assets/js/hors-ligne.js?v=486349bb1c","/assets/img/favicon.svg","/assets/img/icone-192.png","/assets/fonts/mona-sans-latin-wdth-normal.woff2","/assets/fonts/source-sans-3-latin-400-italic.woff2","/assets/fonts/source-sans-3-latin-400-normal.woff2","/assets/fonts/source-sans-3-latin-600-normal.woff2","/assets/fonts/source-sans-3-latin-700-normal.woff2","/assets/fonts/source-serif-4-latin-400-italic.woff2","/assets/fonts/source-serif-4-latin-400-normal.woff2","/assets/fonts/source-serif-4-latin-600-normal.woff2","/assets/fonts/source-serif-4-latin-700-normal.woff2"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(FICHIERS).then(c => c.addAll(AVANCE.filter(u => u.startsWith("/assets/")))).then(() =>
     caches.open(PAGES)).then(c => c.addAll(["/", "/hors-ligne/"])).then(() => self.skipWaiting()));
