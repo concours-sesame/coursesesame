@@ -968,7 +968,7 @@ SUJETS_PAGES.forEach(sujetPage);
     crumbs: [["Accueil", prefix], ["Sujets corrigés", ""]],
     h1: `Sujets corrigés`,
     lead: `${plural(SUJETS_PAGES.length, "sujet")} corrigé${SUJETS_PAGES.length > 1 ? "s" : ""} en entier, tirés de nos ouvrages : dissertations, cas pratiques, commentaires d'articles, questions de cours et SOG, dont ${officiels} sujets réellement tombés aux concours.`,
-    ctas: `<a href="#liste" class="btn btn-gold">Voir les sujets${arrow}</a><a href="${prefix}methodes/" class="btn btn-ghost">Méthodes des épreuves</a>`,
+    ctas: `<a href="#liste" class="btn btn-gold">Voir les sujets${arrow}</a><a href="${prefix}sujets/sujets-de-dissertation/" class="btn btn-ghost">40 sujets de dissertation</a>`,
     facts: [`<b>${SUJETS_PAGES.length}</b> sujets corrigés`, `dont <b>${officiels}</b> sujets tombés aux concours`]
   })}
 
@@ -1121,6 +1121,10 @@ ${contactCTA(prefix)}`;
   const MATIERES = [...new Set(FICHES.map(f => f.matiere))];
   FICHES.forEach(f => f.concours.forEach(id => { if (!CONCOURS.some(c => c.id === id)) throw new Error(`fiche ${f.numero} : concours inconnu ${id}`); }));
   const ficheURL = (f, prefix) => `${prefix}fiches/${f.slug}/`;
+  // Sujets de dissertation de la banque de plans VIP (sujet et résumé seulement), reliés aux fiches dont ils sont tirés
+  const BANQUE = require(path.join(DIR, "contenu/banque-plans.js"));
+  BANQUE.forEach(b => b.fiches.forEach(n => { if (!FICHES.some(f => f.numero === n)) throw new Error(`banque de plans n° ${b.numero} : fiche n° ${n} introuvable`); }));
+  const sujetsDeFiche = f => BANQUE.filter(b => b.fiches.includes(f.numero));
   const resume = f => { const t = stripTags(f.essentiel[0]); return t.length > 170 ? t.slice(0, t.lastIndexOf(" ", 165)) + "…" : t; };
   const ficheCard = (f, prefix, i) => `<a class="ep-card" href="${ficheURL(f, prefix)}">
         <span class="ep-card-tag">Fiche n° ${f.numero}</span>
@@ -1179,6 +1183,7 @@ ${contactCTA(prefix)}`;
       <div class="fiche-essentiel">${f.essentiel.map(p => `<p>${p}</p>`).join("")}</div>
       <h3>Les textes de référence</h3>
       <p class="fiche-sources">${esc(f.sources)}</p>
+      ${sujetsDeFiche(f).length ? `<div class="fiche-sujets"><h3>Sujet${sujetsDeFiche(f).length > 1 ? "s" : ""} de dissertation sur cette notion</h3><ul>${sujetsDeFiche(f).map(b => `<li><a href="${prefix}sujets/sujets-de-dissertation/#plan-${b.numero}">${esc(b.sujet)}</a></li>`).join("")}</ul></div>` : ""}
       ${OFFERTES.includes(f) ? offerteForm(f, prefix) : offerteBand(prefix, f)}
     </article>
     <aside class="fiche-plan" aria-label="Au programme de la fiche">
@@ -1241,6 +1246,41 @@ ${voisines.length ? `<section class="section section-cream">
     }]
   }));
   urls.push(url);
+
+  // Sujets de dissertation : la liste publique de la banque de plans, par matière, avec la fiche gratuite de chaque notion
+  {
+    const prefix = "../../";
+    R.setRoot(prefix);
+    const url = SITE + "sujets/sujets-de-dissertation/";
+    const matieres = [...new Set(BANQUE.map(b => b.matiere))];
+    const body = `${subHero({
+      crumbs: [["Accueil", prefix], ["Sujets corrigés", prefix + "sujets/"], ["Sujets de dissertation", ""]],
+      h1: `${BANQUE.length} sujets de dissertation <em>juridique</em>`,
+      lead: `Les grands sujets de dissertation des concours de la magistrature, du greffe, de l'administration pénitentiaire, de l'EPPJEJ et de l'ENA, en droit pénal, civil, administratif, constitutionnel et OHADA. Pour chacun : l'idée directrice du plan, la fiche de révision de la notion, et le plan détaillé complet (introduction rédigée, deux parties, transitions et conclusion) dans l'espace VIP.`,
+      ctas: `<a href="#liste" class="btn btn-gold">Voir les sujets${arrow}</a><a href="${prefix}methodes/" class="btn btn-ghost">Méthode de la dissertation</a>`,
+      facts: [`<b>${BANQUE.length}</b> sujets`, `<b>${matieres.length}</b> matières`, "plans tirés de textes vérifiés"]
+    })}
+
+<section class="section" id="liste">
+  <div class="wrap">
+    ${matieres.map(m => `<h2 class="group-title" id="${slugify(m)}">${esc(m)}<small>${plural(BANQUE.filter(b => b.matiere === m).length, "sujet")}</small></h2>
+    <ol class="sujets-dissertation">${BANQUE.filter(b => b.matiere === m).map(b => `<li id="plan-${b.numero}"><h3>${esc(b.sujet)}</h3>
+        <p>${esc(b.resume)}</p>
+        <p class="sd-liens">${b.fiches.map(n => FICHES.find(f => f.numero === n)).map(f => `<a href="${ficheURL(f, prefix)}">Fiche n° ${f.numero}, ${esc(f.titre)}</a>`).join(" · ")}<span class="sd-vip">${svg("i-lock")}Plan détaillé dans l'espace VIP</span></p></li>`).join("")}</ol>`).join("\n    ")}
+    <div class="espace-band"><div><b>Les ${BANQUE.length} plans détaillés, dans l'espace VIP</b><p>Introduction rédigée en entonnoir, deux parties et quatre sous-parties argumentées, transitions et conclusion, avec les articles cités mot pour mot. Avec les ouvrages complets, les vidéos et une copie corrigée chaque mois.</p></div><a class="btn btn-gold" href="${prefix}espace-abonnes/">Découvrir l'espace VIP</a></div>
+  </div>
+</section>`;
+    write("sujets/sujets-de-dissertation/index.html", page({
+      prefix, url, body,
+      title: [`${BANQUE.length} sujets de dissertation juridique pour les concours de Côte d'Ivoire`, `${BANQUE.length} sujets de dissertation juridique`],
+      description: `${BANQUE.length} sujets de dissertation juridique pour la magistrature, le greffe et l'ENA : ${matieres.join(", ").toLowerCase()}. Idée directrice du plan et fiche de révision de chaque notion.`,
+      ld: [breadcrumb([["Accueil", SITE], ["Sujets corrigés", SITE + "sujets/"], ["Sujets de dissertation", url]]), {
+        "@context": "https://schema.org", "@type": "ItemList", name: "Sujets de dissertation juridique",
+        itemListElement: BANQUE.map((b, i) => ({ "@type": "ListItem", position: i + 1, url: `${url}#plan-${b.numero}`, name: b.sujet }))
+      }]
+    }));
+    urls.push(url);
+  }
 }
 
 /* ---------- Test de niveau gratuit ---------- */

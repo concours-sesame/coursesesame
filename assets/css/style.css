@@ -1892,3 +1892,17 @@ html[data-installable] .ea-installer,html[data-ios] .ea-installer{display:flex}
 html[data-ios] .ea-installer-ios{display:block}
 .ea-installer [data-install]{display:none}
 html[data-installable] .ea-installer [data-install]:not([hidden]){display:inline-flex}
+
+/* Sujets de dissertation (sujets/sujets-de-dissertation/) et lien depuis les fiches */
+.sujets-dissertation{list-style:none;padding:0;display:grid;gap:.8rem;margin:0 0 2rem}
+.sujets-dissertation li{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:var(--r);background:#fff;scroll-margin-top:90px}
+.sujets-dissertation li:target{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.sujets-dissertation h3{font-family:var(--display);font-size:1.15rem;color:var(--navy);margin:0 0 .3rem}
+.sujets-dissertation p{margin:.2rem 0}
+.sd-liens{display:flex;flex-wrap:wrap;gap:.3rem 1rem;font-size:.93rem}
+.sd-liens a{font-weight:600;color:var(--navy)}
+.sd-vip{display:inline-flex;align-items:center;gap:.3rem;color:var(--muted)}
+.sd-vip svg{width:14px;height:14px}
+.fiche-sujets{margin:1.4rem 0;padding:.9rem 1rem;border-left:4px solid var(--gold);background:var(--cream);border-radius:var(--r-sm)}
+.fiche-sujets h3{margin:0 0 .4rem;font-size:1rem}
+.fiche-sujets ul{margin:0;padding-left:1.1rem}
