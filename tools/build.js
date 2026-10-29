@@ -1343,6 +1343,40 @@ ${voisines.length ? `<section class="section section-cream">
   urls.push(url);
 }
 
+/* ---------- Calendrier des concours ---------- */
+// Dates saisies dans l'administration avec leur source (table calendrier_concours), lues par calendrier.js ; sans date
+// publiée, la page invite à être prévenu sur WhatsApp. Aucune date n'est écrite ici sans source officielle.
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "calendrier-des-concours/";
+  const msg = "Bonjour Les Cours Sésame et SAJ, je souhaite être prévenu(e) dès l'ouverture des inscriptions au concours suivant : ";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Calendrier des concours", ""]],
+    h1: "Calendrier des <em>concours</em>",
+    lead: "Les dates d'inscription, de dépôt des dossiers, des épreuves et des résultats des concours de l'INFJ (magistrature, greffe, administration pénitentiaire, EPPJEJ) et de l'ENA, chacune avec sa source officielle.",
+    ctas: `<a href="#dates" class="btn btn-gold">Voir les dates</a><a href="https://wa.me/${WA}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" class="btn btn-wa">${svg("i-wa")}Être prévenu sur WhatsApp</a>`,
+    facts: ["Dates vérifiées et sourcées", "Mis à jour à chaque communiqué"]
+  })}
+
+<section class="section" id="dates">
+  <div class="wrap">
+    <div class="calendrier" id="calendrier" data-wa="${WA}">
+      <p class="ea-vide" id="calendrierVide">Chargement des dates…</p>
+    </div>
+    <noscript><p>Le calendrier a besoin de JavaScript. Écrivez-nous sur WhatsApp pour connaître les prochaines dates.</p></noscript>
+    <div class="espace-band"><div><b>Préparez-vous avant l'ouverture des inscriptions</b><p>Testez votre niveau gratuitement, puis révisez avec nos fiches, nos sujets corrigés et nos concours blancs.</p></div><a class="btn btn-gold" href="${prefix}test-de-niveau/">Test de niveau gratuit</a></div>
+  </div>
+</section>`;
+  write("calendrier-des-concours/index.html", page({
+    prefix, url, body, scripts: ["assets/js/espace-config.js", "assets/js/calendrier.js"],
+    title: ["Calendrier des concours INFJ et ENA : inscriptions, épreuves, résultats", "Calendrier des concours INFJ et ENA", "Calendrier des concours"],
+    description: "Dates d'inscription, de dépôt des dossiers, des épreuves écrites et des résultats des concours de l'INFJ et de l'ENA en Côte d'Ivoire, avec leur source officielle.",
+    ld: [breadcrumb([["Accueil", SITE], ["Calendrier des concours", url]])]
+  }));
+  urls.push(url);
+}
+
 /* ---------- Témoignage d'admis ---------- */
 // Formulaire pour les admis (temoignage.js, fonction deposer_temoignage) : accord de publication coché et daté ;
 // publication seulement après validation dans l'administration ; affichage sur l'accueil (« Ils ont réussi »).

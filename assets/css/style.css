@@ -1915,3 +1915,19 @@ html[data-installable] .ea-installer [data-install]:not([hidden]){display:inline
 .about-avis .reviews + .reussite-lien{margin-top:.8rem}
 .temoignage-form{max-width:760px}
 .temoignage-form textarea{width:100%}
+
+/* Calendrier des concours (calendrier-des-concours/) */
+.calendrier{display:grid;gap:1.2rem;margin-bottom:2rem}
+.calendrier-concours{padding:1.1rem 1.2rem;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.calendrier-concours h2{font-family:var(--display);font-size:1.25rem;color:var(--navy);margin:0 0 .8rem}
+.calendrier-concours h2 span{display:block;font-family:inherit;font-size:.85rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-ink,#8a5a00);margin-bottom:.2rem}
+.calendrier-concours ol{list-style:none;padding:0;margin:0;display:grid;gap:.6rem}
+.calendrier-concours li{display:grid;gap:.15rem;padding:.6rem .8rem;border-left:4px solid var(--line);background:var(--cream);border-radius:var(--r-sm)}
+.calendrier-concours li.en-cours{border-left-color:#2e8b57}
+.calendrier-concours li.a-venir{border-left-color:var(--gold)}
+.calendrier-concours li.passee{opacity:.65}
+.cal-dates{font-weight:600}
+.calendrier-concours small{color:var(--muted)}
+.calendrier-concours small a{color:var(--navy);text-decoration:underline}
+.calendrier-vide{padding:1.2rem;border:1px dashed var(--line);border-radius:var(--r);background:var(--cream)}
+.calendrier-vide p{margin-bottom:.8rem}

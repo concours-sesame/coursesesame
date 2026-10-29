@@ -35,7 +35,7 @@
   let retourAFaire = ""; // message après une action lancée depuis « À faire aujourd'hui »
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [], epreuvesB = [];
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
-  let visites = [], visitesJours = [], provenances = [], retombeesFb = [], prospects = [], temoignages = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
+  let visites = [], visitesJours = [], provenances = [], retombeesFb = [], prospects = [], temoignages = [], calendrier = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
   let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
@@ -234,6 +234,7 @@
     visites = vi.data || []; visitesJours = vj.data || [];
     provenances = pv.data || []; retombeesFb = fr.data || []; prospects = pr.data || [];
     // Témoignages d'admis (page temoignage/) : à vérifier puis publier sur l'accueil
+    try { const cal = await client.from("calendrier_concours").select("*").order("debut", { ascending: false }).limit(300); calendrier = cal.data || []; } catch (e) { calendrier = []; }
     try { const tg = await client.from("temoignages_admis").select("*").order("cree_le", { ascending: false }).limit(200); temoignages = tg.data || []; } catch (e) { temoignages = []; }
     demandes = da.data || [];
     telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
@@ -964,8 +965,33 @@
         </form>
       </details>
       <div id="adZoneC" class="ad-zone-c">${zoneContenus()}</div>
+      ${blocCalendrier()}
       ${blocAgent()}
       ${blocAnnonces()}`;
+  }
+  // Calendrier des concours (page publique calendrier-des-concours/) : une ligne par étape, toujours avec sa source
+  function blocCalendrier() {
+    const conc = [...CONC.map(x => [x.id, x.court]), ["autre", "Autre concours"]];
+    return `<section class="ad-bloc" id="adCalendrier">
+        <h3>Calendrier des concours <span class="n">${calendrier.length}</span></h3>
+        <p class="ad-note">Affiché sur <a href="../../calendrier-des-concours/" target="_blank" rel="noopener">coursesesame.com/calendrier-des-concours</a>. N'ajoutez une date qu'avec sa source officielle (communiqué de l'INFJ, de l'ENA, du ministère de la Fonction publique) : elle est affichée sous la date. Une étape disparaît seule 60 jours après sa fin.</p>
+        <details class="ad-nouveau"><summary>Ajouter une date</summary>
+        <form class="form ad-form" data-form="calendrier" novalidate>
+          <div class="field"><label>Concours</label><select name="concours">${conc.map(([v, n]) => `<option value="${v}">${esc(n)}</option>`).join("")}</select></div>
+          <div class="field"><label>Intitulé</label><input name="intitule" maxlength="120" placeholder="Concours direct, cycle supérieur, session 2027" required></div>
+          <div class="field"><label>Étape</label><input name="etape" maxlength="80" list="adEtapes" placeholder="Inscriptions en ligne" required><datalist id="adEtapes">${["Inscriptions en ligne", "Visite médicale", "Dépôt des dossiers", "Épreuves écrites", "Résultats d'admissibilité", "Épreuves orales", "Résultats définitifs"].map(e => `<option value="${e}">`).join("")}</datalist></div>
+          <div class="field"><label>Du (ou le)</label><input name="debut" type="date" required></div>
+          <div class="field"><label>Au (facultatif)</label><input name="fin" type="date"></div>
+          <div class="field"><label>Source</label><input name="source_nom" maxlength="120" placeholder="Communiqué de l'INFJ du 12 février 2027" required></div>
+          <div class="field full"><label>Lien de la source (facultatif)</label><input name="source_url" type="url" placeholder="https://"></div>
+          <p class="ea-msg full" role="alert"></p>
+          <button class="btn btn-gold" type="submit">Ajouter la date</button>
+        </form></details>
+        ${calendrier.length ? `<div class="ad-tableau" role="region" aria-label="Calendrier des concours" tabindex="0"><table>
+          <thead><tr><th>Date</th><th>Concours et étape</th><th>Source</th><th></th></tr></thead>
+          <tbody>${calendrier.map(c => `<tr><td>${dateFr(c.debut)}${c.fin && c.fin !== c.debut ? `<small>au ${dateFr(c.fin)}</small>` : ""}</td><td><b>${esc(nomConcours(c.concours) || "Autre concours")}</b>, ${esc(c.intitule)}<small>${esc(c.etape)}</small></td><td>${c.source_url ? `<a href="${esc(c.source_url)}" target="_blank" rel="noopener">${esc(c.source_nom)}</a>` : esc(c.source_nom)}</td><td><button class="btn btn-ghost btn-sm" type="button" data-action="calendrier-supprimer" data-calid="${c.id}">Supprimer</button></td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="ea-vide">Aucune date pour le moment : la page publique invite les visiteurs à être prévenus sur WhatsApp.</p>`}
+      </section>`;
   }
   function ligneContenu(c) {
     const retour = retours["c" + c.id] || "";
@@ -1589,6 +1615,14 @@
       toast(error ? await erreurFonction(error) : `E-mail d'essai envoyé à ${data.a}. Regardez aussi dans les courriers indésirables.`);
       return;
     }
+    if (act === "calendrier-supprimer") {
+      const c = calendrier.find(x => x.id === Number(b.dataset.calid));
+      if (!c || !confirm(`Supprimer « ${c.etape} » (${c.intitule}) du calendrier ?`)) return;
+      const { error } = await client.from("calendrier_concours").delete().eq("id", c.id);
+      if (error) return toast(messageErreur(error));
+      recharger("Date supprimée du calendrier.");
+      return;
+    }
     if (act === "temoignage-publier" || act === "temoignage-retirer" || act === "temoignage-supprimer") {
       const id = Number(b.dataset.tid), t = temoignages.find(x => x.id === id);
       if (!t) return;
@@ -2034,6 +2068,21 @@
         retours["copie" + x.id] = `<div class="ad-retour"><p>Correction enregistrée.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), texte)}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`;
       }
       recharger("Correction enregistrée.");
+      return;
+    }
+
+    if (f.dataset.form === "calendrier") {
+      const ligne = { concours: v("concours"), intitule: v("intitule"), etape: v("etape"), debut: v("debut"), fin: v("fin") || null, source_nom: v("source_nom"), source_url: v("source_url") || null };
+      if (ligne.intitule.length < 3 || ligne.etape.length < 3) { msg.textContent = "Indiquez l'intitulé et l'étape."; return; }
+      if (!ligne.debut) { msg.textContent = "Indiquez la date."; return; }
+      if (ligne.fin && ligne.fin < ligne.debut) { msg.textContent = "La date de fin précède la date de début."; return; }
+      if (ligne.source_nom.length < 3) { msg.textContent = "Indiquez la source officielle de cette date."; return; }
+      if (ligne.source_url && !/^https:\/\//.test(ligne.source_url)) { msg.textContent = "Le lien de la source doit commencer par https://"; return; }
+      bouton.disabled = true;
+      const { error } = await client.from("calendrier_concours").insert(ligne);
+      bouton.disabled = false;
+      if (error) { msg.textContent = messageErreur(error); return; }
+      recharger("Date ajoutée au calendrier.");
       return;
     }
 
