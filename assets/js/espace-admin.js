@@ -936,6 +936,7 @@
           <div class="field full" data-pour="texte" hidden><label for="nTexte">Texte de la fiche</label><textarea id="nTexte" name="texte" rows="10" maxlength="60000"></textarea><small class="ad-note">Une ligne vide entre deux paragraphes. « ## » en début de ligne pour un intertitre, **mots** pour du gras.</small></div>
           <div class="field full" data-pour="lien" hidden><label for="nLien">Adresse du lien</label><input id="nLien" name="lien" type="url" placeholder="https://"></div>
           <label class="ea-accord full" data-pour="pdf" hidden><input type="checkbox" name="vip"><span><b>Réservé à l'espace VIP</b> (seuls les abonnés VIP ouvrent ce document)</span></label>
+          <label class="ea-accord full"><input type="checkbox" name="avant_premiere"><span><b>Avant-première VIP</b> (les abonnés VIP le voient dès la mise en ligne, les autres abonnés sept jours plus tard)</span></label>
           <div class="field full"><label for="nDesc">Présentation (facultatif)</label><textarea id="nDesc" name="description" maxlength="600"></textarea></div>
           <fieldset class="full ad-concours"><legend>Concours concernés</legend>${coches}</fieldset>
           <label class="ea-accord full"><input type="checkbox" name="publie" checked><span>Publier (sinon, le contenu reste en brouillon, invisible des abonnés)</span></label>
@@ -952,7 +953,7 @@
     const retour = retours["c" + c.id] || "";
     return `<article class="ad-ligne" data-cid="${c.id}">
         <div class="ad-ident">
-          <div class="ad-nom"><b>${esc(c.titre)}</b>${c.vip ? `<span class="ea-vip-marque">VIP</span>` : ""}${programme(c) ? `<span class="ad-badge ad-avenir">Programmé le ${dateHeure(c.publie_le)}</span>` : `<span class="ad-badge ${c.publie ? "ad-actif" : "ad-attente"}">${c.publie ? "Publié" : "Brouillon"}</span>`}</div>
+          <div class="ad-nom"><b>${esc(c.titre)}</b>${c.vip ? `<span class="ea-vip-marque">VIP</span>` : ""}${c.avant_premiere && Date.now() - new Date(c.publie_le) < 7 * 864e5 ? `<span class="ad-badge ad-avenir">Avant-première VIP jusqu'au ${dateHeure(new Date(new Date(c.publie_le).getTime() + 7 * 864e5).toISOString())}</span>` : ""}${programme(c) ? `<span class="ad-badge ad-avenir">Programmé le ${dateHeure(c.publie_le)}</span>` : `<span class="ad-badge ${c.publie ? "ad-actif" : "ad-attente"}">${c.publie ? "Publié" : "Brouillon"}</span>`}</div>
           <small>${TYPES[c.type].nom}${c.matiere ? " · " + esc(c.matiere) : ""}${(c.concours || []).length ? " · " + c.concours.map(nomConcours).join(", ") : ""} · ${dateFr(c.publie_le)} · ${pluriel(lecturesRecentes(l => l.contenu_id === c.id), "ouverture")} en 30 jours</small>
         </div>
         <div class="ad-actions">
@@ -978,6 +979,7 @@
         <div class="field"><label>Mis en ligne le</label><input type="datetime-local" name="publie_le" value="${versLocal(c.publie_le)}"><small class="ad-note">Une date future programme la mise en ligne.</small></div>
         <fieldset class="full ad-concours"><legend>Concours concernés</legend>${coches}</fieldset>
         ${c.type === "pdf" ? `<label class="ea-accord full"><input type="checkbox" name="vip"${c.vip ? " checked" : ""}><span><b>Réservé à l'espace VIP</b></span></label>` : ""}
+        <label class="ea-accord full"><input type="checkbox" name="avant_premiere"${c.avant_premiere ? " checked" : ""}><span><b>Avant-première VIP</b> (les autres abonnés le voient sept jours après la mise en ligne)</span></label>
         <p class="ea-msg full" role="alert"></p>
         <button class="btn btn-gold" type="submit">Enregistrer</button>
       </form>`;
@@ -2009,6 +2011,7 @@
       if (v("publie_le")) maj.publie_le = new Date(v("publie_le")).toISOString();
       if (c.type === "texte") maj.texte = f.elements.texte.value;
       if (c.type === "pdf") maj.vip = f.elements.vip.checked;
+      maj.avant_premiere = f.elements.avant_premiere.checked;
       if (c.type === "lien") { maj.lien = v("lien"); if (!lienSur(maj.lien)) { msg.textContent = "L'adresse doit commencer par https://"; return; } }
       if (maj.titre.length < 2) { msg.textContent = "Indiquez un titre."; return; }
       bouton.disabled = true;
@@ -2021,7 +2024,7 @@
 
     if (f.id === "adNouveau") {
       const type = v("type"), titre = v("titre");
-      const ligne = { titre, type, matiere: v("matiere") || null, description: v("description") || null, concours: coches(), publie: f.elements.publie.checked, vip: type === "pdf" && f.elements.vip.checked };
+      const ligne = { titre, type, matiere: v("matiere") || null, description: v("description") || null, concours: coches(), publie: f.elements.publie.checked, vip: type === "pdf" && f.elements.vip.checked, avant_premiere: f.elements.avant_premiere.checked };
       if (v("publie_le")) ligne.publie_le = new Date(v("publie_le")).toISOString();
       if (titre.length < 2) { msg.textContent = "Indiquez un titre."; f.elements.titre.focus(); return; }
       let fichier = null;

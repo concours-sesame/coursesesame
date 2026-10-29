@@ -544,7 +544,8 @@
   }
 
   /* ---------- Téléchargement de pages (limite mensuelle) ---------- */
-  // Sur 30 jours glissants : 20 pages au plus en tout, 5 pages au plus d'un même document. Le PDF est découpé
+  // Sur 30 jours glissants : 20 pages au plus en tout, 5 pages au plus d'un même document (60 et 15 pour un abonné VIP,
+  // telechargement_limites_de). Le PDF est découpé
   // et filigrané au nom de l'abonné par la fonction « telechargement » ; la base tient le décompte.
   function ajouterTelechargement(c, zone) {
     const barre = $(".ea-pdf-barre", zone);
@@ -885,7 +886,7 @@
     return `<section class="ea-vip" id="eaVip">
         <span class="ea-vip-marque">VIP</span>
         <h3>L'espace VIP</h3>
-        <p>${[o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "", v ? `${v} vidéo${v > 1 ? "s" : ""} réservée${v > 1 ? "s" : ""}` : "", dv ? `${dv} document${dv > 1 ? "s" : ""} VIP` : ""].filter(Boolean).join(", ")} à lire et à regarder en ligne, et chaque mois une copie corrigée et notée sur 20 par un correcteur, en plus de tout votre abonnement. Le VIP coûte le triple de l'abonnement normal${vipDes().replace(/,$/, "")} ; il s'ouvre dès la validation de votre paiement, sans attendre la fin de votre abonnement en cours.</p>
+        <p>${[o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "", v ? `${v} vidéo${v > 1 ? "s" : ""} réservée${v > 1 ? "s" : ""}` : "", dv ? `${dv} document${dv > 1 ? "s" : ""} VIP` : ""].filter(Boolean).join(", ")} à lire et à regarder en ligne, chaque mois une copie corrigée et notée sur 20 par un correcteur, les articles à savoir par cœur, votre plan de révision jusqu'au concours, les nouveautés en avant-première et trois fois plus de pages à télécharger (60 sur 30 jours au lieu de 20), en plus de tout votre abonnement. Le VIP coûte le triple de l'abonnement normal${vipDes().replace(/,$/, "")} ; il s'ouvre dès la validation de votre paiement, sans attendre la fin de votre abonnement en cours.</p>
         <p class="ea-tarifs ea-tarifs-vip">${tarifsVip().filter(t => ["vip-j1", "vip-j7", "vip-m1", "vip-m12"].includes(t.cle)).map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
         ${renouvellement ? `<p class="ea-aide">Choisissez une formule VIP dans le formulaire de renouvellement ci-dessus.</p>` : paiementHTML(true, "vip-m1")}
       </section>`;
@@ -1066,6 +1067,8 @@
   const porteeActive = () => !monConcours() ? "tous" : portee || (contenus.some(pourMoi) ? "moi" : "tous");
   const cleAbonne = nom => `ea-${nom}-${etat.uid}`;
   let vuAvant = null; // date de la visite précédente sur cet appareil (contenus « Nouveau »)
+  // Avant-première VIP (contenus.avant_premiere) : la base ne livre le contenu qu'aux VIP pendant ses sept premiers jours
+  const enAvantPremiere = c => !!c.avant_premiere && Date.now() - new Date(c.publie_le) < 7 * 864e5;
   const estNouveau = c => !!vuAvant && !!c.publie_le && new Date(c.publie_le) > vuAvant && new Date(c.publie_le) <= new Date();
   const listeFavoris = () => lu(cleAbonne("favoris"), []);
   const crochetFavoris = {
@@ -1102,7 +1105,7 @@
         ${mots.length ? `<p class="ea-cherche-bilan" role="status">${liste.length ? `${liste.length} résultat${liste.length > 1 ? "s" : ""} dans toute la bibliothèque, tous concours confondus.` : "Aucun contenu ne correspond à cette recherche."}${["textes", "jurisprudence"].some(r => contenus.some(c => rubrique(c) === r)) ? ` Pour chercher dans le texte même des lois et des décisions, ouvrez la rubrique Textes officiels ou Jurisprudence.` : ""}</p>`
           : ["textes", "jurisprudence"].includes(filtre) ? rechercheTextesHTML() : ""}
         <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}">
-            <span class="ea-carte-marques">${estVip(c) ? `<span class="ea-vip-marque">VIP</span>` : ""}<span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
+            <span class="ea-carte-marques">${estVip(c) ? `<span class="ea-vip-marque">VIP</span>` : ""}${enAvantPremiere(c) ? `<span class="ea-avant">Avant-première VIP</span>` : ""}<span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
             <small>${[c.matiere ? esc(c.matiere) : "", (c.concours || []).map(nomConcours).join(", "), dateFr(c.publie_le)].filter(Boolean).join(" · ")}</small>
@@ -1778,6 +1781,23 @@
     const texte = t < debut ? `${esc(b.titre)}, le ${jourHeure(b.debut)}.` : t <= fin ? `${esc(b.titre)} : l'épreuve est en cours, jusqu'à ${heureFr(b.fin)}.` : b.note != null ? `${esc(b.titre)} : ${noteFr(b.note)}/20, rang ${b.rang} sur ${b.notes}.` : `${esc(b.titre)} : épreuve terminée, ${agent && agent.acces && agent.actif ? "faites corriger votre copie" : "lisez le corrigé-type"}.`;
     return `<button class="ea-outil-carte" type="button" data-outil="blanc"><b>Concours blanc</b><span>${texte}</span><small>${EXERCICES[b.exercice] || ""}, ${dureeTxt(b.duree_minutes)}, en conditions réelles</small></button>`;
   }
+  // Classement général (espace VIP, classement_blancs) : moyenne sur les concours blancs notés des douze derniers mois,
+  // sans aucun nom ; seule la ligne de l'abonné est signalée.
+  const moyFr = n => Number(n).toLocaleString("fr-FR", { maximumFractionDigits: 2 });
+  function classementHTML(d) {
+    if (!d.participants) return `<h4>Classement général <span class="ea-vip-marque">VIP</span></h4><p class="ea-vide">Aucune copie notée sur les douze derniers mois : le classement s'ouvrira avec les premières notes.</p>`;
+    const m = d.moi, tranches = ["moins de 8", "8 à 10", "10 à 12", "12 à 14", "14 à 16", "16 et plus"];
+    const max = Math.max(...d.repartition, 1);
+    const tete = d.tete.map(x => `<tr${x.moi ? ` class="ea-classement-moi"` : ""}><td>${x.rang}${x.rang === 1 ? "er" : "e"}</td><td>${x.moi ? "Vous" : "Anonyme"}</td><td>${moyFr(x.moyenne)}/20</td><td>${x.n} épreuve${x.n > 1 ? "s" : ""}</td></tr>`).join("");
+    const parcours = d.parcours.map(x => `<li>${esc(x.titre)}, ${dateFr(x.debut)} : <b>${noteFr(x.note)}/20</b>, rang ${x.rang} sur ${x.notes}</li>`).join("");
+    return `<h4>Classement général <span class="ea-vip-marque">VIP</span></h4>
+      <p>${d.participants} candidat${d.participants > 1 ? "s" : ""} classé${d.participants > 1 ? "s" : ""} sur ${d.epreuves} épreuve${d.epreuves > 1 ? "s" : ""} notée${d.epreuves > 1 ? "s" : ""} en douze mois, par moyenne des notes.</p>
+      ${m ? `<div class="ea-blanc-note"><b>${m.rang}${m.rang === 1 ? "er" : "e"}</b><span>sur ${d.participants}, avec ${moyFr(m.moyenne)}/20 de moyenne sur ${m.n} épreuve${m.n > 1 ? "s" : ""}. ${m.rang <= Math.ceil(d.participants / 10) ? "Vous êtes dans les 10 % de tête." : m.rang <= Math.ceil(d.participants / 4) ? "Vous êtes dans le premier quart." : ""}</span></div>` : `<p>Faites corriger une copie de concours blanc : votre moyenne entrera dans le classement.</p>`}
+      <div class="ea-classement-table"><table><caption class="sr-only">Tête du classement</caption><thead><tr><th scope="col">Rang</th><th scope="col">Candidat</th><th scope="col">Moyenne</th><th scope="col">Notes</th></tr></thead><tbody>${tete}</tbody></table></div>
+      <p class="ea-aide">Répartition des moyennes</p>
+      <ul class="ea-classement-barres">${d.repartition.map((n, i) => `<li><span>${tranches[i]}</span><i style="width:${Math.round(n / max * 100)}%"></i><b>${n}</b></li>`).join("")}</ul>
+      ${parcours ? `<p class="ea-aide">Vos épreuves</p><ul class="ea-oral-liste">${parcours}</ul>` : ""}`;
+  }
   function outilBlanc(corps, marque, id) {
     const b = id ? blancs.find(x => x.id === id) : blancEnVue();
     if (!b) { corps.innerHTML = `<p class="ea-vide">Aucun concours blanc pour le moment.</p>`; return; }
@@ -1828,13 +1848,19 @@
       else if (copie.length < 200) resultat = `<p>Votre copie est trop courte pour être corrigée par l'agent (200 caractères au moins).</p>`;
       else if (!ouvert) resultat = `<p>${agent && agent.acces ? "La correction notée par l'agent de révision n'est pas encore ouverte." : "La correction notée par l'agent de révision est réservée à l'abonnement VIP."} Comparez votre copie au corrigé-type et notez-la vous-même avec sa grille d'auto-évaluation.</p>`;
       else resultat = `<p>L'épreuve est terminée. Faites corriger et noter votre copie, telle que vous l'avez rendue, par l'agent de révision. Votre note entre ensuite dans le classement.</p><div class="ea-outil-boutons"><button class="btn btn-gold" type="button" data-bl="corriger">Faire corriger ma copie</button></div><p class="ea-agent-progres" id="eaBlancProgres"></p>`;
-      corps.innerHTML = `<div class="ea-outil">${tete}${sujetHTML}${copie ? `<h4>Votre copie</h4><div class="ea-blanc-rendue">${mettreEnForme(copie)}</div>` : ""}${resultat}<div id="eaBlancCorrige"></div>${pied}</div>`;
+      corps.innerHTML = `<div class="ea-outil">${tete}${sujetHTML}${copie ? `<h4>Votre copie</h4><div class="ea-blanc-rendue">${mettreEnForme(copie)}</div>` : ""}${resultat}<div id="eaBlancCorrige"></div><div class="ea-classement" id="eaBlancClassement"></div>${pied}</div>`;
+      const zc = $("#eaBlancClassement");
+      if (etat.vip) client.rpc("classement_blancs").then(r => { if (!r.error && r.data && zc.isConnected) zc.innerHTML = classementHTML(r.data); });
+      else {
+        zc.innerHTML = `<p class="ea-classement-vip"><span class="ea-vip-marque">VIP</span> Le classement général des concours blancs, votre moyenne et votre rang sur douze mois sont réservés à l'espace VIP. <a href="#eaVip" data-fermer-visionneuse>Découvrir le VIP</a></p>`;
+        $("[data-fermer-visionneuse]", zc).addEventListener("click", () => fermerVisionneuse());
+      }
       // Corrigé-type de l'épreuve, publié à sa fin (concours_blancs.corrige_id, livré par corrige_blanc)
       let corrige = null;
       if (t > fin) client.rpc("corrige_blanc", { p_concours: b.id }).then(async r => {
         if (r.error || !r.data) return;
         corrige = contenus.find(x => x.id === r.data);
-        if (!corrige) { const q = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip").eq("id", r.data).maybeSingle(); corrige = q.data; }
+        if (!corrige) { const q = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip, avant_premiere").eq("id", r.data).maybeSingle(); corrige = q.data; }
         const z = $("#eaBlancCorrige");
         if (corrige && z) z.innerHTML = `<div class="ea-outil-boutons"><button class="btn btn-navy" type="button" data-bl="corrige">Lire le corrigé-type et sa grille</button></div>`;
       });
@@ -1978,7 +2004,7 @@
       brancherFormulaires();
     } else if (etat.abo.actif || etat.admin) {
       const [{ data, error }] = await Promise.all([
-        client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip").eq("publie", true).order("publie_le", { ascending: false }),
+        client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip, avant_premiere").eq("publie", true).order("publie_le", { ascending: false }),
         chargerAgent().catch(() => { agent = null; }),
         chargerOutils().catch(() => { /* outils indisponibles : la bibliothèque reste accessible */ }),
         chargerCopies().catch(() => { mesCopies = []; })
