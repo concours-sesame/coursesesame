@@ -6,7 +6,8 @@ dans l'aperçu « Au programme » de la page Espace abonnés (`apercu_contenus`)
 
 **Le texte des fiches n'est pas dans ce dépôt, qui est public.** Les sources Markdown sont gardées dans le stockage
 privé `exclusif`, en archives `textes/sources-fiches-NNNN-NNNN.pdf` (un `.tar.gz` sous ce nom, déposé par l'action
-`televersement` de `import-texte`). La dernière archive, `textes/sources-fiches-0001-0100.pdf`, contient les fiches 1 à 100.
+`televersement` de `import-texte`). Les fiches 1 à 100 sont dans `textes/sources-fiches-0001-0100.pdf` ; à partir de la fiche 101, une archive par série de dix
+(`textes/sources-fiches-0101-0110.pdf`, etc.), avec le registre des contrôles à l'écran (`controle-ecran.txt`).
 
 ## Format d'une fiche (`NN.md`)
 
@@ -45,6 +46,20 @@ inventés), pièges des correcteurs, à l'écrit, testez-vous avec corrigé.
   Code pénal), la citation la reproduit et le signale.
 - Une loi temporaire dont le maintien en vigueur n'est pas établi (loi n° 2018-863 sur la procédure spéciale de
   déclaration de naissance) ne fait pas l'objet d'une fiche.
+
+## Vérification des citations (à partir de la fiche 101)
+
+Le texte officiel est lu dans le PDF du Journal officiel lui-même : l'action `lecture` de `import-texte` donne une adresse de
+dix minutes, et `pdftotext` en tire le texte (identique à `passages`, reconnaissance de caractères comprise).
+
+```
+python3 tools/fiches/articles.py <texte.txt> 37-50 106              # lire les articles officiels pour rédiger
+python3 tools/fiches/verifier_citations.py <NNN.md> <texte.txt> …   # chaque « … » : article où elle se lit, ou ABSENTE
+```
+
+La comparaison ignore accents et ponctuation et corrige les confusions courantes de la reconnaissance (« Ie », « it »,
+« II », « contr6le ») ; elle donne pour chaque citation le ou les articles où elle se lit, ce qui contrôle aussi le numéro
+cité. Une citation ABSENTE se contrôle à l'écran sur l'image de la page (`pdftoppm`) et se note dans `controle-ecran.txt`.
 
 ## Fabrication et publication
 
@@ -90,6 +105,7 @@ node tools/build.js
 | 79 à 86 | Personnes et famille : actes de l'état civil, rectification et jugements supplétifs, émancipation, communauté de biens, séparation de biens, option successorale, partage, majeurs protégés | 225 à 232 |
 | 87 à 89 | Institutions : indépendance et statut du magistrat, Conseil supérieur de la magistrature, Haute Cour de justice | 233 à 235 |
 | 90 à 100 | OHADA : fonds de commerce et location-gérance, vente du fonds, vente commerciale, cautionnement, hypothèque, gage, saisie-attribution, saisie-vente, redressement et liquidation, conciliation et règlement préventif, arbitrage | 236 à 246 |
+| 101 à 110 | Sociétés commerciales (AUSCGIE) : contrat de société, apports, société en formation, nullités, dissolution, SNC, SCS, société anonyme, direction de la SA, commissaire aux comptes | 312 à 321 |
 
 Les fiches 2, 13, 14 et 16 ont été republiées en version 2 (`fiche-NNNN-v2.pdf`) après correction de l'espace des
 milliers dans `rendu.py` : « 3.000.000 » s'affichait « 3 000.000 ».

@@ -443,7 +443,7 @@ function rendre(sujet: string, prenom: string, blocs: Bloc[], piedHtml: string, 
 const signature = "Bonne préparation,\nL'équipe des Cours Sésame et SAJ";
 const NOMS_CONCOURS: Record<string, string> = { infj: "la magistrature", greffe: "le Greffe", penitentiaire: "l'administration pénitentiaire", eppjej: "l'EPPJEJ", ena: "l'ENA" };
 const CONTENU_ABONNES = [
-  "les 100 fiches de révision en entier",
+  "toutes nos fiches de révision, en entier",
   "les corrigés-types et les grilles de notation sur 20 des 315 épreuves de nos 70 concours blancs (formules d'une semaine et plus)",
   "les sujets corrigés, les QCM chronométrés et la révision du jour, qui fait revenir les questions au bon moment",
   "plus de 50 textes officiels et décisions, avec une recherche dans le texte",

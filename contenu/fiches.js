@@ -2903,5 +2903,283 @@ module.exports = [
    "Testez-vous"
   ],
   "questions": 4
+ },
+ {
+  "numero": 101,
+  "slug": "101-le-contrat-de-societe",
+  "titre": "Le contrat de société",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 4, 5, 6, 8, 9, 53 et 54.",
+  "essentiel": [
+   "La société commerciale naît d'un contrat par lequel deux personnes au moins affectent des biens ou leur industrie à une activité commune, pour en partager le bénéfice ou l'économie, et s'engagent à contribuer aux pertes ; certaines formes admettent un associé unique.",
+   "Le caractère commercial de la société tient à sa forme ou à son objet : la SNC, la SCS, la SARL, la SA et la SAS sont commerciales quel que soit leur objet."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les éléments du contrat de société",
+   "Commercialité et capacité",
+   "Les clauses léonines",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 102,
+  "slug": "102-les-apports-en-societe",
+  "titre": "Les apports en société",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 37, 38, 40 à 42, 45 à 47, 49, 50 et 53.",
+  "essentiel": [
+   "Chaque associé doit faire un apport, en numéraire, en nature ou en industrie, et reçoit en contrepartie des titres sociaux ; tout autre apport est interdit.",
+   "L'apport est la contribution de l'associé à la formation du patrimoine social : sans apport, pas d'associé."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "L'apport en numéraire",
+   "L'apport en nature",
+   "L'apport en industrie",
+   "Les droits nés de l'apport",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 103,
+  "slug": "103-la-societe-en-formation-et-la-reprise-des-engagements",
+  "titre": "La société en formation et la reprise des engagements",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 98 à 110 et 114.",
+  "essentiel": [
+   "Avant son immatriculation, la société n'a pas la personnalité juridique : les actes passés pour son compte n'engagent la société que si elle les reprend selon les formes prévues ; à défaut, leurs auteurs en répondent solidairement et indéfiniment."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Trois périodes à distinguer",
+   "Les trois modes de reprise des engagements",
+   "Les effets",
+   "La société en participation",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 104,
+  "slug": "104-les-nullites-de-societe",
+  "titre": "Les nullités de société",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 242 à 247, 251, 253, 255 et 256.",
+  "essentiel": [
+   "La nullité d'une société ou de ses actes est strictement encadrée : elle suppose un texte, peut être couverte, se prescrit par trois ans, ne joue que pour l'avenir et ne peut en principe être opposée aux tiers de bonne foi.",
+   "Le législateur cherche à protéger la sécurité des tiers qui ont traité avec la société."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les causes de nullité",
+   "La régularisation",
+   "La prescription",
+   "Les effets",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 105,
+  "slug": "105-la-dissolution-de-la-societe",
+  "titre": "La dissolution de la société",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 60, 200 à 203.",
+  "essentiel": [
+   "La société prend fin pour l'une des causes énumérées par l'article 200 ; la dissolution d'une société pluripersonnelle entraîne sa liquidation, et sa personnalité morale survit pour les besoins de celle-ci."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les causes de dissolution",
+   "Les effets",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 106,
+  "slug": "106-la-societe-en-nom-collectif",
+  "titre": "La société en nom collectif",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 9, 270 à 281, 290 et 291.",
+  "essentiel": [
+   "Dans la société en nom collectif, tous les associés sont commerçants et répondent indéfiniment et solidairement des dettes sociales ; c'est une société de personnes, où les parts ne se cèdent qu'à l'unanimité."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "La responsabilité des associés",
+   "Les parts sociales",
+   "La gérance",
+   "La fin de la société",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 107,
+  "slug": "107-la-societe-en-commandite-simple",
+  "titre": "La société en commandite simple",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 293 à 300 et 305.",
+  "essentiel": [
+   "La société en commandite simple réunit des associés commandités, tenus indéfiniment et solidairement des dettes sociales comme des associés en nom, et des associés commanditaires, tenus seulement dans la limite de leurs apports mais exclus de toute gestion externe."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Deux catégories d'associés",
+   "Les règles propres",
+   "L'interdiction de gestion du commanditaire",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 108,
+  "slug": "108-la-societe-anonyme-constitution-et-capital",
+  "titre": "La société anonyme : constitution et capital",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 385 à 389 et 414.",
+  "essentiel": [
+   "La société anonyme est la société dans laquelle les actionnaires ne répondent des dettes sociales qu'à concurrence de leurs apports, avec un capital minimum de dix millions de francs CFA, entièrement souscrit avant la signature des statuts et libéré d'un quart au moins à la souscription."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les caractères",
+   "Le capital",
+   "Le mode d'administration",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 109,
+  "slug": "109-la-direction-de-la-societe-anonyme-avec-conseil-d-administration",
+  "titre": "La direction de la société anonyme avec conseil d'administration",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 122, 414 à 416, 462 à 465, 477 à 480, 485 à 488 et 492.",
+  "essentiel": [
+   "La société anonyme avec conseil d'administration est dirigée soit par un président-directeur général, soit par un président du conseil d'administration et un directeur général distincts ; le dirigeant qui assure la direction générale dispose envers les tiers des pouvoirs les plus étendus, que les clauses limitatives ne peuvent leur opposer."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le conseil d'administration",
+   "Première formule : le président-directeur général",
+   "Seconde formule : un président et un directeur général",
+   "La protection des tiers",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 110,
+  "slug": "110-le-commissaire-aux-comptes",
+  "titre": "Le commissaire aux comptes",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 694 à 700, 702 à 705, 710 à 712, 721, 725 et 726.",
+  "essentiel": [
+   "Dans la société anonyme, le contrôle est exercé par un ou plusieurs commissaires aux comptes, professionnels indépendants qui certifient les états financiers et vérifient en permanence la comptabilité, sans jamais s'immiscer dans la gestion."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Qui peut être commissaire aux comptes ?",
+   "La désignation et la durée",
+   "La mission",
+   "La responsabilité",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
  }
 ];

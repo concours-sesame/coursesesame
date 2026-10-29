@@ -205,14 +205,14 @@ async function envoyer(a: string, prenom: string, titre: string, fiche: number, 
 <p>Voici la fiche de révision n° ${fiche}, <b>${esc(titre)}</b>, en entier : l'essentiel, les textes cités mot pour mot, les exemples, les pièges des correcteurs et les questions corrigées.</p>
 ${bouton}
 <p>Le lien reste valable 7 jours.</p>
-<p>Les 100 fiches de révision se lisent dans l'espace abonnés, avec les sujets corrigés et les QCM, dès 500 FCFA la journée : <a href="${SITE}/espace-abonnes/" style="color:#0f2a5c">coursesesame.com/espace-abonnes</a>.</p>
+<p>Toutes nos fiches de révision se lisent dans l'espace abonnés, avec les sujets corrigés et les QCM, dès 500 FCFA la journée : <a href="${SITE}/espace-abonnes/" style="color:#0f2a5c">coursesesame.com/espace-abonnes</a>.</p>
 <p>Bonnes révisions,<br>L'équipe des Cours Sésame et SAJ</p>
 </td></tr>
 <tr><td style="padding:16px 24px;background:#f8f4ec;font-size:12px;line-height:1.5;color:#5b6475">Vous recevez cet e-mail parce que vous avez demandé cette fiche sur coursesesame.com.${desinscription}
 <br>Pour nous écrire, utilisez WhatsApp au ${WHATSAPP}. Cette adresse ne reçoit pas les réponses.</td></tr>
 </table></td></tr></table></body></html>`;
   const corps = [`Bonjour ${prenom},`, "", `Voici la fiche de révision n° ${fiche}, ${titre}, en entier :`, lien, "", "Le lien reste valable 7 jours.", "",
-    `Les 100 fiches de révision se lisent dans l'espace abonnés, dès 500 FCFA la journée : ${SITE}/espace-abonnes/`, "",
+    `Toutes nos fiches de révision se lisent dans l'espace abonnés, dès 500 FCFA la journée : ${SITE}/espace-abonnes/`, "",
     "L'équipe des Cours Sésame et SAJ", jeton ? `\nPour ne plus recevoir nos conseils et offres : ${SITE}/fiches/?desinscription=${jeton}` : ""].join("\n");
   return await brevo(a, prenom, `Votre fiche de révision : ${titre}`, html, corps, "fiche-offerte");
 }
