@@ -683,6 +683,21 @@
     });
   }
 
+  /* ---------- Accueil : témoignages d'admis publiés (table temoignages_admis, validés par l'administrateur) ---------- */
+  function initReussites() {
+    const zone = $("#reussite");
+    if (!zone || typeof ESPACE_CONFIG === "undefined" || !window.fetch) return;
+    const NOMS = { infj: "Magistrature", greffe: "Greffe", penitentiaire: "Pénitentiaire", eppjej: "EPPJEJ", ena: "ENA", autre: "Concours" };
+    const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    fetch(ESPACE_CONFIG.url + "/rest/v1/rpc/temoignages_publies", {
+      method: "POST", headers: { apikey: ESPACE_CONFIG.cle, "Content-Type": "application/json" }, body: "{}"
+    }).then(r => r.ok ? r.json() : []).then(liste => {
+      if (!Array.isArray(liste) || !liste.length) return;
+      $("#admis").innerHTML = liste.map(t => `<figure class="review review-admis"><blockquote>« ${esc(t.texte)} »</blockquote><figcaption><cite>${esc(t.prenom)} ${esc(t.initiale)}.</cite>, <small>admis${t.detail ? ", " + esc(t.detail) : ""}, ${esc(NOMS[t.concours] || "Concours")} ${Number(t.annee)}</small></figcaption></figure>`).join("");
+      zone.hidden = false;
+    }).catch(() => { /* hors ligne : le bloc reste caché */ });
+  }
+
   /* ---------- Installation sur l'écran d'accueil ---------- */
   // Chrome et Edge proposent l'installation du site (manifest.webmanifest) : le bouton du pied de page
   // n'apparaît que dans ce cas. Sur iPhone, l'ajout se fait depuis le bouton de partage de Safari (voir la FAQ).
@@ -738,6 +753,7 @@
   initConseiller();
   initQCM();
   initEssai();
+  initReussites();
   initSujetsFiltre();
   initVideos();
   updateCart();

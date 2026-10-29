@@ -35,7 +35,7 @@
   let retourAFaire = ""; // message après une action lancée depuis « À faire aujourd'hui »
   let commandes = [], notes = new Map(), lectures = [], annonces = [], journal = [], blancs = [], epreuvesB = [];
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
-  let visites = [], visitesJours = [], provenances = [], retombeesFb = [], prospects = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
+  let visites = [], visitesJours = [], provenances = [], retombeesFb = [], prospects = [], temoignages = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
   let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
@@ -233,6 +233,8 @@
     blancs = cb.data || []; epreuvesB = eb.data || [];
     visites = vi.data || []; visitesJours = vj.data || [];
     provenances = pv.data || []; retombeesFb = fr.data || []; prospects = pr.data || [];
+    // Témoignages d'admis (page temoignage/) : à vérifier puis publier sur l'accueil
+    try { const tg = await client.from("temoignages_admis").select("*").order("cree_le", { ascending: false }).limit(200); temoignages = tg.data || []; } catch (e) { temoignages = []; }
     demandes = da.data || [];
     telechargements = tl.data || []; pagesLues = pl.data || []; limitesTele = (lt.data || [])[0] || null;
     agentReglages = ar.data || null; agentConsignes = new Map((ac.data || []).map(x => [x.cle, x])); agentEchanges = ae.data || [];
@@ -761,6 +763,7 @@
           <tbody>${retombeesFb.map(x => `<tr><td><b>${esc(x.titre)}</b><small>n° ${Number(x.id)} · ${esc(x.rubrique)} · ${x.publiee_le ? dateFr(String(x.publiee_le).slice(0, 10)) : ""}${x.lien ? "" : " · sans lien vers le site"}</small></td><td><b>${Number(x.visiteurs)}</b></td><td>${Number(x.pages)}</td><td>${Number(x.comptes)}</td></tr>`).join("")}</tbody></table></div>`
           : `<p class="ea-vide">Aucune publication Facebook publiée depuis 90 jours.</p>`}
       </section>
+      ${blocTemoignages()}
       ${blocProspects()}
       <section class="ad-bloc">
         <h3>Les 30 derniers jours</h3>
@@ -772,6 +775,21 @@
   }
   // Fiche offerte (pages fiches/) : contacts laissés par les visiteurs ; « déjà inscrit » si l'e-mail ou le numéro
   // correspond à un compte de l'espace
+  function blocTemoignages() {
+    const etat = t => t.retire_le ? "Retiré" : t.publie ? "Publié" : "À vérifier";
+    const NOMS = { autre: "Autre concours" };
+    return `<section class="ad-bloc">
+        <h3>Témoignages d'admis <span class="n">${temoignages.filter(t => !t.publie && !t.retire_le).length} à vérifier</span></h3>
+        <p class="ad-note">Envoyés depuis <a href="../../temoignage/" target="_blank" rel="noopener">coursesesame.com/temoignage</a>, avec l'accord de publication coché. Vérifiez la réussite avec la personne (le contact n'est jamais publié), puis publiez : le témoignage apparaît dans « Ils ont réussi » sur l'accueil, avec le prénom et l'initiale du nom. Si la personne retire son accord, retirez-le.</p>
+        ${temoignages.length ? `<div class="ad-tableau" role="region" aria-label="Témoignages d'admis" tabindex="0"><table>
+          <thead><tr><th>Reçu</th><th>Qui</th><th>Témoignage</th><th>État</th></tr></thead>
+          <tbody>${temoignages.map(t => `<tr><td>${dateFr(String(t.cree_le).slice(0, 10))}<small>accord du ${dateFr(String(t.accord_le).slice(0, 10))}</small></td>
+            <td><b>${esc(t.prenom)} ${esc(t.nom)}</b><small>${esc(NOMS[t.concours] || nomConcours(t.concours))} ${Number(t.annee)}${t.detail ? ", " + esc(t.detail) : ""}<br>${/^\+?[0-9 .]{8,}$/.test(t.contact) ? `<a href="https://wa.me/${numeroWa(t.contact)}" target="_blank" rel="noopener">${esc(t.contact)}</a>` : esc(t.contact)}</small></td>
+            <td>${esc(t.texte)}</td>
+            <td><b>${etat(t)}</b><div class="ad-actions">${t.publie && !t.retire_le ? `<button class="btn btn-ghost btn-sm" type="button" data-action="temoignage-retirer" data-tid="${t.id}">Retirer</button>` : `<button class="btn btn-gold btn-sm" type="button" data-action="temoignage-publier" data-tid="${t.id}">Publier</button>`}<button class="btn btn-ghost btn-sm" type="button" data-action="temoignage-supprimer" data-tid="${t.id}">Supprimer</button></div></td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="ea-vide">Aucun témoignage reçu pour le moment. Envoyez le lien coursesesame.com/temoignage à vos admis.</p>`}
+      </section>`;
+  }
   function blocProspects() {
     const emails = new Set(abonnes.map(a => String(a.email || "").toLowerCase()));
     const numeros = new Set(abonnes.map(a => numeroWa(a.telephone)));
@@ -1569,6 +1587,20 @@
       const { data, error } = await client.functions.invoke("emails", { body: { action: "essai" } });
       b.disabled = false;
       toast(error ? await erreurFonction(error) : `E-mail d'essai envoyé à ${data.a}. Regardez aussi dans les courriers indésirables.`);
+      return;
+    }
+    if (act === "temoignage-publier" || act === "temoignage-retirer" || act === "temoignage-supprimer") {
+      const id = Number(b.dataset.tid), t = temoignages.find(x => x.id === id);
+      if (!t) return;
+      if (act === "temoignage-supprimer" && !confirm(`Supprimer définitivement le témoignage de ${t.prenom} ${t.nom} ?`)) return;
+      if (act === "temoignage-publier" && !confirm(`Publier le témoignage de ${t.prenom} ${t.nom} sur l'accueil ?\n\nVérifiez d'abord sa réussite au concours avec lui ou elle.`)) return;
+      b.disabled = true;
+      const q = client.from("temoignages_admis");
+      const { error } = act === "temoignage-supprimer" ? await q.delete().eq("id", id)
+        : await q.update(act === "temoignage-publier" ? { publie: true, publie_le: new Date().toISOString(), retire_le: null } : { publie: false, retire_le: new Date().toISOString() }).eq("id", id);
+      b.disabled = false;
+      if (error) return toast(messageErreur(error));
+      recharger(act === "temoignage-publier" ? "Témoignage publié sur l'accueil." : act === "temoignage-retirer" ? "Témoignage retiré du site." : "Témoignage supprimé.");
       return;
     }
     if (act === "recharger") { demarrer(); return; }

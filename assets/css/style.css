@@ -1906,3 +1906,12 @@ html[data-installable] .ea-installer [data-install]:not([hidden]){display:inline
 .fiche-sujets{margin:1.4rem 0;padding:.9rem 1rem;border-left:4px solid var(--gold);background:var(--cream);border-radius:var(--r-sm)}
 .fiche-sujets h3{margin:0 0 .4rem;font-size:1rem}
 .fiche-sujets ul{margin:0;padding-left:1.1rem}
+
+/* Témoignages d'admis : accueil (« Ils ont réussi ») et formulaire (temoignage/) */
+.about-reussite{margin-top:clamp(48px,7vw,80px)}
+.review-admis{border-color:var(--gold)}
+.reussite-lien{margin-top:1rem;font-size:.95rem}
+.reussite-lien a{font-weight:600;text-decoration:underline}
+.about-avis .reviews + .reussite-lien{margin-top:.8rem}
+.temoignage-form{max-width:760px}
+.temoignage-form textarea{width:100%}

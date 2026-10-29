@@ -1343,6 +1343,49 @@ ${voisines.length ? `<section class="section section-cream">
   urls.push(url);
 }
 
+/* ---------- Témoignage d'admis ---------- */
+// Formulaire pour les admis (temoignage.js, fonction deposer_temoignage) : accord de publication coché et daté ;
+// publication seulement après validation dans l'administration ; affichage sur l'accueil (« Ils ont réussi »).
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "temoignage/";
+  const annee = new Date().getFullYear();
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Témoignage", ""]],
+    h1: "Vous avez réussi ? <em>Racontez-le</em>",
+    lead: "Votre parcours peut aider les candidats qui préparent le même concours. Quelques lignes suffisent : comment vous vous êtes préparé, ce qui vous a servi, un conseil pour ceux qui suivent.",
+    ctas: `<a href="#formulaire" class="btn btn-gold">Écrire mon témoignage</a>`,
+    facts: ["Publié après vérification", "Prénom et initiale seulement", "Retrait à tout moment"]
+  })}
+
+<section class="section" id="formulaire">
+  <div class="wrap">
+    <form class="form offerte-form temoignage-form" id="temoignageForm" novalidate>
+      <div class="field"><label for="tgPrenom">Prénom</label><input id="tgPrenom" name="prenom" autocomplete="given-name" maxlength="60" required></div>
+      <div class="field"><label for="tgNom">Nom</label><input id="tgNom" name="nom" autocomplete="family-name" maxlength="60" required><small class="ad-note">Seule l'initiale est publiée.</small></div>
+      <div class="field"><label for="tgConcours">Concours réussi</label><select id="tgConcours" name="concours" required><option value="">Choisir</option>${CONCOURS.map(c => `<option value="${c.id}">${c.court}</option>`).join("")}<option value="autre">Autre concours</option></select></div>
+      <div class="field"><label for="tgAnnee">Année de réussite</label><input id="tgAnnee" name="annee" type="number" inputmode="numeric" min="2000" max="${annee}" value="${annee}" required></div>
+      <div class="field full"><label for="tgDetail">Précision (facultatif)</label><input id="tgDetail" name="detail" maxlength="120" placeholder="Exemple : cycle supérieur, rang 12"></div>
+      <div class="field full"><label for="tgTexte">Votre témoignage</label><textarea id="tgTexte" name="texte" rows="6" minlength="40" maxlength="800" required></textarea><small class="ad-note"><span id="tgCompte">0</span>/800 caractères, 40 au moins.</small></div>
+      <div class="field full"><label for="tgContact">Téléphone WhatsApp ou e-mail</label><input id="tgContact" name="contact" maxlength="254" required><small class="ad-note">Jamais publié : il sert seulement à vérifier votre réussite avant la publication.</small></div>
+      <label class="offerte-accord full"><input type="checkbox" name="accord" value="1" required> J'autorise Les Cours Sésame et SAJ à publier ce témoignage, avec mon prénom, l'initiale de mon nom, mon concours et mon année de réussite, sur coursesesame.com et sur leurs pages de réseaux sociaux. Je peux retirer cet accord à tout moment en écrivant sur WhatsApp.</label>
+      <button class="btn btn-gold" type="submit">Envoyer mon témoignage</button>
+      <p class="offerte-etat" id="temoignageEtat" role="status"></p>
+    </form>
+    <div class="offerte-ok" id="temoignageOk" hidden><p><b>Merci et bravo pour votre réussite !</b> Nous vérifions votre témoignage avant de le publier ; nous vous contacterons si besoin.</p></div>
+    <p class="offerte-mention">Voir nos <a href="${prefix}mentions-legales/#temoignages">données personnelles</a>.</p>
+  </div>
+</section>`;
+  write("temoignage/index.html", page({
+    prefix, url, body, scripts: ["assets/js/espace-config.js", "assets/js/temoignage.js"],
+    title: ["Témoignage d'admis : racontez votre réussite", "Témoignage d'admis"],
+    description: "Admis à la magistrature, au greffe, à l'ENA ou à un autre concours ? Racontez votre préparation pour aider les candidats qui suivent.",
+    ld: [breadcrumb([["Accueil", SITE], ["Témoignage", url]])]
+  }));
+  urls.push(url);
+}
+
 /* ---------- Espace abonnés ---------- */
 // Pages fixes ; tout le reste (connexion, contenus, administration) est affiché par espace.js et espace-admin.js
 const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-config.js", "assets/js/espace.js"];
@@ -1555,6 +1598,8 @@ ${contactCTA(prefix)}`;
     <p>Certaines fiches de révision sont offertes en entier. Pour les recevoir, vous indiquez votre prénom et une adresse e-mail ou un numéro WhatsApp, et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi la date, la fiche demandée et l'adresse de la page. Votre adresse IP est notée pour limiter les abus, puis effacée au bout d'un jour.</p>
     <p>Ces informations servent à vous remettre la fiche, par un lien de téléchargement et, si vous avez indiqué une adresse, par un e-mail envoyé par notre prestataire Brevo. Si vous cochez la case prévue, elles servent aussi à vous envoyer nos conseils de révision et nos offres, par e-mail ou sur WhatsApp ; sans cette case, nous ne vous écrivons pas. Vous pouvez retirer votre accord à tout moment, par le lien figurant dans nos e-mails ou en nous écrivant sur WhatsApp.</p>
     <p>Elles sont conservées chez Supabase, en Europe, consultables par l'administrateur seulement, et ne sont ni vendues ni cédées. Elles sont effacées sur simple demande sur WhatsApp, et au plus tard trois ans après votre dernier échange avec nous.</p>
+    <h2 id="temoignages">Témoignages d'admis</h2>
+    <p>Si vous envoyez un témoignage de réussite, nous enregistrons votre prénom, votre nom, votre concours, votre année de réussite, la précision facultative, votre texte, votre contact (téléphone ou e-mail), ainsi que la date de votre accord de publication. Seuls votre prénom, l'initiale de votre nom, votre concours, votre année, la précision et votre texte sont publiés, et seulement après vérification. Votre contact sert uniquement à cette vérification. Vous pouvez retirer votre accord à tout moment sur WhatsApp : le témoignage est alors retiré du site. Les données sont conservées chez Supabase, consultables par l'administrateur seulement, et effacées sur simple demande.</p>
     <h2 id="test-de-niveau">Test de niveau</h2>
     <p>Pour voir le résultat du test de niveau gratuit, vous indiquez votre prénom et une adresse e-mail ou un numéro WhatsApp. Nous enregistrons aussi le concours choisi, votre résultat (la note et le nombre de bonnes réponses par matière), la date et l'adresse de la page ; votre adresse IP est notée pour limiter les abus, puis effacée au bout d'un jour. Ces informations servent à vous afficher votre résultat et, si vous avez indiqué une adresse, à vous l'envoyer par un e-mail de notre prestataire Brevo. Pour le reste, les règles de la fiche offerte ci-dessus s'appliquent : conseils et offres seulement si vous cochez la case, conservation chez Supabase, effacement sur simple demande et au plus tard trois ans après votre dernier échange avec nous.</p>
 
