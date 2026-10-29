@@ -818,7 +818,7 @@
         <div class="field"><label for="iDate">Date du concours (facultatif)</label><input id="iDate" type="date" min="${auj()}"></div>
         <div class="field full"><label for="iEmail">Adresse e-mail</label><input id="iEmail" type="email" autocomplete="email" required></div>
         <div class="field full"><label for="iMdp">Mot de passe (8 caractères au moins)</label><input id="iMdp" type="password" autocomplete="new-password" minlength="8" required></div>
-        <div class="field full"><label for="iParrain">Code de parrainage (facultatif)</label><input id="iParrain" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" value="${esc(codeParrainRecu())}"></div>
+        <div class="field full"><label for="iParrain">Code de parrainage (facultatif)</label><input id="iParrain" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" value="${esc(codeParrainRecu())}">${codeParrainRecu() ? `<small class="ea-aide">Vous venez de la part d'un ami : son code est déjà indiqué, vous n'avez rien à faire.</small>` : ""}</div>
         <label class="ea-accord full"><input type="checkbox" id="iAccord" required><span>J'accepte que ces informations servent à gérer mon abonnement, comme l'expliquent les <a href="${ROOT}mentions-legales/#espace-abonnes" target="_blank">mentions légales</a>.</span></label>
         <p class="ea-msg" role="alert"></p>
         <button class="btn btn-navy" type="submit">Créer mon compte</button>
@@ -1964,15 +1964,19 @@
       return sessionStorage.getItem(CLE_PARRAIN) || "";
     } catch (e) { return q || ""; }
   }
-  let filleuls = null;
+  // Compteur (mon_parrainage) : amis inscrits avec le code, amis abonnés (récompensés), jours gagnés
+  let parrainage = null;
+  const lienParrain = code => `${new URL(ROOT + "espace-abonnes/", location.href).href}?parrain=${code}#inscription`;
   function parrainageHTML() {
     const code = etat.profil && etat.profil.code_parrain;
     if (!code || !etat.abo.actif) return "";
-    const lien = `${new URL(ROOT + "espace-abonnes/", location.href).href}?parrain=${code}#inscription`;
-    const msg = `Je prépare mes concours avec l'espace abonnés des Cours Sésame et SAJ : ouvrages complets, sujets corrigés, QCM, textes officiels et agent de révision. Inscris-toi avec mon code ${code} :\n${lien}`;
-    return `<section class="ea-parrainage"><div><h3>Parrainez un ami</h3>
-        <p>Votre code : <b class="ea-code">${esc(code)}</b>. Votre ami l'indique en créant son compte. Dès son premier abonnement payé, <b>7 jours vous sont offerts</b>, ajoutés à la suite de votre abonnement.${filleuls ? ` Déjà ${filleuls} ${filleuls > 1 ? "amis parrainés" : "ami parrainé"}, merci !` : ""}</p></div>
-        <a class="btn btn-wa btn-sm" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${icone("i-wa")}Inviter sur WhatsApp</a>
+    const msg = `Je prépare mes concours avec l'espace abonnés des Cours Sésame et SAJ : sujets corrigés, fiches de révision, QCM, textes officiels et concours blancs, dès 500 FCFA la journée. Inscris-toi avec mon code ${code} :\n${lienParrain(code)}`;
+    const p = parrainage || { inscrits: 0, abonnes: 0, jours: 0 };
+    return `<section class="ea-parrainage" id="eaParrainage"><div class="ea-parrainage-texte"><h3>Parrainez un ami, gagnez 7 jours</h3>
+        <p>Votre code : <b class="ea-code">${esc(code)}</b>. Votre ami l'indique en créant son compte, ou ouvre simplement votre lien. Dès son premier abonnement payé, <b>7 jours vous sont offerts</b>, ajoutés à la suite de votre abonnement. Sans limite : 4 amis abonnés, c'est près d'un mois gratuit.</p>
+        <ul class="ea-parrainage-compteur"><li><b>${p.inscrits}</b>${p.inscrits > 1 ? "amis inscrits" : "ami inscrit"}</li><li><b>${p.abonnes}</b>${p.abonnes > 1 ? "amis abonnés" : "ami abonné"}</li><li><b>${p.jours}</b>${p.jours > 1 ? "jours gagnés" : "jour gagné"}</li></ul></div>
+        <div class="ea-parrainage-boutons"><a class="btn btn-wa btn-sm" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${icone("i-wa")}Inviter sur WhatsApp</a>
+        <button class="btn btn-ghost btn-sm" type="button" data-copier-lien="${esc(lienParrain(code))}">Copier mon lien</button></div>
       </section>`;
   }
   async function majOutils() {
@@ -2010,12 +2014,12 @@
         chargerCopies().catch(() => { mesCopies = []; })
       ]);
       contenus = error ? [] : data;
-      if (etat.abo.actif) { try { const r = await client.rpc("mes_parrainages"); filleuls = r.error ? null : r.data; } catch (e) { filleuls = null; } }
+      if (etat.abo.actif) { try { const r = await client.rpc("mon_parrainage"); parrainage = r.error ? null : r.data; } catch (e) { parrainage = null; } }
       // Visite précédente sur cet appareil : relevée une fois par chargement de la page, puis remplacée
       if (vuAvant === null) { const v = lu(cleAbonne("visite"), 0); vuAvant = v ? new Date(v) : false; ecrit(cleAbonne("visite"), Date.now()); }
       memoLecture = (c, page) => { if (c && c.id) ecrit(cleAbonne("reprise"), { id: c.id, page: Number(page) || 1 }); };
       favoris = crochetFavoris;
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + outilsHTML() + agentHTML() + bibliothequeHTML() + parrainageHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
       brancherCompte();
     } else {
       memoLecture = null; favoris = null;
@@ -2223,6 +2227,14 @@
     if (dem) {
       if (dem.dataset.demarrage === "masquer") { try { localStorage.setItem(CLE_DEMARRAGE, "1"); } catch (x) { /* stockage indisponible */ } const d = $("#eaDemarrage"); if (d) d.remove(); }
       else { const b = $(".ea-biblio", racine); if (b) b.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      return;
+    }
+    const copie = e.target.closest("[data-copier-lien]");
+    if (copie) {
+      const lien = copie.dataset.copierLien;
+      const fait = () => toast("Lien copié : collez-le dans un message à votre ami.");
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(lien).then(fait, () => prompt("Copiez votre lien :", lien));
+      else prompt("Copiez votre lien :", lien);
       return;
     }
     if (e.target.closest("[data-vip-teaser]")) {

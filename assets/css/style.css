@@ -1223,7 +1223,13 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
 .ea-blanc-note b{font-size:2rem;color:var(--gold)}
 .ea-parrainage{display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:1.5rem 0 0;padding:1rem 1.1rem;border:1px solid var(--line);border-radius:var(--r);background:var(--cream)}
 .ea-parrainage h3{margin:0 0 .3rem;font-size:1.05rem}
-.ea-parrainage p{margin:0;max-width:60ch}
+.ea-parrainage p{margin:0;max-width:62ch}
+.ea-parrainage{border-color:var(--gold);background:#fff8e8}
+.ea-parrainage-texte{flex:1 1 380px}
+.ea-parrainage-compteur{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;padding:0;margin:.8rem 0 0}
+.ea-parrainage-compteur li{display:flex;align-items:baseline;gap:.35rem;font-size:.92rem;color:var(--muted)}
+.ea-parrainage-compteur b{font-family:var(--display);font-size:1.5rem;color:var(--navy)}
+.ea-parrainage-boutons{display:flex;flex-wrap:wrap;gap:.5rem}
 .ea-code{font-family:ui-monospace,Consolas,monospace;letter-spacing:.08em;background:var(--paper);padding:.05rem .35rem;border:1px solid var(--line);border-radius:4px}
 .ea-textes-cherche{margin:0 0 1rem;padding:1rem;border:1px solid var(--line);border-radius:var(--r);background:var(--cream)}
 .ea-textes-cherche label{display:block;font-weight:700;margin-bottom:.4rem}
