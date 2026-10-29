@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-controle-de-constitutionnalite",
+ "titre": "Le contrôle de constitutionnalité",
+ "rubrique": "Droit constitutionnel",
+ "scenes": [
+  {"type": "intro", "titre": "Le contrôle de constitutionnalité",
+   "dit": ["Une notion, une minute.", "Le contrôle de *constitutionnalité*."]},
+  {"type": "question", "titre": "Au cours de son procès, il conteste la loi.",
+   "texte": "Peut-il saisir le Conseil constitutionnel ?", "cueTexte": 1,
+   "dit": ["Au cours de son procès, Gnamien estime que la loi qu'on lui applique est contraire à la Constitution.", "Peut-il saisir le *Conseil constitutionnel* ?"]},
+  {"type": "article", "titre": "Article 135 de la Constitution",
+   "citation": "Tout plaideur peut, par voie d'exception, soulever l'inconstitutionnalité d'une loi devant toute juridiction.", "cueCitation": 1,
+   "dit": ["Selon l'article *135* de la Constitution,", "tout plaideur peut, par voie d'*exception*, soulever l'inconstitutionnalité d'une loi devant toute juridiction."]},
+  {"type": "etapes", "titre": "Deux voies",
+   "items": [
+     {"n": "1", "t": "La voie d'action", "d": "Avant l'entrée en vigueur : lois organiques, règlements des assemblées, engagements internationaux (article 134)", "cue": 1},
+     {"n": "2", "t": "La voie d'exception", "d": "Au cours d'un procès, par tout plaideur (article 135)", "cue": 2},
+     {"n": "3", "t": "Quinze jours", "d": "Le juge sursoit à statuer et donne quinze jours au plaideur pour saisir le Conseil", "cue": 3}],
+   "dit": ["Deux voies. La voie d'*action*, avant l'entrée en vigueur de la loi, par le Président de la République ou les présidents des chambres.", "La voie d'*exception*, au cours d'un procès, par tout plaideur.", "Le juge sursoit alors à statuer et donne au plaideur *quinze jours* pour saisir le Conseil constitutionnel."]},
+  {"type": "blocs", "titre": "Les effets",
+   "items": [
+     {"t": "Voie d'action", "d": "La disposition contraire ne peut être promulguée ; elle est nulle à l'égard de tous.", "cue": 1},
+     {"t": "Voie d'exception", "d": "La disposition est abrogée ; la décision s'impose à tous, au-delà des parties.", "cue": 2},
+     {"t": "Aucun recours", "d": "« Les décisions du Conseil constitutionnel ne sont susceptibles d'aucun recours » (article 138).", "cue": 3, "fort": true}],
+   "dit": ["Par voie d'action, la disposition contraire à la Constitution ne peut pas être promulguée : elle est *nulle*.", "Par voie d'exception, elle est *abrogée*, et la décision s'impose à tous, au-delà des parties au procès.", "Et les décisions du Conseil constitutionnel ne sont susceptibles d'*aucun* recours."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Saisine possible", "d": "Gnamien soulève l'exception, puis saisit le Conseil dans les quinze jours.", "cue": 1},
+     {"ok": false, "t": "Exception perdue", "d": "Sans preuve de la saisine dans les quinze jours, la juridiction passe outre.", "cue": 2}],
+   "dit": ["Gnamien soulève l'exception devant son juge, puis saisit le Conseil dans les quinze jours : sa demande est *recevable*.", "S'il ne prouve pas la saisine dans ce délai, la juridiction *passe outre*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Action ou exception ?", "d": "La voie d'action précède l'entrée en vigueur de la loi ; la voie d'exception intervient après, au cours d'un procès.", "cue": 0}],
+   "dit": ["Le piège : confondre voie d'action et voie d'exception.", "La première intervient *avant* l'entrée en vigueur de la loi ; la seconde, *après*, au cours d'un procès."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

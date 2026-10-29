@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-etablissement-de-la-filiation",
+ "titre": "L'établissement de la filiation",
+ "rubrique": "Droit de la famille",
+ "scenes": [
+  {"type": "intro", "titre": "L'établissement de la filiation",
+   "dit": ["Une notion, une minute.", "L'établissement de la *filiation*."]},
+  {"type": "question", "titre": "Un enfant naît deux cents jours après le décès du mari.",
+   "texte": "Qui est son père ?", "cueTexte": 1,
+   "dit": ["Un enfant naît deux cents jours après le décès du mari de sa mère.", "Qui est son *père* ?"]},
+  {"type": "article", "titre": "Article 2 de la loi relative à la filiation",
+   "citation": "L'enfant conçu pendant le mariage ou né moins de trois cents jours après la dissolution du mariage, a pour père le mari de sa mère.", "cueCitation": 1,
+   "dit": ["Selon l'article *2* de la loi de 2019 relative à la filiation,", "l'enfant conçu pendant le mariage, ou né moins de trois cents jours après sa dissolution, a pour père le *mari* de sa mère."]},
+  {"type": "etapes", "titre": "Dans le mariage",
+   "items": [
+     {"n": "1", "t": "La présomption de paternité", "d": "Le père est le mari de la mère (article 2)", "cue": 1},
+     {"n": "2", "t": "Le désaveu", "d": "Impossibilité physique ou preuve scientifique (article 4)", "cue": 2},
+     {"n": "3", "t": "Un délai bref", "d": "Deux mois à compter de la naissance (article 6)", "cue": 3}],
+   "dit": ["Dans le mariage, la loi présume que le père est le *mari* de la mère.", "Le mari peut désavouer l'enfant s'il prouve qu'il ne peut pas en être le père.", "Mais il doit agir dans un délai de *deux mois*."]},
+  {"type": "blocs", "titre": "Hors mariage",
+   "items": [
+     {"t": "La mère", "d": "La filiation résulte du seul fait de la naissance (article 19).", "cue": 1},
+     {"t": "Le père", "d": "Une reconnaissance ou un jugement (article 19, alinéa 3).", "cue": 2},
+     {"t": "L'épouse informée", "d": "L'homme marié qui reconnaît un enfant né hors mariage doit en informer son épouse, à peine de nullité (article 22).", "cue": 3}],
+   "dit": ["Hors mariage, la filiation maternelle résulte du seul fait de la *naissance*.", "La filiation paternelle résulte d'une *reconnaissance* ou d'un jugement.", "Et l'homme marié qui reconnaît un enfant né hors mariage doit d'abord en informer son épouse, à peine de nullité."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Le père est le défunt mari", "d": "L'enfant est né moins de trois cents jours après la dissolution du mariage.", "cue": 1},
+     {"ok": false, "t": "Désaveu tardif", "d": "Un mari présent à la naissance conteste sa paternité un an plus tard.", "cue": 2}],
+   "dit": ["L'enfant est né moins de trois cents jours après le décès : son père est le défunt *mari*.", "Un mari présent à la naissance qui conteste sa paternité un an plus tard agit trop *tard*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "La mère n'a pas à reconnaître", "d": "Hors mariage, la naissance suffit, sauf si l'acte de naissance ne porte pas son nom.", "cue": 0}],
+   "dit": ["Le piège : exiger une reconnaissance de la mère hors mariage.", "La *naissance* suffit, sauf si l'acte de naissance ne porte pas son nom."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-abus-de-confiance",
+ "titre": "L'abus de confiance",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {"type": "intro", "titre": "L'abus de confiance",
+   "dit": ["Une notion, une minute.", "L'*abus de confiance*."]},
+  {"type": "question", "titre": "Il confie sa voiture au garagiste, qui la vend.",
+   "texte": "Vol ou abus de confiance ?", "cueTexte": 1,
+   "dit": ["Dablé confie sa voiture à un garagiste pour une réparation. Le garagiste la vend.", "Est-ce un vol, ou un *abus de confiance* ?"]},
+  {"type": "article", "titre": "Article 467 du Code pénal",
+   "citation": "Constitue un abus de confiance, le détournement, la dissipation ou la destruction, par une personne, au préjudice d'autrui, de fonds, de valeurs ou d'un bien meuble quelconque qui lui ont été remis et qu'elle a acceptés à charge de les rendre, de les représenter, d'en faire un usage ou un emploi déterminé.", "cueCitation": 1,
+   "dit": ["Selon l'article *467* du Code pénal,", "l'abus de confiance est le détournement, la dissipation ou la destruction d'un bien *remis*, à charge de le rendre, de le représenter ou d'en faire un usage déterminé."]},
+  {"type": "etapes", "titre": "Les éléments",
+   "items": [
+     {"n": "1", "t": "Une remise volontaire", "d": "Le bien a été remis à l'auteur, qui l'a accepté", "cue": 1},
+     {"n": "2", "t": "Une obligation", "d": "Rendre, représenter, ou en faire un usage déterminé", "cue": 2},
+     {"n": "3", "t": "Un détournement", "d": "Détournement, dissipation ou destruction, au préjudice d'autrui", "cue": 3}],
+   "dit": ["D'abord, une remise *volontaire* : le bien a été remis à l'auteur, qui l'a accepté.", "Ensuite, une obligation : le rendre, le représenter, ou en faire un usage déterminé.", "Enfin, un *détournement*, une dissipation ou une destruction, au préjudice d'autrui."]},
+  {"type": "blocs", "titre": "La répression",
+   "items": [
+     {"t": "Peine de base", "d": "Un à cinq ans d'emprisonnement et 300 000 à 3 000 000 de francs d'amende (article 467).", "cue": 1},
+     {"t": "Une présomption", "d": "La remise prouvée, celui qui ne peut rendre ni justifier de l'usage est présumé avoir détourné.", "cue": 2},
+     {"t": "Les professionnels", "d": "Officier public, liquidateur, mandataire : peines portées au double (article 468).", "cue": 3, "fort": true}],
+   "dit": ["La peine : un à cinq ans d'emprisonnement et une amende de trois cent mille à trois millions de francs.", "Une fois la remise prouvée, celui qui ne peut ni rendre le bien ni justifier de son usage est *présumé* l'avoir détourné.", "Et pour un officier public, un liquidateur ou un mandataire, les peines sont portées au *double*."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Abus de confiance", "d": "La voiture a été remise au garagiste pour être réparée et rendue.", "cue": 1},
+     {"ok": false, "t": "Pas un abus de confiance, mais un vol", "d": "Le garagiste aurait pris la voiture sans qu'on la lui remette.", "cue": 2}],
+   "dit": ["La voiture a été remise au garagiste pour être réparée et rendue : c'est un *abus de confiance*.", "S'il l'avait prise sans qu'on la lui remette, ce serait un *vol*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Sans remise, pas d'abus de confiance", "d": "Sans remise volontaire, pensez au vol ; avec une remise obtenue par tromperie, à l'escroquerie.", "cue": 0}],
+   "dit": ["Le piège : retenir l'abus de confiance sans remise préalable.", "Sans remise volontaire, pensez au *vol*. Avec une remise obtenue par tromperie, à l'*escroquerie*."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

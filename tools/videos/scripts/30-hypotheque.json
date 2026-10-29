@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-hypotheque",
+ "titre": "L'hypothèque",
+ "rubrique": "Droit OHADA",
+ "scenes": [
+  {"type": "intro", "titre": "L'hypothèque",
+   "dit": ["Une notion, une minute.", "L'*hypothèque*."]},
+  {"type": "question", "titre": "La banque prête vingt millions contre sa maison.",
+   "texte": "Que peut faire la banque s'il ne paie pas ?", "cueTexte": 1,
+   "dit": ["Pour financer son commerce, N'Guessan emprunte vingt millions de francs et consent une hypothèque sur sa maison.", "Que peut faire la *banque* s'il ne rembourse pas ?"]},
+  {"type": "article", "titre": "Article 190 de l'Acte uniforme portant organisation des sûretés",
+   "citation": "L'hypothèque est l'affectation d'un immeuble déterminé ou déterminable appartenant au constituant en garantie d'une ou plusieurs créances, présentes ou futures à condition qu'elles soient déterminées ou déterminables.", "cueCitation": 1,
+   "dit": ["Selon l'article *190* de l'Acte uniforme OHADA portant organisation des sûretés,", "l'hypothèque est l'affectation d'un *immeuble* appartenant au constituant en garantie d'une ou plusieurs créances."]},
+  {"type": "etapes", "titre": "La constitution",
+   "items": [
+     {"n": "1", "t": "Un immeuble immatriculé", "d": "En principe présent et immatriculé (article 192)", "cue": 1},
+     {"n": "2", "t": "Un acte", "d": "Authentique, ou sous seing privé suivant un modèle agréé (articles 203 à 208)", "cue": 2},
+     {"n": "3", "t": "L'inscription", "d": "Elle prend rang du jour de l'inscription (article 195)", "cue": 3}],
+   "dit": ["L'hypothèque porte en principe sur un immeuble présent et *immatriculé*.", "Elle est constituée par acte authentique, ou par acte sous seing privé suivant un modèle agréé.", "Et elle prend rang du jour de son *inscription*. Avant, elle est inopposable aux tiers."]},
+  {"type": "blocs", "titre": "Les effets",
+   "items": [
+     {"t": "Droit de préférence", "d": "Le créancier est payé sur le prix avant les autres (article 197).", "cue": 1},
+     {"t": "Droit de suite", "d": "Il saisit l'immeuble même vendu à un tiers (article 223).", "cue": 2},
+     {"t": "La réalisation", "d": "Vente forcée selon la saisie immobilière, ou attribution judiciaire, sauf résidence principale (article 198).", "cue": 3}],
+   "dit": ["Deux droits. Le droit de *préférence* : le créancier est payé sur le prix avant les autres.", "Le droit de *suite* : il peut saisir l'immeuble même s'il a été vendu à un tiers.", "La réalisation se fait par la vente forcée, ou par l'attribution de l'immeuble au créancier, sauf s'il s'agit de la résidence principale du constituant."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "La banque est protégée", "d": "Hypothèque inscrite : elle fait vendre la maison et se paie en priorité.", "cue": 1},
+     {"ok": false, "t": "Pas d'attribution", "d": "Si la maison est la résidence principale de N'Guessan, elle ne peut pas se la faire attribuer.", "cue": 2}],
+   "dit": ["L'hypothèque est inscrite : la banque peut faire vendre la maison et se payer en *priorité*.", "Mais si c'est la résidence principale de N'Guessan, elle ne peut pas se la faire *attribuer* par le juge."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "L'hypothèque non inscrite", "d": "Avant l'inscription, l'acte est inopposable aux tiers et vaut seulement promesse entre les parties (article 206).", "cue": 0}],
+   "dit": ["Le piège : opposer aux tiers une hypothèque non inscrite.", "Selon l'article 206, avant l'inscription, l'acte est *inopposable* aux tiers ; il vaut seulement promesse entre les parties."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
