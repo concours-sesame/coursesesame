@@ -1,8 +1,7 @@
 import { chromium } from 'playwright'; import fs from 'fs'; import path from 'path';
 const [,, scr, out, ...ts] = process.argv;
 const D = JSON.parse(fs.readFileSync(scr)); const T = JSON.parse(fs.readFileSync(out + '/calendrier.json'));
-const exe = fs.readdirSync('/opt/pw-browsers').filter(x => x.startsWith('chromium-'))[0];
-const b = await chromium.launch({ executablePath: `/opt/pw-browsers/${exe}/chrome-linux/chrome` });
+const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: 720, height: 1280 } });
 const errs=[]; p.on('pageerror', e => errs.push(String(e)));
 await p.goto('file://' + path.resolve('rendu.html'));

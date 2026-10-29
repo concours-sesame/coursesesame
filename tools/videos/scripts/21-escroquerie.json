@@ -5,7 +5,7 @@
  "scenes": [
   {"type": "intro", "titre": "L'escroquerie",
    "dit": ["Une notion, une minute.", "L'*escroquerie*."]},
-  {"type": "question", "titre": "Il paie 500 000 francs pour un faux recrutement.",
+  {"type": "question", "titre": "Il paie 500 000 francs pour un faux recrutement.",
    "texte": "Est-ce une escroquerie ?", "cueTexte": 1,
    "dit": ["Se présentant comme agent de l'administration, Zouzou promet à Naounou un recrutement dans la fonction publique contre cinq cent mille francs. Naounou paie.", "Est-ce une *escroquerie* ?"]},
   {"type": "article", "titre": "Article 471 du Code pénal",
@@ -19,8 +19,8 @@
    "dit": ["Il faut d'abord une *tromperie* : faux nom, fausse qualité, abus d'une qualité vraie, ou manœuvres frauduleuses.", "Ensuite, une *remise* : c'est la victime elle-même qui remet le bien, parce qu'elle a été trompée.", "Enfin, un préjudice, et la volonté de tromper pour obtenir la remise."]},
   {"type": "blocs", "titre": "La sanction",
    "items": [
-     {"t": "Peine de base", "d": "Un à cinq ans d'emprisonnement et 300 000 à 3 000 000 de francs d'amende.", "cue": 1},
-     {"t": "Appel au public", "d": "L'emprisonnement peut être porté à dix ans et l'amende à 10 000 000 de francs (article 471, alinéa 2).", "cue": 2},
+     {"t": "Peine de base", "d": "Un à cinq ans d'emprisonnement et 300 000 à 3 000 000 de francs d'amende.", "cue": 1},
+     {"t": "Appel au public", "d": "L'emprisonnement peut être porté à dix ans et l'amende à 10 000 000 de francs (article 471, alinéa 2).", "cue": 2},
      {"t": "La tentative", "d": "Elle est punissable (article 471, alinéa 2).", "cue": 3, "fort": true}],
    "dit": ["La sanction : un à cinq ans d'emprisonnement et une amende de trois cent mille à trois millions de francs.", "En cas d'appel au public pour émettre des titres, l'emprisonnement peut être porté à *dix* ans.", "Et la tentative est punissable."]},
   {"type": "cas", "titre": "Un exemple",
