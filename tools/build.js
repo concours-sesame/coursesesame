@@ -172,6 +172,7 @@ function essaiHTML() {
         <p><b class="essai-resultat"></b> ${q.explication}</p>
         <p class="essai-demain" hidden></p>
         <div class="essai-actions"><a class="btn btn-gold" href="espace-abonnes/#inscription">Créer mon compte</a><a class="btn btn-ghost essai-suite" href="methodes/#qcm">Les 10 questions du QCM</a></div>
+        <p class="essai-test">Pour aller plus loin : <a href="test-de-niveau/">le test de niveau gratuit, 20 questions et une note sur 20</a>.</p>
       </div>
       <noscript><p class="essai-noscript">Réponse : ${q.options[q.bonne]}. ${q.explication}</p></noscript>
     </figure>
@@ -1091,7 +1092,7 @@ ${contactCTA(prefix)}`;
     crumbs: [["Accueil", prefix], ["QCM", ""]],
     h1: `Les QCM gratuits`,
     lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : droit civil, droit pénal, procédure pénale, droit administratif, droit OHADA, droits de l'enfant, organisation judiciaire, culture générale et méthode des épreuves. Chaque réponse est expliquée.`,
-    ctas: `<a href="#liste" class="btn btn-gold">Choisir un QCM${arrow}</a><a href="${prefix}sujets/" class="btn btn-ghost">Sujets corrigés</a>`,
+    ctas: `<a href="#liste" class="btn btn-gold">Choisir un QCM${arrow}</a><a href="${prefix}test-de-niveau/" class="btn btn-ghost">Test de niveau sur 20</a>`,
     facts: [`<b>${THEMES.length + 1}</b> QCM`, `<b>${nb}</b> questions corrigées`]
   })}
 
@@ -1238,6 +1239,66 @@ ${voisines.length ? `<section class="section section-cream">
       "@context": "https://schema.org", "@type": "ItemList", name: "Fiches de révision",
       itemListElement: FICHES.map((f, i) => ({ "@type": "ListItem", position: i + 1, url: SITE + `fiches/${f.slug}/`, name: f.titre }))
     }]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Test de niveau gratuit ---------- */
+// 20 questions tirées des QCM publics, selon le concours choisi (test-niveau.js) ; pour voir son résultat, le visiteur
+// laisse son prénom et un e-mail ou un numéro WhatsApp (fonction fiche-offerte, action « test », table prospects).
+{
+  const qc = {};
+  vm.createContext(qc);
+  vm.runInContext(read("assets/js/qcm-matieres.js") + "\n;globalThis.Q=QCM_MATIERES;", qc);
+  const tous = CONCOURS.map(c => c.id);
+  const banque = [{ nom: "Méthode des épreuves", lien: "methodes/#qcm", concours: tous, questions: ctx.D.QCM },
+    ...qc.Q.map(t => ({ nom: t.nom, lien: `qcm/${t.slug}/`, concours: t.concours, questions: t.questions }))]
+    .map(t => ({ ...t, questions: t.questions.map(q => ({ q: q.q, options: q.options, bonne: q.bonne, explication: q.explication })) }));
+  write("assets/qj/test.json", JSON.stringify(banque));
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "test-de-niveau/";
+  const total = banque.reduce((n, t) => n + t.questions.length, 0);
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Test de niveau", ""]],
+    h1: "Test de niveau <em>gratuit</em>",
+    lead: "Vingt questions tirées de nos QCM, choisies selon votre concours. À la fin : votre note sur 20, vos points forts et vos points faibles matière par matière, la correction de chaque question et nos conseils pour la suite.",
+    ctas: `<a href="#test" class="btn btn-gold">Commencer le test</a>`,
+    facts: ["<b>20</b> questions", "environ <b>10</b> minutes", "résultat immédiat"]
+  })}
+
+<section class="section" id="test">
+  <div class="wrap">
+    <div class="test-niveau" id="testNiveau" data-banque="${prefix}assets/qj/test.json?v=${require("crypto").createHash("sha1").update(JSON.stringify(banque)).digest("hex").slice(0, 10)}" data-prefix="${prefix}">
+      <div class="test-etape" data-etape="debut">
+        <h2 class="h-section">Quel concours <em>préparez-vous ?</em></h2>
+        <p>Les questions sont tirées au hasard parmi les ${total} questions de nos QCM, dans les matières de votre concours. Prenez une feuille si besoin : pas de chronomètre, mais répondez sans chercher la réponse.</p>
+        <div class="test-concours">${CONCOURS.map(c => `<button class="btn btn-ghost" type="button" data-concours="${c.id}">${c.court}</button>`).join("")}</div>
+      </div>
+      <div class="test-etape" data-etape="question" hidden></div>
+      <div class="test-etape" data-etape="contact" hidden>
+        <h2 class="h-section">Votre résultat <em>est prêt</em></h2>
+        <p>Indiquez votre prénom et un e-mail ou un numéro WhatsApp pour l'afficher. Avec un e-mail, nous vous l'envoyons aussi, pour le garder.</p>
+        <form class="form offerte-form" id="testForm" novalidate>
+          <div class="field"><label for="tPrenom">Prénom</label><input id="tPrenom" name="prenom" autocomplete="given-name" maxlength="60" required></div>
+          <div class="field"><label for="tEmail">E-mail</label><input id="tEmail" name="email" type="email" autocomplete="email" maxlength="254"></div>
+          <div class="field"><label for="tWa">ou WhatsApp</label><input id="tWa" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="07 00 00 00 00"></div>
+          <label class="offerte-accord"><input type="checkbox" name="accepte_offres" value="1"> J'accepte de recevoir des conseils de révision et des offres des Cours Sésame et SAJ, par e-mail ou sur WhatsApp. Désinscription possible à tout moment.</label>
+          <button class="btn btn-gold" type="submit">Voir mon résultat</button>
+          <p class="offerte-etat" id="testEtat" role="status"></p>
+        </form>
+        <p class="offerte-mention">Vos coordonnées et votre résultat servent à vous le remettre et, si vous l'acceptez, à vous envoyer nos conseils et offres. Ils ne sont ni vendus ni cédés : voir nos <a href="${prefix}mentions-legales/#test-de-niveau">données personnelles</a>.</p>
+      </div>
+      <div class="test-etape" data-etape="resultat" hidden></div>
+      <noscript><p>Le test de niveau a besoin de JavaScript. Vous pouvez aussi vous entraîner sur <a href="${prefix}qcm/">nos QCM par matière</a>.</p></noscript>
+    </div>
+  </div>
+</section>`;
+  write("test-de-niveau/index.html", page({
+    prefix, url, body, scripts: ["assets/js/espace-config.js", "assets/js/test-niveau.js"],
+    title: ["Test de niveau gratuit pour les concours : magistrature, greffe, ENA", "Test de niveau gratuit pour les concours", "Test de niveau gratuit"],
+    description: "Testez gratuitement votre niveau avant les concours de la magistrature, du greffe, de l'administration pénitentiaire, de l'EPPJEJ ou de l'ENA : 20 questions, une note sur 20 et le détail par matière.",
+    ld: [breadcrumb([["Accueil", SITE], ["Test de niveau", url]])]
   }));
   urls.push(url);
 }
@@ -1454,6 +1515,8 @@ ${contactCTA(prefix)}`;
     <p>Certaines fiches de révision sont offertes en entier. Pour les recevoir, vous indiquez votre prénom et une adresse e-mail ou un numéro WhatsApp, et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi la date, la fiche demandée et l'adresse de la page. Votre adresse IP est notée pour limiter les abus, puis effacée au bout d'un jour.</p>
     <p>Ces informations servent à vous remettre la fiche, par un lien de téléchargement et, si vous avez indiqué une adresse, par un e-mail envoyé par notre prestataire Brevo. Si vous cochez la case prévue, elles servent aussi à vous envoyer nos conseils de révision et nos offres, par e-mail ou sur WhatsApp ; sans cette case, nous ne vous écrivons pas. Vous pouvez retirer votre accord à tout moment, par le lien figurant dans nos e-mails ou en nous écrivant sur WhatsApp.</p>
     <p>Elles sont conservées chez Supabase, en Europe, consultables par l'administrateur seulement, et ne sont ni vendues ni cédées. Elles sont effacées sur simple demande sur WhatsApp, et au plus tard trois ans après votre dernier échange avec nous.</p>
+    <h2 id="test-de-niveau">Test de niveau</h2>
+    <p>Pour voir le résultat du test de niveau gratuit, vous indiquez votre prénom et une adresse e-mail ou un numéro WhatsApp. Nous enregistrons aussi le concours choisi, votre résultat (la note et le nombre de bonnes réponses par matière), la date et l'adresse de la page ; votre adresse IP est notée pour limiter les abus, puis effacée au bout d'un jour. Ces informations servent à vous afficher votre résultat et, si vous avez indiqué une adresse, à vous l'envoyer par un e-mail de notre prestataire Brevo. Pour le reste, les règles de la fiche offerte ci-dessus s'appliquent : conseils et offres seulement si vous cochez la case, conservation chez Supabase, effacement sur simple demande et au plus tard trois ans après votre dernier échange avec nous.</p>
 
     <h2 id="emails">E-mails</h2>
     <p>Nous envoyons aux abonnés, depuis l'adresse infos@coursesesame.com, trois sortes d'e-mails liés à leur abonnement. Le premier souhaite la bienvenue lors du premier abonnement, le deuxième rappelle la fin prochaine d'un abonnement trois jours avant son terme lorsqu'il n'a pas été prolongé, le troisième annonce les contenus mis en ligne dans l'espace abonnés, au plus une fois par jour. L'annonce des nouveautés n'est adressée qu'aux abonnés en cours ; chacun peut la refuser à tout moment, par le lien figurant dans chaque annonce ou dans la rubrique « Mon compte » de l'espace abonnés. Nous n'envoyons d'offres commerciales par e-mail qu'aux personnes qui l'ont accepté en demandant une fiche offerte.</p>

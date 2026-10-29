@@ -214,7 +214,7 @@
       client.rpc("admin_visites_jours", { p_jours: 30 }),
       client.from("demandes_activation").select("*").order("cree_le", { ascending: false }).limit(500),
       client.rpc("admin_provenances", { p_jours: 30 }), client.rpc("admin_facebook_retombees", { p_jours: 90 }),
-      client.from("prospects").select("id, cree_le, prenom, email, whatsapp, concours, fiche, accepte_offres, email_envoye, desinscrit_le").order("cree_le", { ascending: false }).limit(500),
+      client.from("prospects").select("id, cree_le, prenom, email, whatsapp, concours, fiche, source, resultat, accepte_offres, email_envoye, desinscrit_le").order("cree_le", { ascending: false }).limit(500),
       client.rpc("admin_periodes_vip"),
       client.from("copies_vip").select("*").order("cree_le", { ascending: false }).limit(300)
     ]);
@@ -778,13 +778,13 @@
     const inscrit = x => (x.email && emails.has(x.email)) || (x.whatsapp && numeros.has(numeroWa(x.whatsapp)));
     const accord = prospects.filter(x => x.accepte_offres).length;
     return `<section class="ad-bloc">
-        <h3>Fiches offertes : contacts recueillis <span class="n">${prospects.length}</span></h3>
+        <h3>Fiches offertes et test de niveau : contacts recueillis <span class="n">${prospects.length}</span></h3>
         ${prospects.length ? `<p class="ad-note">${pluriel(accord, "personne")} ${accord > 1 ? "acceptent" : "accepte"} de recevoir conseils et offres ; ${pluriel(prospects.filter(inscrit).length, "contact")} ${prospects.filter(inscrit).length > 1 ? "correspondent" : "correspond"} déjà à un compte.</p>
-        <div class="ad-tableau" role="region" aria-label="Contacts des fiches offertes" tabindex="0"><table>
-          <thead><tr><th>Quand</th><th>Qui</th><th>Fiche</th><th>Conseils et offres</th></tr></thead>
-          <tbody>${prospects.map(x => `<tr><td>${dateFr(String(x.cree_le).slice(0, 10))}<small>${ilYa(x.cree_le)}</small></td><td><b>${esc(x.prenom)}</b>${inscrit(x) ? ` <span class="ad-vert">déjà inscrit</span>` : ""}<small>${[x.whatsapp ? `<a href="https://wa.me/${numeroWa(x.whatsapp)}" target="_blank" rel="noopener">${esc(x.whatsapp)}</a>` : "", x.email ? esc(x.email) + (x.email_envoye ? " (fiche envoyée)" : " (e-mail non parti)") : "", x.concours ? esc(nomConcours(x.concours)) : ""].filter(Boolean).join(" · ")}</small></td><td>n° ${Number(x.fiche)}</td><td>${x.desinscrit_le ? "désinscrit" : x.accepte_offres ? "<b>oui</b>" : "non"}</td></tr>`).join("")}</tbody></table></div>
-        <p class="ad-note">N'écrivez pour proposer une offre qu'aux personnes qui l'ont accepté (« oui »). Les autres n'ont demandé que la fiche.</p>`
-          : `<p class="ea-vide">Personne n'a encore demandé de fiche offerte.</p>`}
+        <div class="ad-tableau" role="region" aria-label="Contacts des fiches offertes et du test de niveau" tabindex="0"><table>
+          <thead><tr><th>Quand</th><th>Qui</th><th>Demande</th><th>Conseils et offres</th></tr></thead>
+          <tbody>${prospects.map(x => `<tr><td>${dateFr(String(x.cree_le).slice(0, 10))}<small>${ilYa(x.cree_le)}</small></td><td><b>${esc(x.prenom)}</b>${inscrit(x) ? ` <span class="ad-vert">déjà inscrit</span>` : ""}<small>${[x.whatsapp ? `<a href="https://wa.me/${numeroWa(x.whatsapp)}" target="_blank" rel="noopener">${esc(x.whatsapp)}</a>` : "", x.email ? esc(x.email) + (x.email_envoye ? (x.source === "test" ? " (résultat envoyé)" : " (fiche envoyée)") : " (e-mail non parti)") : "", x.concours ? esc(nomConcours(x.concours)) : ""].filter(Boolean).join(" · ")}</small></td><td>${x.source === "test" && x.resultat ? `Test de niveau : <b>${String(Math.round(x.resultat.note / x.resultat.total * 40) / 2).replace(".", ",")}/20</b><small>${(x.resultat.themes || []).map(t => `${esc(t.nom)} ${Number(t.bons)}/${Number(t.total)}`).join(", ")}</small>` : `Fiche n° ${Number(x.fiche)}`}</td><td>${x.desinscrit_le ? "désinscrit" : x.accepte_offres ? "<b>oui</b>" : "non"}</td></tr>`).join("")}</tbody></table></div>
+        <p class="ad-note">N'écrivez pour proposer une offre qu'aux personnes qui l'ont accepté (« oui »). Les autres n'ont demandé que la fiche ou leur résultat.</p>`
+          : `<p class="ea-vide">Personne n'a encore demandé de fiche offerte ni passé le test de niveau.</p>`}
       </section>`;
   }
   async function rafraichirVisites() {

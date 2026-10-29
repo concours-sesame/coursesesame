@@ -1825,3 +1825,26 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 .essai-tete{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.3rem 1rem}
 .essai-serie{color:var(--gold);font-weight:600}
 .essai-demain{margin-top:.6rem;font-size:.92rem;color:var(--brume)}
+
+/* Test de niveau (test-de-niveau/) */
+.test-niveau{max-width:760px;margin:0 auto}
+.test-concours{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.2rem}
+.test-note{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;padding:1.2rem 1.4rem;border-radius:var(--r);background:var(--navy);color:#fff;margin-bottom:1rem}
+.test-note b{font-family:var(--display);font-size:3rem;line-height:1;color:var(--gold)}
+.test-note small{font-size:1.2rem;color:#fff}
+.test-conseil{font-size:1.05rem;margin-bottom:1.2rem}
+.test-niveau h3{font-family:var(--display);font-size:1.3rem;color:var(--navy);margin:1.6rem 0 .6rem}
+.test-themes{list-style:none;padding:0;display:grid;gap:.5rem}
+.test-themes li{display:grid;grid-template-columns:minmax(0,1fr) 30% 5.5rem;align-items:center;gap:.7rem}
+.test-themes li>i{display:block;height:.6rem;border-radius:3px;background:var(--cream-2)}
+.test-themes li>i>i{display:block;height:100%;border-radius:3px;background:var(--gold)}
+.test-themes b{text-align:right;font-size:.95rem}
+.test-correction{padding-left:1.3rem;display:grid;gap:1rem}
+.test-correction li{padding:.8rem 1rem;border:1px solid var(--line);border-left-width:4px;border-radius:var(--r-sm);background:#fff}
+.test-correction li.juste{border-left-color:#2e8b57}
+.test-correction li.faux{border-left-color:#c0392b}
+.test-cq{font-weight:600;margin-bottom:.3rem}
+.test-expl{color:var(--muted);font-size:.95rem;margin-top:.3rem}
+.essai-test{margin-top:.8rem;font-size:.92rem;color:var(--brume)}
+.essai-test a{color:var(--clair);text-decoration:underline}
+@media (max-width:520px){.test-themes li{grid-template-columns:minmax(0,1fr) 4.8rem}.test-themes li>i{grid-column:1/-1;order:3}}
