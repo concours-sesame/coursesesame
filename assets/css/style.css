@@ -1788,3 +1788,19 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 .ea-art-choix{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
 .ea-outil-vip{border-style:dashed}
 .ea-outil-vip .ea-vip-marque{margin-left:.35rem;vertical-align:middle}
+
+/* Espace VIP : mon plan de révision */
+.ea-plan-barre{display:block;margin:.8rem 0 .4rem}
+.ea-plan-semaine{border:1px solid var(--line);border-radius:var(--r-sm);margin:.6rem 0;background:#fff}
+.ea-plan-semaine summary{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.2rem 1rem;padding:.75rem .95rem;cursor:pointer;list-style:none}
+.ea-plan-semaine summary::-webkit-details-marker{display:none}
+.ea-plan-semaine summary span{color:var(--muted);font-size:.95rem}
+.ea-plan-semaine>p,.ea-plan-semaine>form{padding:0 .95rem .9rem}
+.ea-plan-courante{border-color:var(--gold);box-shadow:inset 3px 0 0 var(--gold)}
+.ea-plan-liste{list-style:none;padding:0 .5rem .6rem;margin:0}
+.ea-plan-liste button{width:100%;display:grid;grid-template-columns:24px 1fr;gap:.65rem;align-items:start;padding:.5rem .45rem;text-align:left;border-radius:var(--r-sm)}
+.ea-plan-liste button:hover{background:var(--cream)}
+.ea-plan-liste small{display:block;color:var(--muted);font-size:.86rem}
+.ea-plan-case{width:22px;height:22px;border:1.5px solid var(--line);border-radius:var(--r-sm);display:grid;place-items:center;font-size:.85rem;color:var(--navy)}
+.ea-plan-fait .ea-plan-case{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.ea-plan-fait span:last-child{color:var(--muted)}
