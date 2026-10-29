@@ -1804,3 +1804,17 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 .ea-plan-case{width:22px;height:22px;border:1.5px solid var(--line);border-radius:var(--r-sm);display:grid;place-items:center;font-size:.85rem;color:var(--navy)}
 .ea-plan-fait .ea-plan-case{background:var(--gold);border-color:var(--gold);color:var(--navy)}
 .ea-plan-fait span:last-child{color:var(--muted)}
+
+/* Classement général des concours blancs (espace VIP) */
+.ea-classement{min-width:0}
+.ea-classement-vip{margin:1.2rem 0;padding:.9rem 1rem;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff}
+.ea-classement-table{overflow-x:auto;margin:.6rem 0 1rem}
+.ea-classement-table table{width:100%;border-collapse:collapse;font-size:.95rem}
+.ea-classement-table th,.ea-classement-table td{padding:.5rem .6rem;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.ea-classement-table th{font-weight:600;color:var(--muted)}
+.ea-classement-moi td{background:var(--gold-soft,#f6efd9);font-weight:700}
+.ea-classement-barres{list-style:none;margin:.3rem 0 1rem;padding:0;display:grid;gap:.35rem}
+.ea-classement-barres li{display:grid;grid-template-columns:7.5rem 1fr 2.5rem;align-items:center;gap:.6rem;font-size:.92rem}
+.ea-classement-barres i{display:block;height:.7rem;min-width:2px;border-radius:2px;background:var(--navy)}
+.ea-classement-barres b{text-align:right}
+@media (max-width:420px){.ea-classement-table th,.ea-classement-table td{padding:.45rem .35rem}}
