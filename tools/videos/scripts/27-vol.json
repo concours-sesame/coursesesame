@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-vol",
+ "titre": "Le vol",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {"type": "intro", "titre": "Le vol",
+   "dit": ["Une notion, une minute.", "Le *vol*."]},
+  {"type": "question", "titre": "Deux individus forcent une porte, la nuit.",
+   "texte": "Quelle peine encourent-ils ?", "cueTexte": 1,
+   "dit": ["La nuit, deux individus forcent la porte d'une maison habitée et emportent un téléviseur.", "Quelle *peine* encourent-ils ?"]},
+  {"type": "article", "titre": "Article 457 du Code pénal",
+   "citation": "Quiconque soustrait frauduleusement une chose qui ne lui appartient pas, commet un vol.", "cueCitation": 1,
+   "dit": ["Selon l'article *457* du Code pénal,", "quiconque soustrait *frauduleusement* une chose qui ne lui appartient pas, commet un vol."]},
+  {"type": "etapes", "titre": "Les éléments",
+   "items": [
+     {"n": "1", "t": "Une soustraction", "d": "La chose est prise à l'insu ou contre le gré de son détenteur", "cue": 1},
+     {"n": "2", "t": "La chose d'autrui", "d": "On ne vole pas sa propre chose", "cue": 2},
+     {"n": "3", "t": "L'intention frauduleuse", "d": "L'auteur veut se comporter en propriétaire", "cue": 3}],
+   "dit": ["D'abord, une *soustraction* : la chose est prise à l'insu ou contre le gré de celui qui la détient.", "Ensuite, une chose qui appartient à *autrui*.", "Enfin, l'intention frauduleuse : l'auteur veut se comporter en propriétaire."]},
+  {"type": "blocs", "titre": "La répression",
+   "items": [
+     {"t": "Vol simple", "d": "Cinq à dix ans d'emprisonnement (article 458).", "cue": 1},
+     {"t": "Vol aggravé", "d": "Dix à vingt ans : effraction, réunion, maison habitée, nuit… (article 459).", "cue": 2},
+     {"t": "Vol le plus grave", "d": "Emprisonnement à vie : la nuit avec deux autres circonstances, arme, violences graves (article 460).", "cue": 3, "fort": true}],
+   "dit": ["Le vol simple est puni de cinq à dix ans d'emprisonnement.", "Avec une circonstance aggravante, comme l'effraction, la réunion, la maison habitée ou la nuit : dix à *vingt* ans.", "Et la nuit avec deux autres circonstances, ou avec une arme : l'emprisonnement *à vie*."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Emprisonnement à vie encouru", "d": "La nuit, avec la réunion, l'effraction et la maison habitée (article 460).", "cue": 1},
+     {"ok": false, "t": "Pas un vol", "d": "Une moto prêtée puis vendue : elle a été remise volontairement.", "cue": 2}],
+   "dit": ["Nos deux individus ont agi la nuit, en réunion, avec effraction, dans une maison habitée : ils encourent l'emprisonnement *à vie*.", "En revanche, celui qui vend la moto qu'on lui a prêtée ne la soustrait pas : c'est un abus de confiance."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Un délit, malgré la peine", "d": "Le vol aggravé est un délit, sans sursis possible, et la tentative est punissable (article 461).", "cue": 0}],
+   "dit": ["Le piège : qualifier de crime le vol aggravé.", "Selon l'article 461, c'est un *délit*, malgré le niveau de la peine. Le sursis est exclu, et la tentative est punissable."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
