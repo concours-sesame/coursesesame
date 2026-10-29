@@ -100,4 +100,11 @@ Les plans de dissertation suivent le même format et la même chaîne, avec troi
 `etiquette: Plan`, `collection: Banque de plans · VIP` et `reserve: Plan réservé aux abonnés VIP…`. Impression :
 `node tools/fiches/pdf.js <dossier> "" 1 Plan`. Dépôt sous `textes/plan-vip-NNNN.pdf`, ligne `contenus` avec la matière
 `Plans · <matière>` (rubrique « Banque de plans ») et `vip = true`. Comme les fiches, leur texte reste hors du dépôt : les sources des plans 1 à 10 et du guide « Préparer le grand oral »
-(impression `node tools/fiches/pdf.js <dossier> "" 0.96 Guide`) sont archivées dans `textes/sources-vip-plans-1-10-grand-oral.pdf`.
+(impression `node tools/fiches/pdf.js <dossier> "" 0.96 Guide`) sont archivées dans `textes/sources-vip-plans-1-10-grand-oral.pdf` ; celles des plans 1 à 40 (volume 1 : droit pénal et
+procédure pénale ; volume 2 : famille et obligations ; volume 3 : institutions, droit administratif et constitutionnel ;
+volume 4 : OHADA), des tableaux comparatifs, des pièges des correcteurs, du kit 48 heures et des cartes d'articles, dans
+`textes/sources-vip-plans-1-40-tableaux-pieges-kit-cartes.pdf`.
+
+Avant impression, chaque plan passe `python3 tools/fiches/verifier_plans.py <plan.md> <fiche.md>` (pour un plan tiré de
+plusieurs fiches, leur concaténation) : toute citation « … » doit se lire telle quelle dans la fiche source, tout article
+cité doit y figurer, et aucun tiret cadratin n'est admis. Seuls les adages peuvent rester hors de la fiche.
