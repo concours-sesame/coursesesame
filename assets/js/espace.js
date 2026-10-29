@@ -818,7 +818,7 @@
         <div class="field"><label for="iDate">Date du concours (facultatif)</label><input id="iDate" type="date" min="${auj()}"></div>
         <div class="field full"><label for="iEmail">Adresse e-mail</label><input id="iEmail" type="email" autocomplete="email" required></div>
         <div class="field full"><label for="iMdp">Mot de passe (8 caractères au moins)</label><input id="iMdp" type="password" autocomplete="new-password" minlength="8" required></div>
-        <div class="field full"><label for="iParrain">Code de parrainage (facultatif)</label><input id="iParrain" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" value="${esc(codeParrainRecu())}"></div>
+        <div class="field full"><label for="iParrain">Code de parrainage (facultatif)</label><input id="iParrain" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" value="${esc(codeParrainRecu())}">${codeParrainRecu() ? `<small class="ea-aide">Vous venez de la part d'un ami : son code est déjà indiqué, vous n'avez rien à faire.</small>` : ""}</div>
         <label class="ea-accord full"><input type="checkbox" id="iAccord" required><span>J'accepte que ces informations servent à gérer mon abonnement, comme l'expliquent les <a href="${ROOT}mentions-legales/#espace-abonnes" target="_blank">mentions légales</a>.</span></label>
         <p class="ea-msg" role="alert"></p>
         <button class="btn btn-navy" type="submit">Créer mon compte</button>
@@ -1314,6 +1314,19 @@
     const ok = qs.filter(x => { const p = progres.get(cleQ(x.c.id, x.i)); return p && p.boite >= MAITRISE; }).length;
     return { total: qs.length, ok, pct: qs.length ? Math.round(ok * 100 / qs.length) : 0 };
   };
+  // Progression d'une matière (tableau de bord) : taux de bonnes réponses, questions vues, maîtrisées, à revoir
+  const progresMatiere = m => {
+    const qs = toutesQuestions().filter(x => x.matiere === m);
+    let vues = 0, bonnes = 0, erreurs = 0, ok = 0, revoir = 0;
+    qs.forEach(x => {
+      const p = progres.get(cleQ(x.c.id, x.i));
+      if (!p) return;
+      vues++; bonnes += p.bonnes; erreurs += p.erreurs;
+      if (p.boite >= MAITRISE) ok++;
+      if (p.prochaine <= auj()) revoir++;
+    });
+    return { m, total: qs.length, vues, ok, revoir, taux: bonnes + erreurs ? Math.round(bonnes * 100 / (bonnes + erreurs)) : null };
+  };
   async function enregistrerReponse(x, juste) {
     const k = cleQ(x.c.id, x.i), avant = progres.get(k) || { boite: 0, bonnes: 0, erreurs: 0 };
     const boite = juste ? Math.min(5, (progres.has(k) ? avant.boite : 0) + 1) : 0;
@@ -1324,8 +1337,8 @@
     if (error && !enregistrerReponse.averti) { enregistrerReponse.averti = true; toast(etat.admin ? "Compte administrateur : la progression n'est pas enregistrée." : "Progression non enregistrée. Vérifiez votre connexion."); }
   }
 
-  function outilRevision(corps, marque) {
-    let matiere = "", liste = [], n = 0, justes = 0;
+  function outilRevision(corps, marque, depart) {
+    let matiere = depart || "", liste = [], n = 0, justes = 0;
     const accueil = () => {
       const ms = matieresQcm();
       const compte = m => seance(m).length;
@@ -1716,6 +1729,24 @@
       ["Au-dessus de la moyenne", "Obtenir plus de 12 sur 20 à une copie", notes.some(n => n > 12)]
     ];
   }
+  // Ma progression par matière : les plus faibles d'abord, les matières pas encore commencées ensuite
+  function progressionHTML() {
+    const ms = matieresQcm().map(progresMatiere);
+    if (!ms.length) return "";
+    const commencees = ms.filter(x => x.taux != null).sort((a, b) => a.taux - b.taux || b.revoir - a.revoir);
+    const nonCommencees = ms.filter(x => x.taux == null);
+    const priorites = [...commencees.filter(x => x.taux < 70), ...nonCommencees].slice(0, 3);
+    const ligne = x => `<tr><th scope="row">${esc(x.m)}</th>
+        <td>${x.taux == null ? `<span class="ea-aide">pas commencée</span>` : `<span class="ea-barre ea-barre-${x.taux < 50 ? "faible" : x.taux < 70 ? "moyen" : "bon"}"><i style="width:${x.taux}%"></i></span><b>${x.taux} %</b>`}</td>
+        <td>${x.vues}/${x.total}</td><td>${x.ok}</td>
+        <td><button class="btn btn-ghost btn-sm" type="button" data-taction="reviser" data-m="${esc(x.m)}">Réviser${x.revoir ? ` (${x.revoir} à revoir)` : ""}</button></td></tr>`;
+    return `<h4>Ma progression par matière</h4>
+        ${priorites.length ? `<p class="ea-tb-priorite"><b>À réviser en priorité :</b> ${priorites.map(x => `${esc(x.m)} (${x.taux == null ? "pas encore commencée" : x.taux + " % de bonnes réponses"})`).join(", ")}.</p>`
+          : `<p class="ea-tb-priorite"><b>Bravo :</b> au moins 70 % de bonnes réponses dans chaque matière. Continuez la révision du jour pour ne rien oublier.</p>`}
+        <div class="ea-tb-progression"><table><thead><tr><th scope="col">Matière</th><th scope="col">Bonnes réponses</th><th scope="col">Questions vues</th><th scope="col">Maîtrisées</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
+        <tbody>${[...commencees, ...nonCommencees].map(ligne).join("")}</tbody></table></div>
+        <p class="ea-aide">Calculé sur vos réponses dans la révision du jour. Une question est « maîtrisée » après trois bonnes réponses espacées.</p>`;
+  }
   function outilTableau(corps, marque) {
     const s = stats || { jours: [], serie: 0, contenus_lus: 0, qcm_bonnes: 0, qcm_erreurs: 0 };
     const j = joursAvant(), p = PLANNING();
@@ -1739,14 +1770,17 @@
         ${semaine && p ? `<p class="ea-outil-fait">Vous êtes dans la <b>semaine ${semaine} sur 12</b> du planning de révision. <button class="btn btn-ghost btn-sm" type="button" data-taction="planning">Ouvrir le planning</button></p>` : ""}
         <h4>Les huit dernières semaines</h4>
         <div class="ea-calendrier" aria-label="Jours de révision des huit dernières semaines">${cases.map(d => `<i class="${actifs.has(d) ? "ea-actif" : ""}" title="${dateFr(d)}"></i>`).join("")}</div>
-        <h4>Maîtrise des QCM</h4>
-        <div class="ea-maitrise">${matieresQcm().map(m => { const x = maitrise(m); return `<div><span>${esc(m)}</span><span class="ea-barre"><i style="width:${x.pct}%"></i></span><b>${x.pct} %</b></div>`; }).join("")}</div>
+        ${progressionHTML()}
         ${notes.length ? `<h4>Vos dernières notes (agent de révision)</h4><p>${notes.map(e => `<span class="ea-tb-note">${noteFr(e.note)}/20</span>`).join(" ")}</p>` : ""}
         <h4>Vos badges</h4>
         <div class="ea-badges">${badges().map(([t, d, ok]) => `<div class="${ok ? "ea-badge-ok" : ""}"><b>${ok ? "★" : "☆"} ${t}</b><span>${d}</span></div>`).join("")}</div>
       </div>`;
     poserFiligrane(corps, marque);
-    corps.onclick = e => { const a = e.target.closest("[data-taction]"); if (a && a.dataset.taction === "planning" && p) ouvrirContenu(p, marque); };
+    corps.onclick = e => {
+      const a = e.target.closest("[data-taction]");
+      if (a && a.dataset.taction === "planning" && p) ouvrirContenu(p, marque);
+      if (a && a.dataset.taction === "reviser") outilRevision(corps, marque, a.dataset.m);
+    };
     corps.onsubmit = async e => {
       e.preventDefault();
       const v = $("#eaDateConcours", corps).value || null;
@@ -1964,15 +1998,23 @@
       return sessionStorage.getItem(CLE_PARRAIN) || "";
     } catch (e) { return q || ""; }
   }
-  let filleuls = null;
+  // Invitation à installer le site (visible seulement si le navigateur le propose, ou sur iPhone : app.js, style.css)
+  const installerHTML = () => `<div class="ea-installer"><p><b>Installez l'application Sésame et SAJ</b> : votre espace s'ouvre d'un geste depuis l'écran d'accueil, comme une application.</p>
+      <button class="btn btn-gold btn-sm" type="button" data-install>Installer</button>
+      <p class="ea-installer-ios">Sur iPhone : dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ».</p></div>`;
+  // Compteur (mon_parrainage) : amis inscrits avec le code, amis abonnés (récompensés), jours gagnés
+  let parrainage = null;
+  const lienParrain = code => `${new URL(ROOT + "espace-abonnes/", location.href).href}?parrain=${code}#inscription`;
   function parrainageHTML() {
     const code = etat.profil && etat.profil.code_parrain;
     if (!code || !etat.abo.actif) return "";
-    const lien = `${new URL(ROOT + "espace-abonnes/", location.href).href}?parrain=${code}#inscription`;
-    const msg = `Je prépare mes concours avec l'espace abonnés des Cours Sésame et SAJ : ouvrages complets, sujets corrigés, QCM, textes officiels et agent de révision. Inscris-toi avec mon code ${code} :\n${lien}`;
-    return `<section class="ea-parrainage"><div><h3>Parrainez un ami</h3>
-        <p>Votre code : <b class="ea-code">${esc(code)}</b>. Votre ami l'indique en créant son compte. Dès son premier abonnement payé, <b>7 jours vous sont offerts</b>, ajoutés à la suite de votre abonnement.${filleuls ? ` Déjà ${filleuls} ${filleuls > 1 ? "amis parrainés" : "ami parrainé"}, merci !` : ""}</p></div>
-        <a class="btn btn-wa btn-sm" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${icone("i-wa")}Inviter sur WhatsApp</a>
+    const msg = `Je prépare mes concours avec l'espace abonnés des Cours Sésame et SAJ : sujets corrigés, fiches de révision, QCM, textes officiels et concours blancs, dès 500 FCFA la journée. Inscris-toi avec mon code ${code} :\n${lienParrain(code)}`;
+    const p = parrainage || { inscrits: 0, abonnes: 0, jours: 0 };
+    return `<section class="ea-parrainage" id="eaParrainage"><div class="ea-parrainage-texte"><h3>Parrainez un ami, gagnez 7 jours</h3>
+        <p>Votre code : <b class="ea-code">${esc(code)}</b>. Votre ami l'indique en créant son compte, ou ouvre simplement votre lien. Dès son premier abonnement payé, <b>7 jours vous sont offerts</b>, ajoutés à la suite de votre abonnement. Sans limite : 4 amis abonnés, c'est près d'un mois gratuit.</p>
+        <ul class="ea-parrainage-compteur"><li><b>${p.inscrits}</b>${p.inscrits > 1 ? "amis inscrits" : "ami inscrit"}</li><li><b>${p.abonnes}</b>${p.abonnes > 1 ? "amis abonnés" : "ami abonné"}</li><li><b>${p.jours}</b>${p.jours > 1 ? "jours gagnés" : "jour gagné"}</li></ul></div>
+        <div class="ea-parrainage-boutons"><a class="btn btn-wa btn-sm" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${icone("i-wa")}Inviter sur WhatsApp</a>
+        <button class="btn btn-ghost btn-sm" type="button" data-copier-lien="${esc(lienParrain(code))}">Copier mon lien</button></div>
       </section>`;
   }
   async function majOutils() {
@@ -2010,12 +2052,12 @@
         chargerCopies().catch(() => { mesCopies = []; })
       ]);
       contenus = error ? [] : data;
-      if (etat.abo.actif) { try { const r = await client.rpc("mes_parrainages"); filleuls = r.error ? null : r.data; } catch (e) { filleuls = null; } }
+      if (etat.abo.actif) { try { const r = await client.rpc("mon_parrainage"); parrainage = r.error ? null : r.data; } catch (e) { parrainage = null; } }
       // Visite précédente sur cet appareil : relevée une fois par chargement de la page, puis remplacée
       if (vuAvant === null) { const v = lu(cleAbonne("visite"), 0); vuAvant = v ? new Date(v) : false; ecrit(cleAbonne("visite"), Date.now()); }
       memoLecture = (c, page) => { if (c && c.id) ecrit(cleAbonne("reprise"), { id: c.id, page: Number(page) || 1 }); };
       favoris = crochetFavoris;
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + outilsHTML() + agentHTML() + bibliothequeHTML() + parrainageHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + installerHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
       brancherCompte();
     } else {
       memoLecture = null; favoris = null;
@@ -2223,6 +2265,14 @@
     if (dem) {
       if (dem.dataset.demarrage === "masquer") { try { localStorage.setItem(CLE_DEMARRAGE, "1"); } catch (x) { /* stockage indisponible */ } const d = $("#eaDemarrage"); if (d) d.remove(); }
       else { const b = $(".ea-biblio", racine); if (b) b.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      return;
+    }
+    const copie = e.target.closest("[data-copier-lien]");
+    if (copie) {
+      const lien = copie.dataset.copierLien;
+      const fait = () => toast("Lien copié : collez-le dans un message à votre ami.");
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(lien).then(fait, () => prompt("Copiez votre lien :", lien));
+      else prompt("Copiez votre lien :", lien);
       return;
     }
     if (e.target.closest("[data-vip-teaser]")) {

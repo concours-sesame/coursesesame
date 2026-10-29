@@ -468,23 +468,70 @@
   }
 
   /* ---------- Accueil : la question du QCM jouable dans le haut de page ---------- */
+  // Question du jour : la question n = jour % total (assets/qj/<n>.json, écrits par tools/build.js), la même pour tous
+  // les visiteurs ; la réponse du jour et la série de jours consécutifs restent dans ce navigateur. Sans réseau ou
+  // sans stockage, la question de méthode écrite dans la page reste jouable.
   function initEssai() {
     const box = $(".essai");
     if (!box) return;
-    const bonne = Number(box.dataset.bonne), verdict = $(".essai-verdict", box);
-    box.addEventListener("click", e => {
-      const b = e.target.closest(".essai-opt");
-      if (!b || box.classList.contains("fait")) return;
-      const juste = Number(b.dataset.i) === bonne;
+    const verdict = $(".essai-verdict", box), CLE = "sesame-question-du-jour";
+    const jour = Math.floor(Date.now() / 864e5); // heure d'Abidjan = temps universel
+    let bonne = Number(box.dataset.bonne), etat = null;
+    try { etat = JSON.parse(localStorage.getItem(CLE) || "null"); } catch (e) { etat = null; }
+    const serieTxt = n => n > 1 ? `Série : ${n} jours d'affilée` : "Série : 1 jour";
+    const montrer = (choix, enregistrer) => {
+      const juste = choix === bonne;
       box.classList.add("fait");
       $$(".essai-opt", box).forEach(x => {
         x.disabled = true;
         if (Number(x.dataset.i) === bonne) x.classList.add("bonne");
+        if (Number(x.dataset.i) === choix && !juste) x.classList.add("fausse");
       });
-      if (!juste) b.classList.add("fausse");
       $(".essai-resultat", box).textContent = juste ? "Bonne réponse." : "Pas tout à fait.";
       verdict.hidden = false;
+      if (!box.dataset.qjN) return;
+      if (enregistrer) {
+        const serie = etat && etat.jour === jour - 1 ? (etat.serie || 0) + 1 : etat && etat.jour === jour ? etat.serie || 1 : 1;
+        etat = { jour, serie, choix, n: Number(box.dataset.qjN) };
+        try { localStorage.setItem(CLE, JSON.stringify(etat)); } catch (e) { /* stockage indisponible */ }
+      }
+      const s = $(".essai-serie", box);
+      s.textContent = serieTxt(etat.serie);
+      s.hidden = false;
+      const d = $(".essai-demain", box);
+      d.textContent = "Une nouvelle question demain : revenez chaque jour pour allonger votre série.";
+      d.hidden = false;
+    };
+    box.addEventListener("click", e => {
+      const b = e.target.closest(".essai-opt");
+      if (!b || box.classList.contains("fait")) return;
+      montrer(Number(b.dataset.i), true);
     });
+    const total = Number(box.dataset.qjTotal);
+    if (!total || !window.fetch) return;
+    const n = jour % total;
+    fetch(`assets/qj/${n}.json?v=${box.dataset.qjV || ""}`).then(r => r.ok ? r.json() : null).then(q => {
+      if (!q || box.classList.contains("fait")) return;
+      bonne = q.bonne;
+      box.dataset.qjN = n;
+      $(".essai-titre", box).textContent = `Question du jour, ${q.theme}`;
+      $(".essai-q", box).textContent = q.q;
+      const opts = $(".essai-opts", box);
+      opts.textContent = "";
+      q.options.forEach((o, i) => {
+        const li = document.createElement("li"), b = document.createElement("button");
+        b.className = "essai-opt"; b.type = "button"; b.dataset.i = i; b.textContent = o;
+        li.appendChild(b); opts.appendChild(li);
+      });
+      const p = $(".essai-verdict p", box);
+      p.textContent = " " + q.explication;
+      const r = document.createElement("b"); r.className = "essai-resultat"; p.prepend(r);
+      const suite = $(".essai-suite", box);
+      suite.href = q.lien;
+      suite.textContent = q.lien.startsWith("qcm/") ? `Le QCM complet : ${q.theme}` : "Les 10 questions du QCM de méthode";
+      if (etat && etat.jour === jour && etat.n === n) montrer(etat.choix, false);
+      else if (etat && etat.jour === jour - 1 && etat.serie > 1) { const s = $(".essai-serie", box); s.textContent = `Série en cours : ${etat.serie} jours, répondez pour la prolonger`; s.hidden = false; }
+    }).catch(() => { /* hors ligne : la question de méthode reste en place */ });
   }
 
   /* ---------- QCM : méthode (page Méthodes) ou matière (pages qcm/) ---------- */
@@ -636,12 +683,34 @@
     });
   }
 
+  /* ---------- Accueil : témoignages d'admis publiés (table temoignages_admis, validés par l'administrateur) ---------- */
+  function initReussites() {
+    const zone = $("#reussite");
+    if (!zone || typeof ESPACE_CONFIG === "undefined" || !window.fetch) return;
+    const NOMS = { infj: "Magistrature", greffe: "Greffe", penitentiaire: "Pénitentiaire", eppjej: "EPPJEJ", ena: "ENA", autre: "Concours" };
+    const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    fetch(ESPACE_CONFIG.url + "/rest/v1/rpc/temoignages_publies", {
+      method: "POST", headers: { apikey: ESPACE_CONFIG.cle, "Content-Type": "application/json" }, body: "{}"
+    }).then(r => r.ok ? r.json() : []).then(liste => {
+      if (!Array.isArray(liste) || !liste.length) return;
+      $("#admis").innerHTML = liste.map(t => `<figure class="review review-admis"><blockquote>« ${esc(t.texte)} »</blockquote><figcaption><cite>${esc(t.prenom)} ${esc(t.initiale)}.</cite>, <small>admis${t.detail ? ", " + esc(t.detail) : ""}, ${esc(NOMS[t.concours] || "Concours")} ${Number(t.annee)}</small></figcaption></figure>`).join("");
+      zone.hidden = false;
+    }).catch(() => { /* hors ligne : le bloc reste caché */ });
+  }
+
   /* ---------- Installation sur l'écran d'accueil ---------- */
   // Chrome et Edge proposent l'installation du site (manifest.webmanifest) : le bouton du pied de page
   // n'apparaît que dans ce cas. Sur iPhone, l'ajout se fait depuis le bouton de partage de Safari (voir la FAQ).
   function initInstallation() {
+    // Service worker (sw.js, écrit par tools/build.js) : pages publiques déjà visitées lisibles hors connexion
+    if ("serviceWorker" in navigator && window.isSecureContext) navigator.serviceWorker.register("/sw.js").catch(() => { /* sans service worker */ });
     let invite = null;
-    const boutons = (visible) => $$("[data-install]").forEach(b => { b.hidden = !visible; });
+    // html[data-installable] : installation proposée par le navigateur ; html[data-ios] : iPhone hors application installée.
+    // Les invitations ajoutées plus tard dans la page (espace abonnés) suivent ces attributs (style.css).
+    const racine = document.documentElement;
+    const boutons = (visible) => { $$("[data-install]").forEach(b => { b.hidden = !visible; }); if (visible) racine.dataset.installable = "1"; else delete racine.dataset.installable; };
+    const installe = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+    if (!installe && /iphone|ipad|ipod/i.test(navigator.userAgent)) racine.dataset.ios = "1";
     window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); invite = e; boutons(true); });
     window.addEventListener("appinstalled", () => { invite = null; boutons(false); });
     document.addEventListener("click", async e => {
@@ -684,6 +753,7 @@
   initConseiller();
   initQCM();
   initEssai();
+  initReussites();
   initSujetsFiltre();
   initVideos();
   updateCart();

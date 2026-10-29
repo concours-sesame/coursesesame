@@ -3,6 +3,9 @@
 //   { fiche, prenom, email?, whatsapp?, concours?, accepte_offres?, page? }
 //        -> { ok, lien } : lien de téléchargement valable 7 jours ; envoyé aussi par e-mail (Brevo) si une adresse est donnée
 //   { action: "desinscrire", jeton }   lien des e-mails : la personne ne veut plus de conseils ni d'offres
+//   { action: "test", prenom, email?, whatsapp?, concours?, accepte_offres?, page?, resultat }
+//        -> { ok } : test de niveau gratuit (page test-de-niveau/), contact enregistré avec son résultat
+//        ({ note, total, themes: [{ nom, bons, total }] }), résultat envoyé par e-mail si une adresse est donnée
 //
 // Pour limiter les abus : au plus 20 demandes par heure depuis une même adresse IP, effacée après un jour.
 // Déploiement : sans vérification de jeton (visiteurs non connectés). Secret : BREVO_API_KEY (déjà utilisé par emails).
@@ -59,7 +62,8 @@ Deno.serve(async (req) => {
     return reponse({ ok: true });
   }
 
-  const fiche = Number(d.fiche);
+  const test = d.action === "test";
+  const fiche = test ? null : Number(d.fiche);
   const prenom = texte(d.prenom, 60);
   const email = texte(d.email, 254).toLowerCase() || null;
   const whatsapp = String(d.whatsapp ?? "").replace(/[^0-9+]/g, "") || null;
@@ -67,7 +71,9 @@ Deno.serve(async (req) => {
   const accepte = d.accepte_offres === true;
   const page = texte(d.page, 200) || null;
 
-  if (!FICHES_OFFERTES[fiche]) return erreur("Cette fiche n'est pas offerte.");
+  if (!test && !FICHES_OFFERTES[fiche!]) return erreur("Cette fiche n'est pas offerte.");
+  const resultat = test ? lireResultat(d.resultat) : null;
+  if (test && !resultat) return erreur("Résultat du test invalide.");
   if (!prenom) return erreur("Indiquez votre prénom.");
   if (!email && !whatsapp) return erreur("Indiquez une adresse e-mail ou un numéro WhatsApp.");
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return erreur("Adresse e-mail invalide.");
@@ -83,7 +89,23 @@ Deno.serve(async (req) => {
   if ((count ?? 0) >= MAX_PAR_HEURE) return erreur("Trop de demandes depuis cette connexion. Réessayez dans une heure.", 429);
   await service.from("prospects").update({ ip: null }).not("ip", "is", null).lt("cree_le", new Date(Date.now() - 86400_000).toISOString());
 
-  const { data: contenu } = await service.from("contenus").select("titre, fichier").eq("id", FICHES_OFFERTES[fiche]).single();
+  if (test) {
+    const { data: ligne, error: errAjout } = await service.from("prospects")
+      .insert({ prenom, email, whatsapp, concours, fiche: null, source: "test", resultat, page, accepte_offres: accepte, ip })
+      .select("id, jeton").single();
+    if (errAjout) {
+      console.error("ajout test :", errAjout.message);
+      return erreur("Enregistrement impossible pour le moment. Réessayez plus tard.", 500);
+    }
+    if (email) {
+      const echec = await envoyerResultat(email, prenom, resultat!, accepte ? ligne.jeton : null);
+      if (echec) console.error("Brevo :", echec);
+      else await service.from("prospects").update({ email_envoye: true }).eq("id", ligne.id);
+    }
+    return reponse({ ok: true });
+  }
+
+  const { data: contenu } = await service.from("contenus").select("titre, fichier").eq("id", FICHES_OFFERTES[fiche!]).single();
   if (!contenu?.fichier) return erreur("Fiche introuvable.", 500);
   const { data: signe, error: errLien } = await service.storage.from("exclusif").createSignedUrl(contenu.fichier, DUREE_LIEN, {
     download: `fiche-${String(fiche).padStart(4, "0")}-cours-sesame-et-saj.pdf`,
@@ -103,12 +125,72 @@ Deno.serve(async (req) => {
 
   if (email) {
     const titre = String(contenu.titre).replace(/^Fiche n° \d+ · /, "");
-    const echec = await envoyer(email, prenom, titre, fiche, signe.signedUrl, accepte ? ligne.jeton : null);
+    const echec = await envoyer(email, prenom, titre, fiche!, signe.signedUrl, accepte ? ligne.jeton : null);
     if (echec) console.error("Brevo :", echec);
     else await service.from("prospects").update({ email_envoye: true }).eq("id", ligne.id);
   }
   return reponse({ ok: true, lien: signe.signedUrl });
 });
+
+type Resultat = { note: number; total: number; themes: { nom: string; bons: number; total: number }[] };
+function lireResultat(v: unknown): Resultat | null {
+  const r = v as Resultat;
+  if (!r || typeof r !== "object" || !Array.isArray(r.themes) || r.themes.length > 12) return null;
+  const total = Number(r.total), note = Number(r.note);
+  if (!Number.isInteger(total) || total < 1 || total > 40 || !(note >= 0 && note <= total)) return null;
+  const themes = r.themes.map((t) => ({ nom: texte(t?.nom, 60), bons: Number(t?.bons), total: Number(t?.total) }));
+  if (themes.some((t) => !t.nom || !Number.isInteger(t.total) || t.total < 1 || !(t.bons >= 0 && t.bons <= t.total))) return null;
+  return { note, total, themes };
+}
+
+async function brevo(a: string, prenom: string, sujet: string, html: string, corps: string, tag: string): Promise<string | null> {
+  try {
+    const rep = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: { "api-key": Deno.env.get("BREVO_API_KEY")!, "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ sender: EXPEDITEUR, to: [{ email: a, name: prenom }], subject: sujet, htmlContent: html, textContent: corps, tags: [tag] }),
+    });
+    if (rep.ok) return null;
+    return `Brevo ${rep.status} ${(await rep.text()).slice(0, 300)}`;
+  } catch (e) {
+    return `Réseau ${e instanceof Error ? e.message : ""}`.slice(0, 300);
+  }
+}
+
+// Résultat du test de niveau, sur 20, avec le détail par matière
+async function envoyerResultat(a: string, prenom: string, r: Resultat, jeton: string | null): Promise<string | null> {
+  const sur20 = Math.round((r.note / r.total) * 40) / 2;
+  const n = String(sur20).replace(".", ",");
+  const lignes = r.themes.map((t) => `<tr><td style="padding:6px 0;border-bottom:1px solid #eee">${esc(t.nom)}</td><td style="padding:6px 0;border-bottom:1px solid #eee;text-align:right"><b>${t.bons}</b> sur ${t.total}</td></tr>`).join("");
+  const conseil = sur20 < 10
+    ? "Les bases sont à consolider : commencez par nos fiches de révision et nos QCM, matière par matière."
+    : sur20 < 15
+    ? "Vous avez de bonnes bases : entraînez-vous maintenant sur nos sujets corrigés et nos concours blancs."
+    : "Très bon niveau : faites corriger vos copies et travaillez nos plans de dissertation pour viser le haut du classement.";
+  const desinscription = jeton ? `<br>Vous avez accepté de recevoir nos conseils et offres. Pour ne plus les recevoir : <a href="${SITE}/fiches/?desinscription=${jeton}" style="color:#5b6475">se désinscrire</a>.` : "";
+  const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Votre test de niveau</title></head>
+<body style="margin:0;background:#f8f4ec;font-family:Arial,Helvetica,sans-serif;color:#18202f">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f4ec"><tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:8px;overflow:hidden">
+<tr><td style="background:#0f2a5c;padding:18px 24px;color:#ffffff;font-size:20px;font-weight:700">Les Cours Sésame et SAJ<div style="font-size:13px;font-weight:400;color:#e8a62b;margin-top:4px">Préparation aux concours, Abidjan</div></td></tr>
+<tr><td style="padding:24px;font-size:16px;line-height:1.55">
+<p>Bonjour ${esc(prenom)},</p>
+<p>Voici le résultat de votre test de niveau : <b style="font-size:22px;color:#0f2a5c">${n}/20</b> (${r.note} bonnes réponses sur ${r.total}).</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:15px;margin:12px 0 18px">${lignes}</table>
+<p>${conseil}</p>
+<p style="margin:24px 0"><a href="${SITE}/espace-abonnes/" style="display:inline-block;padding:12px 22px;background:#e8a62b;color:#0f2a5c;font-weight:700;text-decoration:none;border-radius:6px">Découvrir l'espace abonnés</a></p>
+<p>Abonnement dès 500 FCFA la journée, par Mobile Money. Vous pouvez refaire le test quand vous voulez : <a href="${SITE}/test-de-niveau/" style="color:#0f2a5c">coursesesame.com/test-de-niveau</a>.</p>
+<p>Bonnes révisions,<br>L'équipe des Cours Sésame et SAJ</p>
+</td></tr>
+<tr><td style="padding:16px 24px;background:#f8f4ec;font-size:12px;line-height:1.5;color:#5b6475">Vous recevez cet e-mail parce que vous avez passé le test de niveau sur coursesesame.com.${desinscription}
+<br>Pour nous écrire, utilisez WhatsApp au ${WHATSAPP}. Cette adresse ne reçoit pas les réponses.</td></tr>
+</table></td></tr></table></body></html>`;
+  const corps = [`Bonjour ${prenom},`, "", `Résultat de votre test de niveau : ${n}/20 (${r.note} bonnes réponses sur ${r.total}).`, "",
+    ...r.themes.map((t) => `${t.nom} : ${t.bons} sur ${t.total}`), "", conseil, "",
+    `L'espace abonnés, dès 500 FCFA la journée : ${SITE}/espace-abonnes/`, "", "L'équipe des Cours Sésame et SAJ",
+    jeton ? `\nPour ne plus recevoir nos conseils et offres : ${SITE}/fiches/?desinscription=${jeton}` : ""].join("\n");
+  return await brevo(a, prenom, `Votre test de niveau : ${n}/20`, html, corps, "test-niveau");
+}
 
 async function envoyer(a: string, prenom: string, titre: string, fiche: number, lien: string, jeton: string | null): Promise<string | null> {
   const bouton = `<p style="margin:24px 0"><a href="${esc(lien)}" style="display:inline-block;padding:12px 22px;background:#e8a62b;color:#0f2a5c;font-weight:700;text-decoration:none;border-radius:6px">Télécharger la fiche</a></p>`;
@@ -132,15 +214,5 @@ ${bouton}
   const corps = [`Bonjour ${prenom},`, "", `Voici la fiche de révision n° ${fiche}, ${titre}, en entier :`, lien, "", "Le lien reste valable 7 jours.", "",
     `Les 100 fiches de révision se lisent dans l'espace abonnés, dès 500 FCFA la journée : ${SITE}/espace-abonnes/`, "",
     "L'équipe des Cours Sésame et SAJ", jeton ? `\nPour ne plus recevoir nos conseils et offres : ${SITE}/fiches/?desinscription=${jeton}` : ""].join("\n");
-  try {
-    const rep = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: { "api-key": Deno.env.get("BREVO_API_KEY")!, "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ sender: EXPEDITEUR, to: [{ email: a, name: prenom }], subject: `Votre fiche de révision : ${titre}`, htmlContent: html, textContent: corps, tags: ["fiche-offerte"] }),
-    });
-    if (rep.ok) return null;
-    return `Brevo ${rep.status} ${(await rep.text()).slice(0, 300)}`;
-  } catch (e) {
-    return `Réseau ${e instanceof Error ? e.message : ""}`.slice(0, 300);
-  }
+  return await brevo(a, prenom, `Votre fiche de révision : ${titre}`, html, corps, "fiche-offerte");
 }

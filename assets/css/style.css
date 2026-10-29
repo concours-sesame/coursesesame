@@ -1223,7 +1223,13 @@ body.ea-voile .ea-visionneuse::after{content:"Contenu masqué. Revenez sur cette
 .ea-blanc-note b{font-size:2rem;color:var(--gold)}
 .ea-parrainage{display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:1.5rem 0 0;padding:1rem 1.1rem;border:1px solid var(--line);border-radius:var(--r);background:var(--cream)}
 .ea-parrainage h3{margin:0 0 .3rem;font-size:1.05rem}
-.ea-parrainage p{margin:0;max-width:60ch}
+.ea-parrainage p{margin:0;max-width:62ch}
+.ea-parrainage{border-color:var(--gold);background:#fff8e8}
+.ea-parrainage-texte{flex:1 1 380px}
+.ea-parrainage-compteur{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;padding:0;margin:.8rem 0 0}
+.ea-parrainage-compteur li{display:flex;align-items:baseline;gap:.35rem;font-size:.92rem;color:var(--muted)}
+.ea-parrainage-compteur b{font-family:var(--display);font-size:1.5rem;color:var(--navy)}
+.ea-parrainage-boutons{display:flex;flex-wrap:wrap;gap:.5rem}
 .ea-code{font-family:ui-monospace,Consolas,monospace;letter-spacing:.08em;background:var(--paper);padding:.05rem .35rem;border:1px solid var(--line);border-radius:4px}
 .ea-textes-cherche{margin:0 0 1rem;padding:1rem;border:1px solid var(--line);border-radius:var(--r);background:var(--cream)}
 .ea-textes-cherche label{display:block;font-weight:700;margin-bottom:.4rem}
@@ -1727,6 +1733,7 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 
 /* 1. Le haut de page fait essayer le produit : une vraie question du QCM de méthode */
 .accueil .hero-inner{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}
+@media (max-width:900px){.accueil .hero-inner{grid-template-columns:1fr}}
 .essai{margin:0;padding:clamp(22px,2.6vw,34px);background:var(--nuit-2);border-radius:var(--r);box-shadow:var(--ombre-levee)}
 .essai-tete{font-size:.95rem;color:var(--brume);margin-bottom:.9rem}
 .essai-q{font-family:var(--display);font-weight:400;font-stretch:115%;font-size:clamp(1.35rem,2vw,1.7rem);line-height:1.2;letter-spacing:-.01em;color:var(--clair);margin-bottom:1.2rem;text-wrap:balance}
@@ -1819,3 +1826,108 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 .ea-classement-barres i{display:block;height:.7rem;min-width:2px;border-radius:2px;background:var(--navy)}
 .ea-classement-barres b{text-align:right}
 @media (max-width:420px){.ea-classement-table th,.ea-classement-table td{padding:.45rem .35rem}}
+
+/* Question du jour (accueil) */
+.essai-tete{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.3rem 1rem}
+.essai-serie{color:var(--gold);font-weight:600}
+.essai-demain{margin-top:.6rem;font-size:.92rem;color:var(--brume)}
+
+/* Test de niveau (test-de-niveau/) */
+.test-niveau{max-width:760px;margin:0 auto}
+.test-concours{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.2rem}
+.test-note{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;padding:1.2rem 1.4rem;border-radius:var(--r);background:var(--navy);color:#fff;margin-bottom:1rem}
+.test-note b{font-family:var(--display);font-size:3rem;line-height:1;color:var(--gold)}
+.test-note small{font-size:1.2rem;color:#fff}
+.test-conseil{font-size:1.05rem;margin-bottom:1.2rem}
+.test-niveau h3{font-family:var(--display);font-size:1.3rem;color:var(--navy);margin:1.6rem 0 .6rem}
+.test-themes{list-style:none;padding:0;display:grid;gap:.5rem}
+.test-themes li{display:grid;grid-template-columns:minmax(0,1fr) 30% 5.5rem;align-items:center;gap:.7rem}
+.test-themes li>i{display:block;height:.6rem;border-radius:3px;background:var(--cream-2)}
+.test-themes li>i>i{display:block;height:100%;border-radius:3px;background:var(--gold)}
+.test-themes b{text-align:right;font-size:.95rem}
+.test-correction{padding-left:1.3rem;display:grid;gap:1rem}
+.test-correction li{padding:.8rem 1rem;border:1px solid var(--line);border-left-width:4px;border-radius:var(--r-sm);background:#fff}
+.test-correction li.juste{border-left-color:#2e8b57}
+.test-correction li.faux{border-left-color:#c0392b}
+.test-cq{font-weight:600;margin-bottom:.3rem}
+.test-expl{color:var(--muted);font-size:.95rem;margin-top:.3rem}
+.essai-test{margin-top:.8rem;font-size:.92rem;color:var(--brume)}
+.essai-test a{color:var(--clair);text-decoration:underline}
+@media (max-width:520px){.test-themes li{grid-template-columns:minmax(0,1fr) 4.8rem}.test-themes li>i{grid-column:1/-1;order:3}}
+
+/* Tableau de bord : progression par matière */
+.ea-tb-priorite{padding:.7rem .9rem;border-left:4px solid var(--gold);background:#fff8e8;border-radius:var(--r-sm)}
+.ea-tb-progression{overflow-x:auto;margin:.6rem 0}
+.ea-tb-progression table{width:100%;border-collapse:collapse;font-size:.95rem}
+.ea-tb-progression th,.ea-tb-progression td{padding:.5rem .5rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.ea-tb-progression thead th{font-weight:600;color:var(--muted);white-space:nowrap}
+.ea-tb-progression tbody th{font-weight:600}
+.ea-tb-progression td:nth-child(2){min-width:9rem}
+.ea-tb-progression td:nth-child(2) .ea-barre{display:inline-block;width:5rem;vertical-align:middle;margin-right:.4rem}
+.ea-barre-faible i{background:#c0392b}
+.ea-barre-moyen i{background:var(--gold)}
+.ea-barre-bon i{background:#2e8b57}
+.ea-tb-progression b{white-space:nowrap}
+@media (max-width:560px){
+  .ea-tb-progression thead{display:none}
+  .ea-tb-progression tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.25rem .8rem;padding:.7rem 0;border-bottom:1px solid var(--line)}
+  .ea-tb-progression th,.ea-tb-progression td{border:0;padding:0;min-width:0}
+  .ea-tb-progression td:nth-child(2){min-width:0;text-align:right}
+  .ea-tb-progression td:nth-child(3)::before{content:"Vues : "}
+  .ea-tb-progression td:nth-child(4)::before{content:"Maîtrisées : "}
+  .ea-tb-progression td:nth-child(3),.ea-tb-progression td:nth-child(4){font-size:.88rem;color:var(--muted)}
+  .ea-tb-progression td:nth-child(4){text-align:right}
+  .ea-tb-progression td:nth-child(5){grid-column:1/-1}
+}
+
+/* Hors connexion */
+.hl-pages ul{list-style:none;padding:0;display:grid;gap:.5rem;margin-top:1rem}
+.hl-pages a{display:block;padding:.7rem .9rem;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;font-weight:600;color:var(--navy)}
+
+/* Invitation à installer le site (espace abonnés) */
+.ea-installer{display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem 1rem;margin:1rem 0;padding:.8rem 1rem;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.ea-installer p{margin:0;max-width:60ch}
+.ea-installer-ios{display:none;font-size:.92rem;color:var(--muted)}
+html[data-installable] .ea-installer,html[data-ios] .ea-installer{display:flex}
+html[data-ios] .ea-installer-ios{display:block}
+.ea-installer [data-install]{display:none}
+html[data-installable] .ea-installer [data-install]:not([hidden]){display:inline-flex}
+
+/* Sujets de dissertation (sujets/sujets-de-dissertation/) et lien depuis les fiches */
+.sujets-dissertation{list-style:none;padding:0;display:grid;gap:.8rem;margin:0 0 2rem}
+.sujets-dissertation li{padding:1rem 1.1rem;border:1px solid var(--line);border-radius:var(--r);background:#fff;scroll-margin-top:90px}
+.sujets-dissertation li:target{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.sujets-dissertation h3{font-family:var(--display);font-size:1.15rem;color:var(--navy);margin:0 0 .3rem}
+.sujets-dissertation p{margin:.2rem 0}
+.sd-liens{display:flex;flex-wrap:wrap;gap:.3rem 1rem;font-size:.93rem}
+.sd-liens a{font-weight:600;color:var(--navy)}
+.sd-vip{display:inline-flex;align-items:center;gap:.3rem;color:var(--muted)}
+.sd-vip svg{width:14px;height:14px}
+.fiche-sujets{margin:1.4rem 0;padding:.9rem 1rem;border-left:4px solid var(--gold);background:var(--cream);border-radius:var(--r-sm)}
+.fiche-sujets h3{margin:0 0 .4rem;font-size:1rem}
+.fiche-sujets ul{margin:0;padding-left:1.1rem}
+
+/* Témoignages d'admis : accueil (« Ils ont réussi ») et formulaire (temoignage/) */
+.about-reussite{margin-top:clamp(48px,7vw,80px)}
+.review-admis{border-color:var(--gold)}
+.reussite-lien{margin-top:1rem;font-size:.95rem}
+.reussite-lien a{font-weight:600;text-decoration:underline}
+.about-avis .reviews + .reussite-lien{margin-top:.8rem}
+.temoignage-form{max-width:760px}
+.temoignage-form textarea{width:100%}
+
+/* Calendrier des concours (calendrier-des-concours/) */
+.calendrier{display:grid;gap:1.2rem;margin-bottom:2rem}
+.calendrier-concours{padding:1.1rem 1.2rem;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.calendrier-concours h2{font-family:var(--display);font-size:1.25rem;color:var(--navy);margin:0 0 .8rem}
+.calendrier-concours h2 span{display:block;font-family:inherit;font-size:.85rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-ink,#8a5a00);margin-bottom:.2rem}
+.calendrier-concours ol{list-style:none;padding:0;margin:0;display:grid;gap:.6rem}
+.calendrier-concours li{display:grid;gap:.15rem;padding:.6rem .8rem;border-left:4px solid var(--line);background:var(--cream);border-radius:var(--r-sm)}
+.calendrier-concours li.en-cours{border-left-color:#2e8b57}
+.calendrier-concours li.a-venir{border-left-color:var(--gold)}
+.calendrier-concours li.passee{opacity:.65}
+.cal-dates{font-weight:600}
+.calendrier-concours small{color:var(--muted)}
+.calendrier-concours small a{color:var(--navy);text-decoration:underline}
+.calendrier-vide{padding:1.2rem;border:1px dashed var(--line);border-radius:var(--r);background:var(--cream)}
+.calendrier-vide p{margin-bottom:.8rem}

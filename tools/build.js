@@ -137,20 +137,42 @@ function abonnementHTML() {
     `;
 }
 
-// Accueil : une vraie question du QCM de méthode, jouable dans le haut de page (app.js, initEssai)
+// Question du jour (accueil) : les questions publiques des QCM (méthode et matières), dans un ordre mêlé fixe, une par
+// fichier assets/qj/<n>.json. app.js (initEssai) charge la question n = jour % total et tient la série de jours du
+// visiteur ; sans JavaScript, la question de méthode ci-dessous reste affichée.
+function questionsDuJour() {
+  const qc = {};
+  vm.createContext(qc);
+  vm.runInContext(read("assets/js/qcm-matieres.js") + "\n;globalThis.Q=QCM_MATIERES;", qc);
+  const liste = [...ctx.D.QCM.map(q => ({ ...q, theme: "Méthode des épreuves", lien: "methodes/#qcm" })),
+    ...qc.Q.flatMap(t => t.questions.map(q => ({ ...q, theme: t.nom, lien: `qcm/${t.slug}/` })))];
+  // Mélange à graine fixe (mulberry32) : l'ordre ne change qu'avec la liste des questions
+  let g = 20261029;
+  const alea = () => { g = (g + 0x6D2B79F5) | 0; let t = Math.imul(g ^ (g >>> 15), 1 | g); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  for (let k = liste.length - 1; k > 0; k--) { const j = Math.floor(alea() * (k + 1)); [liste[k], liste[j]] = [liste[j], liste[k]]; }
+  return liste.map(q => ({ q: q.q, options: q.options, bonne: q.bonne, explication: q.explication, theme: q.theme, lien: q.lien }));
+}
+const QJ = questionsDuJour();
+const QJ_VERSION = require("crypto").createHash("sha1").update(JSON.stringify(QJ)).digest("hex").slice(0, 10);
+fs.rmSync(path.join(DIR, "assets/qj"), { recursive: true, force: true });
+QJ.forEach((q, n) => write(`assets/qj/${n}.json`, JSON.stringify(q)));
+
+// Accueil : la question du jour, jouable dans le haut de page (app.js, initEssai) ; sans JavaScript, une question du QCM de méthode
 const ESSAI_QUESTION = "Quel plan est attendu pour une dissertation juridique ?";
 function essaiHTML() {
   const q = ctx.D.QCM.find(x => x.q === ESSAI_QUESTION);
   if (!q) throw new Error("accueil : question du QCM introuvable : " + ESSAI_QUESTION);
-  return `<figure class="essai" data-bonne="${q.bonne}" aria-labelledby="essaiQ">
-      <figcaption class="essai-tete">Essayez : une question de notre QCM de méthode</figcaption>
+  return `<figure class="essai" data-bonne="${q.bonne}" data-qj-total="${QJ.length}" data-qj-v="${QJ_VERSION}" aria-labelledby="essaiQ">
+      <figcaption class="essai-tete"><span class="essai-titre">Essayez : une question de notre QCM de méthode</span><span class="essai-serie" hidden></span></figcaption>
       <p class="essai-q" id="essaiQ">${q.q}</p>
       <ol class="essai-opts" type="A">
         ${q.options.map((o, i) => `<li><button class="essai-opt" type="button" data-i="${i}">${o}</button></li>`).join("\n        ")}
       </ol>
       <div class="essai-verdict" aria-live="polite" hidden>
         <p><b class="essai-resultat"></b> ${q.explication}</p>
-        <div class="essai-actions"><a class="btn btn-gold" href="espace-abonnes/#inscription">Créer mon compte</a><a class="btn btn-ghost" href="methodes/#qcm">Les 10 questions du QCM</a></div>
+        <p class="essai-demain" hidden></p>
+        <div class="essai-actions"><a class="btn btn-gold" href="espace-abonnes/#inscription">Créer mon compte</a><a class="btn btn-ghost essai-suite" href="methodes/#qcm">Les 10 questions du QCM</a></div>
+        <p class="essai-test">Pour aller plus loin : <a href="test-de-niveau/">le test de niveau gratuit, 20 questions et une note sur 20</a>.</p>
       </div>
       <noscript><p class="essai-noscript">Réponse : ${q.options[q.bonne]}. ${q.explication}</p></noscript>
     </figure>
@@ -946,7 +968,7 @@ SUJETS_PAGES.forEach(sujetPage);
     crumbs: [["Accueil", prefix], ["Sujets corrigés", ""]],
     h1: `Sujets corrigés`,
     lead: `${plural(SUJETS_PAGES.length, "sujet")} corrigé${SUJETS_PAGES.length > 1 ? "s" : ""} en entier, tirés de nos ouvrages : dissertations, cas pratiques, commentaires d'articles, questions de cours et SOG, dont ${officiels} sujets réellement tombés aux concours.`,
-    ctas: `<a href="#liste" class="btn btn-gold">Voir les sujets${arrow}</a><a href="${prefix}methodes/" class="btn btn-ghost">Méthodes des épreuves</a>`,
+    ctas: `<a href="#liste" class="btn btn-gold">Voir les sujets${arrow}</a><a href="${prefix}sujets/sujets-de-dissertation/" class="btn btn-ghost">40 sujets de dissertation</a>`,
     facts: [`<b>${SUJETS_PAGES.length}</b> sujets corrigés`, `dont <b>${officiels}</b> sujets tombés aux concours`]
   })}
 
@@ -1070,7 +1092,7 @@ ${contactCTA(prefix)}`;
     crumbs: [["Accueil", prefix], ["QCM", ""]],
     h1: `Les QCM gratuits`,
     lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : droit civil, droit pénal, procédure pénale, droit administratif, droit OHADA, droits de l'enfant, organisation judiciaire, culture générale et méthode des épreuves. Chaque réponse est expliquée.`,
-    ctas: `<a href="#liste" class="btn btn-gold">Choisir un QCM${arrow}</a><a href="${prefix}sujets/" class="btn btn-ghost">Sujets corrigés</a>`,
+    ctas: `<a href="#liste" class="btn btn-gold">Choisir un QCM${arrow}</a><a href="${prefix}test-de-niveau/" class="btn btn-ghost">Test de niveau sur 20</a>`,
     facts: [`<b>${THEMES.length + 1}</b> QCM`, `<b>${nb}</b> questions corrigées`]
   })}
 
@@ -1099,6 +1121,10 @@ ${contactCTA(prefix)}`;
   const MATIERES = [...new Set(FICHES.map(f => f.matiere))];
   FICHES.forEach(f => f.concours.forEach(id => { if (!CONCOURS.some(c => c.id === id)) throw new Error(`fiche ${f.numero} : concours inconnu ${id}`); }));
   const ficheURL = (f, prefix) => `${prefix}fiches/${f.slug}/`;
+  // Sujets de dissertation de la banque de plans VIP (sujet et résumé seulement), reliés aux fiches dont ils sont tirés
+  const BANQUE = require(path.join(DIR, "contenu/banque-plans.js"));
+  BANQUE.forEach(b => b.fiches.forEach(n => { if (!FICHES.some(f => f.numero === n)) throw new Error(`banque de plans n° ${b.numero} : fiche n° ${n} introuvable`); }));
+  const sujetsDeFiche = f => BANQUE.filter(b => b.fiches.includes(f.numero));
   const resume = f => { const t = stripTags(f.essentiel[0]); return t.length > 170 ? t.slice(0, t.lastIndexOf(" ", 165)) + "…" : t; };
   const ficheCard = (f, prefix, i) => `<a class="ep-card" href="${ficheURL(f, prefix)}">
         <span class="ep-card-tag">Fiche n° ${f.numero}</span>
@@ -1157,6 +1183,7 @@ ${contactCTA(prefix)}`;
       <div class="fiche-essentiel">${f.essentiel.map(p => `<p>${p}</p>`).join("")}</div>
       <h3>Les textes de référence</h3>
       <p class="fiche-sources">${esc(f.sources)}</p>
+      ${sujetsDeFiche(f).length ? `<div class="fiche-sujets"><h3>Sujet${sujetsDeFiche(f).length > 1 ? "s" : ""} de dissertation sur cette notion</h3><ul>${sujetsDeFiche(f).map(b => `<li><a href="${prefix}sujets/sujets-de-dissertation/#plan-${b.numero}">${esc(b.sujet)}</a></li>`).join("")}</ul></div>` : ""}
       ${OFFERTES.includes(f) ? offerteForm(f, prefix) : offerteBand(prefix, f)}
     </article>
     <aside class="fiche-plan" aria-label="Au programme de la fiche">
@@ -1217,6 +1244,178 @@ ${voisines.length ? `<section class="section section-cream">
       "@context": "https://schema.org", "@type": "ItemList", name: "Fiches de révision",
       itemListElement: FICHES.map((f, i) => ({ "@type": "ListItem", position: i + 1, url: SITE + `fiches/${f.slug}/`, name: f.titre }))
     }]
+  }));
+  urls.push(url);
+
+  // Sujets de dissertation : la liste publique de la banque de plans, par matière, avec la fiche gratuite de chaque notion
+  {
+    const prefix = "../../";
+    R.setRoot(prefix);
+    const url = SITE + "sujets/sujets-de-dissertation/";
+    const matieres = [...new Set(BANQUE.map(b => b.matiere))];
+    const body = `${subHero({
+      crumbs: [["Accueil", prefix], ["Sujets corrigés", prefix + "sujets/"], ["Sujets de dissertation", ""]],
+      h1: `${BANQUE.length} sujets de dissertation <em>juridique</em>`,
+      lead: `Les grands sujets de dissertation des concours de la magistrature, du greffe, de l'administration pénitentiaire, de l'EPPJEJ et de l'ENA, en droit pénal, civil, administratif, constitutionnel et OHADA. Pour chacun : l'idée directrice du plan, la fiche de révision de la notion, et le plan détaillé complet (introduction rédigée, deux parties, transitions et conclusion) dans l'espace VIP.`,
+      ctas: `<a href="#liste" class="btn btn-gold">Voir les sujets${arrow}</a><a href="${prefix}methodes/" class="btn btn-ghost">Méthode de la dissertation</a>`,
+      facts: [`<b>${BANQUE.length}</b> sujets`, `<b>${matieres.length}</b> matières`, "plans tirés de textes vérifiés"]
+    })}
+
+<section class="section" id="liste">
+  <div class="wrap">
+    ${matieres.map(m => `<h2 class="group-title" id="${slugify(m)}">${esc(m)}<small>${plural(BANQUE.filter(b => b.matiere === m).length, "sujet")}</small></h2>
+    <ol class="sujets-dissertation">${BANQUE.filter(b => b.matiere === m).map(b => `<li id="plan-${b.numero}"><h3>${esc(b.sujet)}</h3>
+        <p>${esc(b.resume)}</p>
+        <p class="sd-liens">${b.fiches.map(n => FICHES.find(f => f.numero === n)).map(f => `<a href="${ficheURL(f, prefix)}">Fiche n° ${f.numero}, ${esc(f.titre)}</a>`).join(" · ")}<span class="sd-vip">${svg("i-lock")}Plan détaillé dans l'espace VIP</span></p></li>`).join("")}</ol>`).join("\n    ")}
+    <div class="espace-band"><div><b>Les ${BANQUE.length} plans détaillés, dans l'espace VIP</b><p>Introduction rédigée en entonnoir, deux parties et quatre sous-parties argumentées, transitions et conclusion, avec les articles cités mot pour mot. Avec les ouvrages complets, les vidéos et une copie corrigée chaque mois.</p></div><a class="btn btn-gold" href="${prefix}espace-abonnes/">Découvrir l'espace VIP</a></div>
+  </div>
+</section>`;
+    write("sujets/sujets-de-dissertation/index.html", page({
+      prefix, url, body,
+      title: [`${BANQUE.length} sujets de dissertation juridique pour les concours de Côte d'Ivoire`, `${BANQUE.length} sujets de dissertation juridique`],
+      description: `${BANQUE.length} sujets de dissertation juridique pour la magistrature, le greffe et l'ENA : ${matieres.join(", ").toLowerCase()}. Idée directrice du plan et fiche de révision de chaque notion.`,
+      ld: [breadcrumb([["Accueil", SITE], ["Sujets corrigés", SITE + "sujets/"], ["Sujets de dissertation", url]]), {
+        "@context": "https://schema.org", "@type": "ItemList", name: "Sujets de dissertation juridique",
+        itemListElement: BANQUE.map((b, i) => ({ "@type": "ListItem", position: i + 1, url: `${url}#plan-${b.numero}`, name: b.sujet }))
+      }]
+    }));
+    urls.push(url);
+  }
+}
+
+/* ---------- Test de niveau gratuit ---------- */
+// 20 questions tirées des QCM publics, selon le concours choisi (test-niveau.js) ; pour voir son résultat, le visiteur
+// laisse son prénom et un e-mail ou un numéro WhatsApp (fonction fiche-offerte, action « test », table prospects).
+{
+  const qc = {};
+  vm.createContext(qc);
+  vm.runInContext(read("assets/js/qcm-matieres.js") + "\n;globalThis.Q=QCM_MATIERES;", qc);
+  const tous = CONCOURS.map(c => c.id);
+  const banque = [{ nom: "Méthode des épreuves", lien: "methodes/#qcm", concours: tous, questions: ctx.D.QCM },
+    ...qc.Q.map(t => ({ nom: t.nom, lien: `qcm/${t.slug}/`, concours: t.concours, questions: t.questions }))]
+    .map(t => ({ ...t, questions: t.questions.map(q => ({ q: q.q, options: q.options, bonne: q.bonne, explication: q.explication })) }));
+  write("assets/qj/test.json", JSON.stringify(banque));
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "test-de-niveau/";
+  const total = banque.reduce((n, t) => n + t.questions.length, 0);
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Test de niveau", ""]],
+    h1: "Test de niveau <em>gratuit</em>",
+    lead: "Vingt questions tirées de nos QCM, choisies selon votre concours. À la fin : votre note sur 20, vos points forts et vos points faibles matière par matière, la correction de chaque question et nos conseils pour la suite.",
+    ctas: `<a href="#test" class="btn btn-gold">Commencer le test</a>`,
+    facts: ["<b>20</b> questions", "environ <b>10</b> minutes", "résultat immédiat"]
+  })}
+
+<section class="section" id="test">
+  <div class="wrap">
+    <div class="test-niveau" id="testNiveau" data-banque="${prefix}assets/qj/test.json?v=${require("crypto").createHash("sha1").update(JSON.stringify(banque)).digest("hex").slice(0, 10)}" data-prefix="${prefix}">
+      <div class="test-etape" data-etape="debut">
+        <h2 class="h-section">Quel concours <em>préparez-vous ?</em></h2>
+        <p>Les questions sont tirées au hasard parmi les ${total} questions de nos QCM, dans les matières de votre concours. Prenez une feuille si besoin : pas de chronomètre, mais répondez sans chercher la réponse.</p>
+        <div class="test-concours">${CONCOURS.map(c => `<button class="btn btn-ghost" type="button" data-concours="${c.id}">${c.court}</button>`).join("")}</div>
+      </div>
+      <div class="test-etape" data-etape="question" hidden></div>
+      <div class="test-etape" data-etape="contact" hidden>
+        <h2 class="h-section">Votre résultat <em>est prêt</em></h2>
+        <p>Indiquez votre prénom et un e-mail ou un numéro WhatsApp pour l'afficher. Avec un e-mail, nous vous l'envoyons aussi, pour le garder.</p>
+        <form class="form offerte-form" id="testForm" novalidate>
+          <div class="field"><label for="tPrenom">Prénom</label><input id="tPrenom" name="prenom" autocomplete="given-name" maxlength="60" required></div>
+          <div class="field"><label for="tEmail">E-mail</label><input id="tEmail" name="email" type="email" autocomplete="email" maxlength="254"></div>
+          <div class="field"><label for="tWa">ou WhatsApp</label><input id="tWa" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="07 00 00 00 00"></div>
+          <label class="offerte-accord"><input type="checkbox" name="accepte_offres" value="1"> J'accepte de recevoir des conseils de révision et des offres des Cours Sésame et SAJ, par e-mail ou sur WhatsApp. Désinscription possible à tout moment.</label>
+          <button class="btn btn-gold" type="submit">Voir mon résultat</button>
+          <p class="offerte-etat" id="testEtat" role="status"></p>
+        </form>
+        <p class="offerte-mention">Vos coordonnées et votre résultat servent à vous le remettre et, si vous l'acceptez, à vous envoyer nos conseils et offres. Ils ne sont ni vendus ni cédés : voir nos <a href="${prefix}mentions-legales/#test-de-niveau">données personnelles</a>.</p>
+      </div>
+      <div class="test-etape" data-etape="resultat" hidden></div>
+      <noscript><p>Le test de niveau a besoin de JavaScript. Vous pouvez aussi vous entraîner sur <a href="${prefix}qcm/">nos QCM par matière</a>.</p></noscript>
+    </div>
+  </div>
+</section>`;
+  write("test-de-niveau/index.html", page({
+    prefix, url, body, scripts: ["assets/js/espace-config.js", "assets/js/test-niveau.js"],
+    title: ["Test de niveau gratuit pour les concours : magistrature, greffe, ENA", "Test de niveau gratuit pour les concours", "Test de niveau gratuit"],
+    description: "Testez gratuitement votre niveau avant les concours de la magistrature, du greffe, de l'administration pénitentiaire, de l'EPPJEJ ou de l'ENA : 20 questions, une note sur 20 et le détail par matière.",
+    ld: [breadcrumb([["Accueil", SITE], ["Test de niveau", url]])]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Calendrier des concours ---------- */
+// Dates saisies dans l'administration avec leur source (table calendrier_concours), lues par calendrier.js ; sans date
+// publiée, la page invite à être prévenu sur WhatsApp. Aucune date n'est écrite ici sans source officielle.
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "calendrier-des-concours/";
+  const msg = "Bonjour Les Cours Sésame et SAJ, je souhaite être prévenu(e) dès l'ouverture des inscriptions au concours suivant : ";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Calendrier des concours", ""]],
+    h1: "Calendrier des <em>concours</em>",
+    lead: "Les dates d'inscription, de dépôt des dossiers, des épreuves et des résultats des concours de l'INFJ (magistrature, greffe, administration pénitentiaire, EPPJEJ) et de l'ENA, chacune avec sa source officielle.",
+    ctas: `<a href="#dates" class="btn btn-gold">Voir les dates</a><a href="https://wa.me/${WA}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" class="btn btn-wa">${svg("i-wa")}Être prévenu sur WhatsApp</a>`,
+    facts: ["Dates vérifiées et sourcées", "Mis à jour à chaque communiqué"]
+  })}
+
+<section class="section" id="dates">
+  <div class="wrap">
+    <div class="calendrier" id="calendrier" data-wa="${WA}">
+      <p class="ea-vide" id="calendrierVide">Chargement des dates…</p>
+    </div>
+    <noscript><p>Le calendrier a besoin de JavaScript. Écrivez-nous sur WhatsApp pour connaître les prochaines dates.</p></noscript>
+    <div class="espace-band"><div><b>Préparez-vous avant l'ouverture des inscriptions</b><p>Testez votre niveau gratuitement, puis révisez avec nos fiches, nos sujets corrigés et nos concours blancs.</p></div><a class="btn btn-gold" href="${prefix}test-de-niveau/">Test de niveau gratuit</a></div>
+  </div>
+</section>`;
+  write("calendrier-des-concours/index.html", page({
+    prefix, url, body, scripts: ["assets/js/espace-config.js", "assets/js/calendrier.js"],
+    title: ["Calendrier des concours INFJ et ENA : inscriptions, épreuves, résultats", "Calendrier des concours INFJ et ENA", "Calendrier des concours"],
+    description: "Dates d'inscription, de dépôt des dossiers, des épreuves écrites et des résultats des concours de l'INFJ et de l'ENA en Côte d'Ivoire, avec leur source officielle.",
+    ld: [breadcrumb([["Accueil", SITE], ["Calendrier des concours", url]])]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Témoignage d'admis ---------- */
+// Formulaire pour les admis (temoignage.js, fonction deposer_temoignage) : accord de publication coché et daté ;
+// publication seulement après validation dans l'administration ; affichage sur l'accueil (« Ils ont réussi »).
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "temoignage/";
+  const annee = new Date().getFullYear();
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Témoignage", ""]],
+    h1: "Vous avez réussi ? <em>Racontez-le</em>",
+    lead: "Votre parcours peut aider les candidats qui préparent le même concours. Quelques lignes suffisent : comment vous vous êtes préparé, ce qui vous a servi, un conseil pour ceux qui suivent.",
+    ctas: `<a href="#formulaire" class="btn btn-gold">Écrire mon témoignage</a>`,
+    facts: ["Publié après vérification", "Prénom et initiale seulement", "Retrait à tout moment"]
+  })}
+
+<section class="section" id="formulaire">
+  <div class="wrap">
+    <form class="form offerte-form temoignage-form" id="temoignageForm" novalidate>
+      <div class="field"><label for="tgPrenom">Prénom</label><input id="tgPrenom" name="prenom" autocomplete="given-name" maxlength="60" required></div>
+      <div class="field"><label for="tgNom">Nom</label><input id="tgNom" name="nom" autocomplete="family-name" maxlength="60" required><small class="ad-note">Seule l'initiale est publiée.</small></div>
+      <div class="field"><label for="tgConcours">Concours réussi</label><select id="tgConcours" name="concours" required><option value="">Choisir</option>${CONCOURS.map(c => `<option value="${c.id}">${c.court}</option>`).join("")}<option value="autre">Autre concours</option></select></div>
+      <div class="field"><label for="tgAnnee">Année de réussite</label><input id="tgAnnee" name="annee" type="number" inputmode="numeric" min="2000" max="${annee}" value="${annee}" required></div>
+      <div class="field full"><label for="tgDetail">Précision (facultatif)</label><input id="tgDetail" name="detail" maxlength="120" placeholder="Exemple : cycle supérieur, rang 12"></div>
+      <div class="field full"><label for="tgTexte">Votre témoignage</label><textarea id="tgTexte" name="texte" rows="6" minlength="40" maxlength="800" required></textarea><small class="ad-note"><span id="tgCompte">0</span>/800 caractères, 40 au moins.</small></div>
+      <div class="field full"><label for="tgContact">Téléphone WhatsApp ou e-mail</label><input id="tgContact" name="contact" maxlength="254" required><small class="ad-note">Jamais publié : il sert seulement à vérifier votre réussite avant la publication.</small></div>
+      <label class="offerte-accord full"><input type="checkbox" name="accord" value="1" required> J'autorise Les Cours Sésame et SAJ à publier ce témoignage, avec mon prénom, l'initiale de mon nom, mon concours et mon année de réussite, sur coursesesame.com et sur leurs pages de réseaux sociaux. Je peux retirer cet accord à tout moment en écrivant sur WhatsApp.</label>
+      <button class="btn btn-gold" type="submit">Envoyer mon témoignage</button>
+      <p class="offerte-etat" id="temoignageEtat" role="status"></p>
+    </form>
+    <div class="offerte-ok" id="temoignageOk" hidden><p><b>Merci et bravo pour votre réussite !</b> Nous vérifions votre témoignage avant de le publier ; nous vous contacterons si besoin.</p></div>
+    <p class="offerte-mention">Voir nos <a href="${prefix}mentions-legales/#temoignages">données personnelles</a>.</p>
+  </div>
+</section>`;
+  write("temoignage/index.html", page({
+    prefix, url, body, scripts: ["assets/js/espace-config.js", "assets/js/temoignage.js"],
+    title: ["Témoignage d'admis : racontez votre réussite", "Témoignage d'admis"],
+    description: "Admis à la magistrature, au greffe, à l'ENA ou à un autre concours ? Racontez votre préparation pour aider les candidats qui suivent.",
+    ld: [breadcrumb([["Accueil", SITE], ["Témoignage", url]])]
   }));
   urls.push(url);
 }
@@ -1433,6 +1632,10 @@ ${contactCTA(prefix)}`;
     <p>Certaines fiches de révision sont offertes en entier. Pour les recevoir, vous indiquez votre prénom et une adresse e-mail ou un numéro WhatsApp, et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi la date, la fiche demandée et l'adresse de la page. Votre adresse IP est notée pour limiter les abus, puis effacée au bout d'un jour.</p>
     <p>Ces informations servent à vous remettre la fiche, par un lien de téléchargement et, si vous avez indiqué une adresse, par un e-mail envoyé par notre prestataire Brevo. Si vous cochez la case prévue, elles servent aussi à vous envoyer nos conseils de révision et nos offres, par e-mail ou sur WhatsApp ; sans cette case, nous ne vous écrivons pas. Vous pouvez retirer votre accord à tout moment, par le lien figurant dans nos e-mails ou en nous écrivant sur WhatsApp.</p>
     <p>Elles sont conservées chez Supabase, en Europe, consultables par l'administrateur seulement, et ne sont ni vendues ni cédées. Elles sont effacées sur simple demande sur WhatsApp, et au plus tard trois ans après votre dernier échange avec nous.</p>
+    <h2 id="temoignages">Témoignages d'admis</h2>
+    <p>Si vous envoyez un témoignage de réussite, nous enregistrons votre prénom, votre nom, votre concours, votre année de réussite, la précision facultative, votre texte, votre contact (téléphone ou e-mail), ainsi que la date de votre accord de publication. Seuls votre prénom, l'initiale de votre nom, votre concours, votre année, la précision et votre texte sont publiés, et seulement après vérification. Votre contact sert uniquement à cette vérification. Vous pouvez retirer votre accord à tout moment sur WhatsApp : le témoignage est alors retiré du site. Les données sont conservées chez Supabase, consultables par l'administrateur seulement, et effacées sur simple demande.</p>
+    <h2 id="test-de-niveau">Test de niveau</h2>
+    <p>Pour voir le résultat du test de niveau gratuit, vous indiquez votre prénom et une adresse e-mail ou un numéro WhatsApp. Nous enregistrons aussi le concours choisi, votre résultat (la note et le nombre de bonnes réponses par matière), la date et l'adresse de la page ; votre adresse IP est notée pour limiter les abus, puis effacée au bout d'un jour. Ces informations servent à vous afficher votre résultat et, si vous avez indiqué une adresse, à vous l'envoyer par un e-mail de notre prestataire Brevo. Pour le reste, les règles de la fiche offerte ci-dessus s'appliquent : conseils et offres seulement si vous cochez la case, conservation chez Supabase, effacement sur simple demande et au plus tard trois ans après votre dernier échange avec nous.</p>
 
     <h2 id="emails">E-mails</h2>
     <p>Nous envoyons aux abonnés, depuis l'adresse infos@coursesesame.com, trois sortes d'e-mails liés à leur abonnement. Le premier souhaite la bienvenue lors du premier abonnement, le deuxième rappelle la fin prochaine d'un abonnement trois jours avant son terme lorsqu'il n'a pas été prolongé, le troisième annonce les contenus mis en ligne dans l'espace abonnés, au plus une fois par jour. L'annonce des nouveautés n'est adressée qu'aux abonnés en cours ; chacun peut la refuser à tout moment, par le lien figurant dans chaque annonce ou dans la rubrique « Mon compte » de l'espace abonnés. Nous n'envoyons d'offres commerciales par e-mail qu'aux personnes qui l'ont accepté en demandant une fiche offerte.</p>
@@ -1606,6 +1809,77 @@ index = inject(index, "jsonld", "\n" + [
 write("index.html", cleanHTML(index));
 
 /* ---------- Plan du site ---------- */
+/* ---------- Hors connexion : page de secours et service worker (sw.js) ---------- */
+// Le service worker garde les pages publiques déjà visitées (réseau d'abord, copie si le réseau manque) et les fichiers
+// du site (feuilles de style, scripts, polices, images). Il ne touche ni à Supabase ni aux contenus des abonnés, qui
+// restent protégés (filigrane, un seul appareil), ni aux vidéos. Sa version suit l'empreinte des fichiers du site.
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Hors connexion", ""]],
+    h1: "Vous êtes <em>hors connexion</em>",
+    lead: "Cette page n'a pas encore été ouverte sur cet appareil. Les pages déjà visitées, elles, restent lisibles sans réseau : fiches de révision, sujets corrigés, QCM et méthodes.",
+    ctas: `<a href="${prefix}" class="btn btn-gold">Accueil</a><a href="${prefix}fiches/" class="btn btn-ghost">Fiches de révision</a>`,
+    facts: ["Pages déjà visitées disponibles", "L'espace abonnés demande une connexion"]
+  })}
+<section class="section"><div class="wrap"><div class="hl-pages" id="pagesHorsLigne" hidden><h2 class="h-section">Disponibles <em>sur cet appareil</em></h2><ul></ul></div></div></section>`;
+  write("hors-ligne/index.html", page({
+    prefix, url: "", body, robots: "noindex", stats: false, scripts: ["assets/js/hors-ligne.js"],
+    title: ["Hors connexion"], description: "Vous êtes hors connexion : les pages déjà visitées restent lisibles.", ld: []
+  }));
+  const fichiers = ["assets/css/style.css", "assets/js/data.js", "assets/js/render.js", "assets/js/app.js", "assets/js/hors-ligne.js",
+    "assets/img/favicon.svg", "assets/img/icone-192.png", ...fs.readdirSync(path.join(DIR, "assets/fonts")).filter(f => f.endsWith(".woff2")).map(f => "assets/fonts/" + f)];
+  const version = require("crypto").createHash("sha1").update(fichiers.map(f => f + empreinte(f)).join() + QJ_VERSION).digest("hex").slice(0, 10);
+  const avance = ["/", "/hors-ligne/", ...fichiers.map(f => "/" + f + (/\.(css|js)$/.test(f) ? "?v=" + empreinte(f) : ""))];
+  write("sw.js", `/* Service worker des Cours Sésame et SAJ, écrit par tools/build.js : ne pas modifier à la main.
+   Pages publiques : réseau d'abord, copie gardée si le réseau manque, sinon la page /hors-ligne/.
+   Fichiers du site : copie d'abord (leurs adresses changent à chaque version). Rien pour Supabase, les vidéos
+   ni l'espace abonnés, dont les contenus restent en ligne. */
+const VERSION = "${version}";
+// Les pages gardent le même cache d'une version à l'autre ; les fichiers changent de cache à chaque version
+const PAGES = "pages", FICHIERS = "fichiers-" + VERSION, MAX_PAGES = 80;
+const AVANCE = ${JSON.stringify(avance)};
+self.addEventListener("install", e => {
+  e.waitUntil(caches.open(FICHIERS).then(c => c.addAll(AVANCE.filter(u => u.startsWith("/assets/")))).then(() =>
+    caches.open(PAGES)).then(c => c.addAll(["/", "/hors-ligne/"])).then(() => self.skipWaiting()));
+});
+self.addEventListener("activate", e => {
+  e.waitUntil(caches.keys().then(cles => Promise.all(cles.filter(k => k !== PAGES && k !== FICHIERS).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
+});
+const horsChamp = u => u.origin !== location.origin || u.pathname.startsWith("/espace-abonnes/") || u.pathname.startsWith("/assets/video/")
+  || u.pathname === "/sw.js";
+async function rogner() {
+  const c = await caches.open(PAGES), cles = await c.keys();
+  for (const k of cles.slice(0, Math.max(0, cles.length - MAX_PAGES))) await c.delete(k);
+}
+self.addEventListener("fetch", e => {
+  const r = e.request, u = new URL(r.url);
+  if (r.method !== "GET") return;
+  // Espace abonnés : jamais gardé ; sans réseau, la page hors connexion plutôt qu'une erreur du navigateur
+  if (r.mode === "navigate" && u.origin === location.origin && u.pathname.startsWith("/espace-abonnes/")) {
+    e.respondWith(fetch(r).catch(() => caches.match("/hors-ligne/")));
+    return;
+  }
+  if (horsChamp(u)) return;
+  if (r.mode === "navigate") {
+    e.respondWith(fetch(r).then(rep => {
+      if (rep.ok && rep.type === "basic") { const copie = rep.clone(); caches.open(PAGES).then(c => c.put(u.pathname, copie)).then(rogner); }
+      return rep;
+    }).catch(() => caches.match(u.pathname).then(m => m || caches.match("/hors-ligne/"))));
+    return;
+  }
+  if (u.pathname.startsWith("/assets/")) {
+    e.respondWith(caches.match(r).then(m => m || fetch(r).then(rep => {
+      if (rep.ok && rep.type === "basic" && !r.headers.has("range")) { const copie = rep.clone(); caches.open(FICHIERS).then(c => c.put(r, copie)); }
+      return rep;
+    }).catch(() => caches.match(r, { ignoreSearch: true }).then(m2 => m2 || Response.error()))));
+  }
+});
+`);
+}
+
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${u}</loc><lastmod>${TODAY}</lastmod></url>`).join("\n")}
