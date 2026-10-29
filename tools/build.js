@@ -1008,11 +1008,18 @@ ${contactCTA(prefix)}`;
   const MATIERES_SUJETS = {
     "droit-civil": ["Droit civil", "Droit de la famille"], "droit-penal": ["Droit pénal", "Procédure pénale"],
     "droit-administratif": ["Droit administratif"], "droits-de-l-enfant": ["Droits de l'enfant"], "organisation-judiciaire": ["Organisation judiciaire"],
-    "procedure-penale": ["Procédure pénale"], "droit-ohada": ["Droit commercial OHADA"], "culture-generale": ["Culture générale"]
+    "procedure-penale": ["Procédure pénale"], "droit-ohada": ["Droit commercial OHADA"], "culture-generale": ["Culture générale"],
+    "droit-de-la-famille": ["Droit de la famille", "Droit civil"], "droit-penal-general": ["Droit pénal"], "droit-penal-special": ["Droit pénal"]
   };
+  // Fiches de révision d'où sont tirées les questions (champ « fiches ») : leur essentiel est en accès libre
+  const FICHES_QCM = require(path.join(DIR, "contenu/fiches.js"));
+  // Début de « L'essentiel en une phrase » (déjà échappé dans contenu/fiches.js), coupé à un mot près
+  const resumeFiche = f => { const t = stripTags(f.essentiel[0]); return t.length > 170 ? t.slice(0, t.lastIndexOf(" ", 160)) + "…" : t; };
   for (const t of THEMES) {
     t.questions.forEach((q, i) => { if (!(q.bonne >= 0 && q.bonne < q.options.length)) throw new Error(`QCM ${t.slug}, question ${i + 1} : réponse "bonne" invalide`); });
     t.livres = t.ouvrages.map(titre => { const o = OUVRAGES.find(x => x.titre === titre); if (!o) throw new Error(`QCM ${t.slug} : ouvrage introuvable : ${titre}`); return o; });
+    t.fichesObj = (t.fiches || []).map(n => { const f = FICHES_QCM.find(x => x.numero === n); if (!f) throw new Error(`QCM ${t.slug} : fiche n° ${n} introuvable`); return f; });
+    if (!t.livres.length && !t.fichesObj.length) throw new Error(`QCM ${t.slug} : ni ouvrage ni fiche pour approfondir`);
   }
   const qcmCard = (t, prefix, i, href) => `<a class="ep-card reveal reveal-d${i % 4}" href="${href || `${prefix}qcm/${t.slug}/`}">
         <span class="ep-card-tag">QCM de ${plural(t.questions.length, "question")}</span>
@@ -1053,7 +1060,8 @@ ${contactCTA(prefix)}`;
       <div><span class="eyebrow">${t.nom}</span><h2 class="h-section">Pour <em>approfondir</em></h2></div>
       <p class="lead">${t.approfondir || "Les ouvrages d'où sont tirées ces questions, avec leur extrait gratuit quand il existe."}</p>
     </div>
-    <div class="books">${t.livres.map(o => R.bookHTML(horsConcours(livreDe(o)), OUVRAGES.indexOf(o), false)).join("")}</div>
+    ${t.fichesObj.length ? `<div class="ep-cards">${t.fichesObj.map((f, i) => `<a class="ep-card reveal reveal-d${i % 4}" href="${prefix}fiches/${f.slug}/"><span class="ep-card-tag">Fiche n° ${f.numero}</span><b>${esc(f.titre)}</b><span>${resumeFiche(f)}</span><span class="ep-card-go">Lire l'essentiel</span></a>`).join("")}</div>` : ""}
+    ${t.livres.length ? `<div class="books">${t.livres.map(o => R.bookHTML(horsConcours(livreDe(o)), OUVRAGES.indexOf(o), false)).join("")}</div>` : ""}
   </div>
 </section>
 
@@ -1094,7 +1102,7 @@ ${contactCTA(prefix)}`;
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["QCM", ""]],
     h1: `Les QCM gratuits`,
-    lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : droit civil, droit pénal, procédure pénale, droit administratif, droit OHADA, droits de l'enfant, organisation judiciaire, culture générale et méthode des épreuves. Chaque réponse est expliquée.`,
+    lead: `${nb} questions corrigées pour tester vos connaissances et votre méthode : ${THEMES.map(t => t.nom.replace(/^Droit/, "droit").replace(/^Droits/, "droits").replace(/^Organisation/, "organisation").replace(/^Procédure/, "procédure").replace(/^Culture/, "culture")).join(", ")} et méthode des épreuves. Chaque réponse est expliquée.`,
     ctas: `<a href="#liste" class="btn btn-gold">Choisir un QCM${arrow}</a><a href="${prefix}test-de-niveau/" class="btn btn-ghost">Test de niveau sur 20</a>`,
     facts: [`<b>${THEMES.length + 1}</b> QCM`, `<b>${nb}</b> questions corrigées`]
   })}
@@ -1109,7 +1117,7 @@ ${contactCTA(prefix)}`;
   write("qcm/index.html", page({
     prefix, url, body,
     title: ["QCM gratuits de droit et de méthode pour les concours ivoiriens", "QCM gratuits de droit et de méthode"],
-    description: `${nb} questions corrigées gratuites : droit civil, pénal, administratif et OHADA, procédure pénale, droits de l'enfant, organisation judiciaire, culture générale.`,
+    description: `${nb} questions corrigées gratuites : droit civil et de la famille, droit pénal, procédure pénale, droit administratif, constitutionnel et OHADA, droits de l'enfant, organisation judiciaire, culture générale.`,
     ld: [breadcrumb([["Accueil", SITE], ["QCM", url]])]
   }));
   urls.push(url);
