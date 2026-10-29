@@ -3181,5 +3181,284 @@ module.exports = [
    "Testez-vous"
   ],
   "questions": 4
+ },
+ {
+  "numero": 111,
+  "slug": "111-l-abus-de-majorite-et-l-abus-de-minorite",
+  "titre": "L'abus de majorité et l'abus de minorité",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 130 et 131.",
+  "essentiel": [
+   "L'Acte uniforme sanctionne le vote détourné de l'intérêt social : la décision prise par abus de majorité est nulle, et les associés qui bloquent par abus de minorité ou d'égalité une décision nécessaire engagent leur responsabilité, le juge pouvant faire voter un mandataire à leur place."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "L'abus de majorité",
+   "L'abus de minorité ou d'égalité",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 112,
+  "slug": "112-la-responsabilite-civile-des-dirigeants-sociaux",
+  "titre": "La responsabilité civile des dirigeants sociaux",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 161 à 172.",
+  "essentiel": [
+   "Le dirigeant social répond de ses fautes de gestion envers les tiers et envers la société : l'action individuelle répare le préjudice personnel d'un tiers ou d'un associé, l'action sociale celui de la société, et les associés peuvent l'exercer eux-mêmes si les organes restent inactifs."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "L'action individuelle",
+   "L'action sociale",
+   "Les protections de l'action",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 113,
+  "slug": "113-la-societe-anonyme-avec-administrateur-general",
+  "titre": "La société anonyme avec administrateur général",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 122, 414, 494 à 500, 502 à 505.",
+  "essentiel": [
+   "La société anonyme qui compte trois actionnaires au plus peut se passer de conseil d'administration : un administrateur général assume alors seul, sous sa responsabilité, l'administration et la direction générale, avec des pouvoirs étendus que les clauses limitatives ne peuvent opposer aux tiers."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La désignation",
+   "Les pouvoirs",
+   "Rémunération et contrat de travail",
+   "Les conventions avec la société",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 114,
+  "slug": "114-les-assemblees-generales-de-la-societe-anonyme",
+  "titre": "Les assemblées générales de la société anonyme",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 516 à 520, 546, 548 à 554.",
+  "essentiel": [
+   "Les actionnaires décident en assemblée générale ordinaire pour la gestion courante (comptes, résultat, nominations) et en assemblée générale extraordinaire pour toute modification des statuts, chacune avec ses règles de quorum et de majorité."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La convocation",
+   "L'assemblée générale ordinaire",
+   "L'assemblée générale extraordinaire",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 115,
+  "slug": "115-la-societe-par-actions-simplifiee-sas",
+  "titre": "La société par actions simplifiée (SAS)",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 853-1 à 853-23.",
+  "essentiel": [
+   "La SAS est la société de la liberté statutaire : les associés, responsables à hauteur de leurs apports, organisent librement sa direction et ses décisions dans les statuts, sous réserve de quelques règles impératives qui protègent les tiers et les associés."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les traits de la SAS",
+   "La direction",
+   "Les décisions des associés",
+   "Les conventions réglementées",
+   "Les clauses statutaires propres à la SAS",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 116,
+  "slug": "116-les-decisions-collectives-dans-la-sarl",
+  "titre": "Les décisions collectives dans la SARL",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 333, 334, 337, 338, 344 à 349, 356 à 360.",
+  "essentiel": [
+   "Dans la SARL, les associés décident en assemblée ou par consultation écrite : les décisions ordinaires exigent plus de la moitié du capital, les modifications des statuts les trois quarts, et certaines décisions graves l'unanimité."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les modes de décision",
+   "La convocation et l'information",
+   "Les décisions ordinaires",
+   "Les décisions extraordinaires",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 117,
+  "slug": "117-le-groupement-d-interet-economique-gie",
+  "titre": "Le groupement d'intérêt économique (GIE)",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 869 à 885.",
+  "essentiel": [
+   "Le GIE est une personne morale créée par deux membres au moins pour faciliter ou développer leur propre activité économique, sans but de partage des bénéfices, et dont les membres répondent des dettes sur leur patrimoine propre, en principe solidairement."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La nature du GIE",
+   "La responsabilité des membres",
+   "Le fonctionnement",
+   "Transformation et fin",
+   "GIE et société : tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 118,
+  "slug": "118-fusion-scission-et-apport-partiel-d-actif",
+  "titre": "Fusion, scission et apport partiel d'actif",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 189 à 199, 671 à 679.",
+  "essentiel": [
+   "La fusion réunit plusieurs sociétés en une seule, la scission partage le patrimoine d'une société entre plusieurs, et l'apport partiel d'actif transfère une branche autonome d'activité : les deux premières font disparaître une société sans liquidation, par transmission universelle de son patrimoine."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les trois opérations",
+   "Les effets",
+   "La procédure",
+   "La fusion entre sociétés anonymes",
+   "Les créanciers",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 119,
+  "slug": "119-la-societe-en-participation-la-societe-creee-de-fait-et-la-societe-de-fait",
+  "titre": "La société en participation, la société créée de fait et la société de fait",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 115, 854 à 868.",
+  "essentiel": [
+   "Trois sociétés vivent sans immatriculation régulière : la société en participation, voulue occulte par les associés ; la société créée de fait, née du comportement de personnes qui agissent en associés ; la société de fait, née d'une société viciée ; aucune n'a la personnalité morale."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La société en participation",
+   "Les tiers face à la société en participation",
+   "La société créée de fait et la société de fait",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 120,
+  "slug": "120-les-conventions-reglementees-dans-la-societe-anonyme",
+  "titre": "Les conventions réglementées dans la société anonyme",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 438 à 450.",
+  "essentiel": [
+   "Toute convention entre la société anonyme et l'un de ses dirigeants ou un actionnaire d'au moins 10 % doit être autorisée par le conseil d'administration puis soumise à l'assemblée, car l'intérêt personnel de l'intéressé peut heurter celui de la société ; certaines conventions sont même interdites."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les conventions concernées",
+   "La procédure",
+   "Les sanctions",
+   "Les conventions interdites",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
  }
 ];
