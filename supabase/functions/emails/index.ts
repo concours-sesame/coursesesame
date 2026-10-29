@@ -465,7 +465,7 @@ function suiviContact(c: Contact) {
         : "Hier, vous avez reçu une de nos fiches de révision. Pour continuer sur votre lancée, voici trois outils gratuits.",
       [
         `la question du jour, sur notre page d'accueil : une question par jour pour garder le rythme (${SITE}/)`,
-        `90 questions corrigées, classées par matière (${SITE}/qcm/)`,
+        `nos QCM gratuits par matière, avec l'explication de chaque réponse (${SITE}/qcm/)`,
         `29 sujets corrigés : dissertations, cas pratiques, commentaires et sujets d'ordre général (${SITE}/sujets/)`,
       ],
       ...(test ? [] : [`Pour savoir où vous en êtes, faites aussi le test de niveau gratuit : 20 questions sur les matières du concours${vise}, avec votre note par matière.`,
