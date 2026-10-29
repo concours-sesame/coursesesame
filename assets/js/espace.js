@@ -1472,6 +1472,88 @@
     accueil();
   }
 
+  // Mon plan de révision (espace VIP) : de cette semaine à la date du concours, les fiches, sujets corrigés, plans et
+  // QCM du concours de l'abonné, répartis semaine par semaine en alternant les matières ; la dernière semaine est
+  // gardée pour la révision finale. Un contenu ouvert dans l'espace est coché tout seul (mes_lectures).
+  const RUBRIQUES_PLAN = ["fiches", "corriges", "plans", "qcm"];
+  let mesLus = null;
+  async function chargerLus() { const r = await client.rpc("mes_lectures"); mesLus = new Set(r.error ? [] : (r.data || []).map(Number)); }
+  const lundiDe = d => { const x = new Date(d + "T00:00:00Z"); x.setUTCDate(x.getUTCDate() - ((x.getUTCDay() + 6) % 7)); return x.toISOString().slice(0, 10); };
+  const plusJoursIso = (d, n) => { const x = new Date(d + "T00:00:00Z"); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
+  function construirePlan() {
+    const fin = etat.profil.date_concours, id = monConcours();
+    if (!fin || fin <= auj()) return null;
+    const pool = contenus.filter(c => RUBRIQUES_PLAN.includes(rubrique(c)) && (!id || !(c.concours || []).length || c.concours.includes(id)) && !(c.vip && !etat.vip));
+    // Alternance des matières : on prend tour à tour un contenu de chaque matière
+    const parMatiere = new Map();
+    pool.sort((a, b) => (a.matiere || "").localeCompare(b.matiere || "") || a.id - b.id).forEach(c => { const m = c.matiere || ""; if (!parMatiere.has(m)) parMatiere.set(m, []); parMatiere.get(m).push(c); });
+    const ordre = [], files = [...parMatiere.values()];
+    while (files.some(f => f.length)) files.forEach(f => { if (f.length) ordre.push(f.shift()); });
+    const premier = lundiDe(auj()), dernier = lundiDe(fin);
+    const nbSemaines = Math.max(1, Math.round((new Date(dernier) - new Date(premier)) / (7 * 864e5)) + 1);
+    const travail = Math.max(1, nbSemaines - 1);
+    const parSemaine = Math.ceil(ordre.length / travail);
+    return Array.from({ length: nbSemaines }, (_, k) => ({
+      debut: plusJoursIso(premier, 7 * k), finale: k === nbSemaines - 1 && nbSemaines > 1,
+      contenus: k < travail ? ordre.slice(k * parSemaine, (k + 1) * parSemaine) : []
+    }));
+  }
+  async function outilPlan(corps, marque) {
+    corps.innerHTML = `<div class="ea-outil"><p>Préparation de votre plan…</p></div>`;
+    if (!mesLus) await chargerLus().catch(() => { mesLus = new Set(); });
+    const formulaireDate = () => `<form class="ea-tb-concours" id="eaPlanDate">
+        <label for="eaPlanJour">Date de mon concours</label>
+        <input id="eaPlanJour" type="date" value="${esc(etat.profil.date_concours || "")}" min="${auj()}" required>
+        <button class="btn btn-ghost btn-sm" type="submit">Enregistrer</button>
+      </form>`;
+    const afficher = () => {
+      const plan = construirePlan();
+      if (!plan) {
+        corps.innerHTML = `<div class="ea-outil"><p>Indiquez la date de votre concours : votre plan se construit aussitôt, semaine par semaine, avec les fiches, les sujets corrigés, les plans et les QCM de votre concours${monConcours() ? "" : " (choisissez aussi votre concours dans Mon compte)"}.</p>${formulaireDate()}</div>`;
+        poserFiligrane(corps, marque); return;
+      }
+      const tous = plan.flatMap(s => s.contenus), faits = tous.filter(c => mesLus.has(c.id)).length;
+      const pct = tous.length ? Math.round(faits * 100 / tous.length) : 0;
+      const cetteSemaine = lundiDe(auj());
+      const semaine = (s, k) => {
+        const n = s.contenus.filter(c => mesLus.has(c.id)).length, courante = s.debut === cetteSemaine;
+        const corpsS = s.finale
+          ? `<p>Semaine de révision finale : relisez vos <b>tableaux comparatifs</b>, récitez les <b>articles à savoir par cœur</b> qui vous restent, refaites une épreuve de <b>concours blanc</b> et reposez-vous la veille.</p>`
+          : !s.contenus.length ? `<p>Semaine de rattrapage : reprenez ce qui n'est pas encore coché et faites votre révision du jour.</p>`
+          : `<ul class="ea-plan-liste">${s.contenus.map(c => `<li class="${mesLus.has(c.id) ? "ea-plan-fait" : ""}"><button type="button" data-plan-ouvrir="${c.id}"><span class="ea-plan-case" aria-hidden="true">${mesLus.has(c.id) ? "✓" : ""}</span><span>${esc(c.titre)}<small>${esc(RUBRIQUES[rubrique(c)])}, ${esc((c.matiere || "").replace(/^[^·]*·\s*/, ""))}</small></span></button></li>`).join("")}</ul>`;
+        return `<details class="ea-plan-semaine${courante ? " ea-plan-courante" : ""}"${courante ? " open" : ""}>
+            <summary><b>Semaine ${k + 1}${courante ? ", cette semaine" : ""}</b><span>du ${dateFr(s.debut)}${s.finale ? ", révision finale" : s.contenus.length ? `, ${n}/${s.contenus.length}` : ", rattrapage"}</span></summary>${corpsS}</details>`;
+      };
+      corps.innerHTML = `<div class="ea-outil ea-plan">
+          <div class="ea-tb-chiffres">
+            <div><b>J-${joursAvant()}</b><span>avant le concours</span></div>
+            <div><b>${plan.length}</b><span>semaine${plan.length > 1 ? "s" : ""} de préparation</span></div>
+            <div><b>${faits}/${tous.length}</b><span>contenus travaillés</span></div>
+          </div>
+          <span class="ea-barre ea-plan-barre"><i style="width:${pct}%"></i></span>
+          <p class="ea-aide">Un contenu est coché dès que vous l'ouvrez dans l'espace. Une semaine en retard ? Rattrapez-la quand vous voulez : le plan ne se décale pas.</p>
+          ${plan.map(semaine).join("")}
+          <details class="ea-plan-semaine"><summary><b>Changer la date du concours</b></summary>${formulaireDate()}</details>
+        </div>`;
+      poserFiligrane(corps, marque);
+    };
+    corps.onclick = e => {
+      const b = e.target.closest("[data-plan-ouvrir]");
+      if (!b) return;
+      const c = contenus.find(x => x.id === Number(b.dataset.planOuvrir));
+      if (c) { mesLus.add(c.id); ouvrirContenu(c, marqueLecteur()); }
+    };
+    corps.onsubmit = async e => {
+      e.preventDefault();
+      const v = $("#eaPlanJour", corps).value || null;
+      const { error } = await client.from("profils").update({ date_concours: v }).eq("id", etat.uid);
+      if (error) { toast(messageErreur(error)); return; }
+      etat.profil.date_concours = v;
+      afficher();
+    };
+    afficher();
+  }
+
   // Grand oral : question tirée parmi les séries publiées, préparation chronométrée (1 minute), réponse à voix haute
   // (3 minutes, comme le conseille la série), enregistrement facultatif qui reste sur l'appareil, puis grille
   // d'auto-évaluation et réponse attendue, ouverte à la bonne page.
@@ -1808,7 +1890,8 @@
     oral: ["Simulateur de grand oral", outilOral],
     sujet: ["Sujet de la semaine", outilSujet],
     tableau: ["Mon tableau de bord", outilTableau],
-    cartes: ["Articles à savoir par cœur", outilCartes]
+    cartes: ["Articles à savoir par cœur", outilCartes],
+    plan: ["Mon plan de révision", outilPlan]
   };
   function outilsHTML() {
     const aFaire = seance(null).length, oral = oralQuestions.length, c = sujetSemaine(), j = joursAvant(), s = stats || { serie: 0 };
@@ -1819,6 +1902,8 @@
         ${toutesQuestions().length ? carte("revision", "Révision du jour", aFaire ? `${aFaire} question${aFaire > 1 ? "s" : ""} de QCM à travailler aujourd'hui.` : "Tout est à jour pour aujourd'hui.", "Méthode des boîtes, quelques minutes par jour") : ""}
         ${etat.vip ? carte("cartes", "Articles à savoir par cœur", cartesArt ? `${seanceCartes(null).length} carte${seanceCartes(null).length > 1 ? "s" : ""} à réciter aujourd'hui.` : "Le texte exact des articles que les correcteurs attendent.", "Espace VIP, méthode des boîtes")
           : `<button class="ea-outil-carte ea-outil-vip" type="button" data-vip-teaser><b>Articles à savoir par cœur <span class="ea-vip-marque">VIP</span></b><span>Le texte exact de 169 articles, à réciter par répétition espacée.</span><small>Réservé à l'espace VIP</small></button>`}
+        ${etat.vip ? carte("plan", "Mon plan de révision", j != null && j >= 0 ? `J-${j} : votre programme de la semaine est prêt.` : "Indiquez la date de votre concours : le plan se construit tout seul.", "Espace VIP, semaine par semaine")
+          : `<button class="ea-outil-carte ea-outil-vip" type="button" data-vip-teaser><b>Mon plan de révision <span class="ea-vip-marque">VIP</span></b><span>Votre programme semaine par semaine jusqu'au concours, coché au fil de vos lectures.</span><small>Réservé à l'espace VIP</small></button>`}
         ${oral ? carte("oral", "Grand oral", `${oral} questions du jury, avec chrono et enregistrement.`, "Préparation 1 min, réponse 3 min") : ""}
         ${c ? carte("sujet", "Sujet de la semaine", esc(c.titre), "Nouveau sujet chaque lundi") : ""}
         ${carte("tableau", "Mon tableau de bord", `${s.serie} jour${s.serie > 1 ? "s" : ""} de révision d'affilée${j != null && j >= 0 ? `, J-${j} avant le concours` : ""}.`, "Progression, planning et badges")}
