@@ -1778,3 +1778,13 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 .faq-contact .contact-list{margin-top:1.4rem}
 @media (max-width:960px){.catalogue-tete{grid-template-columns:1fr}.catalogue-tete .hero-pages{justify-self:start}}
 @media (max-width:640px){.prix-geant b{font-size:clamp(4.2rem,22vw,5.5rem)}}
+
+/* Espace VIP : articles à savoir par cœur */
+.ea-art-ref{font-family:var(--display);font-weight:400;font-stretch:115%;font-size:clamp(1.35rem,2.4vw,1.75rem);line-height:1.2;color:var(--navy);margin:.4rem 0 .2rem;text-wrap:balance}
+.ea-art-consigne{margin:1.2rem 0 1rem;color:var(--muted)}
+.ea-art-texte{margin:1rem 0;padding:1rem 1.15rem;border-left:3px solid var(--gold);background:var(--cream);font-family:var(--serif);font-size:1.06rem;line-height:1.6}
+.ea-art-texte p{margin:0 0 .45rem}
+.ea-art-texte p:last-child{margin-bottom:0}
+.ea-art-choix{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+.ea-outil-vip{border-style:dashed}
+.ea-outil-vip .ea-vip-marque{margin-left:.35rem;vertical-align:middle}
