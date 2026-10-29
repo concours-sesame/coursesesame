@@ -16,7 +16,7 @@
      {"n": "1", "t": "Un immeuble immatriculé", "d": "En principe présent et immatriculé (article 192)", "cue": 1},
      {"n": "2", "t": "Un acte", "d": "Authentique, ou sous seing privé suivant un modèle agréé (articles 203 à 208)", "cue": 2},
      {"n": "3", "t": "L'inscription", "d": "Elle prend rang du jour de l'inscription (article 195)", "cue": 3}],
-   "dit": ["L'hypothèque porte en principe sur un immeuble présent et *immatriculé*.", "Elle est constituée par acte authentique, ou par acte sous seing privé suivant un modèle agréé.", "Et elle prend rang du jour de son *inscription*. Avant, elle est inopposable aux tiers."]},
+   "dit": ["L'hypothèque porte en principe sur un immeuble présent et *immatriculé*.", "Elle est constituée par un acte notarié, ou par un acte sous signature privée suivant un modèle agréé.", "Et elle prend rang du jour de son *inscription*. Avant, elle est inopposable aux tiers."]},
   {"type": "blocs", "titre": "Les effets",
    "items": [
      {"t": "Droit de préférence", "d": "Le créancier est payé sur le prix avant les autres (article 197).", "cue": 1},
