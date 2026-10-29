@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-formation-du-mariage",
+ "titre": "Les conditions du mariage",
+ "rubrique": "Droit de la famille",
+ "scenes": [
+  {"type": "intro", "titre": "Les conditions du mariage",
+   "dit": ["Une notion, une minute.", "Les conditions du *mariage*."]},
+  {"type": "question", "titre": "Mariée à dix-sept ans avec l'accord de ses parents.",
+   "texte": "Le mariage est-il valable ?", "cueTexte": 1,
+   "dit": ["Ama, dix-sept ans, se marie avec l'accord de ses parents.", "Le mariage est-il *valable* ?"]},
+  {"type": "article", "titre": "Article 1er de la loi relative au mariage",
+   "citation": "Le mariage est l'union d'un homme et d'une femme célébrée par devant l'officier de l'état civil.", "cueCitation": 1,
+   "dit": ["Selon l'article *premier* de la loi de 2019 relative au mariage,", "le mariage est l'union d'un homme et d'une femme célébrée devant l'officier de l'*état civil*."]},
+  {"type": "etapes", "titre": "Les conditions de fond",
+   "items": [
+     {"n": "1", "t": "Dix-huit ans révolus", "d": "Pour l'homme comme pour la femme (article 2)", "cue": 1},
+     {"n": "2", "t": "Un consentement personnel", "d": "Les époux consentent seuls à leur mariage (article 5)", "cue": 2},
+     {"n": "3", "t": "Aucun empêchement", "d": "Pas de mariage antérieur non dissous, pas de parenté prohibée (articles 3 et 7)", "cue": 3}],
+   "dit": ["D'abord, l'âge : *dix-huit* ans révolus, pour l'homme comme pour la femme.", "Ensuite, un consentement personnel : les époux consentent *seuls* à leur mariage.", "Enfin, aucun empêchement : pas de mariage précédent non dissous, ni de lien de parenté ou d'alliance prohibé."]},
+  {"type": "blocs", "titre": "Les sanctions",
+   "items": [
+     {"t": "Nullité absolue", "d": "Âge, bigamie, parenté prohibée, absence de consentement : tout intéressé et le ministère public peuvent agir (articles 26 et 27).", "cue": 1},
+     {"t": "Nullité relative", "d": "Consentement vicié : seul l'époux concerné peut agir (article 31).", "cue": 2},
+     {"t": "Le mariage putatif", "d": "Le mariage nul produit ses effets à l'égard de l'époux de bonne foi (article 35).", "cue": 3, "fort": true}],
+   "dit": ["Les sanctions.", "La nullité *absolue* frappe notamment le mariage d'un mineur, la bigamie ou la parenté prohibée.", "La nullité *relative* sanctionne le consentement vicié, et seul l'époux concerné peut agir.", "Mais le mariage nul produit ses effets à l'égard de l'époux de *bonne foi*."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": false, "t": "Mariage nul", "d": "Ama n'a pas dix-huit ans : nullité absolue, malgré l'accord des parents (articles 2 et 26).", "cue": 1},
+     {"ok": true, "t": "La nullité est couverte", "d": "Lorsqu'elle atteint l'âge requis (article 29).", "cue": 2}],
+   "dit": ["Ama n'a pas dix-huit ans : le mariage est nul de nullité *absolue*, même avec l'accord de ses parents.", "Mais la nullité est *couverte* lorsqu'elle atteint l'âge requis."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "L'accord des parents", "d": "Il ne remplace pas l'âge légal : « L'homme et la femme consentent seuls à leur mariage » (article 5).", "cue": 0}],
+   "dit": ["Le piège : croire que l'accord des parents suffit.", "Selon l'article 5, l'homme et la femme consentent *seuls* à leur mariage, et l'âge de dix-huit ans s'impose à tous."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
