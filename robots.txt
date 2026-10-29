@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /tools/
+Disallow: /supabase/
+Disallow: /contenu/
 
 Sitemap: https://coursesesame.com/sitemap.xml

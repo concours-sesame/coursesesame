@@ -92,7 +92,8 @@ function rebase(html, prefix) {
   const fix = h => {
     if (h === "#top") return prefix || "./";
     if (h.startsWith("#")) return prefix + h;
-    if (/^(methodes\/|concours\/|ouvrages\/|sujets\/|qcm\/|assets\/|mentions-legales\/|conditions-de-vente\/|espace-abonnes\/|concours-blancs\/)/.test(h)) return prefix + h;
+    // L'en-tête et le pied de page viennent de index.html, à la racine : tout lien relatif y part de la racine
+    if (h && !/^([a-z][a-z0-9+.-]*:|\/|\.\.?\/)/i.test(h)) return prefix + h;
     return h;
   };
   return html.replace(/(<a\b[^>]*?\shref=")([^"]*)(")/g, (m, a, h, b) => a + fix(h) + b);
@@ -489,17 +490,19 @@ function videoLien(v, prefix, ici) {
   if (v.lien && ici !== "concours") return [v.lien.texte, prefix + v.lien.href];
   return null;
 }
-function videoFrame(v, prefix) {
+// differe : l'affiche n'est chargée qu'à l'approche de l'écran (data-poster, lu par assets/js/app.js), car le
+// navigateur charge toujours l'attribut poster, même pour une vidéo au bout d'une rangée qu'on ne fait pas défiler
+function videoFrame(v, prefix, differe = false) {
   const [w, h] = v.format === "carre" ? [720, 720] : [720, 1280];
   return `<div class="v-frame v-${v.format}">
-          <video class="v-media" controls playsinline preload="none" poster="${prefix}${v.poster}" width="${w}" height="${h}" aria-label="${attr(v.titre)}"><source src="${prefix}${v.src}" type="video/mp4"><a href="${prefix}${v.src}">Télécharger la vidéo</a></video>
+          <video class="v-media" controls playsinline preload="none" ${differe ? "data-" : ""}poster="${prefix}${v.poster}" width="${w}" height="${h}" aria-label="${attr(v.titre)}"><source src="${prefix}${v.src}" type="video/mp4"><a href="${prefix}${v.src}">Télécharger la vidéo</a></video>
           <span class="v-dur" aria-hidden="true">${v.duree}</span>
         </div>`;
 }
 function videoCard(v, prefix, i, ici) {
   const l = videoLien(v, prefix, ici);
   return `<figure class="v-card reveal reveal-d${i % 4}">
-        ${videoFrame(v, prefix)}
+        ${videoFrame(v, prefix, i >= 2)}
         <figcaption><span class="v-tag">${v.tag}</span><b>${v.titre}</b><span class="v-desc">${v.desc}</span>${l ? `<a class="v-link" href="${l[1]}">${l[0]}</a>` : ""}</figcaption>
       </figure>`;
 }
@@ -1887,9 +1890,13 @@ ${urls.map(u => `  <url><loc>${u}</loc><lastmod>${TODAY}</lastmod></url>`).join(
 `);
 
 /* ---------- Consignes aux moteurs de recherche ---------- */
-// La page d'administration porte déjà « noindex » ; le plan du site est indiqué à Google
+// La page d'administration porte déjà « noindex » ; le plan du site est indiqué à Google. Les dossiers de travail
+// (générateurs, base de données, scripts des vidéos) sont publiés avec le site mais n'ont rien à faire dans un moteur
 write("robots.txt", `User-agent: *
 Allow: /
+Disallow: /tools/
+Disallow: /supabase/
+Disallow: /contenu/
 
 Sitemap: ${SITE}sitemap.xml
 `);

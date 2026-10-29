@@ -657,6 +657,14 @@
   // sur l'affiche, les commandes natives dès la lecture, et une seule vidéo à la fois.
   function initVideos() {
     const vids = $$("video.v-media");
+    // Affiches différées (data-poster) : posées à l'approche de l'écran, y compris en faisant défiler une rangée
+    const differees = vids.filter(v => v.dataset.poster);
+    const poser = v => { v.poster = v.dataset.poster; v.removeAttribute("data-poster"); };
+    if (!("IntersectionObserver" in window)) differees.forEach(poser);
+    else if (differees.length) {
+      const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { poser(e.target); io.unobserve(e.target); } }), { rootMargin: "400px" });
+      differees.forEach(v => io.observe(v));
+    }
     vids.forEach(v => {
       const frame = v.closest(".v-frame");
       if (!frame) return;
