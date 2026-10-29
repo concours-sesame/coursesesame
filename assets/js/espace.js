@@ -886,7 +886,7 @@
     return `<section class="ea-vip" id="eaVip">
         <span class="ea-vip-marque">VIP</span>
         <h3>L'espace VIP</h3>
-        <p>${[o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "", v ? `${v} vidéo${v > 1 ? "s" : ""} réservée${v > 1 ? "s" : ""}` : "", dv ? `${dv} document${dv > 1 ? "s" : ""} VIP` : ""].filter(Boolean).join(", ")} à lire et à regarder en ligne, chaque mois une copie corrigée et notée sur 20 par un correcteur, les articles à savoir par cœur, votre plan de révision jusqu'au concours et trois fois plus de pages à télécharger (60 sur 30 jours au lieu de 20), en plus de tout votre abonnement. Le VIP coûte le triple de l'abonnement normal${vipDes().replace(/,$/, "")} ; il s'ouvre dès la validation de votre paiement, sans attendre la fin de votre abonnement en cours.</p>
+        <p>${[o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "", v ? `${v} vidéo${v > 1 ? "s" : ""} réservée${v > 1 ? "s" : ""}` : "", dv ? `${dv} document${dv > 1 ? "s" : ""} VIP` : ""].filter(Boolean).join(", ")} à lire et à regarder en ligne, chaque mois une copie corrigée et notée sur 20 par un correcteur, les articles à savoir par cœur, votre plan de révision jusqu'au concours, les nouveautés en avant-première et trois fois plus de pages à télécharger (60 sur 30 jours au lieu de 20), en plus de tout votre abonnement. Le VIP coûte le triple de l'abonnement normal${vipDes().replace(/,$/, "")} ; il s'ouvre dès la validation de votre paiement, sans attendre la fin de votre abonnement en cours.</p>
         <p class="ea-tarifs ea-tarifs-vip">${tarifsVip().filter(t => ["vip-j1", "vip-j7", "vip-m1", "vip-m12"].includes(t.cle)).map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
         ${renouvellement ? `<p class="ea-aide">Choisissez une formule VIP dans le formulaire de renouvellement ci-dessus.</p>` : paiementHTML(true, "vip-m1")}
       </section>`;
@@ -1067,6 +1067,8 @@
   const porteeActive = () => !monConcours() ? "tous" : portee || (contenus.some(pourMoi) ? "moi" : "tous");
   const cleAbonne = nom => `ea-${nom}-${etat.uid}`;
   let vuAvant = null; // date de la visite précédente sur cet appareil (contenus « Nouveau »)
+  // Avant-première VIP (contenus.avant_premiere) : la base ne livre le contenu qu'aux VIP pendant ses sept premiers jours
+  const enAvantPremiere = c => !!c.avant_premiere && Date.now() - new Date(c.publie_le) < 7 * 864e5;
   const estNouveau = c => !!vuAvant && !!c.publie_le && new Date(c.publie_le) > vuAvant && new Date(c.publie_le) <= new Date();
   const listeFavoris = () => lu(cleAbonne("favoris"), []);
   const crochetFavoris = {
@@ -1103,7 +1105,7 @@
         ${mots.length ? `<p class="ea-cherche-bilan" role="status">${liste.length ? `${liste.length} résultat${liste.length > 1 ? "s" : ""} dans toute la bibliothèque, tous concours confondus.` : "Aucun contenu ne correspond à cette recherche."}${["textes", "jurisprudence"].some(r => contenus.some(c => rubrique(c) === r)) ? ` Pour chercher dans le texte même des lois et des décisions, ouvrez la rubrique Textes officiels ou Jurisprudence.` : ""}</p>`
           : ["textes", "jurisprudence"].includes(filtre) ? rechercheTextesHTML() : ""}
         <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}">
-            <span class="ea-carte-marques">${estVip(c) ? `<span class="ea-vip-marque">VIP</span>` : ""}<span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
+            <span class="ea-carte-marques">${estVip(c) ? `<span class="ea-vip-marque">VIP</span>` : ""}${enAvantPremiere(c) ? `<span class="ea-avant">Avant-première VIP</span>` : ""}<span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
             <small>${[c.matiere ? esc(c.matiere) : "", (c.concours || []).map(nomConcours).join(", "), dateFr(c.publie_le)].filter(Boolean).join(" · ")}</small>
@@ -1858,7 +1860,7 @@
       if (t > fin) client.rpc("corrige_blanc", { p_concours: b.id }).then(async r => {
         if (r.error || !r.data) return;
         corrige = contenus.find(x => x.id === r.data);
-        if (!corrige) { const q = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip").eq("id", r.data).maybeSingle(); corrige = q.data; }
+        if (!corrige) { const q = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip, avant_premiere").eq("id", r.data).maybeSingle(); corrige = q.data; }
         const z = $("#eaBlancCorrige");
         if (corrige && z) z.innerHTML = `<div class="ea-outil-boutons"><button class="btn btn-navy" type="button" data-bl="corrige">Lire le corrigé-type et sa grille</button></div>`;
       });
@@ -2002,7 +2004,7 @@
       brancherFormulaires();
     } else if (etat.abo.actif || etat.admin) {
       const [{ data, error }] = await Promise.all([
-        client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip").eq("publie", true).order("publie_le", { ascending: false }),
+        client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip, avant_premiere").eq("publie", true).order("publie_le", { ascending: false }),
         chargerAgent().catch(() => { agent = null; }),
         chargerOutils().catch(() => { /* outils indisponibles : la bibliothèque reste accessible */ }),
         chargerCopies().catch(() => { mesCopies = []; })
