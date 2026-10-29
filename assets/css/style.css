@@ -1727,6 +1727,7 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 
 /* 1. Le haut de page fait essayer le produit : une vraie question du QCM de méthode */
 .accueil .hero-inner{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}
+@media (max-width:900px){.accueil .hero-inner{grid-template-columns:1fr}}
 .essai{margin:0;padding:clamp(22px,2.6vw,34px);background:var(--nuit-2);border-radius:var(--r);box-shadow:var(--ombre-levee)}
 .essai-tete{font-size:.95rem;color:var(--brume);margin-bottom:.9rem}
 .essai-q{font-family:var(--display);font-weight:400;font-stretch:115%;font-size:clamp(1.35rem,2vw,1.7rem);line-height:1.2;letter-spacing:-.01em;color:var(--clair);margin-bottom:1.2rem;text-wrap:balance}
@@ -1819,3 +1820,8 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 .ea-classement-barres i{display:block;height:.7rem;min-width:2px;border-radius:2px;background:var(--navy)}
 .ea-classement-barres b{text-align:right}
 @media (max-width:420px){.ea-classement-table th,.ea-classement-table td{padding:.45rem .35rem}}
+
+/* Question du jour (accueil) */
+.essai-tete{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.3rem 1rem}
+.essai-serie{color:var(--gold);font-weight:600}
+.essai-demain{margin-top:.6rem;font-size:.92rem;color:var(--brume)}

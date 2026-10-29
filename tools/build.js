@@ -137,20 +137,41 @@ function abonnementHTML() {
     `;
 }
 
-// Accueil : une vraie question du QCM de méthode, jouable dans le haut de page (app.js, initEssai)
+// Question du jour (accueil) : les questions publiques des QCM (méthode et matières), dans un ordre mêlé fixe, une par
+// fichier assets/qj/<n>.json. app.js (initEssai) charge la question n = jour % total et tient la série de jours du
+// visiteur ; sans JavaScript, la question de méthode ci-dessous reste affichée.
+function questionsDuJour() {
+  const qc = {};
+  vm.createContext(qc);
+  vm.runInContext(read("assets/js/qcm-matieres.js") + "\n;globalThis.Q=QCM_MATIERES;", qc);
+  const liste = [...ctx.D.QCM.map(q => ({ ...q, theme: "Méthode des épreuves", lien: "methodes/#qcm" })),
+    ...qc.Q.flatMap(t => t.questions.map(q => ({ ...q, theme: t.nom, lien: `qcm/${t.slug}/` })))];
+  // Mélange à graine fixe (mulberry32) : l'ordre ne change qu'avec la liste des questions
+  let g = 20261029;
+  const alea = () => { g = (g + 0x6D2B79F5) | 0; let t = Math.imul(g ^ (g >>> 15), 1 | g); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  for (let k = liste.length - 1; k > 0; k--) { const j = Math.floor(alea() * (k + 1)); [liste[k], liste[j]] = [liste[j], liste[k]]; }
+  return liste.map(q => ({ q: q.q, options: q.options, bonne: q.bonne, explication: q.explication, theme: q.theme, lien: q.lien }));
+}
+const QJ = questionsDuJour();
+const QJ_VERSION = require("crypto").createHash("sha1").update(JSON.stringify(QJ)).digest("hex").slice(0, 10);
+fs.rmSync(path.join(DIR, "assets/qj"), { recursive: true, force: true });
+QJ.forEach((q, n) => write(`assets/qj/${n}.json`, JSON.stringify(q)));
+
+// Accueil : la question du jour, jouable dans le haut de page (app.js, initEssai) ; sans JavaScript, une question du QCM de méthode
 const ESSAI_QUESTION = "Quel plan est attendu pour une dissertation juridique ?";
 function essaiHTML() {
   const q = ctx.D.QCM.find(x => x.q === ESSAI_QUESTION);
   if (!q) throw new Error("accueil : question du QCM introuvable : " + ESSAI_QUESTION);
-  return `<figure class="essai" data-bonne="${q.bonne}" aria-labelledby="essaiQ">
-      <figcaption class="essai-tete">Essayez : une question de notre QCM de méthode</figcaption>
+  return `<figure class="essai" data-bonne="${q.bonne}" data-qj-total="${QJ.length}" data-qj-v="${QJ_VERSION}" aria-labelledby="essaiQ">
+      <figcaption class="essai-tete"><span class="essai-titre">Essayez : une question de notre QCM de méthode</span><span class="essai-serie" hidden></span></figcaption>
       <p class="essai-q" id="essaiQ">${q.q}</p>
       <ol class="essai-opts" type="A">
         ${q.options.map((o, i) => `<li><button class="essai-opt" type="button" data-i="${i}">${o}</button></li>`).join("\n        ")}
       </ol>
       <div class="essai-verdict" aria-live="polite" hidden>
         <p><b class="essai-resultat"></b> ${q.explication}</p>
-        <div class="essai-actions"><a class="btn btn-gold" href="espace-abonnes/#inscription">Créer mon compte</a><a class="btn btn-ghost" href="methodes/#qcm">Les 10 questions du QCM</a></div>
+        <p class="essai-demain" hidden></p>
+        <div class="essai-actions"><a class="btn btn-gold" href="espace-abonnes/#inscription">Créer mon compte</a><a class="btn btn-ghost essai-suite" href="methodes/#qcm">Les 10 questions du QCM</a></div>
       </div>
       <noscript><p class="essai-noscript">Réponse : ${q.options[q.bonne]}. ${q.explication}</p></noscript>
     </figure>
