@@ -1314,6 +1314,19 @@
     const ok = qs.filter(x => { const p = progres.get(cleQ(x.c.id, x.i)); return p && p.boite >= MAITRISE; }).length;
     return { total: qs.length, ok, pct: qs.length ? Math.round(ok * 100 / qs.length) : 0 };
   };
+  // Progression d'une matière (tableau de bord) : taux de bonnes réponses, questions vues, maîtrisées, à revoir
+  const progresMatiere = m => {
+    const qs = toutesQuestions().filter(x => x.matiere === m);
+    let vues = 0, bonnes = 0, erreurs = 0, ok = 0, revoir = 0;
+    qs.forEach(x => {
+      const p = progres.get(cleQ(x.c.id, x.i));
+      if (!p) return;
+      vues++; bonnes += p.bonnes; erreurs += p.erreurs;
+      if (p.boite >= MAITRISE) ok++;
+      if (p.prochaine <= auj()) revoir++;
+    });
+    return { m, total: qs.length, vues, ok, revoir, taux: bonnes + erreurs ? Math.round(bonnes * 100 / (bonnes + erreurs)) : null };
+  };
   async function enregistrerReponse(x, juste) {
     const k = cleQ(x.c.id, x.i), avant = progres.get(k) || { boite: 0, bonnes: 0, erreurs: 0 };
     const boite = juste ? Math.min(5, (progres.has(k) ? avant.boite : 0) + 1) : 0;
@@ -1324,8 +1337,8 @@
     if (error && !enregistrerReponse.averti) { enregistrerReponse.averti = true; toast(etat.admin ? "Compte administrateur : la progression n'est pas enregistrée." : "Progression non enregistrée. Vérifiez votre connexion."); }
   }
 
-  function outilRevision(corps, marque) {
-    let matiere = "", liste = [], n = 0, justes = 0;
+  function outilRevision(corps, marque, depart) {
+    let matiere = depart || "", liste = [], n = 0, justes = 0;
     const accueil = () => {
       const ms = matieresQcm();
       const compte = m => seance(m).length;
@@ -1716,6 +1729,24 @@
       ["Au-dessus de la moyenne", "Obtenir plus de 12 sur 20 à une copie", notes.some(n => n > 12)]
     ];
   }
+  // Ma progression par matière : les plus faibles d'abord, les matières pas encore commencées ensuite
+  function progressionHTML() {
+    const ms = matieresQcm().map(progresMatiere);
+    if (!ms.length) return "";
+    const commencees = ms.filter(x => x.taux != null).sort((a, b) => a.taux - b.taux || b.revoir - a.revoir);
+    const nonCommencees = ms.filter(x => x.taux == null);
+    const priorites = [...commencees.filter(x => x.taux < 70), ...nonCommencees].slice(0, 3);
+    const ligne = x => `<tr><th scope="row">${esc(x.m)}</th>
+        <td>${x.taux == null ? `<span class="ea-aide">pas commencée</span>` : `<span class="ea-barre ea-barre-${x.taux < 50 ? "faible" : x.taux < 70 ? "moyen" : "bon"}"><i style="width:${x.taux}%"></i></span><b>${x.taux} %</b>`}</td>
+        <td>${x.vues}/${x.total}</td><td>${x.ok}</td>
+        <td><button class="btn btn-ghost btn-sm" type="button" data-taction="reviser" data-m="${esc(x.m)}">Réviser${x.revoir ? ` (${x.revoir} à revoir)` : ""}</button></td></tr>`;
+    return `<h4>Ma progression par matière</h4>
+        ${priorites.length ? `<p class="ea-tb-priorite"><b>À réviser en priorité :</b> ${priorites.map(x => `${esc(x.m)} (${x.taux == null ? "pas encore commencée" : x.taux + " % de bonnes réponses"})`).join(", ")}.</p>`
+          : `<p class="ea-tb-priorite"><b>Bravo :</b> au moins 70 % de bonnes réponses dans chaque matière. Continuez la révision du jour pour ne rien oublier.</p>`}
+        <div class="ea-tb-progression"><table><thead><tr><th scope="col">Matière</th><th scope="col">Bonnes réponses</th><th scope="col">Questions vues</th><th scope="col">Maîtrisées</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
+        <tbody>${[...commencees, ...nonCommencees].map(ligne).join("")}</tbody></table></div>
+        <p class="ea-aide">Calculé sur vos réponses dans la révision du jour. Une question est « maîtrisée » après trois bonnes réponses espacées.</p>`;
+  }
   function outilTableau(corps, marque) {
     const s = stats || { jours: [], serie: 0, contenus_lus: 0, qcm_bonnes: 0, qcm_erreurs: 0 };
     const j = joursAvant(), p = PLANNING();
@@ -1739,14 +1770,17 @@
         ${semaine && p ? `<p class="ea-outil-fait">Vous êtes dans la <b>semaine ${semaine} sur 12</b> du planning de révision. <button class="btn btn-ghost btn-sm" type="button" data-taction="planning">Ouvrir le planning</button></p>` : ""}
         <h4>Les huit dernières semaines</h4>
         <div class="ea-calendrier" aria-label="Jours de révision des huit dernières semaines">${cases.map(d => `<i class="${actifs.has(d) ? "ea-actif" : ""}" title="${dateFr(d)}"></i>`).join("")}</div>
-        <h4>Maîtrise des QCM</h4>
-        <div class="ea-maitrise">${matieresQcm().map(m => { const x = maitrise(m); return `<div><span>${esc(m)}</span><span class="ea-barre"><i style="width:${x.pct}%"></i></span><b>${x.pct} %</b></div>`; }).join("")}</div>
+        ${progressionHTML()}
         ${notes.length ? `<h4>Vos dernières notes (agent de révision)</h4><p>${notes.map(e => `<span class="ea-tb-note">${noteFr(e.note)}/20</span>`).join(" ")}</p>` : ""}
         <h4>Vos badges</h4>
         <div class="ea-badges">${badges().map(([t, d, ok]) => `<div class="${ok ? "ea-badge-ok" : ""}"><b>${ok ? "★" : "☆"} ${t}</b><span>${d}</span></div>`).join("")}</div>
       </div>`;
     poserFiligrane(corps, marque);
-    corps.onclick = e => { const a = e.target.closest("[data-taction]"); if (a && a.dataset.taction === "planning" && p) ouvrirContenu(p, marque); };
+    corps.onclick = e => {
+      const a = e.target.closest("[data-taction]");
+      if (a && a.dataset.taction === "planning" && p) ouvrirContenu(p, marque);
+      if (a && a.dataset.taction === "reviser") outilRevision(corps, marque, a.dataset.m);
+    };
     corps.onsubmit = async e => {
       e.preventDefault();
       const v = $("#eaDateConcours", corps).value || null;

@@ -1854,3 +1854,28 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 .essai-test{margin-top:.8rem;font-size:.92rem;color:var(--brume)}
 .essai-test a{color:var(--clair);text-decoration:underline}
 @media (max-width:520px){.test-themes li{grid-template-columns:minmax(0,1fr) 4.8rem}.test-themes li>i{grid-column:1/-1;order:3}}
+
+/* Tableau de bord : progression par matière */
+.ea-tb-priorite{padding:.7rem .9rem;border-left:4px solid var(--gold);background:#fff8e8;border-radius:var(--r-sm)}
+.ea-tb-progression{overflow-x:auto;margin:.6rem 0}
+.ea-tb-progression table{width:100%;border-collapse:collapse;font-size:.95rem}
+.ea-tb-progression th,.ea-tb-progression td{padding:.5rem .5rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.ea-tb-progression thead th{font-weight:600;color:var(--muted);white-space:nowrap}
+.ea-tb-progression tbody th{font-weight:600}
+.ea-tb-progression td:nth-child(2){min-width:9rem}
+.ea-tb-progression td:nth-child(2) .ea-barre{display:inline-block;width:5rem;vertical-align:middle;margin-right:.4rem}
+.ea-barre-faible i{background:#c0392b}
+.ea-barre-moyen i{background:var(--gold)}
+.ea-barre-bon i{background:#2e8b57}
+.ea-tb-progression b{white-space:nowrap}
+@media (max-width:560px){
+  .ea-tb-progression thead{display:none}
+  .ea-tb-progression tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.25rem .8rem;padding:.7rem 0;border-bottom:1px solid var(--line)}
+  .ea-tb-progression th,.ea-tb-progression td{border:0;padding:0;min-width:0}
+  .ea-tb-progression td:nth-child(2){min-width:0;text-align:right}
+  .ea-tb-progression td:nth-child(3)::before{content:"Vues : "}
+  .ea-tb-progression td:nth-child(4)::before{content:"Maîtrisées : "}
+  .ea-tb-progression td:nth-child(3),.ea-tb-progression td:nth-child(4){font-size:.88rem;color:var(--muted)}
+  .ea-tb-progression td:nth-child(4){text-align:right}
+  .ea-tb-progression td:nth-child(5){grid-column:1/-1}
+}
