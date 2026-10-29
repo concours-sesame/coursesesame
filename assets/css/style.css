@@ -1938,3 +1938,6 @@ html[data-installable] .ea-installer [data-install]:not([hidden]){display:inline
 .ad-periodes{margin-bottom:1rem}
 .ad-entonnoir li{grid-template-columns:minmax(8rem,16rem) minmax(0,1fr) minmax(11rem,15rem)}
 @media (max-width:640px){.ad-entonnoir li{grid-template-columns:1fr;gap:.3rem;margin-bottom:.4rem}.ad-entonnoir .ad-barre-val{text-align:left}}
+/* QCM d'une fiche de révision, proposé en tête de la fiche dans la visionneuse */
+.ea-fiche-qcm{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem 1rem;margin:0 0 1rem;padding:.8rem 1rem;border:1px solid var(--gold);border-radius:var(--r-sm);background:var(--cream)}
+.ea-fiche-qcm span{flex:1 1 16rem}
