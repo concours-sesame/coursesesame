@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-responsabilite-du-commettant",
+ "titre": "La responsabilité du commettant",
+ "rubrique": "Droit civil",
+ "scenes": [
+  {"type": "intro", "titre": "La responsabilité du commettant",
+   "dit": ["Une notion, une minute.", "La responsabilité du *commettant*."]},
+  {"type": "question", "titre": "Le chauffeur de la société renverse un piéton.",
+   "texte": "La société doit-elle payer ?", "cueTexte": 1,
+   "dit": ["En pleine livraison, le chauffeur d'une société de transport renverse un piéton par imprudence.", "La *société* doit-elle réparer le dommage ?"]},
+  {"type": "article", "titre": "Article 1384, alinéa 5, du Code civil",
+   "citation": "Les maîtres et les commettants, du dommage causé par leurs domestiques et préposés dans les fonctions auxquelles ils les ont employés.", "cueCitation": 1,
+   "dit": ["Selon l'article *1384*, alinéa 5, du Code civil,", "les commettants répondent du dommage causé par leurs préposés dans les *fonctions* auxquelles ils les ont employés."]},
+  {"type": "etapes", "titre": "Les conditions",
+   "items": [
+     {"n": "1", "t": "Un lien de préposition", "d": "Le pouvoir de donner des ordres et des instructions", "cue": 1},
+     {"n": "2", "t": "Un fait dommageable du préposé", "d": "En principe une faute (articles 1382 et 1383)", "cue": 2},
+     {"n": "3", "t": "Dans les fonctions", "d": "Pas un acte totalement étranger, à des fins personnelles", "cue": 3}],
+   "dit": ["Trois conditions. Un lien de *préposition* : le commettant a le pouvoir de donner des ordres et des instructions.", "Un fait dommageable du préposé, en principe une faute.", "Et un fait commis *dans les fonctions*, et non à des fins personnelles, totalement en dehors de celles-ci."]},
+  {"type": "blocs", "titre": "Le régime",
+   "items": [
+     {"t": "Pas d'exonération par l'absence de faute", "d": "L'alinéa 7 de l'article 1384 ne vise que les parents et les artisans.", "cue": 1},
+     {"t": "Un recours contre le préposé", "d": "Admis par la doctrine contre le préposé fautif.", "cue": 2},
+     {"t": "Devant le juge pénal", "d": "Le commettant peut être cité comme civilement responsable, avec l'assureur (article 21 du Code de procédure pénale).", "cue": 3}],
+   "dit": ["Le régime est favorable à la victime.", "Le commettant ne peut pas s'exonérer en prouvant qu'il n'a pas commis de faute.", "Il garde un recours contre le préposé fautif.", "Et devant le juge pénal, la victime peut le citer comme civilement responsable, avec son *assureur*."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "La société répond", "d": "Le chauffeur conduisait pour la livraison : dans ses fonctions.", "cue": 1},
+     {"ok": false, "t": "La société ne répond pas", "d": "Un vigile en congé cause un accident avec sa propre voiture, pour une affaire personnelle.", "cue": 2}],
+   "dit": ["Le chauffeur conduisait pour la livraison : la société *répond* du dommage.", "En revanche, un vigile en congé, avec sa propre voiture, pour une affaire personnelle, n'agit pas dans ses fonctions : l'employeur n'en répond pas."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Oublier le lien de subordination", "d": "Sans pouvoir de donner des ordres et des instructions, il n'y a pas de préposition.", "cue": 0}],
+   "dit": ["Le piège : oublier le lien de *subordination*.", "Sans pouvoir de donner des ordres et des instructions, il n'y a pas de commettant."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

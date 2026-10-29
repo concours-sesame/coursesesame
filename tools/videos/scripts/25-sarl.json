@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-sarl",
+ "titre": "La SARL",
+ "rubrique": "Droit OHADA",
+ "scenes": [
+  {"type": "intro", "titre": "La SARL",
+   "dit": ["Une notion, une minute.", "La société à *responsabilité limitée*."]},
+  {"type": "question", "titre": "Elle veut créer seule sa société.",
+   "texte": "Une SARL est-elle possible ?", "cueTexte": 1,
+   "dit": ["Affoué veut créer seule une société pour son commerce, sans risquer ses biens personnels.", "Une société à responsabilité limitée est-elle *possible* ?"]},
+  {"type": "article", "titre": "Article 309 de l'Acte uniforme sur les sociétés commerciales",
+   "citation": "La société à responsabilité limitée est une société dans laquelle les associés ne sont responsables des dettes sociales qu'à concurrence de leurs apports et dont les droits sont représentés par des parts sociales.", "cueCitation": 1,
+   "dit": ["Selon l'article *309* de l'Acte uniforme OHADA sur les sociétés commerciales,", "dans cette société, les associés ne répondent des dettes sociales qu'à concurrence de leurs *apports*."]},
+  {"type": "etapes", "titre": "La constitution",
+   "items": [
+     {"n": "1", "t": "Un ou plusieurs associés", "d": "Personnes physiques ou morales (article 309)", "cue": 1},
+     {"n": "2", "t": "Un capital", "d": "Un million de francs CFA au moins, sauf dispositions nationales contraires (article 311)", "cue": 2},
+     {"n": "3", "t": "Des parts sociales", "d": "D'une valeur nominale de cinq mille francs CFA au moins", "cue": 3}],
+   "dit": ["Elle peut être créée par *une seule* personne, physique ou morale, ou par plusieurs.", "Le capital est d'un million de francs CFA au moins, sauf dispositions nationales contraires.", "Il est divisé en parts sociales d'au moins cinq mille francs."]},
+  {"type": "blocs", "titre": "La gérance",
+   "items": [
+     {"t": "Des personnes physiques", "d": "Associées ou non (article 323).", "cue": 1},
+     {"t": "Des pouvoirs étendus", "d": "À l'égard des tiers, pour agir en toute circonstance au nom de la société (article 329).", "cue": 2},
+     {"t": "Révocable", "d": "Par les associés représentant plus de la moitié des parts sociales (article 326).", "cue": 3}],
+   "dit": ["La gérance.", "Elle est gérée par une ou plusieurs personnes *physiques*, associées ou non.", "À l'égard des tiers, le gérant a les pouvoirs les plus étendus pour agir au nom de la société.", "Et il est révocable par les associés représentant plus de la moitié des parts."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "SARL unipersonnelle", "d": "Affoué peut créer seule sa SARL et en être la gérante.", "cue": 1},
+     {"ok": false, "t": "Gérant refusé", "d": "Une société ne peut pas être gérante : il faut une personne physique.", "cue": 2}],
+   "dit": ["Affoué peut créer seule sa société, et en être la gérante.", "Mais une société ne peut pas être nommée gérante : le texte exige une personne *physique*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Les limites des statuts", "d": "Une clause qui limite les pouvoirs du gérant est inopposable aux tiers de bonne foi (article 329).", "cue": 0}],
+   "dit": ["Le piège : opposer aux tiers une limite des statuts.", "Selon l'article 329, les clauses qui limitent les pouvoirs du gérant sont inopposables aux tiers de *bonne foi*."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

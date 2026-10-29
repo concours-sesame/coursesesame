@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-detention-preventive",
+ "titre": "La détention préventive",
+ "rubrique": "Procédure pénale",
+ "scenes": [
+  {"type": "intro", "titre": "La détention préventive",
+   "dit": ["Une notion, une minute.", "La *détention préventive*."]},
+  {"type": "question", "titre": "Inculpé d'un délit puni d'un an au plus.",
+   "texte": "Peut-il être placé en détention ?", "cueTexte": 1,
+   "dit": ["Bléhi est inculpé d'un délit puni de six mois à un an d'emprisonnement. Il n'a jamais été condamné.", "Peut-il être placé en *détention préventive* ?"]},
+  {"type": "article", "titre": "Article 153 du Code de procédure pénale",
+   "citation": "La liberté est de droit, le contrôle judiciaire et la détention préventive des mesures exceptionnelles.", "cueCitation": 1,
+   "dit": ["L'article *153* du Code de procédure pénale pose le principe :", "la liberté est *de droit* ; le contrôle judiciaire et la détention préventive sont des mesures exceptionnelles."]},
+  {"type": "etapes", "titre": "Les conditions",
+   "items": [
+     {"n": "1", "t": "Une peine d'au moins deux ans", "d": "Sauf récidive ou condamnation antérieure sans sursis (article 162)", "cue": 1},
+     {"n": "2", "t": "Une ordonnance motivée", "d": "Par des éléments précis et circonstanciés (article 163)", "cue": 2},
+     {"n": "3", "t": "L'unique moyen", "d": "Preuves, témoins, fuite, ordre public : le contrôle judiciaire ne suffirait pas", "cue": 3}],
+   "dit": ["Trois conditions. L'inculpé doit encourir une peine privative de liberté d'au moins *deux ans*, sauf récidive ou condamnation antérieure sans sursis.", "Le juge doit rendre une ordonnance motivée par des éléments précis et circonstanciés.", "Et la détention doit être l'*unique* moyen d'atteindre un objectif précis, comme conserver les preuves ou protéger les témoins, que le contrôle judiciaire ne permettrait pas d'atteindre."]},
+  {"type": "blocs", "titre": "Une durée limitée",
+   "items": [
+     {"t": "Délit", "d": "Six mois, prolongeables par périodes de six mois au plus.", "cue": 1},
+     {"t": "Crime", "d": "Huit mois, prolongeables par périodes de huit mois au plus.", "cue": 2},
+     {"t": "Délais dépassés", "d": "L'inculpé est en détention injustifiée et doit être mis en liberté d'office.", "cue": 3, "fort": true}],
+   "dit": ["La durée est limitée.", "Six mois en matière correctionnelle, avec deux prolongations au plus de même durée.", "Huit mois en matière criminelle, selon la même règle.", "Au-delà, l'inculpé est en détention *injustifiée* et doit être mis en liberté d'office."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": false, "t": "Pas de détention possible", "d": "Bléhi encourt un an au plus et n'a jamais été condamné (article 162).", "cue": 1},
+     {"ok": true, "t": "Détention possible", "d": "Pour un délit puni de cinq ans, si elle est l'unique moyen de protéger les témoins.", "cue": 2}],
+   "dit": ["Bléhi encourt un an au plus et n'a jamais été condamné : la détention préventive est *impossible*.", "Pour un délit puni de cinq ans, elle serait possible si elle était l'unique moyen de protéger les témoins."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "La gravité des faits ne suffit pas", "d": "Une formule générale ne motive pas la détention : il faut des éléments précis et circonstanciés (article 163).", "cue": 0}],
+   "dit": ["Le piège : motiver la détention par la seule *gravité* des faits.", "L'article 163 exige des éléments précis et circonstanciés, et la preuve que le contrôle judiciaire ne suffit pas."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

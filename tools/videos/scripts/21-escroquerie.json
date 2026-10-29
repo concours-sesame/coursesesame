@@ -1,0 +1,38 @@
+{
+ "fichier": "notion-escroquerie",
+ "titre": "L'escroquerie",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {"type": "intro", "titre": "L'escroquerie",
+   "dit": ["Une notion, une minute.", "L'*escroquerie*."]},
+  {"type": "question", "titre": "Il paie 500 000 francs pour un faux recrutement.",
+   "texte": "Est-ce une escroquerie ?", "cueTexte": 1,
+   "dit": ["Se présentant comme agent de l'administration, Zouzou promet à Naounou un recrutement dans la fonction publique contre cinq cent mille francs. Naounou paie.", "Est-ce une *escroquerie* ?"]},
+  {"type": "article", "titre": "Article 471 du Code pénal",
+   "citation": "quiconque, soit en faisant usage de faux nom, de fausses qualités ou de qualité vraie, soit en employant des manœuvres frauduleuses, […] se fait remettre ou délivrer des fonds, des meubles ou des obligations […]", "cueCitation": 1,
+   "dit": ["L'article *471* du Code pénal punit", "celui qui, par un faux nom, une fausse qualité, l'abus d'une qualité vraie ou des manœuvres frauduleuses, se fait *remettre* des fonds ou des biens."]},
+  {"type": "etapes", "titre": "Les éléments",
+   "items": [
+     {"n": "1", "t": "Une tromperie", "d": "Faux nom, fausse qualité, qualité vraie ou manœuvres frauduleuses", "cue": 1},
+     {"n": "2", "t": "Une remise", "d": "C'est la victime qui remet, parce qu'elle a été trompée", "cue": 2},
+     {"n": "3", "t": "Un préjudice et l'intention", "d": "La fortune d'autrui est atteinte, par la volonté de tromper", "cue": 3}],
+   "dit": ["Il faut d'abord une *tromperie* : faux nom, fausse qualité, abus d'une qualité vraie, ou manœuvres frauduleuses.", "Ensuite, une *remise* : c'est la victime elle-même qui remet le bien, parce qu'elle a été trompée.", "Enfin, un préjudice, et la volonté de tromper pour obtenir la remise."]},
+  {"type": "blocs", "titre": "La sanction",
+   "items": [
+     {"t": "Peine de base", "d": "Un à cinq ans d'emprisonnement et 300 000 à 3 000 000 de francs d'amende.", "cue": 1},
+     {"t": "Appel au public", "d": "L'emprisonnement peut être porté à dix ans et l'amende à 10 000 000 de francs (article 471, alinéa 2).", "cue": 2},
+     {"t": "La tentative", "d": "Elle est punissable (article 471, alinéa 2).", "cue": 3, "fort": true}],
+   "dit": ["La sanction : un à cinq ans d'emprisonnement et une amende de trois cent mille à trois millions de francs.", "En cas d'appel au public pour émettre des titres, l'emprisonnement peut être porté à *dix* ans.", "Et la tentative est punissable."]},
+  {"type": "cas", "titre": "Un exemple",
+   "items": [
+     {"ok": true, "t": "Escroquerie", "d": "Zouzou se dit agent de l'administration : usage d'une fausse qualité.", "cue": 1},
+     {"ok": false, "t": "Pas une escroquerie, mais un vol", "d": "Il aurait pris l'argent dans le sac de Naounou, sans le tromper.", "cue": 2}],
+   "dit": ["Zouzou a usé d'une fausse qualité pour se faire remettre l'argent : c'est une *escroquerie*.", "S'il avait pris l'argent dans le sac de Naounou, sans le tromper, ce serait un *vol*."]},
+  {"type": "piege", "titre": "Le piège",
+   "items": [
+     {"t": "Escroquerie ou abus de confiance ?", "d": "Dans l'escroquerie, la tromperie précède la remise ; dans l'abus de confiance, la remise est régulière et le détournement vient après.", "cue": 0}],
+   "dit": ["Le piège : confondre escroquerie et abus de confiance.", "Dans l'escroquerie, la tromperie vient *avant* la remise. Dans l'abus de confiance, la remise est régulière, et le détournement vient *après*."]},
+  {"type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
