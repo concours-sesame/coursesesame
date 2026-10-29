@@ -544,7 +544,8 @@
   }
 
   /* ---------- Téléchargement de pages (limite mensuelle) ---------- */
-  // Sur 30 jours glissants : 20 pages au plus en tout, 5 pages au plus d'un même document. Le PDF est découpé
+  // Sur 30 jours glissants : 20 pages au plus en tout, 5 pages au plus d'un même document (60 et 15 pour un abonné VIP,
+  // telechargement_limites_de). Le PDF est découpé
   // et filigrané au nom de l'abonné par la fonction « telechargement » ; la base tient le décompte.
   function ajouterTelechargement(c, zone) {
     const barre = $(".ea-pdf-barre", zone);
@@ -885,7 +886,7 @@
     return `<section class="ea-vip" id="eaVip">
         <span class="ea-vip-marque">VIP</span>
         <h3>L'espace VIP</h3>
-        <p>${[o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "", v ? `${v} vidéo${v > 1 ? "s" : ""} réservée${v > 1 ? "s" : ""}` : "", dv ? `${dv} document${dv > 1 ? "s" : ""} VIP` : ""].filter(Boolean).join(", ")} à lire et à regarder en ligne, et chaque mois une copie corrigée et notée sur 20 par un correcteur, en plus de tout votre abonnement. Le VIP coûte le triple de l'abonnement normal${vipDes().replace(/,$/, "")} ; il s'ouvre dès la validation de votre paiement, sans attendre la fin de votre abonnement en cours.</p>
+        <p>${[o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "", v ? `${v} vidéo${v > 1 ? "s" : ""} réservée${v > 1 ? "s" : ""}` : "", dv ? `${dv} document${dv > 1 ? "s" : ""} VIP` : ""].filter(Boolean).join(", ")} à lire et à regarder en ligne, chaque mois une copie corrigée et notée sur 20 par un correcteur, les articles à savoir par cœur, votre plan de révision jusqu'au concours et trois fois plus de pages à télécharger (60 sur 30 jours au lieu de 20), en plus de tout votre abonnement. Le VIP coûte le triple de l'abonnement normal${vipDes().replace(/,$/, "")} ; il s'ouvre dès la validation de votre paiement, sans attendre la fin de votre abonnement en cours.</p>
         <p class="ea-tarifs ea-tarifs-vip">${tarifsVip().filter(t => ["vip-j1", "vip-j7", "vip-m1", "vip-m12"].includes(t.cle)).map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
         ${renouvellement ? `<p class="ea-aide">Choisissez une formule VIP dans le formulaire de renouvellement ci-dessus.</p>` : paiementHTML(true, "vip-m1")}
       </section>`;
