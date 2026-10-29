@@ -687,8 +687,15 @@
   // Chrome et Edge proposent l'installation du site (manifest.webmanifest) : le bouton du pied de page
   // n'apparaît que dans ce cas. Sur iPhone, l'ajout se fait depuis le bouton de partage de Safari (voir la FAQ).
   function initInstallation() {
+    // Service worker (sw.js, écrit par tools/build.js) : pages publiques déjà visitées lisibles hors connexion
+    if ("serviceWorker" in navigator && window.isSecureContext) navigator.serviceWorker.register("/sw.js").catch(() => { /* sans service worker */ });
     let invite = null;
-    const boutons = (visible) => $$("[data-install]").forEach(b => { b.hidden = !visible; });
+    // html[data-installable] : installation proposée par le navigateur ; html[data-ios] : iPhone hors application installée.
+    // Les invitations ajoutées plus tard dans la page (espace abonnés) suivent ces attributs (style.css).
+    const racine = document.documentElement;
+    const boutons = (visible) => { $$("[data-install]").forEach(b => { b.hidden = !visible; }); if (visible) racine.dataset.installable = "1"; else delete racine.dataset.installable; };
+    const installe = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+    if (!installe && /iphone|ipad|ipod/i.test(navigator.userAgent)) racine.dataset.ios = "1";
     window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); invite = e; boutons(true); });
     window.addEventListener("appinstalled", () => { invite = null; boutons(false); });
     document.addEventListener("click", async e => {

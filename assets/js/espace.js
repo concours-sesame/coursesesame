@@ -1998,6 +1998,10 @@
       return sessionStorage.getItem(CLE_PARRAIN) || "";
     } catch (e) { return q || ""; }
   }
+  // Invitation à installer le site (visible seulement si le navigateur le propose, ou sur iPhone : app.js, style.css)
+  const installerHTML = () => `<div class="ea-installer"><p><b>Installez l'application Sésame et SAJ</b> : votre espace s'ouvre d'un geste depuis l'écran d'accueil, comme une application.</p>
+      <button class="btn btn-gold btn-sm" type="button" data-install>Installer</button>
+      <p class="ea-installer-ios">Sur iPhone : dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ».</p></div>`;
   // Compteur (mon_parrainage) : amis inscrits avec le code, amis abonnés (récompensés), jours gagnés
   let parrainage = null;
   const lienParrain = code => `${new URL(ROOT + "espace-abonnes/", location.href).href}?parrain=${code}#inscription`;
@@ -2053,7 +2057,7 @@
       if (vuAvant === null) { const v = lu(cleAbonne("visite"), 0); vuAvant = v ? new Date(v) : false; ecrit(cleAbonne("visite"), Date.now()); }
       memoLecture = (c, page) => { if (c && c.id) ecrit(cleAbonne("reprise"), { id: c.id, page: Number(page) || 1 }); };
       favoris = crochetFavoris;
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + installerHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
       brancherCompte();
     } else {
       memoLecture = null; favoris = null;

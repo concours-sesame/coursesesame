@@ -1690,6 +1690,77 @@ index = inject(index, "jsonld", "\n" + [
 write("index.html", cleanHTML(index));
 
 /* ---------- Plan du site ---------- */
+/* ---------- Hors connexion : page de secours et service worker (sw.js) ---------- */
+// Le service worker garde les pages publiques déjà visitées (réseau d'abord, copie si le réseau manque) et les fichiers
+// du site (feuilles de style, scripts, polices, images). Il ne touche ni à Supabase ni aux contenus des abonnés, qui
+// restent protégés (filigrane, un seul appareil), ni aux vidéos. Sa version suit l'empreinte des fichiers du site.
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Hors connexion", ""]],
+    h1: "Vous êtes <em>hors connexion</em>",
+    lead: "Cette page n'a pas encore été ouverte sur cet appareil. Les pages déjà visitées, elles, restent lisibles sans réseau : fiches de révision, sujets corrigés, QCM et méthodes.",
+    ctas: `<a href="${prefix}" class="btn btn-gold">Accueil</a><a href="${prefix}fiches/" class="btn btn-ghost">Fiches de révision</a>`,
+    facts: ["Pages déjà visitées disponibles", "L'espace abonnés demande une connexion"]
+  })}
+<section class="section"><div class="wrap"><div class="hl-pages" id="pagesHorsLigne" hidden><h2 class="h-section">Disponibles <em>sur cet appareil</em></h2><ul></ul></div></div></section>`;
+  write("hors-ligne/index.html", page({
+    prefix, url: "", body, robots: "noindex", stats: false, scripts: ["assets/js/hors-ligne.js"],
+    title: ["Hors connexion"], description: "Vous êtes hors connexion : les pages déjà visitées restent lisibles.", ld: []
+  }));
+  const fichiers = ["assets/css/style.css", "assets/js/data.js", "assets/js/render.js", "assets/js/app.js", "assets/js/hors-ligne.js",
+    "assets/img/favicon.svg", "assets/img/icone-192.png", ...fs.readdirSync(path.join(DIR, "assets/fonts")).filter(f => f.endsWith(".woff2")).map(f => "assets/fonts/" + f)];
+  const version = require("crypto").createHash("sha1").update(fichiers.map(f => f + empreinte(f)).join() + QJ_VERSION).digest("hex").slice(0, 10);
+  const avance = ["/", "/hors-ligne/", ...fichiers.map(f => "/" + f + (/\.(css|js)$/.test(f) ? "?v=" + empreinte(f) : ""))];
+  write("sw.js", `/* Service worker des Cours Sésame et SAJ, écrit par tools/build.js : ne pas modifier à la main.
+   Pages publiques : réseau d'abord, copie gardée si le réseau manque, sinon la page /hors-ligne/.
+   Fichiers du site : copie d'abord (leurs adresses changent à chaque version). Rien pour Supabase, les vidéos
+   ni l'espace abonnés, dont les contenus restent en ligne. */
+const VERSION = "${version}";
+// Les pages gardent le même cache d'une version à l'autre ; les fichiers changent de cache à chaque version
+const PAGES = "pages", FICHIERS = "fichiers-" + VERSION, MAX_PAGES = 80;
+const AVANCE = ${JSON.stringify(avance)};
+self.addEventListener("install", e => {
+  e.waitUntil(caches.open(FICHIERS).then(c => c.addAll(AVANCE.filter(u => u.startsWith("/assets/")))).then(() =>
+    caches.open(PAGES)).then(c => c.addAll(["/", "/hors-ligne/"])).then(() => self.skipWaiting()));
+});
+self.addEventListener("activate", e => {
+  e.waitUntil(caches.keys().then(cles => Promise.all(cles.filter(k => k !== PAGES && k !== FICHIERS).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
+});
+const horsChamp = u => u.origin !== location.origin || u.pathname.startsWith("/espace-abonnes/") || u.pathname.startsWith("/assets/video/")
+  || u.pathname === "/sw.js";
+async function rogner() {
+  const c = await caches.open(PAGES), cles = await c.keys();
+  for (const k of cles.slice(0, Math.max(0, cles.length - MAX_PAGES))) await c.delete(k);
+}
+self.addEventListener("fetch", e => {
+  const r = e.request, u = new URL(r.url);
+  if (r.method !== "GET") return;
+  // Espace abonnés : jamais gardé ; sans réseau, la page hors connexion plutôt qu'une erreur du navigateur
+  if (r.mode === "navigate" && u.origin === location.origin && u.pathname.startsWith("/espace-abonnes/")) {
+    e.respondWith(fetch(r).catch(() => caches.match("/hors-ligne/")));
+    return;
+  }
+  if (horsChamp(u)) return;
+  if (r.mode === "navigate") {
+    e.respondWith(fetch(r).then(rep => {
+      if (rep.ok && rep.type === "basic") { const copie = rep.clone(); caches.open(PAGES).then(c => c.put(u.pathname, copie)).then(rogner); }
+      return rep;
+    }).catch(() => caches.match(u.pathname).then(m => m || caches.match("/hors-ligne/"))));
+    return;
+  }
+  if (u.pathname.startsWith("/assets/")) {
+    e.respondWith(caches.match(r).then(m => m || fetch(r).then(rep => {
+      if (rep.ok && rep.type === "basic" && !r.headers.has("range")) { const copie = rep.clone(); caches.open(FICHIERS).then(c => c.put(r, copie)); }
+      return rep;
+    }).catch(() => caches.match(r, { ignoreSearch: true }).then(m2 => m2 || Response.error()))));
+  }
+});
+`);
+}
+
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${u}</loc><lastmod>${TODAY}</lastmod></url>`).join("\n")}
