@@ -7,6 +7,7 @@
 // Variante pour un fichier transmis par l'éditeur : POST { action: "televersement", nom } renvoie une adresse de dépôt
 // signée, valable deux heures, pour le seul fichier textes/<nom>.pdf (sans remplacement d'un fichier existant) ;
 // avec format: "mp4", pour la vidéo videos/<nom>.mp4 (vidéo réservée aux abonnés, contenu de type « video »).
+// Cartes de l'espace VIP : POST { action: "cartes", nom } (voir plus bas).
 // Chargement des concours blancs : POST { action: "epreuves_blanches", nom } lit le fichier JSON déposé à textes/<nom>.pdf
 // (tableau de lignes { concours, serie, ordre, epreuve, titre, nature, duree_minutes, sujet, corrige }), l'enregistre dans
 // epreuves_blanches (une épreuve existante est remplacée, sa publication est conservée) puis efface le fichier.
@@ -120,6 +121,32 @@ Deno.serve(async (req) => {
     }
     await service.storage.from("exclusif").remove([chemin]);
     return json({ contenus: faits.length });
+  }
+  // Cartes de l'espace VIP (« Les articles à savoir par cœur ») : POST { action: "cartes", nom } lit le fichier JSON
+  // déposé à textes/<nom>.pdf (tableau de cartes) et l'enregistre dans cartes_articles, une carte par fiche et référence
+  if (d.action === "cartes") {
+    const nomDepot = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
+    const chemin = `textes/${nomDepot}.pdf`;
+    const { data: fichier, error: errLecture } = await service.storage.from("exclusif").download(chemin);
+    if (errLecture || !fichier) return json({ error: `Stockage ${errLecture?.message ?? "fichier absent"}` }, 404);
+    let cartes: Record<string, unknown>[];
+    try {
+      cartes = JSON.parse(await fichier.text());
+      if (!Array.isArray(cartes) || !cartes.length) throw new Error();
+    } catch {
+      return json({ error: "Fichier JSON invalide" }, 400);
+    }
+    const lignes = cartes.map((c, i) => ({
+      fiche: Number(c.fiche), titre_fiche: String(c.titre_fiche ?? "").slice(0, 200), matiere: String(c.matiere ?? "").slice(0, 80),
+      concours: Array.isArray(c.concours) ? c.concours.map(String) : [], reference: String(c.reference ?? "").slice(0, 300),
+      texte: String(c.texte ?? "").slice(0, 4000), ordre: Number(c.ordre ?? i),
+    }));
+    for (let i = 0; i < lignes.length; i += 100) {
+      const { error } = await service.from("cartes_articles").upsert(lignes.slice(i, i + 100), { onConflict: "fiche,reference" });
+      if (error) return json({ error: `Base ${error.message}` }, 500);
+    }
+    await service.storage.from("exclusif").remove([chemin]);
+    return json({ cartes: lignes.length });
   }
   const url = String(d.url ?? ""), titre = String(d.titre ?? "").trim().slice(0, 160), matiere = String(d.matiere ?? "").trim().slice(0, 80);
   const nom = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);

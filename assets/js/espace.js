@@ -1292,6 +1292,7 @@
     stats = s.error ? null : s.data;
     oralQuestions = g.error ? [] : g.data;
     await chargerBlancs().catch(() => { blancs = []; });
+    if (etat.vip) await chargerCartes().catch(() => { cartesArt = []; });
   }
   const aRevoir = x => { const p = progres.get(cleQ(x.c.id, x.i)); return !!p && p.prochaine <= auj(); };
   const nouvelle = x => !progres.has(cleQ(x.c.id, x.i));
@@ -1374,6 +1375,99 @@
       if (a.dataset.raction === "commencer") { liste = seance(matiere || null); n = 0; justes = 0; question(); }
       if (a.dataset.raction === "suivante") { n++; if (n < liste.length) question(); else bilan(); }
       if (a.dataset.raction === "accueil") accueil();
+    };
+    accueil();
+  }
+
+  // Articles à savoir par cœur (espace VIP) : le texte exact des articles cités dans les fiches de révision
+  // (table cartes_articles, lisible par les seuls abonnés VIP). L'abonné récite l'article de mémoire, retourne la carte
+  // et dit s'il le savait ; même méthode des boîtes que la révision du jour (table cartes_progres).
+  let cartesArt = null, cartesProg = new Map();
+  async function chargerCartes() {
+    const [c, p] = await Promise.all([
+      client.from("cartes_articles").select("id, fiche, titre_fiche, matiere, concours, reference, texte, ordre").order("ordre"),
+      client.from("cartes_progres").select("carte_id, boite, prochaine, bonnes, erreurs").eq("user_id", etat.uid)
+    ]);
+    cartesArt = c.error ? [] : c.data;
+    cartesProg = new Map((p.error ? [] : p.data).map(x => [x.carte_id, x]));
+  }
+  const cartesDuConcours = () => { const id = monConcours(); return (cartesArt || []).filter(c => !id || !c.concours.length || c.concours.includes(id)); };
+  const matieresCartes = () => [...new Set(cartesDuConcours().map(c => c.matiere))];
+  function seanceCartes(matiere) {
+    const toutes = cartesDuConcours().filter(c => !matiere || c.matiere === matiere);
+    const revoir = toutes.filter(c => cartesProg.has(c.id) && cartesProg.get(c.id).prochaine <= auj())
+      .sort((a, b) => (cartesProg.get(a.id).prochaine < cartesProg.get(b.id).prochaine ? -1 : 1)).slice(0, SEANCE);
+    const nouv = toutes.filter(c => !cartesProg.has(c.id)).slice(0, Math.max(0, Math.min(NOUVELLES, SEANCE - revoir.length)));
+    return [...revoir, ...nouv];
+  }
+  const maitriseCartes = matiere => {
+    const cs = cartesDuConcours().filter(c => c.matiere === matiere);
+    const ok = cs.filter(c => (cartesProg.get(c.id) || {}).boite >= MAITRISE).length;
+    return { total: cs.length, ok, pct: cs.length ? Math.round(ok * 100 / cs.length) : 0 };
+  };
+  async function enregistrerCarte(c, su) {
+    const avant = cartesProg.get(c.id) || { boite: 0, bonnes: 0, erreurs: 0 };
+    const boite = su ? Math.min(5, (cartesProg.has(c.id) ? avant.boite : 0) + 1) : 0;
+    const ligne = { user_id: etat.uid, carte_id: c.id, boite, prochaine: dansJours(INTERVALLES[boite]),
+      bonnes: avant.bonnes + (su ? 1 : 0), erreurs: avant.erreurs + (su ? 0 : 1), maj_le: new Date().toISOString() };
+    cartesProg.set(c.id, ligne);
+    const { error } = await client.from("cartes_progres").upsert(ligne);
+    if (error && !enregistrerCarte.averti) { enregistrerCarte.averti = true; toast(etat.admin ? "Compte administrateur : la progression n'est pas enregistrée." : "Progression non enregistrée. Vérifiez votre connexion."); }
+  }
+  // Le texte d'un article : un alinéa par ligne
+  const texteArticle = t => esc(t).split("\n").map(l => `<p>${l}</p>`).join("");
+  async function outilCartes(corps, marque) {
+    corps.innerHTML = `<div class="ea-outil"><p>Chargement des cartes…</p></div>`;
+    if (!cartesArt) await chargerCartes();
+    let matiere = "", liste = [], n = 0, sues = 0;
+    const accueil = () => {
+      const ms = matieresCartes(), nb = seanceCartes(matiere || null).length;
+      corps.innerHTML = `<div class="ea-outil">
+          <p>Le texte exact des articles que les correcteurs attendent, tiré de nos fiches de révision et vérifié au Journal officiel. Lisez la référence, récitez l'article de mémoire, puis retournez la carte : une carte sue revient de plus en plus tard (1, 3, 7, 15 puis 30 jours), une carte manquée revient dès demain.</p>
+          <div class="chips" role="group" aria-label="Matière">${[["", "Toutes les matières"], ...ms.map(m => [m, m])].map(([v, l]) => `<button class="chip" type="button" data-cmat="${esc(v)}" aria-pressed="${matiere === v}">${esc(l)}</button>`).join("")}</div>
+          <div class="ea-maitrise">${ms.map(m => { const x = maitriseCartes(m); return `<div><span>${esc(m)}</span><span class="ea-barre"><i style="width:${x.pct}%"></i></span><b>${x.ok}/${x.total}</b></div>`; }).join("")}</div>
+          <p class="ea-aide">Un article est « su » après trois bonnes récitations espacées. ${cartesDuConcours().length} cartes${monConcours() ? " pour votre concours" : ""}.</p>
+          ${nb ? `<button class="btn btn-gold" type="button" data-caction="commencer">Commencer, ${nb} carte${nb > 1 ? "s" : ""}</button>` : `<p class="ea-outil-fait"><b>Tout est à jour pour aujourd'hui.</b> Revenez demain.</p>`}
+        </div>`;
+      poserFiligrane(corps, marque);
+    };
+    const carte = (retournee) => {
+      const c = liste[n];
+      corps.innerHTML = `<div class="ea-outil ea-rev ea-art">
+          <p class="ea-rev-tete"><span>Carte ${n + 1} sur ${liste.length}</span><span>${esc(c.matiere)}${cartesProg.has(c.id) ? "" : ", nouvelle"}</span></p>
+          <p class="ea-art-ref">${esc(c.reference)}</p>
+          <p class="ea-aide">Fiche n° ${c.fiche}, ${esc(c.titre_fiche)}</p>
+          ${retournee
+            ? `<div class="ea-art-texte">${texteArticle(c.texte)}</div>
+               <p>Le saviez-vous mot pour mot, ou presque ?</p>
+               <div class="ea-art-choix"><button class="btn btn-gold" type="button" data-caction="su">Je le savais</button><button class="btn btn-ghost" type="button" data-caction="revoir">À revoir</button></div>`
+            : `<p class="ea-art-consigne">Récitez l'article de mémoire, à voix haute ou par écrit.</p>
+               <button class="btn btn-navy" type="button" data-caction="retourner">Retourner la carte</button>`}
+        </div>`;
+      poserFiligrane(corps, marque);
+    };
+    const bilan = () => {
+      corps.innerHTML = `<div class="ea-outil">
+          <p class="ea-outil-fait"><b>${sues} carte${sues > 1 ? "s" : ""} sue${sues > 1 ? "s" : ""} sur ${liste.length}.</b> ${sues === liste.length ? "Sans faute." : "Les cartes à revoir reviendront demain."}</p>
+          <button class="btn btn-ghost" type="button" data-caction="accueil">Revenir aux cartes</button>
+        </div>`;
+      poserFiligrane(corps, marque);
+      majOutils();
+    };
+    corps.onclick = e => {
+      const m = e.target.closest("[data-cmat]");
+      if (m) { matiere = m.dataset.cmat; accueil(); return; }
+      const a = e.target.closest("[data-caction]");
+      if (!a) return;
+      const act = a.dataset.caction;
+      if (act === "commencer") { liste = seanceCartes(matiere || null); n = 0; sues = 0; carte(false); }
+      if (act === "retourner") carte(true);
+      if (act === "su" || act === "revoir") {
+        if (act === "su") sues++;
+        enregistrerCarte(liste[n], act === "su");
+        n++; if (n < liste.length) carte(false); else bilan();
+      }
+      if (act === "accueil") accueil();
     };
     accueil();
   }
@@ -1713,7 +1807,8 @@
     revision: ["Révision du jour", outilRevision],
     oral: ["Simulateur de grand oral", outilOral],
     sujet: ["Sujet de la semaine", outilSujet],
-    tableau: ["Mon tableau de bord", outilTableau]
+    tableau: ["Mon tableau de bord", outilTableau],
+    cartes: ["Articles à savoir par cœur", outilCartes]
   };
   function outilsHTML() {
     const aFaire = seance(null).length, oral = oralQuestions.length, c = sujetSemaine(), j = joursAvant(), s = stats || { serie: 0 };
@@ -1722,6 +1817,8 @@
         ${carteBlanc()}
         ${carteEpreuvesBlanches()}
         ${toutesQuestions().length ? carte("revision", "Révision du jour", aFaire ? `${aFaire} question${aFaire > 1 ? "s" : ""} de QCM à travailler aujourd'hui.` : "Tout est à jour pour aujourd'hui.", "Méthode des boîtes, quelques minutes par jour") : ""}
+        ${etat.vip ? carte("cartes", "Articles à savoir par cœur", cartesArt ? `${seanceCartes(null).length} carte${seanceCartes(null).length > 1 ? "s" : ""} à réciter aujourd'hui.` : "Le texte exact des articles que les correcteurs attendent.", "Espace VIP, méthode des boîtes")
+          : `<button class="ea-outil-carte ea-outil-vip" type="button" data-vip-teaser><b>Articles à savoir par cœur <span class="ea-vip-marque">VIP</span></b><span>Le texte exact de 169 articles, à réciter par répétition espacée.</span><small>Réservé à l'espace VIP</small></button>`}
         ${oral ? carte("oral", "Grand oral", `${oral} questions du jury, avec chrono et enregistrement.`, "Préparation 1 min, réponse 3 min") : ""}
         ${c ? carte("sujet", "Sujet de la semaine", esc(c.titre), "Nouveau sujet chaque lundi") : ""}
         ${carte("tableau", "Mon tableau de bord", `${s.serie} jour${s.serie > 1 ? "s" : ""} de révision d'affilée${j != null && j >= 0 ? `, J-${j} avant le concours` : ""}.`, "Progression, planning et badges")}
@@ -2015,6 +2112,11 @@
     if (dem) {
       if (dem.dataset.demarrage === "masquer") { try { localStorage.setItem(CLE_DEMARRAGE, "1"); } catch (x) { /* stockage indisponible */ } const d = $("#eaDemarrage"); if (d) d.remove(); }
       else { const b = $(".ea-biblio", racine); if (b) b.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      return;
+    }
+    if (e.target.closest("[data-vip-teaser]")) {
+      const v = $("#eaVip");
+      if (v) v.scrollIntoView({ behavior: "smooth", block: "start" }); else toast("Les cartes d'articles sont réservées à l'espace VIP.");
       return;
     }
     const outil = e.target.closest("[data-outil]");
