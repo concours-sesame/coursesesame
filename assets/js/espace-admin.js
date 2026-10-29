@@ -37,6 +37,7 @@
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
   let visites = [], visitesJours = [], provenances = [], retombeesFb = [], prospects = [], temoignages = [], calendrier = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
   let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
+  let entonnoir = null, periodeVentes = 30, chargementVentes = false; // onglet Ventes (admin_entonnoir, chargé à l'ouverture)
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
   let telechargement = false; // archive .zip ou texte pour l'agent en préparation : la page ne se redessine pas
@@ -594,7 +595,7 @@
       ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["paiements", "Paiements"], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`]], demandesEnAttente().length + nbRelances() + commandesATraiter()],
     ["contenus", "Contenus", [["contenus", `Contenus (${contenus.length})`], ["copies", `Copies VIP${copiesACorriger().length ? ` (${copiesACorriger().length})` : ""}`], ["blancs", "Concours blancs"], ["telechargements", "Téléchargements"]], copiesACorriger().length],
     ["communication", "Communication", [["emails", "E-mails"], ["agent", "Agent"]], 0],
-    ["pilotage", "Pilotage", [["stats", "Statistiques"], ["visites", "Visites du site"], ["journal", "Journal"]], 0]
+    ["pilotage", "Pilotage", [["ventes", "Ventes"], ["stats", "Statistiques"], ["visites", "Visites du site"], ["journal", "Journal"]], 0]
   ];
   const groupeDe = o => GROUPES().find(g => g[2].some(t => t[0] === o)) || GROUPES()[0];
   function ongletsHTML() {
@@ -698,7 +699,7 @@
   // Redessine la page (onglets compris) sans bouger la position de lecture
   const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
   const PANNEAUX = { demandes: () => panneauDemandes(), direct: () => panneauDirect(), visites: () => panneauVisites(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
-    contenus: () => panneauContenus(), copies: () => panneauCopies(), paiements: () => panneauPaiements(), stats: () => panneauStats(), agent: () => panneauAgent(), blancs: () => panneauBlancs(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
+    contenus: () => panneauContenus(), copies: () => panneauCopies(), paiements: () => panneauPaiements(), stats: () => panneauStats(), ventes: () => panneauVentes(), agent: () => panneauAgent(), blancs: () => panneauBlancs(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
   const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
 
   /* ---------- Visites du site public, actualisées toutes les 15 secondes ---------- */
@@ -1348,6 +1349,76 @@
       ${barres("Ouvrages papier vendus", [...ventes].sort((a, b) => b[1] - a[1]).slice(0, 15), x => pluriel(x, "exemplaire"))}`;
   }
 
+  /* ---------- Ventes : du visiteur au client (admin_entonnoir) ---------- */
+  async function chargerVentes() {
+    if (chargementVentes) return;
+    chargementVentes = true;
+    const { data, error } = await client.rpc("admin_entonnoir", { p_jours: periodeVentes });
+    chargementVentes = false;
+    entonnoir = error ? { erreur: messageErreur(error) } : data;
+    const z = $("#adPanneau");
+    if (z && onglet === "ventes") z.innerHTML = panneauVentes();
+  }
+  const PERIODES_VENTES = [[7, "7 jours"], [30, "30 jours"], [90, "90 jours"]];
+  function panneauVentes() {
+    const choix = `<div class="chips ad-periodes" role="group" aria-label="Période">${PERIODES_VENTES.map(([j, l]) => `<button class="chip" type="button" data-periodev="${j}" aria-pressed="${periodeVentes === j}">${l}</button>`).join("")}</div>`;
+    if (!entonnoir) { chargerVentes(); return `${choix}<p class="ea-vide">Calcul des chiffres de la période…</p>`; }
+    if (entonnoir.erreur) return `${choix}<p class="ea-vide">Chiffres indisponibles : ${esc(entonnoir.erreur)}</p>`;
+    const c = entonnoir.courante, a = entonnoir.precedente, j = entonnoir.jours;
+    const taux = (x, y) => (y ? Math.round(x * 1000 / y) / 10 : null);
+    const pctTxt = t => (t == null ? "–" : `${String(t).replace(".", ",")} %`);
+    // Écart avec la période précédente ; sans visites mesurées avant, la comparaison n'a pas de sens pour les visiteurs
+    const ecart = (k, monnaie) => {
+      const d = Number(c[k]) - Number(a[k]);
+      if (!d) return "comme la période précédente";
+      return `${d > 0 ? "+" : "−"}${monnaie ? fcfa(Math.abs(d)) : Math.abs(d)} par rapport aux ${j} jours précédents`;
+    };
+    const etapes = [
+      ["Visiteurs du site", c.visiteurs, "visiteurs"],
+      ["Ont ouvert l'espace abonnés (tarifs, inscription)", c.offre, "offre"],
+      ["Ont créé un compte", c.comptes, "comptes"],
+      ["Sont devenus clients (premier paiement)", c.clients, "clients"]
+    ];
+    const max = Math.max(1, ...etapes.map(e => Number(e[1])));
+    // Passage d'une étape à la suivante ; le plus faible désigne l'endroit où l'on perd le plus de monde
+    const passages = etapes.slice(1).map((e, i) => [etapes[i][0], e[0], taux(Number(e[1]), Number(etapes[i][1]))]).filter(x => x[2] != null);
+    const faible = passages.length ? passages.reduce((m, x) => (x[2] < m[2] ? x : m)) : null;
+    const conseils = {
+      "Visiteurs du site": "Le site attire, mais peu de visiteurs vont voir l'offre : mettez en avant le bouton « S'abonner » et les tarifs dans les publications et sur les pages les plus vues.",
+      "Ont ouvert l'espace abonnés (tarifs, inscription)": "Les visiteurs voient l'offre sans créer de compte : rappelez ce que contient l'abonnement et proposez la formule d'un jour ou d'une semaine pour essayer.",
+      "Ont créé un compte": "Des comptes sont créés sans paiement : les relances automatiques (2 et 10 jours après l'inscription) partent par e-mail ; un message WhatsApp personnel aux comptes récents reste le plus efficace."
+    };
+    const recettes = Number(c.recettes_nouveaux) + Number(c.recettes_renouvellements);
+    const recettesAvant = Number(a.recettes_nouveaux) + Number(a.recettes_renouvellements);
+    const delai = c.delai_jours == null ? "–" : Number(c.delai_jours) < 1 ? "le jour même" : pluriel(Math.round(Number(c.delai_jours)), "jour");
+    return `${choix}
+      <div class="ad-stats ad-stats-3">
+        <div><b>${fcfa(recettes)}</b><span>Recettes des abonnements sur ${j} jours · ${recettes === recettesAvant ? "comme la période précédente" : `${recettes > recettesAvant ? "+" : "−"}${fcfa(Math.abs(recettes - recettesAvant))} par rapport aux ${j} jours précédents`}</span></div>
+        <div><b>${pctTxt(taux(Number(c.clients), Number(c.visiteurs)))}</b><span>Des visiteurs deviennent clients (${c.clients} sur ${c.visiteurs})</span></div>
+        <div><b>${delai}</b><span>Délai médian entre la création du compte et le premier paiement</span></div>
+      </div>
+      <section class="ad-bloc">
+        <h3>Du visiteur au client (${j} jours)</h3>
+        <ul class="ad-barres ad-entonnoir">${etapes.map(([nom, val, k], i) => `<li><span class="ad-barre-nom">${esc(nom)}</span><span class="ad-barre"><i style="width:${Math.max(Number(val) ? 2 : 0, Math.round(Number(val) / max * 100))}%"></i></span><span class="ad-barre-val">${Number(val)}${i ? ` <small>${pctTxt(taux(Number(val), Number(etapes[i - 1][1])))} de l'étape précédente</small>` : ""}<small class="ad-ecart">${["visiteurs", "offre"].includes(k) && !Number(a.visiteurs) ? "pas de visites mesurées sur la période précédente" : ecart(k)}</small></span></li>`).join("")}</ul>
+        ${faible && Number(c.visiteurs) ? `<p class="ad-note"><b>Là où l'on perd le plus de monde :</b> entre « ${esc(faible[0].toLowerCase())} » et « ${esc(faible[1].toLowerCase())} » (${pctTxt(faible[2])} passent à l'étape suivante). ${esc(conseils[faible[0]] || "")}</p>` : ""}
+        <p class="ad-note">Un visiteur est un navigateur : la même personne sur son téléphone et sur un ordinateur compte deux fois. Ne sont pas comptés les administrateurs ni les abonnés et inscrits plus anciens qui reviennent sur le site. Les clients activés directement sur WhatsApp, sans passer par le site, figurent dans « clients » sans forcément figurer dans les étapes précédentes.</p>
+      </section>
+      <div class="ad-stats">
+        <div><b>${Number(c.contacts)}</b><span>Contacts recueillis (fiche offerte, test de niveau), dont ${Number(c.contacts_accord)} d'accord pour recevoir nos offres · ${ecart("contacts")}</span></div>
+        <div><b>${Number(c.demandes)}</b><span>Demandes d'activation envoyées depuis l'espace · ${ecart("demandes")}</span></div>
+        <div><b>${Number(c.renouvellements)}</b><span>Renouvellements payés · ${fcfa(Number(c.recettes_renouvellements))}</span></div>
+        <div><b>${fcfa(Number(c.recettes_nouveaux))}</b><span>Recettes des nouveaux clients · ${ecart("recettes_nouveaux", true)}</span></div>
+      </div>
+      <section class="ad-bloc">
+        <h3>D'où viennent les nouveaux comptes et les nouveaux clients (${j} jours)</h3>
+        ${entonnoir.provenances.length ? `<div class="ad-tableau" role="region" aria-label="Provenance des comptes et des clients" tabindex="0"><table>
+          <thead><tr><th>Provenance</th><th>Comptes créés</th><th>Nouveaux clients</th></tr></thead>
+          <tbody>${entonnoir.provenances.map(x => `<tr><td>${esc(x.provenance === "Inconnue" ? "Inconnue (compte antérieur au suivi des visites, ou créé par l'administration)" : x.provenance)}</td><td>${Number(x.comptes)}</td><td><b>${Number(x.clients)}</b></td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="ea-vide">Aucun compte ni client sur la période.</p>`}
+        <p class="ad-note">La provenance d'un compte est celle de la toute première visite connue de son navigateur (Facebook, Google, WhatsApp, accès direct…). Le suivi des visites a commencé le 22 octobre 2026.</p>
+      </section>`;
+  }
+
   /* ---------- Journal ---------- */
   const LIBELLES_JOURNAL = {
     abonnement_active: "Abonnement activé", abonnement_supprime: "Abonnement supprimé", acces_coupe: "Accès coupé", abonnement_modifie: "Abonnement modifié",
@@ -1581,7 +1652,7 @@
       if (w) { w.opener = null; w.location = data.signedUrl; } else location.href = data.signedUrl;
       return;
     }
-    const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-groupe], button[data-aller], button[data-filtre], button[data-filtrec], button[data-filtrev]");
+    const b = e.target.closest("button[data-action], button[data-caction], button[data-kaction], button[data-onglet], button[data-groupe], button[data-aller], button[data-filtre], button[data-filtrec], button[data-filtrev], button[data-periodev]");
     if (!b) return;
     if (b.dataset.onglet) { onglet = b.dataset.onglet; afficher(); return; }
     if (b.dataset.groupe) { onglet = GROUPES().find(g => g[0] === b.dataset.groupe)[2][0][0]; afficher(); return; }
@@ -1595,6 +1666,7 @@
     if (b.dataset.filtre) { filtre = b.dataset.filtre; $("#adPanneau").innerHTML = panneauAbonnes(); return; }
     if (b.dataset.filtrec) { filtreC = b.dataset.filtrec; $("#adZoneC").innerHTML = zoneContenus(); return; }
     if (b.dataset.filtrev) { filtreV = b.dataset.filtrev; $("#adPanneau").innerHTML = panneauVisites(); return; }
+    if (b.dataset.periodev) { periodeVentes = Number(b.dataset.periodev); entonnoir = null; $("#adPanneau").innerHTML = panneauVentes(); return; }
     const act = b.dataset.action;
     if (act === "sortir") { debrancherDirect(); await client.auth.signOut(); connexion(); return; }
     if (act === "masquer-retour") { retourAFaire = ""; redessiner(); return; }

@@ -1931,3 +1931,10 @@ html[data-installable] .ea-installer [data-install]:not([hidden]){display:inline
 .calendrier-concours small a{color:var(--navy);text-decoration:underline}
 .calendrier-vide{padding:1.2rem;border:1px dashed var(--line);border-radius:var(--r);background:var(--cream)}
 .calendrier-vide p{margin-bottom:.8rem}
+.ad-entonnoir .ad-barre{height:18px}
+.ad-entonnoir .ad-barre-val{white-space:normal;text-align:right}
+.ad-entonnoir .ad-barre-val small{display:block}
+.ad-ecart{font-size:.82rem}
+.ad-periodes{margin-bottom:1rem}
+.ad-entonnoir li{grid-template-columns:minmax(8rem,16rem) minmax(0,1fr) minmax(11rem,15rem)}
+@media (max-width:640px){.ad-entonnoir li{grid-template-columns:1fr;gap:.3rem;margin-bottom:.4rem}.ad-entonnoir .ad-barre-val{text-align:left}}
