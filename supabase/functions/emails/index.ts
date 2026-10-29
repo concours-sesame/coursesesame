@@ -3,8 +3,10 @@
 //                                 invitation à renouveler (10 jours avant la fin), rappels de fin d'abonnement
 //                                 (7 et 3 jours avant), relance d'inactivité,
 //                                 annonce quotidienne des nouveautés, récapitulatif du lundi, passage en VIP
-//                                 (emails_file_vip), et alertes à
-//                                 l'administrateur (nouvelle demande d'activation, nouveau compte)
+//                                 (emails_file_vip), relance des inscrits jamais abonnés (2 et 10 jours après
+//                                 l'inscription, emails_file_relances), alertes à l'administrateur (nouvelle demande
+//                                 d'activation, nouveau compte), et suivi des contacts qui ont accepté les conseils et
+//                                 offres (fiche offerte, test de niveau : 1, 3 et 7 jours après, emails_file_prospects)
 //   { action: "etat" }            administrateur : envoi ouvert ou fermé, clé Brevo enregistrée ou non
 //   { action: "essai" }           administrateur : e-mail d'essai envoyé à sa propre adresse
 //   { action: "desinscrire", jeton } lien des e-mails : l'abonné ne reçoit plus l'annonce des nouveautés
@@ -83,7 +85,7 @@ Deno.serve(async (req) => {
     const { data: p } = await service.from("profils").select("prenom, jeton_emails").eq("id", appelant.user.id).maybeSingle();
     const { data: derniers } = await service.from("contenus").select("titre, matiere, type").eq("publie", true).order("publie_le", { ascending: false }).limit(3);
     const m = nouveautes(p?.prenom ?? "", (derniers ?? []) as Contenu[], p?.jeton_emails ?? "");
-    const r = await envoyer(appelant.user.email!, p?.prenom ?? "", "[Essai] " + m.sujet, m.html, m.texte, "essai", p?.jeton_emails);
+    const r = await envoyer(appelant.user.email!, p?.prenom ?? "", "[Essai] " + m.sujet, m.html, m.texte, "essai", p?.jeton_emails ? lienDesinscription(p.jeton_emails) : undefined);
     await service.from("emails_envoyes").insert({ user_id: appelant.user.id, type: "essai", cle: new Date().toISOString(), statut: r ? "erreur" : "envoye", erreur: r });
     return r ? json({ error: r }, 502) : json({ ok: true, a: appelant.user.email });
   }
@@ -91,15 +93,16 @@ Deno.serve(async (req) => {
 });
 
 type Contenu = { titre: string; matiere: string | null; type: string };
+type Contact = { id: number; prenom: string; email: string; source: string | null; concours: string | null; resultat: { note?: number; total?: number } | null; jeton: string; etape: number };
 type Ligne = { type: string; cle: string; user_id: string; email: string; prenom: string; donnees: Record<string, unknown> };
 
 async function planif(service: SupabaseClient) {
   const { data: r } = await service.from("emails_reglages").select("actif").maybeSingle();
   if (!r?.actif) return { actif: false };
   if (!Deno.env.get("BREVO_API_KEY")) return { actif: true, cle: false };
-  const [{ data: fileBase, error }, { data: fileVip }] = await Promise.all([service.rpc("emails_file"), service.rpc("emails_file_vip")]);
+  const [{ data: fileBase, error }, { data: fileVip }, { data: fileRelances }] = await Promise.all([service.rpc("emails_file"), service.rpc("emails_file_vip"), service.rpc("emails_file_relances")]);
   if (error) return { erreur: error.message };
-  const file = [...(fileBase ?? []), ...(fileVip ?? [])];
+  const file = [...(fileBase ?? []), ...(fileVip ?? []), ...(fileRelances ?? [])];
   let envoyes = 0, erreurs = 0, annonce = false;
   for (const l of (file ?? []) as Ligne[]) {
     if (envoyes + erreurs >= ENVOIS_MAX) break;
@@ -119,6 +122,7 @@ async function planif(service: SupabaseClient) {
       : l.type === "campagne" ? campagne(l.prenom, l.donnees)
       : l.type === "hebdo" ? hebdo(l.prenom, l.donnees)
       : l.type === "passage_vip" ? passageVip(l.prenom, l.donnees)
+      : l.type === "relance_inscrit" ? relanceInscrit(l.prenom, l.donnees)
       : l.type === "alerte_demande" ? alerteDemande(l.donnees)
       : l.type === "alerte_compte" ? alerteCompte(l.donnees)
       : l.type === "nouveautes" ? nouveautes(l.prenom, l.donnees.contenus as Contenu[], String(l.donnees.jeton ?? ""))
@@ -128,19 +132,37 @@ async function planif(service: SupabaseClient) {
       erreurs++;
       continue;
     }
-    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, ["nouveautes", "inactif", "campagne", "hebdo", "renouvellement"].includes(l.type) ? String(l.donnees.jeton ?? "") : undefined);
+    const echec = await envoyer(l.email, l.prenom, m.sujet, m.html, m.texte, l.type, ["nouveautes", "inactif", "campagne", "hebdo", "renouvellement", "relance_inscrit"].includes(l.type) ? lienDesinscription(String(l.donnees.jeton ?? "")) : undefined);
     await service.from("emails_envoyes").update({ statut: echec ? "erreur" : "envoye", erreur: echec }).eq("id", id);
     if (echec) erreurs++; else envoyes++;
     if (l.type === "nouveautes") annonce = true;
   }
   if (annonce) await service.rpc("emails_annonce_faite");
-  return { actif: true, envoyes, erreurs };
+
+  // Suivi des contacts : l'étape est réservée avant l'envoi ; un envoi manqué n'est pas repris (erreur notée)
+  const { data: contacts } = await service.rpc("emails_file_prospects");
+  let suivis = 0;
+  for (const c of (contacts ?? []) as Contact[]) {
+    if (envoyes + erreurs >= ENVOIS_MAX) break;
+    const { data: reserve } = await service.rpc("prospect_suivi_reserver", { p_id: c.id, p_etape: c.etape });
+    if (reserve !== true) continue;
+    const m = suiviContact(c);
+    const echec = await envoyer(c.email, c.prenom, m.sujet, m.html, m.texte, `suivi_${c.etape}`, lienDesinscriptionContact(c.jeton));
+    if (echec) {
+      await service.rpc("prospect_suivi_erreur", { p_id: c.id, p_erreur: echec });
+      erreurs++;
+    } else {
+      envoyes++;
+      suivis++;
+    }
+  }
+  return { actif: true, envoyes, erreurs, suivis };
 }
 
 // Envoi par l'API de Brevo ; renvoie null si l'e-mail est parti, sinon le message d'erreur
-async function envoyer(a: string, nom: string, sujet: string, html: string, texte: string, etiquette: string, jeton?: string): Promise<string | null> {
+async function envoyer(a: string, nom: string, sujet: string, html: string, texte: string, etiquette: string, desinscription?: string): Promise<string | null> {
   const corps: Record<string, unknown> = { sender: EXPEDITEUR, to: [{ email: a, name: nom || a }], subject: sujet, htmlContent: html, textContent: texte, tags: [etiquette] };
-  if (jeton) corps.headers = { "List-Unsubscribe": `<${lienDesinscription(jeton)}>` };
+  if (desinscription) corps.headers = { "List-Unsubscribe": `<${desinscription}>` };
   try {
     const rep = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
@@ -159,6 +181,7 @@ async function envoyer(a: string, nom: string, sujet: string, html: string, text
 const esc = (t: unknown) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 const dateFr = (d: unknown) => new Date(String(d) + "T12:00:00Z").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 const lienDesinscription = (jeton: string) => `${SITE}/espace-abonnes/?desinscription=${jeton}`;
+const lienDesinscriptionContact = (jeton: string) => `${SITE}/fiches/?desinscription=${jeton}`;
 const bouton = (texte: string, lien: string, fond = "#e8a62b", couleur = "#0f2a5c") =>
   `<p style="margin:24px 0"><a href="${lien}" style="display:inline-block;padding:12px 22px;background:${fond};color:${couleur};font-weight:700;text-decoration:none;border-radius:6px">${esc(texte)}</a></p>`;
 
@@ -404,4 +427,99 @@ function alerteCompte(d: Record<string, unknown>) {
 ${bouton("Voir dans l'administration", `${SITE}/espace-abonnes/admin/`)}`;
   const texte = `Un nouveau compte vient d'être créé sur l'espace abonnés.\n\n${lignes.join("\n")}\n\n${SITE}/espace-abonnes/admin/`;
   return { sujet, html: gabarit(sujet, corps, piedAdmin), texte };
+}
+
+// Suivi des contacts et relance des inscrits : chaque message est une suite de blocs (paragraphe, liste, bouton),
+// rendue à la fois en HTML et en texte brut
+type Bloc = string | string[] | { bouton: string; lien: string; wa?: boolean };
+function rendre(sujet: string, prenom: string, blocs: Bloc[], piedHtml: string, piedTexte: string) {
+  const tout: Bloc[] = [`Bonjour ${prenom},`, ...blocs];
+  const html = tout.map((b) => typeof b === "string" ? `<p>${esc(b).replace(/\n/g, "<br>")}</p>` : Array.isArray(b) ? `<ul>${b.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`
+    : b.wa ? bouton(b.bouton, b.lien, "#25d366", "#ffffff") : bouton(b.bouton, b.lien)).join("\n");
+  const texte = [...tout.map((b) => typeof b === "string" ? b : Array.isArray(b) ? b.map((x) => "- " + x).join("\n") : `${b.bouton} ${b.lien}`),
+    `Pour nous écrire, utilisez WhatsApp au ${WHATSAPP}.`, piedTexte].join("\n\n");
+  return { sujet, html: gabarit(sujet, html, piedHtml), texte };
+}
+const signature = "Bonne préparation,\nL'équipe des Cours Sésame et SAJ";
+const NOMS_CONCOURS: Record<string, string> = { infj: "la magistrature", greffe: "le Greffe", penitentiaire: "l'administration pénitentiaire", eppjej: "l'EPPJEJ", ena: "l'ENA" };
+const CONTENU_ABONNES = [
+  "les 100 fiches de révision en entier",
+  "les corrigés-types et les grilles de notation sur 20 des 315 épreuves de nos 70 concours blancs (formules d'une semaine et plus)",
+  "les sujets corrigés, les QCM chronométrés et la révision du jour, qui fait revenir les questions au bon moment",
+  "plus de 50 textes officiels et décisions, avec une recherche dans le texte",
+  "le simulateur de grand oral et le sujet de la semaine",
+];
+const TARIFS_COURTS = "500\u00a0FCFA pour un jour, 2\u00a0000\u00a0FCFA pour une semaine, 5\u00a0000\u00a0FCFA pour un mois. Les formules longues reviennent moins cher : 12\u00a0500\u00a0FCFA les trois mois, 40\u00a0000\u00a0FCFA les douze mois.";
+const PAIEMENT = "Réglez la formule choisie par Mobile Money (Orange Money, MTN MoMo, Wave ou Moov Money), puis saisissez la référence du paiement dans votre espace. Votre accès s'ouvre dès que nous avons vérifié le paiement.";
+const lienWaTexte = (t: string) => `https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
+
+function suiviContact(c: Contact) {
+  const prenom = c.prenom || "", vise = c.concours && NOMS_CONCOURS[c.concours] ? ` de ${NOMS_CONCOURS[c.concours]}` : "";
+  const lien = lienDesinscriptionContact(c.jeton);
+  const piedHtml = `Vous recevez cet e-mail parce que vous avez laissé votre adresse sur coursesesame.com et accepté de recevoir nos conseils et offres. Pour ne plus les recevoir : <a href="${lien}" style="color:#5b6475">se désinscrire</a>.`;
+  const piedTexte = `Pour ne plus recevoir nos conseils et offres : ${lien}`;
+  const test = c.source === "test" && c.resultat?.total ? c.resultat : null;
+  if (c.etape === 1) {
+    return rendre("Votre préparation : par où continuer", prenom, [
+      test ? `Hier, vous avez passé notre test de niveau et obtenu ${test.note} sur ${test.total}. Pour progresser dans les matières où vous avez perdu des points, voici trois outils gratuits.`
+        : "Hier, vous avez reçu une de nos fiches de révision. Pour continuer sur votre lancée, voici trois outils gratuits.",
+      [
+        `la question du jour, sur notre page d'accueil : une question par jour pour garder le rythme (${SITE}/)`,
+        `90 questions corrigées, classées par matière (${SITE}/qcm/)`,
+        `29 sujets corrigés : dissertations, cas pratiques, commentaires et sujets d'ordre général (${SITE}/sujets/)`,
+      ],
+      ...(test ? [] : [`Pour savoir où vous en êtes, faites aussi le test de niveau gratuit : 20 questions sur les matières du concours${vise}, avec votre note par matière.`,
+        { bouton: "Faire le test de niveau", lien: `${SITE}/test-de-niveau/` }]),
+      ...(test ? [{ bouton: "Voir les sujets corrigés", lien: `${SITE}/sujets/` }] : []),
+      signature,
+    ], piedHtml, piedTexte);
+  }
+  if (c.etape === 2) {
+    return rendre("Composez un concours blanc, gratuitement", prenom, [
+      "Le meilleur entraînement reste l'épreuve en conditions réelles. Nos concours blancs reproduisent les concours de Côte d'Ivoire sur des sujets inédits : 10 séries de la magistrature, 15 du Greffe, 15 du pénitentiaire, 15 de l'EPPJEJ et 15 de l'ENA.",
+      "Le chronomètre démarre dès que vous entrez dans le sujet, sans retour en arrière. Chacun compose gratuitement ; le corrigé de chaque épreuve est réservé aux abonnés des formules d'une semaine et plus.",
+      "Composez seul, sans document, comme le jour du concours : un résultat honnête vous dit exactement ce qu'il reste à travailler.",
+      { bouton: "Choisir un concours blanc", lien: `${SITE}/concours-blancs/` },
+      signature,
+    ], piedHtml, piedTexte);
+  }
+  return rendre("L'espace abonnés, dès 500 FCFA", prenom, [
+    `Depuis une semaine, vous avez découvert une partie de nos contenus. Pour préparer le concours${vise}, l'espace abonnés réunit tout le reste :`,
+    CONTENU_ABONNES,
+    `Les tarifs : ${TARIFS_COURTS}`,
+    `Pour vous abonner, créez votre compte. ${PAIEMENT}`,
+    { bouton: "Créer mon compte", lien: `${SITE}/espace-abonnes/` },
+    { bouton: "Une question ? WhatsApp", lien: lienWaTexte("Bonjour, j'ai une question sur l'abonnement à l'espace abonnés."), wa: true },
+    "Ce message est le dernier de cette série.",
+    signature,
+  ], piedHtml, piedTexte);
+}
+
+// Relance des inscrits qui n'ont jamais pris d'abonnement : r1 deux jours après l'inscription, r2 dix jours après
+function relanceInscrit(prenom: string, d: Record<string, unknown>) {
+  const jeton = String(d.jeton ?? ""), vise = NOMS_CONCOURS[String(d.concours ?? "")];
+  const piedHtml = `${piedService} Vous pouvez <a href="${lienDesinscription(jeton)}" style="color:#5b6475">ne plus recevoir nos e-mails d'information</a>, ou changer ce choix dans votre espace, rubrique Mon compte.`;
+  const piedTexte = `Ne plus recevoir nos e-mails d'information ${lienDesinscription(jeton)}`;
+  const wa = { bouton: "Activer sur WhatsApp", lien: lienWaTexte("Bonjour, je souhaite activer mon abonnement à l'espace abonnés."), wa: true };
+  if (d.cle === "r1") {
+    return rendre("Votre compte est prêt, il reste une étape", prenom, [
+      "Vous avez créé votre compte sur l'espace abonnés de coursesesame.com. Il ne reste qu'à choisir une formule pour ouvrir l'accès aux contenus.",
+      `Les tarifs : ${TARIFS_COURTS}`,
+      PAIEMENT,
+      { bouton: "Choisir ma formule", lien: `${SITE}/espace-abonnes/` },
+      wa,
+      "Pour essayer avant de vous engager, la formule d'une semaine suffit à découvrir l'espace, corrigés des concours blancs compris.",
+      signature,
+    ], piedHtml, piedTexte);
+  }
+  return rendre("Ce qui vous attend dans l'espace abonnés", prenom, [
+    `Votre compte est toujours prêt${vise ? ` pour préparer le concours de ${vise}` : ""}. Avec un abonnement, vous ouvrez :`,
+    CONTENU_ABONNES,
+    `En attendant, nos concours blancs restent gratuits à composer, chronomètre en marche : ${SITE}/concours-blancs/`,
+    `Les tarifs : ${TARIFS_COURTS}`,
+    PAIEMENT,
+    { bouton: "Activer mon abonnement", lien: `${SITE}/espace-abonnes/` },
+    wa,
+    signature,
+  ], piedHtml, piedTexte);
 }
