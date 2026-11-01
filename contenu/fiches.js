@@ -3737,5 +3737,284 @@ module.exports = [
    "Testez-vous"
   ],
   "questions": 4
+ },
+ {
+  "numero": 131,
+  "slug": "131-les-organes-du-redressement-judiciaire-et-de-la-liquidation-des-biens",
+  "titre": "Les organes du redressement judiciaire et de la liquidation des biens",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 35, 39 à 50.",
+  "essentiel": [
+   "La procédure collective est conduite par le syndic, sous la surveillance du juge-commissaire, avec l'assistance de créanciers contrôleurs et sous l'œil du ministère public."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le juge-commissaire",
+   "Le syndic",
+   "Le ministère public",
+   "Les contrôleurs",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 132,
+  "slug": "132-la-periode-suspecte-et-les-inopposabilites",
+  "titre": "La période suspecte et les inopposabilités",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 34, 67 à 71.",
+  "essentiel": [
+   "Entre la cessation des paiements et le jugement d'ouverture, le débiteur aux abois peut appauvrir son patrimoine ou favoriser certains créanciers : certains actes de cette période suspecte sont inopposables de droit à la masse, d'autres peuvent l'être s'ils lui ont causé un préjudice."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La période suspecte",
+   "Les inopposabilités de droit",
+   "Les inopposabilités facultatives",
+   "L'action",
+   "Les effets",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 133,
+  "slug": "133-la-production-et-la-verification-des-creances",
+  "titre": "La production et la vérification des créances",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 73 à 90.",
+  "essentiel": [
+   "Dès l'ouverture, les créanciers de la masse doivent produire leurs créances auprès du syndic dans un délai strict, sous peine de forclusion ; le syndic les vérifie, le juge-commissaire arrête l'état des créances et les contestations sont tranchées par la juridiction compétente."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les effets de l'ouverture sur les créances",
+   "La production",
+   "La vérification",
+   "Les recours",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 134,
+  "slug": "134-salaries-bailleur-coobliges-et-conjoint-dans-la-procedure-collective",
+  "titre": "Salariés, bailleur, coobligés et conjoint dans la procédure collective",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 91 à 100-1.",
+  "essentiel": [
+   "Certains créanciers reçoivent un sort particulier dans la procédure collective : les salariés sont payés en priorité grâce au super privilège, le bailleur conserve un privilège limité mais ne peut résilier le bail du seul fait de l'ouverture, le créancier face à plusieurs coobligés produit dans chaque masse, et le conjoint du débiteur doit établir la consistance de ses biens propres."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les salariés",
+   "Le bailleur des locaux professionnels",
+   "Les coobligés et cautions",
+   "Le conjoint du débiteur",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 135,
+  "slug": "135-les-revendications-dans-la-procedure-collective",
+  "titre": "Les revendications dans la procédure collective",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 101, 101-1 à 106.",
+  "essentiel": [
+   "Le propriétaire d'un bien qui se trouve entre les mains du débiteur ne subit pas la loi du concours : il peut le revendiquer, à condition d'agir dans les quatre-vingt-dix jours de la deuxième insertion de la décision d'ouverture et que le bien se retrouve en nature."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Le délai",
+   "Les biens revendicables",
+   "Le droit du vendeur de retenir",
+   "Le paiement qui évite la revendication",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 136,
+  "slug": "136-les-contrats-en-cours-et-la-continuation-de-l-activite",
+  "titre": "Les contrats en cours et la continuation de l'activité",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 107 à 117.",
+  "essentiel": [
+   "L'ouverture de la procédure ne met pas fin aux contrats en cours : le syndic choisit seul de les poursuivre ou non ; l'activité continue en redressement judiciaire, alors qu'elle cesse en principe en liquidation des biens, et les dettes nées régulièrement après l'ouverture sont des créances de la masse."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les contrats en cours",
+   "Les licenciements économiques",
+   "La continuation de l'activité",
+   "Les créances de la masse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 137,
+  "slug": "137-le-concordat-de-redressement-judiciaire",
+  "titre": "Le concordat de redressement judiciaire",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 119 à 140.",
+  "essentiel": [
+   "Le redressement judiciaire aboutit normalement à un concordat : le débiteur propose délais, remises ou cession d'actif, les créanciers chirographaires votent en assemblée concordataire et la juridiction homologue le concordat, qui s'impose alors à tous les créanciers antérieurs."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "La préparation",
+   "Le vote",
+   "L'homologation",
+   "Les effets",
+   "La cession d'actif",
+   "La fin anormale",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 138,
+  "slug": "138-les-operations-et-la-cloture-de-la-liquidation-des-biens",
+  "titre": "Les opérations et la clôture de la liquidation des biens",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 5-11, 11-1, 33, 33-1, 146 à 178.",
+  "essentiel": [
+   "En liquidation des biens, les créanciers sont constitués en union, le syndic réalise seul l'actif et répartit le prix selon l'ordre légal ; la procédure se clôt par dissolution de l'union, pour insuffisance d'actif ou pour extinction du passif, dans un délai encadré par la juridiction."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La réalisation de l'actif",
+   "L'apurement du passif",
+   "Les clôtures",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 139,
+  "slug": "139-le-comblement-du-passif-et-l-extension-de-la-procedure-aux-dirigeants",
+  "titre": "Le comblement du passif et l'extension de la procédure aux dirigeants",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 180 à 193.",
+  "essentiel": [
+   "Le dirigeant d'une personne morale en procédure collective peut être condamné à supporter tout ou partie de ses dettes s'il a commis une faute de gestion ayant contribué à l'insuffisance d'actif, et même être soumis personnellement à la procédure s'il a confondu ses intérêts avec ceux de la société."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les personnes visées",
+   "L'action en comblement du passif",
+   "L'extension de la procédure au dirigeant",
+   "Comblement et extension : tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 140,
+  "slug": "140-la-faillite-personnelle-et-la-rehabilitation",
+  "titre": "La faillite personnelle et la réhabilitation",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 194 à 215.",
+  "essentiel": [
+   "La faillite personnelle sanctionne le débiteur ou le dirigeant malhonnête ou gravement imprudent par des interdictions professionnelles et civiques de six mois à dix ans ; la réhabilitation lui rend ses droits, de plein droit en cas d'extinction du passif ou sur demande si sa probité est reconnue."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les personnes visées",
+   "Les cas de faillite personnelle",
+   "La procédure",
+   "Les effets",
+   "La réhabilitation",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
  }
 ];
