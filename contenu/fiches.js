@@ -3460,5 +3460,282 @@ module.exports = [
    "Testez-vous"
   ],
   "questions": 4
+ },
+ {
+  "numero": 121,
+  "slug": "121-les-suretes-notion-classification-et-agent-des-suretes",
+  "titre": "Les sûretés : notion, classification et agent des sûretés",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 1 à 11 et 85.",
+  "essentiel": [
+   "La sûreté affecte un bien, un ensemble de biens, un patrimoine ou l'engagement d'une personne à la garantie d'une obligation ; on distingue les sûretés personnelles et les sûretés réelles, et l'agent des sûretés peut les gérer pour le compte de plusieurs créanciers."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La notion",
+   "La classification",
+   "L'agent des sûretés",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 122,
+  "slug": "122-la-garantie-et-la-contre-garantie-autonomes",
+  "titre": "La garantie et la contre-garantie autonomes",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 2, 39 à 49.",
+  "essentiel": [
+   "Par la garantie autonome, un garant s'oblige à payer une somme déterminée au bénéficiaire, sur première demande ou selon les modalités convenues, sans pouvoir opposer les exceptions tirées du contrat de base : c'est une sûreté personnelle détachée de l'obligation garantie."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les acteurs",
+   "La formation",
+   "La mise en jeu",
+   "La fin",
+   "Garantie autonome et cautionnement",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 123,
+  "slug": "123-le-droit-de-retention",
+  "titre": "Le droit de rétention",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 4, 67 à 70.",
+  "essentiel": [
+   "Le créancier qui détient légitimement un bien mobilier de son débiteur peut refuser de le rendre tant qu'il n'est pas entièrement payé, à condition que sa créance soit certaine, liquide et exigible et qu'elle soit connexe à la détention du bien."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "La nature",
+   "Les conditions",
+   "La connexité",
+   "Les obligations du rétenteur",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 124,
+  "slug": "124-la-reserve-de-propriete",
+  "titre": "La réserve de propriété",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 4, 71 à 78.",
+  "essentiel": [
+   "Par la clause de réserve de propriété, le vendeur reste propriétaire du bien mobilier vendu jusqu'au complet paiement du prix : s'il n'est pas payé, il reprend le bien, à charge de restituer au débiteur ce que vaut le bien au-delà du solde dû."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "La nature",
+   "Les conditions",
+   "Les situations particulières",
+   "La réalisation",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 125,
+  "slug": "125-la-propriete-cedee-a-titre-de-garantie",
+  "titre": "La propriété cédée à titre de garantie",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 3, 79 à 91.",
+  "essentiel": [
+   "Le débiteur peut transférer au créancier la propriété d'un bien en garantie de sa dette : l'Acte uniforme organise deux formes de cette fiducie-sûreté, la cession de créance à titre de garantie, réservée aux crédits bancaires, et le transfert fiduciaire d'une somme d'argent."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La cession de créance à titre de garantie",
+   "Le transfert fiduciaire d'une somme d'argent",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 126,
+  "slug": "126-le-nantissement-de-creance-et-de-compte-bancaire",
+  "titre": "Le nantissement de créance et de compte bancaire",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 125 à 139.",
+  "essentiel": [
+   "Le nantissement affecte un bien meuble incorporel à la garantie d'une créance ; nanti, le créancier est payé directement par le débiteur de la créance nantie une fois que celui-ci a été notifié, et le compte bancaire peut être nanti comme une créance sur son solde."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le nantissement en général",
+   "Le nantissement de créance",
+   "La réalisation",
+   "Le nantissement de compte bancaire",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 127,
+  "slug": "127-le-nantissement-du-fonds-de-commerce",
+  "titre": "Le nantissement du fonds de commerce",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 162 à 165, 172 à 178.",
+  "essentiel": [
+   "Le commerçant peut affecter en garantie les éléments incorporels de son fonds, au moins la clientèle et l'enseigne ou le nom commercial ; inscrit au registre du commerce et du crédit mobilier, le créancier nanti bénéficie d'un droit de suite, de réalisation et de préférence, et il est protégé contre le déplacement du fonds et la résiliation du bail."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "L'assiette",
+   "La constitution",
+   "La protection du créancier inscrit",
+   "Les droits du créancier inscrit",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 128,
+  "slug": "128-les-privileges-generaux-et-speciaux",
+  "titre": "Les privilèges généraux et spéciaux",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 179 à 189.",
+  "essentiel": [
+   "Le privilège est une préférence que la loi attache à la qualité de certaines créances : général, il porte sur tous les meubles du débiteur ; spécial, il porte sur un meuble déterminé lié à la créance."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les privilèges généraux sans publicité",
+   "Les privilèges généraux soumis à publicité",
+   "Les privilèges spéciaux",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 129,
+  "slug": "129-l-ordre-de-distribution-des-deniers",
+  "titre": "L'ordre de distribution des deniers",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 180, 224 à 227.",
+  "essentiel": [
+   "Lorsque le prix d'un bien saisi ne suffit pas à payer tous les créanciers, l'Acte uniforme fixe un ordre impératif, différent pour les immeubles et pour les meubles, qui place en tête les frais de justice et les salaires superprivilégiés et en queue les créanciers chirographaires munis d'un titre exécutoire."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Le prix des immeubles (article 225)",
+   "Le prix des meubles (article 226)",
+   "Le concours au marc le franc",
+   "Tableau comparatif",
+   "Le droit transitoire",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 130,
+  "slug": "130-l-hypotheque-judiciaire-conservatoire",
+  "titre": "L'hypothèque judiciaire conservatoire",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 213 à 221.",
+  "essentiel": [
+   "Le créancier dont la créance est menacée peut obtenir du juge l'autorisation de prendre une inscription provisoire d'hypothèque sur les immeubles de son débiteur, puis doit la faire valider par une décision au fond et la rendre définitive dans les six mois, faute de quoi elle disparaît rétroactivement."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "L'autorisation",
+   "L'inscription provisoire",
+   "La défense du débiteur",
+   "L'inscription définitive",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
  }
 ];

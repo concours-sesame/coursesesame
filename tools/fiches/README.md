@@ -107,6 +107,7 @@ node tools/build.js
 | 90 à 100 | OHADA : fonds de commerce et location-gérance, vente du fonds, vente commerciale, cautionnement, hypothèque, gage, saisie-attribution, saisie-vente, redressement et liquidation, conciliation et règlement préventif, arbitrage | 236 à 246 |
 | 101 à 110 | Sociétés commerciales (AUSCGIE) : contrat de société, apports, société en formation, nullités, dissolution, SNC, SCS, société anonyme, direction de la SA, commissaire aux comptes | 312 à 321 |
 | 111 à 120 | Sociétés commerciales (AUSCGIE) : abus de majorité et de minorité, responsabilité des dirigeants, SA avec administrateur général, assemblées de SA, SAS, décisions de SARL, GIE, fusion et scission, société en participation et société de fait, conventions réglementées | 322 à 331 |
+| 121 à 130 | Sûretés (AUS) : notion et agent des sûretés, garantie autonome, droit de rétention, réserve de propriété, propriété cédée en garantie, nantissement de créance et de compte, nantissement du fonds de commerce, privilèges, ordre de distribution, hypothèque judiciaire conservatoire | 332 à 341 |
 
 Les fiches 2, 13, 14 et 16 ont été republiées en version 2 (`fiche-NNNN-v2.pdf`) après correction de l'espace des
 milliers dans `rendu.py` : « 3.000.000 » s'affichait « 3 000.000 ».
