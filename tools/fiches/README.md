@@ -61,6 +61,12 @@ La comparaison ignore accents et ponctuation et corrige les confusions courantes
 « II », « contr6le ») ; elle donne pour chaque citation le ou les articles où elle se lit, ce qui contrôle aussi le numéro
 cité. Une citation ABSENTE se contrôle à l'écran sur l'image de la page (`pdftoppm`) et se note dans `controle-ecran.txt`.
 
+Constitution (fiches 142 à 150) : le PDF « texte d'origine » de la base (contenu 91) est un document Word sans origine
+sûre, qui s'écarte du texte officiel sur une cinquantaine d'articles. Le texte de 2016 est lu dans le projet de loi
+officiel du Gouvernement du 12 octobre 2016, adopté par référendum ; les articles réécrits en 2020 sont transcrits sur
+l'image du Journal officiel du 19 mars 2020, ceux de 2023 sur le Journal officiel du 9 août 2023 (articles 179 à 182
+abrogés). Le texte consolidé et la transcription sont archivés avec les sources des fiches 141 à 150.
+
 ## Fabrication et publication
 
 ```
@@ -109,6 +115,7 @@ node tools/build.js
 | 111 à 120 | Sociétés commerciales (AUSCGIE) : abus de majorité et de minorité, responsabilité des dirigeants, SA avec administrateur général, assemblées de SA, SAS, décisions de SARL, GIE, fusion et scission, société en participation et société de fait, conventions réglementées | 322 à 331 |
 | 121 à 130 | Sûretés (AUS) : notion et agent des sûretés, garantie autonome, droit de rétention, réserve de propriété, propriété cédée en garantie, nantissement de créance et de compte, nantissement du fonds de commerce, privilèges, ordre de distribution, hypothèque judiciaire conservatoire | 332 à 341 |
 | 131 à 140 | Procédures collectives (AUPC) : organes, période suspecte, production et vérification des créances, salariés, bailleur, coobligés et conjoint, revendications, contrats en cours, concordat de redressement, liquidation des biens, comblement du passif et extension, faillite personnelle et réhabilitation | 342 à 351 |
+| 141 à 150 | Banqueroute (AUPC) ; Constitution : droits civils et politiques, droits économiques et sociaux, devoirs, État et souveraineté, Président (élection, pouvoirs), vice-Président, Gouvernement, Parlement | 352 à 361 |
 
 Les fiches 2, 13, 14 et 16 ont été republiées en version 2 (`fiche-NNNN-v2.pdf`) après correction de l'espace des
 milliers dans `rendu.py` : « 3.000.000 » s'affichait « 3 000.000 ».

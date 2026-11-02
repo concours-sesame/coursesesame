@@ -4016,5 +4016,290 @@ module.exports = [
    "Testez-vous"
   ],
   "questions": 4
+ },
+ {
+  "numero": 141,
+  "slug": "141-la-banqueroute-et-les-infractions-assimilees",
+  "titre": "La banqueroute et les infractions assimilées",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 226 à 240.",
+  "essentiel": [
+   "L'Acte uniforme définit les incriminations de banqueroute simple et frauduleuse, pour le débiteur personne physique comme pour les dirigeants de personnes morales, mais laisse à chaque État partie le soin d'en fixer les peines."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le partage des compétences",
+   "Le débiteur personne physique",
+   "Les dirigeants de personnes morales",
+   "Les infractions assimilées",
+   "La poursuite",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 142,
+  "slug": "142-les-droits-civils-et-politiques-dans-la-constitution",
+  "titre": "Les droits civils et politiques dans la Constitution",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire",
+   "eppjej"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 1er à 8, 19 à 23, 25 et 26.",
+  "essentiel": [
+   "La Constitution ouvre sur une déclaration de droits : elle consacre la dignité et la vie, l'égalité, les garanties de la justice et de la liberté individuelle, les libertés de pensée, d'expression, d'association et de circulation, et encadre les partis politiques."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La personne et l'égalité",
+   "La justice et la liberté individuelle",
+   "Les libertés de l'esprit et de l'action collective",
+   "Les partis politiques et la société civile",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 143,
+  "slug": "143-les-droits-economiques-sociaux-culturels-et-environnementaux",
+  "titre": "Les droits économiques, sociaux, culturels et environnementaux",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 9 à 18, 24 et 27.",
+  "essentiel": [
+   "Au-delà des libertés classiques, la Constitution garantit des droits qui appellent une action de l'État : éducation et santé, propriété et libre entreprise, travail, droit syndical et de grève, information, culture et environnement sain."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Éducation et santé",
+   "Propriété et entreprise",
+   "Le travail",
+   "Information, culture, environnement",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 144,
+  "slug": "144-les-devoirs-dans-la-constitution",
+  "titre": "Les devoirs dans la Constitution",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 28 à 47.",
+  "essentiel": [
+   "Le chapitre des devoirs met à la charge de l'État des obligations envers la population (respect des droits, protection de la famille et des personnes vulnérables, bonne gouvernance, service public) et à la charge de chacun des devoirs envers la collectivité (défense, environnement, impôt, respect des biens publics et des lois)."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les devoirs de l'État",
+   "Les devoirs de chacun",
+   "Les devoirs des gouvernants et agents publics",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 145,
+  "slug": "145-l-etat-et-la-souverainete",
+  "titre": "L'État et la souveraineté",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire",
+   "eppjej"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 48 à 53.",
+  "essentiel": [
+   "La Côte d'Ivoire est une République indépendante et souveraine, une et indivisible, laïque, démocratique et sociale ; la souveraineté appartient au peuple, qui l'exerce par le référendum et par ses représentants élus au suffrage universel."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les symboles de la République (article 48)",
+   "Les caractères de la République (article 49)",
+   "La souveraineté",
+   "Le suffrage",
+   "L'Exécutif",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 146,
+  "slug": "146-le-president-de-la-republique-election-mandat-et-vacance",
+  "titre": "Le Président de la République : élection, mandat et vacance",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire",
+   "eppjej"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 54 à 62.",
+  "essentiel": [
+   "Le Président de la République, Chef de l'État, est élu pour cinq ans au suffrage universel direct, au scrutin majoritaire à deux tours, et n'est rééligible qu'une fois ; en cas de vacance, le vice-Président lui succède et achève le mandat."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les conditions d'éligibilité (article 55)",
+   "L'élection",
+   "L'entrée en fonction",
+   "La vacance (article 62)",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 147,
+  "slug": "147-les-pouvoirs-du-president-de-la-republique",
+  "titre": "Les pouvoirs du Président de la République",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 63 à 77.",
+  "essentiel": [
+   "Détenteur exclusif du pouvoir exécutif, le Président détermine et conduit la politique de la Nation, nomme et révoque le Gouvernement, exerce le pouvoir réglementaire, participe à la fonction législative et dispose de pouvoirs exceptionnels en cas de crise grave."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les pouvoirs d'exécution et d'administration",
+   "Le Gouvernement et le Conseil des ministres",
+   "Les pouvoirs législatifs",
+   "Les pouvoirs exceptionnels (article 73)",
+   "La délégation",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 148,
+  "slug": "148-le-vice-president-de-la-republique",
+  "titre": "Le vice-Président de la République",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 53, 55, 58, 62, 76, 78 à 80, 82.",
+  "essentiel": [
+   "Membre de l'Exécutif, le vice-Président est choisi par le Président en accord avec le Parlement ; il prête serment devant le Conseil constitutionnel, reçoit les pouvoirs que le Président lui délègue et lui succède en cas de vacance jusqu'au terme du mandat."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La désignation",
+   "Le statut",
+   "Les fonctions",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 149,
+  "slug": "149-le-gouvernement-et-le-premier-ministre",
+  "titre": "Le Gouvernement et le Premier ministre",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 53, 62, 70, 71, 77, 81 à 84, 93, 117.",
+  "essentiel": [
+   "Le Gouvernement, dirigé par le Premier ministre, met en œuvre la politique de la Nation définie par le Président ; nommé et révoqué par celui-ci, il est solidairement responsable devant lui."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La formation",
+   "Le rôle du Premier ministre",
+   "La responsabilité",
+   "Les incompatibilités",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 150,
+  "slug": "150-le-parlement-assemblee-nationale-et-senat",
+  "titre": "Le Parlement : Assemblée nationale et Sénat",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 85 à 100.",
+  "essentiel": [
+   "Le pouvoir législatif appartient à un Parlement bicaméral, composé de l'Assemblée nationale, élue au suffrage universel direct, et du Sénat, représentant des collectivités territoriales et des Ivoiriens de l'extérieur ; il vote la loi, consent l'impôt, contrôle l'action du Gouvernement et évalue les politiques publiques, et ses membres sont protégés par des immunités."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les deux chambres",
+   "Le statut des parlementaires",
+   "Le fonctionnement",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
  }
 ];
