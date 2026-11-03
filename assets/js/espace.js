@@ -1131,6 +1131,32 @@
   }
   // « Reprendre ma lecture » : dernier document ou fiche ouvert sur cet appareil, à la dernière page lue
   const lireReprise = () => { const r = lu(cleAbonne("reprise"), null); const c = r && contenus.find(x => x.id === r.id); return c && !verrouille(c) ? { c, page: Math.max(1, Number(r.page) || 1) } : null; };
+  // Dates importantes (administrateur seulement) : épinglées en tête de l'espace, avec le nombre de jours restants.
+  // Dates fixes (table echeances, que l'on complète ici) et dates calculées par la base (fin des publications Facebook et
+  // TikTok, des vidéos du jour, connexion TikTok, concours blancs, fins d'abonnements). E-mail une semaine avant (fonction echeances).
+  async function datesHTML() {
+    if (!etat.admin) return "";
+    const { data, error } = await client.rpc("admin_echeances");
+    if (error) return "";
+    const jours = d => Math.round((new Date(d + "T00:00:00Z") - new Date(auj() + "T00:00:00Z")) / 86400000);
+    const reste = n => n < 0 ? "passée" : n === 0 ? "aujourd'hui" : n === 1 ? "demain" : `dans ${n} jours`;
+    return `<section class="ea-dates" id="eaDates" aria-label="Dates importantes">
+        <div class="ea-jour-tete"><span class="eyebrow">Dates importantes</span><span class="ea-aide">Rappel par e-mail une semaine avant chaque date</span></div>
+        <ul class="ea-dates-liste">${(data || []).map(e => { const n = jours(e.date_echeance); return `<li class="${n <= 7 ? "ea-date-proche" : n <= 30 ? "ea-date-bientot" : ""}">
+          <span class="ea-date-quand"><b>${dateFr(e.date_echeance)}</b><small>${reste(n)}</small></span>
+          <span class="ea-date-quoi"><b>${esc(e.titre)}</b>${e.detail ? `<small>${esc(e.detail)}</small>` : ""}</span>
+          ${e.manuelle ? `<button class="btn btn-ghost btn-sm" type="button" data-date-suppr="${e.id}" aria-label="Retirer cette date">Retirer</button>` : ""}</li>`; }).join("")}</ul>
+        <details class="ea-dates-ajout"><summary>Ajouter une date</summary>
+          <form id="eaDateForm" class="ea-dates-form">
+            <label>Objet<input name="titre" required maxlength="160" placeholder="Ex. : renouvellement de l'abonnement Brevo"></label>
+            <label>Date<input name="date" type="date" required></label>
+            <label>Précision (facultatif)<input name="detail" maxlength="600"></label>
+            <button class="btn btn-navy btn-sm" type="submit">Enregistrer</button>
+          </form>
+        </details>
+      </section>`;
+  }
+  async function majDates() { const z = $("#eaDates"); if (z) z.outerHTML = await datesHTML(); }
   // Programme du jour : la dernière vidéo du jour sortie (ouverte à tout abonné), le QCM du jour (page publique,
   // même question que la vidéo TikTok) et la révision du jour, avec la série de jours de révision
   function jourHTML() {
@@ -2173,7 +2199,7 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
       favoris = crochetFavoris;
       qcmFiche = n => toutesQuestions().filter(x => x.q.fiche === n);
       noterFiche = (x, juste) => { if (x) enregistrerReponse(x, juste); };
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + jourHTML() + repriseHTML() + installerHTML() + notifHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
+      racine.innerHTML = compteHTML() + await datesHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + jourHTML() + repriseHTML() + installerHTML() + notifHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
       brancherCompte();
       majNotif();
     } else {
@@ -2300,6 +2326,13 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
     if (e.target.id === "eaTextesForm") { e.preventDefault(); chercherTextes($("#eaTextesQ").value); return; }
     if (e.target.id === "eaPaiement") { e.preventDefault(); envoyerDemande(e.target); return; }
     if (e.target.id === "eaCopieForm") { e.preventDefault(); deposerCopie(e.target); return; }
+    if (e.target.id === "eaDateForm") {
+      e.preventDefault();
+      const f = e.target;
+      client.from("echeances").insert({ titre: f.titre.value.trim(), date_echeance: f.date.value, detail: f.detail.value.trim() || null })
+        .then(({ error }) => { toast(error ? messageErreur(error) : "Date enregistrée. Vous recevrez un e-mail une semaine avant."); if (!error) majDates(); });
+      return;
+    }
     if (e.target.id !== "eaAgentForm") return;
     e.preventDefault();
     if (!agentEnCours) lancerAgent(e.target);
@@ -2330,6 +2363,14 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
 
   // Bibliothèque : filtres et ouverture des contenus (un seul écouteur pour toute la page)
   racine.addEventListener("click", async e => {
+    const ds = e.target.closest("[data-date-suppr]");
+    if (ds) {
+      if (!confirm("Retirer cette date ?")) return;
+      const { error } = await client.from("echeances").delete().eq("id", Number(ds.dataset.dateSuppr));
+      toast(error ? messageErreur(error) : "Date retirée.");
+      majDates();
+      return;
+    }
     const nb = e.target.closest("[data-notif]");
     if (nb) { basculerNotif(nb.dataset.notif); return; }
     const mc = e.target.closest("[data-ma-copie]");
