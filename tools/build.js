@@ -1119,7 +1119,7 @@ ${contactCTA(prefix)}`;
 
 <section class="section" id="liste">
   <div class="wrap">
-    <div class="ep-cards">${THEMES.map((t, i) => qcmCard(t, prefix, i)).join("")}${qcmCard(methode, prefix, THEMES.length, `${prefix}methodes/#qcm`)}</div>
+    <div class="ep-cards"><a class="ep-card reveal" href="${prefix}qcm-du-jour/"><span class="ep-card-tag">Chaque jour à 19 h</span><b>Le QCM du jour</b><span>Une nouvelle question de concours chaque jour, la même que dans notre vidéo TikTok, corrigée et expliquée.</span><span class="ep-card-go">Répondre</span></a>${THEMES.map((t, i) => qcmCard(t, prefix, i)).join("")}${qcmCard(methode, prefix, THEMES.length, `${prefix}methodes/#qcm`)}</div>
   </div>
 </section>
 
@@ -1437,6 +1437,106 @@ ${voisines.length ? `<section class="section section-cream">
     title: ["Témoignage d'admis : racontez votre réussite", "Témoignage d'admis"],
     description: "Admis à la magistrature, au greffe, à l'ENA ou à un autre concours ? Racontez votre préparation pour aider les candidats qui suivent.",
     ld: [breadcrumb([["Accueil", SITE], ["Témoignage", url]])]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Le QCM du jour (même question que la vidéo TikTok du jour) ---------- */
+// Questions : scripts des vidéos (tools/videos/scripts/qcm), dates : tools/videos/calendrier-qcm-du-jour.json.
+// assets/js/qcm-du-jour.js n'affiche que les questions sorties (19 h, heure d'Abidjan, le jour prévu).
+{
+  const CAL = JSON.parse(read("tools/videos/calendrier-qcm-du-jour.json"));
+  const QDJ = Object.entries(CAL).map(([n, jour]) => {
+    const sc = JSON.parse(read(`tools/videos/scripts/qcm/qcm-du-jour-${String(n).padStart(3, "0")}.json`));
+    const q = sc.scenes.find(x => x.type === "qcm"), r = sc.scenes.find(x => x.type === "reponse"), intro = sc.scenes.find(x => x.type === "intro");
+    if (!q || !r || !(r.bonne >= 0 && r.bonne < q.options.length)) throw new Error(`QCM du jour n° ${n} : question ou réponse introuvable`);
+    return { n: +n, jour, matiere: intro.titre, q: q.question, options: q.options, bonne: r.bonne, explication: r.explication };
+  }).sort((a, b) => a.n - b.n);
+  write("assets/js/qcm-du-jour-donnees.js", "/* Fichier généré par tools/build.js : les QCM du jour et leur date de sortie (19 h, heure d'Abidjan). */\nconst QCM_DU_JOUR = " + JSON.stringify(QDJ) + ";\n");
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "qcm-du-jour/";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["QCM", prefix + "qcm/"], ["Le QCM du jour", ""]],
+    h1: "Le QCM <em>du jour</em>",
+    lead: "Chaque jour à 19 h, une nouvelle question de concours, la même que dans notre vidéo TikTok du jour : choisissez votre réponse, lisez l'explication, puis défiez vos amis.",
+    ctas: `<a href="#qcm" class="btn btn-gold">Répondre à la question${arrow}</a><a href="${prefix}qcm/" class="btn btn-ghost">Tous les QCM</a>`,
+    facts: ["une question par jour", "réponse expliquée, texte à l'appui", "gratuit"]
+  })}
+<section class="section sujets" id="qcm">
+  <div class="wrap">
+    <div class="qcm-wrap"><div id="qdjBox"><p class="lead">Activez JavaScript pour répondre à la question du jour.</p></div></div>
+    <div class="qdj-archives" id="qdjArchives" hidden>
+      <h2 class="h-section">Les questions <em>précédentes</em></h2>
+      <ul class="vj-liste" id="qdjListe"></ul>
+    </div>
+  </div>
+</section>
+${contactCTA(prefix)}`;
+  write("qcm-du-jour/index.html", page({
+    prefix, url, body, scripts: ["assets/js/qcm-du-jour-donnees.js", "assets/js/qcm-du-jour.js"],
+    title: ["Le QCM du jour, une question de concours chaque jour", "Le QCM du jour"],
+    description: "Chaque jour, une question de concours corrigée et expliquée, en droit et en culture générale, pour la magistrature, le greffe, la pénitentiaire, l'EPPJEJ et l'ENA.",
+    ld: [breadcrumb([["Accueil", SITE], ["QCM", SITE + "qcm/"], ["Le QCM du jour", url]])]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Lexique juridique : la notion de chaque fiche de révision, définie en une phrase ---------- */
+{
+  const FICHES_LEX = require(path.join(DIR, "contenu/fiches.js"));
+  const cle = t => stripTags(t).replace(/^(Le |La |Les |L'|L’|Un |Une )/, "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const entrees = FICHES_LEX.map(f => ({ f, k: cle(f.titre) })).sort((a, b) => a.k.localeCompare(b.k, "fr"));
+  const lettres = [...new Set(entrees.map(e => e.k[0].toUpperCase()))];
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "lexique/";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Lexique juridique", ""]],
+    h1: "Le lexique <em>juridique</em>",
+    lead: `${entrees.length} notions de droit ivoirien et OHADA, définies chacune en une phrase, avec un lien vers leur fiche de révision : droit pénal, procédure pénale, droit civil et de la famille, droit administratif et constitutionnel, OHADA.`,
+    ctas: `<a href="#lettre-A" class="btn btn-gold">Parcourir le lexique${arrow}</a><a href="${prefix}fiches/" class="btn btn-ghost">Les fiches de révision</a>`,
+    facts: [`<b>${entrees.length}</b> notions`, "une définition par notion", "en accès libre"]
+  })}
+<section class="section">
+  <div class="wrap">
+    <nav class="lex-lettres" aria-label="Lettres">${lettres.map(l => `<a href="#lettre-${l}">${l}</a>`).join("")}</nav>
+    ${lettres.map(l => `<h2 class="lex-lettre" id="lettre-${l}">${l}</h2>
+    <dl class="lex-liste">${entrees.filter(e => e.k[0].toUpperCase() === l).map(({ f }) => `<div class="lex-entree" id="${f.slug}"><dt><a href="${prefix}fiches/${f.slug}/">${esc(stripTags(f.titre))}</a> <small>${esc(f.matiere)}</small></dt><dd>${f.essentiel[0]}</dd></div>`).join("")}</dl>`).join("\n    ")}
+  </div>
+</section>
+${contactCTA(prefix)}`;
+  write("lexique/index.html", page({
+    prefix, url, body,
+    title: ["Lexique juridique des concours de Côte d'Ivoire", "Lexique juridique"],
+    description: `${entrees.length} notions de droit ivoirien et OHADA définies en une phrase, avec leur fiche de révision : pour réviser les concours de la magistrature, du greffe, de la pénitentiaire et de l'ENA.`,
+    ld: [breadcrumb([["Accueil", SITE], ["Lexique juridique", url]]), {
+      "@context": "https://schema.org", "@type": "DefinedTermSet", name: "Lexique juridique des Cours Sésame et SAJ", url, inLanguage: "fr",
+      hasDefinedTerm: entrees.map(({ f }) => ({ "@type": "DefinedTerm", name: stripTags(f.titre), description: stripTags(f.essentiel[0]), url: `${SITE}fiches/${f.slug}/` }))
+    }]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Toutes les vidéos ---------- */
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "videos/";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Vidéos", ""]],
+    h1: "Nos <em>vidéos</em>",
+    lead: "Notre présentation, des notions et des articles expliqués en une minute, des sujets décryptés, et chaque jour une vidéo nouvelle dans l'espace abonnés.",
+    ctas: `<a href="#videos" class="btn btn-gold">Regarder${arrow}</a><a href="${prefix}espace-abonnes/#inscription" class="btn btn-ghost">S'abonner</a>`,
+    facts: [`<b>${VIDS.length}</b> vidéos en accès libre`, `<b>${VIDS_ABO.length}</b> vidéos VIP`, "une vidéo nouvelle chaque jour"]
+  })}
+${videosSection(VIDS, prefix, { h2: "En accès <em>libre</em>", ici: "videos", abo: VIDS_ABO, jour: true, band: espaceBand(prefix) })}
+${contactCTA(prefix)}`;
+  write("videos/index.html", page({
+    prefix, url, body,
+    title: ["Vidéos de révision des concours de Côte d'Ivoire", "Nos vidéos"],
+    description: "Des notions de droit et des articles expliqués en une minute, des sujets de SOG décryptés, et une vidéo nouvelle chaque jour dans l'espace abonnés.",
+    ld: [breadcrumb([["Accueil", SITE], ["Vidéos", url]]), ...VIDS.map(videoLD)]
   }));
   urls.push(url);
 }

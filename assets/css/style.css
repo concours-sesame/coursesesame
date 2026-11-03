@@ -1961,3 +1961,17 @@ form[data-form=tiktok] fieldset label{display:flex;gap:.55rem;align-items:flex-s
 form[data-form=tiktok] fieldset input{width:auto;height:auto;margin:.2rem 0 0;flex:none;align-self:flex-start}
 form[data-form=tiktok] fieldset label{line-height:1.45}
 .ad-tt-apercu video{border-radius:6px;background:#000;max-width:100%}
+
+/* QCM du jour et lexique juridique */
+.qdj-archives{margin-top:clamp(40px,6vw,64px)}
+.qdj-archives .h-section{margin-bottom:18px}
+.lex-lettres{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+.lex-lettres a{display:grid;place-items:center;min-width:38px;height:38px;border:1px solid var(--line);border-radius:var(--r-sm);color:var(--navy);font-weight:700;text-decoration:none}
+.lex-lettres a:hover{border-color:var(--gold);background:var(--gold);color:var(--navy)}
+.lex-lettre{font-family:var(--display);color:var(--navy);font-size:1.6rem;margin:28px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--gold)}
+.lex-liste{margin:0}
+.lex-entree{padding:12px 0;border-bottom:1px solid var(--line)}
+.lex-entree dt a{font-weight:700;color:var(--navy);text-decoration:none}
+.lex-entree dt a:hover{color:var(--gold-dark,#a8791d)}
+.lex-entree dt small{margin-left:.4rem;color:var(--muted);font-size:.85rem}
+.lex-entree dd{margin:.3rem 0 0;color:var(--ink,inherit);line-height:1.55}
