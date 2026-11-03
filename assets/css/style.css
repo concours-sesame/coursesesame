@@ -246,6 +246,7 @@ a.concours-card{text-decoration:none}
 .book-niveau{font-size:.9rem;color:var(--muted)}
 .book-extrait{display:block;margin-top:.25rem;font-size:.88rem;font-weight:600;color:var(--gold-ink)}
 .book-num{display:block;margin-top:.25rem;font-size:.88rem;font-weight:600;color:var(--navy)}
+.book-vvip{align-self:flex-start;margin-top:.45rem;padding:.14rem .55rem;border-radius:4px;background:var(--gold);font-size:.84rem;font-weight:800;letter-spacing:.04em;line-height:1.35;color:var(--navy)}
 /* Ouvrage dont la version intégrale se lit dans l'espace abonnés */
 .book-abo{align-self:flex-start;margin-top:.45rem;padding:.14rem .55rem;border:1px solid rgba(15,42,92,.3);border-radius:4px;font-size:.84rem;font-weight:700;line-height:1.35;color:var(--navy);text-decoration:none}
 .book-abo:hover,.book-abo:focus-visible{background:var(--navy);border-color:var(--navy);color:#fff}
@@ -261,6 +262,9 @@ a.concours-card{text-decoration:none}
 .empty a{color:var(--navy);font-weight:600}
 .spec.spec-num{background:var(--gold);color:var(--navy)}
 .spec.spec-abo{background:var(--navy);color:#fff}
+.spec.spec-vvip{background:var(--gold);color:var(--navy);font-weight:800;letter-spacing:.04em}
+.price-version{display:block;font-size:.8rem;font-style:normal;font-weight:600;letter-spacing:.02em;opacity:.8}
+.product-buy-papier{margin-top:0;border-top:0}
 
 /* Packs */
 .pack{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.5rem;background:var(--cream);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r-sm);padding:.9rem 1rem .9rem 1.2rem;margin:0 0 24px}
@@ -1719,6 +1723,7 @@ body.accueil{background:var(--nuit);color:var(--clair-2)}
 .hero-sub .btn-ghost:hover{background:var(--nuit-3);border-color:var(--clair-2)}
 .hero-sub .spec{background:var(--nuit-2);color:var(--clair-2)}
 .hero-sub .spec.spec-num{background:var(--gold);color:var(--nuit)}
+.hero-sub .spec.spec-vvip{background:var(--gold);color:var(--nuit)}
 .hero-sub .spec.spec-abo{background:var(--clair);color:var(--nuit)}
 .hero-sub .product-concours a{background:transparent;border-color:var(--nuit-filet-2);color:var(--clair-2)}
 .hero-sub .product-concours a:hover{border-color:var(--clair-2);color:var(--clair)}

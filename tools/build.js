@@ -760,7 +760,8 @@ function ouvragePage(l) {
   const cs = l.items.map(concoursDe);
   const pages = apercus(o);
   const pdf = o.extrait ? `${prefix}assets/extraits/${o.extrait}` : "";
-  const waMsg = `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite commander :\n📚 ${o.titre}${o.numerique ? " (version numérique)" : ""}\n💰 ${o.prix} FCFA\n\nMerci !`;
+  const waMsg = `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite commander :\n📚 ${o.titre}${o.numerique || o.papier ? " (version numérique)" : ""}\n💰 ${o.prix} FCFA\n\nMerci !`;
+  const waPapier = o.papier ? `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite commander :\n📚 ${o.titre} (version papier)\n💰 ${o.papier} FCFA\n\nMerci !` : "";
   const autres = byCat(o.categorie).filter(x => x.titre !== o.titre);
   const memePhase = x => o.phase && x.phase === o.phase;
   const suggestions = [...autres.filter(memePhase), ...autres.filter(x => !memePhase(x))].slice(0, 4);
@@ -777,11 +778,15 @@ function ouvragePage(l) {
         <div class="product-concours">${cs.map(c => `<a href="${prefix}concours/${c.slug}/">${c.court}</a>`).join("")}</div>
         <h1 class="product-title">${o.titre}</h1>
         <p class="lead">${o.desc}</p>
-        <div class="specs">${o.phase ? `<span class="spec">${o.phase}</span>` : ""}<span class="spec">Niveaux ${o.niveau}</span>${o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : `<span class="spec">Livraison partout en CI</span>`}<span class="spec">Paiement Mobile Money</span>${o.abonnement ? `<span class="spec spec-abo">${R.ABO_MENTION}</span>` : ""}</div>
+        <div class="specs">${o.vvip ? `<span class="spec spec-vvip">Ouvrage VVIP</span>` : ""}${o.phase ? `<span class="spec">${o.phase}</span>` : ""}<span class="spec">Niveaux ${o.niveau}</span>${o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : o.papier ? `<span class="spec">Version numérique ou papier</span><span class="spec">Papier livré partout en CI</span>` : `<span class="spec">Livraison partout en CI</span>`}<span class="spec">Paiement Mobile Money</span>${o.abonnement ? `<span class="spec spec-abo">${R.ABO_MENTION}</span>` : ""}</div>
         <div class="product-buy">
-          <span class="price">${o.prix}<small>FCFA</small></span>
+          <span class="price">${o.prix}<small>FCFA</small>${o.papier ? `<em class="price-version">Version numérique</em>` : ""}</span>
           <button class="btn btn-gold p-add" data-add="${idx}">${svg("i-plus", 'fill="none" stroke="currentColor" stroke-width="2.6"')}Ajouter au panier</button>
         </div>
+        ${o.papier ? `<div class="product-buy product-buy-papier">
+          <span class="price">${o.papier}<small>FCFA</small><em class="price-version">Version papier</em></span>
+          <a class="btn btn-ghost" href="${WA_URL}?text=${encodeURIComponent(waPapier)}" target="_blank" rel="noopener">${waIcon}Commander la version papier</a>
+        </div>` : ""}
         <div class="product-actions">
           <a class="btn btn-wa" href="${WA_URL}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener">${waIcon}Commander sur WhatsApp</a>
           ${pdf ? `<a class="btn btn-ghost" href="${pdf}" target="_blank" rel="noopener">${bookIcon}Lire un extrait gratuit</a>` : ""}
@@ -846,9 +851,10 @@ ${suggestions.length ? `<section class="section${l.items.length > 1 ? "" : " sec
 
 ${contactCTA(prefix)}`;
 
-  const fin = ` ${o.prix} FCFA${o.numerique ? ", version numérique" : ", livraison en Côte d'Ivoire"}${o.extrait ? ", extrait gratuit" : ""}.`;
+  const fin = o.papier ? ` ${o.prix} FCFA en version numérique, ${o.papier} FCFA en version papier${o.extrait ? ", extrait gratuit" : ""}.`
+    : ` ${o.prix} FCFA${o.numerique ? ", version numérique" : ", livraison en Côte d'Ivoire"}${o.extrait ? ", extrait gratuit" : ""}.`;
   // Si la présentation ne tient pas en entier, on garde le prix et on retire la mention de livraison
-  const finCourte = ` ${o.prix} FCFA${o.numerique ? ", version numérique" : ""}${o.extrait ? ", extrait gratuit" : ""}.`;
+  const finCourte = o.papier ? ` ${o.prix} FCFA en numérique, ${o.papier} FCFA en papier.` : ` ${o.prix} FCFA${o.numerique ? ", version numérique" : ""}${o.extrait ? ", extrait gratuit" : ""}.`;
   const entier = d => !d.endsWith("…");
   const description = entier(phrases(o.desc, DESC_MAX - fin.length)) ? phrases(o.desc, DESC_MAX - fin.length) + fin : phrases(o.desc, DESC_MAX - finCourte.length) + finCourte;
   write(`ouvrages/${l.slug}/index.html`, page({
