@@ -1993,3 +1993,21 @@ a.ea-jour-carte{text-decoration:none;color:inherit}
 .lettre .lettre-form .offerte-mention{color:#566074}.lettre .lettre-form .offerte-mention a{color:#0f2a5c}
 .lettre-form input,.lettre-form select{color:#141c2e}
 @media (max-width:760px){.lettre-wrap{grid-template-columns:1fr}}
+/* Espace abonnés : dates importantes de l'administrateur */
+.ea-dates{margin:0 0 1.2rem;padding:1rem 1.1rem;border:1px solid var(--line);border-top:4px solid var(--navy);border-radius:var(--r);background:#fff}
+.ea-dates-liste{list-style:none;margin:0;padding:0}
+.ea-dates-liste li{display:grid;grid-template-columns:9.5rem minmax(0,1fr) auto;gap:.4rem 1rem;align-items:start;padding:.65rem 0;border-bottom:1px solid var(--line)}
+.ea-dates-liste li:last-child{border-bottom:0}
+.ea-date-quand b{display:block;color:var(--navy)}
+.ea-date-quand small,.ea-date-quoi small{display:block;color:var(--muted);font-size:.85rem;line-height:1.4}
+.ea-date-quoi b{display:block;color:var(--ink)}
+.ea-date-bientot .ea-date-quand small{color:#a8791d;font-weight:700}
+.ea-date-proche{background:#fbf3e2}
+.ea-date-proche .ea-date-quand small{color:#b3261e;font-weight:700}
+.ea-dates-ajout{margin-top:.6rem}
+.ea-dates-ajout summary{cursor:pointer;font-weight:700;color:var(--navy)}
+.ea-dates-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px;align-items:end;margin-top:.6rem}
+.ea-dates-form label{display:grid;gap:4px;font-weight:700;color:var(--navy);font-size:.9rem}
+.ea-dates-form input{padding:.6rem .7rem;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit}
+@media (max-width:600px){.ea-dates-liste li{grid-template-columns:1fr auto}.ea-date-quoi{grid-column:1/-1}}
+.ea-dates-liste li .btn{justify-self:end;align-self:center}
