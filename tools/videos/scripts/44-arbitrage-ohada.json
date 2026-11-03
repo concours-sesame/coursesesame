@@ -1,0 +1,26 @@
+{
+ "fichier": "notion-arbitrage-ohada",
+ "titre": "L'arbitrage OHADA",
+ "rubrique": "Droit OHADA",
+ "scenes": [
+  {"type": "intro", "titre": "L'arbitrage OHADA", "dit": ["Une notion, une minute.", "L'arbitrage *Ohada*."], "st": ["Une notion, une minute.", "L'arbitrage *OHADA*."]},
+  {"type": "question", "titre": "Un litige entre deux sociétés.", "texte": "Faut-il forcément aller devant le juge ?",
+   "dit": ["Un litige oppose deux sociétés.", "Faut-il forcément aller devant le *juge* ?", "Non, si elles ont choisi l'arbitrage."]},
+  {"type": "article", "titre": "Acte uniforme relatif à l'arbitrage, article 4",
+   "citation": "La convention d'arbitrage est indépendante du contrat principal. Sa validité n'est pas affectée par la nullité de ce contrat et elle est appréciée d'après la commune volonté des parties, sans référence nécessaire à un droit étatique.",
+   "dit": ["Selon l'article *4* de l'Acte uniforme relatif à l'arbitrage, la convention d'arbitrage est *indépendante* du contrat principal : sa validité n'est pas affectée par la nullité de ce contrat."]},
+  {"type": "blocs", "titre": "Deux formes de convention", "items": [
+    {"t": "La clause compromissoire", "d": "Avant le litige, dans le contrat.", "cue": 1},
+    {"t": "Le compromis", "d": "Une fois le différend né.", "cue": 2}],
+   "dit": ["La convention d'arbitrage prend deux formes.", "La *clause compromissoire*, prévue avant tout litige.", "Ou le *compromis*, conclu une fois le différend né."]},
+  {"type": "etapes", "titre": "La sentence", "items": [
+    {"n": "1", "t": "Autorité de la chose jugée", "d": "Dès qu'elle est rendue (article 23)", "cue": 1},
+    {"n": "2", "t": "Ni appel, ni opposition", "d": "Seulement un recours en annulation, pour six cas", "cue": 2},
+    {"n": "3", "t": "L'exequatur", "d": "Pour l'exécution forcée (article 30)", "cue": 3}],
+   "dit": ["La sentence.", "Elle a l'*autorité de la chose jugée* dès qu'elle est rendue.", "Elle n'est susceptible ni d'appel ni d'opposition : seulement d'un *recours en annulation*, pour six cas limités.", "Et son exécution forcée suppose l'*exequatur*."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Le juge qui se déclare incompétent d'office", "d": "Le juge étatique ne peut relever d'office la convention d'arbitrage : une partie doit le demander (article 13).", "cue": 0}],
+   "dit": ["Le piège : croire que le juge saisi se déclare incompétent de lui-même.", "Il ne le fait que si une partie le *demande*."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

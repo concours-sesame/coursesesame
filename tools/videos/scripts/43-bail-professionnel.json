@@ -1,0 +1,26 @@
+{
+ "fichier": "notion-bail-professionnel",
+ "titre": "Le bail à usage professionnel",
+ "rubrique": "Droit OHADA",
+ "scenes": [
+  {"type": "intro", "titre": "Le bail à usage professionnel", "dit": ["Une notion, une minute.", "Le bail à usage *professionnel*."]},
+  {"type": "question", "titre": "Cinq ans dans le même local.", "texte": "Le bailleur peut-il refuser de renouveler ?",
+   "dit": ["Il exploite son salon de coiffure depuis cinq ans dans le même local.", "Le bailleur peut-il refuser de *renouveler* le bail ?", "Oui, mais il devra en général payer."]},
+  {"type": "article", "titre": "AUDCG, article 103",
+   "citation": "Est réputé bail à usage professionnel toute convention, écrite ou non, entre une personne investie par la loi ou une convention du droit de donner en location tout ou partie d'un immeuble […] et une autre personne physique ou morale, permettant à celle-ci, le preneur, d'exercer dans les lieux avec l'accord de celle-là, le bailleur, une activité commerciale, industrielle, artisanale ou toute autre activité professionnelle.",
+   "dit": ["Selon l'article *103* de l'Acte uniforme sur le droit commercial général, le bail à usage professionnel est toute convention, *écrite ou non*, qui permet au preneur d'exercer dans les lieux loués une activité commerciale, industrielle, artisanale ou professionnelle."]},
+  {"type": "etapes", "titre": "Le droit au renouvellement", "items": [
+    {"n": "1", "t": "Deux ans d'exploitation", "d": "Conforme au bail (article 123)", "cue": 1},
+    {"n": "2", "t": "Une demande à temps", "d": "Au plus tard trois mois avant la fin du bail", "cue": 2},
+    {"n": "3", "t": "Le silence du bailleur", "d": "Un mois avant la fin, il vaut acceptation", "cue": 3}],
+   "dit": ["Le droit au renouvellement.", "Le preneur doit avoir exploité l'activité pendant au moins *deux ans*.", "Pour un bail à durée déterminée, il demande le renouvellement au plus tard *trois mois* avant la fin, sous peine de déchéance.", "Si le bailleur ne répond pas au plus tard un mois avant l'expiration, il est réputé *accepter*."]},
+  {"type": "cas", "titre": "Le refus du bailleur", "items": [
+    {"ok": true, "t": "Indemnité d'éviction", "d": "En principe, le bailleur qui refuse doit indemniser le preneur (article 126).", "cue": 1},
+    {"ok": false, "t": "Sans indemnité", "d": "Motif grave et légitime contre le preneur, ou démolition et reconstruction (article 127).", "cue": 2}],
+   "dit": ["Le refus du bailleur.", "En principe, il doit payer une *indemnité d'éviction*.", "Il n'en doit pas en cas de motif grave et légitime contre le preneur, ou de projet de démolition et de reconstruction."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Exiger un bail écrit", "d": "Le bail est valable « écrit ou non ». Sans écrit ni terme, il est à durée indéterminée.", "cue": 0}],
+   "dit": ["Le piège : exiger un bail *écrit*.", "Le bail peut être verbal ; sans écrit ni terme fixé, il est réputé conclu pour une durée indéterminée."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

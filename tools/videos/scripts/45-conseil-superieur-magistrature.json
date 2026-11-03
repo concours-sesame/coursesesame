@@ -1,0 +1,23 @@
+{
+ "fichier": "notion-conseil-superieur-magistrature",
+ "titre": "Le Conseil supérieur de la magistrature",
+ "rubrique": "Organisation judiciaire",
+ "scenes": [
+  {"type": "intro", "titre": "Le Conseil supérieur de la magistrature", "dit": ["Une notion, une minute.", "Le Conseil supérieur de la *magistrature*."]},
+  {"type": "question", "titre": "Muter un juge du siège.", "texte": "Le ministre décide-t-il seul ?",
+   "dit": ["On veut muter un juge du siège.", "Le ministre décide-t-il *seul* ?", "Non."]},
+  {"type": "article", "titre": "Constitution, article 146",
+   "citation": "Le Conseil supérieur de la Magistrature examine toutes les questions relatives à l'indépendance de la Magistrature et à la déontologie des magistrats ; […] donne son avis conforme à la nomination, à la mutation et à la promotion des magistrats du siège ; statue en formation disciplinaire des magistrats du siège et du Parquet.",
+   "dit": ["Selon l'article *146* de la Constitution, le Conseil supérieur de la magistrature examine les questions relatives à l'indépendance et à la déontologie des magistrats, donne son *avis conforme* sur la carrière des juges du siège, et statue en formation disciplinaire."]},
+  {"type": "etapes", "titre": "Quatre missions", "items": [
+    {"n": "1", "t": "Indépendance et déontologie", "d": "", "cue": 1},
+    {"n": "2", "t": "Propositions de hautes nominations", "d": "Cour de cassation, Conseil d'État, Cour des comptes…", "cue": 2},
+    {"n": "3", "t": "Avis conforme pour le siège", "d": "Nomination, mutation, promotion", "cue": 3},
+    {"n": "4", "t": "Discipline", "d": "Siège et parquet", "cue": 4}],
+   "dit": ["Quatre missions.", "Veiller à l'*indépendance* et à la déontologie.", "Proposer les *hautes nominations* : Cour de cassation, Conseil d'État, Cour des comptes, chefs de juridiction.", "Donner un *avis conforme* sur la nomination, la mutation et la promotion des juges du siège.", "Et statuer en matière *disciplinaire*, pour le siège comme pour le parquet."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Croire que le Conseil nomme", "d": "Il propose ou donne un avis ; et sa compétence disciplinaire couvre aussi le parquet.", "cue": 0}],
+   "dit": ["Le piège : croire que le Conseil nomme lui-même les magistrats.", "Il *propose* ou donne un avis. Et sa compétence disciplinaire couvre aussi le *parquet*."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
