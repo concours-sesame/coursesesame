@@ -1,0 +1,68 @@
+{
+ "fichier": "notion-omission-de-porter-secours",
+ "titre": "L'omission de porter secours",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "L'omission de porter secours",
+   "dit": ["Une notion, une minute.", "L'omission de porter *secours*."]
+  },
+  {
+   "type": "question",
+   "titre": "Un homme se noie. Vous ne savez pas nager.",
+   "texte": "Pouvez-vous rester sans rien faire ?",
+   "dit": ["Un homme se noie, et vous ne savez pas nager.", "Pouvez-vous rester *sans rien faire* ?", "Non."]
+  },
+  {
+   "type": "article",
+   "titre": "Article 391 du Code pénal",
+   "citation": "Est puni d'un emprisonnement de trois mois à cinq ans et d'une amende de 50.000 à 500.000 francs quiconque s'abstient volontairement de porter à une personne en péril l'assistance que, sans risque pour lui ni pour les tiers, il pouvait lui prêter, soit par son action personnelle, soit en provoquant un secours.",
+   "dit": ["Selon l'article *391* du Code pénal, est puni quiconque s'abstient volontairement de porter à une personne en péril l'assistance qu'il pouvait lui prêter sans risque, soit par son action personnelle, soit en provoquant un secours."]
+  },
+  {
+   "type": "etapes",
+   "titre": "Quatre conditions",
+   "items": [
+    {"n": "1", "t": "Une personne en péril", "d": "Sa vie ou son intégrité, pas ses biens", "cue": 1},
+    {"n": "2", "t": "Une aide possible sans risque", "d": "Pour soi comme pour les tiers", "cue": 2},
+    {"n": "3", "t": "Agir ou alerter", "d": "Action personnelle, ou appel des secours", "cue": 3},
+    {"n": "4", "t": "Une abstention volontaire", "d": "Avoir connu le péril et choisi de ne rien faire", "cue": 4}
+   ],
+   "dit": [
+    "Quatre conditions.",
+    "Une personne en *péril*, dans sa vie ou son intégrité.",
+    "Une aide possible *sans risque*, pour soi comme pour les tiers.",
+    "Agir soi-même, ou au moins *alerter* les secours.",
+    "Et une abstention *volontaire* : il faut avoir connu le péril."
+   ]
+  },
+  {
+   "type": "cas",
+   "titre": "Un exemple",
+   "items": [
+    {"ok": false, "t": "Infraction", "d": "Sélibo ne sait pas nager et n'appelle personne.", "cue": 1},
+    {"ok": true, "t": "Pas d'infraction", "d": "Sélibo appelle aussitôt les pompiers, même si la victime ne survit pas.", "cue": 2}
+   ],
+   "dit": [
+    "Un exemple.",
+    "Sélibo ne sait pas nager, et il n'appelle personne : l'infraction est *constituée*, car il pouvait provoquer un secours.",
+    "S'il appelle aussitôt les pompiers, il n'est *pas punissable*, même si la victime ne survit pas."
+   ]
+  },
+  {
+   "type": "piege",
+   "titre": "Le piège",
+   "items": [
+    {"t": "Exiger un dommage", "d": "L'abstention suffit : l'infraction existe même si la victime s'en sort.", "cue": 0}
+   ],
+   "dit": [
+    "Le piège : exiger un dommage.", "L'abstention *suffit*, même si la victime s'en sort. Et la peine est doublée pour celui qui avait l'obligation professionnelle ou contractuelle de secourir."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]
+  }
+ ]
+}

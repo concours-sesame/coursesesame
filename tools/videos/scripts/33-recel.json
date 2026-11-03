@@ -1,0 +1,64 @@
+{
+ "fichier": "notion-recel",
+ "titre": "Le recel",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Le recel",
+   "dit": ["Une notion, une minute.", "Le *recel*."]
+  },
+  {
+   "type": "question",
+   "titre": "Un téléphone neuf à moitié prix.",
+   "texte": "L'acheteur risque-t-il quelque chose ?",
+   "dit": ["Un téléphone neuf, vendu à moitié prix dans la rue.", "L'acheteur risque-t-il *quelque chose* ?", "Tout dépend de ce qu'il savait."]
+  },
+  {
+   "type": "article",
+   "titre": "Article 477 du Code pénal",
+   "citation": "Constitue un recel, le fait pour une personne de dissimuler, de détenir ou de transmettre une chose, ou de servir d'intermédiaire afin de la transmettre, en sachant que cette chose provient d'un crime ou d'un délit.",
+   "dit": ["Selon l'article *477* du Code pénal, constitue un recel le fait de dissimuler, de détenir ou de transmettre une chose, ou de servir d'intermédiaire pour la transmettre, en sachant qu'elle provient d'un crime ou d'un délit."]
+  },
+  {
+   "type": "blocs",
+   "titre": "Trois éléments",
+   "items": [
+    {"t": "Une infraction d'origine", "d": "Un crime ou un délit, pas une contravention. Son auteur n'a pas besoin d'être condamné.", "cue": 1},
+    {"t": "Détenir ou profiter", "d": "Détenir, cacher, transmettre la chose, ou bénéficier du produit de l'infraction.", "cue": 2},
+    {"t": "Savoir", "d": "Connaître l'origine de la chose, même après l'avoir reçue.", "cue": 3}
+   ],
+   "dit": [
+    "Trois éléments sont nécessaires.",
+    "Une infraction d'origine, *crime ou délit*, dont l'auteur n'a pas besoin d'être condamné.",
+    "Un acte : détenir, cacher, transmettre la chose, ou *profiter* de son produit.",
+    "Et la *connaissance* de son origine, même acquise après coup."
+   ]
+  },
+  {
+   "type": "cas",
+   "titre": "Un exemple",
+   "items": [
+    {"ok": false, "t": "Recel", "d": "Nanlé garde le téléphone après avoir appris qu'il était volé.", "cue": 1},
+    {"ok": true, "t": "Pas de recel", "d": "Nanlé l'achète de bonne foi dans un magasin et ignore tout.", "cue": 2}
+   ],
+   "dit": [
+    "Un exemple.",
+    "Nanlé garde le téléphone après avoir appris qu'il était volé : il le détient *en sachant*, c'est un recel.",
+    "S'il l'a acheté de bonne foi en magasin, sans rien savoir, il n'y a *pas de recel*."
+   ]
+  },
+  {
+   "type": "piege",
+   "titre": "Le piège",
+   "items": [
+    {"t": "Exiger la condamnation du voleur", "d": "Il suffit que le crime ou le délit d'origine soit établi.", "cue": 0}
+   ],
+   "dit": ["Le piège : exiger la condamnation du voleur.", "Il suffit que l'infraction d'origine soit *établie*."]
+  },
+  {
+   "type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]
+  }
+ ]
+}
