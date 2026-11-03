@@ -526,7 +526,7 @@ function videoFeature(v, prefix, ici, titre, actions = "") {
     </div>`;
 }
 // Section « En vidéo » : la vidéo carrée en avant, les vidéos verticales en rangée
-function videosSection(list, prefix, { id = "videos", h2, eyebrow = "", lead, ici, cls = "", band = "", abo = [] }) {
+function videosSection(list, prefix, { id = "videos", h2, eyebrow = "", lead, ici, cls = "", band = "", abo = [], jour = false }) {
   if (!list.length) return "";
   const feat = list.find(v => v.format === "carre") || (list.length === 1 ? list[0] : null);
   const rest = list.filter(v => v !== feat);
@@ -541,9 +541,19 @@ function videosSection(list, prefix, { id = "videos", h2, eyebrow = "", lead, ic
     ${rest.length ? `<div class="v-rail${feat ? " v-rail-after" : ""}"${ici === "accueil" ? ` tabindex="0" role="region" aria-label="Vidéos, à faire défiler"` : ""}>${rest.map((v, i) => videoCard(v, prefix, i, ici)).join("")}</div>` : ""}
     ${abo.length ? `<div class="v-abo-head reveal"><h3>${svg("i-lock")}Réservées aux abonnés VIP</h3><p>D'autres notions expliquées en une minute, à regarder dans l'espace VIP de l'espace abonnés.</p></div>
     <div class="v-rail">${abo.map((v, i) => videoAboCard(v, prefix, i)).join("")}</div>` : ""}
+    ${jour ? videosJourHTML(prefix) : ""}
     ${band}
   </div>
 </section>`;
+}
+// Vidéos du jour de l'espace VIP : titres des dernières vidéos sorties, remplis par assets/js/videos-du-jour.js
+// (bloc masqué tant qu'aucune n'est sortie ; la vidéo elle-même reste réservée aux abonnés VIP)
+function videosJourHTML(prefix) {
+  return `<div class="v-jour" data-videos-jour hidden>
+      <div class="v-abo-head"><h3>${svg("i-lock")}Les vidéos du jour, dans l'espace VIP</h3><p>Chaque jour, une nouvelle vidéo : un QCM, un article, une fiche ou une notion expliqués. Elles se regardent dans l'espace VIP de l'espace abonnés.</p></div>
+      <ul class="vj-liste"></ul>
+    </div>
+    <script defer src="${prefix}assets/js/videos-du-jour.js"></script>`;
 }
 // Invitation à l'espace abonnés
 function espaceBand(prefix) {
@@ -1843,7 +1853,7 @@ index = inject(index, "essai", essaiHTML());
 index = inject(index, "prixjour", prixJourHTML());
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
-  h2: `Nos vidéos`, ici: "accueil",
+  h2: `Nos vidéos`, ici: "accueil", jour: true,
   lead: "Notre présentation, un ouvrage en vidéo, des notions et un article de loi expliqués en une minute, et des sujets de SOG décryptés.",
   band: espaceBand("")
 }) + "\n");
