@@ -1,0 +1,31 @@
+{
+ "fichier": "notion-controle-judiciaire",
+ "titre": "Le contrôle judiciaire",
+ "rubrique": "Procédure pénale",
+ "scenes": [
+  {"type": "intro", "titre": "Le contrôle judiciaire", "dit": ["Une notion, une minute.", "Le contrôle *judiciaire*."]},
+  {"type": "question", "titre": "Inculpé, mais pas en prison.", "texte": "Est-il pour autant libre de tout faire ?",
+   "dit": ["Il est inculpé, mais il n'est pas en prison.", "Est-il libre de *tout faire* ?", "Non, s'il est sous contrôle judiciaire."]},
+  {"type": "article", "titre": "Article 153 du Code de procédure pénale",
+   "citation": "La liberté est de droit, le contrôle judiciaire et la détention préventive des mesures exceptionnelles. Lorsqu'elles sont ordonnées, les règles ci-après doivent être observées.",
+   "dit": ["Selon l'article *153* du Code de procédure pénale, la liberté est de droit ; le contrôle judiciaire et la détention préventive sont des mesures *exceptionnelles*."]},
+  {"type": "blocs", "titre": "Les conditions", "items": [
+    {"t": "Le juge d'instruction", "d": "À toute étape de la procédure, par une ordonnance spécialement motivée.", "cue": 1},
+    {"t": "Une peine d'emprisonnement encourue", "d": "Quelle qu'en soit la durée (article 154).", "cue": 2}],
+   "dit": ["Deux conditions.", "La mesure est ordonnée par le *juge d'instruction*, à toute étape, par une ordonnance spécialement motivée.", "Et l'inculpé doit encourir une peine d'*emprisonnement*, quelle qu'en soit la durée."]},
+  {"type": "etapes", "titre": "Des obligations au choix", "items": [
+    {"n": "1", "t": "Ne pas quitter un territoire", "d": "", "cue": 1},
+    {"n": "2", "t": "Remettre son passeport", "d": "", "cue": 1},
+    {"n": "3", "t": "Ne pas rencontrer la victime", "d": "", "cue": 2},
+    {"n": "4", "t": "Verser un cautionnement", "d": "Selon ses ressources", "cue": 2}],
+   "dit": ["Le juge choisit les obligations, par exemple : ne pas quitter un territoire, remettre son passeport,", "ne pas rencontrer la *victime*, ou verser un cautionnement adapté à ses ressources."]},
+  {"type": "cas", "titre": "Un exemple", "items": [
+    {"ok": true, "t": "Contrôle judiciaire", "d": "Dognimé, inculpé de violences sur son épouse, doit vivre hors du domicile conjugal.", "cue": 1},
+    {"ok": false, "t": "Détention possible", "d": "Il y revient : le juge peut le placer en détention préventive.", "cue": 2}],
+   "dit": ["Un exemple.", "Dognimé, inculpé de violences sur son épouse, doit résider hors du domicile conjugal.", "S'il y revient, il viole ses obligations : le juge peut le placer en *détention préventive*, quelle que soit la peine encourue."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Exiger deux ans de prison encourus", "d": "Ce seuil est celui de la détention préventive, pas du contrôle judiciaire.", "cue": 0}],
+   "dit": ["Le piège : exiger une peine d'au moins *deux ans*.", "Ce seuil vaut pour la détention préventive, pas pour le contrôle judiciaire."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

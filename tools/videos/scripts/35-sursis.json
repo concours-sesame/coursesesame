@@ -1,0 +1,26 @@
+{
+ "fichier": "notion-sursis",
+ "titre": "Le sursis",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {"type": "intro", "titre": "Le sursis", "dit": ["Une notion, une minute.", "Le *sursis*."]},
+  {"type": "question", "titre": "Condamné à un an de prison.", "texte": "Va-t-il forcément en prison ?",
+   "dit": ["Il est condamné à un an de prison.", "Va-t-il *forcément* en prison ?", "Pas s'il bénéficie du sursis."]},
+  {"type": "article", "titre": "Article 130 du Code pénal",
+   "citation": "En cas de condamnation pour crime ou délit de droit commun à une peine d'emprisonnement inférieure ou égale à cinq ans et à une amende ou à l'une de ces deux peines seulement, le juge peut […] ordonner qu'il sera sursis en tout ou partie à l'exécution de l'emprisonnement et de l'amende […] pendant un délai de cinq ans.",
+   "dit": ["Selon l'article *130* du Code pénal, en cas de condamnation pour crime ou délit de droit commun à une peine d'emprisonnement inférieure ou égale à cinq ans, ou à une amende, le juge peut ordonner qu'il sera sursis à l'exécution de la peine, pendant un délai de cinq ans."]},
+  {"type": "etapes", "titre": "Trois conditions", "items": [
+    {"n": "1", "t": "Un crime ou un délit de droit commun", "d": "", "cue": 1},
+    {"n": "2", "t": "Cinq ans de prison au plus", "d": "Ou une amende", "cue": 2},
+    {"n": "3", "t": "Pas de condamnation antérieure à la prison", "d": "Définitive et non effacée", "cue": 3}],
+   "dit": ["Trois conditions.", "Un crime ou un délit de *droit commun*.", "Une peine de *cinq ans* de prison au plus, ou une amende.", "Et aucune condamnation antérieure à la *prison*, définitive et non effacée."]},
+  {"type": "cas", "titre": "Les cinq ans d'épreuve", "items": [
+    {"ok": true, "t": "Rien à signaler", "d": "La condamnation est effacée, comme par l'amnistie.", "cue": 1},
+    {"ok": false, "t": "Nouvelle condamnation à la prison", "d": "Le sursis est révoqué : les deux peines s'exécutent, sans confusion.", "cue": 2}],
+   "dit": ["Ensuite, cinq ans d'épreuve.", "Sans nouvelle condamnation à la prison, la condamnation est *effacée*.", "Sinon, le sursis est *révoqué* : les deux peines s'exécutent, sans confusion."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Oublier la victime", "d": "Le sursis ne dispense ni des dommages-intérêts, ni des peines complémentaires.", "cue": 0}],
+   "dit": ["Le piège : croire que le sursis efface tout.", "Il ne dispense ni des *dommages-intérêts* dus à la victime, ni des peines complémentaires."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

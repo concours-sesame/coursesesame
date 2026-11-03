@@ -1,0 +1,26 @@
+{
+ "fichier": "notion-association-de-malfaiteurs",
+ "titre": "L'association de malfaiteurs",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {"type": "intro", "titre": "L'association de malfaiteurs", "dit": ["Une notion, une minute.", "L'association de *malfaiteurs*."]},
+  {"type": "question", "titre": "Ils préparent un braquage. Rien n'est encore commis.", "texte": "Sont-ils déjà punissables ?",
+   "dit": ["Ils préparent un braquage, mais rien n'est encore commis.", "Sont-ils déjà *punissables* ?", "Oui."]},
+  {"type": "article", "titre": "Article 203 du Code pénal",
+   "citation": "Est puni d'une peine d'un à cinq ans d'emprisonnement, celui qui s'affilie à une association ou participe à une entente, quel qu'en soit la durée ou le nombre de leurs membres, ayant pour but de préparer ou de commettre des crimes ou délits contre les personnes ou les biens.",
+   "dit": ["Selon l'article *203* du Code pénal, est puni d'un à cinq ans d'emprisonnement celui qui s'affilie à une association, ou participe à une entente, ayant pour but de préparer ou de commettre des crimes ou délits contre les personnes ou les biens."]},
+  {"type": "blocs", "titre": "Ce qu'il faut savoir", "items": [
+    {"t": "Une simple entente suffit", "d": "Quelle qu'en soit la durée ou le nombre de membres, à partir de deux.", "cue": 1},
+    {"t": "Des délits graves", "d": "Le minimum de la peine encourue doit être d'au moins cinq ans d'emprisonnement, ou des crimes.", "cue": 2},
+    {"t": "Cinq à dix ans", "d": "Si l'auteur dispose d'instruments propres à commettre l'infraction, ou d'armes.", "cue": 3}],
+   "dit": ["Ce qu'il faut savoir.", "Une simple *entente* suffit, quelle qu'en soit la durée.", "Pour les délits visés, le minimum de la peine encourue doit être d'au moins *cinq ans* d'emprisonnement.", "Et la peine passe à cinq à dix ans si l'auteur dispose d'*instruments* ou d'armes."]},
+  {"type": "cas", "titre": "Un exemple", "items": [
+    {"ok": false, "t": "Infraction", "d": "Trois amis repèrent une station-service et achètent des cagoules : arrêtés avant d'agir, ils sont punissables.", "cue": 1},
+    {"ok": true, "t": "Exempté de peine", "d": "L'un d'eux révèle le projet à la police avant toute poursuite.", "cue": 2}],
+   "dit": ["Un exemple.", "Trois amis repèrent une station-service et achètent des cagoules. Arrêtés avant d'agir, ils sont *punissables*.", "Celui qui révèle le projet aux autorités avant toute poursuite bénéficie d'une *excuse absolutoire*."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Exiger un commencement d'exécution", "d": "C'est la tentative qui l'exige. L'association est punie avant.", "cue": 0}],
+   "dit": ["Le piège : exiger un commencement d'exécution.", "C'est la *tentative* qui l'exige ; l'association est punie avant."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
