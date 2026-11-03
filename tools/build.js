@@ -1657,6 +1657,10 @@ ${contactCTA(prefix)}`;
     <p>N'écrivez donc aucune information personnelle, ni la vôtre ni celle d'un tiers, dans le sujet ou dans la copie. Vos demandes et les réponses sont conservées dans votre compte, chez Supabase en Europe, pour que vous puissiez les relire ; elles nous servent aussi à suivre la qualité et le coût du service, et sont effacées avec votre compte.</p>
     <p>Vous pouvez demander à tout moment la correction de vos informations ou la suppression de votre compte en nous écrivant sur WhatsApp. La suppression d'un compte efface les informations qui s'y rattachent.</p>
 
+    <h2 id="reseaux-sociaux">Réseaux sociaux (Facebook et TikTok)</h2>
+    <p>Nous publions nos vidéos et nos annonces sur nos propres pages Facebook et TikTok, par les interfaces officielles de ces services (Graph API de Meta, Login Kit et Content Posting API de TikTok). Ces publications partent de notre espace d'administration, à l'heure que nous avons programmée.</p>
+    <p>Pour TikTok, la connexion est faite une seule fois par l'éditeur, avec son propre compte. Nous ne recevons de TikTok que ce qui sert à publier sur ce compte : son identifiant, son nom affiché et les jetons d'accès qui autorisent la publication. Ils sont conservés chez Supabase en Europe, ne sont jamais affichés sur le site et sont effacés si la connexion est retirée, ce que l'éditeur peut faire à tout moment depuis les réglages de TikTok. Aucune donnée des visiteurs du site ni des autres utilisateurs de TikTok n'est collectée par ce moyen, et rien n'est vendu ni transmis à des tiers.</p>
+
     <h2 id="credits">Crédits</h2>
     <p>Les photographies suivantes sont publiées sous la <a href="https://unsplash.com/license" target="_blank" rel="noopener">licence Unsplash</a>, qui en permet l'usage libre :</p>
     <ul>
