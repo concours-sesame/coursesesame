@@ -61,9 +61,10 @@ La comparaison ignore accents et ponctuation et corrige les confusions courantes
 « II », « contr6le ») ; elle donne pour chaque citation le ou les articles où elle se lit, ce qui contrôle aussi le numéro
 cité. Une citation ABSENTE se contrôle à l'écran sur l'image de la page (`pdftoppm`) et se note dans `controle-ecran.txt`.
 
-Constitution (fiches 142 à 150) : le PDF « texte d'origine » de la base (contenu 91) est un document Word sans origine
-sûre, qui s'écarte du texte officiel sur une cinquantaine d'articles. Le texte de 2016 est lu dans le projet de loi
-officiel du Gouvernement du 12 octobre 2016, adopté par référendum ; les articles réécrits en 2020 sont transcrits sur
+Constitution (fiches 142 à 150) : le PDF « texte d'origine » de la base (contenu 91) était un document Word sans origine
+sûre, qui s'écartait du texte officiel sur une cinquantaine d'articles ; il a été remplacé le 3 novembre 2026 par le projet
+de loi officiel du Gouvernement du 12 octobre 2016 (`textes/constitution-2016-projet-officiel.pdf`, passages de recherche
+refaits). Le texte de 2016 est lu dans ce projet de loi, adopté par référendum ; les articles réécrits en 2020 sont transcrits sur
 l'image du Journal officiel du 19 mars 2020, ceux de 2023 sur le Journal officiel du 9 août 2023 (articles 179 à 182
 abrogés). Le texte consolidé et la transcription sont archivés avec les sources des fiches 141 à 150.
 
@@ -119,6 +120,10 @@ node tools/build.js
 
 Les fiches 2, 13, 14 et 16 ont été republiées en version 2 (`fiche-NNNN-v2.pdf`) après correction de l'espace des
 milliers dans `rendu.py` : « 3.000.000 » s'affichait « 3 000.000 ».
+
+La fiche 41 a été republiée en version 2 (`fiche-0041-v2.pdf`, source dans `textes/sources-fiche-0041-v2.pdf`) : elle
+présentait l'article 181 issu de la révision de 2020 comme en vigueur, alors que la loi n° 2023-693 du 25 juillet 2023
+(article 2) a abrogé les articles 179 à 182.
 
 ## Banque de plans (espace VIP)
 

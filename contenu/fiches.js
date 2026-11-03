@@ -1180,7 +1180,7 @@ module.exports = [
    "eppjej",
    "ena"
   ],
-  "sources": "Constitution du 8 novembre 2016, révisée par la loi constitutionnelle n° 2020-348 du 19 mars 2020, articles 143, 144, 147 à 149, 152 à 154 et 181 ; loi organique n° 2020-968 du 17 décembre 2020 sur le Conseil d'État, article 14 ; loi n° 2020-884 du 21 octobre 2020 sur le Tribunal des conflits, articles 1er et 6.",
+  "sources": "Constitution du 8 novembre 2016, révisée par la loi constitutionnelle n° 2020-348 du 19 mars 2020, articles 143, 144, 147 à 149, 152 à 154 et 181 ; loi n° 2023-693 du 25 juillet 2023 modifiant la Constitution, article 2 ; loi organique n° 2020-968 du 17 décembre 2020 sur le Conseil d'État, article 14 ; loi n° 2020-884 du 21 octobre 2020 sur le Tribunal des conflits, articles 1er et 6.",
   "essentiel": [
    "La justice ivoirienne est organisée en deux ordres de juridiction, l'ordre judiciaire, dominé par la Cour de cassation, et l'ordre administratif, dominé par le Conseil d'État ; à côté d'eux, la Cour des comptes contrôle les finances publiques. Depuis la révision de 2020, la Cour suprême n'existe plus."
   ],
