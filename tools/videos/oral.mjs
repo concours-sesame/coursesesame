@@ -13,7 +13,7 @@ const SIGLES = [
   [/\bBCEAO\b/g, 'B C E A O'], [/\bSNC\b/g, 'S N C'], [/\bCRPC\b/g, 'C R P C'], [/\bBAD\b/g, 'B A D'], [/\bINFJ\b/g, 'I N F J'], [/\bENA\b/g, 'E N A'], [/\bQCM\b/g, 'Q C M'], [/coursesesame\.com/g, 'cours sésame point com']
 ];
 export function oral(t) {
-  let s = t.replace(/\s*Sources? : [^.]*\.?/g, '').replace(/\s*\([^)]*source[^)]*\)/gi, '').replace(/\s*\(([^)]*)\)/g, ', $1,').replace(/,([.;:?])/g, '$1');
+  let s = t.replace(/\s*Sources? : [^.]*\.?/g, '').replace(/\s*\([^)]*source[^)]*\)/gi, '').replace(/\s*\(([^)]*)\)/g, ', $1,').replace(/,\s*\?/g, ' ?').replace(/,\s*([.;:])/g, '$1');
   s = s.replace(/n° ?\d{4}-\d+,?(?= du )/g, '').replace(/n° ?(\d{4})-\d+/g, 'de $1').replace(/n° ?(\d{2})-\d+/g, 'de 19$1');
   s = s.replace(/\b1er\b/g, 'premier').replace(/(\d)\.(?=\d{3}\b)/g, '$1').replace(/\s+/g, ' ').replace(/ ,/g, ',').trim();
   for (const [a, b] of SIGLES) s = s.replace(a, b);
