@@ -6,7 +6,8 @@ dans l'aperçu « Au programme » de la page Espace abonnés (`apercu_contenus`)
 
 **Le texte des fiches n'est pas dans ce dépôt, qui est public.** Les sources Markdown sont gardées dans le stockage
 privé `exclusif`, en archives `textes/sources-fiches-NNNN-NNNN.pdf` (un `.tar.gz` sous ce nom, déposé par l'action
-`televersement` de `import-texte`). La dernière archive, `textes/sources-fiches-0001-0100.pdf`, contient les fiches 1 à 100.
+`televersement` de `import-texte`). Les fiches 1 à 100 sont dans `textes/sources-fiches-0001-0100.pdf` ; à partir de la fiche 101, une archive par série de dix
+(`textes/sources-fiches-0101-0110.pdf`, etc.), avec le registre des contrôles à l'écran (`controle-ecran.txt`).
 
 ## Format d'une fiche (`NN.md`)
 
@@ -45,6 +46,27 @@ inventés), pièges des correcteurs, à l'écrit, testez-vous avec corrigé.
   Code pénal), la citation la reproduit et le signale.
 - Une loi temporaire dont le maintien en vigueur n'est pas établi (loi n° 2018-863 sur la procédure spéciale de
   déclaration de naissance) ne fait pas l'objet d'une fiche.
+
+## Vérification des citations (à partir de la fiche 101)
+
+Le texte officiel est lu dans le PDF du Journal officiel lui-même : l'action `lecture` de `import-texte` donne une adresse de
+dix minutes, et `pdftotext` en tire le texte (identique à `passages`, reconnaissance de caractères comprise).
+
+```
+python3 tools/fiches/articles.py <texte.txt> 37-50 106              # lire les articles officiels pour rédiger
+python3 tools/fiches/verifier_citations.py <NNN.md> <texte.txt> …   # chaque « … » : article où elle se lit, ou ABSENTE
+```
+
+La comparaison ignore accents et ponctuation et corrige les confusions courantes de la reconnaissance (« Ie », « it »,
+« II », « contr6le ») ; elle donne pour chaque citation le ou les articles où elle se lit, ce qui contrôle aussi le numéro
+cité. Une citation ABSENTE se contrôle à l'écran sur l'image de la page (`pdftoppm`) et se note dans `controle-ecran.txt`.
+
+Constitution (fiches 142 à 150) : le PDF « texte d'origine » de la base (contenu 91) était un document Word sans origine
+sûre, qui s'écartait du texte officiel sur une cinquantaine d'articles ; il a été remplacé le 3 novembre 2026 par le projet
+de loi officiel du Gouvernement du 12 octobre 2016 (`textes/constitution-2016-projet-officiel.pdf`, passages de recherche
+refaits). Le texte de 2016 est lu dans ce projet de loi, adopté par référendum ; les articles réécrits en 2020 sont transcrits sur
+l'image du Journal officiel du 19 mars 2020, ceux de 2023 sur le Journal officiel du 9 août 2023 (articles 179 à 182
+abrogés). Le texte consolidé et la transcription sont archivés avec les sources des fiches 141 à 150.
 
 ## Fabrication et publication
 
@@ -90,9 +112,18 @@ node tools/build.js
 | 79 à 86 | Personnes et famille : actes de l'état civil, rectification et jugements supplétifs, émancipation, communauté de biens, séparation de biens, option successorale, partage, majeurs protégés | 225 à 232 |
 | 87 à 89 | Institutions : indépendance et statut du magistrat, Conseil supérieur de la magistrature, Haute Cour de justice | 233 à 235 |
 | 90 à 100 | OHADA : fonds de commerce et location-gérance, vente du fonds, vente commerciale, cautionnement, hypothèque, gage, saisie-attribution, saisie-vente, redressement et liquidation, conciliation et règlement préventif, arbitrage | 236 à 246 |
+| 101 à 110 | Sociétés commerciales (AUSCGIE) : contrat de société, apports, société en formation, nullités, dissolution, SNC, SCS, société anonyme, direction de la SA, commissaire aux comptes | 312 à 321 |
+| 111 à 120 | Sociétés commerciales (AUSCGIE) : abus de majorité et de minorité, responsabilité des dirigeants, SA avec administrateur général, assemblées de SA, SAS, décisions de SARL, GIE, fusion et scission, société en participation et société de fait, conventions réglementées | 322 à 331 |
+| 121 à 130 | Sûretés (AUS) : notion et agent des sûretés, garantie autonome, droit de rétention, réserve de propriété, propriété cédée en garantie, nantissement de créance et de compte, nantissement du fonds de commerce, privilèges, ordre de distribution, hypothèque judiciaire conservatoire | 332 à 341 |
+| 131 à 140 | Procédures collectives (AUPC) : organes, période suspecte, production et vérification des créances, salariés, bailleur, coobligés et conjoint, revendications, contrats en cours, concordat de redressement, liquidation des biens, comblement du passif et extension, faillite personnelle et réhabilitation | 342 à 351 |
+| 141 à 150 | Banqueroute (AUPC) ; Constitution : droits civils et politiques, droits économiques et sociaux, devoirs, État et souveraineté, Président (élection, pouvoirs), vice-Président, Gouvernement, Parlement | 352 à 361 |
 
 Les fiches 2, 13, 14 et 16 ont été republiées en version 2 (`fiche-NNNN-v2.pdf`) après correction de l'espace des
 milliers dans `rendu.py` : « 3.000.000 » s'affichait « 3 000.000 ».
+
+La fiche 41 a été republiée en version 2 (`fiche-0041-v2.pdf`, source dans `textes/sources-fiche-0041-v2.pdf`) : elle
+présentait l'article 181 issu de la révision de 2020 comme en vigueur, alors que la loi n° 2023-693 du 25 juillet 2023
+(article 2) a abrogé les articles 179 à 182.
 
 ## Banque de plans (espace VIP)
 

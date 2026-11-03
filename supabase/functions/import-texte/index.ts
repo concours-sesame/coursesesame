@@ -8,6 +8,10 @@
 // signée, valable deux heures, pour le seul fichier textes/<nom>.pdf (sans remplacement d'un fichier existant) ;
 // avec format: "mp4", pour la vidéo videos/<nom>.mp4 (vidéo réservée aux abonnés, contenu de type « video »).
 // Cartes de l'espace VIP : POST { action: "cartes", nom } (voir plus bas).
+// QCM de l'espace abonnés : POST { action: "qcm", nom } lit le fichier JSON déposé à textes/<nom>.pdf (tableau de
+// { titre, description, matiere, concours, texte }, texte = { qcm: { duree, questions: [{ q, options, bonne, reference,
+// explication, fiche? }] } } en JSON), crée chaque QCM en brouillon (contenu de type « texte », matière « QCM · … »)
+// puis efface le fichier. Les questions ne passent jamais par le dépôt GitHub, qui est public.
 // Chargement des concours blancs : POST { action: "epreuves_blanches", nom } lit le fichier JSON déposé à textes/<nom>.pdf
 // (tableau de lignes { concours, serie, ordre, epreuve, titre, nature, duree_minutes, sujet, corrige }), l'enregistre dans
 // epreuves_blanches (une épreuve existante est remplacée, sa publication est conservée) puis efface le fichier.
@@ -121,6 +125,37 @@ Deno.serve(async (req) => {
     }
     await service.storage.from("exclusif").remove([chemin]);
     return json({ contenus: faits.length });
+  }
+  // QCM de l'espace abonnés (voir l'en-tête) : créés en brouillon, publiés ensuite depuis l'administration
+  if (d.action === "qcm") {
+    const nomDepot = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
+    const chemin = `textes/${nomDepot}.pdf`;
+    const { data: fichier, error: errLecture } = await service.storage.from("exclusif").download(chemin);
+    if (errLecture || !fichier) return json({ error: `Stockage ${errLecture?.message ?? "fichier absent"}` }, 404);
+    let qcms: Record<string, unknown>[];
+    try {
+      qcms = JSON.parse(await fichier.text());
+      if (!Array.isArray(qcms) || !qcms.length) throw new Error();
+    } catch {
+      return json({ error: "Fichier JSON invalide" }, 400);
+    }
+    // Contrôle de chaque QCM : matière « QCM · … », au moins deux options par question et bonne réponse parmi elles
+    const lignes = [];
+    for (const [i, c] of qcms.entries()) {
+      const matiere = String(c.matiere ?? "").slice(0, 80);
+      let qs: { options?: unknown[]; bonne?: number; q?: string }[] = [];
+      try { qs = JSON.parse(String(c.texte ?? "")).qcm.questions; } catch { /* contrôlé ci-dessous */ }
+      if (!/^QCM · /.test(matiere) || !Array.isArray(qs) || !qs.length
+        || qs.some((q) => !q.q || !Array.isArray(q.options) || q.options.length < 2 || !Number.isInteger(q.bonne) || q.bonne! < 0 || q.bonne! >= q.options.length)) {
+        return json({ error: `QCM n° ${i + 1} invalide` }, 400);
+      }
+      lignes.push({ titre: String(c.titre ?? "").slice(0, 200), description: String(c.description ?? "").slice(0, 600), matiere, type: "texte",
+        concours: Array.isArray(c.concours) ? c.concours.map(String) : [], texte: String(c.texte), publie: false });
+    }
+    const { data: crees, error } = await service.from("contenus").insert(lignes).select("id, titre");
+    if (error) return json({ error: `Base ${error.message}` }, 500);
+    await service.storage.from("exclusif").remove([chemin]);
+    return json({ crees });
   }
   // Cartes de l'espace VIP (« Les articles à savoir par cœur ») : POST { action: "cartes", nom } lit le fichier JSON
   // déposé à textes/<nom>.pdf (tableau de cartes) et l'enregistre dans cartes_articles, une carte par fiche et référence

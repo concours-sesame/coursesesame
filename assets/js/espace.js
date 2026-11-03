@@ -337,7 +337,8 @@
 
   /* ---------- QCM chronométré ---------- */
   let minuterieQcm;
-  function lancerQcm(qcm, corps, marque) {
+  // surReponse (facultatif) : appelé pour chaque question répondue, avec la question et le résultat (QCM d'une fiche)
+  function lancerQcm(qcm, corps, marque, surReponse) {
     const melanger = t => { const a = t.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
     const duree = Math.max(1, Math.round(qcm.duree || qcm.questions.length));
     const accueil = () => {
@@ -355,6 +356,7 @@
         const bloc = $(`[data-qi="${i}"]`, corps), choix = $(`input[name="qz${i}"]:checked`, corps);
         const rep = choix ? +choix.value : -1, ok = rep === q.bonne;
         if (ok) bons++;
+        if (surReponse && rep >= 0) surReponse(q, ok);
         bloc.classList.add(ok ? "qz-ok" : "qz-ko");
         $$("input", bloc).forEach(x => { x.disabled = true; });
         $$("label", bloc).forEach((l, k) => { if (k === q.bonne) l.classList.add("qz-bonne"); else if (k === rep) l.classList.add("qz-fausse"); });
@@ -426,6 +428,9 @@
   let surRefus = null;
   // Crochets posés par la page de l'espace abonnés : dernière page lue (« Reprendre ma lecture ») et favoris
   let memoLecture = null, favoris = null;
+  // QCM d'une fiche de révision : qcmFiche(numéro) renvoie ses questions publiées (avec leur origine), noterFiche(origine,
+  // juste) enregistre la réponse dans la progression de la révision du jour
+  let qcmFiche = null, noterFiche = null;
   // marque : texte affiché sur la vidéo et porté sur les documents (nom et téléphone de l'abonné)
   async function ouvrirContenu(c, marque) {
     if (!visionneuse) creerVisionneuse();
@@ -480,8 +485,17 @@
     if (c.type === "pdf") {
       // Textes officiels et jurisprudence : lecture sans plafond et texte complet téléchargeable
       const officiel = /^\s*(Texte officiel|Jurisprudence)/i.test(c.matiere || "");
-      corps.innerHTML = `<div class="ea-pdf" aria-live="polite"><p class="ea-attente">Ouverture du document…</p></div>
+      const numFiche = (/^Fiche n° (\d+)/.exec(c.titre || "") || [])[1];
+      const deFiche = numFiche && qcmFiche ? qcmFiche(+numFiche) : [];
+      corps.innerHTML = `${deFiche.length ? `<div class="ea-fiche-qcm"><span><b>Testez-vous</b> : ${deFiche.length} questions sur cette fiche, corrigées et expliquées.</span><button class="btn btn-gold btn-sm" type="button" data-fiche-qcm>Faire le QCM de la fiche</button></div>` : ""}<div class="ea-pdf" aria-live="polite"><p class="ea-attente">Ouverture du document…</p></div>
         <p class="ea-mention">${officiel ? "Texte reproduit d'après sa source officielle, indiquée dans la présentation. Seule la publication au Journal officiel fait foi." : `Document réservé à ${esc(marque)}. Chaque page porte votre nom. Copie et impression désactivées ; quelques pages peuvent être téléchargées chaque mois.`}</p>`;
+      const bQcm = $("[data-fiche-qcm]", corps);
+      if (bQcm) bQcm.addEventListener("click", () => {
+        if (nettoyerPdf) { nettoyerPdf(); nettoyerPdf = null; }
+        const origine = new Map(deFiche.map(x => [x.q, x]));
+        lancerQcm({ duree: Math.max(2, deFiche.length), questions: deFiche.map(x => x.q) }, corps, marque, (q, ok) => { if (noterFiche) noterFiche(origine.get(q), ok); });
+        poserFiligrane(corps, marque);
+      });
       try {
         await afficherPages(c, $(".ea-pdf", corps), c.page, officiel);
         if (!visionneuse.hidden) (officiel ? ajouterTexteComplet : ajouterTelechargement)(c, $(".ea-pdf", corps));
@@ -2041,7 +2055,7 @@
       return afficher();
     }
     if (!etat.session) {
-      memoLecture = null; favoris = null; vuAvant = null;
+      memoLecture = null; favoris = null; vuAvant = null; qcmFiche = null; noterFiche = null;
       racine.innerHTML = `<div class="ea-accueil">${formulairesHTML(onglet || (!avisAppareil && location.hash === "#inscription" ? "inscription" : "connexion"))}${await apercuHTML()}</div>`;
       brancherFormulaires();
     } else if (etat.abo.actif || etat.admin) {
@@ -2057,10 +2071,12 @@
       if (vuAvant === null) { const v = lu(cleAbonne("visite"), 0); vuAvant = v ? new Date(v) : false; ecrit(cleAbonne("visite"), Date.now()); }
       memoLecture = (c, page) => { if (c && c.id) ecrit(cleAbonne("reprise"), { id: c.id, page: Number(page) || 1 }); };
       favoris = crochetFavoris;
+      qcmFiche = n => toutesQuestions().filter(x => x.q.fiche === n);
+      noterFiche = (x, juste) => { if (x) enregistrerReponse(x, juste); };
       racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + installerHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
       brancherCompte();
     } else {
-      memoLecture = null; favoris = null;
+      memoLecture = null; favoris = null; qcmFiche = null; noterFiche = null;
       racine.innerHTML = compteHTML() + await annoncesHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
       brancherCompte();
     }

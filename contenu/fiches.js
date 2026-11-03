@@ -1180,7 +1180,7 @@ module.exports = [
    "eppjej",
    "ena"
   ],
-  "sources": "Constitution du 8 novembre 2016, révisée par la loi constitutionnelle n° 2020-348 du 19 mars 2020, articles 143, 144, 147 à 149, 152 à 154 et 181 ; loi organique n° 2020-968 du 17 décembre 2020 sur le Conseil d'État, article 14 ; loi n° 2020-884 du 21 octobre 2020 sur le Tribunal des conflits, articles 1er et 6.",
+  "sources": "Constitution du 8 novembre 2016, révisée par la loi constitutionnelle n° 2020-348 du 19 mars 2020, articles 143, 144, 147 à 149, 152 à 154 et 181 ; loi n° 2023-693 du 25 juillet 2023 modifiant la Constitution, article 2 ; loi organique n° 2020-968 du 17 décembre 2020 sur le Conseil d'État, article 14 ; loi n° 2020-884 du 21 octobre 2020 sur le Tribunal des conflits, articles 1er et 6.",
   "essentiel": [
    "La justice ivoirienne est organisée en deux ordres de juridiction, l'ordre judiciaire, dominé par la Cour de cassation, et l'ordre administratif, dominé par le Conseil d'État ; à côté d'eux, la Cour des comptes contrôle les finances publiques. Depuis la révision de 2020, la Cour suprême n'existe plus."
   ],
@@ -2897,6 +2897,1404 @@ module.exports = [
    "La sentence",
    "Les recours",
    "L'exequatur",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 101,
+  "slug": "101-le-contrat-de-societe",
+  "titre": "Le contrat de société",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 4, 5, 6, 8, 9, 53 et 54.",
+  "essentiel": [
+   "La société commerciale naît d'un contrat par lequel deux personnes au moins affectent des biens ou leur industrie à une activité commune, pour en partager le bénéfice ou l'économie, et s'engagent à contribuer aux pertes ; certaines formes admettent un associé unique.",
+   "Le caractère commercial de la société tient à sa forme ou à son objet : la SNC, la SCS, la SARL, la SA et la SAS sont commerciales quel que soit leur objet."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les éléments du contrat de société",
+   "Commercialité et capacité",
+   "Les clauses léonines",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 102,
+  "slug": "102-les-apports-en-societe",
+  "titre": "Les apports en société",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 37, 38, 40 à 42, 45 à 47, 49, 50 et 53.",
+  "essentiel": [
+   "Chaque associé doit faire un apport, en numéraire, en nature ou en industrie, et reçoit en contrepartie des titres sociaux ; tout autre apport est interdit.",
+   "L'apport est la contribution de l'associé à la formation du patrimoine social : sans apport, pas d'associé."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "L'apport en numéraire",
+   "L'apport en nature",
+   "L'apport en industrie",
+   "Les droits nés de l'apport",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 103,
+  "slug": "103-la-societe-en-formation-et-la-reprise-des-engagements",
+  "titre": "La société en formation et la reprise des engagements",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 98 à 110 et 114.",
+  "essentiel": [
+   "Avant son immatriculation, la société n'a pas la personnalité juridique : les actes passés pour son compte n'engagent la société que si elle les reprend selon les formes prévues ; à défaut, leurs auteurs en répondent solidairement et indéfiniment."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Trois périodes à distinguer",
+   "Les trois modes de reprise des engagements",
+   "Les effets",
+   "La société en participation",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 104,
+  "slug": "104-les-nullites-de-societe",
+  "titre": "Les nullités de société",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 242 à 247, 251, 253, 255 et 256.",
+  "essentiel": [
+   "La nullité d'une société ou de ses actes est strictement encadrée : elle suppose un texte, peut être couverte, se prescrit par trois ans, ne joue que pour l'avenir et ne peut en principe être opposée aux tiers de bonne foi.",
+   "Le législateur cherche à protéger la sécurité des tiers qui ont traité avec la société."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les causes de nullité",
+   "La régularisation",
+   "La prescription",
+   "Les effets",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 105,
+  "slug": "105-la-dissolution-de-la-societe",
+  "titre": "La dissolution de la société",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 60, 200 à 203.",
+  "essentiel": [
+   "La société prend fin pour l'une des causes énumérées par l'article 200 ; la dissolution d'une société pluripersonnelle entraîne sa liquidation, et sa personnalité morale survit pour les besoins de celle-ci."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les causes de dissolution",
+   "Les effets",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 106,
+  "slug": "106-la-societe-en-nom-collectif",
+  "titre": "La société en nom collectif",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 9, 270 à 281, 290 et 291.",
+  "essentiel": [
+   "Dans la société en nom collectif, tous les associés sont commerçants et répondent indéfiniment et solidairement des dettes sociales ; c'est une société de personnes, où les parts ne se cèdent qu'à l'unanimité."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "La responsabilité des associés",
+   "Les parts sociales",
+   "La gérance",
+   "La fin de la société",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 107,
+  "slug": "107-la-societe-en-commandite-simple",
+  "titre": "La société en commandite simple",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 293 à 300 et 305.",
+  "essentiel": [
+   "La société en commandite simple réunit des associés commandités, tenus indéfiniment et solidairement des dettes sociales comme des associés en nom, et des associés commanditaires, tenus seulement dans la limite de leurs apports mais exclus de toute gestion externe."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Deux catégories d'associés",
+   "Les règles propres",
+   "L'interdiction de gestion du commanditaire",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 108,
+  "slug": "108-la-societe-anonyme-constitution-et-capital",
+  "titre": "La société anonyme : constitution et capital",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 385 à 389 et 414.",
+  "essentiel": [
+   "La société anonyme est la société dans laquelle les actionnaires ne répondent des dettes sociales qu'à concurrence de leurs apports, avec un capital minimum de dix millions de francs CFA, entièrement souscrit avant la signature des statuts et libéré d'un quart au moins à la souscription."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les caractères",
+   "Le capital",
+   "Le mode d'administration",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 109,
+  "slug": "109-la-direction-de-la-societe-anonyme-avec-conseil-d-administration",
+  "titre": "La direction de la société anonyme avec conseil d'administration",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 122, 414 à 416, 462 à 465, 477 à 480, 485 à 488 et 492.",
+  "essentiel": [
+   "La société anonyme avec conseil d'administration est dirigée soit par un président-directeur général, soit par un président du conseil d'administration et un directeur général distincts ; le dirigeant qui assure la direction générale dispose envers les tiers des pouvoirs les plus étendus, que les clauses limitatives ne peuvent leur opposer."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le conseil d'administration",
+   "Première formule : le président-directeur général",
+   "Seconde formule : un président et un directeur général",
+   "La protection des tiers",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 110,
+  "slug": "110-le-commissaire-aux-comptes",
+  "titre": "Le commissaire aux comptes",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 694 à 700, 702 à 705, 710 à 712, 721, 725 et 726.",
+  "essentiel": [
+   "Dans la société anonyme, le contrôle est exercé par un ou plusieurs commissaires aux comptes, professionnels indépendants qui certifient les états financiers et vérifient en permanence la comptabilité, sans jamais s'immiscer dans la gestion."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Qui peut être commissaire aux comptes ?",
+   "La désignation et la durée",
+   "La mission",
+   "La responsabilité",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 111,
+  "slug": "111-l-abus-de-majorite-et-l-abus-de-minorite",
+  "titre": "L'abus de majorité et l'abus de minorité",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 130 et 131.",
+  "essentiel": [
+   "L'Acte uniforme sanctionne le vote détourné de l'intérêt social : la décision prise par abus de majorité est nulle, et les associés qui bloquent par abus de minorité ou d'égalité une décision nécessaire engagent leur responsabilité, le juge pouvant faire voter un mandataire à leur place."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "L'abus de majorité",
+   "L'abus de minorité ou d'égalité",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 112,
+  "slug": "112-la-responsabilite-civile-des-dirigeants-sociaux",
+  "titre": "La responsabilité civile des dirigeants sociaux",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 161 à 172.",
+  "essentiel": [
+   "Le dirigeant social répond de ses fautes de gestion envers les tiers et envers la société : l'action individuelle répare le préjudice personnel d'un tiers ou d'un associé, l'action sociale celui de la société, et les associés peuvent l'exercer eux-mêmes si les organes restent inactifs."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "L'action individuelle",
+   "L'action sociale",
+   "Les protections de l'action",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 113,
+  "slug": "113-la-societe-anonyme-avec-administrateur-general",
+  "titre": "La société anonyme avec administrateur général",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 122, 414, 494 à 500, 502 à 505.",
+  "essentiel": [
+   "La société anonyme qui compte trois actionnaires au plus peut se passer de conseil d'administration : un administrateur général assume alors seul, sous sa responsabilité, l'administration et la direction générale, avec des pouvoirs étendus que les clauses limitatives ne peuvent opposer aux tiers."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La désignation",
+   "Les pouvoirs",
+   "Rémunération et contrat de travail",
+   "Les conventions avec la société",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 114,
+  "slug": "114-les-assemblees-generales-de-la-societe-anonyme",
+  "titre": "Les assemblées générales de la société anonyme",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 516 à 520, 546, 548 à 554.",
+  "essentiel": [
+   "Les actionnaires décident en assemblée générale ordinaire pour la gestion courante (comptes, résultat, nominations) et en assemblée générale extraordinaire pour toute modification des statuts, chacune avec ses règles de quorum et de majorité."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La convocation",
+   "L'assemblée générale ordinaire",
+   "L'assemblée générale extraordinaire",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 115,
+  "slug": "115-la-societe-par-actions-simplifiee-sas",
+  "titre": "La société par actions simplifiée (SAS)",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 853-1 à 853-23.",
+  "essentiel": [
+   "La SAS est la société de la liberté statutaire : les associés, responsables à hauteur de leurs apports, organisent librement sa direction et ses décisions dans les statuts, sous réserve de quelques règles impératives qui protègent les tiers et les associés."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les traits de la SAS",
+   "La direction",
+   "Les décisions des associés",
+   "Les conventions réglementées",
+   "Les clauses statutaires propres à la SAS",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 116,
+  "slug": "116-les-decisions-collectives-dans-la-sarl",
+  "titre": "Les décisions collectives dans la SARL",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 333, 334, 337, 338, 344 à 349, 356 à 360.",
+  "essentiel": [
+   "Dans la SARL, les associés décident en assemblée ou par consultation écrite : les décisions ordinaires exigent plus de la moitié du capital, les modifications des statuts les trois quarts, et certaines décisions graves l'unanimité."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les modes de décision",
+   "La convocation et l'information",
+   "Les décisions ordinaires",
+   "Les décisions extraordinaires",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 117,
+  "slug": "117-le-groupement-d-interet-economique-gie",
+  "titre": "Le groupement d'intérêt économique (GIE)",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 869 à 885.",
+  "essentiel": [
+   "Le GIE est une personne morale créée par deux membres au moins pour faciliter ou développer leur propre activité économique, sans but de partage des bénéfices, et dont les membres répondent des dettes sur leur patrimoine propre, en principe solidairement."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La nature du GIE",
+   "La responsabilité des membres",
+   "Le fonctionnement",
+   "Transformation et fin",
+   "GIE et société : tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 118,
+  "slug": "118-fusion-scission-et-apport-partiel-d-actif",
+  "titre": "Fusion, scission et apport partiel d'actif",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 189 à 199, 671 à 679.",
+  "essentiel": [
+   "La fusion réunit plusieurs sociétés en une seule, la scission partage le patrimoine d'une société entre plusieurs, et l'apport partiel d'actif transfère une branche autonome d'activité : les deux premières font disparaître une société sans liquidation, par transmission universelle de son patrimoine."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les trois opérations",
+   "Les effets",
+   "La procédure",
+   "La fusion entre sociétés anonymes",
+   "Les créanciers",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 119,
+  "slug": "119-la-societe-en-participation-la-societe-creee-de-fait-et-la-societe-de-fait",
+  "titre": "La société en participation, la société créée de fait et la société de fait",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 115, 854 à 868.",
+  "essentiel": [
+   "Trois sociétés vivent sans immatriculation régulière : la société en participation, voulue occulte par les associés ; la société créée de fait, née du comportement de personnes qui agissent en associés ; la société de fait, née d'une société viciée ; aucune n'a la personnalité morale."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La société en participation",
+   "Les tiers face à la société en participation",
+   "La société créée de fait et la société de fait",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 120,
+  "slug": "120-les-conventions-reglementees-dans-la-societe-anonyme",
+  "titre": "Les conventions réglementées dans la société anonyme",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme relatif au droit des sociétés commerciales et du groupement d'intérêt économique (AUSCGIE) du 30 janvier 2014, articles 438 à 450.",
+  "essentiel": [
+   "Toute convention entre la société anonyme et l'un de ses dirigeants ou un actionnaire d'au moins 10 % doit être autorisée par le conseil d'administration puis soumise à l'assemblée, car l'intérêt personnel de l'intéressé peut heurter celui de la société ; certaines conventions sont même interdites."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les conventions concernées",
+   "La procédure",
+   "Les sanctions",
+   "Les conventions interdites",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 121,
+  "slug": "121-les-suretes-notion-classification-et-agent-des-suretes",
+  "titre": "Les sûretés : notion, classification et agent des sûretés",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 1 à 11 et 85.",
+  "essentiel": [
+   "La sûreté affecte un bien, un ensemble de biens, un patrimoine ou l'engagement d'une personne à la garantie d'une obligation ; on distingue les sûretés personnelles et les sûretés réelles, et l'agent des sûretés peut les gérer pour le compte de plusieurs créanciers."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La notion",
+   "La classification",
+   "L'agent des sûretés",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 122,
+  "slug": "122-la-garantie-et-la-contre-garantie-autonomes",
+  "titre": "La garantie et la contre-garantie autonomes",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 2, 39 à 49.",
+  "essentiel": [
+   "Par la garantie autonome, un garant s'oblige à payer une somme déterminée au bénéficiaire, sur première demande ou selon les modalités convenues, sans pouvoir opposer les exceptions tirées du contrat de base : c'est une sûreté personnelle détachée de l'obligation garantie."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les acteurs",
+   "La formation",
+   "La mise en jeu",
+   "La fin",
+   "Garantie autonome et cautionnement",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 123,
+  "slug": "123-le-droit-de-retention",
+  "titre": "Le droit de rétention",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 4, 67 à 70.",
+  "essentiel": [
+   "Le créancier qui détient légitimement un bien mobilier de son débiteur peut refuser de le rendre tant qu'il n'est pas entièrement payé, à condition que sa créance soit certaine, liquide et exigible et qu'elle soit connexe à la détention du bien."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "La nature",
+   "Les conditions",
+   "La connexité",
+   "Les obligations du rétenteur",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 124,
+  "slug": "124-la-reserve-de-propriete",
+  "titre": "La réserve de propriété",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 4, 71 à 78.",
+  "essentiel": [
+   "Par la clause de réserve de propriété, le vendeur reste propriétaire du bien mobilier vendu jusqu'au complet paiement du prix : s'il n'est pas payé, il reprend le bien, à charge de restituer au débiteur ce que vaut le bien au-delà du solde dû."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "La nature",
+   "Les conditions",
+   "Les situations particulières",
+   "La réalisation",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 125,
+  "slug": "125-la-propriete-cedee-a-titre-de-garantie",
+  "titre": "La propriété cédée à titre de garantie",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 3, 79 à 91.",
+  "essentiel": [
+   "Le débiteur peut transférer au créancier la propriété d'un bien en garantie de sa dette : l'Acte uniforme organise deux formes de cette fiducie-sûreté, la cession de créance à titre de garantie, réservée aux crédits bancaires, et le transfert fiduciaire d'une somme d'argent."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La cession de créance à titre de garantie",
+   "Le transfert fiduciaire d'une somme d'argent",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 126,
+  "slug": "126-le-nantissement-de-creance-et-de-compte-bancaire",
+  "titre": "Le nantissement de créance et de compte bancaire",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 125 à 139.",
+  "essentiel": [
+   "Le nantissement affecte un bien meuble incorporel à la garantie d'une créance ; nanti, le créancier est payé directement par le débiteur de la créance nantie une fois que celui-ci a été notifié, et le compte bancaire peut être nanti comme une créance sur son solde."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le nantissement en général",
+   "Le nantissement de créance",
+   "La réalisation",
+   "Le nantissement de compte bancaire",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 127,
+  "slug": "127-le-nantissement-du-fonds-de-commerce",
+  "titre": "Le nantissement du fonds de commerce",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 162 à 165, 172 à 178.",
+  "essentiel": [
+   "Le commerçant peut affecter en garantie les éléments incorporels de son fonds, au moins la clientèle et l'enseigne ou le nom commercial ; inscrit au registre du commerce et du crédit mobilier, le créancier nanti bénéficie d'un droit de suite, de réalisation et de préférence, et il est protégé contre le déplacement du fonds et la résiliation du bail."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "L'assiette",
+   "La constitution",
+   "La protection du créancier inscrit",
+   "Les droits du créancier inscrit",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 128,
+  "slug": "128-les-privileges-generaux-et-speciaux",
+  "titre": "Les privilèges généraux et spéciaux",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 179 à 189.",
+  "essentiel": [
+   "Le privilège est une préférence que la loi attache à la qualité de certaines créances : général, il porte sur tous les meubles du débiteur ; spécial, il porte sur un meuble déterminé lié à la créance."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les privilèges généraux sans publicité",
+   "Les privilèges généraux soumis à publicité",
+   "Les privilèges spéciaux",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 129,
+  "slug": "129-l-ordre-de-distribution-des-deniers",
+  "titre": "L'ordre de distribution des deniers",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 180, 224 à 227.",
+  "essentiel": [
+   "Lorsque le prix d'un bien saisi ne suffit pas à payer tous les créanciers, l'Acte uniforme fixe un ordre impératif, différent pour les immeubles et pour les meubles, qui place en tête les frais de justice et les salaires superprivilégiés et en queue les créanciers chirographaires munis d'un titre exécutoire."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Le prix des immeubles (article 225)",
+   "Le prix des meubles (article 226)",
+   "Le concours au marc le franc",
+   "Tableau comparatif",
+   "Le droit transitoire",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 130,
+  "slug": "130-l-hypotheque-judiciaire-conservatoire",
+  "titre": "L'hypothèque judiciaire conservatoire",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des sûretés (AUS) du 15 décembre 2010, articles 213 à 221.",
+  "essentiel": [
+   "Le créancier dont la créance est menacée peut obtenir du juge l'autorisation de prendre une inscription provisoire d'hypothèque sur les immeubles de son débiteur, puis doit la faire valider par une décision au fond et la rendre définitive dans les six mois, faute de quoi elle disparaît rétroactivement."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "L'autorisation",
+   "L'inscription provisoire",
+   "La défense du débiteur",
+   "L'inscription définitive",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 131,
+  "slug": "131-les-organes-du-redressement-judiciaire-et-de-la-liquidation-des-biens",
+  "titre": "Les organes du redressement judiciaire et de la liquidation des biens",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 35, 39 à 50.",
+  "essentiel": [
+   "La procédure collective est conduite par le syndic, sous la surveillance du juge-commissaire, avec l'assistance de créanciers contrôleurs et sous l'œil du ministère public."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le juge-commissaire",
+   "Le syndic",
+   "Le ministère public",
+   "Les contrôleurs",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 132,
+  "slug": "132-la-periode-suspecte-et-les-inopposabilites",
+  "titre": "La période suspecte et les inopposabilités",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 34, 67 à 71.",
+  "essentiel": [
+   "Entre la cessation des paiements et le jugement d'ouverture, le débiteur aux abois peut appauvrir son patrimoine ou favoriser certains créanciers : certains actes de cette période suspecte sont inopposables de droit à la masse, d'autres peuvent l'être s'ils lui ont causé un préjudice."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La période suspecte",
+   "Les inopposabilités de droit",
+   "Les inopposabilités facultatives",
+   "L'action",
+   "Les effets",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 133,
+  "slug": "133-la-production-et-la-verification-des-creances",
+  "titre": "La production et la vérification des créances",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 73 à 90.",
+  "essentiel": [
+   "Dès l'ouverture, les créanciers de la masse doivent produire leurs créances auprès du syndic dans un délai strict, sous peine de forclusion ; le syndic les vérifie, le juge-commissaire arrête l'état des créances et les contestations sont tranchées par la juridiction compétente."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les effets de l'ouverture sur les créances",
+   "La production",
+   "La vérification",
+   "Les recours",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 134,
+  "slug": "134-salaries-bailleur-coobliges-et-conjoint-dans-la-procedure-collective",
+  "titre": "Salariés, bailleur, coobligés et conjoint dans la procédure collective",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 91 à 100-1.",
+  "essentiel": [
+   "Certains créanciers reçoivent un sort particulier dans la procédure collective : les salariés sont payés en priorité grâce au super privilège, le bailleur conserve un privilège limité mais ne peut résilier le bail du seul fait de l'ouverture, le créancier face à plusieurs coobligés produit dans chaque masse, et le conjoint du débiteur doit établir la consistance de ses biens propres."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les salariés",
+   "Le bailleur des locaux professionnels",
+   "Les coobligés et cautions",
+   "Le conjoint du débiteur",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 135,
+  "slug": "135-les-revendications-dans-la-procedure-collective",
+  "titre": "Les revendications dans la procédure collective",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 101, 101-1 à 106.",
+  "essentiel": [
+   "Le propriétaire d'un bien qui se trouve entre les mains du débiteur ne subit pas la loi du concours : il peut le revendiquer, à condition d'agir dans les quatre-vingt-dix jours de la deuxième insertion de la décision d'ouverture et que le bien se retrouve en nature."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Le délai",
+   "Les biens revendicables",
+   "Le droit du vendeur de retenir",
+   "Le paiement qui évite la revendication",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 136,
+  "slug": "136-les-contrats-en-cours-et-la-continuation-de-l-activite",
+  "titre": "Les contrats en cours et la continuation de l'activité",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 107 à 117.",
+  "essentiel": [
+   "L'ouverture de la procédure ne met pas fin aux contrats en cours : le syndic choisit seul de les poursuivre ou non ; l'activité continue en redressement judiciaire, alors qu'elle cesse en principe en liquidation des biens, et les dettes nées régulièrement après l'ouverture sont des créances de la masse."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les contrats en cours",
+   "Les licenciements économiques",
+   "La continuation de l'activité",
+   "Les créances de la masse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 137,
+  "slug": "137-le-concordat-de-redressement-judiciaire",
+  "titre": "Le concordat de redressement judiciaire",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 119 à 140.",
+  "essentiel": [
+   "Le redressement judiciaire aboutit normalement à un concordat : le débiteur propose délais, remises ou cession d'actif, les créanciers chirographaires votent en assemblée concordataire et la juridiction homologue le concordat, qui s'impose alors à tous les créanciers antérieurs."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "La préparation",
+   "Le vote",
+   "L'homologation",
+   "Les effets",
+   "La cession d'actif",
+   "La fin anormale",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 138,
+  "slug": "138-les-operations-et-la-cloture-de-la-liquidation-des-biens",
+  "titre": "Les opérations et la clôture de la liquidation des biens",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 5-11, 11-1, 33, 33-1, 146 à 178.",
+  "essentiel": [
+   "En liquidation des biens, les créanciers sont constitués en union, le syndic réalise seul l'actif et répartit le prix selon l'ordre légal ; la procédure se clôt par dissolution de l'union, pour insuffisance d'actif ou pour extinction du passif, dans un délai encadré par la juridiction."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La réalisation de l'actif",
+   "L'apurement du passif",
+   "Les clôtures",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 139,
+  "slug": "139-le-comblement-du-passif-et-l-extension-de-la-procedure-aux-dirigeants",
+  "titre": "Le comblement du passif et l'extension de la procédure aux dirigeants",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 180 à 193.",
+  "essentiel": [
+   "Le dirigeant d'une personne morale en procédure collective peut être condamné à supporter tout ou partie de ses dettes s'il a commis une faute de gestion ayant contribué à l'insuffisance d'actif, et même être soumis personnellement à la procédure s'il a confondu ses intérêts avec ceux de la société."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les personnes visées",
+   "L'action en comblement du passif",
+   "L'extension de la procédure au dirigeant",
+   "Comblement et extension : tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 140,
+  "slug": "140-la-faillite-personnelle-et-la-rehabilitation",
+  "titre": "La faillite personnelle et la réhabilitation",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 194 à 215.",
+  "essentiel": [
+   "La faillite personnelle sanctionne le débiteur ou le dirigeant malhonnête ou gravement imprudent par des interdictions professionnelles et civiques de six mois à dix ans ; la réhabilitation lui rend ses droits, de plein droit en cas d'extinction du passif ou sur demande si sa probité est reconnue."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les personnes visées",
+   "Les cas de faillite personnelle",
+   "La procédure",
+   "Les effets",
+   "La réhabilitation",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 141,
+  "slug": "141-la-banqueroute-et-les-infractions-assimilees",
+  "titre": "La banqueroute et les infractions assimilées",
+  "matiere": "Droit OHADA",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire"
+  ],
+  "sources": "Acte uniforme portant organisation des procédures collectives d'apurement du passif (AUPC) du 10 septembre 2015, articles 226 à 240.",
+  "essentiel": [
+   "L'Acte uniforme définit les incriminations de banqueroute simple et frauduleuse, pour le débiteur personne physique comme pour les dirigeants de personnes morales, mais laisse à chaque État partie le soin d'en fixer les peines."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le partage des compétences",
+   "Le débiteur personne physique",
+   "Les dirigeants de personnes morales",
+   "Les infractions assimilées",
+   "La poursuite",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 142,
+  "slug": "142-les-droits-civils-et-politiques-dans-la-constitution",
+  "titre": "Les droits civils et politiques dans la Constitution",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire",
+   "eppjej"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 1er à 8, 19 à 23, 25 et 26.",
+  "essentiel": [
+   "La Constitution ouvre sur une déclaration de droits : elle consacre la dignité et la vie, l'égalité, les garanties de la justice et de la liberté individuelle, les libertés de pensée, d'expression, d'association et de circulation, et encadre les partis politiques."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La personne et l'égalité",
+   "La justice et la liberté individuelle",
+   "Les libertés de l'esprit et de l'action collective",
+   "Les partis politiques et la société civile",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 143,
+  "slug": "143-les-droits-economiques-sociaux-culturels-et-environnementaux",
+  "titre": "Les droits économiques, sociaux, culturels et environnementaux",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 9 à 18, 24 et 27.",
+  "essentiel": [
+   "Au-delà des libertés classiques, la Constitution garantit des droits qui appellent une action de l'État : éducation et santé, propriété et libre entreprise, travail, droit syndical et de grève, information, culture et environnement sain."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Éducation et santé",
+   "Propriété et entreprise",
+   "Le travail",
+   "Information, culture, environnement",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 144,
+  "slug": "144-les-devoirs-dans-la-constitution",
+  "titre": "Les devoirs dans la Constitution",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 28 à 47.",
+  "essentiel": [
+   "Le chapitre des devoirs met à la charge de l'État des obligations envers la population (respect des droits, protection de la famille et des personnes vulnérables, bonne gouvernance, service public) et à la charge de chacun des devoirs envers la collectivité (défense, environnement, impôt, respect des biens publics et des lois)."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les devoirs de l'État",
+   "Les devoirs de chacun",
+   "Les devoirs des gouvernants et agents publics",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 145,
+  "slug": "145-l-etat-et-la-souverainete",
+  "titre": "L'État et la souveraineté",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire",
+   "eppjej"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 48 à 53.",
+  "essentiel": [
+   "La Côte d'Ivoire est une République indépendante et souveraine, une et indivisible, laïque, démocratique et sociale ; la souveraineté appartient au peuple, qui l'exerce par le référendum et par ses représentants élus au suffrage universel."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les symboles de la République (article 48)",
+   "Les caractères de la République (article 49)",
+   "La souveraineté",
+   "Le suffrage",
+   "L'Exécutif",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 146,
+  "slug": "146-le-president-de-la-republique-election-mandat-et-vacance",
+  "titre": "Le Président de la République : élection, mandat et vacance",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena",
+   "penitentiaire",
+   "eppjej"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 54 à 62.",
+  "essentiel": [
+   "Le Président de la République, Chef de l'État, est élu pour cinq ans au suffrage universel direct, au scrutin majoritaire à deux tours, et n'est rééligible qu'une fois ; en cas de vacance, le vice-Président lui succède et achève le mandat."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les conditions d'éligibilité (article 55)",
+   "L'élection",
+   "L'entrée en fonction",
+   "La vacance (article 62)",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 147,
+  "slug": "147-les-pouvoirs-du-president-de-la-republique",
+  "titre": "Les pouvoirs du Président de la République",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 63 à 77.",
+  "essentiel": [
+   "Détenteur exclusif du pouvoir exécutif, le Président détermine et conduit la politique de la Nation, nomme et révoque le Gouvernement, exerce le pouvoir réglementaire, participe à la fonction législative et dispose de pouvoirs exceptionnels en cas de crise grave."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les pouvoirs d'exécution et d'administration",
+   "Le Gouvernement et le Conseil des ministres",
+   "Les pouvoirs législatifs",
+   "Les pouvoirs exceptionnels (article 73)",
+   "La délégation",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 148,
+  "slug": "148-le-vice-president-de-la-republique",
+  "titre": "Le vice-Président de la République",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 53, 55, 58, 62, 76, 78 à 80, 82.",
+  "essentiel": [
+   "Membre de l'Exécutif, le vice-Président est choisi par le Président en accord avec le Parlement ; il prête serment devant le Conseil constitutionnel, reçoit les pouvoirs que le Président lui délègue et lui succède en cas de vacance jusqu'au terme du mandat."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La désignation",
+   "Le statut",
+   "Les fonctions",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 149,
+  "slug": "149-le-gouvernement-et-le-premier-ministre",
+  "titre": "Le Gouvernement et le Premier ministre",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 53, 62, 70, 71, 77, 81 à 84, 93, 117.",
+  "essentiel": [
+   "Le Gouvernement, dirigé par le Premier ministre, met en œuvre la politique de la Nation définie par le Président ; nommé et révoqué par celui-ci, il est solidairement responsable devant lui."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La formation",
+   "Le rôle du Premier ministre",
+   "La responsabilité",
+   "Les incompatibilités",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 150,
+  "slug": "150-le-parlement-assemblee-nationale-et-senat",
+  "titre": "Le Parlement : Assemblée nationale et Sénat",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 85 à 100.",
+  "essentiel": [
+   "Le pouvoir législatif appartient à un Parlement bicaméral, composé de l'Assemblée nationale, élue au suffrage universel direct, et du Sénat, représentant des collectivités territoriales et des Ivoiriens de l'extérieur ; il vote la loi, consent l'impôt, contrôle l'action du Gouvernement et évalue les politiques publiques, et ses membres sont protégés par des immunités."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les deux chambres",
+   "Le statut des parlementaires",
+   "Le fonctionnement",
    "Exemples",
    "Les pièges des correcteurs",
    "À l'écrit",

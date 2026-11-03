@@ -443,7 +443,7 @@ function rendre(sujet: string, prenom: string, blocs: Bloc[], piedHtml: string, 
 const signature = "Bonne préparation,\nL'équipe des Cours Sésame et SAJ";
 const NOMS_CONCOURS: Record<string, string> = { infj: "la magistrature", greffe: "le Greffe", penitentiaire: "l'administration pénitentiaire", eppjej: "l'EPPJEJ", ena: "l'ENA" };
 const CONTENU_ABONNES = [
-  "les 100 fiches de révision en entier",
+  "toutes nos fiches de révision, en entier",
   "les corrigés-types et les grilles de notation sur 20 des 315 épreuves de nos 70 concours blancs (formules d'une semaine et plus)",
   "les sujets corrigés, les QCM chronométrés et la révision du jour, qui fait revenir les questions au bon moment",
   "plus de 50 textes officiels et décisions, avec une recherche dans le texte",
@@ -465,7 +465,7 @@ function suiviContact(c: Contact) {
         : "Hier, vous avez reçu une de nos fiches de révision. Pour continuer sur votre lancée, voici trois outils gratuits.",
       [
         `la question du jour, sur notre page d'accueil : une question par jour pour garder le rythme (${SITE}/)`,
-        `90 questions corrigées, classées par matière (${SITE}/qcm/)`,
+        `nos QCM gratuits par matière, avec l'explication de chaque réponse (${SITE}/qcm/)`,
         `29 sujets corrigés : dissertations, cas pratiques, commentaires et sujets d'ordre général (${SITE}/sujets/)`,
       ],
       ...(test ? [] : [`Pour savoir où vous en êtes, faites aussi le test de niveau gratuit : 20 questions sur les matières du concours${vise}, avec votre note par matière.`,
