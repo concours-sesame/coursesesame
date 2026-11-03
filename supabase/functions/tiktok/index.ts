@@ -150,13 +150,17 @@ async function envoyer(service: Service, ligne: Ligne): Promise<Ligne> {
       init = await api("/post/publish/inbox/video/init/", jeton, { source_info });
     } else {
       const options: string[] = createur.privacy_level_options ?? [];
-      if (!prise.confidentialite || !options.includes(prise.confidentialite)) {
-        throw new Error(`Confidentialité « ${prise.confidentialite ?? "non choisie"} » refusée par TikTok pour ce compte (permises : ${options.join(", ") || "aucune"}).`);
+      let confidentialite = prise.confidentialite;
+      // Publication validée d'avance (calendrier des vidéos du jour) : tant que TikTok n'autorise pas la publication
+      // publique pour l'application (avant son audit), la vidéo part en « moi seul » plutôt que d'être perdue
+      if (prise.automatique && confidentialite && !options.includes(confidentialite) && options.includes("SELF_ONLY")) confidentialite = "SELF_ONLY";
+      if (!confidentialite || !options.includes(confidentialite)) {
+        throw new Error(`Confidentialité « ${confidentialite ?? "non choisie"} » refusée par TikTok pour ce compte (permises : ${options.join(", ") || "aucune"}).`);
       }
       init = await api("/post/publish/video/init/", jeton, {
         post_info: {
           title: prise.legende,
-          privacy_level: prise.confidentialite,
+          privacy_level: confidentialite,
           disable_comment: !prise.commentaires || !!createur.comment_disabled,
           disable_duet: !prise.duo || !!createur.duet_disabled,
           disable_stitch: !prise.collage || !!createur.stitch_disabled,
@@ -257,8 +261,11 @@ Deno.serve(async (req) => {
       const maintenant = new Date().toISOString(), il3h = new Date(Date.now() - 3 * 3600 * 1000).toISOString();
       await service.from("tiktok_publications").update({ statut: "manquee", erreur: "Plus de trois heures de retard : non envoyée." })
         .eq("statut", "programmee").lt("prevue_le", il3h);
-      const { data: dues } = await service.from("tiktok_publications").select("*").eq("statut", "programmee")
-        .lte("prevue_le", maintenant).order("prevue_le").limit(2);
+      // Sans compte TikTok connecté, rien n'est envoyé : les publications restent programmées (puis « manquée »
+      // après trois heures de retard), au lieu de passer en erreur
+      const { data: compte } = await service.from("tiktok_compte").select("id").maybeSingle();
+      const { data: dues } = compte ? await service.from("tiktok_publications").select("*").eq("statut", "programmee")
+        .lte("prevue_le", maintenant).order("prevue_le").limit(2) : { data: [] as Ligne[] };
       const envoyees = [];
       for (const l of dues ?? []) envoyees.push((await envoyer(service, l))?.statut);
       const { data: enCours } = await service.from("tiktok_publications").select("*").eq("statut", "traitement").order("prevue_le").limit(10);

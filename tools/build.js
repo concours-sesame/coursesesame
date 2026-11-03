@@ -546,11 +546,11 @@ function videosSection(list, prefix, { id = "videos", h2, eyebrow = "", lead, ic
   </div>
 </section>`;
 }
-// Vidéos du jour de l'espace VIP : titres des dernières vidéos sorties, remplis par assets/js/videos-du-jour.js
-// (bloc masqué tant qu'aucune n'est sortie ; la vidéo elle-même reste réservée aux abonnés VIP)
+// Vidéos du jour de l'espace abonnés : titres des dernières vidéos sorties, remplis par assets/js/videos-du-jour.js
+// (bloc masqué tant qu'aucune n'est sortie ; la vidéo elle-même reste réservée aux abonnés)
 function videosJourHTML(prefix) {
   return `<div class="v-jour" data-videos-jour hidden>
-      <div class="v-abo-head"><h3>${svg("i-lock")}Les vidéos du jour, dans l'espace VIP</h3><p>Chaque jour, une nouvelle vidéo : un QCM, un article, une fiche ou une notion expliqués. Elles se regardent dans l'espace VIP de l'espace abonnés.</p></div>
+      <div class="v-abo-head"><h3>${svg("i-lock")}Les vidéos du jour, dans l'espace abonnés</h3><p>Chaque jour, une nouvelle vidéo : un QCM, un article, une fiche ou une notion expliqués. Elles se regardent dans l'espace abonnés, avec tout abonnement en cours.</p></div>
       <ul class="vj-liste"></ul>
     </div>
     <script defer src="${prefix}assets/js/videos-du-jour.js"></script>`;
