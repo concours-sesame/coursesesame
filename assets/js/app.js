@@ -118,7 +118,7 @@
 
     $("#cartBody").innerHTML = n ? cart.map(i => {
       const o = OUVRAGES[i];
-      return `<div class="c-item"><span class="c-mini"></span><div><b>${o.titre}</b><small>${o.concours}${o.numerique ? ", version numérique" : ""}</small><span class="c-price">${o.prix} FCFA</span></div><button class="c-remove" data-remove="${i}" aria-label="Retirer ${o.titre.replace(/"/g, "&quot;")}">${svg("i-x")}</button></div>`;
+      return `<div class="c-item"><span class="c-mini"></span><div><b>${o.titre}</b><small>${o.concours}${o.numerique || o.papier ? ", version numérique" : ""}</small><span class="c-price">${o.prix} FCFA</span></div><button class="c-remove" data-remove="${i}" aria-label="Retirer ${o.titre.replace(/"/g, "&quot;")}">${svg("i-x")}</button></div>`;
     }).join("") : `<div class="c-empty"><b>Votre panier est vide</b>Ajoutez des ouvrages depuis le catalogue.</div>`;
 
     const meter = $("#promoMeter");
@@ -145,7 +145,7 @@
   on("#cartSend", "click", () => {
     const t = totals();
     let msg = "Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite commander les ouvrages suivants :\n\n";
-    cart.forEach((i, k) => { const o = OUVRAGES[i]; msg += `${k + 1}. ${o.titre}${o.numerique ? " (version numérique)" : ""}\n   ${o.concours} · ${o.prix} FCFA\n\n`; });
+    cart.forEach((i, k) => { const o = OUVRAGES[i]; msg += `${k + 1}. ${o.titre}${o.numerique || o.papier ? " (version numérique)" : ""}\n   ${o.concours} · ${o.prix} FCFA\n\n`; });
     if (t.promo) msg += `🎁 Remise 10% (3+ ouvrages) : -${fmt(t.disc)} FCFA\n`;
     msg += `\n💰 Total : ${fmt(t.total)} FCFA\n\nMerci !`;
     openWhatsApp(msg);
@@ -174,10 +174,16 @@
     $("#mConcours").textContent = o.concours;
     $("#mTitle").textContent = o.titre;
     $("#mDesc").textContent = o.desc;
-    $("#mSpecs").innerHTML = (o.phase ? `<span class="spec">${o.phase}</span>` : "") + `<span class="spec">Niveaux ${o.niveau}</span>` +
-      (o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : `<span class="spec">Livraison partout en CI</span>`) + `<span class="spec">Paiement Mobile Money</span>` +
+    $("#mSpecs").innerHTML = (o.vvip ? `<span class="spec spec-vvip">Ouvrage VVIP</span>` : "") + (o.phase ? `<span class="spec">${o.phase}</span>` : "") + `<span class="spec">Niveaux ${o.niveau}</span>` +
+      (o.numerique ? `<span class="spec spec-num">Version numérique uniquement</span>` : o.papier ? `<span class="spec">Papier : ${o.papier} FCFA, livré partout en CI</span>` : `<span class="spec">Livraison partout en CI</span>`) + `<span class="spec">Paiement Mobile Money</span>` +
       (o.abonnement ? `<span class="spec spec-abo">${ABO_MENTION}</span>` : "");
-    $("#mPrice").innerHTML = `${o.prix}<small>FCFA</small>`;
+    $("#mPrice").innerHTML = `${o.prix}<small>FCFA</small>${o.papier ? `<em class="price-version">Version numérique</em>` : ""}`;
+    // Ouvrage vendu en deux versions : choix de la version dans la commande rapide
+    const ver = $("#fVersionBloc");
+    if (ver) {
+      ver.hidden = !o.papier;
+      $("#fVersion").innerHTML = o.papier ? `<option value="numerique">Numérique, ${o.prix} FCFA</option><option value="papier">Papier, ${o.papier} FCFA</option>` : "";
+    }
     const ex = $("#mExtrait");
     if (ex) {
       ex.hidden = !o.extrait;
@@ -216,9 +222,10 @@
     ["#fPrenom", "#fNom", "#fTel", "#fVille"].forEach(id => { const bad = !v(id); $(id).classList.toggle("err", bad); if (bad && ok) { $(id).focus(); ok = false; } });
     if (!ok) return toast("Merci de remplir prénom, nom, téléphone et ville");
     const o = OUVRAGES[modalIdx];
+    const papier = !!o.papier && $("#fVersion") && $("#fVersion").value === "papier";
     const m = v("#fMsg");
     const msg = ["Bonjour Les Cours Sésame & SAJ,", "", "Je souhaite passer une commande :", "",
-      `📚 ${o.titre}${o.numerique ? " (version numérique)" : ""}`, `📂 ${o.concours}`, `📊 ${o.niveau}`, `💰 ${o.prix} FCFA`, `🔢 Quantité : ${v("#fQte") || 1}`, "",
+      `📚 ${o.titre}${o.numerique ? " (version numérique)" : papier ? " (version papier)" : o.papier ? " (version numérique)" : ""}`, `📂 ${o.concours}`, `📊 ${o.niveau}`, `💰 ${papier ? o.papier : o.prix} FCFA`, `🔢 Quantité : ${v("#fQte") || 1}`, "",
       "Mes coordonnées :", `👤 ${v("#fPrenom")} ${v("#fNom")}`, `📞 ${v("#fTel")}`, `📍 ${v("#fVille")}`, m ? `\n💬 ${m}` : "", "", "Merci !"].join("\n");
     openWhatsApp(msg);
     setModal(false);

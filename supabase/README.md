@@ -70,6 +70,11 @@ dans ce dépôt** : le dépôt est public, les contenus vivent uniquement dans S
   différentes par jour (`noter_page_lue`, table `pages_lues`). Téléchargement : réservation par `reserver_telechargement`
   (sur 30 jours glissants, 20 pages en tout et 5 pages par document, valeurs données par `telechargement_limites`, table `telechargements`), puis chaque page
   réservée livrée en PDF image pendant 30 minutes. Nombre de pages gardé dans `documents_pages`.
+  Gros ouvrage (plus d'un millier de pages, que la fonction ne peut pas ouvrir dans son temps de calcul) : découper
+  les morceaux d'avance avec pdf-lib (même découpage que `morceau()` de `rendu.ts`), les réunir en un lot (format de
+  `tiktok-depot`, chemins `<n>.pdf`), le déposer par `import-texte` (`televersement`), le déballer par `tiktok-depot`
+  `{ nom, morceaux: <contenu> }`, et remplir `documents_pages` à la main. Exemple : contenu n° 553, Code de procédure
+  pénale commenté (1 419 pages, 71 morceaux).
 - `functions/telechargement` : fermée le 19 octobre 2026 (réponse 410), remplacée par `pages`.
 - `functions/emails` : e-mails aux abonnés par Brevo, depuis infos@coursesesame.com (secret `BREVO_API_KEY`).
   Déployée sans vérification de jeton. La tâche planifiée `emails-abonnes` (pg_cron, toutes les 15 minutes) l'appelle

@@ -9,6 +9,7 @@
 // conditions de la ligne correspondante de la table contenus (date de publication, abonnement, accès aux vidéos).
 // Nettoyage : POST { effacer: ["donnees/<nom>.mp4", "qcm/<nom>.mp4", …] } efface des fichiers de données provisoires du
 // dossier donnees/, et les vidéos publiques dont la copie privée identique existe (200 chemins au plus par appel).
+// Gros ouvrage : POST { nom, morceaux: <contenu> } déballe un lot de morceaux de 20 pages pour la fonction « pages ».
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 function cleSecrete(): string {
@@ -27,7 +28,7 @@ Deno.serve(async (req) => {
   const service = createClient(Deno.env.get("SUPABASE_URL")!, cleSecrete(), { auth: { persistSession: false, autoRefreshToken: false } });
   const { data: valide } = await service.rpc("textes_verifier_import", { p_cle: req.headers.get("x-import") ?? "" });
   if (valide !== true) return json({ error: "Accès refusé" }, 403);
-  let d: { nom?: string; copier?: string[]; effacer?: string[] };
+  let d: { nom?: string; copier?: string[]; effacer?: string[]; morceaux?: number };
   try {
     d = await req.json();
   } catch {
@@ -84,6 +85,37 @@ Deno.serve(async (req) => {
   }
   const nom = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
   if (!nom) return json({ error: "Nom manquant" }, 400);
+  // Morceaux de 20 pages d'un gros ouvrage, découpés d'avance pour la fonction « pages » : POST { nom, morceaux: <contenu> }
+  // déballe le lot (index [{ chemin: "<k>.pdf", taille }]) dans exclusif/pages/<contenu>/<empreinte du fichier>/<k>.pdf
+  if (d.morceaux !== undefined) {
+    const id = Number(d.morceaux);
+    const { data: c } = await service.from("contenus").select("fichier").eq("id", id).maybeSingle();
+    if (!c?.fichier) return json({ error: "Contenu introuvable" }, 404);
+    const empreinte = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(c.fichier))).slice(0, 8),
+      (o) => o.toString(16).padStart(2, "0")).join("");
+    const lotM = `textes/${nom}.pdf`;
+    const { data: f, error: e0 } = await service.storage.from("exclusif").download(lotM);
+    if (e0 || !f) return json({ error: `Stockage ${e0?.message ?? "lot absent"}` }, 404);
+    const o = new Uint8Array(await f.arrayBuffer());
+    const l = Number(new TextDecoder().decode(o.slice(0, 10)));
+    const idx: { chemin: string; taille: number }[] = JSON.parse(new TextDecoder().decode(o.slice(10, 10 + l)));
+    let p = 10 + l;
+    const faits: string[] = [], erreurs: string[] = [];
+    for (const { chemin, taille } of idx) {
+      const m = o.slice(p, p + taille);
+      p += taille;
+      if (!/^\d+\.pdf$/.test(chemin) || m.byteLength !== taille) {
+        erreurs.push(`${chemin} : invalide`);
+        continue;
+      }
+      const cible = `pages/${id}/${empreinte}/${chemin}`;
+      const { error: e } = await service.storage.from("exclusif").upload(cible, m, { contentType: "application/pdf", upsert: true });
+      if (e) erreurs.push(`${cible} : ${e.message}`);
+      else faits.push(cible);
+    }
+    if (!erreurs.length) await service.storage.from("exclusif").remove([lotM]);
+    return json({ deposes: faits.length, erreurs });
+  }
   const lot = `textes/${nom}.pdf`;
   const { data: fichier, error } = await service.storage.from("exclusif").download(lot);
   if (error || !fichier) return json({ error: `Stockage ${error?.message ?? "lot absent"}` }, 404);

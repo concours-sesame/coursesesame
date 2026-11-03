@@ -64,7 +64,7 @@
   // Première page réelle de l'ouvrage (rendue depuis son extrait gratuit) : assets/img/pages/<extrait>.jpg
   const pageImage = o => o.extrait ? o.extrait.replace(/\.pdf$/, "") : "";
   // Pages au format portrait (les autres sont à l'italienne)
-  const PORTRAIT = ["annales-magistrature"];
+  const PORTRAIT = ["annales-magistrature", "resume-informatique-2027"];
 
   // big : affichage en grand (fiche ou page de l'ouvrage)
   function coverHTML(o, big) {
@@ -88,7 +88,7 @@
       <div class="book-meta">
         <span class="book-concours">${(o.concoursListe || o.concours).replace(/ · /g, ", ")}</span>
         <h3 class="book-title"><a href="${ouvrageURL(o)}">${o.titre}</a></h3>
-        <span class="book-niveau">${o.phase ? o.phase + ", niveaux " : "Niveaux "}${o.niveau}</span>${o.extrait ? `<span class="book-extrait">Extrait gratuit à lire</span>` : ""}${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}${o.abonnement ? `<a class="book-abo" href="${root}espace-abonnes/#inclus">${ABO_MENTION}</a>` : ""}
+        <span class="book-niveau">${o.phase ? o.phase + ", niveaux " : "Niveaux "}${o.niveau}</span>${o.extrait ? `<span class="book-extrait">Extrait gratuit à lire</span>` : ""}${o.numerique ? `<span class="book-num">Version numérique uniquement</span>` : ""}${o.papier ? `<span class="book-num">Numérique ${o.prix} FCFA, papier ${o.papier} FCFA</span>` : ""}${o.vvip ? `<span class="book-vvip">Ouvrage VVIP</span>` : ""}${o.abonnement ? `<a class="book-abo" href="${root}espace-abonnes/#inclus">${ABO_MENTION}</a>` : ""}
         <div class="book-buy">
           <span class="price">${o.prix}<small>FCFA</small></span>
           <button class="add-btn${inCart ? " in" : ""}" data-add="${idx}">${inCart ? svg("i-check") + "Ajouté" : svg("i-plus") + "Panier"}</button>

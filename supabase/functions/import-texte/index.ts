@@ -6,7 +6,8 @@
 // Requête : POST { url, titre, description, matiere, concours: [...], nom } ; nom = nom du fichier, sans extension.
 // Variante pour un fichier transmis par l'éditeur : POST { action: "televersement", nom } renvoie une adresse de dépôt
 // signée, valable deux heures, pour le seul fichier textes/<nom>.pdf (sans remplacement d'un fichier existant) ;
-// avec format: "mp4", pour la vidéo videos/<nom>.mp4 (vidéo réservée aux abonnés, contenu de type « video »).
+// avec format: "mp4", pour la vidéo videos/<nom>.mp4 (vidéo réservée aux abonnés, contenu de type « video ») ; avec
+// format: "morceau" et chemin: "pages/<contenu>/<empreinte>/<k>.pdf", pour un morceau de 20 pages découpé d'avance.
 // Cartes de l'espace VIP : POST { action: "cartes", nom } (voir plus bas).
 // QCM de l'espace abonnés : POST { action: "qcm", nom } lit le fichier JSON déposé à textes/<nom>.pdf (tableau de
 // { titre, description, matiere, concours, texte }, texte = { qcm: { duree, questions: [{ q, options, bonne, reference,
@@ -64,6 +65,14 @@ Deno.serve(async (req) => {
     return json({ error: "Requête invalide" }, 400);
   }
   if (d.action === "televersement") {
+    // Morceau de 20 pages d'un gros ouvrage, découpé d'avance pour la fonction « pages » (qui ne peut pas ouvrir un PDF de
+    // plus d'un millier de pages dans son temps de calcul) : pages/<contenu>/<empreinte>/<k>.pdf
+    if (d.format === "morceau") {
+      const chemin = String(d.chemin ?? "");
+      if (!/^pages\/\d+\/[0-9a-f]{16}\/\d+\.pdf$/.test(chemin)) return json({ error: "Chemin invalide" }, 400);
+      const { data, error } = await service.storage.from("exclusif").createSignedUploadUrl(chemin);
+      return error ? json({ error: `Stockage ${error.message}` }, 409) : json({ chemin: data.path, url: data.signedUrl });
+    }
     const nomDepot = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
     if (!nomDepot) return json({ error: "Nom manquant" }, 400);
     // Une vidéo réservée aux abonnés (format "mp4") est déposée dans videos/<nom>.mp4
