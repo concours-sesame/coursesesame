@@ -50,3 +50,8 @@ Contrôle de la voix : `controle.py` décode le son par ffmpeg (la bibliothèque
 faster-whisper 1.2). Les vidéos de ces séries sont des contenus gratuits : elles sont déposées dans l'espace de stockage
 public `tiktok` de Supabase (`qcm/`, `articles/`, `fiches/`), par l'action `televersement` de la fonction `tiktok`
 (appel de la base, clé `x-import`), et programmées dans `tiktok_publications` avec la source `tiktok/<dossier>/<fichier>.mp4`.
+
+Stockage : chaque vidéo du jour est copiée dans `exclusif/videos/<fichier>.mp4` (action `copier` de `tiktok-depot`), où
+l'espace abonnés la lit. La fonction `tiktok` lit d'abord cette copie privée pour une source `tiktok/<dossier>/<fichier>.mp4`.
+Une fois la copie faite, le fichier public peut être effacé pour économiser le stockage (offre gratuite de 1 Go) :
+action `effacer` de `tiktok-depot`, qui n'efface une vidéo publique que si sa copie privée de même taille existe.
