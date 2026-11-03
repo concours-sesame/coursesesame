@@ -4,6 +4,10 @@
 // Format du lot : 10 chiffres (longueur L de l'index), l'index JSON [{ chemin, taille }] sur L octets, puis les fichiers
 // mis bout à bout dans l'ordre de l'index. Chaque fichier va dans tiktok/<chemin> (dossier/nom.mp4, sans remplacement).
 // Requête : POST { nom } ; le lot est effacé une fois déballé.
+// Copie vers l'espace abonnés : POST { copier: ["qcm/qcm-du-jour-001.mp4", …] } recopie chaque vidéo du stockage public
+// « tiktok » dans le stockage privé, à exclusif/videos/<nom>.mp4 (sans remplacement), où elle n'est lisible qu'aux
+// conditions de la ligne correspondante de la table contenus (date de publication, abonnement, accès aux vidéos).
+// Nettoyage : POST { effacer: ["donnees/<nom>.mp4", …] } efface des fichiers de données provisoires du dossier donnees/.
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 function cleSecrete(): string {
@@ -22,11 +26,36 @@ Deno.serve(async (req) => {
   const service = createClient(Deno.env.get("SUPABASE_URL")!, cleSecrete(), { auth: { persistSession: false, autoRefreshToken: false } });
   const { data: valide } = await service.rpc("textes_verifier_import", { p_cle: req.headers.get("x-import") ?? "" });
   if (valide !== true) return json({ error: "Accès refusé" }, 403);
-  let d: { nom?: string };
+  let d: { nom?: string; copier?: string[]; effacer?: string[] };
   try {
     d = await req.json();
   } catch {
     return json({ error: "Requête invalide" }, 400);
+  }
+  // Effacement des fichiers de données provisoires (tiktok/donnees/…) une fois lus par la base
+  if (Array.isArray(d.effacer)) {
+    const chemins = d.effacer.map(String).filter((c) => /^donnees\/[a-z0-9-]+\.mp4$/.test(c));
+    const { data, error: e } = await service.storage.from("tiktok").remove(chemins);
+    return e ? json({ error: e.message }, 500) : json({ effaces: (data ?? []).map((o) => o.name) });
+  }
+  if (Array.isArray(d.copier)) {
+    const faits: string[] = [], erreurs: string[] = [];
+    for (const chemin of d.copier.slice(0, 40).map(String)) {
+      if (!/^[a-z0-9-]+\/[a-z0-9-]+\.mp4$/.test(chemin)) {
+        erreurs.push(`${chemin} : invalide`);
+        continue;
+      }
+      const cible = `videos/${chemin.split("/")[1]}`;
+      const { data: video, error: e1 } = await service.storage.from("tiktok").download(chemin);
+      if (e1 || !video) {
+        erreurs.push(`${chemin} : ${e1?.message ?? "absente"}`);
+        continue;
+      }
+      const { error: e2 } = await service.storage.from("exclusif").upload(cible, video, { contentType: "video/mp4", upsert: false });
+      if (e2) erreurs.push(`${cible} : ${e2.message}`);
+      else faits.push(cible);
+    }
+    return json({ copies: faits.length, faits, erreurs });
   }
   const nom = String(d.nom ?? "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
   if (!nom) return json({ error: "Nom manquant" }, 400);
