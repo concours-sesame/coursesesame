@@ -555,6 +555,24 @@ function videosJourHTML(prefix) {
     </div>
     <script defer src="${prefix}assets/js/videos-du-jour.js"></script>`;
 }
+// Lettre d'information sans compte (assets/js/lettre.js, fonction fiche-offerte, action « lettre »)
+function lettreHTML(prefix) {
+  return `<section class="section section-cream lettre" id="lettre">
+  <div class="wrap lettre-wrap">
+    <div><span class="eyebrow">Lettre d'information gratuite</span><h2 class="h-section">Recevez nos <em>conseils</em></h2>
+      <p class="lead">Méthode, dates des concours, nouveaux sujets corrigés et nouvelles vidéos : quelques e-mails utiles, sans excès, sans créer de compte.</p></div>
+    <form class="lettre-form" data-lettre novalidate>
+      <div class="field"><label for="lettrePrenom">Prénom</label><input id="lettrePrenom" name="prenom" required maxlength="60" autocomplete="given-name"></div>
+      <div class="field"><label for="lettreEmail">E-mail</label><input id="lettreEmail" name="email" type="email" required maxlength="254" autocomplete="email"></div>
+      <div class="field"><label for="lettreConcours">Concours préparé</label><select id="lettreConcours" name="concours"><option value="">Choisir…</option>${CONCOURS.map(c => `<option value="${c.id}">${esc(c.court || c.nom)}</option>`).join("")}<option value="autre">Autre concours</option></select></div>
+      <button class="btn btn-gold" type="submit">Je m'inscris</button>
+      <p class="lettre-etat" role="status" aria-live="polite"></p>
+      <p class="offerte-mention">En vous inscrivant, vous acceptez de recevoir nos conseils et offres par e-mail. Un lien de désinscription figure dans chaque e-mail. Voir nos <a href="${prefix}mentions-legales/#lettre">données personnelles</a>.</p>
+    </form>
+  </div>
+</section>
+<script defer src="${prefix}assets/js/lettre.js"></script>`;
+}
 // Invitation à l'espace abonnés
 function espaceBand(prefix) {
   return `<div class="espace-band reveal">
@@ -1119,7 +1137,7 @@ ${contactCTA(prefix)}`;
 
 <section class="section" id="liste">
   <div class="wrap">
-    <div class="ep-cards">${THEMES.map((t, i) => qcmCard(t, prefix, i)).join("")}${qcmCard(methode, prefix, THEMES.length, `${prefix}methodes/#qcm`)}</div>
+    <div class="ep-cards"><a class="ep-card reveal" href="${prefix}qcm-du-jour/"><span class="ep-card-tag">Chaque jour à 19 h</span><b>Le QCM du jour</b><span>Une nouvelle question de concours chaque jour, la même que dans notre vidéo TikTok, corrigée et expliquée.</span><span class="ep-card-go">Répondre</span></a>${THEMES.map((t, i) => qcmCard(t, prefix, i)).join("")}${qcmCard(methode, prefix, THEMES.length, `${prefix}methodes/#qcm`)}</div>
   </div>
 </section>
 
@@ -1441,6 +1459,108 @@ ${voisines.length ? `<section class="section section-cream">
   urls.push(url);
 }
 
+/* ---------- Le QCM du jour (même question que la vidéo TikTok du jour) ---------- */
+// Questions : scripts des vidéos (tools/videos/scripts/qcm), dates : tools/videos/calendrier-qcm-du-jour.json.
+// assets/js/qcm-du-jour.js n'affiche que les questions sorties (19 h, heure d'Abidjan, le jour prévu).
+{
+  const CAL = JSON.parse(read("tools/videos/calendrier-qcm-du-jour.json"));
+  const QDJ = Object.entries(CAL).map(([n, jour]) => {
+    const sc = JSON.parse(read(`tools/videos/scripts/qcm/qcm-du-jour-${String(n).padStart(3, "0")}.json`));
+    const q = sc.scenes.find(x => x.type === "qcm"), r = sc.scenes.find(x => x.type === "reponse"), intro = sc.scenes.find(x => x.type === "intro");
+    if (!q || !r || !(r.bonne >= 0 && r.bonne < q.options.length)) throw new Error(`QCM du jour n° ${n} : question ou réponse introuvable`);
+    return { n: +n, jour, matiere: intro.titre, q: q.question, options: q.options, bonne: r.bonne, explication: r.explication };
+  }).sort((a, b) => a.n - b.n);
+  write("assets/js/qcm-du-jour-donnees.js", "/* Fichier généré par tools/build.js : les QCM du jour et leur date de sortie (19 h, heure d'Abidjan). */\nconst QCM_DU_JOUR = " + JSON.stringify(QDJ) + ";\n");
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "qcm-du-jour/";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["QCM", prefix + "qcm/"], ["Le QCM du jour", ""]],
+    h1: "Le QCM <em>du jour</em>",
+    lead: "Chaque jour à 19 h, une nouvelle question de concours, la même que dans notre vidéo TikTok du jour : choisissez votre réponse, lisez l'explication, puis défiez vos amis.",
+    ctas: `<a href="#qcm" class="btn btn-gold">Répondre à la question${arrow}</a><a href="${prefix}qcm/" class="btn btn-ghost">Tous les QCM</a>`,
+    facts: ["une question par jour", "réponse expliquée, texte à l'appui", "gratuit"]
+  })}
+<section class="section sujets" id="qcm">
+  <div class="wrap">
+    <div class="qcm-wrap"><div id="qdjBox"><p class="lead">Activez JavaScript pour répondre à la question du jour.</p></div></div>
+    <div class="qdj-archives" id="qdjArchives" hidden>
+      <h2 class="h-section">Les questions <em>précédentes</em></h2>
+      <ul class="vj-liste" id="qdjListe"></ul>
+    </div>
+  </div>
+</section>
+${lettreHTML(prefix)}
+${contactCTA(prefix)}`;
+  write("qcm-du-jour/index.html", page({
+    prefix, url, body, scripts: ["assets/js/qcm-du-jour-donnees.js", "assets/js/qcm-du-jour.js"],
+    title: ["Le QCM du jour, une question de concours chaque jour", "Le QCM du jour"],
+    description: "Chaque jour, une question de concours corrigée et expliquée, en droit et en culture générale, pour la magistrature, le greffe, la pénitentiaire, l'EPPJEJ et l'ENA.",
+    ld: [breadcrumb([["Accueil", SITE], ["QCM", SITE + "qcm/"], ["Le QCM du jour", url]])]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Lexique juridique : la notion de chaque fiche de révision, définie en une phrase ---------- */
+{
+  const FICHES_LEX = require(path.join(DIR, "contenu/fiches.js"));
+  const cle = t => stripTags(t).replace(/^(Le |La |Les |L'|L’|Un |Une )/, "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const entrees = FICHES_LEX.map(f => ({ f, k: cle(f.titre) })).sort((a, b) => a.k.localeCompare(b.k, "fr"));
+  const lettres = [...new Set(entrees.map(e => e.k[0].toUpperCase()))];
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "lexique/";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Lexique juridique", ""]],
+    h1: "Le lexique <em>juridique</em>",
+    lead: `${entrees.length} notions de droit ivoirien et OHADA, définies chacune en une phrase, avec un lien vers leur fiche de révision : droit pénal, procédure pénale, droit civil et de la famille, droit administratif et constitutionnel, OHADA.`,
+    ctas: `<a href="#lettre-A" class="btn btn-gold">Parcourir le lexique${arrow}</a><a href="${prefix}fiches/" class="btn btn-ghost">Les fiches de révision</a>`,
+    facts: [`<b>${entrees.length}</b> notions`, "une définition par notion", "en accès libre"]
+  })}
+<section class="section">
+  <div class="wrap">
+    <nav class="lex-lettres" aria-label="Lettres">${lettres.map(l => `<a href="#lettre-${l}">${l}</a>`).join("")}</nav>
+    ${lettres.map(l => `<h2 class="lex-lettre" id="lettre-${l}">${l}</h2>
+    <dl class="lex-liste">${entrees.filter(e => e.k[0].toUpperCase() === l).map(({ f }) => `<div class="lex-entree" id="${f.slug}"><dt><a href="${prefix}fiches/${f.slug}/">${esc(stripTags(f.titre))}</a> <small>${esc(f.matiere)}</small></dt><dd>${f.essentiel[0]}</dd></div>`).join("")}</dl>`).join("\n    ")}
+  </div>
+</section>
+${lettreHTML(prefix)}
+${contactCTA(prefix)}`;
+  write("lexique/index.html", page({
+    prefix, url, body,
+    title: ["Lexique juridique des concours de Côte d'Ivoire", "Lexique juridique"],
+    description: `${entrees.length} notions de droit ivoirien et OHADA définies en une phrase, avec leur fiche de révision : pour réviser les concours de la magistrature, du greffe, de la pénitentiaire et de l'ENA.`,
+    ld: [breadcrumb([["Accueil", SITE], ["Lexique juridique", url]]), {
+      "@context": "https://schema.org", "@type": "DefinedTermSet", name: "Lexique juridique des Cours Sésame et SAJ", url, inLanguage: "fr",
+      hasDefinedTerm: entrees.map(({ f }) => ({ "@type": "DefinedTerm", name: stripTags(f.titre), description: stripTags(f.essentiel[0]), url: `${SITE}fiches/${f.slug}/` }))
+    }]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Toutes les vidéos ---------- */
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "videos/";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Vidéos", ""]],
+    h1: "Nos <em>vidéos</em>",
+    lead: "Notre présentation, des notions et des articles expliqués en une minute, des sujets décryptés, et chaque jour une vidéo nouvelle dans l'espace abonnés.",
+    ctas: `<a href="#videos" class="btn btn-gold">Regarder${arrow}</a><a href="${prefix}espace-abonnes/#inscription" class="btn btn-ghost">S'abonner</a>`,
+    facts: [`<b>${VIDS.length}</b> vidéos en accès libre`, `<b>${VIDS_ABO.length}</b> vidéos VIP`, "une vidéo nouvelle chaque jour"]
+  })}
+${videosSection(VIDS, prefix, { h2: "En accès <em>libre</em>", ici: "videos", abo: VIDS_ABO, jour: true, band: espaceBand(prefix) })}
+${contactCTA(prefix)}`;
+  write("videos/index.html", page({
+    prefix, url, body,
+    title: ["Vidéos de révision des concours de Côte d'Ivoire", "Nos vidéos"],
+    description: "Des notions de droit et des articles expliqués en une minute, des sujets de SOG décryptés, et une vidéo nouvelle chaque jour dans l'espace abonnés.",
+    ld: [breadcrumb([["Accueil", SITE], ["Vidéos", url]]), ...VIDS.map(videoLD)]
+  }));
+  urls.push(url);
+}
+
 /* ---------- Retour de TikTok (connexion du compte TikTok de l'éditeur) ---------- */
 // Adresse de redirection déclarée dans l'application TikTok for Developers (Login Kit). tiktok-retour.js transmet le
 // code et le jeton « state » à la fonction tiktok, qui les vérifie et enregistre la connexion. Page hors plan du site.
@@ -1662,7 +1782,7 @@ const VIDEOS_TIKTOK = ${JSON.stringify([
     <p>Les commandes se passent sur WhatsApp, depuis le panier ou depuis la page d'un ouvrage. Les prix sont affichés en francs CFA. Le prix, le paiement, la livraison, les incidents de livraison et les abonnements sont régis par nos <a href="${prefix}conditions-de-vente/">conditions de vente et d'abonnement</a>.</p>
 
     <h2>Données personnelles</h2>
-    <p>En dehors de l'espace abonnés et du formulaire de la fiche offerte, présentés plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
+    <p>En dehors de l'espace abonnés et des formulaires de la fiche offerte, du test de niveau et de la lettre d'information, présentés plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
     <p>Votre panier est conservé uniquement dans votre navigateur, sur votre appareil, pour que vous le retrouviez à votre prochaine visite. Nous n'y avons pas accès. Pour le supprimer, videz-le ou effacez les données du site dans votre navigateur.</p>
     <p>Quand vous commandez, les informations que vous saisissez (prénom, nom, téléphone, ville, message) sont placées dans un message WhatsApp que vous envoyez vous-même. Nous ne les utilisons que pour traiter votre commande et vous livrer.</p>
     <p>Le site n'utilise aucun cookie. Les polices de caractères sont hébergées sur le site lui-même. Quelques photographies sont affichées depuis les serveurs d'Unsplash, qui reçoivent à cette occasion l'adresse IP du visiteur, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
@@ -1687,6 +1807,8 @@ const VIDEOS_TIKTOK = ${JSON.stringify([
     <p>Certaines fiches de révision sont offertes en entier. Pour les recevoir, vous indiquez votre prénom et une adresse e-mail ou un numéro WhatsApp, et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi la date, la fiche demandée et l'adresse de la page. Votre adresse IP est notée pour limiter les abus, puis effacée au bout d'un jour.</p>
     <p>Ces informations servent à vous remettre la fiche, par un lien de téléchargement et, si vous avez indiqué une adresse, par un e-mail envoyé par notre prestataire Brevo. Si vous cochez la case prévue, elles servent aussi à vous envoyer nos conseils de révision et nos offres, par e-mail ou sur WhatsApp ; sans cette case, nous ne vous écrivons pas. Vous pouvez retirer votre accord à tout moment, par le lien figurant dans nos e-mails ou en nous écrivant sur WhatsApp.</p>
     <p>Elles sont conservées chez Supabase, en Europe, consultables par l'administrateur seulement, et ne sont ni vendues ni cédées. Elles sont effacées sur simple demande sur WhatsApp, et au plus tard trois ans après votre dernier échange avec nous.</p>
+    <h2 id="lettre">Lettre d'information</h2>
+    <p>Pour recevoir notre lettre d'information, vous indiquez votre prénom, votre adresse e-mail et, si vous le souhaitez, le concours que vous préparez ; nous notons aussi la date et l'adresse de la page, et votre adresse IP pour limiter les abus, effacée au bout d'un jour. Ces informations servent seulement à vous envoyer nos conseils, nos nouveautés et nos offres par des e-mails de notre prestataire Brevo : un e-mail de bienvenue, puis quelques e-mails utiles, sans excès. Chaque e-mail contient un lien de désinscription, qui arrête aussitôt les envois. Pour le reste, les règles de la fiche offerte ci-dessus s'appliquent : conservation chez Supabase, ni vente ni cession, effacement sur simple demande et au plus tard trois ans après votre dernier échange avec nous.</p>
     <h2 id="temoignages">Témoignages d'admis</h2>
     <p>Si vous envoyez un témoignage de réussite, nous enregistrons votre prénom, votre nom, votre concours, votre année de réussite, la précision facultative, votre texte, votre contact (téléphone ou e-mail), ainsi que la date de votre accord de publication. Seuls votre prénom, l'initiale de votre nom, votre concours, votre année, la précision et votre texte sont publiés, et seulement après vérification. Votre contact sert uniquement à cette vérification. Vous pouvez retirer votre accord à tout moment sur WhatsApp : le témoignage est alors retiré du site. Les données sont conservées chez Supabase, consultables par l'administrateur seulement, et effacées sur simple demande.</p>
     <h2 id="test-de-niveau">Test de niveau</h2>
@@ -1856,7 +1978,7 @@ index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
   h2: `Nos vidéos`, ici: "accueil", jour: true,
   lead: "Notre présentation, un ouvrage en vidéo, des notions et un article de loi expliqués en une minute, et des sujets de SOG décryptés.",
   band: espaceBand("")
-}) + "\n");
+}) + lettreHTML("") + "\n");
 // Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
 index = index.replace(/(data-count-from="ouvrages">)[^<]*(<)/g, `$1${LIVRES.length}$2`).replace(/(data-count-from="concours">)[^<]*(<)/g, `$1${CONCOURS.length}$2`);
 index = inject(index, "stats", STATS + '<script defer src="assets/js/visite.js"></script>');
@@ -1935,6 +2057,22 @@ self.addEventListener("fetch", e => {
       return rep;
     }).catch(() => caches.match(r, { ignoreSearch: true }).then(m2 => m2 || Response.error()))));
   }
+});
+// Notifications (fonction notifications, sortie de la vidéo du jour) : affichage, puis ouverture de l'espace abonnés
+self.addEventListener("push", e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = {}; }
+  e.waitUntil(self.registration.showNotification(d.titre || "Les Cours Sésame et SAJ", {
+    body: d.corps || "", icon: "/assets/img/icone-192.png", badge: "/assets/img/favicon-32.png", lang: "fr", data: { url: d.url || "/espace-abonnes/" }
+  }));
+});
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || "/espace-abonnes/";
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(liste => {
+    for (const c of liste) if (new URL(c.url).pathname === url && "focus" in c) return c.focus();
+    return self.clients.openWindow(url);
+  }));
 });
 `);
 }

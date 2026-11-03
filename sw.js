@@ -2,10 +2,10 @@
    Pages publiques : réseau d'abord, copie gardée si le réseau manque, sinon la page /hors-ligne/.
    Fichiers du site : copie d'abord (leurs adresses changent à chaque version). Rien pour Supabase, les vidéos
    ni l'espace abonnés, dont les contenus restent en ligne. */
-const VERSION = "882c0541cf";
+const VERSION = "264ec8a82d";
 // Les pages gardent le même cache d'une version à l'autre ; les fichiers changent de cache à chaque version
 const PAGES = "pages", FICHIERS = "fichiers-" + VERSION, MAX_PAGES = 80;
-const AVANCE = ["/","/hors-ligne/","/assets/css/style.css?v=b0a0d5a54f","/assets/js/data.js?v=412fc95e76","/assets/js/render.js?v=e1bb10e093","/assets/js/app.js?v=7be3c224d9","/assets/js/hors-ligne.js?v=486349bb1c","/assets/img/favicon.svg","/assets/img/icone-192.png","/assets/fonts/mona-sans-latin-wdth-normal.woff2","/assets/fonts/source-sans-3-latin-400-italic.woff2","/assets/fonts/source-sans-3-latin-400-normal.woff2","/assets/fonts/source-sans-3-latin-600-normal.woff2","/assets/fonts/source-sans-3-latin-700-normal.woff2","/assets/fonts/source-serif-4-latin-400-italic.woff2","/assets/fonts/source-serif-4-latin-400-normal.woff2","/assets/fonts/source-serif-4-latin-600-normal.woff2","/assets/fonts/source-serif-4-latin-700-normal.woff2"];
+const AVANCE = ["/","/hors-ligne/","/assets/css/style.css?v=87df1f7ed6","/assets/js/data.js?v=9d53bc04e8","/assets/js/render.js?v=e1bb10e093","/assets/js/app.js?v=7be3c224d9","/assets/js/hors-ligne.js?v=486349bb1c","/assets/img/favicon.svg","/assets/img/icone-192.png","/assets/fonts/mona-sans-latin-wdth-normal.woff2","/assets/fonts/source-sans-3-latin-400-italic.woff2","/assets/fonts/source-sans-3-latin-400-normal.woff2","/assets/fonts/source-sans-3-latin-600-normal.woff2","/assets/fonts/source-sans-3-latin-700-normal.woff2","/assets/fonts/source-serif-4-latin-400-italic.woff2","/assets/fonts/source-serif-4-latin-400-normal.woff2","/assets/fonts/source-serif-4-latin-600-normal.woff2","/assets/fonts/source-serif-4-latin-700-normal.woff2"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(FICHIERS).then(c => c.addAll(AVANCE.filter(u => u.startsWith("/assets/")))).then(() =>
     caches.open(PAGES)).then(c => c.addAll(["/", "/hors-ligne/"])).then(() => self.skipWaiting()));
@@ -42,4 +42,20 @@ self.addEventListener("fetch", e => {
       return rep;
     }).catch(() => caches.match(r, { ignoreSearch: true }).then(m2 => m2 || Response.error()))));
   }
+});
+// Notifications (fonction notifications, sortie de la vidéo du jour) : affichage, puis ouverture de l'espace abonnés
+self.addEventListener("push", e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = {}; }
+  e.waitUntil(self.registration.showNotification(d.titre || "Les Cours Sésame et SAJ", {
+    body: d.corps || "", icon: "/assets/img/icone-192.png", badge: "/assets/img/favicon-32.png", lang: "fr", data: { url: d.url || "/espace-abonnes/" }
+  }));
+});
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || "/espace-abonnes/";
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(liste => {
+    for (const c of liste) if (new URL(c.url).pathname === url && "focus" in c) return c.focus();
+    return self.clients.openWindow(url);
+  }));
 });

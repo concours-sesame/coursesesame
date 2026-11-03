@@ -1131,6 +1131,21 @@
   }
   // « Reprendre ma lecture » : dernier document ou fiche ouvert sur cet appareil, à la dernière page lue
   const lireReprise = () => { const r = lu(cleAbonne("reprise"), null); const c = r && contenus.find(x => x.id === r.id); return c && !verrouille(c) ? { c, page: Math.max(1, Number(r.page) || 1) } : null; };
+  // Programme du jour : la dernière vidéo du jour sortie (ouverte à tout abonné), le QCM du jour (page publique,
+  // même question que la vidéo TikTok) et la révision du jour, avec la série de jours de révision
+  function jourHTML() {
+    const v = contenus.filter(c => c.type === "video" && c.video_ouverte).sort((a, b) => a.publie_le < b.publie_le ? 1 : -1)[0];
+    if (!v) return "";
+    const s = stats || { serie: 0 }, n = seance(null).length, racineSite = document.body.dataset.root || "../";
+    return `<section class="ea-jour" id="eaJour" aria-label="Programme du jour">
+        <div class="ea-jour-tete"><span class="eyebrow">Programme du jour</span>${s.serie ? `<span class="ea-jour-serie">${s.serie} jour${s.serie > 1 ? "s" : ""} de révision d'affilée</span>` : ""}</div>
+        <div class="ea-jour-grille">
+          <button class="ea-carte ea-jour-carte" type="button" data-id="${v.id}"><span class="ea-carte-marques"><span class="ea-type ea-type-video">Vidéo du jour</span>${estNouveau(v) ? `<span class="ea-nouveau">Nouveau</span>` : ""}</span><b>${esc(v.titre)}</b><small>${[esc(v.matiere || ""), dateFr(v.publie_le)].filter(Boolean).join(" · ")}</small><span class="ea-carte-go">Regarder${icone("i-arrow")}</span></button>
+          <a class="ea-carte ea-jour-carte" href="${racineSite}qcm-du-jour/"><span class="ea-carte-marques"><span class="ea-type">QCM du jour</span></span><b>La question de concours du jour</b><small>Corrigée et expliquée, à 19 h</small><span class="ea-carte-go">Répondre${icone("i-arrow")}</span></a>
+          <button class="ea-carte ea-jour-carte" type="button" data-outil="revision"><span class="ea-carte-marques"><span class="ea-type">Révision du jour</span></span><b>${n ? `${n} question${n > 1 ? "s" : ""} à revoir aujourd'hui` : "Vos questions du jour"}</b><small>Tirées de vos QCM et des fiches</small><span class="ea-carte-go">Réviser${icone("i-arrow")}</span></button>
+        </div>
+      </section>`;
+  }
   function repriseHTML() {
     const r = lireReprise();
     if (!r) return "";
@@ -1745,6 +1760,49 @@
       ["Au-dessus de la moyenne", "Obtenir plus de 12 sur 20 à une copie", notes.some(n => n > 12)]
     ];
   }
+  // Attestation de préparation : un document imprimable (ou à enregistrer en PDF) qui décrit le travail enregistré dans
+  // l'espace, ouvert à partir de 10 jours de révision, 15 contenus ouverts et 100 réponses de QCM. Il ne vaut ni diplôme ni titre.
+  const SEUILS_ATTESTATION = { jours: 10, lus: 15, qcm: 100 };
+  const chiffresAttestation = () => {
+    const s = stats || {};
+    return { jours: (s.jours || []).length, lus: s.contenus_lus || 0, qcm: (s.qcm_bonnes || 0) + (s.qcm_erreurs || 0), bonnes: s.qcm_bonnes || 0 };
+  };
+  function attestationHTML() {
+    const c = chiffresAttestation(), S = SEUILS_ATTESTATION;
+    const ok = c.jours >= S.jours && c.lus >= S.lus && c.qcm >= S.qcm;
+    const l = (v, max, t) => `<li class="${v >= max ? "ea-badge-ok" : ""}">${v >= max ? "★" : "☆"} ${t} : <b>${Math.min(v, max)}/${max}</b></li>`;
+    return `<h4>Votre attestation de préparation</h4>
+        <p>Un document au nom de l'abonné, aux couleurs des Cours Sésame et SAJ, qui décrit votre travail de préparation : à joindre à un dossier ou à garder comme repère.</p>
+        <ul class="ea-attestation-seuils">${l(c.jours, S.jours, "jours de révision")}${l(c.lus, S.lus, "contenus ouverts")}${l(c.qcm, S.qcm, "réponses à des QCM")}</ul>
+        ${ok ? `<button class="btn btn-gold btn-sm" type="button" data-taction="attestation">Imprimer ou enregistrer mon attestation</button>` : `<p class="ea-aide">L'attestation s'ouvre quand les trois seuils sont atteints.</p>`}`;
+  }
+  function imprimerAttestation() {
+    const c = chiffresAttestation(), p = etat.profil || {};
+    const nom = `${p.prenom || ""} ${p.nom || ""}`.trim() || etat.email;
+    const conc = monConcours() ? nomConcours(monConcours()) : "";
+    const racineSite = new URL(document.body.dataset.root || "../", location.href).href;
+    const taux = c.qcm ? Math.round((c.bonnes / c.qcm) * 100) : 0;
+    const w = window.open("", "_blank");
+    if (!w) { toast("Autorisez les fenêtres de ce site pour ouvrir l'attestation."); return; }
+    w.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Attestation de préparation, ${esc(nom)}</title>
+<style>@page{size:A4;margin:0}body{margin:0;font-family:Georgia,serif;color:#141c2e;background:#fff}
+.page{box-sizing:border-box;width:210mm;min-height:297mm;padding:22mm 20mm;border:10px solid #0f2a5c;outline:2px solid #c9962b;outline-offset:-18px;display:flex;flex-direction:column}
+.tete{text-align:center}.tete img{width:72px;height:72px}.tete h1{margin:8px 0 2px;font-size:26px;color:#0f2a5c}
+.base{font:600 11px/1.4 Arial,sans-serif;letter-spacing:.16em;color:#c9962b}
+h2{margin:36px 0 6px;text-align:center;font-size:30px;color:#0f2a5c;letter-spacing:.04em}.filet{width:120px;height:3px;background:#c9962b;margin:0 auto 30px}
+p{font-size:16px;line-height:1.7;text-align:justify}.nom{font-size:24px;font-weight:700;color:#0f2a5c;text-align:center;margin:18px 0}
+ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;font-size:13px}
+.mention{font:12px/1.5 Arial,sans-serif;color:#566074;margin-top:28px}</style></head><body><div class="page">
+<div class="tete"><img src="${racineSite}assets/img/icone-192.png" alt=""><h1>Les Cours Sésame et SAJ</h1><div class="base">FORMATION JURIDIQUE · CONCOURS &amp; EXCELLENCE</div></div>
+<h2>ATTESTATION DE PRÉPARATION</h2><div class="filet"></div>
+<p>Les Cours Sésame et SAJ attestent que</p><div class="nom">${esc(nom)}</div>
+<p>prépare ${conc ? `le concours ${esc(conc)}` : "les concours administratifs"} dans l'espace abonnés des Cours Sésame et SAJ et, à la date du ${dateFr(auj())}, y a accompli le travail suivant :</p>
+<ul><li>${c.jours} jours de révision au cours des 120 derniers jours ;</li><li>${c.lus} contenus étudiés (sujets corrigés, fiches, ouvrages, textes officiels) ;</li><li>${c.qcm} réponses à des QCM, dont ${taux} % de bonnes réponses.</li></ul>
+<p class="mention">Document établi à partir de l'activité enregistrée dans l'espace abonnés de coursesesame.com. Il décrit un travail de préparation et ne vaut ni diplôme, ni titre, ni résultat à un concours.</p>
+<div class="pied"><span>Fait à Abidjan, le ${dateFr(auj())}</span><span>Les Cours Sésame et SAJ<br>coursesesame.com</span></div>
+</div><script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script></body></html>`);
+    w.document.close();
+  }
   // Ma progression par matière : les plus faibles d'abord, les matières pas encore commencées ensuite
   function progressionHTML() {
     const ms = matieresQcm().map(progresMatiere);
@@ -1790,12 +1848,14 @@
         ${notes.length ? `<h4>Vos dernières notes (agent de révision)</h4><p>${notes.map(e => `<span class="ea-tb-note">${noteFr(e.note)}/20</span>`).join(" ")}</p>` : ""}
         <h4>Vos badges</h4>
         <div class="ea-badges">${badges().map(([t, d, ok]) => `<div class="${ok ? "ea-badge-ok" : ""}"><b>${ok ? "★" : "☆"} ${t}</b><span>${d}</span></div>`).join("")}</div>
+        ${attestationHTML()}
       </div>`;
     poserFiligrane(corps, marque);
     corps.onclick = e => {
       const a = e.target.closest("[data-taction]");
       if (a && a.dataset.taction === "planning" && p) ouvrirContenu(p, marque);
       if (a && a.dataset.taction === "reviser") outilRevision(corps, marque, a.dataset.m);
+      if (a && a.dataset.taction === "attestation") imprimerAttestation();
     };
     corps.onsubmit = async e => {
       e.preventDefault();
@@ -2018,6 +2078,42 @@
   const installerHTML = () => `<div class="ea-installer"><p><b>Installez l'application Sésame et SAJ</b> : votre espace s'ouvre d'un geste depuis l'écran d'accueil, comme une application.</p>
       <button class="btn btn-gold btn-sm" type="button" data-install>Installer</button>
       <p class="ea-installer-ios">Sur iPhone : dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ».</p></div>`;
+  // Notifications sur le téléphone (Web Push) : une notification à la sortie de chaque vidéo du jour. L'abonnement du
+  // navigateur est rangé dans push_abonnements ; la fonction notifications envoie à 19 h. Absent si le navigateur ne
+  // sait pas recevoir de notifications (sur iPhone : seulement depuis l'application installée sur l'écran d'accueil).
+  const pushPossible = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window && window.isSecureContext;
+  const notifHTML = () => pushPossible() && Notification.permission !== "denied" ? `<div class="ea-installer ea-notif" id="eaNotif"><p><b>Notifications</b> : soyez prévenu sur ce téléphone à la sortie de chaque vidéo du jour, à 19 h.</p>
+      <button class="btn btn-navy btn-sm" type="button" data-notif="activer">Activer les notifications</button></div>` : "";
+  const base64Octets = t => { const p = "=".repeat((4 - t.length % 4) % 4), b = atob((t + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+  async function majNotif() {
+    const z = $("#eaNotif");
+    if (!z || !pushPossible()) return;
+    try {
+      const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription();
+      if (sub && Notification.permission === "granted") z.innerHTML = `<p><b>Notifications activées</b> sur cet appareil : vous êtes prévenu à la sortie de chaque vidéo du jour.</p><button class="btn btn-ghost btn-sm" type="button" data-notif="couper">Désactiver</button>`;
+    } catch (e) { /* sans service worker */ }
+  }
+  async function basculerNotif(action) {
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      if (action === "couper") {
+        const sub = await reg.pushManager.getSubscription();
+        if (sub) { await client.from("push_abonnements").delete().eq("endpoint", sub.endpoint); await sub.unsubscribe(); }
+        toast("Notifications désactivées sur cet appareil.");
+        const z = $("#eaNotif"); if (z) z.outerHTML = notifHTML();
+        return;
+      }
+      if (await Notification.requestPermission() !== "granted") { toast("Notifications refusées : vous pouvez les autoriser dans les réglages du navigateur."); return; }
+      const { data: cle, error } = await client.rpc("push_cle_publique");
+      if (error || !cle) throw error || new Error("clé absente");
+      const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: base64Octets(cle) });
+      const j = sub.toJSON();
+      const { error: e2 } = await client.from("push_abonnements").insert({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth });
+      if (e2 && e2.code !== "23505") throw e2;
+      toast("Notifications activées.");
+      majNotif();
+    } catch (e) { toast("Activation impossible sur ce navigateur pour le moment."); }
+  }
   // Compteur (mon_parrainage) : amis inscrits avec le code, amis abonnés (récompensés), jours gagnés
   let parrainage = null;
   const lienParrain = code => `${new URL(ROOT + "espace-abonnes/", location.href).href}?parrain=${code}#inscription`;
@@ -2035,6 +2131,8 @@
   }
   async function majOutils() {
     try { const r = await client.rpc("mes_statistiques"); if (!r.error) stats = r.data; } catch (e) { /* hors ligne */ }
+    const jb = $("#eaJour");
+    if (jb) jb.outerHTML = jourHTML();
     const b = $("#eaOutils"), d = $("#eaDemarrage");
     if (d) d.remove();
     if (b) b.outerHTML = outilsHTML();
@@ -2075,8 +2173,9 @@
       favoris = crochetFavoris;
       qcmFiche = n => toutesQuestions().filter(x => x.q.fiche === n);
       noterFiche = (x, juste) => { if (x) enregistrerReponse(x, juste); };
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + repriseHTML() + installerHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + jourHTML() + repriseHTML() + installerHTML() + notifHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
       brancherCompte();
+      majNotif();
     } else {
       memoLecture = null; favoris = null; qcmFiche = null; noterFiche = null;
       racine.innerHTML = compteHTML() + await annoncesHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
@@ -2231,6 +2330,8 @@
 
   // Bibliothèque : filtres et ouverture des contenus (un seul écouteur pour toute la page)
   racine.addEventListener("click", async e => {
+    const nb = e.target.closest("[data-notif]");
+    if (nb) { basculerNotif(nb.dataset.notif); return; }
     const mc = e.target.closest("[data-ma-copie]");
     if (mc) {
       // Fenêtre ouverte tout de suite (sinon bloquée sur téléphone), adresse signée ensuite
