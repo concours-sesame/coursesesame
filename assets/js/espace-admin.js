@@ -594,7 +594,7 @@
     ["abonnes", "Abonnés", [["direct", "En direct"], ["abonnes", `Abonnés (${abonnes.length})`], ["demandes", `Demandes${demandesEnAttente().length ? ` (${demandesEnAttente().length})` : ""}`],
       ["relances", `Relances${nbRelances() ? ` (${nbRelances()})` : ""}`], ["paiements", "Paiements"], ["commandes", `Commandes${commandesATraiter() ? ` (${commandesATraiter()})` : ""}`]], demandesEnAttente().length + nbRelances() + commandesATraiter()],
     ["contenus", "Contenus", [["contenus", `Contenus (${contenus.length})`], ["copies", `Copies VIP${copiesACorriger().length ? ` (${copiesACorriger().length})` : ""}`], ["blancs", "Concours blancs"], ["telechargements", "Téléchargements"]], copiesACorriger().length],
-    ["communication", "Communication", [["emails", "E-mails"], ["agent", "Agent"]], 0],
+    ["communication", "Communication", [["emails", "E-mails"], ["tiktok", "TikTok"], ["agent", "Agent"]], 0],
     ["pilotage", "Pilotage", [["ventes", "Ventes"], ["stats", "Statistiques"], ["visites", "Visites du site"], ["journal", "Journal"]], 0]
   ];
   const groupeDe = o => GROUPES().find(g => g[2].some(t => t[0] === o)) || GROUPES()[0];
@@ -699,7 +699,7 @@
   // Redessine la page (onglets compris) sans bouger la position de lecture
   const redessiner = () => { const y = scrollY; afficher(); scrollTo(0, y); };
   const PANNEAUX = { demandes: () => panneauDemandes(), direct: () => panneauDirect(), visites: () => panneauVisites(), abonnes: () => panneauAbonnes(), relances: () => panneauRelances(), commandes: () => panneauCommandes(),
-    contenus: () => panneauContenus(), copies: () => panneauCopies(), paiements: () => panneauPaiements(), stats: () => panneauStats(), ventes: () => panneauVentes(), agent: () => panneauAgent(), blancs: () => panneauBlancs(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), journal: () => panneauJournal() };
+    contenus: () => panneauContenus(), copies: () => panneauCopies(), paiements: () => panneauPaiements(), stats: () => panneauStats(), ventes: () => panneauVentes(), agent: () => panneauAgent(), blancs: () => panneauBlancs(), telechargements: () => panneauTelechargements(), emails: () => panneauEmails(), tiktok: () => panneauTiktok(), journal: () => panneauJournal() };
   const panneau = () => (PANNEAUX[onglet] || PANNEAUX.direct)();
 
   /* ---------- Visites du site public, actualisées toutes les 15 secondes ---------- */
@@ -1445,6 +1445,196 @@
       : `<p class="ea-vide">Aucune action enregistrée pour le moment. Le journal démarre avec cette version de l'administration.</p>`;
   }
 
+  /* ---------- TikTok : compte connecté, publication d'une vidéo, plan de publication ---------- */
+  // Fonction « tiktok » (Login Kit et Content Posting API de TikTok for Developers). Le formulaire reprend ce que TikTok
+  // exige avant toute publication : pseudonyme du compte, confidentialité choisie sans valeur par défaut, interactions
+  // décochées par défaut, déclaration du contenu commercial et accord avec la confirmation d'utilisation de la musique.
+  // Une ligne du plan (« À valider ») n'est envoyée qu'après validation dans ce formulaire.
+  const CONFIDENTIALITES = { PUBLIC_TO_EVERYONE: "Tout le monde", MUTUAL_FOLLOW_FRIENDS: "Amis (abonnements réciproques)", FOLLOWER_OF_CREATOR: "Mes abonnés", SELF_ONLY: "Moi seulement (privé)" };
+  const STATUTS_TT = { a_valider: ["À valider", "attente"], programmee: ["Programmée", "avenir"], envoi: ["Envoi en cours", "avenir"], traitement: ["En traitement chez TikTok", "avenir"], publiee: ["Publiée", "actif"], brouillon_envoye: ["Brouillon reçu dans TikTok", "actif"], erreur: ["Erreur", "expire"], manquee: ["Manquée", "expire"], annulee: ["Annulée", "suspendu"] };
+  const LIEN_MUSIQUE = "https://www.tiktok.com/legal/page/global/music-usage-confirmation/en";
+  const LIEN_MARQUE = "https://www.tiktok.com/legal/page/global/bc-policy/en";
+  let tiktok = null, tiktokPubs = [], chargementTiktok = false, tiktokPrepare = null;
+  const videosTT = () => (typeof VIDEOS_TIKTOK !== "undefined" ? VIDEOS_TIKTOK : []);
+  const videoTT = source => videosTT().find(v => v.source === source);
+  async function chargerTiktok() {
+    if (chargementTiktok) return;
+    chargementTiktok = true;
+    const [etat, pubs] = await Promise.all([client.functions.invoke("tiktok", { body: { action: "etat" } }),
+      client.from("tiktok_publications").select("*").order("prevue_le", { ascending: true })]);
+    chargementTiktok = false;
+    tiktok = etat.error ? { erreur: await erreurFonction(etat.error) } : etat.data;
+    tiktokPubs = pubs.error ? [] : pubs.data;
+    if (onglet === "tiktok" && !occupe()) { const z = $("#adPanneau"); if (z) z.innerHTML = panneauTiktok(); }
+  }
+  const heureLocale = t => { const d = new Date(t); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
+  function compteTiktokHTML() {
+    if (!tiktok) return `<p class="ea-vide">Lecture du compte TikTok…</p>`;
+    if (tiktok.erreur) return `<p class="ea-vide">${esc(tiktok.erreur)}</p><button class="btn btn-ghost btn-sm" type="button" data-action="tiktok-actualiser">Réessayer</button>`;
+    if (!tiktok.connecte) return `<p>Aucun compte TikTok n'est connecté. La connexion ouvre la page d'autorisation de TikTok, puis revient sur coursesesame.com.</p>
+      <button class="btn btn-gold" type="button" data-action="tiktok-connecter">Connecter le compte TikTok</button>`;
+    const c = tiktok.compte || {}, cr = tiktok.createur || {};
+    return `<div class="ad-tt-compte">${cr.creator_avatar_url || c.avatar ? `<img src="${esc(cr.creator_avatar_url || c.avatar)}" alt="" width="48" height="48" loading="lazy">` : ""}
+        <div><b>${esc(cr.creator_nickname || c.nom || "Compte TikTok")}</b> <span class="ad-badge ad-actif">Connecté</span>
+        <small>Depuis le ${dateHeure(c.connecte_le)}, autorisation à renouveler avant le ${dateFr(String(c.refresh_expire_le).slice(0, 10))}. Autorisations : ${esc(c.scope || "")}.</small></div></div>
+      ${tiktok.alerte ? `<p class="ad-note"><b>TikTok :</b> ${esc(tiktok.alerte)}</p>` : ""}
+      <div class="ad-actions"><button class="btn btn-ghost btn-sm" type="button" data-action="tiktok-actualiser">Actualiser</button><button class="btn btn-ghost btn-sm" type="button" data-action="tiktok-deconnecter">Déconnecter</button></div>`;
+  }
+  // Formulaire de publication (nouvelle vidéo ou ligne du plan à valider)
+  function formTiktok() {
+    const cr = (tiktok && tiktok.createur) || {}, p = tiktokPrepare || {};
+    const options = cr.privacy_level_options || [];
+    const v = videoTT(p.source);
+    const libre = videosTT().filter(x => !x.abonnes), reservees = videosTT().filter(x => x.abonnes);
+    const opt = x => `<option value="${esc(x.source)}"${x.source === p.source ? " selected" : ""}>${esc(x.titre)} (${esc(x.duree || "")})</option>`;
+    return `<details class="ad-ajout" id="adTtForm"${tiktokPrepare ? " open" : ""}>
+        <summary>${p.id ? `Valider la publication « ${esc(p.titre)} »` : "Publier une vidéo sur TikTok"}</summary>
+        <form class="form ad-form" data-form="tiktok" novalidate>
+          <input type="hidden" name="id" value="${p.id || ""}">
+          <div class="field full"><p>Publié sur le compte TikTok <b>${esc(cr.creator_nickname || "(non connecté)")}</b></p></div>
+          <div class="field full"><label for="ttVideo">Vidéo</label><select id="ttVideo" name="source" required><option value="">Choisir une vidéo</option>
+            <optgroup label="Vidéos libres du site">${libre.map(opt).join("")}</optgroup>
+            <optgroup label="Vidéos réservées aux abonnés">${reservees.map(opt).join("")}</optgroup></select>
+            <small class="ad-note" id="ttVideoNote">${v ? esc(v.desc || "") : ""}${cr.max_video_post_duration_sec ? ` Durée maximale permise par TikTok pour ce compte : ${Number(cr.max_video_post_duration_sec)} secondes.` : ""}</small></div>
+          <div class="field full ad-tt-apercu" id="ttApercu">${v && !v.abonnes ? `<video src="${esc(ROOT + v.source)}" controls preload="metadata" playsinline width="180"></video>` : ""}</div>
+          <div class="field full"><label for="ttLegende">Légende</label><textarea id="ttLegende" name="legende" rows="5" maxlength="2200">${esc(p.legende || "")}</textarea><small class="ad-note"><span id="ttCompte">${(p.legende || "").length}</span>/2200 caractères, mots-clés (#) compris.</small></div>
+          <div class="field"><label for="ttConf">Qui peut voir cette vidéo</label><select id="ttConf" name="confidentialite" required><option value="">Choisir</option>${options.map(o => `<option value="${esc(o)}"${o === p.confidentialite ? " selected" : ""}>${esc(CONFIDENTIALITES[o] || o)}</option>`).join("")}</select>
+            <small class="ad-note">Tant que TikTok n'a pas validé l'application, seule l'option « Moi seulement » est acceptée.</small></div>
+          <fieldset class="field full"><legend>Autoriser les utilisateurs à</legend>
+            <label><input type="checkbox" name="commentaires"${cr.comment_disabled ? " disabled" : p.commentaires ? " checked" : ""}> Commenter</label>
+            <label><input type="checkbox" name="duo"${cr.duet_disabled ? " disabled" : p.duo ? " checked" : ""}> Faire un duo</label>
+            <label><input type="checkbox" name="collage"${cr.stitch_disabled ? " disabled" : p.collage ? " checked" : ""}> Faire un collage (stitch)</label>
+            ${cr.comment_disabled || cr.duet_disabled || cr.stitch_disabled ? `<small class="ad-note">Les cases grisées sont désactivées dans les réglages de votre compte TikTok.</small>` : ""}</fieldset>
+          <fieldset class="field full"><legend>Contenu commercial</legend>
+            <label><input type="checkbox" name="commercial" id="ttCommercial"${p.marque_propre || p.contenu_sponsorise ? " checked" : ""}> Cette vidéo fait la promotion d'une marque, d'un produit ou d'un service</label>
+            <div id="ttCommercialOptions"${p.marque_propre || p.contenu_sponsorise ? "" : " hidden"}>
+              <label><input type="checkbox" name="marque_propre"${p.marque_propre ? " checked" : ""}> Votre marque : vous faites la promotion de votre propre activité (étiquette « Contenu promotionnel »)</label>
+              <label><input type="checkbox" name="contenu_sponsorise"${p.contenu_sponsorise ? " checked" : ""}> Contenu de marque : vous êtes rémunéré par un tiers (étiquette « Partenariat rémunéré » ; jamais en « Moi seulement »)</label>
+            </div></fieldset>
+          <fieldset class="field full"><legend>Envoi</legend>
+            <label><input type="radio" name="mode" value="direct"${p.mode !== "brouillon" ? " checked" : ""}> Publier directement sur le compte</label>
+            <label><input type="radio" name="mode" value="brouillon"${p.mode === "brouillon" ? " checked" : ""}> Envoyer en brouillon dans l'application TikTok (vous la publiez ensuite vous-même)</label></fieldset>
+          <div class="field"><label for="ttQuand">Date et heure</label><input id="ttQuand" name="quand" type="datetime-local" value="${p.prevue_le ? heureLocale(p.prevue_le) : ""}"><small class="ad-note">Laissez vide pour publier tout de suite.</small></div>
+          <div class="field full"><p class="ad-note" id="ttDeclaration">En publiant, vous acceptez la <a href="${LIEN_MUSIQUE}" target="_blank" rel="noopener">confirmation d'utilisation de la musique</a> de TikTok<span id="ttDeclMarque"${p.contenu_sponsorise ? "" : " hidden"}> et sa <a href="${LIEN_MARQUE}" target="_blank" rel="noopener">politique relative au contenu de marque</a></span>. Après l'envoi, TikTok peut mettre quelques minutes à traiter la vidéo avant qu'elle n'apparaisse sur le profil.</p></div>
+          <p class="ea-msg" role="alert"></p>
+          <div class="ad-actions"><button class="btn btn-gold" type="submit"${tiktok && tiktok.connecte ? "" : " disabled"}>${p.id ? "Valider" : "Publier ou programmer"}</button>${tiktokPrepare ? `<button class="btn btn-ghost" type="button" data-action="tiktok-fermer">Fermer</button>` : ""}</div>
+        </form>
+      </details>`;
+  }
+  function panneauTiktok() {
+    if (!tiktok) setTimeout(chargerTiktok, 0);
+    const avenir = tiktokPubs.filter(p => ["a_valider", "programmee", "envoi", "traitement"].includes(p.statut));
+    const passees = tiktokPubs.filter(p => !avenir.includes(p)).reverse();
+    const ligne = p => {
+      const [lib, cl] = STATUTS_TT[p.statut] || [p.statut, "attente"];
+      const actions = [
+        p.statut === "a_valider" || p.statut === "programmee" || p.statut === "erreur" || p.statut === "manquee" ? `<button class="btn btn-gold btn-sm" type="button" data-action="tiktok-preparer" data-ttid="${p.id}">${p.statut === "a_valider" ? "Valider" : "Modifier"}</button>` : "",
+        p.statut === "traitement" ? `<button class="btn btn-ghost btn-sm" type="button" data-action="tiktok-statut" data-ttid="${p.id}">Actualiser</button>` : "",
+        ["a_valider", "programmee"].includes(p.statut) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="tiktok-annuler" data-ttid="${p.id}">Annuler</button>` : ""].join("");
+      return `<tr><td>${dateHeure(p.prevue_le)}</td><td><b>${esc(p.titre)}</b><small>${esc((p.legende || "").slice(0, 90))}${(p.legende || "").length > 90 ? "…" : ""}</small></td>
+        <td>${p.mode === "brouillon" ? "Brouillon" : esc(CONFIDENTIALITES[p.confidentialite] || "à choisir")}</td>
+        <td><span class="ad-badge ad-${cl}">${lib}</span>${p.erreur ? `<small>${esc(p.erreur)}</small>` : ""}${p.post_id ? `<small><a href="https://m.tiktok.com/v/${esc(p.post_id)}.html" target="_blank" rel="noopener">Voir sur TikTok</a></small>` : ""}<div class="ad-actions">${actions}</div></td></tr>`;
+    };
+    const tableau = (l, titre) => `<div class="ad-tableau" role="region" aria-label="${titre}" tabindex="0"><table>
+        <thead><tr><th>Date</th><th>Vidéo</th><th>Visibilité</th><th>État</th></tr></thead><tbody>${l.map(ligne).join("")}</tbody></table></div>`;
+    return `<section class="ad-bloc"><h3>Compte TikTok</h3>${compteTiktokHTML()}</section>
+      <section class="ad-bloc">${formTiktok()}</section>
+      <section class="ad-bloc"><h3>À venir <span class="n">${avenir.length}</span></h3>${avenir.length ? tableau(avenir, "Publications TikTok à venir") : `<p class="ea-vide">Aucune publication TikTok à venir.</p>`}
+        <p class="ad-note">Les publications validées partent à leur heure, vérifiées toutes les cinq minutes. Une ligne « À valider » ne part jamais seule : ouvrez-la, choisissez qui peut la voir, puis validez.</p></section>
+      <section class="ad-bloc"><h3>Historique <span class="n">${passees.length}</span></h3>${passees.length ? tableau(passees, "Publications TikTok passées") : `<p class="ea-vide">Aucune publication TikTok pour le moment.</p>`}</section>`;
+  }
+  const redessinerTiktok = () => { const z = $("#adPanneau"); if (z && onglet === "tiktok") z.innerHTML = panneauTiktok(); };
+  async function actionTiktok(act, b) {
+    const id = Number(b.dataset.ttid), p = tiktokPubs.find(x => x.id === id);
+    if (act === "tiktok-actualiser") { tiktok = null; await chargerTiktok(); redessinerTiktok(); return; }
+    if (act === "tiktok-connecter") {
+      b.disabled = true;
+      const { data, error } = await client.functions.invoke("tiktok", { body: { action: "autoriser" } });
+      b.disabled = false;
+      if (error) return toast(await erreurFonction(error));
+      location.href = data.url;
+      return;
+    }
+    if (act === "tiktok-deconnecter") {
+      if (!confirm("Déconnecter le compte TikTok ? Les publications programmées ne partiront plus jusqu'à la prochaine connexion.")) return;
+      const { error } = await client.functions.invoke("tiktok", { body: { action: "deconnecter" } });
+      if (error) return toast(await erreurFonction(error));
+      tiktok = null; await chargerTiktok(); redessinerTiktok(); toast("Compte TikTok déconnecté.");
+      return;
+    }
+    if (act === "tiktok-fermer") { tiktokPrepare = null; redessinerTiktok(); return; }
+    if (act === "tiktok-preparer" && p) {
+      tiktokPrepare = { ...p, confidentialite: p.statut === "a_valider" ? null : p.confidentialite };
+      redessinerTiktok();
+      const f = $("#adTtForm"); if (f) f.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (act === "tiktok-annuler" && p) {
+      if (!confirm(`Annuler la publication « ${p.titre} » ?`)) return;
+      const { error } = await client.from("tiktok_publications").update({ statut: "annulee" }).eq("id", id).in("statut", ["a_valider", "programmee"]);
+      if (error) return toast(messageErreur(error));
+      await chargerTiktok(); redessinerTiktok(); toast("Publication annulée.");
+      return;
+    }
+    if (act === "tiktok-statut" && p) {
+      b.disabled = true;
+      const { error } = await client.functions.invoke("tiktok", { body: { action: "statut", id } });
+      b.disabled = false;
+      if (error) toast(await erreurFonction(error));
+      await chargerTiktok(); redessinerTiktok();
+    }
+  }
+  async function soumettreTiktok(f, msg, bouton) {
+    const el = f.elements, source = el.source.value, v = videoTT(source);
+    const mode = (f.querySelector("input[name=mode]:checked") || {}).value || "direct";
+    const conf = el.confidentialite.value, sponsor = el.commercial.checked && el.contenu_sponsorise.checked;
+    const marque = el.commercial.checked && el.marque_propre.checked;
+    if (!v) { msg.textContent = "Choisissez une vidéo."; return; }
+    if (mode === "direct" && !conf) { msg.textContent = "Choisissez qui peut voir la vidéo."; return; }
+    if (el.commercial.checked && !sponsor && !marque) { msg.textContent = "Précisez s'il s'agit de votre marque ou d'un contenu de marque, ou décochez « Contenu commercial »."; return; }
+    if (sponsor && conf === "SELF_ONLY") { msg.textContent = "Un contenu de marque ne peut pas être publié en « Moi seulement »."; return; }
+    const quand = el.quand.value ? new Date(el.quand.value) : new Date();
+    if (el.quand.value && quand.getTime() < Date.now() - 60000) { msg.textContent = "La date choisie est passée."; return; }
+    const ligne = {
+      titre: v.titre, source, legende: el.legende.value.trim(), mode, confidentialite: mode === "direct" ? conf : null,
+      commentaires: !!el.commentaires.checked, duo: !!el.duo.checked, collage: !!el.collage.checked,
+      marque_propre: marque, contenu_sponsorise: sponsor, prevue_le: quand.toISOString(),
+      statut: "programmee", valide_le: new Date().toISOString(), valide_par: moi.id, erreur: null
+    };
+    bouton.disabled = true;
+    const id = Number(el.id.value);
+    const r = id ? await client.from("tiktok_publications").update(ligne).eq("id", id).select("id").single()
+      : await client.from("tiktok_publications").insert(ligne).select("id").single();
+    if (r.error) { bouton.disabled = false; msg.textContent = messageErreur(r.error); return; }
+    let message = `Publication programmée le ${dateHeure(ligne.prevue_le)}.`;
+    if (!el.quand.value) {
+      msg.textContent = "Envoi de la vidéo à TikTok…";
+      const { data, error } = await client.functions.invoke("tiktok", { body: { action: "publier", id: r.data.id } });
+      const pub = data && data.publication;
+      message = error ? await erreurFonction(error) : pub && pub.statut === "erreur" ? `TikTok a refusé l'envoi : ${pub.erreur}` : "Vidéo envoyée : TikTok la traite, l'état se met à jour dans quelques minutes.";
+    }
+    bouton.disabled = false;
+    tiktokPrepare = null;
+    await chargerTiktok(); redessinerTiktok(); toast(message);
+  }
+  // Formulaire TikTok : aperçu de la vidéo choisie, options du contenu commercial, déclaration à jour
+  function majFormTiktok(f, cible) {
+    const el = f.elements;
+    if (cible.name === "source") {
+      const v = videoTT(cible.value), cr = (tiktok && tiktok.createur) || {};
+      $("#ttVideoNote").textContent = (v ? v.desc || "" : "") + (cr.max_video_post_duration_sec ? ` Durée maximale permise par TikTok pour ce compte : ${Number(cr.max_video_post_duration_sec)} secondes.` : "");
+      $("#ttApercu").innerHTML = v && !v.abonnes ? `<video src="${esc(ROOT + v.source)}" controls preload="metadata" playsinline width="180"></video>` : v ? `<p class="ad-note">Vidéo réservée aux abonnés : elle deviendra visible sur TikTok selon la confidentialité choisie.</p>` : "";
+    }
+    if (cible.name === "commercial") {
+      $("#ttCommercialOptions").hidden = !cible.checked;
+      if (!cible.checked) { el.marque_propre.checked = false; el.contenu_sponsorise.checked = false; }
+    }
+    const sponsor = el.commercial.checked && el.contenu_sponsorise.checked;
+    $("#ttDeclMarque").hidden = !sponsor;
+    const prive = [...el.confidentialite.options].find(o => o.value === "SELF_ONLY");
+    if (prive) { prive.disabled = sponsor; if (sponsor && el.confidentialite.value === "SELF_ONLY") el.confidentialite.value = ""; }
+  }
+
   /* ---------- Agent de révision : réglages, méthode, coûts ---------- */
   // La méthode (consignes) est rangée dans la base, réservée à l'administrateur, et jamais dans le dépôt public.
   // La clé de l'API Anthropic est un secret de la fonction Supabase « agent-revision » (ANTHROPIC_API_KEY).
@@ -1668,6 +1858,7 @@
     if (b.dataset.filtrev) { filtreV = b.dataset.filtrev; $("#adPanneau").innerHTML = panneauVisites(); return; }
     if (b.dataset.periodev) { periodeVentes = Number(b.dataset.periodev); entonnoir = null; $("#adPanneau").innerHTML = panneauVentes(); return; }
     const act = b.dataset.action;
+    if (act && act.startsWith("tiktok-")) { await actionTiktok(act, b); return; }
     if (act === "sortir") { debrancherDirect(); await client.auth.signOut(); connexion(); return; }
     if (act === "masquer-retour") { retourAFaire = ""; redessiner(); return; }
     if (act === "emails-basculer") {
@@ -1933,6 +2124,7 @@
   });
 
   racine.addEventListener("input", e => {
+    if (e.target.id === "ttLegende") { const n = $("#ttCompte"); if (n) n.textContent = e.target.value.length; return; }
     if (e.target.form && e.target.form.id === "adCommande" && e.target.name !== "montant") { majTotalCommande(e.target.form, e.target); return; }
     if (e.target.form && e.target.form.id === "adCommande" && e.target.name === "montant") { e.target.dataset.manuel = "1"; return; }
     if (e.target.id === "adRechercheT") { rechercheT = e.target.value; $("#adTablesT").innerHTML = tablesTelechargements(); return; }
@@ -1958,6 +2150,7 @@
     if (e.target.form && e.target.form.id === "adCommande") { majTotalCommande(e.target.form, e.target); return; }
     const f = e.target.form;
     if (!f) return;
+    if (f.dataset.form === "tiktok") { majFormTiktok(f, e.target); return; }
     if (e.target.name === "duree" || (e.target.name === "vip" && f.dataset.form === "activer")) {
       const duree = f.elements.duree.value, prix = prixFormule(duree, f.elements.vip && f.elements.vip.checked);
       $("[data-jusqua]", f).hidden = duree !== "date";
@@ -1973,6 +2166,7 @@
     const coches = () => $$("input[name=concours]:checked", f).map(x => x.value);
     msg.textContent = "";
 
+    if (f.dataset.form === "tiktok") { await soumettreTiktok(f, msg, bouton); return; }
     if (f.dataset.form === "mfa") {
       const code = v("code").replace(/\D/g, "");
       if (code.length !== 6) { msg.textContent = "Le code compte 6 chiffres."; return; }

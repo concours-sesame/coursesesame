@@ -1431,6 +1431,32 @@ ${voisines.length ? `<section class="section section-cream">
   urls.push(url);
 }
 
+/* ---------- Retour de TikTok (connexion du compte TikTok de l'éditeur) ---------- */
+// Adresse de redirection déclarée dans l'application TikTok for Developers (Login Kit). tiktok-retour.js transmet le
+// code et le jeton « state » à la fonction tiktok, qui les vérifie et enregistre la connexion. Page hors plan du site.
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Connexion TikTok", ""]],
+    h1: "Connexion à <em>TikTok</em>",
+    lead: "Cette page termine la connexion du compte TikTok des Cours Sésame et SAJ, ouverte depuis l'administration du site."
+  })}
+
+<section class="section">
+  <div class="wrap">
+    <p class="offerte-etat" id="tiktokEtat" role="status">Connexion en cours…</p>
+    <p><a class="btn btn-gold" href="${prefix}espace-abonnes/admin/">Retour à l'administration</a></p>
+    <p class="offerte-mention">Ce que nous recevons de TikTok est décrit dans nos <a href="${prefix}mentions-legales/#reseaux-sociaux">données personnelles</a>.</p>
+  </div>
+</section>`;
+  write("tiktok/index.html", page({
+    prefix, url: "", body, scripts: ["assets/js/espace-config.js", "assets/js/tiktok-retour.js"], robots: "noindex", stats: false,
+    title: ["Connexion TikTok", "Connexion TikTok"], ld: [],
+    description: "Fin de la connexion du compte TikTok des Cours Sésame et SAJ."
+  }));
+}
+
 /* ---------- Espace abonnés ---------- */
 // Pages fixes ; tout le reste (connexion, contenus, administration) est affiché par espace.js et espace-admin.js
 const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-config.js", "assets/js/espace.js"];
@@ -1575,9 +1601,17 @@ ${contactCTA(prefix)}`;
     <div class="ea-app" id="admin" aria-live="polite" aria-busy="true"><p class="ea-attente">Chargement…</p></div>
   </div>
 </section>`;
+  // Vidéos proposées à l'onglet TikTok de l'administration : vidéos libres du site (assets/video/) et vidéos réservées
+  // du stockage privé (videos/), avec leur titre, leur résumé et leur durée
+  write("assets/js/videos-tiktok.js", `/* Généré par tools/build.js à partir de data.js : vidéos que l'onglet TikTok de l'administration peut publier. */
+const VIDEOS_TIKTOK = ${JSON.stringify([
+    ...VIDEOS.map(v => ({ source: `assets/video/${v.fichier}.mp4`, titre: v.titre, desc: v.desc, duree: v.duree, tag: v.tag, abonnes: false })),
+    ...VIDEOS_ABONNES.map(v => ({ source: `videos/${v.fichier}.mp4`, titre: v.titre, desc: v.desc, duree: v.duree, tag: v.tag, abonnes: true }))
+  ], null, 1)};
+`);
   write("espace-abonnes/admin/index.html", page({
     prefix, url: SITE + "espace-abonnes/admin/", body, robots: "noindex, nofollow", stats: false,
-    scripts: [...SCRIPTS_ESPACE, "assets/js/espace-admin.js"],
+    scripts: [...SCRIPTS_ESPACE, "assets/js/videos-tiktok.js", "assets/js/espace-admin.js"],
     title: "Administration de l'espace abonnés",
     description: "Administration de l'espace abonnés des Cours Sésame et SAJ.",
     ld: []

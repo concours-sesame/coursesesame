@@ -1941,3 +1941,13 @@ html[data-installable] .ea-installer [data-install]:not([hidden]){display:inline
 /* QCM d'une fiche de révision, proposé en tête de la fiche dans la visionneuse */
 .ea-fiche-qcm{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem 1rem;margin:0 0 1rem;padding:.8rem 1rem;border:1px solid var(--gold);border-radius:var(--r-sm);background:var(--cream)}
 .ea-fiche-qcm span{flex:1 1 16rem}
+/* Onglet TikTok de l'administration */
+.ad-tt-compte{display:flex;gap:.75rem;align-items:center;margin-bottom:.6rem}
+.ad-tt-compte img{border-radius:50%;flex:none}
+.ad-tt-compte small{display:block;color:var(--muted,#566074)}
+form[data-form=tiktok] fieldset{border:0;padding:0;margin:0}
+form[data-form=tiktok] fieldset legend{font-weight:600;margin-bottom:.35rem}
+form[data-form=tiktok] fieldset label{display:flex;gap:.55rem;align-items:flex-start;margin:.3rem 0;font-weight:400}
+form[data-form=tiktok] fieldset input{width:auto;height:auto;margin:.2rem 0 0;flex:none;align-self:flex-start}
+form[data-form=tiktok] fieldset label{line-height:1.45}
+.ad-tt-apercu video{border-radius:6px;background:#000;max-width:100%}
