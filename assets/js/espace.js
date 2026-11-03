@@ -791,12 +791,12 @@
     };
     const groupes = ORDRE_APERCU.map(r => [r, lignes(r)]).filter(([, l]) => l.length);
     const cadenas = `<span class="ea-cadenas" aria-label="Réservé aux abonnés"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>`;
-    const detail = l => [l.items.length > 1 ? `${l.items.length} volumes` : (l.items[0].matiere || "").replace(/^[^·]*·\s*/, ""), l.concours.map(nomConcours).join(", ")].filter(Boolean).map(esc).join(" · ");
+    const detail = l => [l.items.length > 1 ? `${l.items.length} volumes` : (l.items[0].matiere || "").replace(/^[^·]*·\s*/, ""), l.concours.map(nomConcours).join(", "), l.items[0].type === "video" && !l.items[0].video_ouverte && data.some(x => x.video_ouverte) ? "Espace VIP" : ""].filter(Boolean).map(esc).join(" · ");
     return `<div class="ea-apercu">
         <h3>Au programme</h3>
         <p class="ea-apercu-intro">Tous les contenus de l'espace, à lire dès l'ouverture de votre accès. Touchez une rubrique pour voir les titres.</p>
         ${groupes.map(([r, l]) => `<details class="ea-groupe">
-          <summary><span class="ea-groupe-nom">${RUBRIQUES[r]}</span><span class="ea-groupe-n">${l.length}<span class="sr-only"> ${COMPTES[r][l.length > 1 ? 1 : 0]}</span></span>${r === "ouvrages" || r === "videos" ? `<span class="ea-groupe-note">Espace VIP</span>` : ""}</summary>
+          <summary><span class="ea-groupe-nom">${RUBRIQUES[r]}</span><span class="ea-groupe-n">${l.length}<span class="sr-only"> ${COMPTES[r][l.length > 1 ? 1 : 0]}</span></span>${r === "ouvrages" || (r === "videos" && l.every(x => x.items.every(i => !i.video_ouverte))) ? `<span class="ea-groupe-note">Espace VIP</span>` : ""}</summary>
           <ul class="ea-liste">${l.map(x => `<li class="ea-item">${cadenas}<span><b>${esc(x.titre)}</b><small>${detail(x)}</small></span></li>`).join("")}</ul>
         </details>`).join("")}
       </div>`;
@@ -894,7 +894,7 @@
   // sans attendre la fin de l'abonnement en cours. À dix jours de la fin, le formulaire de renouvellement sert aussi.
   function vipHTML() {
     if (!etat.abo.actif || etat.vip || !tarifsVip().length) return "";
-    const nb = r => contenus.filter(c => r === "videos" ? c.type === "video" : r === "docs" ? c.vip : rubrique(c) === r).length;
+    const nb = r => contenus.filter(c => r === "videos" ? c.type === "video" && !c.video_ouverte : r === "docs" ? c.vip : rubrique(c) === r).length;
     const [o, v, dv] = [nb("ouvrages"), nb("videos"), nb("docs")];
     const renouvellement = joursJusqua(etat.abo.fin) <= JOURS_RENOUVELLEMENT;
     return `<section class="ea-vip" id="eaVip">
@@ -1061,11 +1061,13 @@
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   // Espace VIP : ouvrages complets et vidéos. Affichés avec un cadenas sans accès (abonnement normal)
   const verrouOuvrage = c => !etat.ouvrages && rubrique(c) === "ouvrages";
-  const verrouVideo = c => !etat.videos && c.type === "video";
+  // Vidéos du jour (video_ouverte) : ouvertes à tout abonné en cours, VIP ou non
+  const videoVip = c => c.type === "video" && !c.video_ouverte;
+  const verrouVideo = c => !etat.videos && videoVip(c);
   // Document réservé à l'espace VIP (contenus.vip) : seule une période VIP l'ouvre
   const verrouDocVip = c => !!c.vip && !etat.vip;
   const verrouille = c => verrouOuvrage(c) || verrouVideo(c) || verrouDocVip(c);
-  const estVip = c => !!c.vip || rubrique(c) === "ouvrages" || c.type === "video";
+  const estVip = c => !!c.vip || rubrique(c) === "ouvrages" || videoVip(c);
   const noteVerrou = () => "Espace VIP";
   const msgFormule = () => `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à l'abonnement VIP (ouvrages complets et vidéos réservées).\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
   // Bibliothèque centrée sur le concours de l'abonné : par défaut, les contenus de son concours et les contenus
@@ -1908,7 +1910,7 @@
       if (t > fin) client.rpc("corrige_blanc", { p_concours: b.id }).then(async r => {
         if (r.error || !r.data) return;
         corrige = contenus.find(x => x.id === r.data);
-        if (!corrige) { const q = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip, avant_premiere").eq("id", r.data).maybeSingle(); corrige = q.data; }
+        if (!corrige) { const q = await client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip, avant_premiere, video_ouverte").eq("id", r.data).maybeSingle(); corrige = q.data; }
         const z = $("#eaBlancCorrige");
         if (corrige && z) z.innerHTML = `<div class="ea-outil-boutons"><button class="btn btn-navy" type="button" data-bl="corrige">Lire le corrigé-type et sa grille</button></div>`;
       });
@@ -2060,7 +2062,7 @@
       brancherFormulaires();
     } else if (etat.abo.actif || etat.admin) {
       const [{ data, error }] = await Promise.all([
-        client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip, avant_premiere").eq("publie", true).order("publie_le", { ascending: false }),
+        client.from("contenus").select("id, titre, description, type, fichier, texte, lien, concours, matiere, publie_le, vip, avant_premiere, video_ouverte").eq("publie", true).order("publie_le", { ascending: false }),
         chargerAgent().catch(() => { agent = null; }),
         chargerOutils().catch(() => { /* outils indisponibles : la bibliothèque reste accessible */ }),
         chargerCopies().catch(() => { mesCopies = []; })
