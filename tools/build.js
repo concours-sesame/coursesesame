@@ -555,6 +555,24 @@ function videosJourHTML(prefix) {
     </div>
     <script defer src="${prefix}assets/js/videos-du-jour.js"></script>`;
 }
+// Lettre d'information sans compte (assets/js/lettre.js, fonction fiche-offerte, action « lettre »)
+function lettreHTML(prefix) {
+  return `<section class="section section-cream lettre" id="lettre">
+  <div class="wrap lettre-wrap">
+    <div><span class="eyebrow">Lettre d'information gratuite</span><h2 class="h-section">Recevez nos <em>conseils</em></h2>
+      <p class="lead">Méthode, dates des concours, nouveaux sujets corrigés et nouvelles vidéos : quelques e-mails utiles, sans excès, sans créer de compte.</p></div>
+    <form class="lettre-form" data-lettre novalidate>
+      <div class="field"><label for="lettrePrenom">Prénom</label><input id="lettrePrenom" name="prenom" required maxlength="60" autocomplete="given-name"></div>
+      <div class="field"><label for="lettreEmail">E-mail</label><input id="lettreEmail" name="email" type="email" required maxlength="254" autocomplete="email"></div>
+      <div class="field"><label for="lettreConcours">Concours préparé</label><select id="lettreConcours" name="concours"><option value="">Choisir…</option>${CONCOURS.map(c => `<option value="${c.id}">${esc(c.court || c.nom)}</option>`).join("")}<option value="autre">Autre concours</option></select></div>
+      <button class="btn btn-gold" type="submit">Je m'inscris</button>
+      <p class="lettre-etat" role="status" aria-live="polite"></p>
+      <p class="offerte-mention">En vous inscrivant, vous acceptez de recevoir nos conseils et offres par e-mail. Un lien de désinscription figure dans chaque e-mail. Voir nos <a href="${prefix}mentions-legales/#lettre">données personnelles</a>.</p>
+    </form>
+  </div>
+</section>
+<script defer src="${prefix}assets/js/lettre.js"></script>`;
+}
 // Invitation à l'espace abonnés
 function espaceBand(prefix) {
   return `<div class="espace-band reveal">
@@ -1472,6 +1490,7 @@ ${voisines.length ? `<section class="section section-cream">
     </div>
   </div>
 </section>
+${lettreHTML(prefix)}
 ${contactCTA(prefix)}`;
   write("qcm-du-jour/index.html", page({
     prefix, url, body, scripts: ["assets/js/qcm-du-jour-donnees.js", "assets/js/qcm-du-jour.js"],
@@ -1505,6 +1524,7 @@ ${contactCTA(prefix)}`;
     <dl class="lex-liste">${entrees.filter(e => e.k[0].toUpperCase() === l).map(({ f }) => `<div class="lex-entree" id="${f.slug}"><dt><a href="${prefix}fiches/${f.slug}/">${esc(stripTags(f.titre))}</a> <small>${esc(f.matiere)}</small></dt><dd>${f.essentiel[0]}</dd></div>`).join("")}</dl>`).join("\n    ")}
   </div>
 </section>
+${lettreHTML(prefix)}
 ${contactCTA(prefix)}`;
   write("lexique/index.html", page({
     prefix, url, body,
@@ -1762,7 +1782,7 @@ const VIDEOS_TIKTOK = ${JSON.stringify([
     <p>Les commandes se passent sur WhatsApp, depuis le panier ou depuis la page d'un ouvrage. Les prix sont affichés en francs CFA. Le prix, le paiement, la livraison, les incidents de livraison et les abonnements sont régis par nos <a href="${prefix}conditions-de-vente/">conditions de vente et d'abonnement</a>.</p>
 
     <h2>Données personnelles</h2>
-    <p>En dehors de l'espace abonnés et du formulaire de la fiche offerte, présentés plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
+    <p>En dehors de l'espace abonnés et des formulaires de la fiche offerte, du test de niveau et de la lettre d'information, présentés plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
     <p>Votre panier est conservé uniquement dans votre navigateur, sur votre appareil, pour que vous le retrouviez à votre prochaine visite. Nous n'y avons pas accès. Pour le supprimer, videz-le ou effacez les données du site dans votre navigateur.</p>
     <p>Quand vous commandez, les informations que vous saisissez (prénom, nom, téléphone, ville, message) sont placées dans un message WhatsApp que vous envoyez vous-même. Nous ne les utilisons que pour traiter votre commande et vous livrer.</p>
     <p>Le site n'utilise aucun cookie. Les polices de caractères sont hébergées sur le site lui-même. Quelques photographies sont affichées depuis les serveurs d'Unsplash, qui reçoivent à cette occasion l'adresse IP du visiteur, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
@@ -1787,6 +1807,8 @@ const VIDEOS_TIKTOK = ${JSON.stringify([
     <p>Certaines fiches de révision sont offertes en entier. Pour les recevoir, vous indiquez votre prénom et une adresse e-mail ou un numéro WhatsApp, et, si vous le souhaitez, le concours que vous préparez. Nous enregistrons aussi la date, la fiche demandée et l'adresse de la page. Votre adresse IP est notée pour limiter les abus, puis effacée au bout d'un jour.</p>
     <p>Ces informations servent à vous remettre la fiche, par un lien de téléchargement et, si vous avez indiqué une adresse, par un e-mail envoyé par notre prestataire Brevo. Si vous cochez la case prévue, elles servent aussi à vous envoyer nos conseils de révision et nos offres, par e-mail ou sur WhatsApp ; sans cette case, nous ne vous écrivons pas. Vous pouvez retirer votre accord à tout moment, par le lien figurant dans nos e-mails ou en nous écrivant sur WhatsApp.</p>
     <p>Elles sont conservées chez Supabase, en Europe, consultables par l'administrateur seulement, et ne sont ni vendues ni cédées. Elles sont effacées sur simple demande sur WhatsApp, et au plus tard trois ans après votre dernier échange avec nous.</p>
+    <h2 id="lettre">Lettre d'information</h2>
+    <p>Pour recevoir notre lettre d'information, vous indiquez votre prénom, votre adresse e-mail et, si vous le souhaitez, le concours que vous préparez ; nous notons aussi la date et l'adresse de la page, et votre adresse IP pour limiter les abus, effacée au bout d'un jour. Ces informations servent seulement à vous envoyer nos conseils, nos nouveautés et nos offres par des e-mails de notre prestataire Brevo : un e-mail de bienvenue, puis quelques e-mails utiles, sans excès. Chaque e-mail contient un lien de désinscription, qui arrête aussitôt les envois. Pour le reste, les règles de la fiche offerte ci-dessus s'appliquent : conservation chez Supabase, ni vente ni cession, effacement sur simple demande et au plus tard trois ans après votre dernier échange avec nous.</p>
     <h2 id="temoignages">Témoignages d'admis</h2>
     <p>Si vous envoyez un témoignage de réussite, nous enregistrons votre prénom, votre nom, votre concours, votre année de réussite, la précision facultative, votre texte, votre contact (téléphone ou e-mail), ainsi que la date de votre accord de publication. Seuls votre prénom, l'initiale de votre nom, votre concours, votre année, la précision et votre texte sont publiés, et seulement après vérification. Votre contact sert uniquement à cette vérification. Vous pouvez retirer votre accord à tout moment sur WhatsApp : le témoignage est alors retiré du site. Les données sont conservées chez Supabase, consultables par l'administrateur seulement, et effacées sur simple demande.</p>
     <h2 id="test-de-niveau">Test de niveau</h2>
@@ -1956,7 +1978,7 @@ index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
   h2: `Nos vidéos`, ici: "accueil", jour: true,
   lead: "Notre présentation, un ouvrage en vidéo, des notions et un article de loi expliqués en une minute, et des sujets de SOG décryptés.",
   band: espaceBand("")
-}) + "\n");
+}) + lettreHTML("") + "\n");
 // Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
 index = index.replace(/(data-count-from="ouvrages">)[^<]*(<)/g, `$1${LIVRES.length}$2`).replace(/(data-count-from="concours">)[^<]*(<)/g, `$1${CONCOURS.length}$2`);
 index = inject(index, "stats", STATS + '<script defer src="assets/js/visite.js"></script>');

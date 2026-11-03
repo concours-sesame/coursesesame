@@ -1982,3 +1982,14 @@ form[data-form=tiktok] fieldset label{line-height:1.45}
 .ea-jour-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px}
 a.ea-jour-carte{text-decoration:none;color:inherit}
 .ea-attestation-seuils{list-style:none;margin:.4rem 0 .8rem;padding:0;display:flex;flex-wrap:wrap;gap:.4rem 1.2rem}
+/* Lettre d'information */
+.lettre-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);align-items:start}
+.lettre-form{display:grid;gap:12px;padding:20px;border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:var(--r);background:#fff}
+.lettre-form .field{display:grid;gap:4px}
+.lettre-form label{font-weight:700;color:#0f2a5c;font-size:.95rem}
+.lettre-form input,.lettre-form select{width:100%;padding:.7rem .8rem;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit;background:#fff;color:var(--ink)}
+.lettre-etat:empty{display:none}
+.lettre-etat{margin:0;font-weight:700;color:#0f2a5c}
+.lettre .lettre-form .offerte-mention{color:#566074}.lettre .lettre-form .offerte-mention a{color:#0f2a5c}
+.lettre-form input,.lettre-form select{color:#141c2e}
+@media (max-width:760px){.lettre-wrap{grid-template-columns:1fr}}

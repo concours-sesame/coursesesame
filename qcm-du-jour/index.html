@@ -24,7 +24,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="../assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/source-serif-4-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/style.css?v=9372bf6fca">
+<link rel="stylesheet" href="../assets/css/style.css?v=87df1f7ed6">
 <script data-goatcounter="https://coursesesame.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script defer src="../assets/js/visite.js?v=b5a9f56a90"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://coursesesame.com/"},{"@type":"ListItem","position":2,"name":"QCM","item":"https://coursesesame.com/qcm/"},{"@type":"ListItem","position":3,"name":"Le QCM du jour","item":"https://coursesesame.com/qcm-du-jour/"}]}</script>
@@ -132,6 +132,21 @@
     </div>
   </div>
 </section>
+<section class="section section-cream lettre" id="lettre">
+  <div class="wrap lettre-wrap">
+    <div><span class="eyebrow">Lettre d'information gratuite</span><h2 class="h-section">Recevez nos <em>conseils</em></h2>
+      <p class="lead">Méthode, dates des concours, nouveaux sujets corrigés et nouvelles vidéos : quelques e-mails utiles, sans excès, sans créer de compte.</p></div>
+    <form class="lettre-form" data-lettre novalidate>
+      <div class="field"><label for="lettrePrenom">Prénom</label><input id="lettrePrenom" name="prenom" required maxlength="60" autocomplete="given-name"></div>
+      <div class="field"><label for="lettreEmail">E-mail</label><input id="lettreEmail" name="email" type="email" required maxlength="254" autocomplete="email"></div>
+      <div class="field"><label for="lettreConcours">Concours préparé</label><select id="lettreConcours" name="concours"><option value="">Choisir…</option><option value="infj">Magistrature</option><option value="greffe">Greffe</option><option value="penitentiaire">Pénitentiaire</option><option value="eppjej">EPPJEJ</option><option value="ena">ENA</option><option value="autre">Autre concours</option></select></div>
+      <button class="btn btn-gold" type="submit">Je m'inscris</button>
+      <p class="lettre-etat" role="status" aria-live="polite"></p>
+      <p class="offerte-mention">En vous inscrivant, vous acceptez de recevoir nos conseils et offres par e-mail. Un lien de désinscription figure dans chaque e-mail. Voir nos <a href="../mentions-legales/#lettre">données personnelles</a>.</p>
+    </form>
+  </div>
+</section>
+<script defer src="../assets/js/lettre.js?v=c906ced463"></script>
 <section class="section contact">
   <div class="wrap contact-inner">
     <div>

@@ -6,6 +6,9 @@
 //   { action: "test", prenom, email?, whatsapp?, concours?, accepte_offres?, page?, resultat }
 //        -> { ok } : test de niveau gratuit (page test-de-niveau/), contact enregistré avec son résultat
 //        ({ note, total, themes: [{ nom, bons, total }] }), résultat envoyé par e-mail si une adresse est donnée
+//   { action: "lettre", prenom, email, concours?, page? }
+//        -> { ok } : inscription à la lettre d'information sans compte (accord donné par l'inscription même) ;
+//        e-mail de bienvenue, puis les e-mails 2 et 3 du suivi des contacts (fonction emails)
 //
 // Pour limiter les abus : au plus 20 demandes par heure depuis une même adresse IP, effacée après un jour.
 // Déploiement : sans vérification de jeton (visiteurs non connectés). Secret : BREVO_API_KEY (déjà utilisé par emails).
@@ -62,8 +65,9 @@ Deno.serve(async (req) => {
     return reponse({ ok: true });
   }
 
+  const lettre = d.action === "lettre";
   const test = d.action === "test";
-  const fiche = test ? null : Number(d.fiche);
+  const fiche = test || d.action === "lettre" ? null : Number(d.fiche);
   const prenom = texte(d.prenom, 60);
   const email = texte(d.email, 254).toLowerCase() || null;
   const whatsapp = String(d.whatsapp ?? "").replace(/[^0-9+]/g, "") || null;
@@ -71,7 +75,8 @@ Deno.serve(async (req) => {
   const accepte = d.accepte_offres === true;
   const page = texte(d.page, 200) || null;
 
-  if (!test && !FICHES_OFFERTES[fiche!]) return erreur("Cette fiche n'est pas offerte.");
+  if (lettre && !email) return erreur("Indiquez votre adresse e-mail.");
+  if (!test && !lettre && !FICHES_OFFERTES[fiche!]) return erreur("Cette fiche n'est pas offerte.");
   const resultat = test ? lireResultat(d.resultat) : null;
   if (test && !resultat) return erreur("Résultat du test invalide.");
   if (!prenom) return erreur("Indiquez votre prénom.");
@@ -88,6 +93,23 @@ Deno.serve(async (req) => {
   }
   if ((count ?? 0) >= MAX_PAR_HEURE) return erreur("Trop de demandes depuis cette connexion. Réessayez dans une heure.", 429);
   await service.from("prospects").update({ ip: null }).not("ip", "is", null).lt("cree_le", new Date(Date.now() - 86400_000).toISOString());
+
+  if (lettre) {
+    // Déjà inscrit (et pas désinscrit) : rien de plus, pour ne pas renvoyer la bienvenue
+    const { data: deja } = await service.from("prospects").select("id").eq("source", "lettre").eq("email", email!).is("desinscrit_le", null).limit(1);
+    if (deja?.length) return reponse({ ok: true, deja: true });
+    const { data: ligne, error: errAjout } = await service.from("prospects")
+      .insert({ prenom, email, whatsapp: null, concours, fiche: null, source: "lettre", page, accepte_offres: true, suivi_etape: 1, ip })
+      .select("id, jeton").single();
+    if (errAjout) {
+      console.error("ajout lettre :", errAjout.message);
+      return erreur("Inscription impossible pour le moment. Réessayez plus tard.", 500);
+    }
+    const echec = await envoyerBienvenue(email!, prenom, ligne.jeton);
+    if (echec) console.error("Brevo :", echec);
+    else await service.from("prospects").update({ email_envoye: true }).eq("id", ligne.id);
+    return reponse({ ok: true });
+  }
 
   if (test) {
     const { data: ligne, error: errAjout } = await service.from("prospects")
@@ -215,4 +237,39 @@ ${bouton}
     `Toutes nos fiches de révision se lisent dans l'espace abonnés, dès 500 FCFA la journée : ${SITE}/espace-abonnes/`, "",
     "L'équipe des Cours Sésame et SAJ", jeton ? `\nPour ne plus recevoir nos conseils et offres : ${SITE}/fiches/?desinscription=${jeton}` : ""].join("\n");
   return await brevo(a, prenom, `Votre fiche de révision : ${titre}`, html, corps, "fiche-offerte");
+}
+
+// Bienvenue de la lettre d'information : les rendez-vous gratuits du site
+async function envoyerBienvenue(a: string, prenom: string, jeton: string): Promise<string | null> {
+  const lien = (chemin: string, texte: string) => `<a href="${SITE}${chemin}" style="color:#0f2a5c;font-weight:700">${texte}</a>`;
+  const points = [
+    [`${lien("/qcm-du-jour/", "Le QCM du jour")}`, "chaque jour à 19 h, une question de concours corrigée et expliquée"],
+    [`${lien("/lexique/", "Le lexique juridique")}`, "150 notions de droit définies en une phrase"],
+    [`${lien("/fiches/", "Les fiches de révision")}`, "l'essentiel de chaque notion, en accès libre"],
+    [`${lien("/sujets/", "Les sujets corrigés")}`, "dissertations, cas pratiques, commentaires et SOG"],
+    [`${lien("/test-de-niveau/", "Le test de niveau")}`, "20 questions et votre note sur 20, par matière"],
+  ];
+  const desinscription = `${SITE}/fiches/?desinscription=${jeton}`;
+  const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Bienvenue</title></head>
+<body style="margin:0;background:#f8f4ec;font-family:Arial,Helvetica,sans-serif;color:#18202f">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f4ec"><tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:8px;overflow:hidden">
+<tr><td style="background:#0f2a5c;padding:18px 24px;color:#ffffff;font-size:20px;font-weight:700">Les Cours Sésame et SAJ<div style="font-size:13px;font-weight:400;color:#e8a62b;margin-top:4px">Préparation aux concours, Abidjan</div></td></tr>
+<tr><td style="padding:24px;font-size:16px;line-height:1.55">
+<p>Bonjour ${esc(prenom)},</p>
+<p>Merci de votre inscription. Vous recevrez nos conseils de préparation et nos nouveautés, sans excès. Pour commencer dès aujourd'hui, voici nos rendez-vous gratuits :</p>
+<ul style="padding-left:20px">${points.map(([t, d]) => `<li style="margin:6px 0">${t} : ${d}</li>`).join("")}</ul>
+<p style="margin:24px 0"><a href="${SITE}/qcm-du-jour/" style="display:inline-block;padding:12px 22px;background:#e8a62b;color:#0f2a5c;font-weight:700;text-decoration:none;border-radius:6px">Répondre au QCM du jour</a></p>
+<p>Pour aller plus loin, l'espace abonnés réunit les fiches entières, les QCM chronométrés, les concours blancs corrigés et une vidéo nouvelle chaque jour, dès 500 FCFA la journée : <a href="${SITE}/espace-abonnes/" style="color:#0f2a5c">coursesesame.com/espace-abonnes</a>.</p>
+<p>Bonnes révisions,<br>L'équipe des Cours Sésame et SAJ</p>
+</td></tr>
+<tr><td style="padding:16px 24px;background:#f8f4ec;font-size:12px;line-height:1.5;color:#5b6475">Vous recevez cet e-mail parce que vous avez demandé notre lettre d'information sur coursesesame.com. Pour ne plus la recevoir : <a href="${desinscription}" style="color:#5b6475">se désinscrire</a>.
+<br>Pour nous écrire, utilisez WhatsApp au ${WHATSAPP}. Cette adresse ne reçoit pas les réponses.</td></tr>
+</table></td></tr></table></body></html>`;
+  const corps = [`Bonjour ${prenom},`, "", "Merci de votre inscription. Nos rendez-vous gratuits :",
+    `- Le QCM du jour, chaque jour à 19 h : ${SITE}/qcm-du-jour/`, `- Le lexique juridique : ${SITE}/lexique/`, `- Les fiches de révision : ${SITE}/fiches/`,
+    `- Les sujets corrigés : ${SITE}/sujets/`, `- Le test de niveau : ${SITE}/test-de-niveau/`, "",
+    `L'espace abonnés, dès 500 FCFA la journée : ${SITE}/espace-abonnes/`, "", "L'équipe des Cours Sésame et SAJ", "",
+    `Pour ne plus recevoir notre lettre : ${desinscription}`].join("\n");
+  return await brevo(a, prenom, "Bienvenue aux Cours Sésame et SAJ", html, corps, "lettre-bienvenue");
 }
