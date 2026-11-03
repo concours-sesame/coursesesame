@@ -1,0 +1,25 @@
+{
+ "fichier": "notion-casier-judiciaire",
+ "titre": "Le casier judiciaire",
+ "rubrique": "Procédure pénale",
+ "scenes": [
+  {"type": "intro", "titre": "Le casier judiciaire", "dit": ["Une notion, une minute.", "Le casier *judiciaire*."]},
+  {"type": "question", "titre": "Condamné avec sursis il y a sept ans.", "texte": "Son concours est-il compromis ?",
+   "dit": ["Il a été condamné avec sursis il y a sept ans, sans incident depuis.", "Son concours de la fonction publique est-il *compromis* ?", "Tout dépend du bulletin."]},
+  {"type": "article", "titre": "Article 754 du Code de procédure pénale",
+   "citation": "Lorsque la condamnation est devenue définitive, le greffier en chef de la juridiction qui a rendu la décision établit la fiche du casier judiciaire du condamné qu'il transmet, par le canal du ministère public, au greffier en chef du tribunal du lieu de naissance de celui-ci.",
+   "dit": ["Selon l'article *754* du Code de procédure pénale, la fiche du casier judiciaire est établie quand la condamnation est définitive, et transmise au greffe du tribunal du *lieu de naissance* du condamné."]},
+  {"type": "etapes", "titre": "Trois bulletins", "items": [
+    {"n": "1", "t": "Bulletin n° 1", "d": "Tout le casier, pour les autorités judiciaires seulement", "cue": 1},
+    {"n": "2", "t": "Bulletin n° 2", "d": "Pour certaines administrations, sans le sursis non avenu", "cue": 2},
+    {"n": "3", "t": "Bulletin n° 3", "d": "La prison ferme seulement, remis à l'intéressé", "cue": 3}],
+   "dit": ["Il existe trois bulletins.", "Le bulletin numéro *un* contient tout le casier, pour les seules autorités judiciaires.", "Le numéro *deux* va à certaines administrations, sans les condamnations avec sursis devenues non avenues.", "Le numéro *trois* ne relève que la prison ferme, et n'est remis qu'à la personne elle-même."]},
+  {"type": "cas", "titre": "Notre candidat", "items": [
+    {"ok": true, "t": "Bulletin n° 2", "d": "Le sursis non avenu n'y figure pas : l'administration ne le voit pas.", "cue": 1}],
+   "dit": ["Notre candidat : son sursis est devenu non avenu, la condamnation ne figure *pas* sur le bulletin numéro deux que reçoit l'administration."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Remettre le bulletin n° 3 à un tiers", "d": "Il n'est délivré qu'à la personne concernée, jamais à un employeur.", "cue": 0}],
+   "dit": ["Le piège : délivrer le bulletin numéro trois à un tiers.", "Il n'est remis qu'à la personne *concernée*, jamais directement à un employeur."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

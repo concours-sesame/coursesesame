@@ -1,0 +1,25 @@
+{
+ "fichier": "notion-emancipation",
+ "titre": "L'émancipation",
+ "rubrique": "Droit de la famille",
+ "scenes": [
+  {"type": "intro", "titre": "L'émancipation", "dit": ["Une notion, une minute.", "L'*émancipation*."]},
+  {"type": "question", "titre": "Dix-sept ans, et déjà indépendante.", "texte": "Peut-elle agir seule avant sa majorité ?",
+   "dit": ["Elle a dix-sept ans et travaille déjà.", "Peut-elle agir *seule* avant sa majorité ?", "Oui, si elle est émancipée."]},
+  {"type": "article", "titre": "Loi relative à la minorité, article 119",
+   "citation": "L'émancipation est l'état du mineur qui est affranchi de l'autorité parentale ou de la tutelle. Il devient capable d'accomplir tous les actes de la vie civile, et de faire le commerce sous les réserves ci-après.",
+   "dit": ["Selon l'article *119* de la loi relative à la minorité, l'émancipation est l'état du mineur affranchi de l'autorité parentale ou de la tutelle. Il devient capable d'accomplir tous les actes de la vie civile."]},
+  {"type": "blocs", "titre": "Prononcée par le juge", "items": [
+    {"t": "À la demande des parents", "d": "Le mineur doit avoir seize ans révolus (article 120).", "cue": 1},
+    {"t": "De justes motifs", "d": "Le juge des tutelles recueille le consentement du mineur et vérifie son intérêt.", "cue": 2}],
+   "dit": ["L'émancipation est prononcée par le *juge des tutelles*.", "À la demande des parents, le mineur doit avoir *seize ans* révolus.", "Le juge recueille son consentement et vérifie qu'il y a de *justes motifs*."]},
+  {"type": "cas", "titre": "Les effets", "items": [
+    {"ok": true, "t": "Capacité civile", "d": "Le mineur émancipé agit seul ; ses parents ne répondent plus de ses dommages.", "cue": 1},
+    {"ok": false, "t": "Commerce", "d": "Il faut une autorisation, inscrite au registre du commerce (article 125).", "cue": 2}],
+   "dit": ["Les effets.", "Le mineur émancipé agit seul, et ses parents ne sont plus *responsables* des dommages qu'il cause ensuite.", "Mais pour faire le *commerce*, il lui faut une autorisation, inscrite au registre du commerce et du crédit mobilier."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Émanciper un mineur de quinze ans", "d": "À la demande des parents, il faut seize ans révolus.", "cue": 0}],
+   "dit": ["Le piège : émanciper un enfant de quinze ans à la demande de ses parents.", "Il faut *seize ans* révolus."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

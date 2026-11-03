@@ -1,0 +1,22 @@
+{
+ "fichier": "notion-saisie-attribution",
+ "titre": "La saisie-attribution",
+ "rubrique": "Droit OHADA",
+ "scenes": [
+  {"type": "intro", "titre": "La saisie-attribution", "dit": ["Une notion, une minute.", "La saisie-*attribution*."]},
+  {"type": "question", "titre": "Votre débiteur ne paie pas, mais il a de l'argent en banque.", "texte": "Pouvez-vous le saisir ?",
+   "dit": ["Votre débiteur ne paie pas, mais il a de l'argent à la banque.", "Pouvez-vous le *saisir* ?", "Oui, par une saisie-attribution."]},
+  {"type": "article", "titre": "AUPSRVE, article 153",
+   "citation": "Tout créancier muni d'un titre exécutoire constatant une créance liquide et exigible peut, pour en obtenir le paiement, sans commandement préalable, saisir entre les mains d'un tiers les créances de son débiteur portant sur une somme d'argent […].",
+   "dit": ["Selon l'article *153* de l'Acte uniforme sur les procédures simplifiées de recouvrement, le créancier muni d'un titre exécutoire peut, sans commandement préalable, saisir entre les mains d'un tiers les créances de son débiteur portant sur une somme d'argent."]},
+  {"type": "etapes", "titre": "Trois temps", "items": [
+    {"n": "1", "t": "L'acte de saisie au tiers", "d": "La banque, par exemple : attribution immédiate", "cue": 1},
+    {"n": "2", "t": "La dénonciation au débiteur", "d": "Dans les huit jours, à peine de caducité", "cue": 2},
+    {"n": "3", "t": "Un mois pour contester", "d": "Puis le tiers paie le créancier", "cue": 3}],
+   "dit": ["Trois temps.", "L'huissier signifie l'acte de saisie au tiers, par exemple la banque : la créance est *immédiatement attribuée* au créancier.", "La saisie est dénoncée au débiteur dans les *huit jours*, sinon elle est caduque.", "Le débiteur a *un mois* pour contester ; ensuite, le tiers paie."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Exiger un commandement préalable", "d": "C'est la saisie-vente qui en exige un, pas la saisie-attribution.", "cue": 0}],
+   "dit": ["Le piège : exiger un commandement préalable.", "C'est la *saisie-vente* qui en exige un, pas la saisie-attribution."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
