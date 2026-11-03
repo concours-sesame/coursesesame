@@ -114,9 +114,13 @@ async function jetonValide(service: Service): Promise<string> {
 
 const infoCreateur = (jeton: string) => api("/post/publish/creator_info/query/", jeton, {});
 
-// Fichier de la vidéo : site public (assets/video/…), stockage public « tiktok » (tiktok/…) ou stockage privé (videos/…)
+// Fichier de la vidéo : site public (assets/video/…), stockage public « tiktok » (tiktok/…) ou stockage privé (videos/…).
+// Une source tiktok/<dossier>/<nom>.mp4 est lue d'abord dans sa copie privée exclusif/videos/<nom>.mp4 (les vidéos du jour
+// n'y sont gardées qu'une fois, pour économiser le stockage), puis, à défaut, dans l'espace public « tiktok ».
 async function video(service: Service, source: string): Promise<Uint8Array> {
   if (source.startsWith("tiktok/")) {
+    const copie = await service.storage.from("exclusif").download(`videos/${source.split("/").pop()}`);
+    if (!copie.error && copie.data) return new Uint8Array(await copie.data.arrayBuffer());
     const { data, error } = await service.storage.from("tiktok").download(source.slice(7));
     if (error || !data) throw new Error(`Vidéo introuvable dans l'espace tiktok (${error?.message ?? "absente"}).`);
     return new Uint8Array(await data.arrayBuffer());

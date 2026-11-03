@@ -7,7 +7,8 @@
 // Copie vers l'espace abonnés : POST { copier: ["qcm/qcm-du-jour-001.mp4", …] } recopie chaque vidéo du stockage public
 // « tiktok » dans le stockage privé, à exclusif/videos/<nom>.mp4 (sans remplacement), où elle n'est lisible qu'aux
 // conditions de la ligne correspondante de la table contenus (date de publication, abonnement, accès aux vidéos).
-// Nettoyage : POST { effacer: ["donnees/<nom>.mp4", …] } efface des fichiers de données provisoires du dossier donnees/.
+// Nettoyage : POST { effacer: ["donnees/<nom>.mp4", "qcm/<nom>.mp4", …] } efface des fichiers de données provisoires du
+// dossier donnees/, et les vidéos publiques dont la copie privée identique existe (200 chemins au plus par appel).
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 function cleSecrete(): string {
@@ -32,11 +33,35 @@ Deno.serve(async (req) => {
   } catch {
     return json({ error: "Requête invalide" }, 400);
   }
-  // Effacement des fichiers de données provisoires (tiktok/donnees/…) une fois lus par la base
+  // Effacement des fichiers de données provisoires (tiktok/donnees/…) une fois lus par la base, et des vidéos publiques
+  // (tiktok/<dossier>/<nom>.mp4) dont la copie privée exclusif/videos/<nom>.mp4 existe avec la même taille
   if (Array.isArray(d.effacer)) {
-    const chemins = d.effacer.map(String).filter((c) => /^donnees\/[a-z0-9-]+\.mp4$/.test(c));
+    const chemins: string[] = [], gardes: string[] = [];
+    const { data: copies } = await service.storage.from("exclusif").list("videos", { limit: 1000 });
+    const tailles = new Map((copies ?? []).map((o) => [o.name, Number(o.metadata?.size ?? -1)]));
+    const dossiers = new Map<string, Map<string, number>>();
+    for (const c of d.effacer.slice(0, 200).map(String)) {
+      if (/^donnees\/[a-z0-9-]+\.mp4$/.test(c)) {
+        chemins.push(c);
+        continue;
+      }
+      const m = c.match(/^([a-z0-9-]+)\/([a-z0-9-]+\.mp4)$/);
+      if (!m) {
+        gardes.push(`${c} : invalide`);
+        continue;
+      }
+      if (!dossiers.has(m[1])) {
+        const { data: l } = await service.storage.from("tiktok").list(m[1], { limit: 1000 });
+        dossiers.set(m[1], new Map((l ?? []).map((o) => [o.name, Number(o.metadata?.size ?? -2)])));
+      }
+      const t = dossiers.get(m[1])!.get(m[2]);
+      if (t === undefined) gardes.push(`${c} : absente`);
+      else if (tailles.get(m[2]) !== t) gardes.push(`${c} : pas de copie privée identique`);
+      else chemins.push(c);
+    }
+    if (!chemins.length) return json({ effaces: [], gardes });
     const { data, error: e } = await service.storage.from("tiktok").remove(chemins);
-    return e ? json({ error: e.message }, 500) : json({ effaces: (data ?? []).map((o) => o.name) });
+    return e ? json({ error: e.message }, 500) : json({ effaces: (data ?? []).map((o) => o.name), gardes });
   }
   if (Array.isArray(d.copier)) {
     const faits: string[] = [], erreurs: string[] = [];
