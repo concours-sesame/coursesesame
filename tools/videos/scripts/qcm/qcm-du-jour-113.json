@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-113",
+ "titre": "Le QCM du jour n° 113",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 113",
+ "source": {
+  "matiere": "droit-penal-special",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal spécial",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal spécial*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal spécial*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un passant voit une personne se noyer, mais ne sait pas nager. Que doit-il faire pour ne pas tomber sous le coup de l'article 391 du Code pénal ?",
+   "options": [
+    "Rien : le risque qu'il courrait le dispense de toute obligation",
+    "Plonger malgré tout",
+    "Déposer plainte ensuite",
+    "Provoquer un secours, par exemple en alertant les pompiers"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un passant voit une personne se noyer, mais ne sait pas nager. Que doit-il faire pour ne pas tomber sous le coup de l'article 391 du Code pénal ?",
+    "A : Rien : le risque qu'il courrait le dispense de toute obligation.",
+    "B : Plonger malgré tout.",
+    "C : Déposer plainte ensuite.",
+    "D : Provoquer un secours, par exemple en alertant les pompiers.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un passant voit une personne se noyer, mais ne sait pas nager. Que doit-il faire pour ne pas tomber sous le coup de l'article 391 du Code pénal ?",
+    "A : Rien : le risque qu'il courrait le dispense de toute obligation.",
+    "B : Plonger malgré tout.",
+    "C : Déposer plainte ensuite.",
+    "D : Provoquer un secours, par exemple en alertant les pompiers.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Provoquer un secours, par exemple en alertant les pompiers",
+   "explication": "L'assistance peut être portée « soit par son action personnelle, soit en provoquant un secours », dès lors qu'elle est possible « sans risque pour lui ni pour les tiers » (article 391). Celui qui ne peut agir lui-même doit au moins alerter.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "L'assistance peut être portée « soit par son action personnelle, soit en provoquant un secours », dès lors qu'elle est possible « sans risque pour lui ni pour les tiers », article 391. Celui qui ne peut agir lui-même doit au moins alerter."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "L'assistance peut être portée « soit par son action personnelle, soit en provoquant un secours », dès lors qu'elle est possible « sans risque pour lui ni pour les tiers » (article 391). Celui qui ne peut agir lui-même doit au moins alerter."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

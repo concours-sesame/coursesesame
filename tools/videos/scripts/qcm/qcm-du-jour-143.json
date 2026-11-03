@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-143",
+ "titre": "Le QCM du jour n° 143",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 143",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 13
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "L'instruction préparatoire est obligatoire (article 96 du Code de procédure pénale) :",
+   "options": [
+    "En matière de crime et de délit",
+    "En matière de crime ; elle est facultative en matière de délit, sauf dispositions spéciales",
+    "Seulement lorsque la victime le demande",
+    "En matière de contravention"
+   ],
+   "pause": 5,
+   "dit": [
+    "L'instruction préparatoire est obligatoire, article 96 du Code de procédure pénale:",
+    "A : En matière de crime et de délit.",
+    "B : En matière de crime ; elle est facultative en matière de délit, sauf dispositions spéciales.",
+    "C : Seulement lorsque la victime le demande.",
+    "D : En matière de contravention.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "L'instruction préparatoire est obligatoire (article 96 du Code de procédure pénale) :",
+    "A : En matière de crime et de délit.",
+    "B : En matière de crime ; elle est facultative en matière de délit, sauf dispositions spéciales.",
+    "C : Seulement lorsque la victime le demande.",
+    "D : En matière de contravention.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "En matière de crime ; elle est facultative en matière de délit, sauf dispositions spéciales",
+   "explication": "« L'instruction préparatoire est obligatoire en matière de crime ; sauf dispositions spéciales, elle est facultative en matière de délit » (article 96).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "« L'instruction préparatoire est obligatoire en matière de crime ; sauf dispositions spéciales, elle est facultative en matière de délit », article 96."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "« L'instruction préparatoire est obligatoire en matière de crime ; sauf dispositions spéciales, elle est facultative en matière de délit » (article 96)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

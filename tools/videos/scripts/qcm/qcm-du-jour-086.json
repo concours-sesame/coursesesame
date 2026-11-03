@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-086",
+ "titre": "Le QCM du jour n° 86",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 86",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 7
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle est la différence essentielle entre l'adoption simple et l'adoption plénière (loi n° 2019-987 relative à l'adoption) ?",
+   "options": [
+    "L'adoption simple est irrévocable, l'adoption plénière révocable",
+    "Seule l'adoption plénière exige un jugement",
+    "L'adoption simple ajoute une filiation à celle d'origine ; l'adoption plénière la remplace et est irrévocable",
+    "Aucune : seul le nom change"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle est la différence essentielle entre l'adoption simple et l'adoption plénière, loi de 2019 relative à l'adoption ?",
+    "A : L'adoption simple est irrévocable, l'adoption plénière révocable.",
+    "B : Seule l'adoption plénière exige un jugement.",
+    "C : L'adoption simple ajoute une filiation à celle d'origine ; l'adoption plénière la remplace et est irrévocable.",
+    "D : Aucune : seul le nom change.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle est la différence essentielle entre l'adoption simple et l'adoption plénière (loi n° 2019-987 relative à l'adoption) ?",
+    "A : L'adoption simple est irrévocable, l'adoption plénière révocable.",
+    "B : Seule l'adoption plénière exige un jugement.",
+    "C : L'adoption simple ajoute une filiation à celle d'origine ; l'adoption plénière la remplace et est irrévocable.",
+    "D : Aucune : seul le nom change.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "L'adoption simple ajoute une filiation à celle d'origine ; l'adoption plénière la remplace et est irrévocable",
+   "explication": "Dans l'adoption simple, « l'adopté reste membre de sa famille d'origine et y conserve tous ses droits » (article 18). L'adoption plénière confère une filiation « qui se substitue à la filiation d'origine » (article 27) et « est irrévocable » (article 28).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Dans l'adoption simple, « l'adopté reste membre de sa famille d'origine et y conserve tous ses droits », article 18. L'adoption plénière confère une filiation « qui se substitue à la filiation d'origine », article 27, et « est irrévocable », article 28."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Dans l'adoption simple, « l'adopté reste membre de sa famille d'origine et y conserve tous ses droits » (article 18). L'adoption plénière confère une filiation « qui se substitue à la filiation d'origine » (article 27) et « est irrévocable » (article 28)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-116",
+ "titre": "Le QCM du jour n° 116",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 116",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Que signifie le sigle COM ?",
+   "options": [
+    "Comité d'orientation des mineurs",
+    "Centre d'observation des mineurs",
+    "Commission d'office des magistrats",
+    "Centre officiel de médiation"
+   ],
+   "pause": 5,
+   "dit": [
+    "Que signifie le sigle COM ?",
+    "A : Comité d'orientation des mineurs.",
+    "B : Centre d'observation des mineurs.",
+    "C : Commission d'office des magistrats.",
+    "D : Centre officiel de médiation.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Que signifie le sigle COM ?",
+    "A : Comité d'orientation des mineurs.",
+    "B : Centre d'observation des mineurs.",
+    "C : Commission d'office des magistrats.",
+    "D : Centre officiel de médiation.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Centre d'observation des mineurs",
+   "explication": "Le Centre d'observation des mineurs accueille les mineurs en conflit avec la loi placés par le juge des enfants, pour l'observation de leur personnalité, de leur comportement et de leur milieu.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le Centre d'observation des mineurs accueille les mineurs en conflit avec la loi placés par le juge des enfants, pour l'observation de leur personnalité, de leur comportement et de leur milieu."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le Centre d'observation des mineurs accueille les mineurs en conflit avec la loi placés par le juge des enfants, pour l'observation de leur personnalité, de leur comportement et de leur milieu."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

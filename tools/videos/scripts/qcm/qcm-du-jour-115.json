@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-115",
+ "titre": "Le QCM du jour n° 115",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 115",
+ "source": {
+  "matiere": "droit-constitutionnel",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit constitutionnel",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit constitutionnel*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit constitutionnel*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quels magistrats sont inamovibles selon la Constitution (article 140) ?",
+   "options": [
+    "Les magistrats du siège",
+    "Les magistrats du parquet",
+    "Tous les magistrats, du siège comme du parquet",
+    "Aucun magistrat"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quels magistrats sont inamovibles selon la Constitution, article 140 ?",
+    "A : Les magistrats du siège.",
+    "B : Les magistrats du parquet.",
+    "C : Tous les magistrats, du siège comme du parquet.",
+    "D : Aucun magistrat.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quels magistrats sont inamovibles selon la Constitution (article 140) ?",
+    "A : Les magistrats du siège.",
+    "B : Les magistrats du parquet.",
+    "C : Tous les magistrats, du siège comme du parquet.",
+    "D : Aucun magistrat.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Les magistrats du siège",
+   "explication": "« Les magistrats du siège sont inamovibles. » Ils ne peuvent être mutés sans leur accord, sauf nécessités de service (article 140). Les magistrats du parquet sont soumis à l'autorité hiérarchique.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« Les magistrats du siège sont inamovibles. » Ils ne peuvent être mutés sans leur accord, sauf nécessités de service, article 140. Les magistrats du parquet sont soumis à l'autorité hiérarchique."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« Les magistrats du siège sont inamovibles. » Ils ne peuvent être mutés sans leur accord, sauf nécessités de service (article 140). Les magistrats du parquet sont soumis à l'autorité hiérarchique."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

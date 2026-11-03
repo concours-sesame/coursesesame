@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-152",
+ "titre": "Le QCM du jour n° 152",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 152",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 15
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le ministère d'avocat est-il obligatoire devant la Cour de cassation (loi organique n° 2020-967, article 56) ?",
+   "options": [
+    "Non, chaque partie peut se défendre seule",
+    "Seulement en matière pénale",
+    "Seulement pour l'État",
+    "Oui, à peine d'irrecevabilité du pourvoi"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le ministère d'avocat est-il obligatoire devant la Cour de cassation, loi organique de 2020, article 56 ?",
+    "A : Non, chaque partie peut se défendre seule.",
+    "B : Seulement en matière pénale.",
+    "C : Seulement pour l'État.",
+    "D : Oui, à peine d'irrecevabilité du pourvoi.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le ministère d'avocat est-il obligatoire devant la Cour de cassation (loi organique n° 2020-967, article 56) ?",
+    "A : Non, chaque partie peut se défendre seule.",
+    "B : Seulement en matière pénale.",
+    "C : Seulement pour l'État.",
+    "D : Oui, à peine d'irrecevabilité du pourvoi.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Oui, à peine d'irrecevabilité du pourvoi",
+   "explication": "Le ministère d'avocat est obligatoire devant la Cour de cassation, à peine d'irrecevabilité du pourvoi (article 56). L'acte de pourvoi doit en outre viser au moins un cas d'ouverture à cassation (article 55).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Le ministère d'avocat est obligatoire devant la Cour de cassation, à peine d'irrecevabilité du pourvoi, article 56. L'acte de pourvoi doit en outre viser au moins un cas d'ouverture à cassation, article 55."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Le ministère d'avocat est obligatoire devant la Cour de cassation, à peine d'irrecevabilité du pourvoi (article 56). L'acte de pourvoi doit en outre viser au moins un cas d'ouverture à cassation (article 55)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

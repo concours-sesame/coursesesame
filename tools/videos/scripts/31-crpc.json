@@ -1,0 +1,67 @@
+{
+ "fichier": "notion-crpc",
+ "titre": "La CRPC",
+ "rubrique": "Procédure pénale",
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Le plaider-coupable : la CRPC",
+   "dit": ["Une notion, une minute.", "La comparution sur reconnaissance préalable de *culpabilité*."]
+  },
+  {
+   "type": "question",
+   "titre": "Le prévenu reconnaît les faits.",
+   "texte": "Faut-il encore un procès ?",
+   "dit": ["Le prévenu reconnaît les faits.", "Faut-il encore un *procès* ?", "Pas toujours."]
+  },
+  {
+   "type": "article",
+   "titre": "Article 521 du Code de procédure pénale",
+   "citation": "Le Procureur de la République peut, d'office ou à la demande du prévenu, recourir à la procédure de comparution sur reconnaissance préalable de culpabilité, lorsque les faits poursuivis sont constitutifs d'un délit passible d'une peine d'emprisonnement de cinq ans au plus et que le prévenu reconnaît les avoir commis.",
+   "dit": ["Selon l'article *521* du Code de procédure pénale, le procureur peut recourir à cette procédure lorsque les faits sont un délit passible de cinq ans d'emprisonnement au plus, et que le prévenu reconnaît les avoir commis."],
+   "st": ["Selon l'article *521* du Code de procédure pénale, le procureur peut recourir à cette procédure lorsque les faits sont un délit passible de cinq ans d'emprisonnement au plus, et que le prévenu reconnaît les avoir commis."]
+  },
+  {
+   "type": "etapes",
+   "titre": "Trois étapes",
+   "items": [
+    {"n": "1", "t": "Le procureur propose une peine", "d": "Prison : un an au plus, et pas plus de la moitié de la peine encourue", "cue": 1},
+    {"n": "2", "t": "Le prévenu accepte", "d": "Il peut demander cinq jours de réflexion", "cue": 2},
+    {"n": "3", "t": "Le président homologue", "d": "Le jour même, en audience publique", "cue": 3}
+   ],
+   "dit": [
+    "La procédure se déroule en trois étapes.",
+    "Le procureur propose une peine : la prison proposée ne peut dépasser *un an*, ni la moitié de la peine encourue.",
+    "Le prévenu accepte, après cinq jours de réflexion s'il le demande.",
+    "Le président du tribunal *homologue* la peine, le jour même, en audience publique."
+   ]
+  },
+  {
+   "type": "cas",
+   "titre": "Deux exemples",
+   "items": [
+    {"ok": true, "t": "CRPC possible", "d": "Tébalo reconnaît un abus de confiance, puni de cinq ans au plus.", "cue": 1},
+    {"ok": false, "t": "CRPC impossible", "d": "Le prévenu a seize ans : les mineurs sont exclus.", "cue": 2}
+   ],
+   "dit": [
+    "Deux exemples.",
+    "Tébalo reconnaît un abus de confiance, puni de cinq ans au plus : la procédure est *possible*.",
+    "Un prévenu de seize ans reconnaît un vol : impossible, les *mineurs* sont exclus par l'article 530."
+   ]
+  },
+  {
+   "type": "piege",
+   "titre": "Le piège",
+   "items": [
+    {"t": "Utiliser les aveux après l'échec", "d": "Si la peine n'est pas homologuée, personne ne peut faire état des déclarations du prévenu (article 528).", "cue": 0}
+   ],
+   "dit": [
+    "Le piège : si la peine n'est pas homologuée, le tribunal est saisi normalement, et personne ne peut faire état des *aveux* faits pendant la procédure."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]
+  }
+ ]
+}

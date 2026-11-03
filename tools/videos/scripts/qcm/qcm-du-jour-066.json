@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-066",
+ "titre": "Le QCM du jour n° 66",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 66",
+ "source": {
+  "matiere": "droit-administratif",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit administratif",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit administratif*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit administratif*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "D'après l'arrêt Benjamin (1933), une mesure de police restreignant la liberté de réunion est légale :",
+   "options": [
+    "Dès qu'un trouble est possible",
+    "Seulement si elle est nécessaire, la menace ne pouvant être prévenue par des mesures moins contraignantes",
+    "Si elle est demandée par une association",
+    "Toujours, le maire étant seul juge de l'ordre public"
+   ],
+   "pause": 5,
+   "dit": [
+    "D'après l'arrêt Benjamin, 1933,, une mesure de police restreignant la liberté de réunion est légale :",
+    "A : Dès qu'un trouble est possible.",
+    "B : Seulement si elle est nécessaire, la menace ne pouvant être prévenue par des mesures moins contraignantes.",
+    "C : Si elle est demandée par une association.",
+    "D : Toujours, le maire étant seul juge de l'ordre public.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "D'après l'arrêt Benjamin (1933), une mesure de police restreignant la liberté de réunion est légale :",
+    "A : Dès qu'un trouble est possible.",
+    "B : Seulement si elle est nécessaire, la menace ne pouvant être prévenue par des mesures moins contraignantes.",
+    "C : Si elle est demandée par une association.",
+    "D : Toujours, le maire étant seul juge de l'ordre public.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Seulement si elle est nécessaire, la menace ne pouvant être prévenue par des mesures moins contraignantes",
+   "explication": "Le juge exerce un contrôle de proportionnalité des mesures de police : l'interdiction n'est légale que si les troubles graves ne peuvent être évités autrement.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le juge exerce un contrôle de proportionnalité des mesures de police : l'interdiction n'est légale que si les troubles graves ne peuvent être évités autrement."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le juge exerce un contrôle de proportionnalité des mesures de police : l'interdiction n'est légale que si les troubles graves ne peuvent être évités autrement."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

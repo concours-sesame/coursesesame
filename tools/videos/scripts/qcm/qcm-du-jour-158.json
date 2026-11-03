@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-158",
+ "titre": "Le QCM du jour n° 158",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 158",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 16
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans la vente commerciale OHADA, à quel moment la propriété des marchandises passe-t-elle à l'acheteur (AUDCG, article 275) ?",
+   "options": [
+    "À la conclusion du contrat",
+    "Au paiement complet du prix, dans tous les cas",
+    "À la prise de livraison, sauf clause de réserve de propriété",
+    "À la remise de la facture"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans la vente commerciale Ohada, à quel moment la propriété des marchandises passe-t-elle à l'acheteur, Acte uniforme sur le droit commercial général, article 275 ?",
+    "A : À la conclusion du contrat.",
+    "B : Au paiement complet du prix, dans tous les cas.",
+    "C : À la prise de livraison, sauf clause de réserve de propriété.",
+    "D : À la remise de la facture.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans la vente commerciale OHADA, à quel moment la propriété des marchandises passe-t-elle à l'acheteur (AUDCG, article 275) ?",
+    "A : À la conclusion du contrat.",
+    "B : Au paiement complet du prix, dans tous les cas.",
+    "C : À la prise de livraison, sauf clause de réserve de propriété.",
+    "D : À la remise de la facture.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "À la prise de livraison, sauf clause de réserve de propriété",
+   "explication": "« La prise de livraison opère transfert à l'acheteur de la propriété des marchandises vendues » (article 275), sauf clause de réserve de propriété (article 276). Le transfert de propriété entraîne celui des risques (article 277).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "« La prise de livraison opère transfert à l'acheteur de la propriété des marchandises vendues », article 275,, sauf clause de réserve de propriété, article 276. Le transfert de propriété entraîne celui des risques, article 277."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "« La prise de livraison opère transfert à l'acheteur de la propriété des marchandises vendues » (article 275), sauf clause de réserve de propriété (article 276). Le transfert de propriété entraîne celui des risques (article 277)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

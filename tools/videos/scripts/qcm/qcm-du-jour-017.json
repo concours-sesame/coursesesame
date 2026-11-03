@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-017",
+ "titre": "Le QCM du jour n° 17",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 17",
+ "source": {
+  "matiere": "droit-penal-special",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal spécial",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal spécial*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal spécial*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans l'abus de confiance, une fois la remise de la chose prouvée, que présume l'article 467 du Code pénal ?",
+   "options": [
+    "Que la victime a consenti au détournement",
+    "Que la chose a été perdue par cas fortuit",
+    "Rien : la victime doit tout prouver",
+    "Que celui qui l'a reçue l'a détournée s'il ne peut la rendre, la représenter ou justifier de l'usage prévu"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans l'abus de confiance, une fois la remise de la chose prouvée, que présume l'article 467 du Code pénal ?",
+    "A : Que la victime a consenti au détournement.",
+    "B : Que la chose a été perdue par cas fortuit.",
+    "C : Rien : la victime doit tout prouver.",
+    "D : Que celui qui l'a reçue l'a détournée s'il ne peut la rendre, la représenter ou justifier de l'usage prévu.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans l'abus de confiance, une fois la remise de la chose prouvée, que présume l'article 467 du Code pénal ?",
+    "A : Que la victime a consenti au détournement.",
+    "B : Que la chose a été perdue par cas fortuit.",
+    "C : Rien : la victime doit tout prouver.",
+    "D : Que celui qui l'a reçue l'a détournée s'il ne peut la rendre, la représenter ou justifier de l'usage prévu.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Que celui qui l'a reçue l'a détournée s'il ne peut la rendre, la représenter ou justifier de l'usage prévu",
+   "explication": "« Dès lors que la preuve de la remise de la chose est rapportée, celui qui l'a reçue est présumé l'avoir détournée, dissipée ou détruite s'il ne peut la rendre, la représenter ou justifier qu'il en a fait l'usage ou l'emploi prévu » (article 467). C'est à lui de se justifier.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "« Dès lors que la preuve de la remise de la chose est rapportée, celui qui l'a reçue est présumé l'avoir détournée, dissipée ou détruite s'il ne peut la rendre, la représenter ou justifier qu'il en a fait l'usage ou l'emploi prévu », article 467. C'est à lui de se justifier."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "« Dès lors que la preuve de la remise de la chose est rapportée, celui qui l'a reçue est présumé l'avoir détournée, dissipée ou détruite s'il ne peut la rendre, la représenter ou justifier qu'il en a fait l'usage ou l'emploi prévu » (article 467). C'est à lui de se justifier."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

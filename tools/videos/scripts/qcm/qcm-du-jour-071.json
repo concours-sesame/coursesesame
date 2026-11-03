@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-071",
+ "titre": "Le QCM du jour n° 71",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 71",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quels éléments le fonds de commerce comprend-il nécessairement (article 136 AUDCG) ?",
+   "options": [
+    "Le droit au bail et le matériel",
+    "La clientèle et l'enseigne, ou la clientèle et le nom commercial",
+    "Les marchandises en stock et la clientèle",
+    "Les brevets et les marques"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quels éléments le fonds de commerce comprend-il nécessairement, article 136 Acte uniforme sur le droit commercial général ?",
+    "A : Le droit au bail et le matériel.",
+    "B : La clientèle et l'enseigne, ou la clientèle et le nom commercial.",
+    "C : Les marchandises en stock et la clientèle.",
+    "D : Les brevets et les marques.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quels éléments le fonds de commerce comprend-il nécessairement (article 136 AUDCG) ?",
+    "A : Le droit au bail et le matériel.",
+    "B : La clientèle et l'enseigne, ou la clientèle et le nom commercial.",
+    "C : Les marchandises en stock et la clientèle.",
+    "D : Les brevets et les marques.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "La clientèle et l'enseigne, ou la clientèle et le nom commercial",
+   "explication": "Le fonds de commerce comprend nécessairement la clientèle et l'enseigne, ou la clientèle et le nom commercial, sans préjudice de leur cumul (article 136). Les autres éléments, comme le droit au bail ou le matériel, sont facultatifs (article 137).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le fonds de commerce comprend nécessairement la clientèle et l'enseigne, ou la clientèle et le nom commercial, sans préjudice de leur cumul, article 136. Les autres éléments, comme le droit au bail ou le matériel, sont facultatifs, article 137."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le fonds de commerce comprend nécessairement la clientèle et l'enseigne, ou la clientèle et le nom commercial, sans préjudice de leur cumul (article 136). Les autres éléments, comme le droit au bail ou le matériel, sont facultatifs (article 137)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

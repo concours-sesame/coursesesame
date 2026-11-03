@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-018",
+ "titre": "Le QCM du jour n° 18",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 18",
+ "source": {
+  "matiere": "droit-administratif",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit administratif",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit administratif*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit administratif*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quel arrêt est considéré comme l'équivalent ivoirien de l'arrêt Blanco ?",
+   "options": [
+    "Diby Yao Georges",
+    "Société des Centaures routiers",
+    "Mlle Audran",
+    "SATMACI c/ Kripa Amoin"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quel arrêt est considéré comme l'équivalent ivoirien de l'arrêt Blanco ?",
+    "A : Diby Yao Georges.",
+    "B : Société des Centaures routiers.",
+    "C : Mlle Audran.",
+    "D : Satmaci c/ Kripa Amoin.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quel arrêt est considéré comme l'équivalent ivoirien de l'arrêt Blanco ?",
+    "A : Diby Yao Georges.",
+    "B : Société des Centaures routiers.",
+    "C : Mlle Audran.",
+    "D : SATMACI c/ Kripa Amoin.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Société des Centaures routiers",
+   "explication": "Par l'arrêt Société des Centaures routiers (Chambre administrative de la Cour suprême, 14 janvier 1970), le juge applique le droit administratif au bac exploité par l'État : l'unité de juridiction n'emporte pas unité du droit applicable.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Par l'arrêt Société des Centaures routiers, Chambre administrative de la Cour suprême, 14 janvier 1970,, le juge applique le droit administratif au bac exploité par l'État : l'unité de juridiction n'emporte pas unité du droit applicable."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Par l'arrêt Société des Centaures routiers (Chambre administrative de la Cour suprême, 14 janvier 1970), le juge applique le droit administratif au bac exploité par l'État : l'unité de juridiction n'emporte pas unité du droit applicable."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

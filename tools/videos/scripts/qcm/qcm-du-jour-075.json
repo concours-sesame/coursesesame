@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-075",
+ "titre": "Le QCM du jour n° 75",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 75",
+ "source": {
+  "matiere": "droit-penal",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal et procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal et procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal et procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle est la durée de la garde à vue d'un majeur ?",
+   "options": [
+    "Vingt-quatre heures, sans prolongation",
+    "Quarante-huit heures, prolongeable de quarante-huit heures par le procureur",
+    "Soixante-douze heures",
+    "Huit jours"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle est la durée de la garde à vue d'un majeur ?",
+    "A : Vingt-quatre heures, sans prolongation.",
+    "B : Quarante-huit heures, prolongeable de quarante-huit heures par le procureur.",
+    "C : Soixante-douze heures.",
+    "D : Huit jours.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle est la durée de la garde à vue d'un majeur ?",
+    "A : Vingt-quatre heures, sans prolongation.",
+    "B : Quarante-huit heures, prolongeable de quarante-huit heures par le procureur.",
+    "C : Soixante-douze heures.",
+    "D : Huit jours.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Quarante-huit heures, prolongeable de quarante-huit heures par le procureur",
+   "explication": "L'officier ne peut retenir la personne plus de quarante-huit heures ; le procureur peut autoriser une prolongation de quarante-huit heures (article 72 du Code de procédure pénale).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'officier ne peut retenir la personne plus de quarante-huit heures ; le procureur peut autoriser une prolongation de quarante-huit heures, article 72 du Code de procédure pénale."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'officier ne peut retenir la personne plus de quarante-huit heures ; le procureur peut autoriser une prolongation de quarante-huit heures (article 72 du Code de procédure pénale)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

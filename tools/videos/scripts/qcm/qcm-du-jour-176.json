@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-176",
+ "titre": "Le QCM du jour n° 176",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 176",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 22
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Après une saisie-vente, de quel délai le débiteur dispose-t-il pour vendre lui-même ses biens à l'amiable (AUPSRVE, article 116) ?",
+   "options": [
+    "Huit jours",
+    "Un mois à compter de la notification du procès-verbal de saisie",
+    "Trois mois",
+    "Aucun : la vente forcée est immédiate"
+   ],
+   "pause": 5,
+   "dit": [
+    "Après une saisie-vente, de quel délai le débiteur dispose-t-il pour vendre lui-même ses biens à l'amiable, Acte uniforme sur les procédures simplifiées de recouvrement, article 116 ?",
+    "A : Huit jours.",
+    "B : Un mois à compter de la notification du procès-verbal de saisie.",
+    "C : Trois mois.",
+    "D : Aucun : la vente forcée est immédiate.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Après une saisie-vente, de quel délai le débiteur dispose-t-il pour vendre lui-même ses biens à l'amiable (AUPSRVE, article 116) ?",
+    "A : Huit jours.",
+    "B : Un mois à compter de la notification du procès-verbal de saisie.",
+    "C : Trois mois.",
+    "D : Aucun : la vente forcée est immédiate.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Un mois à compter de la notification du procès-verbal de saisie",
+   "explication": "« Le débiteur dispose d'un délai d'un mois à compter de la notification du procès-verbal de saisie pour procéder lui-même à la vente des biens saisis » (article 116). La saisie-vente suppose un commandement signifié au moins huit jours avant.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "« Le débiteur dispose d'un délai d'un mois à compter de la notification du procès-verbal de saisie pour procéder lui-même à la vente des biens saisis », article 116. La saisie-vente suppose un commandement signifié au moins huit jours avant."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "« Le débiteur dispose d'un délai d'un mois à compter de la notification du procès-verbal de saisie pour procéder lui-même à la vente des biens saisis » (article 116). La saisie-vente suppose un commandement signifié au moins huit jours avant."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

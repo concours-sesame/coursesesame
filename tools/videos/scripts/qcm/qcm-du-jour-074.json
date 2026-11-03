@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-074",
+ "titre": "Le QCM du jour n° 74",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 74",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Les parents peuvent-ils déléguer le droit de consentir à l'adoption de leur enfant mineur (loi relative à la minorité, article 18) ?",
+   "options": [
+    "Oui, à toute personne qui recueille l'enfant",
+    "Oui, au juge des tutelles",
+    "Non, ce droit ne peut être délégué",
+    "Oui, par acte notarié"
+   ],
+   "pause": 5,
+   "dit": [
+    "Les parents peuvent-ils déléguer le droit de consentir à l'adoption de leur enfant mineur, loi relative à la minorité, article 18 ?",
+    "A : Oui, à toute personne qui recueille l'enfant.",
+    "B : Oui, au juge des tutelles.",
+    "C : Non, ce droit ne peut être délégué.",
+    "D : Oui, par acte notarié.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Les parents peuvent-ils déléguer le droit de consentir à l'adoption de leur enfant mineur (loi relative à la minorité, article 18) ?",
+    "A : Oui, à toute personne qui recueille l'enfant.",
+    "B : Oui, au juge des tutelles.",
+    "C : Non, ce droit ne peut être délégué.",
+    "D : Oui, par acte notarié.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Non, ce droit ne peut être délégué",
+   "explication": "« Le droit de consentir à l'adoption du mineur ne peut être délégué » (article 18). La délégation volontaire ou judiciaire de l'autorité parentale ne peut donc pas porter sur ce droit.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "« Le droit de consentir à l'adoption du mineur ne peut être délégué », article 18. La délégation volontaire ou judiciaire de l'autorité parentale ne peut donc pas porter sur ce droit."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "« Le droit de consentir à l'adoption du mineur ne peut être délégué » (article 18). La délégation volontaire ou judiciaire de l'autorité parentale ne peut donc pas porter sur ce droit."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

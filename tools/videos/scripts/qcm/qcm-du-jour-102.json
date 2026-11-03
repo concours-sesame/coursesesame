@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-102",
+ "titre": "Le QCM du jour n° 102",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 102",
+ "source": {
+  "matiere": "droit-administratif",
+  "question": 8
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit administratif",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit administratif*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit administratif*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "L'arrêt Regnault-Desroziers (1919) illustre :",
+   "options": [
+    "La responsabilité pour faute lourde",
+    "La responsabilité sans faute pour choses dangereuses",
+    "L'irresponsabilité de l'État en temps de guerre",
+    "La théorie de l'imprévision"
+   ],
+   "pause": 5,
+   "dit": [
+    "L'arrêt Regnault-Desroziers, 1919, illustre :",
+    "A : La responsabilité pour faute lourde.",
+    "B : La responsabilité sans faute pour choses dangereuses.",
+    "C : L'irresponsabilité de l'État en temps de guerre.",
+    "D : La théorie de l'imprévision.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "L'arrêt Regnault-Desroziers (1919) illustre :",
+    "A : La responsabilité pour faute lourde.",
+    "B : La responsabilité sans faute pour choses dangereuses.",
+    "C : L'irresponsabilité de l'État en temps de guerre.",
+    "D : La théorie de l'imprévision.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "La responsabilité sans faute pour choses dangereuses",
+   "explication": "L'accumulation d'explosifs près d'une agglomération crée des risques excédant les limites normales du voisinage : la responsabilité de l'État est engagée sans faute.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'accumulation d'explosifs près d'une agglomération crée des risques excédant les limites normales du voisinage : la responsabilité de l'État est engagée sans faute."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'accumulation d'explosifs près d'une agglomération crée des risques excédant les limites normales du voisinage : la responsabilité de l'État est engagée sans faute."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

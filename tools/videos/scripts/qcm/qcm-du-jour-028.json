@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-028",
+ "titre": "Le QCM du jour n° 28",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 28",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Celui qui, sciemment et par des promesses, incite un tiers à commettre une infraction est, selon l'article 29 du Code pénal :",
+   "options": [
+    "Complice, seulement si l'infraction est commise",
+    "Non punissable si l'infraction n'est pas commise",
+    "Auteur de l'infraction, même si celle-ci n'a été ni tentée ni commise",
+    "Receleur"
+   ],
+   "pause": 5,
+   "dit": [
+    "Celui qui, sciemment et par des promesses, incite un tiers à commettre une infraction est, selon l'article 29 du Code pénal :",
+    "A : Complice, seulement si l'infraction est commise.",
+    "B : Non punissable si l'infraction n'est pas commise.",
+    "C : Auteur de l'infraction, même si celle-ci n'a été ni tentée ni commise.",
+    "D : Receleur.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Celui qui, sciemment et par des promesses, incite un tiers à commettre une infraction est, selon l'article 29 du Code pénal :",
+    "A : Complice, seulement si l'infraction est commise.",
+    "B : Non punissable si l'infraction n'est pas commise.",
+    "C : Auteur de l'infraction, même si celle-ci n'a été ni tentée ni commise.",
+    "D : Receleur.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Auteur de l'infraction, même si celle-ci n'a été ni tentée ni commise",
+   "explication": "En droit ivoirien, l'instigateur est auteur (article 29, 3°) : il incite « sciemment et sans équivoque » un tiers par instructions, dons, promesses, menaces, etc., « même si l'infraction n'a été ni tentée ni commise ».",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "En droit ivoirien, l'instigateur est auteur, article 29, 3°: il incite « sciemment et sans équivoque » un tiers par instructions, dons, promesses, menaces, etc., « même si l'infraction n'a été ni tentée ni commise »."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "En droit ivoirien, l'instigateur est auteur (article 29, 3°) : il incite « sciemment et sans équivoque » un tiers par instructions, dons, promesses, menaces, etc., « même si l'infraction n'a été ni tentée ni commise »."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

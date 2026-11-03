@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-034",
+ "titre": "Le QCM du jour n° 34",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 34",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Que garantit l'article 5 du Code de procédure pénale à toute personne condamnée ?",
+   "options": [
+    "Une remise de peine automatique",
+    "Le droit de faire examiner sa cause par une juridiction supérieure",
+    "Le droit d'être jugée par un jury",
+    "L'effacement de la condamnation après cinq ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "Que garantit l'article 5 du Code de procédure pénale à toute personne condamnée ?",
+    "A : Une remise de peine automatique.",
+    "B : Le droit de faire examiner sa cause par une juridiction supérieure.",
+    "C : Le droit d'être jugée par un jury.",
+    "D : L'effacement de la condamnation après cinq ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Que garantit l'article 5 du Code de procédure pénale à toute personne condamnée ?",
+    "A : Une remise de peine automatique.",
+    "B : Le droit de faire examiner sa cause par une juridiction supérieure.",
+    "C : Le droit d'être jugée par un jury.",
+    "D : L'effacement de la condamnation après cinq ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Le droit de faire examiner sa cause par une juridiction supérieure",
+   "explication": "L'article 5 impose qu'il soit statué définitivement dans un délai raisonnable et reconnaît à toute personne condamnée le droit de faire examiner sa cause par une juridiction supérieure.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'article 5 impose qu'il soit statué définitivement dans un délai raisonnable et reconnaît à toute personne condamnée le droit de faire examiner sa cause par une juridiction supérieure."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'article 5 impose qu'il soit statué définitivement dans un délai raisonnable et reconnaît à toute personne condamnée le droit de faire examiner sa cause par une juridiction supérieure."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

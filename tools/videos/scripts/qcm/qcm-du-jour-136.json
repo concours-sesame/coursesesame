@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-136",
+ "titre": "Le QCM du jour n° 136",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 136",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 12
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Comment le Tribunal des conflits est-il composé (loi n° 2020-884 du 21 octobre 2020, article 1er) ?",
+   "options": [
+    "Uniquement de conseillers d'État",
+    "De membres du Conseil constitutionnel",
+    "De membres de la Cour de cassation et du Conseil d'État, en nombre égal",
+    "De parlementaires et de magistrats"
+   ],
+   "pause": 5,
+   "dit": [
+    "Comment le Tribunal des conflits est-il composé, loi du 21 octobre 2020, article premier ?",
+    "A : Uniquement de conseillers d'État.",
+    "B : De membres du Conseil constitutionnel.",
+    "C : De membres de la Cour de cassation et du Conseil d'État, en nombre égal.",
+    "D : De parlementaires et de magistrats.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Comment le Tribunal des conflits est-il composé (loi n° 2020-884 du 21 octobre 2020, article 1er) ?",
+    "A : Uniquement de conseillers d'État.",
+    "B : De membres du Conseil constitutionnel.",
+    "C : De membres de la Cour de cassation et du Conseil d'État, en nombre égal.",
+    "D : De parlementaires et de magistrats.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "De membres de la Cour de cassation et du Conseil d'État, en nombre égal",
+   "explication": "Le Tribunal des conflits est « composé, en nombre égal, de membres de la Cour de Cassation et du Conseil d'Etat » (article 1er). Il règle les conflits de compétence entre les deux ordres de juridiction (article 6).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Le Tribunal des conflits est « composé, en nombre égal, de membres de la Cour de Cassation et du Conseil d'Etat », article premier. Il règle les conflits de compétence entre les deux ordres de juridiction, article 6."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Le Tribunal des conflits est « composé, en nombre égal, de membres de la Cour de Cassation et du Conseil d'Etat » (article 1er). Il règle les conflits de compétence entre les deux ordres de juridiction (article 6)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

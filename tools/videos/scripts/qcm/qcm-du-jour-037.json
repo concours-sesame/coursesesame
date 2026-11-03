@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-037",
+ "titre": "Le QCM du jour n° 37",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 37",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Combien de temps avant la célébration l'officier de l'état civil procède-t-il à la publication du mariage par affichage ?",
+   "options": [
+    "Dix jours francs",
+    "Un mois",
+    "Trois mois",
+    "Quarante-huit heures"
+   ],
+   "pause": 5,
+   "dit": [
+    "Combien de temps avant la célébration l'officier de l'état civil procède-t-il à la publication du mariage par affichage ?",
+    "A : Dix jours francs.",
+    "B : Un mois.",
+    "C : Trois mois.",
+    "D : Quarante-huit heures.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Combien de temps avant la célébration l'officier de l'état civil procède-t-il à la publication du mariage par affichage ?",
+    "A : Dix jours francs.",
+    "B : Un mois.",
+    "C : Trois mois.",
+    "D : Quarante-huit heures.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Un mois",
+   "explication": "Le dossier matrimonial est déposé dix jours francs avant la célébration, et la publication par affichage intervient un mois avant celle-ci (articles 15 à 19).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le dossier matrimonial est déposé dix jours francs avant la célébration, et la publication par affichage intervient un mois avant celle-ci, articles 15 à 19."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le dossier matrimonial est déposé dix jours francs avant la célébration, et la publication par affichage intervient un mois avant celle-ci (articles 15 à 19)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

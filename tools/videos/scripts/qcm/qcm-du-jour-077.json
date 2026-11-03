@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-077",
+ "titre": "Le QCM du jour n° 77",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 77",
+ "source": {
+  "matiere": "droit-penal-special",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal spécial",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal spécial*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal spécial*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le vol aggravé de l'article 459 est puni de dix à vingt ans d'emprisonnement. Est-ce un crime ?",
+   "options": [
+    "Oui, car la peine dépasse dix ans",
+    "Oui, s'il est commis la nuit",
+    "Cela dépend de la peine prononcée",
+    "Non : l'article 461 le qualifie de délit et exclut le sursis"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le vol aggravé de l'article 459 est puni de dix à vingt ans d'emprisonnement. Est-ce un crime ?",
+    "A : Oui, car la peine dépasse dix ans.",
+    "B : Oui, s'il est commis la nuit.",
+    "C : Cela dépend de la peine prononcée.",
+    "D : Non : l'article 461 le qualifie de délit et exclut le sursis.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le vol aggravé de l'article 459 est puni de dix à vingt ans d'emprisonnement. Est-ce un crime ?",
+    "A : Oui, car la peine dépasse dix ans.",
+    "B : Oui, s'il est commis la nuit.",
+    "C : Cela dépend de la peine prononcée.",
+    "D : Non : l'article 461 le qualifie de délit et exclut le sursis.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Non : l'article 461 le qualifie de délit et exclut le sursis",
+   "explication": "« Les infractions prévues par les articles 459 à 460 sont des délits. Les dispositions de l'article 130 relatives au sursis ne leur sont pas applicables » (article 461). L'article 3 le permet : est délit l'infraction « qualifiée comme tel par la loi ».",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "« Les infractions prévues par les articles 459 à 460 sont des délits. Les dispositions de l'article 130 relatives au sursis ne leur sont pas applicables », article 461. L'article 3 le permet : est délit l'infraction « qualifiée comme tel par la loi »."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "« Les infractions prévues par les articles 459 à 460 sont des délits. Les dispositions de l'article 130 relatives au sursis ne leur sont pas applicables » (article 461). L'article 3 le permet : est délit l'infraction « qualifiée comme tel par la loi »."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

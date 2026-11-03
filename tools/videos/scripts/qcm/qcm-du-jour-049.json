@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-049",
+ "titre": "Le QCM du jour n° 49",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 49",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La nullité relative du mariage pour vice du consentement est couverte par :",
+   "options": [
+    "La naissance d'un enfant commun",
+    "Un an de mariage",
+    "Six mois de cohabitation depuis la découverte du vice",
+    "La seule volonté du procureur"
+   ],
+   "pause": 5,
+   "dit": [
+    "La nullité relative du mariage pour vice du consentement est couverte par :",
+    "A : La naissance d'un enfant commun.",
+    "B : Un an de mariage.",
+    "C : Six mois de cohabitation depuis la découverte du vice.",
+    "D : La seule volonté du procureur.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La nullité relative du mariage pour vice du consentement est couverte par :",
+    "A : La naissance d'un enfant commun.",
+    "B : Un an de mariage.",
+    "C : Six mois de cohabitation depuis la découverte du vice.",
+    "D : La seule volonté du procureur.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Six mois de cohabitation depuis la découverte du vice",
+   "explication": "Seul le vice du consentement de l'article 4 ouvre une nullité relative, réservée à l'époux dont le consentement a été vicié et couverte par six mois de cohabitation depuis la découverte du vice (articles 30 à 32).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Seul le vice du consentement de l'article 4 ouvre une nullité relative, réservée à l'époux dont le consentement a été vicié et couverte par six mois de cohabitation depuis la découverte du vice, articles 30 à 32."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Seul le vice du consentement de l'article 4 ouvre une nullité relative, réservée à l'époux dont le consentement a été vicié et couverte par six mois de cohabitation depuis la découverte du vice (articles 30 à 32)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

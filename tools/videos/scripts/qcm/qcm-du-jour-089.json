@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-089",
+ "titre": "Le QCM du jour n° 89",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 89",
+ "source": {
+  "matiere": "droit-penal-special",
+  "question": 7
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal spécial",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal spécial*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal spécial*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Pour condamner un receleur (article 477 du Code pénal), faut-il que l'auteur du vol d'origine ait été identifié et condamné ?",
+   "options": [
+    "Oui, l'auteur doit avoir été condamné définitivement",
+    "Non : il suffit que le crime ou le délit d'origine soit établi",
+    "Oui, il doit au moins être identifié",
+    "Non, et l'infraction d'origine peut même être une contravention"
+   ],
+   "pause": 5,
+   "dit": [
+    "Pour condamner un receleur, article 477 du Code pénal,, faut-il que l'auteur du vol d'origine ait été identifié et condamné ?",
+    "A : Oui, l'auteur doit avoir été condamné définitivement.",
+    "B : Non : il suffit que le crime ou le délit d'origine soit établi.",
+    "C : Oui, il doit au moins être identifié.",
+    "D : Non, et l'infraction d'origine peut même être une contravention.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Pour condamner un receleur (article 477 du Code pénal), faut-il que l'auteur du vol d'origine ait été identifié et condamné ?",
+    "A : Oui, l'auteur doit avoir été condamné définitivement.",
+    "B : Non : il suffit que le crime ou le délit d'origine soit établi.",
+    "C : Oui, il doit au moins être identifié.",
+    "D : Non, et l'infraction d'origine peut même être une contravention.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Non : il suffit que le crime ou le délit d'origine soit établi",
+   "explication": "Le recel suppose que la chose provienne d'un crime ou d'un délit, une contravention ne suffisant pas, mais il n'exige ni l'identification ni la condamnation de son auteur. C'est une infraction autonome.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le recel suppose que la chose provienne d'un crime ou d'un délit, une contravention ne suffisant pas, mais il n'exige ni l'identification ni la condamnation de son auteur. C'est une infraction autonome."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le recel suppose que la chose provienne d'un crime ou d'un délit, une contravention ne suffisant pas, mais il n'exige ni l'identification ni la condamnation de son auteur. C'est une infraction autonome."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

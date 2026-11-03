@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-091",
+ "titre": "Le QCM du jour n° 91",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 91",
+ "source": {
+  "matiere": "droit-constitutionnel",
+  "question": 7
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit constitutionnel",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit constitutionnel*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit constitutionnel*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Qui préside la Haute Cour de justice depuis la révision constitutionnelle de 2020 (article 160) ?",
+   "options": [
+    "Le président de la Cour de cassation",
+    "Le président du Conseil constitutionnel",
+    "Le président de l'Assemblée nationale",
+    "Le ministre de la Justice"
+   ],
+   "pause": 5,
+   "dit": [
+    "Qui préside la Haute Cour de justice depuis la révision constitutionnelle de 2020, article 160 ?",
+    "A : Le président de la Cour de cassation.",
+    "B : Le président du Conseil constitutionnel.",
+    "C : Le président de l'Assemblée nationale.",
+    "D : Le ministre de la Justice.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Qui préside la Haute Cour de justice depuis la révision constitutionnelle de 2020 (article 160) ?",
+    "A : Le président de la Cour de cassation.",
+    "B : Le président du Conseil constitutionnel.",
+    "C : Le président de l'Assemblée nationale.",
+    "D : Le ministre de la Justice.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Le président de la Cour de cassation",
+   "explication": "La Haute Cour de justice est composée de membres élus en nombre égal par l'Assemblée nationale et par le Sénat, et présidée par le président de la Cour de cassation (article 160, rédaction de 2020). Avant 2020, elle l'était par le président de la Cour suprême.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "La Haute Cour de justice est composée de membres élus en nombre égal par l'Assemblée nationale et par le Sénat, et présidée par le président de la Cour de cassation, article 160, rédaction de 2020. Avant 2020, elle l'était par le président de la Cour suprême."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "La Haute Cour de justice est composée de membres élus en nombre égal par l'Assemblée nationale et par le Sénat, et présidée par le président de la Cour de cassation (article 160, rédaction de 2020). Avant 2020, elle l'était par le président de la Cour suprême."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

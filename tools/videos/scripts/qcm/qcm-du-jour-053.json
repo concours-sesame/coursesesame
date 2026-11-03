@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-053",
+ "titre": "Le QCM du jour n° 53",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 53",
+ "source": {
+  "matiere": "droit-penal-special",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal spécial",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal spécial*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal spécial*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Des violences volontaires ont entraîné une incapacité totale de travail de quinze jours. Quelle peine prévoit l'article 381 nouveau du Code pénal ?",
+   "options": [
+    "Un à cinq ans d'emprisonnement et une amende de 100.000 à 1.000.000 de francs",
+    "Un mois à un an d'emprisonnement et une amende de 50.000 à 500.000 francs",
+    "Cinq à dix ans d'emprisonnement",
+    "Une simple amende"
+   ],
+   "pause": 5,
+   "dit": [
+    "Des violences volontaires ont entraîné une incapacité totale de travail de quinze jours. Quelle peine prévoit l'article 381 nouveau du Code pénal ?",
+    "A : Un à cinq ans d'emprisonnement et une amende de 100000 à 1000000 de francs.",
+    "B : Un mois à un an d'emprisonnement et une amende de 50000 à 500000 francs.",
+    "C : Cinq à dix ans d'emprisonnement.",
+    "D : Une simple amende.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Des violences volontaires ont entraîné une incapacité totale de travail de quinze jours. Quelle peine prévoit l'article 381 nouveau du Code pénal ?",
+    "A : Un à cinq ans d'emprisonnement et une amende de 100.000 à 1.000.000 de francs.",
+    "B : Un mois à un an d'emprisonnement et une amende de 50.000 à 500.000 francs.",
+    "C : Cinq à dix ans d'emprisonnement.",
+    "D : Une simple amende.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Un à cinq ans d'emprisonnement et une amende de 100.000 à 1.000.000 de francs",
+   "explication": "Au-delà de dix jours d'incapacité, c'est le 3° : un à cinq ans et 100.000 à 1.000.000 de francs. Pour dix jours au plus, ou aucune incapacité, c'est le 4° : un mois à un an et 50.000 à 500.000 francs.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "Au-delà de dix jours d'incapacité, c'est le 3° : un à cinq ans et 100000 à 1000000 de francs. Pour dix jours au plus, ou aucune incapacité, c'est le 4° : un mois à un an et 50000 à 500000 francs."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "Au-delà de dix jours d'incapacité, c'est le 3° : un à cinq ans et 100.000 à 1.000.000 de francs. Pour dix jours au plus, ou aucune incapacité, c'est le 4° : un mois à un an et 50.000 à 500.000 francs."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

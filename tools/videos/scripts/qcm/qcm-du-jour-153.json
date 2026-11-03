@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-153",
+ "titre": "Le QCM du jour n° 153",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 153",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 15
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "En principe, la détention préventive ne peut être ordonnée que si l'inculpé encourt une peine privative de liberté d'au moins :",
+   "options": [
+    "Deux ans",
+    "Six mois",
+    "Cinq ans",
+    "Dix ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "En principe, la détention préventive ne peut être ordonnée que si l'inculpé encourt une peine privative de liberté d'au moins :",
+    "A : Deux ans.",
+    "B : Six mois.",
+    "C : Cinq ans.",
+    "D : Dix ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "En principe, la détention préventive ne peut être ordonnée que si l'inculpé encourt une peine privative de liberté d'au moins :",
+    "A : Deux ans.",
+    "B : Six mois.",
+    "C : Cinq ans.",
+    "D : Dix ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Deux ans",
+   "explication": "« La détention préventive ne peut être ordonnée que si l'inculpé encourt une peine privative de liberté d'au moins deux ans » (article 162), sauf récidive ou condamnation antérieure à une peine privative de liberté sans sursis.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« La détention préventive ne peut être ordonnée que si l'inculpé encourt une peine privative de liberté d'au moins deux ans », article 162,, sauf récidive ou condamnation antérieure à une peine privative de liberté sans sursis."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« La détention préventive ne peut être ordonnée que si l'inculpé encourt une peine privative de liberté d'au moins deux ans » (article 162), sauf récidive ou condamnation antérieure à une peine privative de liberté sans sursis."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-070",
+ "titre": "Le QCM du jour n° 70",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 70",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Par quel délai l'action publique se prescrit-elle en matière de crime (article 12, dans sa rédaction issue de la loi du 11 mars 2022) ?",
+   "options": [
+    "Trois années révolues",
+    "Cinq années révolues",
+    "Dix années révolues",
+    "Vingt années révolues"
+   ],
+   "pause": 5,
+   "dit": [
+    "Par quel délai l'action publique se prescrit-elle en matière de crime, article 12, dans sa rédaction issue de la loi du 11 mars 2022 ?",
+    "A : Trois années révolues.",
+    "B : Cinq années révolues.",
+    "C : Dix années révolues.",
+    "D : Vingt années révolues.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Par quel délai l'action publique se prescrit-elle en matière de crime (article 12, dans sa rédaction issue de la loi du 11 mars 2022) ?",
+    "A : Trois années révolues.",
+    "B : Cinq années révolues.",
+    "C : Dix années révolues.",
+    "D : Vingt années révolues.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Dix années révolues",
+   "explication": "En matière de crime, l'action publique se prescrit par dix années révolues ; si des actes d'instruction ou de poursuite ont été accomplis, le délai court à compter du dernier acte (article 12).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "En matière de crime, l'action publique se prescrit par dix années révolues ; si des actes d'instruction ou de poursuite ont été accomplis, le délai court à compter du dernier acte, article 12."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "En matière de crime, l'action publique se prescrit par dix années révolues ; si des actes d'instruction ou de poursuite ont été accomplis, le délai court à compter du dernier acte (article 12)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

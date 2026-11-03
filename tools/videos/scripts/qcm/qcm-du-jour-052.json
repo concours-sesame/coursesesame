@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-052",
+ "titre": "Le QCM du jour n° 52",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 52",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Laquelle de ces conditions n'est pas exigée pour l'état de nécessité (article 101 du Code pénal) ?",
+   "options": [
+    "Un danger grave et imminent",
+    "L'impossibilité d'écarter le danger autrement",
+    "Des moyens proportionnés aux circonstances",
+    "Une attaque injuste venant de la personne qui subit l'acte"
+   ],
+   "pause": 5,
+   "dit": [
+    "Laquelle de ces conditions n'est pas exigée pour l'état de nécessité, article 101 du Code pénal ?",
+    "A : Un danger grave et imminent.",
+    "B : L'impossibilité d'écarter le danger autrement.",
+    "C : Des moyens proportionnés aux circonstances.",
+    "D : Une attaque injuste venant de la personne qui subit l'acte.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Laquelle de ces conditions n'est pas exigée pour l'état de nécessité (article 101 du Code pénal) ?",
+    "A : Un danger grave et imminent.",
+    "B : L'impossibilité d'écarter le danger autrement.",
+    "C : Des moyens proportionnés aux circonstances.",
+    "D : Une attaque injuste venant de la personne qui subit l'acte.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Une attaque injuste venant de la personne qui subit l'acte",
+   "explication": "L'état de nécessité suppose un danger grave et imminent qui ne peut être écarté autrement, et des moyens proportionnés (article 101). L'attaque injuste est la condition de la légitime défense (article 97) : dans l'état de nécessité, l'acte frappe souvent un tiers qui n'a rien fait.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "L'état de nécessité suppose un danger grave et imminent qui ne peut être écarté autrement, et des moyens proportionnés, article 101. L'attaque injuste est la condition de la légitime défense, article 97: dans l'état de nécessité, l'acte frappe souvent un tiers qui n'a rien fait."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "L'état de nécessité suppose un danger grave et imminent qui ne peut être écarté autrement, et des moyens proportionnés (article 101). L'attaque injuste est la condition de la légitime défense (article 97) : dans l'état de nécessité, l'acte frappe souvent un tiers qui n'a rien fait."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

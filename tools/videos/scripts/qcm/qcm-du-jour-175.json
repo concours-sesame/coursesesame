@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-175",
+ "titre": "Le QCM du jour n° 175",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 175",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 22
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La partie civile peut-elle citer directement un mineur devant le tribunal correctionnel ?",
+   "options": [
+    "Non : la citation directe d'un mineur est interdite (article 804)",
+    "Oui, comme pour un majeur",
+    "Oui, avec l'accord de ses parents",
+    "Oui, s'il a plus de seize ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "La partie civile peut-elle citer directement un mineur devant le tribunal correctionnel ?",
+    "A : Non : la citation directe d'un mineur est interdite, article 804,.",
+    "B : Oui, comme pour un majeur.",
+    "C : Oui, avec l'accord de ses parents.",
+    "D : Oui, s'il a plus de seize ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La partie civile peut-elle citer directement un mineur devant le tribunal correctionnel ?",
+    "A : Non : la citation directe d'un mineur est interdite (article 804).",
+    "B : Oui, comme pour un majeur.",
+    "C : Oui, avec l'accord de ses parents.",
+    "D : Oui, s'il a plus de seize ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Non : la citation directe d'un mineur est interdite (article 804)",
+   "explication": "La citation directe permet en principe à la victime de mettre elle-même l'action publique en mouvement (articles 6 et 586), mais elle est exclue à l'égard d'un mineur (article 804).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "La citation directe permet en principe à la victime de mettre elle-même l'action publique en mouvement, articles 6 et 586,, mais elle est exclue à l'égard d'un mineur, article 804."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "La citation directe permet en principe à la victime de mettre elle-même l'action publique en mouvement (articles 6 et 586), mais elle est exclue à l'égard d'un mineur (article 804)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

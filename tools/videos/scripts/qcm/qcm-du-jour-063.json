@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-063",
+ "titre": "Le QCM du jour n° 63",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 63",
+ "source": {
+  "matiere": "droit-penal",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal et procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal et procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal et procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Qui peut décider d'un placement en garde à vue ?",
+   "options": [
+    "L'agent de police judiciaire",
+    "L'officier de police judiciaire",
+    "Le greffier",
+    "La victime"
+   ],
+   "pause": 5,
+   "dit": [
+    "Qui peut décider d'un placement en garde à vue ?",
+    "A : L'agent de police judiciaire.",
+    "B : L'officier de police judiciaire.",
+    "C : Le greffier.",
+    "D : La victime.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Qui peut décider d'un placement en garde à vue ?",
+    "A : L'agent de police judiciaire.",
+    "B : L'officier de police judiciaire.",
+    "C : Le greffier.",
+    "D : La victime.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "L'officier de police judiciaire",
+   "explication": "L'officier de police judiciaire peut placer en garde à vue une personne contre laquelle existent des indices graves et concordants ; l'agent de police judiciaire n'a pas ce pouvoir (articles 33 et 71 du Code de procédure pénale).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'officier de police judiciaire peut placer en garde à vue une personne contre laquelle existent des indices graves et concordants ; l'agent de police judiciaire n'a pas ce pouvoir, articles 33 et 71 du Code de procédure pénale."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'officier de police judiciaire peut placer en garde à vue une personne contre laquelle existent des indices graves et concordants ; l'agent de police judiciaire n'a pas ce pouvoir (articles 33 et 71 du Code de procédure pénale)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

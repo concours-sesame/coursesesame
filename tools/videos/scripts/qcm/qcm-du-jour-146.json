@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-146",
+ "titre": "Le QCM du jour n° 146",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 146",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 14
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle différence y a-t-il entre la curatelle et la tutelle d'un majeur (loi n° 2023-417 du 22 mai 2023) ?",
+   "options": [
+    "La curatelle concerne les mineurs, la tutelle les majeurs",
+    "Le majeur en curatelle est assisté pour les actes graves ; le majeur en tutelle est représenté de manière continue",
+    "Le majeur en tutelle conserve tous ses droits",
+    "Aucune : ce sont deux noms du même régime"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle différence y a-t-il entre la curatelle et la tutelle d'un majeur, loi du 22 mai 2023 ?",
+    "A : La curatelle concerne les mineurs, la tutelle les majeurs.",
+    "B : Le majeur en curatelle est assisté pour les actes graves ; le majeur en tutelle est représenté de manière continue.",
+    "C : Le majeur en tutelle conserve tous ses droits.",
+    "D : Aucune : ce sont deux noms du même régime.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle différence y a-t-il entre la curatelle et la tutelle d'un majeur (loi n° 2023-417 du 22 mai 2023) ?",
+    "A : La curatelle concerne les mineurs, la tutelle les majeurs.",
+    "B : Le majeur en curatelle est assisté pour les actes graves ; le majeur en tutelle est représenté de manière continue.",
+    "C : Le majeur en tutelle conserve tous ses droits.",
+    "D : Aucune : ce sont deux noms du même régime.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Le majeur en curatelle est assisté pour les actes graves ; le majeur en tutelle est représenté de manière continue",
+   "explication": "La curatelle vise le majeur qui, « sans être hors d'état d'agir lui-même », doit être assisté ou contrôlé (article 47). La tutelle vise celui qui doit être représenté « d'une manière continue » (article 23). Toute mesure n'est ordonnée qu'en cas de nécessité (article 12).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "La curatelle vise le majeur qui, « sans être hors d'état d'agir lui-même », doit être assisté ou contrôlé, article 47. La tutelle vise celui qui doit être représenté « d'une manière continue », article 23. Toute mesure n'est ordonnée qu'en cas de nécessité, article 12."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "La curatelle vise le majeur qui, « sans être hors d'état d'agir lui-même », doit être assisté ou contrôlé (article 47). La tutelle vise celui qui doit être représenté « d'une manière continue » (article 23). Toute mesure n'est ordonnée qu'en cas de nécessité (article 12)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

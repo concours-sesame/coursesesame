@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-084",
+ "titre": "Le QCM du jour n° 84",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 84",
+ "source": {
+  "matiere": "culture-generale",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Culture générale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *culture générale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *culture générale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Où siège la Commission de l'Union économique et monétaire ouest-africaine (UEMOA) ?",
+   "options": [
+    "À Dakar",
+    "À Ouagadougou",
+    "À Abidjan",
+    "À Lomé"
+   ],
+   "pause": 5,
+   "dit": [
+    "Où siège la Commission de l'Union économique et monétaire ouest-africaine, Uémoa ?",
+    "A : À Dakar.",
+    "B : À Ouagadougou.",
+    "C : À Abidjan.",
+    "D : À Lomé.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Où siège la Commission de l'Union économique et monétaire ouest-africaine (UEMOA) ?",
+    "A : À Dakar.",
+    "B : À Ouagadougou.",
+    "C : À Abidjan.",
+    "D : À Lomé.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "À Ouagadougou",
+   "explication": "La Commission de l'UEMOA siège à Ouagadougou (Burkina Faso), comme la Cour de justice et la Cour des comptes de l'Union. Le traité de l'UEMOA a été signé à Dakar le 10 janvier 1994, et la Banque centrale des États de l'Afrique de l'Ouest (BCEAO) a son siège à Dakar. Sources : Wikipédia, BCEAO.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "La Commission de l'Uémoa siège à Ouagadougou, Burkina Faso,, comme la Cour de justice et la Cour des comptes de l'Union. Le traité de l'Uémoa a été signé à Dakar le 10 janvier 1994, et la Banque centrale des États de l'Afrique de l'Ouest, B C E A O, a son siège à Dakar."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "La Commission de l'UEMOA siège à Ouagadougou (Burkina Faso), comme la Cour de justice et la Cour des comptes de l'Union. Le traité de l'UEMOA a été signé à Dakar le 10 janvier 1994, et la Banque centrale des États de l'Afrique de l'Ouest (BCEAO) a son siège à Dakar. Sources : Wikipédia, BCEAO."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-044",
+ "titre": "Le QCM du jour n° 44",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 44",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un enfant de douze ans commet un vol. Quelle peine peut-il encourir ?",
+   "options": [
+    "La moitié de la peine encourue par un majeur",
+    "Aucune peine : il bénéficie de droit de l'excuse absolutoire de minorité",
+    "Une peine d'emprisonnement avec sursis",
+    "Une amende seulement"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un enfant de douze ans commet un vol. Quelle peine peut-il encourir ?",
+    "A : La moitié de la peine encourue par un majeur.",
+    "B : Aucune peine : il bénéficie de droit de l'excuse absolutoire de minorité.",
+    "C : Une peine d'emprisonnement avec sursis.",
+    "D : Une amende seulement.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un enfant de douze ans commet un vol. Quelle peine peut-il encourir ?",
+    "A : La moitié de la peine encourue par un majeur.",
+    "B : Aucune peine : il bénéficie de droit de l'excuse absolutoire de minorité.",
+    "C : Une peine d'emprisonnement avec sursis.",
+    "D : Une amende seulement.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Aucune peine : il bénéficie de droit de l'excuse absolutoire de minorité",
+   "explication": "Âgé de dix ans au moins et de moins de treize ans, il ne peut se voir infliger aucune peine ; seules des mesures de protection, d'assistance, de surveillance et d'éducation peuvent être prononcées par le juge des enfants.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Âgé de dix ans au moins et de moins de treize ans, il ne peut se voir infliger aucune peine ; seules des mesures de protection, d'assistance, de surveillance et d'éducation peuvent être prononcées par le juge des enfants."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Âgé de dix ans au moins et de moins de treize ans, il ne peut se voir infliger aucune peine ; seules des mesures de protection, d'assistance, de surveillance et d'éducation peuvent être prononcées par le juge des enfants."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

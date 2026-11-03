@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-065",
+ "titre": "Le QCM du jour n° 65",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 65",
+ "source": {
+  "matiere": "droit-penal-special",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal spécial",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal spécial*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal spécial*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La délivrance d'une ordonnance de protection à une victime de violences domestiques (loi n° 2021-894 du 21 décembre 2021) suppose-t-elle une plainte pénale ou un certificat médical ?",
+   "options": [
+    "Une plainte pénale préalable",
+    "Un certificat médical",
+    "Ni l'une ni l'autre",
+    "Les deux"
+   ],
+   "pause": 5,
+   "dit": [
+    "La délivrance d'une ordonnance de protection à une victime de violences domestiques, loi du 21 décembre 2021, suppose-t-elle une plainte pénale ou un certificat médical ?",
+    "A : Une plainte pénale préalable.",
+    "B : Un certificat médical.",
+    "C : Ni l'une ni l'autre.",
+    "D : Les deux.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La délivrance d'une ordonnance de protection à une victime de violences domestiques (loi n° 2021-894 du 21 décembre 2021) suppose-t-elle une plainte pénale ou un certificat médical ?",
+    "A : Une plainte pénale préalable.",
+    "B : Un certificat médical.",
+    "C : Ni l'une ni l'autre.",
+    "D : Les deux.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Ni l'une ni l'autre",
+   "explication": "« La délivrance de l'ordonnance de protection n'est pas subordonnée à l'existence d'une plainte pénale préalable ou à la production d'un certificat médical » (article 4). Le président du tribunal statue dans les vingt-quatre heures de sa saisine (article 5).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "« La délivrance de l'ordonnance de protection n'est pas subordonnée à l'existence d'une plainte pénale préalable ou à la production d'un certificat médical », article 4. Le président du tribunal statue dans les vingt-quatre heures de sa saisine, article 5."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "« La délivrance de l'ordonnance de protection n'est pas subordonnée à l'existence d'une plainte pénale préalable ou à la production d'un certificat médical » (article 4). Le président du tribunal statue dans les vingt-quatre heures de sa saisine (article 5)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

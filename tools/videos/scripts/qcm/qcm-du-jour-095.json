@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-095",
+ "titre": "Le QCM du jour n° 95",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 95",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 7
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans la société en nom collectif, les associés :",
+   "options": [
+    "Ne répondent des dettes qu'à concurrence de leurs apports",
+    "Sont tous commerçants et répondent indéfiniment et solidairement des dettes sociales",
+    "Peuvent être poursuivis par les créanciers sans mise en demeure préalable de la société",
+    "Ne sont pas commerçants"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans la société en nom collectif, les associés :",
+    "A : Ne répondent des dettes qu'à concurrence de leurs apports.",
+    "B : Sont tous commerçants et répondent indéfiniment et solidairement des dettes sociales.",
+    "C : Peuvent être poursuivis par les créanciers sans mise en demeure préalable de la société.",
+    "D : Ne sont pas commerçants.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans la société en nom collectif, les associés :",
+    "A : Ne répondent des dettes qu'à concurrence de leurs apports.",
+    "B : Sont tous commerçants et répondent indéfiniment et solidairement des dettes sociales.",
+    "C : Peuvent être poursuivis par les créanciers sans mise en demeure préalable de la société.",
+    "D : Ne sont pas commerçants.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Sont tous commerçants et répondent indéfiniment et solidairement des dettes sociales",
+   "explication": "Tous les associés de la SNC sont commerçants et répondent indéfiniment et solidairement des dettes sociales (article 270 AUSCGIE). Les créanciers ne peuvent toutefois les poursuivre que soixante jours au moins après avoir vainement mis en demeure la société (article 271).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Tous les associés de la S N C sont commerçants et répondent indéfiniment et solidairement des dettes sociales, article 270 Acte uniforme sur les sociétés commerciales. Les créanciers ne peuvent toutefois les poursuivre que soixante jours au moins après avoir vainement mis en demeure la société, article 271."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Tous les associés de la SNC sont commerçants et répondent indéfiniment et solidairement des dettes sociales (article 270 AUSCGIE). Les créanciers ne peuvent toutefois les poursuivre que soixante jours au moins après avoir vainement mis en demeure la société (article 271)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

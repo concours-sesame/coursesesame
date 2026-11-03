@@ -29,8 +29,12 @@ for i,sc in enumerate(d['scenes']):
     for j,p in enumerate(sc['dit']):
         f,du=dur[(i,j)]; w,sr=sf.read(f); assert sr==SR
         audio.append(w); s['phrases'].append({'debut':round(t,3),'fin':round(t+du,3)})
-        morceaux(p.replace('« ','« ').replace(' »',' »'),t,t+du); t+=du
+        # Sous-titre : texte affiché (« st ») s'il diffère du texte dit (sigles, adresse du site)
+        aff=sc.get('st',sc['dit'])[j]
+        morceaux(aff.replace('« ','« ').replace(' »',' »'),t,t+du); t+=du
         g=ENTRE if j<len(sc['dit'])-1 else APRES
+        # Silence de réflexion après la dernière phrase d'une scène « pause » (compte à rebours du QCM)
+        if j==len(sc['dit'])-1 and sc.get('pause'): s['pause']={'debut':round(t,3),'fin':round(t+sc['pause'],3)}; g+=sc['pause']
         audio.append(np.zeros(int(SR*g))); t+=g
     if sc['type']=='outro': audio.append(np.zeros(int(SR*1.6))); t+=1.6
     s['fin']=round(t,3); T['scenes'].append(s)

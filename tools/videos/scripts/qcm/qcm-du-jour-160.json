@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-160",
+ "titre": "Le QCM du jour n° 160",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 160",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 17
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Pour quelle durée les présidents de la Cour de cassation et du Conseil d'État sont-ils nommés (Constitution, article 150 nouveau) ?",
+   "options": [
+    "Six ans, non renouvelables",
+    "Jusqu'à leur retraite",
+    "Trois ans, renouvelables sans limite",
+    "Cinq ans, renouvelables une fois"
+   ],
+   "pause": 5,
+   "dit": [
+    "Pour quelle durée les présidents de la Cour de cassation et du Conseil d'État sont-ils nommés, Constitution, article 150 nouveau ?",
+    "A : Six ans, non renouvelables.",
+    "B : Jusqu'à leur retraite.",
+    "C : Trois ans, renouvelables sans limite.",
+    "D : Cinq ans, renouvelables une fois.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Pour quelle durée les présidents de la Cour de cassation et du Conseil d'État sont-ils nommés (Constitution, article 150 nouveau) ?",
+    "A : Six ans, non renouvelables.",
+    "B : Jusqu'à leur retraite.",
+    "C : Trois ans, renouvelables sans limite.",
+    "D : Cinq ans, renouvelables une fois.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Cinq ans, renouvelables une fois",
+   "explication": "Ils sont nommés par le Président de la République pour cinq ans, renouvelables une fois, parmi les personnalités reconnues pour leur compétence et leur expertise en matière juridique (article 150 nouveau).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Ils sont nommés par le Président de la République pour cinq ans, renouvelables une fois, parmi les personnalités reconnues pour leur compétence et leur expertise en matière juridique, article 150 nouveau."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Ils sont nommés par le Président de la République pour cinq ans, renouvelables une fois, parmi les personnalités reconnues pour leur compétence et leur expertise en matière juridique (article 150 nouveau)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

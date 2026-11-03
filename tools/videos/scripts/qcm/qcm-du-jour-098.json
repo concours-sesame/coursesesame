@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-098",
+ "titre": "Le QCM du jour n° 98",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 98",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 8
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quel âge l'adoptant doit-il avoir, en principe, et quelle différence d'âge avec l'adopté (loi relative à l'adoption, article 3) ?",
+   "options": [
+    "Plus de vingt et un ans, et dix ans de plus que l'adopté",
+    "Plus de trente ans, et quinze ans de plus que l'adopté",
+    "Plus de quarante ans, sans condition de différence d'âge",
+    "Être majeur, et cinq ans de plus que l'adopté"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quel âge l'adoptant doit-il avoir, en principe, et quelle différence d'âge avec l'adopté, loi relative à l'adoption, article 3 ?",
+    "A : Plus de vingt et un ans, et dix ans de plus que l'adopté.",
+    "B : Plus de trente ans, et quinze ans de plus que l'adopté.",
+    "C : Plus de quarante ans, sans condition de différence d'âge.",
+    "D : Être majeur, et cinq ans de plus que l'adopté.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quel âge l'adoptant doit-il avoir, en principe, et quelle différence d'âge avec l'adopté (loi relative à l'adoption, article 3) ?",
+    "A : Plus de vingt et un ans, et dix ans de plus que l'adopté.",
+    "B : Plus de trente ans, et quinze ans de plus que l'adopté.",
+    "C : Plus de quarante ans, sans condition de différence d'âge.",
+    "D : Être majeur, et cinq ans de plus que l'adopté.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Plus de trente ans, et quinze ans de plus que l'adopté",
+   "explication": "L'adoptant doit avoir plus de trente ans, et une différence d'âge de quinze ans est exigée, réduite à dix ans pour l'enfant du conjoint ; le tribunal peut, pour de justes motifs, admettre des conditions inférieures (article 3).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'adoptant doit avoir plus de trente ans, et une différence d'âge de quinze ans est exigée, réduite à dix ans pour l'enfant du conjoint ; le tribunal peut, pour de justes motifs, admettre des conditions inférieures, article 3."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'adoptant doit avoir plus de trente ans, et une différence d'âge de quinze ans est exigée, réduite à dix ans pour l'enfant du conjoint ; le tribunal peut, pour de justes motifs, admettre des conditions inférieures (article 3)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

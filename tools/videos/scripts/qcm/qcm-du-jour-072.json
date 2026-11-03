@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-072",
+ "titre": "Le QCM du jour n° 72",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 72",
+ "source": {
+  "matiere": "culture-generale",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Culture générale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *culture générale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *culture générale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le traité instituant la Communauté économique des États de l'Afrique de l'Ouest (CEDEAO) a été signé :",
+   "options": [
+    "Le 28 mai 1975, à Lagos",
+    "Le 25 mai 1963, à Addis-Abeba",
+    "Le 10 janvier 1994, à Dakar",
+    "Le 17 octobre 1993, à Port-Louis"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le traité instituant la Communauté économique des États de l'Afrique de l'Ouest, Cédéao, a été signé :",
+    "A : Le 28 mai 1975, à Lagos.",
+    "B : Le 25 mai 1963, à Addis-Abeba.",
+    "C : Le 10 janvier 1994, à Dakar.",
+    "D : Le 17 octobre 1993, à Port-Louis.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le traité instituant la Communauté économique des États de l'Afrique de l'Ouest (CEDEAO) a été signé :",
+    "A : Le 28 mai 1975, à Lagos.",
+    "B : Le 25 mai 1963, à Addis-Abeba.",
+    "C : Le 10 janvier 1994, à Dakar.",
+    "D : Le 17 octobre 1993, à Port-Louis.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Le 28 mai 1975, à Lagos",
+   "explication": "Les chefs d'État et de gouvernement de quinze pays d'Afrique de l'Ouest ont signé le traité de la CEDEAO le 28 mai 1975 à Lagos, au Nigeria. Source : CEDEAO.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "Les chefs d'État et de gouvernement de quinze pays d'Afrique de l'Ouest ont signé le traité de la Cédéao le 28 mai 1975 à Lagos, au Nigeria."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "Les chefs d'État et de gouvernement de quinze pays d'Afrique de l'Ouest ont signé le traité de la CEDEAO le 28 mai 1975 à Lagos, au Nigeria. Source : CEDEAO."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

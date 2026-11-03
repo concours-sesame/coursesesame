@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-117",
+ "titre": "Le QCM du jour n° 117",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 117",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Devant quelle juridiction sont portés les appels contre les décisions du Tribunal de commerce d'Abidjan ?",
+   "options": [
+    "La Cour d'appel d'Abidjan",
+    "La Cour d'appel de commerce d'Abidjan",
+    "La Cour de cassation directement",
+    "Le Conseil d'État"
+   ],
+   "pause": 5,
+   "dit": [
+    "Devant quelle juridiction sont portés les appels contre les décisions du Tribunal de commerce d'Abidjan ?",
+    "A : La Cour d'appel d'Abidjan.",
+    "B : La Cour d'appel de commerce d'Abidjan.",
+    "C : La Cour de cassation directement.",
+    "D : Le Conseil d'État.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Devant quelle juridiction sont portés les appels contre les décisions du Tribunal de commerce d'Abidjan ?",
+    "A : La Cour d'appel d'Abidjan.",
+    "B : La Cour d'appel de commerce d'Abidjan.",
+    "C : La Cour de cassation directement.",
+    "D : Le Conseil d'État.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "La Cour d'appel de commerce d'Abidjan",
+   "explication": "Le Tribunal de commerce d'Abidjan, créé par la loi du 8 décembre 2016, relève en appel de la Cour d'appel de commerce d'Abidjan, juridiction spécialisée de second degré.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le Tribunal de commerce d'Abidjan, créé par la loi du 8 décembre 2016, relève en appel de la Cour d'appel de commerce d'Abidjan, juridiction spécialisée de second degré."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le Tribunal de commerce d'Abidjan, créé par la loi du 8 décembre 2016, relève en appel de la Cour d'appel de commerce d'Abidjan, juridiction spécialisée de second degré."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

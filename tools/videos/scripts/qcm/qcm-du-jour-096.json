@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-096",
+ "titre": "Le QCM du jour n° 96",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 96",
+ "source": {
+  "matiere": "culture-generale",
+  "question": 7
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Culture générale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *culture générale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *culture générale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Où siège la Cour commune de justice et d'arbitrage (CCJA) de l'OHADA ?",
+   "options": [
+    "À Yaoundé",
+    "À Porto-Novo",
+    "À Port-Louis",
+    "À Abidjan"
+   ],
+   "pause": 5,
+   "dit": [
+    "Où siège la Cour commune de justice et d'arbitrage, C C J A, de l'Ohada ?",
+    "A : À Yaoundé.",
+    "B : À Porto-Novo.",
+    "C : À Port-Louis.",
+    "D : À Abidjan.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Où siège la Cour commune de justice et d'arbitrage (CCJA) de l'OHADA ?",
+    "A : À Yaoundé.",
+    "B : À Porto-Novo.",
+    "C : À Port-Louis.",
+    "D : À Abidjan.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "À Abidjan",
+   "explication": "La CCJA siège à Abidjan. Le traité OHADA a été signé le 17 octobre 1993 à Port-Louis (île Maurice) ; le Secrétariat permanent est à Yaoundé et l'École régionale supérieure de la magistrature (ERSUMA) à Porto-Novo. Source : Wikipédia.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "La C C J A siège à Abidjan. Le traité Ohada a été signé le 17 octobre 1993 à Port-Louis, île Maurice; le Secrétariat permanent est à Yaoundé et l'École régionale supérieure de la magistrature, Ersuma, à Porto-Novo."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "La CCJA siège à Abidjan. Le traité OHADA a été signé le 17 octobre 1993 à Port-Louis (île Maurice) ; le Secrétariat permanent est à Yaoundé et l'École régionale supérieure de la magistrature (ERSUMA) à Porto-Novo. Source : Wikipédia."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-135",
+ "titre": "Le QCM du jour n° 135",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 135",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 12
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Une loi pénale plus douce entre en vigueur. À quelles infractions commises avant elle s'applique-t-elle (article 24 du Code pénal) ?",
+   "options": [
+    "À toutes, même définitivement jugées",
+    "À celles qui n'ont pas fait l'objet d'une condamnation devenue définitive",
+    "À aucune : elle ne vaut que pour l'avenir",
+    "À celles que le juge choisit"
+   ],
+   "pause": 5,
+   "dit": [
+    "Une loi pénale plus douce entre en vigueur. À quelles infractions commises avant elle s'applique-t-elle, article 24 du Code pénal ?",
+    "A : À toutes, même définitivement jugées.",
+    "B : À celles qui n'ont pas fait l'objet d'une condamnation devenue définitive.",
+    "C : À aucune : elle ne vaut que pour l'avenir.",
+    "D : À celles que le juge choisit.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Une loi pénale plus douce entre en vigueur. À quelles infractions commises avant elle s'applique-t-elle (article 24 du Code pénal) ?",
+    "A : À toutes, même définitivement jugées.",
+    "B : À celles qui n'ont pas fait l'objet d'une condamnation devenue définitive.",
+    "C : À aucune : elle ne vaut que pour l'avenir.",
+    "D : À celles que le juge choisit.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "À celles qui n'ont pas fait l'objet d'une condamnation devenue définitive",
+   "explication": "La disposition nouvelle moins sévère « s'applique aux infractions qui n'ont pas fait l'objet d'une condamnation devenue définitive au jour de son entrée en vigueur » (article 24, alinéa 1er). Seule la loi qui supprime l'infraction met fin à l'exécution des peines déjà prononcées (article 23).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "La disposition nouvelle moins sévère « s'applique aux infractions qui n'ont pas fait l'objet d'une condamnation devenue définitive au jour de son entrée en vigueur », article 24, alinéa premier. Seule la loi qui supprime l'infraction met fin à l'exécution des peines déjà prononcées, article 23."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "La disposition nouvelle moins sévère « s'applique aux infractions qui n'ont pas fait l'objet d'une condamnation devenue définitive au jour de son entrée en vigueur » (article 24, alinéa 1er). Seule la loi qui supprime l'infraction met fin à l'exécution des peines déjà prononcées (article 23)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

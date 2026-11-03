@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-180",
+ "titre": "Le QCM du jour n° 180",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 180",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 24
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Une sentence arbitrale rendue sous l'empire de l'Acte uniforme relatif au droit de l'arbitrage peut-elle faire l'objet d'un appel (article 25) ?",
+   "options": [
+    "Oui, devant la Cour d'appel, dans le mois",
+    "Oui, devant la CCJA directement",
+    "Oui, si les parties ne l'ont pas exclu",
+    "Non : ni opposition, ni appel, ni pourvoi ; la voie ouverte est le recours en annulation, pour des cas limités"
+   ],
+   "pause": 5,
+   "dit": [
+    "Une sentence arbitrale rendue sous l'empire de l'Acte uniforme relatif au droit de l'arbitrage peut-elle faire l'objet d'un appel, article 25 ?",
+    "A : Oui, devant la Cour d'appel, dans le mois.",
+    "B : Oui, devant la C C J A directement.",
+    "C : Oui, si les parties ne l'ont pas exclu.",
+    "D : Non : ni opposition, ni appel, ni pourvoi ; la voie ouverte est le recours en annulation, pour des cas limités.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Une sentence arbitrale rendue sous l'empire de l'Acte uniforme relatif au droit de l'arbitrage peut-elle faire l'objet d'un appel (article 25) ?",
+    "A : Oui, devant la Cour d'appel, dans le mois.",
+    "B : Oui, devant la CCJA directement.",
+    "C : Oui, si les parties ne l'ont pas exclu.",
+    "D : Non : ni opposition, ni appel, ni pourvoi ; la voie ouverte est le recours en annulation, pour des cas limités.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Non : ni opposition, ni appel, ni pourvoi ; la voie ouverte est le recours en annulation, pour des cas limités",
+   "explication": "La sentence ne peut faire l'objet ni d'une opposition, ni d'un appel, ni d'un pourvoi en cassation : elle peut faire l'objet d'un recours en annulation devant la juridiction compétente de l'État partie, dont la décision peut être déférée à la CCJA (article 25), pour les six cas de l'article 26. La tierce opposition et la révision pour fait nouveau restent possibles.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "La sentence ne peut faire l'objet ni d'une opposition, ni d'un appel, ni d'un pourvoi en cassation : elle peut faire l'objet d'un recours en annulation devant la juridiction compétente de l'État partie, dont la décision peut être déférée à la C C J A, article 25,, pour les six cas de l'article 26. La tierce opposition et la révision pour fait nouveau restent possibles."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "La sentence ne peut faire l'objet ni d'une opposition, ni d'un appel, ni d'un pourvoi en cassation : elle peut faire l'objet d'un recours en annulation devant la juridiction compétente de l'État partie, dont la décision peut être déférée à la CCJA (article 25), pour les six cas de l'article 26. La tierce opposition et la révision pour fait nouveau restent possibles."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

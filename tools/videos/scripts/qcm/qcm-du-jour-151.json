@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-151",
+ "titre": "Le QCM du jour n° 151",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 151",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 15
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Depuis la loi du 11 juin 2024, la confiscation est obligatoire pour tout crime ou délit, sauf :",
+   "options": [
+    "Les crimes contre les personnes",
+    "Les délits punis de moins d'un an",
+    "Les délits de presse et les infractions non intentionnelles",
+    "Aucune exception n'est prévue"
+   ],
+   "pause": 5,
+   "dit": [
+    "Depuis la loi du 11 juin 2024, la confiscation est obligatoire pour tout crime ou délit, sauf :",
+    "A : Les crimes contre les personnes.",
+    "B : Les délits punis de moins d'un an.",
+    "C : Les délits de presse et les infractions non intentionnelles.",
+    "D : Aucune exception n'est prévue.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Depuis la loi du 11 juin 2024, la confiscation est obligatoire pour tout crime ou délit, sauf :",
+    "A : Les crimes contre les personnes.",
+    "B : Les délits punis de moins d'un an.",
+    "C : Les délits de presse et les infractions non intentionnelles.",
+    "D : Aucune exception n'est prévue.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Les délits de presse et les infractions non intentionnelles",
+   "explication": "« Dans tous les cas de condamnation pour une infraction qualifiée crime ou délit, à l'exception des délits de presse et des infractions non intentionnelles, le juge prononce obligatoirement la peine complémentaire de confiscation » (article 59, rédaction de 2024).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "« Dans tous les cas de condamnation pour une infraction qualifiée crime ou délit, à l'exception des délits de presse et des infractions non intentionnelles, le juge prononce obligatoirement la peine complémentaire de confiscation », article 59, rédaction de 2024."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "« Dans tous les cas de condamnation pour une infraction qualifiée crime ou délit, à l'exception des délits de presse et des infractions non intentionnelles, le juge prononce obligatoirement la peine complémentaire de confiscation » (article 59, rédaction de 2024)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

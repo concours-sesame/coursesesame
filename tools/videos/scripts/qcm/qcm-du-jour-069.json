@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-069",
+ "titre": "Le QCM du jour n° 69",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 69",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La Cour de cassation rejuge-t-elle les faits ?",
+   "options": [
+    "Oui, toujours",
+    "Non : elle statue sur les pourvois sans rejuger les faits et veille à l'unité d'interprétation du droit",
+    "Oui, en matière pénale seulement",
+    "Oui, lorsque l'affaire lui est renvoyée par le Conseil d'État"
+   ],
+   "pause": 5,
+   "dit": [
+    "La Cour de cassation rejuge-t-elle les faits ?",
+    "A : Oui, toujours.",
+    "B : Non : elle statue sur les pourvois sans rejuger les faits et veille à l'unité d'interprétation du droit.",
+    "C : Oui, en matière pénale seulement.",
+    "D : Oui, lorsque l'affaire lui est renvoyée par le Conseil d'État.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La Cour de cassation rejuge-t-elle les faits ?",
+    "A : Oui, toujours.",
+    "B : Non : elle statue sur les pourvois sans rejuger les faits et veille à l'unité d'interprétation du droit.",
+    "C : Oui, en matière pénale seulement.",
+    "D : Oui, lorsque l'affaire lui est renvoyée par le Conseil d'État.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Non : elle statue sur les pourvois sans rejuger les faits et veille à l'unité d'interprétation du droit",
+   "explication": "Juridiction suprême de l'ordre judiciaire, régie par la loi organique du 17 décembre 2020, elle statue sur les pourvois formés contre les décisions rendues en dernier ressort.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Juridiction suprême de l'ordre judiciaire, régie par la loi organique du 17 décembre 2020, elle statue sur les pourvois formés contre les décisions rendues en dernier ressort."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Juridiction suprême de l'ordre judiciaire, régie par la loi organique du 17 décembre 2020, elle statue sur les pourvois formés contre les décisions rendues en dernier ressort."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

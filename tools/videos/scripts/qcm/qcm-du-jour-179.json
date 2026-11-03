@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-179",
+ "titre": "Le QCM du jour n° 179",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 179",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 24
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Devant quelle juridiction est portée une demande de révision d'une condamnation pénale (article 638 du Code de procédure pénale) ?",
+   "options": [
+    "La Cour de cassation, saisie par requête",
+    "La Cour d'appel qui a statué",
+    "Le tribunal qui a prononcé la condamnation",
+    "Le Conseil constitutionnel"
+   ],
+   "pause": 5,
+   "dit": [
+    "Devant quelle juridiction est portée une demande de révision d'une condamnation pénale, article 638 du Code de procédure pénale ?",
+    "A : La Cour de cassation, saisie par requête.",
+    "B : La Cour d'appel qui a statué.",
+    "C : Le tribunal qui a prononcé la condamnation.",
+    "D : Le Conseil constitutionnel.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Devant quelle juridiction est portée une demande de révision d'une condamnation pénale (article 638 du Code de procédure pénale) ?",
+    "A : La Cour de cassation, saisie par requête.",
+    "B : La Cour d'appel qui a statué.",
+    "C : Le tribunal qui a prononcé la condamnation.",
+    "D : Le Conseil constitutionnel.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "La Cour de cassation, saisie par requête",
+   "explication": "« La Cour de cassation est saisie par voie de requête » (article 638). La révision corrige une erreur de fait, au profit d'une personne condamnée pour crime ou délit, dans l'un des cinq cas de l'article 637.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« La Cour de cassation est saisie par voie de requête », article 638. La révision corrige une erreur de fait, au profit d'une personne condamnée pour crime ou délit, dans l'un des cinq cas de l'article 637."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« La Cour de cassation est saisie par voie de requête » (article 638). La révision corrige une erreur de fait, au profit d'une personne condamnée pour crime ou délit, dans l'un des cinq cas de l'article 637."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

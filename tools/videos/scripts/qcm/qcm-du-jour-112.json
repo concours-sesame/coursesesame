@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-112",
+ "titre": "Le QCM du jour n° 112",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 112",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un prévenu, qui n'est pas en état de récidive, est jugé dans une même poursuite pour un vol et une escroquerie. Que prévoit l'article 119 du Code pénal ?",
+   "options": [
+    "Les peines des deux infractions s'additionnent",
+    "Le juge prononce la peine la plus douce",
+    "Seule la première infraction commise est jugée",
+    "Les peines ne se cumulent pas : seules les peines de l'infraction la plus sévèrement punie peuvent être prononcées"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un prévenu, qui n'est pas en état de récidive, est jugé dans une même poursuite pour un vol et une escroquerie. Que prévoit l'article 119 du Code pénal ?",
+    "A : Les peines des deux infractions s'additionnent.",
+    "B : Le juge prononce la peine la plus douce.",
+    "C : Seule la première infraction commise est jugée.",
+    "D : Les peines ne se cumulent pas : seules les peines de l'infraction la plus sévèrement punie peuvent être prononcées.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un prévenu, qui n'est pas en état de récidive, est jugé dans une même poursuite pour un vol et une escroquerie. Que prévoit l'article 119 du Code pénal ?",
+    "A : Les peines des deux infractions s'additionnent.",
+    "B : Le juge prononce la peine la plus douce.",
+    "C : Seule la première infraction commise est jugée.",
+    "D : Les peines ne se cumulent pas : seules les peines de l'infraction la plus sévèrement punie peuvent être prononcées.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Les peines ne se cumulent pas : seules les peines de l'infraction la plus sévèrement punie peuvent être prononcées",
+   "explication": "En cas de concours réel d'infractions jugées dans une même poursuite, « les peines sanctionnant chacune de ces infractions ne se cumulent pas » ; seules sont prononcées celles de l'infraction passible des peines principales les plus sévères (article 119).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "En cas de concours réel d'infractions jugées dans une même poursuite, « les peines sanctionnant chacune de ces infractions ne se cumulent pas » ; seules sont prononcées celles de l'infraction passible des peines principales les plus sévères, article 119."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "En cas de concours réel d'infractions jugées dans une même poursuite, « les peines sanctionnant chacune de ces infractions ne se cumulent pas » ; seules sont prononcées celles de l'infraction passible des peines principales les plus sévères (article 119)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

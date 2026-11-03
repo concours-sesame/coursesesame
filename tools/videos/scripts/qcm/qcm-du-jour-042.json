@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-042",
+ "titre": "Le QCM du jour n° 42",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 42",
+ "source": {
+  "matiere": "droit-administratif",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit administratif",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit administratif*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit administratif*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Que retient l'arrêt Dame Lamotte (Conseil d'État, 17 février 1950) ?",
+   "options": [
+    "Le recours pour excès de pouvoir n'est ouvert que si un texte le prévoit",
+    "Le recours pour excès de pouvoir est ouvert même sans texte contre tout acte administratif, et ne peut être exclu que par une disposition législative expresse",
+    "Les concessions de terres échappent à tout recours",
+    "Le juge ne contrôle pas les actes du préfet"
+   ],
+   "pause": 5,
+   "dit": [
+    "Que retient l'arrêt Dame Lamotte, Conseil d'État, 17 février 1950 ?",
+    "A : Le recours pour excès de pouvoir n'est ouvert que si un texte le prévoit.",
+    "B : Le recours pour excès de pouvoir est ouvert même sans texte contre tout acte administratif, et ne peut être exclu que par une disposition législative expresse.",
+    "C : Les concessions de terres échappent à tout recours.",
+    "D : Le juge ne contrôle pas les actes du préfet.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Que retient l'arrêt Dame Lamotte (Conseil d'État, 17 février 1950) ?",
+    "A : Le recours pour excès de pouvoir n'est ouvert que si un texte le prévoit.",
+    "B : Le recours pour excès de pouvoir est ouvert même sans texte contre tout acte administratif, et ne peut être exclu que par une disposition législative expresse.",
+    "C : Les concessions de terres échappent à tout recours.",
+    "D : Le juge ne contrôle pas les actes du préfet.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Le recours pour excès de pouvoir est ouvert même sans texte contre tout acte administratif, et ne peut être exclu que par une disposition législative expresse",
+   "explication": "Le recours pour excès de pouvoir est un principe général du droit, reçu en droit ivoirien par les arrêts Diby Yao Georges et Deflorin.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le recours pour excès de pouvoir est un principe général du droit, reçu en droit ivoirien par les arrêts Diby Yao Georges et Deflorin."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le recours pour excès de pouvoir est un principe général du droit, reçu en droit ivoirien par les arrêts Diby Yao Georges et Deflorin."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-024",
+ "titre": "Le QCM du jour n° 24",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 24",
+ "source": {
+  "matiere": "culture-generale",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Culture générale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *culture générale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *culture générale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Depuis quand Yamoussoukro est-elle la capitale politique et administrative de la Côte d'Ivoire ?",
+   "options": [
+    "Depuis l'indépendance, en 1960",
+    "Depuis mars 1983",
+    "Depuis 1993",
+    "Depuis la Constitution de 2016"
+   ],
+   "pause": 5,
+   "dit": [
+    "Depuis quand Yamoussoukro est-elle la capitale politique et administrative de la Côte d'Ivoire ?",
+    "A : Depuis l'indépendance, en 1960.",
+    "B : Depuis mars 1983.",
+    "C : Depuis 1993.",
+    "D : Depuis la Constitution de 2016.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Depuis quand Yamoussoukro est-elle la capitale politique et administrative de la Côte d'Ivoire ?",
+    "A : Depuis l'indépendance, en 1960.",
+    "B : Depuis mars 1983.",
+    "C : Depuis 1993.",
+    "D : Depuis la Constitution de 2016.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Depuis mars 1983",
+   "explication": "Yamoussoukro est devenue la capitale politique et administrative du pays en mars 1983. Abidjan reste le principal centre urbain et économique. Source : Wikipédia.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Yamoussoukro est devenue la capitale politique et administrative du pays en mars 1983. Abidjan reste le principal centre urbain et économique."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Yamoussoukro est devenue la capitale politique et administrative du pays en mars 1983. Abidjan reste le principal centre urbain et économique. Source : Wikipédia."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

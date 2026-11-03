@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-178",
+ "titre": "Le QCM du jour n° 178",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 178",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 23
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans quel délai le débiteur en cessation des paiements doit-il la déclarer (AUPC, article 25) ?",
+   "options": [
+    "Dans les huit jours",
+    "Dans les trois mois",
+    "Il n'a aucune obligation de la déclarer",
+    "Au plus tard dans les trente jours qui suivent la cessation des paiements"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans quel délai le débiteur en cessation des paiements doit-il la déclarer, Acte uniforme sur les procédures collectives, article 25 ?",
+    "A : Dans les huit jours.",
+    "B : Dans les trois mois.",
+    "C : Il n'a aucune obligation de la déclarer.",
+    "D : Au plus tard dans les trente jours qui suivent la cessation des paiements.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans quel délai le débiteur en cessation des paiements doit-il la déclarer (AUPC, article 25) ?",
+    "A : Dans les huit jours.",
+    "B : Dans les trois mois.",
+    "C : Il n'a aucune obligation de la déclarer.",
+    "D : Au plus tard dans les trente jours qui suivent la cessation des paiements.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Au plus tard dans les trente jours qui suivent la cessation des paiements",
+   "explication": "La déclaration de cessation des paiements est obligatoire « au plus tard dans les trente (30) jours qui suivent la cessation des paiements » (article 25). La juridiction ouvre ensuite un redressement judiciaire ou une liquidation des biens (article 33).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "La déclaration de cessation des paiements est obligatoire « au plus tard dans les trente, 30, jours qui suivent la cessation des paiements », article 25. La juridiction ouvre ensuite un redressement judiciaire ou une liquidation des biens, article 33."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "La déclaration de cessation des paiements est obligatoire « au plus tard dans les trente (30) jours qui suivent la cessation des paiements » (article 25). La juridiction ouvre ensuite un redressement judiciaire ou une liquidation des biens (article 33)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-125",
+ "titre": "Le QCM du jour n° 125",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 125",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 10
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Lequel de ces magistrats a la qualité d'officier de police judiciaire (article 27 du Code de procédure pénale) ?",
+   "options": [
+    "Le président du tribunal correctionnel",
+    "Le juge d'instruction",
+    "Le juge des tutelles",
+    "Le premier président de la Cour d'appel"
+   ],
+   "pause": 5,
+   "dit": [
+    "Lequel de ces magistrats a la qualité d'officier de police judiciaire, article 27 du Code de procédure pénale ?",
+    "A : Le président du tribunal correctionnel.",
+    "B : Le juge d'instruction.",
+    "C : Le juge des tutelles.",
+    "D : Le premier président de la Cour d'appel.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Lequel de ces magistrats a la qualité d'officier de police judiciaire (article 27 du Code de procédure pénale) ?",
+    "A : Le président du tribunal correctionnel.",
+    "B : Le juge d'instruction.",
+    "C : Le juge des tutelles.",
+    "D : Le premier président de la Cour d'appel.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Le juge d'instruction",
+   "explication": "L'article 27 place en tête des officiers de police judiciaire les procureurs de la République et leurs substituts, puis les juges d'instruction, avant les maires et leurs adjoints, les commissaires et officiers de police et les officiers de gendarmerie.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'article 27 place en tête des officiers de police judiciaire les procureurs de la République et leurs substituts, puis les juges d'instruction, avant les maires et leurs adjoints, les commissaires et officiers de police et les officiers de gendarmerie."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'article 27 place en tête des officiers de police judiciaire les procureurs de la République et leurs substituts, puis les juges d'instruction, avant les maires et leurs adjoints, les commissaires et officiers de police et les officiers de gendarmerie."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

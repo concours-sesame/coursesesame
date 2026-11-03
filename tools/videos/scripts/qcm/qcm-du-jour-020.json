@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-020",
+ "titre": "Le QCM du jour n° 20",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 20",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quand la Charte africaine des droits et du bien-être de l'enfant (CADBE) a-t-elle été adoptée ?",
+   "options": [
+    "Le 20 novembre 1989 à New York",
+    "Le 11 juillet 1990 à Addis-Abeba",
+    "Le 29 novembre 1999 à Abidjan",
+    "Le 26 juin 2019 à Yamoussoukro"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quand la Charte africaine des droits et du bien-être de l'enfant, Charte africaine des droits et du bien-être de l'enfant, a-t-elle été adoptée ?",
+    "A : Le 20 novembre 1989 à New York.",
+    "B : Le 11 juillet 1990 à Addis-Abeba.",
+    "C : Le 29 novembre 1999 à Abidjan.",
+    "D : Le 26 juin 2019 à Yamoussoukro.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quand la Charte africaine des droits et du bien-être de l'enfant (CADBE) a-t-elle été adoptée ?",
+    "A : Le 20 novembre 1989 à New York.",
+    "B : Le 11 juillet 1990 à Addis-Abeba.",
+    "C : Le 29 novembre 1999 à Abidjan.",
+    "D : Le 26 juin 2019 à Yamoussoukro.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Le 11 juillet 1990 à Addis-Abeba",
+   "explication": "Adoptée le 11 juillet 1990 à Addis-Abeba par la conférence des chefs d'État de l'OUA, la Charte est entrée en vigueur le 29 novembre 1999.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Adoptée le 11 juillet 1990 à Addis-Abeba par la conférence des chefs d'État de l'O U A, la Charte est entrée en vigueur le 29 novembre 1999."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Adoptée le 11 juillet 1990 à Addis-Abeba par la conférence des chefs d'État de l'OUA, la Charte est entrée en vigueur le 29 novembre 1999."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

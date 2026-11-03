@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-137",
+ "titre": "Le QCM du jour n° 137",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 137",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 12
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "En enquête préliminaire, sauf exceptions, entre quelles heures une perquisition peut-elle commencer (article 68 du Code de procédure pénale) ?",
+   "options": [
+    "Pas avant six heures ni après vingt et une heures",
+    "Pas avant huit heures ni après dix-huit heures",
+    "À toute heure",
+    "Pas avant quatre heures ni après vingt et une heures"
+   ],
+   "pause": 5,
+   "dit": [
+    "En enquête préliminaire, sauf exceptions, entre quelles heures une perquisition peut-elle commencer, article 68 du Code de procédure pénale ?",
+    "A : Pas avant six heures ni après vingt et une heures.",
+    "B : Pas avant huit heures ni après dix-huit heures.",
+    "C : À toute heure.",
+    "D : Pas avant quatre heures ni après vingt et une heures.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "En enquête préliminaire, sauf exceptions, entre quelles heures une perquisition peut-elle commencer (article 68 du Code de procédure pénale) ?",
+    "A : Pas avant six heures ni après vingt et une heures.",
+    "B : Pas avant huit heures ni après dix-huit heures.",
+    "C : À toute heure.",
+    "D : Pas avant quatre heures ni après vingt et une heures.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Pas avant quatre heures ni après vingt et une heures",
+   "explication": "Sauf réclamation de l'intérieur ou exception légale, les perquisitions et visites domiciliaires ne peuvent commencer « avant quatre heures et après vingt et une heures » (article 68). Les lieux ouverts au public peuvent être visités à toute heure.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Sauf réclamation de l'intérieur ou exception légale, les perquisitions et visites domiciliaires ne peuvent commencer « avant quatre heures et après vingt et une heures », article 68. Les lieux ouverts au public peuvent être visités à toute heure."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Sauf réclamation de l'intérieur ou exception légale, les perquisitions et visites domiciliaires ne peuvent commencer « avant quatre heures et après vingt et une heures » (article 68). Les lieux ouverts au public peuvent être visités à toute heure."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

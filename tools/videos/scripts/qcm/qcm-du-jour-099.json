@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-099",
+ "titre": "Le QCM du jour n° 99",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 99",
+ "source": {
+  "matiere": "droit-penal",
+  "question": 8
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal et procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal et procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal et procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un simple mensonge suffit-il à constituer l'escroquerie ?",
+   "options": [
+    "Oui, dès lors qu'il a déterminé la remise",
+    "Non, il doit être corroboré par des éléments extérieurs, mise en scène ou intervention d'un tiers",
+    "Oui, s'il est écrit",
+    "Non, l'escroquerie suppose toujours un faux document"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un simple mensonge suffit-il à constituer l'escroquerie ?",
+    "A : Oui, dès lors qu'il a déterminé la remise.",
+    "B : Non, il doit être corroboré par des éléments extérieurs, mise en scène ou intervention d'un tiers.",
+    "C : Oui, s'il est écrit.",
+    "D : Non, l'escroquerie suppose toujours un faux document.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un simple mensonge suffit-il à constituer l'escroquerie ?",
+    "A : Oui, dès lors qu'il a déterminé la remise.",
+    "B : Non, il doit être corroboré par des éléments extérieurs, mise en scène ou intervention d'un tiers.",
+    "C : Oui, s'il est écrit.",
+    "D : Non, l'escroquerie suppose toujours un faux document.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Non, il doit être corroboré par des éléments extérieurs, mise en scène ou intervention d'un tiers",
+   "explication": "Le simple mensonge ne suffit pas : il doit être corroboré par des éléments extérieurs qui constituent la manœuvre frauduleuse. L'article 471 vise aussi le faux nom, la fausse qualité et l'abus de qualité vraie.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le simple mensonge ne suffit pas : il doit être corroboré par des éléments extérieurs qui constituent la manœuvre frauduleuse. L'article 471 vise aussi le faux nom, la fausse qualité et l'abus de qualité vraie."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le simple mensonge ne suffit pas : il doit être corroboré par des éléments extérieurs qui constituent la manœuvre frauduleuse. L'article 471 vise aussi le faux nom, la fausse qualité et l'abus de qualité vraie."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

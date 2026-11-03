@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-033",
+ "titre": "Le QCM du jour n° 33",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 33",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quel texte porte aujourd'hui organisation des juridictions en Côte d'Ivoire ?",
+   "options": [
+    "La loi n° 61-155 du 18 mai 1961",
+    "La loi n° 2025-219 du 28 mars 2025",
+    "La loi organique n° 2020-968 du 17 décembre 2020",
+    "Le décret n° 2025-633 du 30 juillet 2025"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quel texte porte aujourd'hui organisation des juridictions en Côte d'Ivoire ?",
+    "A : La loi de 1961 du 18 mai 1961.",
+    "B : La loi du 28 mars 2025.",
+    "C : La loi organique du 17 décembre 2020.",
+    "D : Le décret du 30 juillet 2025.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quel texte porte aujourd'hui organisation des juridictions en Côte d'Ivoire ?",
+    "A : La loi n° 61-155 du 18 mai 1961.",
+    "B : La loi n° 2025-219 du 28 mars 2025.",
+    "C : La loi organique n° 2020-968 du 17 décembre 2020.",
+    "D : Le décret n° 2025-633 du 30 juillet 2025.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "La loi n° 2025-219 du 28 mars 2025",
+   "explication": "La loi du 28 mars 2025 abroge la loi du 18 mai 1961 portant organisation judiciaire, texte plus que soixantenaire.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "La loi du 28 mars 2025 abroge la loi du 18 mai 1961 portant organisation judiciaire, texte plus que soixantenaire."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "La loi du 28 mars 2025 abroge la loi du 18 mai 1961 portant organisation judiciaire, texte plus que soixantenaire."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

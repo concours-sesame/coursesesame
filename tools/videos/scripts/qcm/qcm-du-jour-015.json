@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-015",
+ "titre": "Le QCM du jour n° 15",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 15",
+ "source": {
+  "matiere": "droit-penal",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal et procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal et procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal et procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La tentative de délit est-elle punissable ?",
+   "options": [
+    "Toujours",
+    "Jamais",
+    "Seulement dans les cas prévus par une disposition de la loi",
+    "Seulement si le délit est puni de plus de cinq ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "La tentative de délit est-elle punissable ?",
+    "A : Toujours.",
+    "B : Jamais.",
+    "C : Seulement dans les cas prévus par une disposition de la loi.",
+    "D : Seulement si le délit est puni de plus de cinq ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La tentative de délit est-elle punissable ?",
+    "A : Toujours.",
+    "B : Jamais.",
+    "C : Seulement dans les cas prévus par une disposition de la loi.",
+    "D : Seulement si le délit est puni de plus de cinq ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Seulement dans les cas prévus par une disposition de la loi",
+   "explication": "La tentative de crime est toujours punissable ; la tentative de délit ne l'est que dans les cas déterminés par la loi (article 28, alinéa 2).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "La tentative de crime est toujours punissable ; la tentative de délit ne l'est que dans les cas déterminés par la loi, article 28, alinéa 2."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "La tentative de crime est toujours punissable ; la tentative de délit ne l'est que dans les cas déterminés par la loi (article 28, alinéa 2)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

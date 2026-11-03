@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-174",
+ "titre": "Le QCM du jour n° 174",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 174",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 21
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La saisie-attribution des créances (AUPSRVE, articles 153 et 154) :",
+   "options": [
+    "Exige un commandement de payer resté sans effet pendant huit jours",
+    "Ne porte que sur les meubles corporels du débiteur",
+    "Peut être pratiquée sans titre exécutoire",
+    "Se pratique sans commandement préalable et attribue immédiatement la créance saisie au saisissant"
+   ],
+   "pause": 5,
+   "dit": [
+    "La saisie-attribution des créances, Acte uniforme sur les procédures simplifiées de recouvrement, articles 153 et 154:",
+    "A : Exige un commandement de payer resté sans effet pendant huit jours.",
+    "B : Ne porte que sur les meubles corporels du débiteur.",
+    "C : Peut être pratiquée sans titre exécutoire.",
+    "D : Se pratique sans commandement préalable et attribue immédiatement la créance saisie au saisissant.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La saisie-attribution des créances (AUPSRVE, articles 153 et 154) :",
+    "A : Exige un commandement de payer resté sans effet pendant huit jours.",
+    "B : Ne porte que sur les meubles corporels du débiteur.",
+    "C : Peut être pratiquée sans titre exécutoire.",
+    "D : Se pratique sans commandement préalable et attribue immédiatement la créance saisie au saisissant.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Se pratique sans commandement préalable et attribue immédiatement la créance saisie au saisissant",
+   "explication": "Le créancier muni d'un titre exécutoire saisit « sans commandement préalable » les créances de somme d'argent de son débiteur entre les mains d'un tiers (article 153) ; l'acte de saisie emporte « attribution immédiate » de la créance saisie (article 154).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Le créancier muni d'un titre exécutoire saisit « sans commandement préalable » les créances de somme d'argent de son débiteur entre les mains d'un tiers, article 153; l'acte de saisie emporte « attribution immédiate » de la créance saisie, article 154."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Le créancier muni d'un titre exécutoire saisit « sans commandement préalable » les créances de somme d'argent de son débiteur entre les mains d'un tiers (article 153) ; l'acte de saisie emporte « attribution immédiate » de la créance saisie (article 154)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

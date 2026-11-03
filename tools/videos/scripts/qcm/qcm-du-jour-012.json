@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-012",
+ "titre": "Le QCM du jour n° 12",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 12",
+ "source": {
+  "matiere": "culture-generale",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Culture générale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *culture générale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *culture générale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "À quelle date la Côte d'Ivoire a-t-elle proclamé son indépendance ?",
+   "options": [
+    "Le 3 novembre 1960",
+    "Le 4 avril 1960",
+    "Le 7 août 1960",
+    "Le 1er janvier 1961"
+   ],
+   "pause": 5,
+   "dit": [
+    "À quelle date la Côte d'Ivoire a-t-elle proclamé son indépendance ?",
+    "A : Le 3 novembre 1960.",
+    "B : Le 4 avril 1960.",
+    "C : Le 7 août 1960.",
+    "D : Le premier janvier 1961.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "À quelle date la Côte d'Ivoire a-t-elle proclamé son indépendance ?",
+    "A : Le 3 novembre 1960.",
+    "B : Le 4 avril 1960.",
+    "C : Le 7 août 1960.",
+    "D : Le 1er janvier 1961.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Le 7 août 1960",
+   "explication": "Le 7 août 1960, Félix Houphouët-Boigny, alors président du Conseil du gouvernement, proclame l'indépendance de la Côte d'Ivoire au nom du peuple ivoirien. Source : APA News.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Le 7 août 1960, Félix Houphouët-Boigny, alors président du Conseil du gouvernement, proclame l'indépendance de la Côte d'Ivoire au nom du peuple ivoirien."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Le 7 août 1960, Félix Houphouët-Boigny, alors président du Conseil du gouvernement, proclame l'indépendance de la Côte d'Ivoire au nom du peuple ivoirien. Source : APA News."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

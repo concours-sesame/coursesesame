@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-170",
+ "titre": "Le QCM du jour n° 170",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 170",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 19
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Avant son inscription, l'hypothèque conventionnelle (AUS, article 206) :",
+   "options": [
+    "Produit tous ses effets à l'égard de tous",
+    "Est nulle",
+    "Est inopposable aux tiers, et vaut entre les parties promesse synallagmatique",
+    "Ne vaut qu'à l'égard des créanciers chirographaires"
+   ],
+   "pause": 5,
+   "dit": [
+    "Avant son inscription, l'hypothèque conventionnelle, Acte uniforme sur les sûretés, article 206:",
+    "A : Produit tous ses effets à l'égard de tous.",
+    "B : Est nulle.",
+    "C : Est inopposable aux tiers, et vaut entre les parties promesse synallagmatique.",
+    "D : Ne vaut qu'à l'égard des créanciers chirographaires.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Avant son inscription, l'hypothèque conventionnelle (AUS, article 206) :",
+    "A : Produit tous ses effets à l'égard de tous.",
+    "B : Est nulle.",
+    "C : Est inopposable aux tiers, et vaut entre les parties promesse synallagmatique.",
+    "D : Ne vaut qu'à l'égard des créanciers chirographaires.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Est inopposable aux tiers, et vaut entre les parties promesse synallagmatique",
+   "explication": "Avant inscription, l'acte d'hypothèque est « inopposable aux tiers » et vaut entre les parties « promesse synallagmatique » (article 206). L'hypothèque prend rang du jour de l'inscription (article 195).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Avant inscription, l'acte d'hypothèque est « inopposable aux tiers » et vaut entre les parties « promesse synallagmatique », article 206. L'hypothèque prend rang du jour de l'inscription, article 195."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Avant inscription, l'acte d'hypothèque est « inopposable aux tiers » et vaut entre les parties « promesse synallagmatique » (article 206). L'hypothèque prend rang du jour de l'inscription (article 195)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

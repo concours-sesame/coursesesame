@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-056",
+ "titre": "Le QCM du jour n° 56",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 56",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "À partir de treize ans, de quoi le mineur bénéficie-t-il ?",
+   "options": [
+    "De l'excuse absolutoire de minorité",
+    "De l'excuse atténuante de minorité, qui réduit de moitié les peines encourues",
+    "D'aucune excuse particulière",
+    "D'une immunité totale pour les délits"
+   ],
+   "pause": 5,
+   "dit": [
+    "À partir de treize ans, de quoi le mineur bénéficie-t-il ?",
+    "A : De l'excuse absolutoire de minorité.",
+    "B : De l'excuse atténuante de minorité, qui réduit de moitié les peines encourues.",
+    "C : D'aucune excuse particulière.",
+    "D : D'une immunité totale pour les délits.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "À partir de treize ans, de quoi le mineur bénéficie-t-il ?",
+    "A : De l'excuse absolutoire de minorité.",
+    "B : De l'excuse atténuante de minorité, qui réduit de moitié les peines encourues.",
+    "C : D'aucune excuse particulière.",
+    "D : D'une immunité totale pour les délits.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "De l'excuse atténuante de minorité, qui réduit de moitié les peines encourues",
+   "explication": "À partir de treize ans, le mineur ne bénéficie plus que de l'excuse atténuante de minorité (article 113 du Code pénal).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "À partir de treize ans, le mineur ne bénéficie plus que de l'excuse atténuante de minorité, article 113 du Code pénal."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "À partir de treize ans, le mineur ne bénéficie plus que de l'excuse atténuante de minorité (article 113 du Code pénal)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

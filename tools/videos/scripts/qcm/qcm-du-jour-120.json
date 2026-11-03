@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-120",
+ "titre": "Le QCM du jour n° 120",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 120",
+ "source": {
+  "matiere": "culture-generale",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Culture générale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *culture générale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *culture générale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Qui est l'auteur de De l'esprit des lois, l'ouvrage de 1748 associé à la séparation des pouvoirs ?",
+   "options": [
+    "Jean-Jacques Rousseau",
+    "Voltaire",
+    "Montesquieu",
+    "Alexis de Tocqueville"
+   ],
+   "pause": 5,
+   "dit": [
+    "Qui est l'auteur de De l'esprit des lois, l'ouvrage de 1748 associé à la séparation des pouvoirs ?",
+    "A : Jean-Jacques Rousseau.",
+    "B : Voltaire.",
+    "C : Montesquieu.",
+    "D : Alexis de Tocqueville.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Qui est l'auteur de De l'esprit des lois, l'ouvrage de 1748 associé à la séparation des pouvoirs ?",
+    "A : Jean-Jacques Rousseau.",
+    "B : Voltaire.",
+    "C : Montesquieu.",
+    "D : Alexis de Tocqueville.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Montesquieu",
+   "explication": "Montesquieu publie De l'esprit des lois à Genève en 1748. On en retient la séparation des pouvoirs législatif, exécutif et judiciaire, et la formule « le pouvoir arrête le pouvoir ». Source : Wikipédia.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Montesquieu publie De l'esprit des lois à Genève en 1748. On en retient la séparation des pouvoirs législatif, exécutif et judiciaire, et la formule « le pouvoir arrête le pouvoir »."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Montesquieu publie De l'esprit des lois à Genève en 1748. On en retient la séparation des pouvoirs législatif, exécutif et judiciaire, et la formule « le pouvoir arrête le pouvoir ». Source : Wikipédia."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

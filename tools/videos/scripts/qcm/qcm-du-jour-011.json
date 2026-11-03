@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-011",
+ "titre": "Le QCM du jour n° 11",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 11",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Selon l'article 2 de l'AUDCG, qui est commerçant ?",
+   "options": [
+    "Toute personne immatriculée au RCCM",
+    "Celui qui fait de l'accomplissement d'actes de commerce par nature sa profession",
+    "Celui qui réalise un acte de commerce, même isolé",
+    "Toute personne qui exploite une entreprise individuelle"
+   ],
+   "pause": 5,
+   "dit": [
+    "Selon l'article 2 de l'Acte uniforme sur le droit commercial général, qui est commerçant ?",
+    "A : Toute personne immatriculée au R C C M.",
+    "B : Celui qui fait de l'accomplissement d'actes de commerce par nature sa profession.",
+    "C : Celui qui réalise un acte de commerce, même isolé.",
+    "D : Toute personne qui exploite une entreprise individuelle.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Selon l'article 2 de l'AUDCG, qui est commerçant ?",
+    "A : Toute personne immatriculée au RCCM.",
+    "B : Celui qui fait de l'accomplissement d'actes de commerce par nature sa profession.",
+    "C : Celui qui réalise un acte de commerce, même isolé.",
+    "D : Toute personne qui exploite une entreprise individuelle.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Celui qui fait de l'accomplissement d'actes de commerce par nature sa profession",
+   "explication": "Est commerçant celui qui fait de l'accomplissement d'actes de commerce par nature sa profession (article 2 AUDCG). L'immatriculation est une obligation du commerçant, pas le critère de sa qualité.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Est commerçant celui qui fait de l'accomplissement d'actes de commerce par nature sa profession, article 2 Acte uniforme sur le droit commercial général. L'immatriculation est une obligation du commerçant, pas le critère de sa qualité."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Est commerçant celui qui fait de l'accomplissement d'actes de commerce par nature sa profession (article 2 AUDCG). L'immatriculation est une obligation du commerçant, pas le critère de sa qualité."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

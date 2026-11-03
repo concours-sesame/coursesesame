@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-149",
+ "titre": "Le QCM du jour n° 149",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 149",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 14
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Au cours d'une information, le juge d'instruction découvre des faits nouveaux. Peut-il s'en saisir lui-même ?",
+   "options": [
+    "Oui, s'ils sont connexes aux faits dont il est saisi",
+    "Oui, en cas de crime",
+    "Oui, avec l'accord de la partie civile",
+    "Non : il transmet au procureur les plaintes ou procès-verbaux qui les constatent"
+   ],
+   "pause": 5,
+   "dit": [
+    "Au cours d'une information, le juge d'instruction découvre des faits nouveaux. Peut-il s'en saisir lui-même ?",
+    "A : Oui, s'ils sont connexes aux faits dont il est saisi.",
+    "B : Oui, en cas de crime.",
+    "C : Oui, avec l'accord de la partie civile.",
+    "D : Non : il transmet au procureur les plaintes ou procès-verbaux qui les constatent.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Au cours d'une information, le juge d'instruction découvre des faits nouveaux. Peut-il s'en saisir lui-même ?",
+    "A : Oui, s'ils sont connexes aux faits dont il est saisi.",
+    "B : Oui, en cas de crime.",
+    "C : Oui, avec l'accord de la partie civile.",
+    "D : Non : il transmet au procureur les plaintes ou procès-verbaux qui les constatent.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Non : il transmet au procureur les plaintes ou procès-verbaux qui les constatent",
+   "explication": "Le juge d'instruction « ne peut informer qu'en vertu d'un réquisitoire du procureur de la République » ; pour les faits nouveaux, il transmet au procureur les plaintes ou procès-verbaux qui les constatent (article 97).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Le juge d'instruction « ne peut informer qu'en vertu d'un réquisitoire du procureur de la République » ; pour les faits nouveaux, il transmet au procureur les plaintes ou procès-verbaux qui les constatent, article 97."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Le juge d'instruction « ne peut informer qu'en vertu d'un réquisitoire du procureur de la République » ; pour les faits nouveaux, il transmet au procureur les plaintes ou procès-verbaux qui les constatent (article 97)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

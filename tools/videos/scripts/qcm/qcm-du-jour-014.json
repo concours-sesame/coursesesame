@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-014",
+ "titre": "Le QCM du jour n° 14",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 14",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "À quelles conditions les époux peuvent-ils changer de régime matrimonial (loi relative au mariage, articles 61 et 62) ?",
+   "options": [
+    "À tout moment, par simple déclaration",
+    "Seulement en cas de divorce",
+    "Dans le seul intérêt de la famille, après deux années d'application du régime adopté",
+    "Après dix ans de mariage"
+   ],
+   "pause": 5,
+   "dit": [
+    "À quelles conditions les époux peuvent-ils changer de régime matrimonial, loi relative au mariage, articles 61 et 62 ?",
+    "A : À tout moment, par simple déclaration.",
+    "B : Seulement en cas de divorce.",
+    "C : Dans le seul intérêt de la famille, après deux années d'application du régime adopté.",
+    "D : Après dix ans de mariage.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "À quelles conditions les époux peuvent-ils changer de régime matrimonial (loi relative au mariage, articles 61 et 62) ?",
+    "A : À tout moment, par simple déclaration.",
+    "B : Seulement en cas de divorce.",
+    "C : Dans le seul intérêt de la famille, après deux années d'application du régime adopté.",
+    "D : Après dix ans de mariage.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Dans le seul intérêt de la famille, après deux années d'application du régime adopté",
+   "explication": "Le changement n'est possible que « dans le seul intérêt de la famille » (article 61), après deux années d'application du régime adopté (article 62).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Le changement n'est possible que « dans le seul intérêt de la famille », article 61,, après deux années d'application du régime adopté, article 62."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Le changement n'est possible que « dans le seul intérêt de la famille » (article 61), après deux années d'application du régime adopté (article 62)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

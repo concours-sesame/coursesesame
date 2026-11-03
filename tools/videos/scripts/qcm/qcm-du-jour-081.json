@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-081",
+ "titre": "Le QCM du jour n° 81",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 81",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle innovation majeure la loi du 28 mars 2025 apporte-t-elle à l'ordre administratif ?",
+   "options": [
+    "Elle supprime le Conseil d'État",
+    "Elle en fait un ordre complet à trois niveaux : tribunaux administratifs, cours administratives d'appel et Conseil d'État",
+    "Elle confie le contentieux administratif à la Cour de cassation",
+    "Elle rétablit la chambre administrative de la Cour suprême"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle innovation majeure la loi du 28 mars 2025 apporte-t-elle à l'ordre administratif ?",
+    "A : Elle supprime le Conseil d'État.",
+    "B : Elle en fait un ordre complet à trois niveaux : tribunaux administratifs, cours administratives d'appel et Conseil d'État.",
+    "C : Elle confie le contentieux administratif à la Cour de cassation.",
+    "D : Elle rétablit la chambre administrative de la Cour suprême.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle innovation majeure la loi du 28 mars 2025 apporte-t-elle à l'ordre administratif ?",
+    "A : Elle supprime le Conseil d'État.",
+    "B : Elle en fait un ordre complet à trois niveaux : tribunaux administratifs, cours administratives d'appel et Conseil d'État.",
+    "C : Elle confie le contentieux administratif à la Cour de cassation.",
+    "D : Elle rétablit la chambre administrative de la Cour suprême.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Elle en fait un ordre complet à trois niveaux : tribunaux administratifs, cours administratives d'appel et Conseil d'État",
+   "explication": "Le dualisme juridictionnel, affirmé par la Constitution de 2016, reçoit ainsi une traduction organique complète.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le dualisme juridictionnel, affirmé par la Constitution de 2016, reçoit ainsi une traduction organique complète."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le dualisme juridictionnel, affirmé par la Constitution de 2016, reçoit ainsi une traduction organique complète."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

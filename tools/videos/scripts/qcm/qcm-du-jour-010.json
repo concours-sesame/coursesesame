@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-010",
+ "titre": "Le QCM du jour n° 10",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 10",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle garantie l'article 1er du Code de procédure pénale pose-t-il, sauf exception prévue par la loi ?",
+   "options": [
+    "La gratuité de la justice pénale",
+    "La séparation des fonctions de poursuite, d'instruction et de jugement",
+    "La collégialité de toutes les juridictions répressives",
+    "Le caractère public de l'enquête"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle garantie l'article premier du Code de procédure pénale pose-t-il, sauf exception prévue par la loi ?",
+    "A : La gratuité de la justice pénale.",
+    "B : La séparation des fonctions de poursuite, d'instruction et de jugement.",
+    "C : La collégialité de toutes les juridictions répressives.",
+    "D : Le caractère public de l'enquête.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle garantie l'article 1er du Code de procédure pénale pose-t-il, sauf exception prévue par la loi ?",
+    "A : La gratuité de la justice pénale.",
+    "B : La séparation des fonctions de poursuite, d'instruction et de jugement.",
+    "C : La collégialité de toutes les juridictions répressives.",
+    "D : Le caractère public de l'enquête.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "La séparation des fonctions de poursuite, d'instruction et de jugement",
+   "explication": "La procédure pénale doit, sauf exception prévue par la loi, garantir la séparation des fonctions de poursuite, d'instruction et de jugement (article 1er).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "La procédure pénale doit, sauf exception prévue par la loi, garantir la séparation des fonctions de poursuite, d'instruction et de jugement, article premier."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "La procédure pénale doit, sauf exception prévue par la loi, garantir la séparation des fonctions de poursuite, d'instruction et de jugement (article 1er)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

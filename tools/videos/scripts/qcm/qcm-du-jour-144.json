@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-144",
+ "titre": "Le QCM du jour n° 144",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 144",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 13
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans quel délai le débiteur peut-il former opposition à une ordonnance d'injonction de payer (AUPSRVE, article 10) ?",
+   "options": [
+    "Quinze jours suivant son prononcé",
+    "Un mois suivant la signification",
+    "Trois mois suivant la signification",
+    "Dix jours suivant la signification de l'ordonnance"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans quel délai le débiteur peut-il former opposition à une ordonnance d'injonction de payer, Acte uniforme sur les procédures simplifiées de recouvrement, article 10 ?",
+    "A : Quinze jours suivant son prononcé.",
+    "B : Un mois suivant la signification.",
+    "C : Trois mois suivant la signification.",
+    "D : Dix jours suivant la signification de l'ordonnance.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans quel délai le débiteur peut-il former opposition à une ordonnance d'injonction de payer (AUPSRVE, article 10) ?",
+    "A : Quinze jours suivant son prononcé.",
+    "B : Un mois suivant la signification.",
+    "C : Trois mois suivant la signification.",
+    "D : Dix jours suivant la signification de l'ordonnance.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Dix jours suivant la signification de l'ordonnance",
+   "explication": "L'opposition doit être formée dans les dix jours qui suivent la signification de l'ordonnance (article 10). L'ordonnance elle-même doit être signifiée dans les trois mois, sinon elle est non avenue (article 7).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "L'opposition doit être formée dans les dix jours qui suivent la signification de l'ordonnance, article 10. L'ordonnance elle-même doit être signifiée dans les trois mois, sinon elle est non avenue, article 7."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "L'opposition doit être formée dans les dix jours qui suivent la signification de l'ordonnance (article 10). L'ordonnance elle-même doit être signifiée dans les trois mois, sinon elle est non avenue (article 7)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

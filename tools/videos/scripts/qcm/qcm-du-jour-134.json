@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-134",
+ "titre": "Le QCM du jour n° 134",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 134",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 12
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans quel délai une naissance doit-elle être déclarée à l'état civil (loi n° 2018-862 relative à l'état civil, article 41) ?",
+   "options": [
+    "Trois mois à compter de l'accouchement",
+    "Quinze jours",
+    "Un mois",
+    "Un an"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans quel délai une naissance doit-elle être déclarée à l'état civil, loi de 2018 relative à l'état civil, article 41 ?",
+    "A : Trois mois à compter de l'accouchement.",
+    "B : Quinze jours.",
+    "C : Un mois.",
+    "D : Un an.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans quel délai une naissance doit-elle être déclarée à l'état civil (loi n° 2018-862 relative à l'état civil, article 41) ?",
+    "A : Trois mois à compter de l'accouchement.",
+    "B : Quinze jours.",
+    "C : Un mois.",
+    "D : Un an.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Trois mois à compter de l'accouchement",
+   "explication": "« Les naissances doivent être déclarées dans les trois mois de l'accouchement. » Passé ce délai, l'officier de l'état civil ne peut relater la naissance qu'en vertu d'un jugement du tribunal du lieu de naissance (article 41).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« Les naissances doivent être déclarées dans les trois mois de l'accouchement. » Passé ce délai, l'officier de l'état civil ne peut relater la naissance qu'en vertu d'un jugement du tribunal du lieu de naissance, article 41."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« Les naissances doivent être déclarées dans les trois mois de l'accouchement. » Passé ce délai, l'officier de l'état civil ne peut relater la naissance qu'en vertu d'un jugement du tribunal du lieu de naissance (article 41)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

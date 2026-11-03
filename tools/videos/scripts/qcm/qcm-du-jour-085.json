@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-085",
+ "titre": "Le QCM du jour n° 85",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 85",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 7
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le gérant d'affaires a-t-il droit à une rémunération ?",
+   "options": [
+    "Oui, fixée par le juge",
+    "Non, la gestion d'affaires est par nature désintéressée",
+    "Oui, si l'affaire a été bien administrée",
+    "Oui, à hauteur de ses dépenses majorées"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le gérant d'affaires a-t-il droit à une rémunération ?",
+    "A : Oui, fixée par le juge.",
+    "B : Non, la gestion d'affaires est par nature désintéressée.",
+    "C : Oui, si l'affaire a été bien administrée.",
+    "D : Oui, à hauteur de ses dépenses majorées.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le gérant d'affaires a-t-il droit à une rémunération ?",
+    "A : Oui, fixée par le juge.",
+    "B : Non, la gestion d'affaires est par nature désintéressée.",
+    "C : Oui, si l'affaire a été bien administrée.",
+    "D : Oui, à hauteur de ses dépenses majorées.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Non, la gestion d'affaires est par nature désintéressée",
+   "explication": "Le maître de l'affaire rembourse les dépenses utiles ou nécessaires et exécute les engagements pris en son nom (article 1375), mais le gérant n'a droit à aucune rémunération.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le maître de l'affaire rembourse les dépenses utiles ou nécessaires et exécute les engagements pris en son nom, article 1375,, mais le gérant n'a droit à aucune rémunération."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le maître de l'affaire rembourse les dépenses utiles ou nécessaires et exécute les engagements pris en son nom (article 1375), mais le gérant n'a droit à aucune rémunération."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

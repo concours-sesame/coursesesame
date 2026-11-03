@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-031",
+ "titre": "Le QCM du jour n° 31",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 31",
+ "source": {
+  "matiere": "droit-constitutionnel",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit constitutionnel",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit constitutionnel*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit constitutionnel*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Lequel de ces textes doit obligatoirement être soumis au Conseil constitutionnel avant sa promulgation (Constitution, article 134 nouveau) ?",
+   "options": [
+    "Toute loi ordinaire",
+    "Une loi organique",
+    "Un décret",
+    "Un arrêté ministériel"
+   ],
+   "pause": 5,
+   "dit": [
+    "Lequel de ces textes doit obligatoirement être soumis au Conseil constitutionnel avant sa promulgation, Constitution, article 134 nouveau ?",
+    "A : Toute loi ordinaire.",
+    "B : Une loi organique.",
+    "C : Un décret.",
+    "D : Un arrêté ministériel.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Lequel de ces textes doit obligatoirement être soumis au Conseil constitutionnel avant sa promulgation (Constitution, article 134 nouveau) ?",
+    "A : Toute loi ordinaire.",
+    "B : Une loi organique.",
+    "C : Un décret.",
+    "D : Un arrêté ministériel.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Une loi organique",
+   "explication": "Doivent être déférés au Conseil constitutionnel les engagements internationaux de l'article 120 avant ratification, les lois constitutionnelles adoptées par voie parlementaire, les lois organiques avant promulgation et les règlements des assemblées avant leur mise en application (article 134 nouveau).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Doivent être déférés au Conseil constitutionnel les engagements internationaux de l'article 120 avant ratification, les lois constitutionnelles adoptées par voie parlementaire, les lois organiques avant promulgation et les règlements des assemblées avant leur mise en application, article 134 nouveau."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Doivent être déférés au Conseil constitutionnel les engagements internationaux de l'article 120 avant ratification, les lois constitutionnelles adoptées par voie parlementaire, les lois organiques avant promulgation et les règlements des assemblées avant leur mise en application (article 134 nouveau)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

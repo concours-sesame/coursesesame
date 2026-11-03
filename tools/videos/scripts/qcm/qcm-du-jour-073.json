@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-073",
+ "titre": "Le QCM du jour n° 73",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 73",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quel quasi-contrat a été dégagé par la jurisprudence, sans texte du Code civil ?",
+   "options": [
+    "La gestion d'affaires",
+    "La répétition de l'indu",
+    "L'enrichissement sans cause",
+    "Le mandat"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quel quasi-contrat a été dégagé par la jurisprudence, sans texte du Code civil ?",
+    "A : La gestion d'affaires.",
+    "B : La répétition de l'indu.",
+    "C : L'enrichissement sans cause.",
+    "D : Le mandat.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quel quasi-contrat a été dégagé par la jurisprudence, sans texte du Code civil ?",
+    "A : La gestion d'affaires.",
+    "B : La répétition de l'indu.",
+    "C : L'enrichissement sans cause.",
+    "D : Le mandat.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "L'enrichissement sans cause",
+   "explication": "Le Code civil organise la gestion d'affaires et le paiement de l'indu. L'enrichissement sans cause a été dégagé par la jurisprudence sur le fondement de l'équité ; il est sanctionné par l'action de in rem verso.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Le Code civil organise la gestion d'affaires et le paiement de l'indu. L'enrichissement sans cause a été dégagé par la jurisprudence sur le fondement de l'équité ; il est sanctionné par l'action de in rem verso."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Le Code civil organise la gestion d'affaires et le paiement de l'indu. L'enrichissement sans cause a été dégagé par la jurisprudence sur le fondement de l'équité ; il est sanctionné par l'action de in rem verso."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-104",
+ "titre": "Le QCM du jour n° 104",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 104",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 8
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle juridiction est compétente pour les crimes commis par des mineurs de seize ans au moins ?",
+   "options": [
+    "Le Tribunal pour enfants",
+    "Le Tribunal criminel pour mineurs",
+    "Le tribunal criminel de droit commun",
+    "Le juge des enfants statuant seul"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle juridiction est compétente pour les crimes commis par des mineurs de seize ans au moins ?",
+    "A : Le Tribunal pour enfants.",
+    "B : Le Tribunal criminel pour mineurs.",
+    "C : Le tribunal criminel de droit commun.",
+    "D : Le juge des enfants statuant seul.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle juridiction est compétente pour les crimes commis par des mineurs de seize ans au moins ?",
+    "A : Le Tribunal pour enfants.",
+    "B : Le Tribunal criminel pour mineurs.",
+    "C : Le tribunal criminel de droit commun.",
+    "D : Le juge des enfants statuant seul.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Le Tribunal criminel pour mineurs",
+   "explication": "Le Tribunal pour enfants connaît des délits, des contraventions de cinquième classe et des crimes commis par les mineurs de moins de seize ans ; le Tribunal criminel pour mineurs juge les crimes des mineurs de seize ans au moins.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le Tribunal pour enfants connaît des délits, des contraventions de cinquième classe et des crimes commis par les mineurs de moins de seize ans ; le Tribunal criminel pour mineurs juge les crimes des mineurs de seize ans au moins."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le Tribunal pour enfants connaît des délits, des contraventions de cinquième classe et des crimes commis par les mineurs de moins de seize ans ; le Tribunal criminel pour mineurs juge les crimes des mineurs de seize ans au moins."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

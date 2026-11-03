@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-050",
+ "titre": "Le QCM du jour n° 50",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 50",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Hors mariage, comment la filiation maternelle est-elle établie (loi relative à la filiation, article 19) ?",
+   "options": [
+    "Seulement par une reconnaissance",
+    "Par le seul fait de la naissance, sauf si l'acte de naissance ne porte pas le nom de la mère",
+    "Seulement par un jugement",
+    "Par la possession d'état uniquement"
+   ],
+   "pause": 5,
+   "dit": [
+    "Hors mariage, comment la filiation maternelle est-elle établie, loi relative à la filiation, article 19 ?",
+    "A : Seulement par une reconnaissance.",
+    "B : Par le seul fait de la naissance, sauf si l'acte de naissance ne porte pas le nom de la mère.",
+    "C : Seulement par un jugement.",
+    "D : Par la possession d'état uniquement.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Hors mariage, comment la filiation maternelle est-elle établie (loi relative à la filiation, article 19) ?",
+    "A : Seulement par une reconnaissance.",
+    "B : Par le seul fait de la naissance, sauf si l'acte de naissance ne porte pas le nom de la mère.",
+    "C : Seulement par un jugement.",
+    "D : Par la possession d'état uniquement.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Par le seul fait de la naissance, sauf si l'acte de naissance ne porte pas le nom de la mère",
+   "explication": "À l'égard de la mère, la filiation « résulte [...] du seul fait de la naissance » ; si l'acte de naissance ne porte pas son nom, elle est établie par une reconnaissance ou un jugement. À l'égard du père, elle ne peut résulter que d'une reconnaissance ou d'un jugement (article 19).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "À l'égard de la mère, la filiation « résulte [...] du seul fait de la naissance » ; si l'acte de naissance ne porte pas son nom, elle est établie par une reconnaissance ou un jugement. À l'égard du père, elle ne peut résulter que d'une reconnaissance ou d'un jugement, article 19."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "À l'égard de la mère, la filiation « résulte [...] du seul fait de la naissance » ; si l'acte de naissance ne porte pas son nom, elle est établie par une reconnaissance ou un jugement. À l'égard du père, elle ne peut résulter que d'une reconnaissance ou d'un jugement (article 19)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

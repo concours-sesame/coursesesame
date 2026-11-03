@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-006",
+ "titre": "Le QCM du jour n° 6",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 6",
+ "source": {
+  "matiere": "droit-administratif",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit administratif",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit administratif*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit administratif*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Que décide l'arrêt Blanco (Tribunal des conflits, 8 février 1873) ?",
+   "options": [
+    "La responsabilité de l'État pour les dommages causés par un service public obéit à des règles spéciales, distinctes du Code civil",
+    "L'État est irresponsable des dommages causés par ses agents",
+    "Les litiges impliquant l'État relèvent toujours du juge judiciaire",
+    "Le préfet ne peut jamais élever le conflit"
+   ],
+   "pause": 5,
+   "dit": [
+    "Que décide l'arrêt Blanco, Tribunal des conflits, 8 février 1873 ?",
+    "A : La responsabilité de l'État pour les dommages causés par un service public obéit à des règles spéciales, distinctes du Code civil.",
+    "B : L'État est irresponsable des dommages causés par ses agents.",
+    "C : Les litiges impliquant l'État relèvent toujours du juge judiciaire.",
+    "D : Le préfet ne peut jamais élever le conflit.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Que décide l'arrêt Blanco (Tribunal des conflits, 8 février 1873) ?",
+    "A : La responsabilité de l'État pour les dommages causés par un service public obéit à des règles spéciales, distinctes du Code civil.",
+    "B : L'État est irresponsable des dommages causés par ses agents.",
+    "C : Les litiges impliquant l'État relèvent toujours du juge judiciaire.",
+    "D : Le préfet ne peut jamais élever le conflit.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "La responsabilité de l'État pour les dommages causés par un service public obéit à des règles spéciales, distinctes du Code civil",
+   "explication": "La responsabilité de l'État ne peut être régie par les principes du Code civil ; elle obéit à des règles spéciales et son contentieux relève de la juridiction administrative. C'est l'arrêt fondateur de l'autonomie du droit administratif.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "La responsabilité de l'État ne peut être régie par les principes du Code civil ; elle obéit à des règles spéciales et son contentieux relève de la juridiction administrative. C'est l'arrêt fondateur de l'autonomie du droit administratif."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "La responsabilité de l'État ne peut être régie par les principes du Code civil ; elle obéit à des règles spéciales et son contentieux relève de la juridiction administrative. C'est l'arrêt fondateur de l'autonomie du droit administratif."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

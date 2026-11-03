@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-048",
+ "titre": "Le QCM du jour n° 48",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 48",
+ "source": {
+  "matiere": "culture-generale",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Culture générale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *culture générale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *culture générale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quand l'Assemblée générale des Nations unies a-t-elle adopté la Déclaration universelle des droits de l'homme ?",
+   "options": [
+    "Le 26 juin 1945",
+    "Le 10 décembre 1948",
+    "Le 4 novembre 1950",
+    "Le 25 mai 1963"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quand l'Assemblée générale des Nations unies a-t-elle adopté la Déclaration universelle des droits de l'homme ?",
+    "A : Le 26 juin 1945.",
+    "B : Le 10 décembre 1948.",
+    "C : Le 4 novembre 1950.",
+    "D : Le 25 mai 1963.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quand l'Assemblée générale des Nations unies a-t-elle adopté la Déclaration universelle des droits de l'homme ?",
+    "A : Le 26 juin 1945.",
+    "B : Le 10 décembre 1948.",
+    "C : Le 4 novembre 1950.",
+    "D : Le 25 mai 1963.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Le 10 décembre 1948",
+   "explication": "Le 10 décembre 1948, les 58 États membres qui composaient alors l'Assemblée générale ont adopté la Déclaration universelle. Le 26 juin 1945 est la date de la signature de la Charte des Nations unies, à San Francisco. Source : Nations unies.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le 10 décembre 1948, les 58 États membres qui composaient alors l'Assemblée générale ont adopté la Déclaration universelle. Le 26 juin 1945 est la date de la signature de la Charte des Nations unies, à San Francisco."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le 10 décembre 1948, les 58 États membres qui composaient alors l'Assemblée générale ont adopté la Déclaration universelle. Le 26 juin 1945 est la date de la signature de la Charte des Nations unies, à San Francisco. Source : Nations unies."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

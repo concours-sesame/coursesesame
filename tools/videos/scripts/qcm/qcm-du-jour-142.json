@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-142",
+ "titre": "Le QCM du jour n° 142",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 142",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 13
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelles juridictions sont les juges de droit commun du contentieux administratif en premier ressort (loi organique sur le Conseil d'État, article 14) ?",
+   "options": [
+    "Les tribunaux de première instance",
+    "Les Cours administratives d'appel",
+    "Le Conseil d'État",
+    "Les tribunaux administratifs"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelles juridictions sont les juges de droit commun du contentieux administratif en premier ressort, loi organique sur le Conseil d'État, article 14 ?",
+    "A : Les tribunaux de première instance.",
+    "B : Les Cours administratives d'appel.",
+    "C : Le Conseil d'État.",
+    "D : Les tribunaux administratifs.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelles juridictions sont les juges de droit commun du contentieux administratif en premier ressort (loi organique sur le Conseil d'État, article 14) ?",
+    "A : Les tribunaux de première instance.",
+    "B : Les Cours administratives d'appel.",
+    "C : Le Conseil d'État.",
+    "D : Les tribunaux administratifs.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Les tribunaux administratifs",
+   "explication": "Les tribunaux administratifs sont les « juges de droit commun du contentieux administratif, en premier ressort » ; les Cours administratives d'appel connaissent de leurs décisions (article 14).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Les tribunaux administratifs sont les « juges de droit commun du contentieux administratif, en premier ressort » ; les Cours administratives d'appel connaissent de leurs décisions, article 14."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Les tribunaux administratifs sont les « juges de droit commun du contentieux administratif, en premier ressort » ; les Cours administratives d'appel connaissent de leurs décisions (article 14)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

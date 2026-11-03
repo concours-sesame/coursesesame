@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-046",
+ "titre": "Le QCM du jour n° 46",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 46",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La victime a porté son action en réparation devant le juge civil compétent. Peut-elle ensuite la porter devant la juridiction répressive ?",
+   "options": [
+    "Oui, à tout moment",
+    "Non, sauf si le ministère public a saisi la juridiction répressive avant qu'un jugement sur le fond ait été rendu par le juge civil",
+    "Oui, si elle se désiste devant le juge civil",
+    "Non, en aucun cas"
+   ],
+   "pause": 5,
+   "dit": [
+    "La victime a porté son action en réparation devant le juge civil compétent. Peut-elle ensuite la porter devant la juridiction répressive ?",
+    "A : Oui, à tout moment.",
+    "B : Non, sauf si le ministère public a saisi la juridiction répressive avant qu'un jugement sur le fond ait été rendu par le juge civil.",
+    "C : Oui, si elle se désiste devant le juge civil.",
+    "D : Non, en aucun cas.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La victime a porté son action en réparation devant le juge civil compétent. Peut-elle ensuite la porter devant la juridiction répressive ?",
+    "A : Oui, à tout moment.",
+    "B : Non, sauf si le ministère public a saisi la juridiction répressive avant qu'un jugement sur le fond ait été rendu par le juge civil.",
+    "C : Oui, si elle se désiste devant le juge civil.",
+    "D : Non, en aucun cas.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Non, sauf si le ministère public a saisi la juridiction répressive avant qu'un jugement sur le fond ait été rendu par le juge civil",
+   "explication": "C'est la règle electa una via de l'article 10 : la partie qui a exercé son action devant la juridiction civile compétente ne peut la porter devant la juridiction répressive, sauf si celle-ci a été saisie par le ministère public avant un jugement civil sur le fond.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "C'est la règle electa una via de l'article 10 : la partie qui a exercé son action devant la juridiction civile compétente ne peut la porter devant la juridiction répressive, sauf si celle-ci a été saisie par le ministère public avant un jugement civil sur le fond."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "C'est la règle electa una via de l'article 10 : la partie qui a exercé son action devant la juridiction civile compétente ne peut la porter devant la juridiction répressive, sauf si celle-ci a été saisie par le ministère public avant un jugement civil sur le fond."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}
