@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-107",
+ "titre": "Le QCM du jour n° 107",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 107",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 8
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quel est le capital social minimum de la société anonyme, et combien d'actionnaires faut-il au moins ?",
+   "options": [
+    "1 000 000 FCFA et deux actionnaires",
+    "10 000 000 FCFA, et la société peut ne comprendre qu'un seul actionnaire",
+    "10 000 000 FCFA et sept actionnaires",
+    "100 000 000 FCFA et trois actionnaires"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quel est le capital social minimum de la société anonyme, et combien d'actionnaires faut-il au moins ?",
+    "A : 1 000 000 francs C F A et deux actionnaires.",
+    "B : 10 000 000 francs C F A, et la société peut ne comprendre qu'un seul actionnaire.",
+    "C : 10 000 000 francs C F A et sept actionnaires.",
+    "D : 100 000 000 francs C F A et trois actionnaires.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quel est le capital social minimum de la société anonyme, et combien d'actionnaires faut-il au moins ?",
+    "A : 1 000 000 FCFA et deux actionnaires.",
+    "B : 10 000 000 FCFA, et la société peut ne comprendre qu'un seul actionnaire.",
+    "C : 10 000 000 FCFA et sept actionnaires.",
+    "D : 100 000 000 FCFA et trois actionnaires.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "10 000 000 FCFA, et la société peut ne comprendre qu'un seul actionnaire",
+   "explication": "La société anonyme peut ne comprendre qu'un seul actionnaire (article 385 AUSCGIE) et son capital social minimum est fixé à dix millions de francs CFA (article 387).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "La société anonyme peut ne comprendre qu'un seul actionnaire, article 385 Acte uniforme sur les sociétés commerciales, et son capital social minimum est fixé à dix millions de francs C F A, article 387."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "La société anonyme peut ne comprendre qu'un seul actionnaire (article 385 AUSCGIE) et son capital social minimum est fixé à dix millions de francs CFA (article 387)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

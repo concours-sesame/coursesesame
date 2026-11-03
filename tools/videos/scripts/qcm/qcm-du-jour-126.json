@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-126",
+ "titre": "Le QCM du jour n° 126",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 126",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 10
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Qui peut être gérant d'une SARL (article 323 de l'AUSCGIE) ?",
+   "options": [
+    "Une ou plusieurs personnes physiques, associées ou non",
+    "Uniquement un associé personne physique",
+    "Une personne physique ou une personne morale",
+    "Uniquement une société commerciale"
+   ],
+   "pause": 5,
+   "dit": [
+    "Qui peut être gérant d'une S A R L, article 323 de l'Acte uniforme sur les sociétés commerciales, ?",
+    "A : Une ou plusieurs personnes physiques, associées ou non.",
+    "B : Uniquement un associé personne physique.",
+    "C : Une personne physique ou une personne morale.",
+    "D : Uniquement une société commerciale.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Qui peut être gérant d'une SARL (article 323 de l'AUSCGIE) ?",
+    "A : Une ou plusieurs personnes physiques, associées ou non.",
+    "B : Uniquement un associé personne physique.",
+    "C : Une personne physique ou une personne morale.",
+    "D : Uniquement une société commerciale.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Une ou plusieurs personnes physiques, associées ou non",
+   "explication": "« La société à responsabilité limitée est gérée par une ou plusieurs personnes physiques, associées ou non » (article 323). Une personne morale ne peut donc pas être gérante.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« La société à responsabilité limitée est gérée par une ou plusieurs personnes physiques, associées ou non », article 323. Une personne morale ne peut donc pas être gérante."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« La société à responsabilité limitée est gérée par une ou plusieurs personnes physiques, associées ou non » (article 323). Une personne morale ne peut donc pas être gérante."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

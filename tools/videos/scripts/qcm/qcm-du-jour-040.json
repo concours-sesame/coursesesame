@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-040",
+ "titre": "Le QCM du jour n° 40",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 40",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un agent exécute l'ordre de son supérieur de frapper un détenu. Peut-il invoquer le commandement de l'autorité légitime (article 100 du Code pénal) ?",
+   "options": [
+    "Non, car l'ordre est manifestement illicite",
+    "Oui, l'ordre d'un supérieur couvre toujours celui qui l'exécute",
+    "Oui, à condition d'être fonctionnaire",
+    "Oui, si le supérieur reconnaît avoir donné l'ordre"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un agent exécute l'ordre de son supérieur de frapper un détenu. Peut-il invoquer le commandement de l'autorité légitime, article 100 du Code pénal, ?",
+    "A : Non, car l'ordre est manifestement illicite.",
+    "B : Oui, l'ordre d'un supérieur couvre toujours celui qui l'exécute.",
+    "C : Oui, à condition d'être fonctionnaire.",
+    "D : Oui, si le supérieur reconnaît avoir donné l'ordre.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un agent exécute l'ordre de son supérieur de frapper un détenu. Peut-il invoquer le commandement de l'autorité légitime (article 100 du Code pénal) ?",
+    "A : Non, car l'ordre est manifestement illicite.",
+    "B : Oui, l'ordre d'un supérieur couvre toujours celui qui l'exécute.",
+    "C : Oui, à condition d'être fonctionnaire.",
+    "D : Oui, si le supérieur reconnaît avoir donné l'ordre.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Non, car l'ordre est manifestement illicite",
+   "explication": "L'article 100 supprime l'infraction de celui qui agit sur ordre de l'autorité légitime, mais ses dispositions « ne sont pas applicables si l'ordre est manifestement illicite » (alinéa 3).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "L'article 100 supprime l'infraction de celui qui agit sur ordre de l'autorité légitime, mais ses dispositions « ne sont pas applicables si l'ordre est manifestement illicite », alinéa 3."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "L'article 100 supprime l'infraction de celui qui agit sur ordre de l'autorité légitime, mais ses dispositions « ne sont pas applicables si l'ordre est manifestement illicite » (alinéa 3)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

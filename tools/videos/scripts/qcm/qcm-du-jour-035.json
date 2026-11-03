@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-035",
+ "titre": "Le QCM du jour n° 35",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 35",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Par quel délai se prescrivent les obligations nées à l'occasion de leur commerce entre commerçants, ou entre commerçants et non-commerçants ?",
+   "options": [
+    "Deux ans",
+    "Trois ans",
+    "Cinq ans",
+    "Dix ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "Par quel délai se prescrivent les obligations nées à l'occasion de leur commerce entre commerçants, ou entre commerçants et non-commerçants ?",
+    "A : Deux ans.",
+    "B : Trois ans.",
+    "C : Cinq ans.",
+    "D : Dix ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Par quel délai se prescrivent les obligations nées à l'occasion de leur commerce entre commerçants, ou entre commerçants et non-commerçants ?",
+    "A : Deux ans.",
+    "B : Trois ans.",
+    "C : Cinq ans.",
+    "D : Dix ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Cinq ans",
+   "explication": "Elles se prescrivent par cinq ans si elles ne sont pas soumises à des prescriptions plus courtes (article 16 AUDCG).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Elles se prescrivent par cinq ans si elles ne sont pas soumises à des prescriptions plus courtes, article 16 Acte uniforme sur le droit commercial général."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Elles se prescrivent par cinq ans si elles ne sont pas soumises à des prescriptions plus courtes (article 16 AUDCG)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-039",
+ "titre": "Le QCM du jour n° 39",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 39",
+ "source": {
+  "matiere": "droit-penal",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal et procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal et procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal et procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelles qualités la défense doit-elle présenter pour constituer la légitime défense (article 97 du Code pénal) ?",
+   "options": [
+    "Être nécessaire, concomitante et proportionnée",
+    "Être préméditée et proportionnée",
+    "Être postérieure à l'attaque et mesurée",
+    "Être autorisée par un officier de police judiciaire"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelles qualités la défense doit-elle présenter pour constituer la légitime défense, article 97 du Code pénal, ?",
+    "A : Être nécessaire, concomitante et proportionnée.",
+    "B : Être préméditée et proportionnée.",
+    "C : Être postérieure à l'attaque et mesurée.",
+    "D : Être autorisée par un officier de police judiciaire.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelles qualités la défense doit-elle présenter pour constituer la légitime défense (article 97 du Code pénal) ?",
+    "A : Être nécessaire, concomitante et proportionnée.",
+    "B : Être préméditée et proportionnée.",
+    "C : Être postérieure à l'attaque et mesurée.",
+    "D : Être autorisée par un officier de police judiciaire.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Être nécessaire, concomitante et proportionnée",
+   "explication": "L'attaque doit être actuelle et injuste, et ne pouvoir être écartée autrement ; la défense doit être nécessaire, concomitante et proportionnée. Une riposte postérieure à l'attaque n'est pas couverte.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "L'attaque doit être actuelle et injuste, et ne pouvoir être écartée autrement ; la défense doit être nécessaire, concomitante et proportionnée. Une riposte postérieure à l'attaque n'est pas couverte."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "L'attaque doit être actuelle et injuste, et ne pouvoir être écartée autrement ; la défense doit être nécessaire, concomitante et proportionnée. Une riposte postérieure à l'attaque n'est pas couverte."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

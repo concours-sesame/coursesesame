@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-130",
+ "titre": "Le QCM du jour n° 130",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 130",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 11
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Comment la Constitution définit-elle la Cour des comptes (article 152) ?",
+   "options": [
+    "Une chambre de la Cour de cassation",
+    "Un service du ministère de l'Économie et des Finances",
+    "Une juridiction de l'ordre administratif placée sous le Conseil d'État",
+    "L'institution suprême de contrôle des finances publiques, avec des attributions juridictionnelles, de contrôle et de consultation"
+   ],
+   "pause": 5,
+   "dit": [
+    "Comment la Constitution définit-elle la Cour des comptes, article 152, ?",
+    "A : Une chambre de la Cour de cassation.",
+    "B : Un service du ministère de l'Économie et des Finances.",
+    "C : Une juridiction de l'ordre administratif placée sous le Conseil d'État.",
+    "D : L'institution suprême de contrôle des finances publiques, avec des attributions juridictionnelles, de contrôle et de consultation.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Comment la Constitution définit-elle la Cour des comptes (article 152) ?",
+    "A : Une chambre de la Cour de cassation.",
+    "B : Un service du ministère de l'Économie et des Finances.",
+    "C : Une juridiction de l'ordre administratif placée sous le Conseil d'État.",
+    "D : L'institution suprême de contrôle des finances publiques, avec des attributions juridictionnelles, de contrôle et de consultation.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "L'institution suprême de contrôle des finances publiques, avec des attributions juridictionnelles, de contrôle et de consultation",
+   "explication": "« La Cour des Comptes est l'Institution suprême de contrôle des finances publiques. Elle a des attributions juridictionnelles, de contrôle et de consultation » (article 152). Les Chambres régionales des Comptes complètent le dispositif (article 143 nouveau).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "« La Cour des Comptes est l'Institution suprême de contrôle des finances publiques. Elle a des attributions juridictionnelles, de contrôle et de consultation », article 152. Les Chambres régionales des Comptes complètent le dispositif, article 143 nouveau."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "« La Cour des Comptes est l'Institution suprême de contrôle des finances publiques. Elle a des attributions juridictionnelles, de contrôle et de consultation » (article 152). Les Chambres régionales des Comptes complètent le dispositif (article 143 nouveau)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-025",
+ "titre": "Le QCM du jour n° 25",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 25",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "L'officier de l'état civil constate un empêchement au mariage. Dans quel délai doit-il en aviser le procureur de la République ?",
+   "options": [
+    "Vingt-quatre heures",
+    "Quarante-huit heures",
+    "Huit jours",
+    "Un mois"
+   ],
+   "pause": 5,
+   "dit": [
+    "L'officier de l'état civil constate un empêchement au mariage. Dans quel délai doit-il en aviser le procureur de la République ?",
+    "A : Vingt-quatre heures.",
+    "B : Quarante-huit heures.",
+    "C : Huit jours.",
+    "D : Un mois.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "L'officier de l'état civil constate un empêchement au mariage. Dans quel délai doit-il en aviser le procureur de la République ?",
+    "A : Vingt-quatre heures.",
+    "B : Quarante-huit heures.",
+    "C : Huit jours.",
+    "D : Un mois.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Quarante-huit heures",
+   "explication": "Il sursoit à la célébration et en avise le procureur dans les quarante-huit heures ; celui-ci peut autoriser à passer outre ou former lui-même l'opposition (article 8).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Il sursoit à la célébration et en avise le procureur dans les quarante-huit heures ; celui-ci peut autoriser à passer outre ou former lui-même l'opposition, article 8."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Il sursoit à la célébration et en avise le procureur dans les quarante-huit heures ; celui-ci peut autoriser à passer outre ou former lui-même l'opposition (article 8)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

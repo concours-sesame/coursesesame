@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-121",
+ "titre": "Le QCM du jour n° 121",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 121",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 10
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Laquelle de ces conditions ne figure pas parmi les quatre conditions de validité des conventions de l'article 1108 du Code civil ?",
+   "options": [
+    "Le consentement de la partie qui s'oblige",
+    "Sa capacité de contracter",
+    "La rédaction d'un écrit",
+    "Une cause licite dans l'obligation"
+   ],
+   "pause": 5,
+   "dit": [
+    "Laquelle de ces conditions ne figure pas parmi les quatre conditions de validité des conventions de l'article 1108 du Code civil ?",
+    "A : Le consentement de la partie qui s'oblige.",
+    "B : Sa capacité de contracter.",
+    "C : La rédaction d'un écrit.",
+    "D : Une cause licite dans l'obligation.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Laquelle de ces conditions ne figure pas parmi les quatre conditions de validité des conventions de l'article 1108 du Code civil ?",
+    "A : Le consentement de la partie qui s'oblige.",
+    "B : Sa capacité de contracter.",
+    "C : La rédaction d'un écrit.",
+    "D : Une cause licite dans l'obligation.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "La rédaction d'un écrit",
+   "explication": "L'article 1108 exige le consentement de la partie qui s'oblige, sa capacité de contracter, un objet certain qui forme la matière de l'engagement et une cause licite dans l'obligation. L'écrit n'est pas une condition de validité générale.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "L'article 1108 exige le consentement de la partie qui s'oblige, sa capacité de contracter, un objet certain qui forme la matière de l'engagement et une cause licite dans l'obligation. L'écrit n'est pas une condition de validité générale."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "L'article 1108 exige le consentement de la partie qui s'oblige, sa capacité de contracter, un objet certain qui forme la matière de l'engagement et une cause licite dans l'obligation. L'écrit n'est pas une condition de validité générale."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-005",
+ "titre": "Le QCM du jour n° 5",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 5",
+ "source": {
+  "matiere": "droit-penal-special",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal spécial",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal spécial*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal spécial*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans l'escroquerie (article 471 du Code pénal), comment le bien passe-t-il entre les mains de l'auteur ?",
+   "options": [
+    "L'auteur le soustrait à l'insu de la victime",
+    "La victime le remet régulièrement, puis l'auteur le détourne",
+    "La victime le lui remet elle-même, parce qu'elle a été trompée",
+    "L'auteur le trouve après sa perte"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans l'escroquerie, article 471 du Code pénal,, comment le bien passe-t-il entre les mains de l'auteur ?",
+    "A : L'auteur le soustrait à l'insu de la victime.",
+    "B : La victime le remet régulièrement, puis l'auteur le détourne.",
+    "C : La victime le lui remet elle-même, parce qu'elle a été trompée.",
+    "D : L'auteur le trouve après sa perte.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans l'escroquerie (article 471 du Code pénal), comment le bien passe-t-il entre les mains de l'auteur ?",
+    "A : L'auteur le soustrait à l'insu de la victime.",
+    "B : La victime le remet régulièrement, puis l'auteur le détourne.",
+    "C : La victime le lui remet elle-même, parce qu'elle a été trompée.",
+    "D : L'auteur le trouve après sa perte.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "La victime le lui remet elle-même, parce qu'elle a été trompée",
+   "explication": "L'escroc « se fait remettre ou délivrer » le bien grâce à un faux nom, une fausse qualité, l'abus d'une qualité vraie ou des manœuvres frauduleuses. Dans le vol, le bien est soustrait ; dans l'abus de confiance, il est remis régulièrement puis détourné.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "L'escroc « se fait remettre ou délivrer » le bien grâce à un faux nom, une fausse qualité, l'abus d'une qualité vraie ou des manœuvres frauduleuses. Dans le vol, le bien est soustrait ; dans l'abus de confiance, il est remis régulièrement puis détourné."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "L'escroc « se fait remettre ou délivrer » le bien grâce à un faux nom, une fausse qualité, l'abus d'une qualité vraie ou des manœuvres frauduleuses. Dans le vol, le bien est soustrait ; dans l'abus de confiance, il est remis régulièrement puis détourné."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

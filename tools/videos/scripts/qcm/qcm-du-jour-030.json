@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-030",
+ "titre": "Le QCM du jour n° 30",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 30",
+ "source": {
+  "matiere": "droit-administratif",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit administratif",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit administratif*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit administratif*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Selon l'arrêt Quéralt, le pouvoir hiérarchique :",
+   "options": [
+    "N'existe qu'en vertu d'un texte exprès",
+    "Existe de plein droit, sans texte, et permet d'annuler ou de réformer pour des motifs de légalité comme d'opportunité",
+    "Ne permet qu'un contrôle de légalité",
+    "Appartient au seul juge administratif"
+   ],
+   "pause": 5,
+   "dit": [
+    "Selon l'arrêt Quéralt, le pouvoir hiérarchique :",
+    "A : N'existe qu'en vertu d'un texte exprès.",
+    "B : Existe de plein droit, sans texte, et permet d'annuler ou de réformer pour des motifs de légalité comme d'opportunité.",
+    "C : Ne permet qu'un contrôle de légalité.",
+    "D : Appartient au seul juge administratif.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Selon l'arrêt Quéralt, le pouvoir hiérarchique :",
+    "A : N'existe qu'en vertu d'un texte exprès.",
+    "B : Existe de plein droit, sans texte, et permet d'annuler ou de réformer pour des motifs de légalité comme d'opportunité.",
+    "C : Ne permet qu'un contrôle de légalité.",
+    "D : Appartient au seul juge administratif.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Existe de plein droit, sans texte, et permet d'annuler ou de réformer pour des motifs de légalité comme d'opportunité",
+   "explication": "Le pouvoir hiérarchique existe de plein droit, sans texte : le supérieur peut annuler ou réformer les décisions de son subordonné, pour l'illégalité comme pour l'inopportunité, sauf texte contraire.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le pouvoir hiérarchique existe de plein droit, sans texte : le supérieur peut annuler ou réformer les décisions de son subordonné, pour l'illégalité comme pour l'inopportunité, sauf texte contraire."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le pouvoir hiérarchique existe de plein droit, sans texte : le supérieur peut annuler ou réformer les décisions de son subordonné, pour l'illégalité comme pour l'inopportunité, sauf texte contraire."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

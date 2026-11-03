@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-163",
+ "titre": "Le QCM du jour n° 163",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 163",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 18
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle peine principale peut être prononcée contre une personne morale (article 96 du Code pénal) ?",
+   "options": [
+    "La seule amende, jusqu'à cinq fois celle encourue par une personne physique",
+    "L'emprisonnement de ses dirigeants à sa place",
+    "Le travail d'intérêt général",
+    "Aucune : seules les personnes physiques sont punissables"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle peine principale peut être prononcée contre une personne morale, article 96 du Code pénal, ?",
+    "A : La seule amende, jusqu'à cinq fois celle encourue par une personne physique.",
+    "B : L'emprisonnement de ses dirigeants à sa place.",
+    "C : Le travail d'intérêt général.",
+    "D : Aucune : seules les personnes physiques sont punissables.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle peine principale peut être prononcée contre une personne morale (article 96 du Code pénal) ?",
+    "A : La seule amende, jusqu'à cinq fois celle encourue par une personne physique.",
+    "B : L'emprisonnement de ses dirigeants à sa place.",
+    "C : Le travail d'intérêt général.",
+    "D : Aucune : seules les personnes physiques sont punissables.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "La seule amende, jusqu'à cinq fois celle encourue par une personne physique",
+   "explication": "« Lorsque la responsabilité pénale de la personne morale est retenue, seule la peine d'amende est prononcée, au titre des peines principales », et elle peut atteindre le quintuple du maximum prévu pour une personne physique. L'État et ses démembrements sont exclus (article 96).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« Lorsque la responsabilité pénale de la personne morale est retenue, seule la peine d'amende est prononcée, au titre des peines principales », et elle peut atteindre le quintuple du maximum prévu pour une personne physique. L'État et ses démembrements sont exclus, article 96."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« Lorsque la responsabilité pénale de la personne morale est retenue, seule la peine d'amende est prononcée, au titre des peines principales », et elle peut atteindre le quintuple du maximum prévu pour une personne physique. L'État et ses démembrements sont exclus (article 96)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

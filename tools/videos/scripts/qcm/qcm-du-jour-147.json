@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-147",
+ "titre": "Le QCM du jour n° 147",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 147",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 14
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le travail d'intérêt général peut être prononcé :",
+   "options": [
+    "Pour tout crime",
+    "Pour un délit ou une contravention puni d'un emprisonnement de trois ans au plus, le prévenu étant présent à l'audience",
+    "Pour tout délit, quelle que soit la peine encourue",
+    "En plus d'une peine d'emprisonnement ferme"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le travail d'intérêt général peut être prononcé :",
+    "A : Pour tout crime.",
+    "B : Pour un délit ou une contravention puni d'un emprisonnement de trois ans au plus, le prévenu étant présent à l'audience.",
+    "C : Pour tout délit, quelle que soit la peine encourue.",
+    "D : En plus d'une peine d'emprisonnement ferme.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le travail d'intérêt général peut être prononcé :",
+    "A : Pour tout crime.",
+    "B : Pour un délit ou une contravention puni d'un emprisonnement de trois ans au plus, le prévenu étant présent à l'audience.",
+    "C : Pour tout délit, quelle que soit la peine encourue.",
+    "D : En plus d'une peine d'emprisonnement ferme.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Pour un délit ou une contravention puni d'un emprisonnement de trois ans au plus, le prévenu étant présent à l'audience",
+   "explication": "Il « n'est applicable qu'aux délits et aux contraventions » (article 38), punis d'un emprisonnement n'excédant pas trois ans (article 55). Le prévenu doit être présent à l'audience (article 56), et il ne se cumule pas avec une peine privative de liberté (article 57).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Il « n'est applicable qu'aux délits et aux contraventions », article 38,, punis d'un emprisonnement n'excédant pas trois ans, article 55. Le prévenu doit être présent à l'audience, article 56,, et il ne se cumule pas avec une peine privative de liberté, article 57."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Il « n'est applicable qu'aux délits et aux contraventions » (article 38), punis d'un emprisonnement n'excédant pas trois ans (article 55). Le prévenu doit être présent à l'audience (article 56), et il ne se cumule pas avec une peine privative de liberté (article 57)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-001",
+ "titre": "Le QCM du jour n° 1",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 1",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Selon la loi du 26 juin 2019 relative au mariage, quel est l'âge nubile ?",
+   "options": [
+    "16 ans pour la femme et 18 ans pour l'homme",
+    "18 ans révolus pour l'homme et la femme, sans dispense possible",
+    "18 ans révolus, avec dispense possible du procureur",
+    "21 ans pour les deux époux"
+   ],
+   "pause": 5,
+   "dit": [
+    "Selon la loi du 26 juin 2019 relative au mariage, quel est l'âge nubile ?",
+    "A : 16 ans pour la femme et 18 ans pour l'homme.",
+    "B : 18 ans révolus pour l'homme et la femme, sans dispense possible.",
+    "C : 18 ans révolus, avec dispense possible du procureur.",
+    "D : 21 ans pour les deux époux.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Selon la loi du 26 juin 2019 relative au mariage, quel est l'âge nubile ?",
+    "A : 16 ans pour la femme et 18 ans pour l'homme.",
+    "B : 18 ans révolus pour l'homme et la femme, sans dispense possible.",
+    "C : 18 ans révolus, avec dispense possible du procureur.",
+    "D : 21 ans pour les deux époux.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "18 ans révolus pour l'homme et la femme, sans dispense possible",
+   "explication": "L'âge nubile est fixé à dix-huit ans révolus pour l'homme et la femme indistinctement, sans dispense légale possible (article 2).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'âge nubile est fixé à dix-huit ans révolus pour l'homme et la femme indistinctement, sans dispense légale possible, article 2."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'âge nubile est fixé à dix-huit ans révolus pour l'homme et la femme indistinctement, sans dispense légale possible (article 2)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

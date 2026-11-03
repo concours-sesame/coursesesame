@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-057",
+ "titre": "Le QCM du jour n° 57",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 57",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Qu'appelle-t-on un conflit négatif de compétence ?",
+   "options": [
+    "Deux juridictions d'un même ordre rendent des décisions contraires",
+    "Les juridictions des deux ordres se sont successivement déclarées incompétentes pour un même litige",
+    "Une juridiction judiciaire refuse de se dessaisir d'un litige administratif",
+    "Le justiciable renonce à son action"
+   ],
+   "pause": 5,
+   "dit": [
+    "Qu'appelle-t-on un conflit négatif de compétence ?",
+    "A : Deux juridictions d'un même ordre rendent des décisions contraires.",
+    "B : Les juridictions des deux ordres se sont successivement déclarées incompétentes pour un même litige.",
+    "C : Une juridiction judiciaire refuse de se dessaisir d'un litige administratif.",
+    "D : Le justiciable renonce à son action.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Qu'appelle-t-on un conflit négatif de compétence ?",
+    "A : Deux juridictions d'un même ordre rendent des décisions contraires.",
+    "B : Les juridictions des deux ordres se sont successivement déclarées incompétentes pour un même litige.",
+    "C : Une juridiction judiciaire refuse de se dessaisir d'un litige administratif.",
+    "D : Le justiciable renonce à son action.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Les juridictions des deux ordres se sont successivement déclarées incompétentes pour un même litige",
+   "explication": "Le justiciable se trouve alors sans juge ; le Tribunal des conflits règle ce conflit en désignant l'ordre compétent. Le conflit positif survient au contraire quand une juridiction judiciaire refuse de se dessaisir.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le justiciable se trouve alors sans juge ; le Tribunal des conflits règle ce conflit en désignant l'ordre compétent. Le conflit positif survient au contraire quand une juridiction judiciaire refuse de se dessaisir."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le justiciable se trouve alors sans juge ; le Tribunal des conflits règle ce conflit en désignant l'ordre compétent. Le conflit positif survient au contraire quand une juridiction judiciaire refuse de se dessaisir."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

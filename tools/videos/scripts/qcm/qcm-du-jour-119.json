@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-119",
+ "titre": "Le QCM du jour n° 119",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 119",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le groupement d'intérêt économique (GIE) :",
+   "options": [
+    "Doit être constitué avec un capital minimum",
+    "A pour but premier de réaliser et partager des bénéfices",
+    "Peut être constitué sans capital et ne donne pas lieu par lui-même à réalisation et partage de bénéfices",
+    "Ne peut réunir que des commerçants"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le groupement d'intérêt économique, G I E, :",
+    "A : Doit être constitué avec un capital minimum.",
+    "B : A pour but premier de réaliser et partager des bénéfices.",
+    "C : Peut être constitué sans capital et ne donne pas lieu par lui-même à réalisation et partage de bénéfices.",
+    "D : Ne peut réunir que des commerçants.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le groupement d'intérêt économique (GIE) :",
+    "A : Doit être constitué avec un capital minimum.",
+    "B : A pour but premier de réaliser et partager des bénéfices.",
+    "C : Peut être constitué sans capital et ne donne pas lieu par lui-même à réalisation et partage de bénéfices.",
+    "D : Ne peut réunir que des commerçants.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Peut être constitué sans capital et ne donne pas lieu par lui-même à réalisation et partage de bénéfices",
+   "explication": "Le GIE peut être constitué sans capital (article 869 AUSCGIE) et ne donne pas lieu par lui-même à réalisation et partage de bénéfices (article 870). Deux personnes physiques ou morales au moins peuvent le constituer, y compris des membres de professions libérales (article 871).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Le G I E peut être constitué sans capital, article 869 Acte uniforme sur les sociétés commerciales, et ne donne pas lieu par lui-même à réalisation et partage de bénéfices, article 870. Deux personnes physiques ou morales au moins peuvent le constituer, y compris des membres de professions libérales, article 871."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Le GIE peut être constitué sans capital (article 869 AUSCGIE) et ne donne pas lieu par lui-même à réalisation et partage de bénéfices (article 870). Deux personnes physiques ou morales au moins peuvent le constituer, y compris des membres de professions libérales (article 871)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-051",
+ "titre": "Le QCM du jour n° 51",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 51",
+ "source": {
+  "matiere": "droit-penal",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal et procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal et procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal et procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans quel cas la loi présume-t-elle la légitime défense (article 98 du Code pénal) ?",
+   "options": [
+    "Lorsqu'on repousse de jour l'entrée d'un inconnu dans son jardin",
+    "Lorsqu'on repousse pendant la nuit l'escalade ou l'effraction d'une maison habitée",
+    "Lorsqu'on poursuit un voleur qui s'enfuit",
+    "Dans tous les cas de vol simple"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans quel cas la loi présume-t-elle la légitime défense, article 98 du Code pénal, ?",
+    "A : Lorsqu'on repousse de jour l'entrée d'un inconnu dans son jardin.",
+    "B : Lorsqu'on repousse pendant la nuit l'escalade ou l'effraction d'une maison habitée.",
+    "C : Lorsqu'on poursuit un voleur qui s'enfuit.",
+    "D : Dans tous les cas de vol simple.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans quel cas la loi présume-t-elle la légitime défense (article 98 du Code pénal) ?",
+    "A : Lorsqu'on repousse de jour l'entrée d'un inconnu dans son jardin.",
+    "B : Lorsqu'on repousse pendant la nuit l'escalade ou l'effraction d'une maison habitée.",
+    "C : Lorsqu'on poursuit un voleur qui s'enfuit.",
+    "D : Dans tous les cas de vol simple.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Lorsqu'on repousse pendant la nuit l'escalade ou l'effraction d'une maison habitée",
+   "explication": "La présomption joue pour celui qui repousse pendant la nuit l'escalade ou l'effraction des clôtures, murs ou entrées d'une maison habitée, ou qui se défend contre les auteurs de vols ou de pillages exécutés avec violence. Elle ne s'étend pas à une effraction commise de jour.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "La présomption joue pour celui qui repousse pendant la nuit l'escalade ou l'effraction des clôtures, murs ou entrées d'une maison habitée, ou qui se défend contre les auteurs de vols ou de pillages exécutés avec violence. Elle ne s'étend pas à une effraction commise de jour."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "La présomption joue pour celui qui repousse pendant la nuit l'escalade ou l'effraction des clôtures, murs ou entrées d'une maison habitée, ou qui se défend contre les auteurs de vols ou de pillages exécutés avec violence. Elle ne s'étend pas à une effraction commise de jour."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

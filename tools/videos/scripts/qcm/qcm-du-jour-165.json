@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-165",
+ "titre": "Le QCM du jour n° 165",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 165",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 18
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans quel délai faire appel d'un jugement correctionnel contradictoire (article 559 nouveau du Code de procédure pénale) ?",
+   "options": [
+    "Dix jours à compter du prononcé",
+    "Un mois à compter de la signification",
+    "Quinze jours francs",
+    "Vingt jours à compter du prononcé"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans quel délai faire appel d'un jugement correctionnel contradictoire, article 559 nouveau du Code de procédure pénale, ?",
+    "A : Dix jours à compter du prononcé.",
+    "B : Un mois à compter de la signification.",
+    "C : Quinze jours francs.",
+    "D : Vingt jours à compter du prononcé.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans quel délai faire appel d'un jugement correctionnel contradictoire (article 559 nouveau du Code de procédure pénale) ?",
+    "A : Dix jours à compter du prononcé.",
+    "B : Un mois à compter de la signification.",
+    "C : Quinze jours francs.",
+    "D : Vingt jours à compter du prononcé.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Vingt jours à compter du prononcé",
+   "explication": "L'appel est formé dans les vingt jours du prononcé du jugement contradictoire (article 559 nouveau). Les autres parties disposent de dix jours supplémentaires pour un appel incident (article 561), et le procureur général de quatre mois (article 567).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "L'appel est formé dans les vingt jours du prononcé du jugement contradictoire, article 559 nouveau. Les autres parties disposent de dix jours supplémentaires pour un appel incident, article 561,, et le procureur général de quatre mois, article 567."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "L'appel est formé dans les vingt jours du prononcé du jugement contradictoire (article 559 nouveau). Les autres parties disposent de dix jours supplémentaires pour un appel incident (article 561), et le procureur général de quatre mois (article 567)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

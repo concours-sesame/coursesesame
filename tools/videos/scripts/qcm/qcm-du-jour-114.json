@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-114",
+ "titre": "Le QCM du jour n° 114",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 114",
+ "source": {
+  "matiere": "droit-administratif",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit administratif",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit administratif*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit administratif*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Que prévoit l'arrêt Compagnie générale d'éclairage de Bordeaux (30 mars 1916) en cas de bouleversement imprévisible de l'économie du contrat ?",
+   "options": [
+    "Le cocontractant peut cesser l'exécution",
+    "Le contrat est résilié de plein droit",
+    "Le cocontractant doit poursuivre l'exécution mais a droit à une indemnité couvrant une partie du déficit",
+    "L'Administration doit couvrir l'intégralité des pertes"
+   ],
+   "pause": 5,
+   "dit": [
+    "Que prévoit l'arrêt Compagnie générale d'éclairage de Bordeaux, 30 mars 1916, en cas de bouleversement imprévisible de l'économie du contrat ?",
+    "A : Le cocontractant peut cesser l'exécution.",
+    "B : Le contrat est résilié de plein droit.",
+    "C : Le cocontractant doit poursuivre l'exécution mais a droit à une indemnité couvrant une partie du déficit.",
+    "D : L'Administration doit couvrir l'intégralité des pertes.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Que prévoit l'arrêt Compagnie générale d'éclairage de Bordeaux (30 mars 1916) en cas de bouleversement imprévisible de l'économie du contrat ?",
+    "A : Le cocontractant peut cesser l'exécution.",
+    "B : Le contrat est résilié de plein droit.",
+    "C : Le cocontractant doit poursuivre l'exécution mais a droit à une indemnité couvrant une partie du déficit.",
+    "D : L'Administration doit couvrir l'intégralité des pertes.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Le cocontractant doit poursuivre l'exécution mais a droit à une indemnité couvrant une partie du déficit",
+   "explication": "C'est l'arrêt fondateur de la théorie de l'imprévision : obligation de continuer, en contrepartie d'une indemnité partielle.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "C'est l'arrêt fondateur de la théorie de l'imprévision : obligation de continuer, en contrepartie d'une indemnité partielle."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "C'est l'arrêt fondateur de la théorie de l'imprévision : obligation de continuer, en contrepartie d'une indemnité partielle."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

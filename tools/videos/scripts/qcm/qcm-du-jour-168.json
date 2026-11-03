@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-168",
+ "titre": "Le QCM du jour n° 168",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 168",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 19
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Sauf flagrant délit ou condamnation définitive, un magistrat peut-il être poursuivi en matière criminelle ou correctionnelle sans autorisation (Constitution, article 142) ?",
+   "options": [
+    "Non : il faut l'autorisation du Conseil supérieur de la magistrature",
+    "Oui, sur simple décision du procureur",
+    "Non : il faut l'autorisation du ministre de la Justice",
+    "Oui, s'il appartient au parquet"
+   ],
+   "pause": 5,
+   "dit": [
+    "Sauf flagrant délit ou condamnation définitive, un magistrat peut-il être poursuivi en matière criminelle ou correctionnelle sans autorisation, Constitution, article 142, ?",
+    "A : Non : il faut l'autorisation du Conseil supérieur de la magistrature.",
+    "B : Oui, sur simple décision du procureur.",
+    "C : Non : il faut l'autorisation du ministre de la Justice.",
+    "D : Oui, s'il appartient au parquet.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Sauf flagrant délit ou condamnation définitive, un magistrat peut-il être poursuivi en matière criminelle ou correctionnelle sans autorisation (Constitution, article 142) ?",
+    "A : Non : il faut l'autorisation du Conseil supérieur de la magistrature.",
+    "B : Oui, sur simple décision du procureur.",
+    "C : Non : il faut l'autorisation du ministre de la Justice.",
+    "D : Oui, s'il appartient au parquet.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Non : il faut l'autorisation du Conseil supérieur de la magistrature",
+   "explication": "« Sauf flagrant délit ou condamnation définitive, aucun magistrat ne peut être poursuivi, arrêté, détenu ou jugé en matière criminelle ou correctionnelle qu'avec l'autorisation du Conseil supérieur de la Magistrature » (article 142).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« Sauf flagrant délit ou condamnation définitive, aucun magistrat ne peut être poursuivi, arrêté, détenu ou jugé en matière criminelle ou correctionnelle qu'avec l'autorisation du Conseil supérieur de la Magistrature », article 142."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« Sauf flagrant délit ou condamnation définitive, aucun magistrat ne peut être poursuivi, arrêté, détenu ou jugé en matière criminelle ou correctionnelle qu'avec l'autorisation du Conseil supérieur de la Magistrature » (article 142)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

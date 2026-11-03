@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-055",
+ "titre": "Le QCM du jour n° 55",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 55",
+ "source": {
+  "matiere": "droit-constitutionnel",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit constitutionnel",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit constitutionnel*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit constitutionnel*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "À qui appartient l'initiative de la révision de la Constitution (article 177 nouveau) ?",
+   "options": [
+    "Au seul Président de la République",
+    "Concurremment au Président de la République et aux membres du Parlement",
+    "Au seul Parlement",
+    "Au Conseil constitutionnel"
+   ],
+   "pause": 5,
+   "dit": [
+    "À qui appartient l'initiative de la révision de la Constitution, article 177 nouveau, ?",
+    "A : Au seul Président de la République.",
+    "B : Concurremment au Président de la République et aux membres du Parlement.",
+    "C : Au seul Parlement.",
+    "D : Au Conseil constitutionnel.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "À qui appartient l'initiative de la révision de la Constitution (article 177 nouveau) ?",
+    "A : Au seul Président de la République.",
+    "B : Concurremment au Président de la République et aux membres du Parlement.",
+    "C : Au seul Parlement.",
+    "D : Au Conseil constitutionnel.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Concurremment au Président de la République et aux membres du Parlement",
+   "explication": "« L'initiative de la révision de la Constitution appartient concurremment au Président de la République et aux membres du Parlement » (article 177 nouveau). Le projet ou la proposition doit ensuite être pris en considération par le Congrès à la majorité absolue de ses membres.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "« L'initiative de la révision de la Constitution appartient concurremment au Président de la République et aux membres du Parlement », article 177 nouveau. Le projet ou la proposition doit ensuite être pris en considération par le Congrès à la majorité absolue de ses membres."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "« L'initiative de la révision de la Constitution appartient concurremment au Président de la République et aux membres du Parlement » (article 177 nouveau). Le projet ou la proposition doit ensuite être pris en considération par le Congrès à la majorité absolue de ses membres."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-009",
+ "titre": "Le QCM du jour n° 9",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 9",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Combien la Côte d'Ivoire compte-t-elle de juridictions suprêmes ?",
+   "options": [
+    "Une, la Cour suprême",
+    "Deux, la Cour de cassation et le Conseil d'État",
+    "Trois, la Cour de cassation, le Conseil d'État et la Cour des comptes",
+    "Quatre, en comptant le Conseil constitutionnel"
+   ],
+   "pause": 5,
+   "dit": [
+    "Combien la Côte d'Ivoire compte-t-elle de juridictions suprêmes ?",
+    "A : Une, la Cour suprême.",
+    "B : Deux, la Cour de cassation et le Conseil d'État.",
+    "C : Trois, la Cour de cassation, le Conseil d'État et la Cour des comptes.",
+    "D : Quatre, en comptant le Conseil constitutionnel.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Combien la Côte d'Ivoire compte-t-elle de juridictions suprêmes ?",
+    "A : Une, la Cour suprême.",
+    "B : Deux, la Cour de cassation et le Conseil d'État.",
+    "C : Trois, la Cour de cassation, le Conseil d'État et la Cour des comptes.",
+    "D : Quatre, en comptant le Conseil constitutionnel.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Trois, la Cour de cassation, le Conseil d'État et la Cour des comptes",
+   "explication": "Ces trois juridictions, consacrées par la révision constitutionnelle du 19 mars 2020, ont succédé aux chambres judiciaire, administrative et des comptes de l'ancienne Cour suprême.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Ces trois juridictions, consacrées par la révision constitutionnelle du 19 mars 2020, ont succédé aux chambres judiciaire, administrative et des comptes de l'ancienne Cour suprême."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Ces trois juridictions, consacrées par la révision constitutionnelle du 19 mars 2020, ont succédé aux chambres judiciaire, administrative et des comptes de l'ancienne Cour suprême."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

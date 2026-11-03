@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-036",
+ "titre": "Le QCM du jour n° 36",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 36",
+ "source": {
+  "matiere": "culture-generale",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Culture générale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *culture générale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *culture générale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle est la devise de la République de Côte d'Ivoire ?",
+   "options": [
+    "Unité, Travail, Progrès",
+    "Paix, Justice, Travail",
+    "Un peuple, un but, une foi",
+    "Union, Discipline, Travail"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle est la devise de la République de Côte d'Ivoire ?",
+    "A : Unité, Travail, Progrès.",
+    "B : Paix, Justice, Travail.",
+    "C : Un peuple, un but, une foi.",
+    "D : Union, Discipline, Travail.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle est la devise de la République de Côte d'Ivoire ?",
+    "A : Unité, Travail, Progrès.",
+    "B : Paix, Justice, Travail.",
+    "C : Un peuple, un but, une foi.",
+    "D : Union, Discipline, Travail.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Union, Discipline, Travail",
+   "explication": "Article 48 de la Constitution : « La devise de la République est : Union, Discipline, Travail. » Le même article fait du drapeau tricolore orange, blanc, vert l'emblème national et de l'Abidjanaise l'hymne national.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Article 48 de la Constitution : « La devise de la République est : Union, Discipline, Travail. » Le même article fait du drapeau tricolore orange, blanc, vert l'emblème national et de l'Abidjanaise l'hymne national."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Article 48 de la Constitution : « La devise de la République est : Union, Discipline, Travail. » Le même article fait du drapeau tricolore orange, blanc, vert l'emblème national et de l'Abidjanaise l'hymne national."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

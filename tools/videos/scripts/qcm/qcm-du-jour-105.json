@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-105",
+ "titre": "Le QCM du jour n° 105",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 105",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 8
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle juridiction connaît des infractions économiques et financières d'une particulière gravité ou complexité ?",
+   "options": [
+    "Le Tribunal de commerce d'Abidjan",
+    "Le Pôle pénal économique et financier",
+    "La Cour des comptes",
+    "Le Tribunal militaire d'Abidjan"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle juridiction connaît des infractions économiques et financières d'une particulière gravité ou complexité ?",
+    "A : Le Tribunal de commerce d'Abidjan.",
+    "B : Le Pôle pénal économique et financier.",
+    "C : La Cour des comptes.",
+    "D : Le Tribunal militaire d'Abidjan.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle juridiction connaît des infractions économiques et financières d'une particulière gravité ou complexité ?",
+    "A : Le Tribunal de commerce d'Abidjan.",
+    "B : Le Pôle pénal économique et financier.",
+    "C : La Cour des comptes.",
+    "D : Le Tribunal militaire d'Abidjan.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Le Pôle pénal économique et financier",
+   "explication": "Régi par la loi du 11 mars 2022, le Pôle pénal économique et financier juge notamment les détournements de deniers publics, la corruption et le blanchiment de capitaux ; ses décisions sont frappées d'appel devant la Cour d'appel d'Abidjan.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Régi par la loi du 11 mars 2022, le Pôle pénal économique et financier juge notamment les détournements de deniers publics, la corruption et le blanchiment de capitaux ; ses décisions sont frappées d'appel devant la Cour d'appel d'Abidjan."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Régi par la loi du 11 mars 2022, le Pôle pénal économique et financier juge notamment les détournements de deniers publics, la corruption et le blanchiment de capitaux ; ses décisions sont frappées d'appel devant la Cour d'appel d'Abidjan."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

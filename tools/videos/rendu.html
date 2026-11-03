@@ -38,7 +38,8 @@ h1.t{font:700 54px/1.18 LB;color:var(--navy);text-align:center}
 .bloc.fort span{color:#fff;font-weight:700}
 .citation{margin-top:46px;background:#fffdf8;border:2px solid var(--navy);border-radius:20px;padding:36px 34px;position:relative}
 .citation:before{content:"«";position:absolute;top:-34px;left:26px;font:700 80px LB;color:var(--or)}
-.citation p{font:italic 400 33px/1.5 LB;color:var(--texte)}
+.citation p{font:italic 400 33px/1.5 LB;color:var(--texte);white-space:pre-line}
+.dense .citation{margin-top:36px;padding:28px 28px}.dense .citation p{font-size:28px}
 .cas{display:flex;gap:20px;align-items:flex-start;background:#fffdf8;border-radius:20px;padding:26px;margin-top:26px;border:2px solid}
 .cas.ok{border-color:#2e7d4f}.cas.non{border-color:#b23a2b}
 .cas .ic{flex:0 0 60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 34px MS;color:#fff}
@@ -50,6 +51,16 @@ h1.t{font:700 54px/1.18 LB;color:var(--navy);text-align:center}
 .pg{background:#fffdf8;border:2px solid var(--or);border-radius:20px;padding:24px 28px;margin-top:22px;text-align:center}
 .pg b{display:block;font:700 34px/1.25 LB;color:var(--navy)}
 .pg span{display:block;margin-top:10px;font:500 26px/1.4 MS;color:#3a4763}
+/* QCM du jour : choix lettrés, compte à rebours, bonne réponse */
+.q-enonce{margin-top:44px;font:700 36px/1.38 LB;color:var(--texte);text-align:center}
+.choix{display:flex;gap:20px;align-items:center;background:#fffdf8;border:2px solid var(--navy);border-radius:18px;padding:16px 20px;margin-top:16px}
+.lettre{flex:0 0 54px;height:54px;border-radius:50%;background:var(--navy);color:#fff;font:800 27px MS;display:flex;align-items:center;justify-content:center}
+.choix span{font:600 27px/1.32 MS;color:var(--texte)}
+.choix.bon{border-color:#2e7d4f;background:#eaf6ee}.choix.bon .lettre{background:#2e7d4f}
+.compte{margin:30px auto 0;width:150px;height:150px;border-radius:50%;border:8px solid var(--or);display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fffdf8}
+.compte b{font:800 64px/1 MS;color:var(--navy)}.compte small{font:700 15px MS;letter-spacing:.12em;color:var(--or);margin-top:6px}
+.dense .q-enonce{font-size:31px;margin-top:30px}.dense .choix{padding:12px 18px;margin-top:12px}.dense .choix span{font-size:24px}.dense .lettre{flex-basis:46px;height:46px;font-size:23px}
+.dense .bloc span{font-size:24px}
 /* intro et fin */
 .centre{position:absolute;left:0;right:0;text-align:center}
 .logo-grand{width:230px;height:230px;margin:0 auto}
@@ -82,7 +93,7 @@ function dessineEtoiles(c,t){const x=c.getContext('2d');x.clearRect(0,0,720,1280
 function construit(sc,i){
   const d=document.createElement('div');d.className='scene';
   const it=(o,html,cls='')=>`<div class="app ${cls}" data-cue="${o.cue??0}">${html}</div>`;
-  if(sc.type==='intro'){d.classList.add('nuit');d.innerHTML=`<canvas class="etoiles" width="720" height="1280"></canvas><div class="centre" style="top:250px"><div class="logo-grand">${LOGO(true)}</div><div class="serie">UNE NOTION, UNE MINUTE</div><div class="filet"></div><div class="app" data-cue="1"><div class="titre-intro">${esc(sc.titre)}</div><div class="rub">${esc(D.rubrique)}</div></div></div>`;}
+  if(sc.type==='intro'){d.classList.add('nuit');d.innerHTML=`<canvas class="etoiles" width="720" height="1280"></canvas><div class="centre" style="top:250px"><div class="logo-grand">${LOGO(true)}</div><div class="serie">${esc(D.serie||"UNE NOTION, UNE MINUTE")}</div><div class="filet"></div><div class="app" data-cue="1"><div class="titre-intro">${esc(sc.titre)}</div><div class="rub">${esc(D.rubrique)}</div></div></div>`;}
   else if(sc.type==='outro'){d.classList.add('nuit');d.innerHTML=`<canvas class="etoiles" width="720" height="1280"></canvas><div class="centre" style="top:150px"><div class="logo-grand" style="width:200px;height:200px">${LOGO(true)}</div><div class="nom">Les Cours<br>Sésame et SAJ</div><div class="devise">FORMATION JURIDIQUE<br>CONCOURS &amp; EXCELLENCE</div><div class="app" data-cue="1"><div class="mission">Votre réussite est notre mission</div><div class="wa"><small>INSCRIPTIONS SUR WHATSAPP</small><div>01 60 86 05 37<br>05 06 60 03 32</div></div><div class="enligne">Cours entièrement en ligne · coursesesame.com</div></div></div>`;}
   else{
     d.classList.add('creme');let h='';
@@ -91,11 +102,16 @@ function construit(sc,i){
     if(sc.type==='blocs')h=sc.items.map(o=>it(o,`<div class="bloc ${o.fort?'fort':''}"><b>${esc(o.t)}</b><span>${esc(o.d)}</span></div>`)).join('');
     if(sc.type==='article')h=`<div class="app" data-cue="${sc.cueCitation??1}"><div class="citation"><p>${esc(sc.citation)}</p></div></div>`;
     if(sc.type==='cas')h=sc.items.map(o=>it(o,`<div class="cas ${o.ok?'ok':'non'}"><div class="ic">${o.ok?'✓':'✗'}</div><div><b>${esc(o.t)}</b><span>${esc(o.d)}</span></div></div>`)).join('');
+    const L='ABCD';
+    if(sc.type==='qcm')h=`<p class="q-enonce">${esc(sc.question)}</p>`+sc.options.map((o,k)=>it({cue:k+1},`<div class="choix"><div class="lettre">${L[k]}</div><span>${esc(o)}</span></div>`)).join('')+`<div class="app" data-cue="${sc.options.length+1}"><div class="compte"><b>5</b><small>SECONDES</small></div></div>`;
+    if(sc.type==='reponse')h=`<div class="app" data-cue="0"><div class="choix bon"><div class="lettre">${L[sc.bonne]}</div><span>${esc(sc.texte)}</span></div></div>`+(sc.explication?`<div class="app" data-cue="1"><div class="bloc"><b>Pourquoi</b><span>${esc(sc.explication)}</span></div></div>`:'');
     if(sc.type==='piege')h=`<div class="alerte">${ALERTE}</div>`+sc.items.map(o=>it(o,`<div class="pg"><b>${esc(o.t)}</b><span>${esc(o.d)}</span></div>`)).join('');
     d.innerHTML=`<div class="filigrane">${LOGO(false)}</div><div class="entete"><div class="marque">${LOGO(false)}LES COURS SÉSAME ET SAJ</div><div class="barre"><i></i></div></div><div class="corps"><h1 class="t">${esc(sc.titre)}</h1><div class="trait"></div>${h}</div>`;
   }
   document.getElementById('ecran').appendChild(d);
   d.querySelectorAll('canvas.etoiles').forEach(etoiles);
+  // Trop de texte pour l'espace au-dessus des sous-titres : caractères resserrés
+  const c=d.querySelector('.corps');if(c){d.style.display='block';if(c.scrollHeight>820)d.classList.add('dense');d.style.display='';}
   return d;
 }
 const ease=x=>x<0?0:x>1?1:1-Math.pow(1-x,3);
@@ -109,6 +125,7 @@ function rendu(t){
     if(op>0){
       el.querySelectorAll('.app').forEach(a=>{const c=+a.dataset.cue;const t0=s.phrases[Math.min(c,s.phrases.length-1)].debut-0.15;const k=ease((t-t0)/0.45);a.style.opacity=k;a.style.transform=`translateY(${(1-k)*26}px)`;});
       el.querySelectorAll('canvas.etoiles').forEach(c=>dessineEtoiles(c,t));
+      const cp=el.querySelector('.compte b');if(cp&&s.pause){cp.textContent=Math.max(1,Math.min(5,Math.ceil(s.pause.fin-t)));}
       const b=el.querySelector('.barre i');if(b)b.style.width=(100*Math.min(1,Math.max(0,(t-T.contenuDebut)/(T.contenuFin-T.contenuDebut))))+'%';
     }
   });

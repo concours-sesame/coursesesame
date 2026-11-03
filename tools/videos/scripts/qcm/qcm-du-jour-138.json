@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-138",
+ "titre": "Le QCM du jour n° 138",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 138",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 12
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La procédure d'injonction de payer (AUPSRVE, article 2) est ouverte pour le recouvrement d'une créance certaine, liquide et exigible :",
+   "options": [
+    "De toute nature, y compris délictuelle",
+    "Seulement si elle dépasse un million de francs CFA",
+    "Seulement entre commerçants",
+    "Ayant une cause contractuelle, ou résultant d'un effet de commerce ou d'un chèque sans provision suffisante"
+   ],
+   "pause": 5,
+   "dit": [
+    "La procédure d'injonction de payer, Acte uniforme sur les procédures simplifiées de recouvrement, article 2, est ouverte pour le recouvrement d'une créance certaine, liquide et exigible :",
+    "A : De toute nature, y compris délictuelle.",
+    "B : Seulement si elle dépasse un million de francs C F A.",
+    "C : Seulement entre commerçants.",
+    "D : Ayant une cause contractuelle, ou résultant d'un effet de commerce ou d'un chèque sans provision suffisante.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La procédure d'injonction de payer (AUPSRVE, article 2) est ouverte pour le recouvrement d'une créance certaine, liquide et exigible :",
+    "A : De toute nature, y compris délictuelle.",
+    "B : Seulement si elle dépasse un million de francs CFA.",
+    "C : Seulement entre commerçants.",
+    "D : Ayant une cause contractuelle, ou résultant d'un effet de commerce ou d'un chèque sans provision suffisante.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Ayant une cause contractuelle, ou résultant d'un effet de commerce ou d'un chèque sans provision suffisante",
+   "explication": "L'article 2 vise la créance qui a « une cause contractuelle » et l'engagement résultant d'un effet de commerce ou d'un chèque dont la provision s'est révélée inexistante ou insuffisante. Une créance délictuelle en est exclue.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "L'article 2 vise la créance qui a « une cause contractuelle » et l'engagement résultant d'un effet de commerce ou d'un chèque dont la provision s'est révélée inexistante ou insuffisante. Une créance délictuelle en est exclue."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "L'article 2 vise la créance qui a « une cause contractuelle » et l'engagement résultant d'un effet de commerce ou d'un chèque dont la provision s'est révélée inexistante ou insuffisante. Une créance délictuelle en est exclue."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

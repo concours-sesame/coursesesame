@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-139",
+ "titre": "Le QCM du jour n° 139",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 139",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 13
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le dol (article 1116 du Code civil) :",
+   "options": [
+    "Se présume dès que le contrat est déséquilibré",
+    "Peut émaner de n'importe quel tiers",
+    "N'entraîne jamais la nullité du contrat",
+    "Ne se présume pas, doit être prouvé et doit avoir été déterminant"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le dol, article 1116 du Code civil, :",
+    "A : Se présume dès que le contrat est déséquilibré.",
+    "B : Peut émaner de n'importe quel tiers.",
+    "C : N'entraîne jamais la nullité du contrat.",
+    "D : Ne se présume pas, doit être prouvé et doit avoir été déterminant.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le dol (article 1116 du Code civil) :",
+    "A : Se présume dès que le contrat est déséquilibré.",
+    "B : Peut émaner de n'importe quel tiers.",
+    "C : N'entraîne jamais la nullité du contrat.",
+    "D : Ne se présume pas, doit être prouvé et doit avoir été déterminant.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Ne se présume pas, doit être prouvé et doit avoir été déterminant",
+   "explication": "Le dol est une cause de nullité lorsque les manœuvres de l'une des parties sont telles que, sans elles, l'autre n'aurait pas contracté. « Il ne se présume pas, et doit être prouvé » (article 1116).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Le dol est une cause de nullité lorsque les manœuvres de l'une des parties sont telles que, sans elles, l'autre n'aurait pas contracté. « Il ne se présume pas, et doit être prouvé », article 1116."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Le dol est une cause de nullité lorsque les manœuvres de l'une des parties sont telles que, sans elles, l'autre n'aurait pas contracté. « Il ne se présume pas, et doit être prouvé » (article 1116)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-111",
+ "titre": "Le QCM du jour n° 111",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 111",
+ "source": {
+  "matiere": "droit-penal",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal et procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal et procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal et procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La corruption d'un agent public est-elle consommée si l'acte promis n'a pas été accompli ?",
+   "options": [
+    "Non, l'acte doit avoir été accompli",
+    "Oui, elle est consommée par la sollicitation ou la proposition, même sans suite",
+    "Seulement si l'avantage a été remis",
+    "Seulement en cas de corruption active"
+   ],
+   "pause": 5,
+   "dit": [
+    "La corruption d'un agent public est-elle consommée si l'acte promis n'a pas été accompli ?",
+    "A : Non, l'acte doit avoir été accompli.",
+    "B : Oui, elle est consommée par la sollicitation ou la proposition, même sans suite.",
+    "C : Seulement si l'avantage a été remis.",
+    "D : Seulement en cas de corruption active.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La corruption d'un agent public est-elle consommée si l'acte promis n'a pas été accompli ?",
+    "A : Non, l'acte doit avoir été accompli.",
+    "B : Oui, elle est consommée par la sollicitation ou la proposition, même sans suite.",
+    "C : Seulement si l'avantage a été remis.",
+    "D : Seulement en cas de corruption active.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Oui, elle est consommée par la sollicitation ou la proposition, même sans suite",
+   "explication": "Corruption passive et corruption active sont deux infractions distinctes et autonomes, chacune consommée par la sollicitation ou la proposition, même sans suite (ordonnance du 20 septembre 2013, articles 28 et 29).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Corruption passive et corruption active sont deux infractions distinctes et autonomes, chacune consommée par la sollicitation ou la proposition, même sans suite, ordonnance du 20 septembre 2013, articles 28 et 29."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Corruption passive et corruption active sont deux infractions distinctes et autonomes, chacune consommée par la sollicitation ou la proposition, même sans suite (ordonnance du 20 septembre 2013, articles 28 et 29)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-123",
+ "titre": "Le QCM du jour n° 123",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 123",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 10
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un frère s'empare de l'argent de sa sœur. L'immunité familiale de l'article 103 du Code pénal s'applique-t-elle ?",
+   "options": [
+    "Oui, entre tous les membres d'une même famille",
+    "Oui, si la somme est modique",
+    "Oui, s'ils vivent sous le même toit",
+    "Non : les frères et sœurs ne figurent pas parmi les personnes visées par le texte"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un frère s'empare de l'argent de sa sœur. L'immunité familiale de l'article 103 du Code pénal s'applique-t-elle ?",
+    "A : Oui, entre tous les membres d'une même famille.",
+    "B : Oui, si la somme est modique.",
+    "C : Oui, s'ils vivent sous le même toit.",
+    "D : Non : les frères et sœurs ne figurent pas parmi les personnes visées par le texte.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un frère s'empare de l'argent de sa sœur. L'immunité familiale de l'article 103 du Code pénal s'applique-t-elle ?",
+    "A : Oui, entre tous les membres d'une même famille.",
+    "B : Oui, si la somme est modique.",
+    "C : Oui, s'ils vivent sous le même toit.",
+    "D : Non : les frères et sœurs ne figurent pas parmi les personnes visées par le texte.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Non : les frères et sœurs ne figurent pas parmi les personnes visées par le texte",
+   "explication": "L'article 103 ne vise que les époux, le conjoint survivant, les ascendants et descendants et les alliés aux mêmes degrés. Les frères et sœurs, oncles, neveux et cousins n'en bénéficient pas.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "L'article 103 ne vise que les époux, le conjoint survivant, les ascendants et descendants et les alliés aux mêmes degrés. Les frères et sœurs, oncles, neveux et cousins n'en bénéficient pas."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "L'article 103 ne vise que les époux, le conjoint survivant, les ascendants et descendants et les alliés aux mêmes degrés. Les frères et sœurs, oncles, neveux et cousins n'en bénéficient pas."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

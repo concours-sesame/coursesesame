@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-003",
+ "titre": "Le QCM du jour n° 3",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 3",
+ "source": {
+  "matiere": "droit-penal",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal et procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal et procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal et procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quel critère l'article 28 du Code pénal ivoirien retient-il pour caractériser la tentative ?",
+   "options": [
+    "Le commencement d'exécution",
+    "Un acte impliquant, sans équivoque, l'intention irrévocable de commettre l'infraction",
+    "La simple résolution criminelle exprimée devant témoins",
+    "Tout acte préparatoire"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quel critère l'article 28 du Code pénal ivoirien retient-il pour caractériser la tentative ?",
+    "A : Le commencement d'exécution.",
+    "B : Un acte impliquant, sans équivoque, l'intention irrévocable de commettre l'infraction.",
+    "C : La simple résolution criminelle exprimée devant témoins.",
+    "D : Tout acte préparatoire.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quel critère l'article 28 du Code pénal ivoirien retient-il pour caractériser la tentative ?",
+    "A : Le commencement d'exécution.",
+    "B : Un acte impliquant, sans équivoque, l'intention irrévocable de commettre l'infraction.",
+    "C : La simple résolution criminelle exprimée devant témoins.",
+    "D : Tout acte préparatoire.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Un acte impliquant, sans équivoque, l'intention irrévocable de commettre l'infraction",
+   "explication": "Le texte ivoirien ne parle pas de commencement d'exécution : il exige un acte révélant sans équivoque l'intention irrévocable de l'auteur, et un échec dû à des circonstances indépendantes de sa volonté.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le texte ivoirien ne parle pas de commencement d'exécution : il exige un acte révélant sans équivoque l'intention irrévocable de l'auteur, et un échec dû à des circonstances indépendantes de sa volonté."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le texte ivoirien ne parle pas de commencement d'exécution : il exige un acte révélant sans équivoque l'intention irrévocable de l'auteur, et un échec dû à des circonstances indépendantes de sa volonté."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-083",
+ "titre": "Le QCM du jour n° 83",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 83",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "À partir de quand une société commerciale jouit-elle de la personnalité juridique ?",
+   "options": [
+    "De la signature des statuts",
+    "De la libération du capital",
+    "De son immatriculation au RCCM, sauf disposition contraire de l'acte uniforme",
+    "De sa première assemblée générale"
+   ],
+   "pause": 5,
+   "dit": [
+    "À partir de quand une société commerciale jouit-elle de la personnalité juridique ?",
+    "A : De la signature des statuts.",
+    "B : De la libération du capital.",
+    "C : De son immatriculation au R C C M, sauf disposition contraire de l'acte uniforme.",
+    "D : De sa première assemblée générale.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "À partir de quand une société commerciale jouit-elle de la personnalité juridique ?",
+    "A : De la signature des statuts.",
+    "B : De la libération du capital.",
+    "C : De son immatriculation au RCCM, sauf disposition contraire de l'acte uniforme.",
+    "D : De sa première assemblée générale.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "De son immatriculation au RCCM, sauf disposition contraire de l'acte uniforme",
+   "explication": "Toute société jouit de la personnalité juridique à compter de son immatriculation au registre du commerce et du crédit mobilier, à moins que l'acte uniforme en dispose autrement (article 98 AUSCGIE). La société en participation n'est pas immatriculée (article 97).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Toute société jouit de la personnalité juridique à compter de son immatriculation au registre du commerce et du crédit mobilier, à moins que l'acte uniforme en dispose autrement, article 98 Acte uniforme sur les sociétés commerciales. La société en participation n'est pas immatriculée, article 97."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Toute société jouit de la personnalité juridique à compter de son immatriculation au registre du commerce et du crédit mobilier, à moins que l'acte uniforme en dispose autrement (article 98 AUSCGIE). La société en participation n'est pas immatriculée (article 97)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

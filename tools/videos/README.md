@@ -28,3 +28,25 @@ Le fichier ne va jamais dans le dépôt, qui est public : il est déposé dans l
 2. Envoi : `curl -X PUT -H 'Content-Type: video/mp4' --data-binary @travail/X/video.mp4 '<adresse>'`.
 3. Contenu de l'espace abonnés, en SQL : `insert into contenus (titre, description, type, fichier, matiere, concours, publie)` avec le titre « Une notion, une minute : … », une description qui donne la durée et les articles cités, le type `video`, le fichier `videos/<fichier>.mp4`, la matière seule (« Droit pénal », « Procédure pénale », « Droit civil », « Droit administratif », « Droit OHADA ») et `publie` à `true`.
 4. Aperçu public : l'image de l'introduction en 540 × 960 dans `assets/img/videos/<fichier>.jpg`, une entrée dans `VIDEOS_ABONNES` (assets/js/data.js : `fichier`, `duree`, `tag`, `titre`, `desc`, `concours`), puis `node tools/build.js`. La carte, avec un cadenas, mène à l'inscription ; la vidéo ne figure pas dans les données structurées pour Google.
+
+## Rendez-vous TikTok : « Le QCM du jour », « L'article du jour », « La fiche du jour »
+
+Trois séries fabriquées en nombre, avec le même gabarit (`rendu.html`) et la même voix, pour la publication de trois vidéos
+par jour sur TikTok (8 h, 13 h et 19 h). Chaque script peut porter `serie` (bandeau de l'introduction) et, par scène, `st`
+(texte des sous-titres quand il diffère du texte dit `dit` : sigles, adresse du site). Une scène peut porter `pause`
+(secondes de silence après sa dernière phrase, avec compte à rebours). Types ajoutés : `qcm` (question, quatre choix
+lettrés, compte à rebours) et `reponse` (bonne réponse en vert et explication). Un écran trop rempli passe seul en
+caractères resserrés.
+
+- `oral.mjs` : version dite d'un texte (sigles développés ou épelés, numéros de loi remplacés par l'année, sources omises).
+- `node qcm-du-jour.mjs` : un script par question des QCM gratuits (`assets/js/qcm-matieres.js`), matières en alternance,
+  dans `scripts/qcm/`, avec `legendes.json` (légendes TikTok).
+- `node article-du-jour.mjs <export des cartes.json> <dossier>` : un script par carte d'article de l'espace VIP (table
+  `cartes_articles`, textes de 700 caractères au plus), avec l'essentiel public de la fiche. L'export et les scripts
+  restent hors du dépôt.
+- `node fiche-du-jour.mjs <dossier>` : un script par fiche de révision, à partir de la vitrine publique (`contenu/fiches.js`).
+
+Contrôle de la voix : `controle.py` décode le son par ffmpeg (la bibliothèque `av` récente n'est plus compatible avec
+faster-whisper 1.2). Les vidéos de ces séries sont des contenus gratuits : elles sont déposées dans l'espace de stockage
+public `tiktok` de Supabase (`qcm/`, `articles/`, `fiches/`), par l'action `televersement` de la fonction `tiktok`
+(appel de la base, clé `x-import`), et programmées dans `tiktok_publications` avec la source `tiktok/<dossier>/<fichier>.mp4`.

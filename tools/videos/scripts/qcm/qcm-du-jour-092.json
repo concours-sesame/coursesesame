@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-092",
+ "titre": "Le QCM du jour n° 92",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 92",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 7
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Lorsque les parents sont défaillants, quel magistrat confie la garde de l'enfant à la personne ou à l'institution qui l'a recueilli ?",
+   "options": [
+    "Le juge des tutelles",
+    "Le procureur de la République",
+    "Le juge des enfants, dans tous les cas",
+    "Le maire"
+   ],
+   "pause": 5,
+   "dit": [
+    "Lorsque les parents sont défaillants, quel magistrat confie la garde de l'enfant à la personne ou à l'institution qui l'a recueilli ?",
+    "A : Le juge des tutelles.",
+    "B : Le procureur de la République.",
+    "C : Le juge des enfants, dans tous les cas.",
+    "D : Le maire.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Lorsque les parents sont défaillants, quel magistrat confie la garde de l'enfant à la personne ou à l'institution qui l'a recueilli ?",
+    "A : Le juge des tutelles.",
+    "B : Le procureur de la République.",
+    "C : Le juge des enfants, dans tous les cas.",
+    "D : Le maire.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Le juge des tutelles",
+   "explication": "Le juge des tutelles décide, par ordonnance et dans l'intérêt supérieur de l'enfant, de confier tout ou partie de l'exercice de l'autorité parentale, notamment la garde (loi du 26 juin 2019 relative à la minorité).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "Le juge des tutelles décide, par ordonnance et dans l'intérêt supérieur de l'enfant, de confier tout ou partie de l'exercice de l'autorité parentale, notamment la garde, loi du 26 juin 2019 relative à la minorité."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "Le juge des tutelles décide, par ordonnance et dans l'intérêt supérieur de l'enfant, de confier tout ou partie de l'exercice de l'autorité parentale, notamment la garde (loi du 26 juin 2019 relative à la minorité)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

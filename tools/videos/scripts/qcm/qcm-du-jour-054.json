@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-054",
+ "titre": "Le QCM du jour n° 54",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 54",
+ "source": {
+  "matiere": "droit-administratif",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit administratif",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit administratif*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit administratif*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quel arrêt est l'arrêt fondateur du recours pour excès de pouvoir ivoirien ?",
+   "options": [
+    "Diby Yao Georges (1er avril 1964)",
+    "Copagri c/ Cimaf (18 mai 2016)",
+    "Kouamé Kouadio (11 décembre 1970)",
+    "By Jules (20 février 1963)"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quel arrêt est l'arrêt fondateur du recours pour excès de pouvoir ivoirien ?",
+    "A : Diby Yao Georges, premier avril 1964,.",
+    "B : Copagri c/ Cimaf, 18 mai 2016,.",
+    "C : Kouamé Kouadio, 11 décembre 1970,.",
+    "D : By Jules, 20 février 1963,.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quel arrêt est l'arrêt fondateur du recours pour excès de pouvoir ivoirien ?",
+    "A : Diby Yao Georges (1er avril 1964).",
+    "B : Copagri c/ Cimaf (18 mai 2016).",
+    "C : Kouamé Kouadio (11 décembre 1970).",
+    "D : By Jules (20 février 1963).",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Diby Yao Georges (1er avril 1964)",
+   "explication": "La révocation d'un interprète, dépourvue de base légale, est annulée pour erreur de droit : le recours pour excès de pouvoir est ouvert même en l'absence de texte.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "La révocation d'un interprète, dépourvue de base légale, est annulée pour erreur de droit : le recours pour excès de pouvoir est ouvert même en l'absence de texte."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "La révocation d'un interprète, dépourvue de base légale, est annulée pour erreur de droit : le recours pour excès de pouvoir est ouvert même en l'absence de texte."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

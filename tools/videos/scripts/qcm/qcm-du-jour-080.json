@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-080",
+ "titre": "Le QCM du jour n° 80",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 80",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quel juge décide des mesures de protection et d'assistance éducative à l'égard d'un enfant en danger ?",
+   "options": [
+    "Le juge des tutelles",
+    "Le juge des enfants",
+    "Le juge d'instruction",
+    "Le président du tribunal du travail"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quel juge décide des mesures de protection et d'assistance éducative à l'égard d'un enfant en danger ?",
+    "A : Le juge des tutelles.",
+    "B : Le juge des enfants.",
+    "C : Le juge d'instruction.",
+    "D : Le président du tribunal du travail.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quel juge décide des mesures de protection et d'assistance éducative à l'égard d'un enfant en danger ?",
+    "A : Le juge des tutelles.",
+    "B : Le juge des enfants.",
+    "C : Le juge d'instruction.",
+    "D : Le président du tribunal du travail.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Le juge des enfants",
+   "explication": "Le juge des enfants intervient lorsque la santé, la sécurité, la moralité ou les conditions d'éducation du mineur sont gravement compromises, en s'appuyant sur le Service de la protection judiciaire de l'enfance et de la jeunesse.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le juge des enfants intervient lorsque la santé, la sécurité, la moralité ou les conditions d'éducation du mineur sont gravement compromises, en s'appuyant sur le Service de la protection judiciaire de l'enfance et de la jeunesse."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le juge des enfants intervient lorsque la santé, la sécurité, la moralité ou les conditions d'éducation du mineur sont gravement compromises, en s'appuyant sur le Service de la protection judiciaire de l'enfance et de la jeunesse."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

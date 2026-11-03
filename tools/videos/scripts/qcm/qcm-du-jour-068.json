@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-068",
+ "titre": "Le QCM du jour n° 68",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 68",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un mineur de treize ans et plus, auteur d'une contravention, peut-il être condamné à l'emprisonnement ?",
+   "options": [
+    "Oui, pour dix jours au plus",
+    "Non : seuls un travail d'intérêt général ou une admonestation peuvent être prononcés",
+    "Oui, si la contravention est de cinquième classe",
+    "Oui, avec l'accord des parents"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un mineur de treize ans et plus, auteur d'une contravention, peut-il être condamné à l'emprisonnement ?",
+    "A : Oui, pour dix jours au plus.",
+    "B : Non : seuls un travail d'intérêt général ou une admonestation peuvent être prononcés.",
+    "C : Oui, si la contravention est de cinquième classe.",
+    "D : Oui, avec l'accord des parents.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un mineur de treize ans et plus, auteur d'une contravention, peut-il être condamné à l'emprisonnement ?",
+    "A : Oui, pour dix jours au plus.",
+    "B : Non : seuls un travail d'intérêt général ou une admonestation peuvent être prononcés.",
+    "C : Oui, si la contravention est de cinquième classe.",
+    "D : Oui, avec l'accord des parents.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Non : seuls un travail d'intérêt général ou une admonestation peuvent être prononcés",
+   "explication": "L'excuse atténuante de minorité exclut, en matière de contravention, toute peine privative de liberté.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'excuse atténuante de minorité exclut, en matière de contravention, toute peine privative de liberté."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'excuse atténuante de minorité exclut, en matière de contravention, toute peine privative de liberté."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

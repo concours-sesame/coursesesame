@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-129",
+ "titre": "Le QCM du jour n° 129",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 129",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 11
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Une infraction est punie de cinq à quinze ans d'emprisonnement. Comment est-elle classée (article 3 du Code pénal) ?",
+   "options": [
+    "Délit, car le minimum est inférieur à dix ans",
+    "Crime ou délit selon la peine prononcée",
+    "Crime, car c'est le maximum de la peine encourue qui compte",
+    "Contravention de grande gravité"
+   ],
+   "pause": 5,
+   "dit": [
+    "Une infraction est punie de cinq à quinze ans d'emprisonnement. Comment est-elle classée, article 3 du Code pénal, ?",
+    "A : Délit, car le minimum est inférieur à dix ans.",
+    "B : Crime ou délit selon la peine prononcée.",
+    "C : Crime, car c'est le maximum de la peine encourue qui compte.",
+    "D : Contravention de grande gravité.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Une infraction est punie de cinq à quinze ans d'emprisonnement. Comment est-elle classée (article 3 du Code pénal) ?",
+    "A : Délit, car le minimum est inférieur à dix ans.",
+    "B : Crime ou délit selon la peine prononcée.",
+    "C : Crime, car c'est le maximum de la peine encourue qui compte.",
+    "D : Contravention de grande gravité.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Crime, car c'est le maximum de la peine encourue qui compte",
+   "explication": "« Lorsque le minimum de la peine prévue est inférieur aux quantums ci-dessus spécifiés, il est tenu compte, pour la qualification de l'infraction, du maximum de la peine encourue » (article 3). Une peine supérieure à dix ans fait un crime.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "« Lorsque le minimum de la peine prévue est inférieur aux quantums ci-dessus spécifiés, il est tenu compte, pour la qualification de l'infraction, du maximum de la peine encourue », article 3. Une peine supérieure à dix ans fait un crime."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "« Lorsque le minimum de la peine prévue est inférieur aux quantums ci-dessus spécifiés, il est tenu compte, pour la qualification de l'infraction, du maximum de la peine encourue » (article 3). Une peine supérieure à dix ans fait un crime."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

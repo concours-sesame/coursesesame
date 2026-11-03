@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-108",
+ "titre": "Le QCM du jour n° 108",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 108",
+ "source": {
+  "matiere": "culture-generale",
+  "question": 8
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Culture générale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *culture générale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *culture générale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Où se trouve le siège de la Banque africaine de développement (BAD) ?",
+   "options": [
+    "À Abidjan",
+    "À Addis-Abeba",
+    "À Lagos",
+    "À Nairobi"
+   ],
+   "pause": 5,
+   "dit": [
+    "Où se trouve le siège de la Banque africaine de développement, B A D, ?",
+    "A : À Abidjan.",
+    "B : À Addis-Abeba.",
+    "C : À Lagos.",
+    "D : À Nairobi.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Où se trouve le siège de la Banque africaine de développement (BAD) ?",
+    "A : À Abidjan.",
+    "B : À Addis-Abeba.",
+    "C : À Lagos.",
+    "D : À Nairobi.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "À Abidjan",
+   "explication": "Le Groupe de la Banque africaine de développement, fondé en 1964, est basé à Abidjan, en Côte d'Ivoire. Source : Banque africaine de développement.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "Le Groupe de la Banque africaine de développement, fondé en 1964, est basé à Abidjan, en Côte d'Ivoire."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "Le Groupe de la Banque africaine de développement, fondé en 1964, est basé à Abidjan, en Côte d'Ivoire. Source : Banque africaine de développement."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

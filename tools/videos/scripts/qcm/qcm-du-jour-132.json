@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-132",
+ "titre": "Le QCM du jour n° 132",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 132",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 11
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Les statuts d'une SARL limitent les pouvoirs du gérant. Cette limitation est-elle opposable aux tiers de bonne foi (article 329 de l'AUSCGIE) ?",
+   "options": [
+    "Oui, dès que les statuts sont publiés",
+    "Oui, si la limitation porte sur les ventes d'immeubles",
+    "Non : à l'égard des tiers, le gérant a les pouvoirs les plus étendus",
+    "Oui, si le tiers est un commerçant"
+   ],
+   "pause": 5,
+   "dit": [
+    "Les statuts d'une S A R L limitent les pouvoirs du gérant. Cette limitation est-elle opposable aux tiers de bonne foi, article 329 de l'Acte uniforme sur les sociétés commerciales, ?",
+    "A : Oui, dès que les statuts sont publiés.",
+    "B : Oui, si la limitation porte sur les ventes d'immeubles.",
+    "C : Non : à l'égard des tiers, le gérant a les pouvoirs les plus étendus.",
+    "D : Oui, si le tiers est un commerçant.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Les statuts d'une SARL limitent les pouvoirs du gérant. Cette limitation est-elle opposable aux tiers de bonne foi (article 329 de l'AUSCGIE) ?",
+    "A : Oui, dès que les statuts sont publiés.",
+    "B : Oui, si la limitation porte sur les ventes d'immeubles.",
+    "C : Non : à l'égard des tiers, le gérant a les pouvoirs les plus étendus.",
+    "D : Oui, si le tiers est un commerçant.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Non : à l'égard des tiers, le gérant a les pouvoirs les plus étendus",
+   "explication": "À l'égard des tiers, le gérant « est investi des pouvoirs les plus étendus pour agir en toute circonstance au nom de la société », et les clauses limitant ses pouvoirs sont inopposables aux tiers de bonne foi (article 329).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "À l'égard des tiers, le gérant « est investi des pouvoirs les plus étendus pour agir en toute circonstance au nom de la société », et les clauses limitant ses pouvoirs sont inopposables aux tiers de bonne foi, article 329."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "À l'égard des tiers, le gérant « est investi des pouvoirs les plus étendus pour agir en toute circonstance au nom de la société », et les clauses limitant ses pouvoirs sont inopposables aux tiers de bonne foi (article 329)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

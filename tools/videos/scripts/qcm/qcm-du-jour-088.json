@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-088",
+ "titre": "Le QCM du jour n° 88",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 88",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 7
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle est la différence entre l'excuse atténuante et les circonstances atténuantes ?",
+   "options": [
+    "L'excuse atténuante est prévue par la loi et la réduction est obligatoire ; les circonstances atténuantes sont accordées librement par le juge",
+    "Les circonstances atténuantes s'imposent au juge, l'excuse est facultative",
+    "Aucune : les deux expressions sont synonymes",
+    "Les circonstances atténuantes font disparaître l'infraction"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle est la différence entre l'excuse atténuante et les circonstances atténuantes ?",
+    "A : L'excuse atténuante est prévue par la loi et la réduction est obligatoire ; les circonstances atténuantes sont accordées librement par le juge.",
+    "B : Les circonstances atténuantes s'imposent au juge, l'excuse est facultative.",
+    "C : Aucune : les deux expressions sont synonymes.",
+    "D : Les circonstances atténuantes font disparaître l'infraction.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle est la différence entre l'excuse atténuante et les circonstances atténuantes ?",
+    "A : L'excuse atténuante est prévue par la loi et la réduction est obligatoire ; les circonstances atténuantes sont accordées librement par le juge.",
+    "B : Les circonstances atténuantes s'imposent au juge, l'excuse est facultative.",
+    "C : Aucune : les deux expressions sont synonymes.",
+    "D : Les circonstances atténuantes font disparaître l'infraction.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "L'excuse atténuante est prévue par la loi et la réduction est obligatoire ; les circonstances atténuantes sont accordées librement par le juge",
+   "explication": "L'excuse est « limitativement prévue et définie par la loi » et entraîne une « atténuation obligatoire » (article 11). Les circonstances atténuantes relèvent de l'appréciation du juge, qui « peut » les accorder (article 114). Les barèmes diffèrent : article 112 pour l'une, article 115 pour les autres.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "L'excuse est « limitativement prévue et définie par la loi » et entraîne une « atténuation obligatoire », article 11. Les circonstances atténuantes relèvent de l'appréciation du juge, qui « peut » les accorder, article 114. Les barèmes diffèrent : article 112 pour l'une, article 115 pour les autres."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "L'excuse est « limitativement prévue et définie par la loi » et entraîne une « atténuation obligatoire » (article 11). Les circonstances atténuantes relèvent de l'appréciation du juge, qui « peut » les accorder (article 114). Les barèmes diffèrent : article 112 pour l'une, article 115 pour les autres."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-038",
+ "titre": "Le QCM du jour n° 38",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 38",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans quel délai le mari doit-il, en principe, agir en désaveu de paternité (loi relative à la filiation, article 6) ?",
+   "options": [
+    "Deux mois à compter de la naissance",
+    "Six mois à compter de la naissance",
+    "Un an à compter de la naissance",
+    "Dix ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans quel délai le mari doit-il, en principe, agir en désaveu de paternité, loi relative à la filiation, article 6, ?",
+    "A : Deux mois à compter de la naissance.",
+    "B : Six mois à compter de la naissance.",
+    "C : Un an à compter de la naissance.",
+    "D : Dix ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans quel délai le mari doit-il, en principe, agir en désaveu de paternité (loi relative à la filiation, article 6) ?",
+    "A : Deux mois à compter de la naissance.",
+    "B : Six mois à compter de la naissance.",
+    "C : Un an à compter de la naissance.",
+    "D : Dix ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Deux mois à compter de la naissance",
+   "explication": "L'action en désaveu est enfermée dans un délai de deux mois à compter de la naissance, du retour du mari ou de la découverte de la naissance qui lui avait été cachée (article 6).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "L'action en désaveu est enfermée dans un délai de deux mois à compter de la naissance, du retour du mari ou de la découverte de la naissance qui lui avait été cachée, article 6."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "L'action en désaveu est enfermée dans un délai de deux mois à compter de la naissance, du retour du mari ou de la découverte de la naissance qui lui avait été cachée (article 6)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

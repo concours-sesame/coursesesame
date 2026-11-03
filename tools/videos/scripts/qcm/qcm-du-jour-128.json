@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-128",
+ "titre": "Le QCM du jour n° 128",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 128",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 11
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un héritier ne s'est pas prononcé sur la succession dans le délai légal. Quelle est sa situation (loi relative aux successions, article 42) ?",
+   "options": [
+    "Après cinq ans, il est réputé avoir renoncé",
+    "Après un an, il est réputé avoir accepté sous bénéfice d'inventaire",
+    "Après cinq ans, il est réputé avoir accepté",
+    "Il peut opter sans limite de temps"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un héritier ne s'est pas prononcé sur la succession dans le délai légal. Quelle est sa situation, loi relative aux successions, article 42, ?",
+    "A : Après cinq ans, il est réputé avoir renoncé.",
+    "B : Après un an, il est réputé avoir accepté sous bénéfice d'inventaire.",
+    "C : Après cinq ans, il est réputé avoir accepté.",
+    "D : Il peut opter sans limite de temps.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un héritier ne s'est pas prononcé sur la succession dans le délai légal. Quelle est sa situation (loi relative aux successions, article 42) ?",
+    "A : Après cinq ans, il est réputé avoir renoncé.",
+    "B : Après un an, il est réputé avoir accepté sous bénéfice d'inventaire.",
+    "C : Après cinq ans, il est réputé avoir accepté.",
+    "D : Il peut opter sans limite de temps.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Après cinq ans, il est réputé avoir accepté",
+   "explication": "« La faculté d'accepter ou de répudier une succession se prescrit par cinq ans à compter de l'ouverture de la succession. L'héritier qui n'a pris parti dans ce délai, est réputé avoir accepté » (article 42).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "« La faculté d'accepter ou de répudier une succession se prescrit par cinq ans à compter de l'ouverture de la succession. L'héritier qui n'a pris parti dans ce délai, est réputé avoir accepté », article 42."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "« La faculté d'accepter ou de répudier une succession se prescrit par cinq ans à compter de l'ouverture de la succession. L'héritier qui n'a pris parti dans ce délai, est réputé avoir accepté » (article 42)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

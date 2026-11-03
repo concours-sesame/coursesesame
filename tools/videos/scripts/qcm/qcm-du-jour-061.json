@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-061",
+ "titre": "Le QCM du jour n° 61",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 61",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Combien de causes de dissolution du mariage l'article 103 de la loi relative au mariage énumère-t-il ?",
+   "options": [
+    "Deux",
+    "Trois",
+    "Quatre",
+    "Cinq"
+   ],
+   "pause": 5,
+   "dit": [
+    "Combien de causes de dissolution du mariage l'article 103 de la loi relative au mariage énumère-t-il ?",
+    "A : Deux.",
+    "B : Trois.",
+    "C : Quatre.",
+    "D : Cinq.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Combien de causes de dissolution du mariage l'article 103 de la loi relative au mariage énumère-t-il ?",
+    "A : Deux.",
+    "B : Trois.",
+    "C : Quatre.",
+    "D : Cinq.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Cinq",
+   "explication": "Le décès, le divorce, l'annulation, ainsi que l'absence et le décès judiciairement déclarés en cas de disparition : cinq causes limitativement énumérées.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Le décès, le divorce, l'annulation, ainsi que l'absence et le décès judiciairement déclarés en cas de disparition : cinq causes limitativement énumérées."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Le décès, le divorce, l'annulation, ainsi que l'absence et le décès judiciairement déclarés en cas de disparition : cinq causes limitativement énumérées."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

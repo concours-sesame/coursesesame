@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-131",
+ "titre": "Le QCM du jour n° 131",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 131",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 11
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Sous la direction de qui la police judiciaire est-elle exercée (article 23 nouveau du Code de procédure pénale) ?",
+   "options": [
+    "Du ministre de l'Intérieur",
+    "Du juge d'instruction",
+    "Du préfet",
+    "Du procureur de la République"
+   ],
+   "pause": 5,
+   "dit": [
+    "Sous la direction de qui la police judiciaire est-elle exercée, article 23 nouveau du Code de procédure pénale, ?",
+    "A : Du ministre de l'Intérieur.",
+    "B : Du juge d'instruction.",
+    "C : Du préfet.",
+    "D : Du procureur de la République.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Sous la direction de qui la police judiciaire est-elle exercée (article 23 nouveau du Code de procédure pénale) ?",
+    "A : Du ministre de l'Intérieur.",
+    "B : Du juge d'instruction.",
+    "C : Du préfet.",
+    "D : Du procureur de la République.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Du procureur de la République",
+   "explication": "La police judiciaire est exercée « sous la direction du Procureur de la République » (article 23 nouveau). Elle est placée sous la surveillance du procureur général et sous le contrôle de la Chambre d'instruction (article 24).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "La police judiciaire est exercée « sous la direction du Procureur de la République », article 23 nouveau. Elle est placée sous la surveillance du procureur général et sous le contrôle de la Chambre d'instruction, article 24."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "La police judiciaire est exercée « sous la direction du Procureur de la République » (article 23 nouveau). Elle est placée sous la surveillance du procureur général et sous le contrôle de la Chambre d'instruction (article 24)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

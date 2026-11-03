@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-162",
+ "titre": "Le QCM du jour n° 162",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 162",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 17
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans quel délai l'acheteur doit-il dénoncer un défaut de conformité apparent des marchandises (AUDCG, article 258) ?",
+   "options": [
+    "Dans les huit jours",
+    "Dans l'année",
+    "Dans les deux ans",
+    "Dans le mois qui suit la livraison, sous peine de déchéance"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans quel délai l'acheteur doit-il dénoncer un défaut de conformité apparent des marchandises, Acte uniforme sur le droit commercial général, article 258, ?",
+    "A : Dans les huit jours.",
+    "B : Dans l'année.",
+    "C : Dans les deux ans.",
+    "D : Dans le mois qui suit la livraison, sous peine de déchéance.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans quel délai l'acheteur doit-il dénoncer un défaut de conformité apparent des marchandises (AUDCG, article 258) ?",
+    "A : Dans les huit jours.",
+    "B : Dans l'année.",
+    "C : Dans les deux ans.",
+    "D : Dans le mois qui suit la livraison, sous peine de déchéance.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Dans le mois qui suit la livraison, sous peine de déchéance",
+   "explication": "Le défaut apparent doit être dénoncé dans le mois qui suit la livraison (article 258). Pour un défaut caché, l'action se prescrit par un an à compter du jour où il a été constaté ou aurait dû l'être (article 259).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Le défaut apparent doit être dénoncé dans le mois qui suit la livraison, article 258. Pour un défaut caché, l'action se prescrit par un an à compter du jour où il a été constaté ou aurait dû l'être, article 259."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Le défaut apparent doit être dénoncé dans le mois qui suit la livraison (article 258). Pour un défaut caché, l'action se prescrit par un an à compter du jour où il a été constaté ou aurait dû l'être (article 259)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-167",
+ "titre": "Le QCM du jour n° 167",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 167",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 19
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un enfant de neuf ans commet un vol. Que prévoit l'article 113 du Code pénal ?",
+   "options": [
+    "Il bénéficie de l'excuse atténuante de minorité",
+    "Les faits ne sont susceptibles ni de qualification ni de poursuites pénales",
+    "Il peut être condamné à la moitié de la peine",
+    "Il est jugé comme un majeur"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un enfant de neuf ans commet un vol. Que prévoit l'article 113 du Code pénal ?",
+    "A : Il bénéficie de l'excuse atténuante de minorité.",
+    "B : Les faits ne sont susceptibles ni de qualification ni de poursuites pénales.",
+    "C : Il peut être condamné à la moitié de la peine.",
+    "D : Il est jugé comme un majeur.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un enfant de neuf ans commet un vol. Que prévoit l'article 113 du Code pénal ?",
+    "A : Il bénéficie de l'excuse atténuante de minorité.",
+    "B : Les faits ne sont susceptibles ni de qualification ni de poursuites pénales.",
+    "C : Il peut être condamné à la moitié de la peine.",
+    "D : Il est jugé comme un majeur.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Les faits ne sont susceptibles ni de qualification ni de poursuites pénales",
+   "explication": "« Les faits commis par un mineur de 10 ans ne sont pas susceptibles de qualification et de poursuites pénales » (article 113, alinéa 1er, rédaction de 2021). De dix à treize ans, l'excuse absolutoire de minorité est de droit ; à partir de treize ans, l'excuse atténuante.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "« Les faits commis par un mineur de 10 ans ne sont pas susceptibles de qualification et de poursuites pénales », article 113, alinéa premier, rédaction de 2021. De dix à treize ans, l'excuse absolutoire de minorité est de droit ; à partir de treize ans, l'excuse atténuante."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "« Les faits commis par un mineur de 10 ans ne sont pas susceptibles de qualification et de poursuites pénales » (article 113, alinéa 1er, rédaction de 2021). De dix à treize ans, l'excuse absolutoire de minorité est de droit ; à partir de treize ans, l'excuse atténuante."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

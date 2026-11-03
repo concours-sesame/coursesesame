@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-013",
+ "titre": "Le QCM du jour n° 13",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 13",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle est la durée du délai de viduité imposé à la femme avant un remariage ?",
+   "options": [
+    "Cent quatre-vingts jours",
+    "Un an",
+    "Trois cents jours",
+    "Aucun délai n'est imposé"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle est la durée du délai de viduité imposé à la femme avant un remariage ?",
+    "A : Cent quatre-vingts jours.",
+    "B : Un an.",
+    "C : Trois cents jours.",
+    "D : Aucun délai n'est imposé.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle est la durée du délai de viduité imposé à la femme avant un remariage ?",
+    "A : Cent quatre-vingts jours.",
+    "B : Un an.",
+    "C : Trois cents jours.",
+    "D : Aucun délai n'est imposé.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Trois cents jours",
+   "explication": "La femme ne peut se remarier qu'à l'expiration d'un délai de trois cents jours à compter de la dissolution du précédent mariage, sauf abrégement judiciaire ; le délai prend fin en cas d'accouchement (article 6).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "La femme ne peut se remarier qu'à l'expiration d'un délai de trois cents jours à compter de la dissolution du précédent mariage, sauf abrégement judiciaire ; le délai prend fin en cas d'accouchement, article 6."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "La femme ne peut se remarier qu'à l'expiration d'un délai de trois cents jours à compter de la dissolution du précédent mariage, sauf abrégement judiciaire ; le délai prend fin en cas d'accouchement (article 6)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

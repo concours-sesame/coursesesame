@@ -18,6 +18,8 @@
 //   Base (pg_cron toutes les cinq minutes, en-tête x-import vérifié par textes_verifier_import) :
 //     planif                    : envoie les publications validées arrivées à leur heure (plus de trois heures de retard :
 //                                 « manquee »), puis suit celles que TikTok traite encore
+//     televersement { chemin }  : adresse de dépôt signée (deux heures) dans l'espace public « tiktok » (vidéos fabriquées
+//                                 pour TikTok, par exemple qcm/qcm-du-jour-001.mp4), sans remplacement d'un fichier existant
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
 
 const API = "https://open.tiktokapis.com/v2";
@@ -112,8 +114,13 @@ async function jetonValide(service: Service): Promise<string> {
 
 const infoCreateur = (jeton: string) => api("/post/publish/creator_info/query/", jeton, {});
 
-// Fichier de la vidéo : site public (assets/video/…) ou stockage privé (videos/…)
+// Fichier de la vidéo : site public (assets/video/…), stockage public « tiktok » (tiktok/…) ou stockage privé (videos/…)
 async function video(service: Service, source: string): Promise<Uint8Array> {
+  if (source.startsWith("tiktok/")) {
+    const { data, error } = await service.storage.from("tiktok").download(source.slice(7));
+    if (error || !data) throw new Error(`Vidéo introuvable dans l'espace tiktok (${error?.message ?? "absente"}).`);
+    return new Uint8Array(await data.arrayBuffer());
+  }
   if (source.startsWith("assets/video/")) {
     const rep = await fetch(SITE + source);
     if (!rep.ok) throw new Error(`Vidéo introuvable sur le site (${rep.status}).`);
@@ -231,6 +238,16 @@ Deno.serve(async (req) => {
       const { error } = await service.from("tiktok_compte").upsert({ id: true, ...j, nom, avatar, connecte_le: new Date().toISOString(), connecte_par: e.user_id });
       if (error) return erreur(`Base : ${error.message}`, 500);
       return reponse({ nom, autorisations: j.scope });
+    }
+
+    // Dépôt d'une vidéo fabriquée pour TikTok (appel de la base, même clé que planif)
+    if (d.action === "televersement") {
+      const { data: valide } = await service.rpc("textes_verifier_import", { p_cle: req.headers.get("x-import") ?? "" });
+      if (valide !== true) return erreur("Accès refusé", 403);
+      const chemin = String(d.chemin ?? "");
+      if (!/^[a-z0-9-]+\/[a-z0-9-]+\.mp4$/.test(chemin)) return erreur("Chemin invalide.");
+      const { data, error } = await service.storage.from("tiktok").createSignedUploadUrl(chemin);
+      return error ? erreur(`Stockage ${error.message}`, 409) : reponse({ chemin, url: data.signedUrl });
     }
 
     // Tâche planifiée de la base

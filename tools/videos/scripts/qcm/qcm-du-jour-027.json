@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-027",
+ "titre": "Le QCM du jour n° 27",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 27",
+ "source": {
+  "matiere": "droit-penal",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal et procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal et procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal et procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "L'auteur tire sur une victime déjà morte, ce qu'il ignorait. Que décide le Code pénal ?",
+   "options": [
+    "Il n'y a pas d'infraction, faute d'objet",
+    "La tentative est punissable alors même que le but ne pouvait être atteint",
+    "Seule une contravention peut être retenue",
+    "Le juge doit relaxer au bénéfice du doute"
+   ],
+   "pause": 5,
+   "dit": [
+    "L'auteur tire sur une victime déjà morte, ce qu'il ignorait. Que décide le Code pénal ?",
+    "A : Il n'y a pas d'infraction, faute d'objet.",
+    "B : La tentative est punissable alors même que le but ne pouvait être atteint.",
+    "C : Seule une contravention peut être retenue.",
+    "D : Le juge doit relaxer au bénéfice du doute.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "L'auteur tire sur une victime déjà morte, ce qu'il ignorait. Que décide le Code pénal ?",
+    "A : Il n'y a pas d'infraction, faute d'objet.",
+    "B : La tentative est punissable alors même que le but ne pouvait être atteint.",
+    "C : Seule une contravention peut être retenue.",
+    "D : Le juge doit relaxer au bénéfice du doute.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "La tentative est punissable alors même que le but ne pouvait être atteint",
+   "explication": "La tentative est punissable alors même que le but recherché ne pouvait être atteint en raison d'une circonstance de fait (article 28, alinéa 3) : l'infraction impossible est réprimée.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "La tentative est punissable alors même que le but recherché ne pouvait être atteint en raison d'une circonstance de fait, article 28, alinéa 3, : l'infraction impossible est réprimée."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "La tentative est punissable alors même que le but recherché ne pouvait être atteint en raison d'une circonstance de fait (article 28, alinéa 3) : l'infraction impossible est réprimée."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

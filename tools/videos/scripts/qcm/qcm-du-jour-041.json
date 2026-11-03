@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-041",
+ "titre": "Le QCM du jour n° 41",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 41",
+ "source": {
+  "matiere": "droit-penal-special",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal spécial",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal spécial*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal spécial*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Des coups volontaires portés sans intention de tuer ont causé la mort de la victime. Quelle est la qualification ?",
+   "options": [
+    "Meurtre",
+    "Homicide involontaire",
+    "Violences volontaires ayant entraîné la mort, punies de cinq à vingt ans (article 381 nouveau, 1°)",
+    "Assassinat"
+   ],
+   "pause": 5,
+   "dit": [
+    "Des coups volontaires portés sans intention de tuer ont causé la mort de la victime. Quelle est la qualification ?",
+    "A : Meurtre.",
+    "B : Homicide involontaire.",
+    "C : Violences volontaires ayant entraîné la mort, punies de cinq à vingt ans, article 381 nouveau, 1°,.",
+    "D : Assassinat.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Des coups volontaires portés sans intention de tuer ont causé la mort de la victime. Quelle est la qualification ?",
+    "A : Meurtre.",
+    "B : Homicide involontaire.",
+    "C : Violences volontaires ayant entraîné la mort, punies de cinq à vingt ans (article 381 nouveau, 1°).",
+    "D : Assassinat.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Violences volontaires ayant entraîné la mort, punies de cinq à vingt ans (article 381 nouveau, 1°)",
+   "explication": "Le meurtre suppose l'intention de tuer (article 378, 1°). Lorsque les coups ou violences, « même sans intention de donner la mort, l'ont pourtant occasionnée », l'article 381 nouveau, 1°, prévoit cinq à vingt ans d'emprisonnement.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Le meurtre suppose l'intention de tuer, article 378, 1°. Lorsque les coups ou violences, « même sans intention de donner la mort, l'ont pourtant occasionnée », l'article 381 nouveau, 1°, prévoit cinq à vingt ans d'emprisonnement."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Le meurtre suppose l'intention de tuer (article 378, 1°). Lorsque les coups ou violences, « même sans intention de donner la mort, l'ont pourtant occasionnée », l'article 381 nouveau, 1°, prévoit cinq à vingt ans d'emprisonnement."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-145",
+ "titre": "Le QCM du jour n° 145",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 145",
+ "source": {
+  "matiere": "droit-civil",
+  "question": 14
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit civil",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit civil*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit civil*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le commettant peut-il échapper à sa responsabilité du fait de son préposé en prouvant qu'il n'a commis aucune faute ?",
+   "options": [
+    "Oui, dans tous les cas",
+    "Oui, s'il prouve qu'il a bien choisi son préposé",
+    "Oui, si le préposé est solvable",
+    "Non : l'article 1384, alinéa 7, ne permet cette preuve qu'aux père et mère et aux artisans"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le commettant peut-il échapper à sa responsabilité du fait de son préposé en prouvant qu'il n'a commis aucune faute ?",
+    "A : Oui, dans tous les cas.",
+    "B : Oui, s'il prouve qu'il a bien choisi son préposé.",
+    "C : Oui, si le préposé est solvable.",
+    "D : Non : l'article 1384, alinéa 7, ne permet cette preuve qu'aux père et mère et aux artisans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le commettant peut-il échapper à sa responsabilité du fait de son préposé en prouvant qu'il n'a commis aucune faute ?",
+    "A : Oui, dans tous les cas.",
+    "B : Oui, s'il prouve qu'il a bien choisi son préposé.",
+    "C : Oui, si le préposé est solvable.",
+    "D : Non : l'article 1384, alinéa 7, ne permet cette preuve qu'aux père et mère et aux artisans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Non : l'article 1384, alinéa 7, ne permet cette preuve qu'aux père et mère et aux artisans",
+   "explication": "Le commettant répond du dommage causé par son préposé « dans les fonctions auxquelles il l'a employé » (article 1384, alinéa 5). L'exonération par la preuve de l'impossibilité d'empêcher le fait est réservée aux père et mère et aux artisans (alinéa 7).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Le commettant répond du dommage causé par son préposé « dans les fonctions auxquelles il l'a employé », article 1384, alinéa 5. L'exonération par la preuve de l'impossibilité d'empêcher le fait est réservée aux père et mère et aux artisans, alinéa 7."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Le commettant répond du dommage causé par son préposé « dans les fonctions auxquelles il l'a employé » (article 1384, alinéa 5). L'exonération par la preuve de l'impossibilité d'empêcher le fait est réservée aux père et mère et aux artisans (alinéa 7)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

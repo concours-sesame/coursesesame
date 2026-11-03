@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-106",
+ "titre": "Le QCM du jour n° 106",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 106",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 8
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Pendant la garde à vue, l'examen médical de la personne retenue est :",
+   "options": [
+    "Interdit avant la fin de la mesure",
+    "De droit si la personne gardée à vue ou un membre de sa famille le demande",
+    "Laissé à l'appréciation de l'officier de police judiciaire",
+    "Réservé aux mineurs"
+   ],
+   "pause": 5,
+   "dit": [
+    "Pendant la garde à vue, l'examen médical de la personne retenue est :",
+    "A : Interdit avant la fin de la mesure.",
+    "B : De droit si la personne gardée à vue ou un membre de sa famille le demande.",
+    "C : Laissé à l'appréciation de l'officier de police judiciaire.",
+    "D : Réservé aux mineurs.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Pendant la garde à vue, l'examen médical de la personne retenue est :",
+    "A : Interdit avant la fin de la mesure.",
+    "B : De droit si la personne gardée à vue ou un membre de sa famille le demande.",
+    "C : Laissé à l'appréciation de l'officier de police judiciaire.",
+    "D : Réservé aux mineurs.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "De droit si la personne gardée à vue ou un membre de sa famille le demande",
+   "explication": "L'examen médical est de droit si la personne gardée à vue ou un membre de sa famille le demande (article 75).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'examen médical est de droit si la personne gardée à vue ou un membre de sa famille le demande, article 75."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'examen médical est de droit si la personne gardée à vue ou un membre de sa famille le demande (article 75)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

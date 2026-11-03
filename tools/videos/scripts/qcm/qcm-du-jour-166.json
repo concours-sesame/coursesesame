@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-166",
+ "titre": "Le QCM du jour n° 166",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 166",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 18
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "En droit OHADA, sauf stipulation contraire, le cautionnement est (AUS, article 20) :",
+   "options": [
+    "Présumé simple",
+    "Toujours gratuit",
+    "Réputé solidaire",
+    "Nul s'il n'est pas notarié"
+   ],
+   "pause": 5,
+   "dit": [
+    "En droit Ohada, sauf stipulation contraire, le cautionnement est, Acte uniforme sur les sûretés, article 20, :",
+    "A : Présumé simple.",
+    "B : Toujours gratuit.",
+    "C : Réputé solidaire.",
+    "D : Nul s'il n'est pas notarié.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "En droit OHADA, sauf stipulation contraire, le cautionnement est (AUS, article 20) :",
+    "A : Présumé simple.",
+    "B : Toujours gratuit.",
+    "C : Réputé solidaire.",
+    "D : Nul s'il n'est pas notarié.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Réputé solidaire",
+   "explication": "« Le cautionnement est réputé solidaire. Il est simple lorsqu'il en est ainsi décidé, expressément, par la loi de chaque Etat Partie ou la convention des parties » (article 20). La caution solidaire ne bénéficie pas du bénéfice de discussion (article 27).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "« Le cautionnement est réputé solidaire. Il est simple lorsqu'il en est ainsi décidé, expressément, par la loi de chaque Etat Partie ou la convention des parties », article 20. La caution solidaire ne bénéficie pas du bénéfice de discussion, article 27."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "« Le cautionnement est réputé solidaire. Il est simple lorsqu'il en est ainsi décidé, expressément, par la loi de chaque Etat Partie ou la convention des parties » (article 20). La caution solidaire ne bénéficie pas du bénéfice de discussion (article 27)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

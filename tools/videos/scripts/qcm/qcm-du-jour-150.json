@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-150",
+ "titre": "Le QCM du jour n° 150",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 150",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 14
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le locataire-gérant d'un fonds de commerce (AUDCG, article 139) :",
+   "options": [
+    "Est un simple salarié du propriétaire",
+    "A la qualité de commerçant et doit s'immatriculer au Registre du commerce et du crédit mobilier",
+    "Exploite le fonds aux risques du propriétaire",
+    "N'a aucune formalité à accomplir"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le locataire-gérant d'un fonds de commerce, Acte uniforme sur le droit commercial général, article 139, :",
+    "A : Est un simple salarié du propriétaire.",
+    "B : A la qualité de commerçant et doit s'immatriculer au Registre du commerce et du crédit mobilier.",
+    "C : Exploite le fonds aux risques du propriétaire.",
+    "D : N'a aucune formalité à accomplir.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le locataire-gérant d'un fonds de commerce (AUDCG, article 139) :",
+    "A : Est un simple salarié du propriétaire.",
+    "B : A la qualité de commerçant et doit s'immatriculer au Registre du commerce et du crédit mobilier.",
+    "C : Exploite le fonds aux risques du propriétaire.",
+    "D : N'a aucune formalité à accomplir.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "A la qualité de commerçant et doit s'immatriculer au Registre du commerce et du crédit mobilier",
+   "explication": "Le locataire-gérant exploite le fonds « à ses risques et périls » (article 138) ; il « a la qualité de commerçant » et doit s'immatriculer au RCCM (article 139). Jusqu'à la publication du contrat, le propriétaire est solidairement responsable de ses dettes d'exploitation (article 145).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le locataire-gérant exploite le fonds « à ses risques et périls », article 138, ; il « a la qualité de commerçant » et doit s'immatriculer au R C C M, article 139. Jusqu'à la publication du contrat, le propriétaire est solidairement responsable de ses dettes d'exploitation, article 145."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le locataire-gérant exploite le fonds « à ses risques et périls » (article 138) ; il « a la qualité de commerçant » et doit s'immatriculer au RCCM (article 139). Jusqu'à la publication du contrat, le propriétaire est solidairement responsable de ses dettes d'exploitation (article 145)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

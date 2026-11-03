@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-008",
+ "titre": "Le QCM du jour n° 8",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 8",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Selon l'article 1er de la Convention internationale relative aux droits de l'enfant, l'enfant est :",
+   "options": [
+    "Tout être humain âgé de moins de seize ans",
+    "Tout être humain âgé de moins de dix-huit ans, sauf majorité atteinte plus tôt en vertu de la loi applicable",
+    "Tout être humain âgé de moins de vingt et un ans",
+    "Tout mineur non émancipé de moins de quinze ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "Selon l'article premier de la Convention internationale relative aux droits de l'enfant, l'enfant est :",
+    "A : Tout être humain âgé de moins de seize ans.",
+    "B : Tout être humain âgé de moins de dix-huit ans, sauf majorité atteinte plus tôt en vertu de la loi applicable.",
+    "C : Tout être humain âgé de moins de vingt et un ans.",
+    "D : Tout mineur non émancipé de moins de quinze ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Selon l'article 1er de la Convention internationale relative aux droits de l'enfant, l'enfant est :",
+    "A : Tout être humain âgé de moins de seize ans.",
+    "B : Tout être humain âgé de moins de dix-huit ans, sauf majorité atteinte plus tôt en vertu de la loi applicable.",
+    "C : Tout être humain âgé de moins de vingt et un ans.",
+    "D : Tout mineur non émancipé de moins de quinze ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Tout être humain âgé de moins de dix-huit ans, sauf majorité atteinte plus tôt en vertu de la loi applicable",
+   "explication": "Le droit ivoirien s'aligne sur cette définition : la loi n° 2019-572 du 26 juin 2019 relative à la minorité qualifie de mineur la personne qui n'a pas atteint dix-huit ans accomplis.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le droit ivoirien s'aligne sur cette définition : la loi du 26 juin 2019 relative à la minorité qualifie de mineur la personne qui n'a pas atteint dix-huit ans accomplis."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le droit ivoirien s'aligne sur cette définition : la loi n° 2019-572 du 26 juin 2019 relative à la minorité qualifie de mineur la personne qui n'a pas atteint dix-huit ans accomplis."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

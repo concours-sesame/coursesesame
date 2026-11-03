@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-103",
+ "titre": "Le QCM du jour n° 103",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 103",
+ "source": {
+  "matiere": "droit-constitutionnel",
+  "question": 8
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit constitutionnel",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit constitutionnel*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit constitutionnel*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Pour quels actes accomplis dans l'exercice de ses fonctions le Président de la République peut-il être traduit devant la Haute Cour de justice (article 157) ?",
+   "options": [
+    "Pour tout crime ou délit",
+    "En cas de haute trahison seulement",
+    "Pour toute faute de gestion",
+    "Jamais"
+   ],
+   "pause": 5,
+   "dit": [
+    "Pour quels actes accomplis dans l'exercice de ses fonctions le Président de la République peut-il être traduit devant la Haute Cour de justice, article 157, ?",
+    "A : Pour tout crime ou délit.",
+    "B : En cas de haute trahison seulement.",
+    "C : Pour toute faute de gestion.",
+    "D : Jamais.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Pour quels actes accomplis dans l'exercice de ses fonctions le Président de la République peut-il être traduit devant la Haute Cour de justice (article 157) ?",
+    "A : Pour tout crime ou délit.",
+    "B : En cas de haute trahison seulement.",
+    "C : Pour toute faute de gestion.",
+    "D : Jamais.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "En cas de haute trahison seulement",
+   "explication": "« Le Président de la République n'est responsable des actes accomplis dans l'exercice de ses fonctions et traduit devant la Haute Cour de Justice qu'en cas de haute trahison » (article 157). Sa mise en accusation exige la majorité des deux tiers du Parlement (article 161).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "« Le Président de la République n'est responsable des actes accomplis dans l'exercice de ses fonctions et traduit devant la Haute Cour de Justice qu'en cas de haute trahison », article 157. Sa mise en accusation exige la majorité des deux tiers du Parlement, article 161."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "« Le Président de la République n'est responsable des actes accomplis dans l'exercice de ses fonctions et traduit devant la Haute Cour de Justice qu'en cas de haute trahison » (article 157). Sa mise en accusation exige la majorité des deux tiers du Parlement (article 161)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

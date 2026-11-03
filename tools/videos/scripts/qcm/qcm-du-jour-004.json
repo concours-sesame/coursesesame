@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-004",
+ "titre": "Le QCM du jour n° 4",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 4",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Selon les articles 15 et 16 du Code pénal, le juge peut-il appliquer un texte pénal à un fait voisin que ce texte n'a pas prévu ?",
+   "options": [
+    "Oui, s'il estime les faits aussi graves",
+    "Non : la loi pénale est d'interprétation stricte et l'application par analogie est interdite",
+    "Oui, avec l'accord du ministère public",
+    "Oui, mais seulement en matière de contravention"
+   ],
+   "pause": 5,
+   "dit": [
+    "Selon les articles 15 et 16 du Code pénal, le juge peut-il appliquer un texte pénal à un fait voisin que ce texte n'a pas prévu ?",
+    "A : Oui, s'il estime les faits aussi graves.",
+    "B : Non : la loi pénale est d'interprétation stricte et l'application par analogie est interdite.",
+    "C : Oui, avec l'accord du ministère public.",
+    "D : Oui, mais seulement en matière de contravention.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Selon les articles 15 et 16 du Code pénal, le juge peut-il appliquer un texte pénal à un fait voisin que ce texte n'a pas prévu ?",
+    "A : Oui, s'il estime les faits aussi graves.",
+    "B : Non : la loi pénale est d'interprétation stricte et l'application par analogie est interdite.",
+    "C : Oui, avec l'accord du ministère public.",
+    "D : Oui, mais seulement en matière de contravention.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Non : la loi pénale est d'interprétation stricte et l'application par analogie est interdite",
+   "explication": "« La loi pénale est d'interprétation stricte » (article 15) et « L'application par analogie d'une disposition pénale à un fait qu'elle n'a pas prévu est interdite » (article 16). Le juge interprète le texte, mais ne l'étend pas.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "« La loi pénale est d'interprétation stricte », article 15, et « L'application par analogie d'une disposition pénale à un fait qu'elle n'a pas prévu est interdite », article 16. Le juge interprète le texte, mais ne l'étend pas."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "« La loi pénale est d'interprétation stricte » (article 15) et « L'application par analogie d'une disposition pénale à un fait qu'elle n'a pas prévu est interdite » (article 16). Le juge interprète le texte, mais ne l'étend pas."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

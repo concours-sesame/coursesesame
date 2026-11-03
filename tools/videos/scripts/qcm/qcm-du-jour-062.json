@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-062",
+ "titre": "Le QCM du jour n° 62",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 62",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Pendant le mariage, comment l'autorité parentale est-elle exercée (loi n° 2019-572 relative à la minorité, article 5) ?",
+   "options": [
+    "Par le père seul",
+    "Par la mère seule",
+    "En commun par le père et la mère, sauf décision judiciaire contraire",
+    "Par le conseil de famille"
+   ],
+   "pause": 5,
+   "dit": [
+    "Pendant le mariage, comment l'autorité parentale est-elle exercée, loi de 2019 relative à la minorité, article 5, ?",
+    "A : Par le père seul.",
+    "B : Par la mère seule.",
+    "C : En commun par le père et la mère, sauf décision judiciaire contraire.",
+    "D : Par le conseil de famille.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Pendant le mariage, comment l'autorité parentale est-elle exercée (loi n° 2019-572 relative à la minorité, article 5) ?",
+    "A : Par le père seul.",
+    "B : Par la mère seule.",
+    "C : En commun par le père et la mère, sauf décision judiciaire contraire.",
+    "D : Par le conseil de famille.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "En commun par le père et la mère, sauf décision judiciaire contraire",
+   "explication": "L'autorité parentale « est exercée en commun par les père et mère, sauf décision judiciaire contraire » ; en cas de conflit, le juge statue dans l'intérêt de l'enfant (article 5).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "L'autorité parentale « est exercée en commun par les père et mère, sauf décision judiciaire contraire » ; en cas de conflit, le juge statue dans l'intérêt de l'enfant, article 5."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "L'autorité parentale « est exercée en commun par les père et mère, sauf décision judiciaire contraire » ; en cas de conflit, le juge statue dans l'intérêt de l'enfant (article 5)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

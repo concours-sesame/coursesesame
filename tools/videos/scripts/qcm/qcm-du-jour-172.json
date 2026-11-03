@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-172",
+ "titre": "Le QCM du jour n° 172",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 172",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 20
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le gage de meubles corporels est opposable aux tiers (AUS, article 97) :",
+   "options": [
+    "Seulement par la remise du bien au créancier",
+    "Par son inscription au Registre du commerce et du crédit mobilier, ou par la remise du bien",
+    "Dès la signature du contrat, sans formalité",
+    "Seulement par acte notarié"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le gage de meubles corporels est opposable aux tiers, Acte uniforme sur les sûretés, article 97, :",
+    "A : Seulement par la remise du bien au créancier.",
+    "B : Par son inscription au Registre du commerce et du crédit mobilier, ou par la remise du bien.",
+    "C : Dès la signature du contrat, sans formalité.",
+    "D : Seulement par acte notarié.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le gage de meubles corporels est opposable aux tiers (AUS, article 97) :",
+    "A : Seulement par la remise du bien au créancier.",
+    "B : Par son inscription au Registre du commerce et du crédit mobilier, ou par la remise du bien.",
+    "C : Dès la signature du contrat, sans formalité.",
+    "D : Seulement par acte notarié.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Par son inscription au Registre du commerce et du crédit mobilier, ou par la remise du bien",
+   "explication": "Deux voies : l'inscription au RCCM, qui permet un gage sans dépossession, ou la remise du bien au créancier ou à un tiers convenu (article 97). Le contrat doit être constaté par écrit, à peine de nullité (article 96).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Deux voies : l'inscription au R C C M, qui permet un gage sans dépossession, ou la remise du bien au créancier ou à un tiers convenu, article 97. Le contrat doit être constaté par écrit, à peine de nullité, article 96."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Deux voies : l'inscription au RCCM, qui permet un gage sans dépossession, ou la remise du bien au créancier ou à un tiers convenu (article 97). Le contrat doit être constaté par écrit, à peine de nullité (article 96)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

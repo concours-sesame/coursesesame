@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-110",
+ "titre": "Le QCM du jour n° 110",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 110",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le défunt laisse des enfants et un conjoint survivant. Comment la succession est-elle partagée (loi n° 2019-573 relative aux successions, article 26) ?",
+   "options": [
+    "Trois quarts aux enfants, un quart au conjoint",
+    "Moitié aux enfants, moitié au conjoint",
+    "Tout aux enfants",
+    "Tout au conjoint"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le défunt laisse des enfants et un conjoint survivant. Comment la succession est-elle partagée, loi de 2019 relative aux successions, article 26, ?",
+    "A : Trois quarts aux enfants, un quart au conjoint.",
+    "B : Moitié aux enfants, moitié au conjoint.",
+    "C : Tout aux enfants.",
+    "D : Tout au conjoint.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le défunt laisse des enfants et un conjoint survivant. Comment la succession est-elle partagée (loi n° 2019-573 relative aux successions, article 26) ?",
+    "A : Trois quarts aux enfants, un quart au conjoint.",
+    "B : Moitié aux enfants, moitié au conjoint.",
+    "C : Tout aux enfants.",
+    "D : Tout au conjoint.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Trois quarts aux enfants, un quart au conjoint",
+   "explication": "« Les trois quarts de la succession sont dévolus aux enfants ou leurs descendants et un quart au conjoint survivant » (article 26). Les enfants succèdent sans distinction de sexe ni de primogéniture, même nés hors mariage (article 28).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« Les trois quarts de la succession sont dévolus aux enfants ou leurs descendants et un quart au conjoint survivant », article 26. Les enfants succèdent sans distinction de sexe ni de primogéniture, même nés hors mariage, article 28."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« Les trois quarts de la succession sont dévolus aux enfants ou leurs descendants et un quart au conjoint survivant » (article 26). Les enfants succèdent sans distinction de sexe ni de primogéniture, même nés hors mariage (article 28)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

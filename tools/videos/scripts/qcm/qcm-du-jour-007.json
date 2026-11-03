@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-007",
+ "titre": "Le QCM du jour n° 7",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 7",
+ "source": {
+  "matiere": "droit-constitutionnel",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit constitutionnel",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit constitutionnel*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit constitutionnel*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Pour quelle durée le président du Conseil constitutionnel est-il nommé (Constitution, articles 128 à 130) ?",
+   "options": [
+    "Cinq ans, renouvelables une fois",
+    "Sept ans, renouvelables",
+    "À vie",
+    "Six ans, non renouvelables"
+   ],
+   "pause": 5,
+   "dit": [
+    "Pour quelle durée le président du Conseil constitutionnel est-il nommé, Constitution, articles 128 à 130, ?",
+    "A : Cinq ans, renouvelables une fois.",
+    "B : Sept ans, renouvelables.",
+    "C : À vie.",
+    "D : Six ans, non renouvelables.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Pour quelle durée le président du Conseil constitutionnel est-il nommé (Constitution, articles 128 à 130) ?",
+    "A : Cinq ans, renouvelables une fois.",
+    "B : Sept ans, renouvelables.",
+    "C : À vie.",
+    "D : Six ans, non renouvelables.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Six ans, non renouvelables",
+   "explication": "Le président du Conseil constitutionnel est nommé par le Président de la République pour six ans non renouvelables ; les six conseillers aussi. Le Conseil est renouvelé par moitié tous les trois ans (article 128).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Le président du Conseil constitutionnel est nommé par le Président de la République pour six ans non renouvelables ; les six conseillers aussi. Le Conseil est renouvelé par moitié tous les trois ans, article 128."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Le président du Conseil constitutionnel est nommé par le Président de la République pour six ans non renouvelables ; les six conseillers aussi. Le Conseil est renouvelé par moitié tous les trois ans (article 128)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

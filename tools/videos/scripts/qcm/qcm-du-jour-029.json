@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-029",
+ "titre": "Le QCM du jour n° 29",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 29",
+ "source": {
+  "matiere": "droit-penal-special",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal spécial",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal spécial*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal spécial*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La victime d'un empoisonnement survit. L'empoisonnement (article 378, 4°, du Code pénal) est-il consommé ?",
+   "options": [
+    "Non : il s'agit seulement d'une tentative",
+    "Non : sans décès, ce sont des violences volontaires",
+    "Oui, mais seulement si la victime garde une infirmité",
+    "Oui : il est constitué quelles qu'aient été les suites de l'attentat"
+   ],
+   "pause": 5,
+   "dit": [
+    "La victime d'un empoisonnement survit. L'empoisonnement, article 378, 4°, du Code pénal, est-il consommé ?",
+    "A : Non : il s'agit seulement d'une tentative.",
+    "B : Non : sans décès, ce sont des violences volontaires.",
+    "C : Oui, mais seulement si la victime garde une infirmité.",
+    "D : Oui : il est constitué quelles qu'aient été les suites de l'attentat.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La victime d'un empoisonnement survit. L'empoisonnement (article 378, 4°, du Code pénal) est-il consommé ?",
+    "A : Non : il s'agit seulement d'une tentative.",
+    "B : Non : sans décès, ce sont des violences volontaires.",
+    "C : Oui, mais seulement si la victime garde une infirmité.",
+    "D : Oui : il est constitué quelles qu'aient été les suites de l'attentat.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Oui : il est constitué quelles qu'aient été les suites de l'attentat",
+   "explication": "L'empoisonnement est « tout attentat à la vie d'une personne, par l'effet d'une substance qui peut donner la mort [...] quelles qu'aient été les suites de cet attentat » (article 378, 4°). La mort de la victime n'est pas exigée.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "L'empoisonnement est « tout attentat à la vie d'une personne, par l'effet d'une substance qui peut donner la mort [...] quelles qu'aient été les suites de cet attentat », article 378, 4°. La mort de la victime n'est pas exigée."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "L'empoisonnement est « tout attentat à la vie d'une personne, par l'effet d'une substance qui peut donner la mort [...] quelles qu'aient été les suites de cet attentat » (article 378, 4°). La mort de la victime n'est pas exigée."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

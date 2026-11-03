@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-140",
+ "titre": "Le QCM du jour n° 140",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 140",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 13
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Sous le régime de la communauté de biens, un époux reçoit un immeuble par succession pendant le mariage. Ce bien est-il commun (loi relative au mariage, article 73) ?",
+   "options": [
+    "Non : les biens reçus par succession ou donation, même pendant le mariage, restent propres",
+    "Oui, comme tout bien acquis pendant le mariage",
+    "Oui, pour moitié",
+    "Seulement s'il sert de logement à la famille"
+   ],
+   "pause": 5,
+   "dit": [
+    "Sous le régime de la communauté de biens, un époux reçoit un immeuble par succession pendant le mariage. Ce bien est-il commun, loi relative au mariage, article 73, ?",
+    "A : Non : les biens reçus par succession ou donation, même pendant le mariage, restent propres.",
+    "B : Oui, comme tout bien acquis pendant le mariage.",
+    "C : Oui, pour moitié.",
+    "D : Seulement s'il sert de logement à la famille.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Sous le régime de la communauté de biens, un époux reçoit un immeuble par succession pendant le mariage. Ce bien est-il commun (loi relative au mariage, article 73) ?",
+    "A : Non : les biens reçus par succession ou donation, même pendant le mariage, restent propres.",
+    "B : Oui, comme tout bien acquis pendant le mariage.",
+    "C : Oui, pour moitié.",
+    "D : Seulement s'il sert de logement à la famille.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Non : les biens reçus par succession ou donation, même pendant le mariage, restent propres",
+   "explication": "La communauté comprend les gains et revenus, les biens acquis à titre onéreux pendant le mariage et les biens donnés aux deux époux (article 72). Les biens reçus par succession ou donation restent propres (article 73), mais l'époux qui le revendique doit prouver que le bien est propre (article 74).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "La communauté comprend les gains et revenus, les biens acquis à titre onéreux pendant le mariage et les biens donnés aux deux époux, article 72. Les biens reçus par succession ou donation restent propres, article 73,, mais l'époux qui le revendique doit prouver que le bien est propre, article 74."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "La communauté comprend les gains et revenus, les biens acquis à titre onéreux pendant le mariage et les biens donnés aux deux époux (article 72). Les biens reçus par succession ou donation restent propres (article 73), mais l'époux qui le revendique doit prouver que le bien est propre (article 74)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

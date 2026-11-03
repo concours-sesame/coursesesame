@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-023",
+ "titre": "Le QCM du jour n° 23",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 23",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Comment se prouvent les actes de commerce à l'égard des commerçants (article 5 AUDCG) ?",
+   "options": [
+    "Uniquement par écrit",
+    "Par tous moyens, même par voie électronique",
+    "Par acte authentique au-delà d'un certain montant",
+    "Par témoins seulement"
+   ],
+   "pause": 5,
+   "dit": [
+    "Comment se prouvent les actes de commerce à l'égard des commerçants, article 5 Acte uniforme sur le droit commercial général, ?",
+    "A : Uniquement par écrit.",
+    "B : Par tous moyens, même par voie électronique.",
+    "C : Par acte authentique au-delà d'un certain montant.",
+    "D : Par témoins seulement.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Comment se prouvent les actes de commerce à l'égard des commerçants (article 5 AUDCG) ?",
+    "A : Uniquement par écrit.",
+    "B : Par tous moyens, même par voie électronique.",
+    "C : Par acte authentique au-delà d'un certain montant.",
+    "D : Par témoins seulement.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Par tous moyens, même par voie électronique",
+   "explication": "Les actes de commerce se prouvent par tous moyens, même par voie électronique, à l'égard des commerçants. Tout commencement de preuve par écrit autorise le commerçant à prouver par tous moyens contre un non-commerçant (article 5 AUDCG).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Les actes de commerce se prouvent par tous moyens, même par voie électronique, à l'égard des commerçants. Tout commencement de preuve par écrit autorise le commerçant à prouver par tous moyens contre un non-commerçant, article 5 Acte uniforme sur le droit commercial général."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Les actes de commerce se prouvent par tous moyens, même par voie électronique, à l'égard des commerçants. Tout commencement de preuve par écrit autorise le commerçant à prouver par tous moyens contre un non-commerçant (article 5 AUDCG)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

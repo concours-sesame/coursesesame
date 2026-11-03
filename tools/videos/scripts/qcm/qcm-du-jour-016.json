@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-016",
+ "titre": "Le QCM du jour n° 16",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 16",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Selon l'article 94-1 du Code pénal, qu'est-ce qui fait disparaître une contravention ?",
+   "options": [
+    "La bonne foi de l'auteur",
+    "L'ignorance de la loi",
+    "Le pardon de la victime",
+    "La force majeure"
+   ],
+   "pause": 5,
+   "dit": [
+    "Selon l'article 94-1 du Code pénal, qu'est-ce qui fait disparaître une contravention ?",
+    "A : La bonne foi de l'auteur.",
+    "B : L'ignorance de la loi.",
+    "C : Le pardon de la victime.",
+    "D : La force majeure.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Selon l'article 94-1 du Code pénal, qu'est-ce qui fait disparaître une contravention ?",
+    "A : La bonne foi de l'auteur.",
+    "B : L'ignorance de la loi.",
+    "C : Le pardon de la victime.",
+    "D : La force majeure.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "La force majeure",
+   "explication": "« Il n'y a pas de contravention en cas de force majeure » (article 94-1, alinéa 2). Pour les contraventions, l'intention n'est pas exigée : la constatation du fait matériel suffit, sauf force majeure.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "« Il n'y a pas de contravention en cas de force majeure », article 94-1, alinéa 2. Pour les contraventions, l'intention n'est pas exigée : la constatation du fait matériel suffit, sauf force majeure."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "« Il n'y a pas de contravention en cas de force majeure » (article 94-1, alinéa 2). Pour les contraventions, l'intention n'est pas exigée : la constatation du fait matériel suffit, sauf force majeure."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

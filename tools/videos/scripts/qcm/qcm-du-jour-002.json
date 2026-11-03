@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-002",
+ "titre": "Le QCM du jour n° 2",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 2",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 0
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un époux peut-il vendre seul le logement de la famille (loi n° 2019-570 relative au mariage, article 53) ?",
+   "options": [
+    "Oui, s'il en est seul propriétaire",
+    "Oui, sous le régime de la séparation de biens",
+    "Oui, avec l'accord du juge des tutelles",
+    "Non : il lui faut le consentement de l'autre, qui peut sinon demander l'annulation de l'acte"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un époux peut-il vendre seul le logement de la famille, loi de 2019 relative au mariage, article 53, ?",
+    "A : Oui, s'il en est seul propriétaire.",
+    "B : Oui, sous le régime de la séparation de biens.",
+    "C : Oui, avec l'accord du juge des tutelles.",
+    "D : Non : il lui faut le consentement de l'autre, qui peut sinon demander l'annulation de l'acte.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un époux peut-il vendre seul le logement de la famille (loi n° 2019-570 relative au mariage, article 53) ?",
+    "A : Oui, s'il en est seul propriétaire.",
+    "B : Oui, sous le régime de la séparation de biens.",
+    "C : Oui, avec l'accord du juge des tutelles.",
+    "D : Non : il lui faut le consentement de l'autre, qui peut sinon demander l'annulation de l'acte.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Non : il lui faut le consentement de l'autre, qui peut sinon demander l'annulation de l'acte",
+   "explication": "« Un époux ne peut, sans le consentement de l'autre, disposer des droits par lesquels est assuré le logement de la famille ni des meubles meublants dont il est garni. » L'époux qui n'a pas consenti peut demander l'annulation dans l'année où il a eu connaissance de l'acte (article 53).",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "« Un époux ne peut, sans le consentement de l'autre, disposer des droits par lesquels est assuré le logement de la famille ni des meubles meublants dont il est garni. » L'époux qui n'a pas consenti peut demander l'annulation dans l'année où il a eu connaissance de l'acte, article 53."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "« Un époux ne peut, sans le consentement de l'autre, disposer des droits par lesquels est assuré le logement de la famille ni des meubles meublants dont il est garni. » L'époux qui n'a pas consenti peut demander l'annulation dans l'année où il a eu connaissance de l'acte (article 53)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

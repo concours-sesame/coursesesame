@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-177",
+ "titre": "Le QCM du jour n° 177",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 177",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 23
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Après quel temps d'épreuve un condamné qui n'est pas récidiviste peut-il obtenir la libération conditionnelle (article 734 du Code de procédure pénale) ?",
+   "options": [
+    "La moitié de sa peine",
+    "Le tiers de sa peine",
+    "Les deux tiers de sa peine",
+    "Quinze ans dans tous les cas"
+   ],
+   "pause": 5,
+   "dit": [
+    "Après quel temps d'épreuve un condamné qui n'est pas récidiviste peut-il obtenir la libération conditionnelle, article 734 du Code de procédure pénale, ?",
+    "A : La moitié de sa peine.",
+    "B : Le tiers de sa peine.",
+    "C : Les deux tiers de sa peine.",
+    "D : Quinze ans dans tous les cas.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Après quel temps d'épreuve un condamné qui n'est pas récidiviste peut-il obtenir la libération conditionnelle (article 734 du Code de procédure pénale) ?",
+    "A : La moitié de sa peine.",
+    "B : Le tiers de sa peine.",
+    "C : Les deux tiers de sa peine.",
+    "D : Quinze ans dans tous les cas.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "La moitié de sa peine",
+   "explication": "« La libération conditionnelle est réservée au condamné ayant purgé la moitié de sa peine. » Le temps d'épreuve est porté aux deux tiers pour le récidiviste et à quinze ans pour le condamné à vie (article 734).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« La libération conditionnelle est réservée au condamné ayant purgé la moitié de sa peine. » Le temps d'épreuve est porté aux deux tiers pour le récidiviste et à quinze ans pour le condamné à vie, article 734."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« La libération conditionnelle est réservée au condamné ayant purgé la moitié de sa peine. » Le temps d'épreuve est porté aux deux tiers pour le récidiviste et à quinze ans pour le condamné à vie (article 734)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

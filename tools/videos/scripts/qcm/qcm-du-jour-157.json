@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-157",
+ "titre": "Le QCM du jour n° 157",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 157",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 16
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelle est la durée initiale maximale de la détention préventive en matière correctionnelle (article 166 nouveau du Code de procédure pénale) ?",
+   "options": [
+    "Six mois",
+    "Quatre mois",
+    "Huit mois",
+    "Un an"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelle est la durée initiale maximale de la détention préventive en matière correctionnelle, article 166 nouveau du Code de procédure pénale, ?",
+    "A : Six mois.",
+    "B : Quatre mois.",
+    "C : Huit mois.",
+    "D : Un an.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelle est la durée initiale maximale de la détention préventive en matière correctionnelle (article 166 nouveau du Code de procédure pénale) ?",
+    "A : Six mois.",
+    "B : Quatre mois.",
+    "C : Huit mois.",
+    "D : Un an.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Six mois",
+   "explication": "Six mois en matière correctionnelle et huit mois en matière criminelle, prolongeables une fois par le juge d'instruction après débat contradictoire, puis une fois, à titre exceptionnel, par la Chambre d'instruction, pour la même durée au plus.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "Six mois en matière correctionnelle et huit mois en matière criminelle, prolongeables une fois par le juge d'instruction après débat contradictoire, puis une fois, à titre exceptionnel, par la Chambre d'instruction, pour la même durée au plus."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "Six mois en matière correctionnelle et huit mois en matière criminelle, prolongeables une fois par le juge d'instruction après débat contradictoire, puis une fois, à titre exceptionnel, par la Chambre d'instruction, pour la même durée au plus."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

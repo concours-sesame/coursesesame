@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-058",
+ "titre": "Le QCM du jour n° 58",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 58",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 4
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Lequel de ces événements n'est pas une cause d'extinction de l'action publique selon l'article 11 ?",
+   "options": [
+    "L'amnistie",
+    "La mort de la personne poursuivie",
+    "L'indemnisation de la victime par l'auteur",
+    "L'abrogation de la loi pénale"
+   ],
+   "pause": 5,
+   "dit": [
+    "Lequel de ces événements n'est pas une cause d'extinction de l'action publique selon l'article 11 ?",
+    "A : L'amnistie.",
+    "B : La mort de la personne poursuivie.",
+    "C : L'indemnisation de la victime par l'auteur.",
+    "D : L'abrogation de la loi pénale.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Lequel de ces événements n'est pas une cause d'extinction de l'action publique selon l'article 11 ?",
+    "A : L'amnistie.",
+    "B : La mort de la personne poursuivie.",
+    "C : L'indemnisation de la victime par l'auteur.",
+    "D : L'abrogation de la loi pénale.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "L'indemnisation de la victime par l'auteur",
+   "explication": "L'action publique s'éteint par la mort de la personne poursuivie, la prescription, l'amnistie, l'abrogation de la loi pénale et la chose jugée, et aussi par la transaction lorsque la loi le prévoit ou le retrait de plainte lorsque la plainte est une condition de la poursuite (article 11). L'indemnisation de la victime n'en fait pas partie.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "L'action publique s'éteint par la mort de la personne poursuivie, la prescription, l'amnistie, l'abrogation de la loi pénale et la chose jugée, et aussi par la transaction lorsque la loi le prévoit ou le retrait de plainte lorsque la plainte est une condition de la poursuite, article 11. L'indemnisation de la victime n'en fait pas partie."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "L'action publique s'éteint par la mort de la personne poursuivie, la prescription, l'amnistie, l'abrogation de la loi pénale et la chose jugée, et aussi par la transaction lorsque la loi le prévoit ou le retrait de plainte lorsque la plainte est une condition de la poursuite (article 11). L'indemnisation de la victime n'en fait pas partie."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

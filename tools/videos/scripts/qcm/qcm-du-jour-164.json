@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-164",
+ "titre": "Le QCM du jour n° 164",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 164",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 18
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quel est le rôle du Conseil supérieur de la magistrature pour la nomination, la mutation et la promotion des juges du siège (Constitution, article 146) ?",
+   "options": [
+    "Il nomme lui-même les juges",
+    "Il n'a aucun rôle",
+    "Il donne un simple avis, que l'autorité peut écarter",
+    "Il donne un avis conforme, qui lie l'autorité de nomination"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quel est le rôle du Conseil supérieur de la magistrature pour la nomination, la mutation et la promotion des juges du siège, Constitution, article 146, ?",
+    "A : Il nomme lui-même les juges.",
+    "B : Il n'a aucun rôle.",
+    "C : Il donne un simple avis, que l'autorité peut écarter.",
+    "D : Il donne un avis conforme, qui lie l'autorité de nomination.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quel est le rôle du Conseil supérieur de la magistrature pour la nomination, la mutation et la promotion des juges du siège (Constitution, article 146) ?",
+    "A : Il nomme lui-même les juges.",
+    "B : Il n'a aucun rôle.",
+    "C : Il donne un simple avis, que l'autorité peut écarter.",
+    "D : Il donne un avis conforme, qui lie l'autorité de nomination.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 3,
+   "texte": "Il donne un avis conforme, qui lie l'autorité de nomination",
+   "explication": "Le Conseil supérieur de la magistrature « donne son avis conforme » à la nomination, à la mutation et à la promotion des magistrats du siège (article 146). Pour les plus hautes fonctions, il fait des propositions.",
+   "dit": [
+    "Bonne réponse : *D*.",
+    "Le Conseil supérieur de la magistrature « donne son avis conforme » à la nomination, à la mutation et à la promotion des magistrats du siège, article 146. Pour les plus hautes fonctions, il fait des propositions."
+   ],
+   "st": [
+    "Bonne réponse : *D*.",
+    "Le Conseil supérieur de la magistrature « donne son avis conforme » à la nomination, à la mutation et à la promotion des magistrats du siège (article 146). Pour les plus hautes fonctions, il fait des propositions."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

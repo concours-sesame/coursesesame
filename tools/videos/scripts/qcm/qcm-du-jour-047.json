@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-047",
+ "titre": "Le QCM du jour n° 47",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 47",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 3
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "À quelle condition le preneur d'un bail à usage professionnel acquiert-il le droit au renouvellement ?",
+   "options": [
+    "Avoir exploité l'activité prévue au bail pendant au moins deux ans, conformément au bail",
+    "Être immatriculé au RCCM depuis cinq ans",
+    "Avoir payé une indemnité au bailleur",
+    "Avoir conclu un bail d'au moins neuf ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "À quelle condition le preneur d'un bail à usage professionnel acquiert-il le droit au renouvellement ?",
+    "A : Avoir exploité l'activité prévue au bail pendant au moins deux ans, conformément au bail.",
+    "B : Être immatriculé au R C C M depuis cinq ans.",
+    "C : Avoir payé une indemnité au bailleur.",
+    "D : Avoir conclu un bail d'au moins neuf ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "À quelle condition le preneur d'un bail à usage professionnel acquiert-il le droit au renouvellement ?",
+    "A : Avoir exploité l'activité prévue au bail pendant au moins deux ans, conformément au bail.",
+    "B : Être immatriculé au RCCM depuis cinq ans.",
+    "C : Avoir payé une indemnité au bailleur.",
+    "D : Avoir conclu un bail d'au moins neuf ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Avoir exploité l'activité prévue au bail pendant au moins deux ans, conformément au bail",
+   "explication": "Le droit au renouvellement est acquis au preneur qui justifie avoir exploité, conformément aux stipulations du bail, l'activité prévue pendant une durée minimale de deux ans (article 123 AUDCG).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "Le droit au renouvellement est acquis au preneur qui justifie avoir exploité, conformément aux stipulations du bail, l'activité prévue pendant une durée minimale de deux ans, article 123 Acte uniforme sur le droit commercial général."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "Le droit au renouvellement est acquis au preneur qui justifie avoir exploité, conformément aux stipulations du bail, l'activité prévue pendant une durée minimale de deux ans (article 123 AUDCG)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-032",
+ "titre": "Le QCM du jour n° 32",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 32",
+ "source": {
+  "matiere": "droits-de-l-enfant",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droits de l'enfant",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droits de l'enfant*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droits de l'enfant*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "En deçà de quel âge les faits commis par un mineur ne sont-ils susceptibles ni de qualification ni de poursuites pénales ?",
+   "options": [
+    "Huit ans",
+    "Dix ans",
+    "Treize ans",
+    "Seize ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "En deçà de quel âge les faits commis par un mineur ne sont-ils susceptibles ni de qualification ni de poursuites pénales ?",
+    "A : Huit ans.",
+    "B : Dix ans.",
+    "C : Treize ans.",
+    "D : Seize ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "En deçà de quel âge les faits commis par un mineur ne sont-ils susceptibles ni de qualification ni de poursuites pénales ?",
+    "A : Huit ans.",
+    "B : Dix ans.",
+    "C : Treize ans.",
+    "D : Seize ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Dix ans",
+   "explication": "C'est le seuil d'irresponsabilité absolue de l'article 113 du Code pénal, modifié par la loi du 21 décembre 2021. L'enfant peut seulement faire l'objet de mesures de protection.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "C'est le seuil d'irresponsabilité absolue de l'article 113 du Code pénal, modifié par la loi du 21 décembre 2021. L'enfant peut seulement faire l'objet de mesures de protection."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "C'est le seuil d'irresponsabilité absolue de l'article 113 du Code pénal, modifié par la loi du 21 décembre 2021. L'enfant peut seulement faire l'objet de mesures de protection."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-079",
+ "titre": "Le QCM du jour n° 79",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 79",
+ "source": {
+  "matiere": "droit-constitutionnel",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit constitutionnel",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit constitutionnel*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit constitutionnel*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Que la Constitution interdit-elle de réviser (article 178) ?",
+   "options": [
+    "La forme républicaine du Gouvernement et la laïcité de l'État",
+    "Le mandat des députés",
+    "Le nombre des ministres",
+    "L'organisation des juridictions"
+   ],
+   "pause": 5,
+   "dit": [
+    "Que la Constitution interdit-elle de réviser, article 178, ?",
+    "A : La forme républicaine du Gouvernement et la laïcité de l'État.",
+    "B : Le mandat des députés.",
+    "C : Le nombre des ministres.",
+    "D : L'organisation des juridictions.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Que la Constitution interdit-elle de réviser (article 178) ?",
+    "A : La forme républicaine du Gouvernement et la laïcité de l'État.",
+    "B : Le mandat des députés.",
+    "C : Le nombre des ministres.",
+    "D : L'organisation des juridictions.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "La forme républicaine du Gouvernement et la laïcité de l'État",
+   "explication": "« La forme républicaine du Gouvernement et la laïcité de l'Etat ne peuvent faire l'objet d'une révision. » En outre, aucune révision ne peut être engagée ou poursuivie en cas d'atteinte à l'intégrité du territoire (article 178).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "« La forme républicaine du Gouvernement et la laïcité de l'Etat ne peuvent faire l'objet d'une révision. » En outre, aucune révision ne peut être engagée ou poursuivie en cas d'atteinte à l'intégrité du territoire, article 178."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "« La forme républicaine du Gouvernement et la laïcité de l'Etat ne peuvent faire l'objet d'une révision. » En outre, aucune révision ne peut être engagée ou poursuivie en cas d'atteinte à l'intégrité du territoire (article 178)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

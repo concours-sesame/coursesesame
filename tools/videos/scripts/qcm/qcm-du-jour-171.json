@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-171",
+ "titre": "Le QCM du jour n° 171",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 171",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 20
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "De quel délai dispose-t-on pour se pourvoir en cassation en matière pénale (article 604 du Code de procédure pénale) ?",
+   "options": [
+    "Vingt jours à compter du prononcé",
+    "Quinze jours francs à compter du prononcé de la décision",
+    "Deux mois à compter de la signification",
+    "Huit jours"
+   ],
+   "pause": 5,
+   "dit": [
+    "De quel délai dispose-t-on pour se pourvoir en cassation en matière pénale, article 604 du Code de procédure pénale, ?",
+    "A : Vingt jours à compter du prononcé.",
+    "B : Quinze jours francs à compter du prononcé de la décision.",
+    "C : Deux mois à compter de la signification.",
+    "D : Huit jours.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "De quel délai dispose-t-on pour se pourvoir en cassation en matière pénale (article 604 du Code de procédure pénale) ?",
+    "A : Vingt jours à compter du prononcé.",
+    "B : Quinze jours francs à compter du prononcé de la décision.",
+    "C : Deux mois à compter de la signification.",
+    "D : Huit jours.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Quinze jours francs à compter du prononcé de la décision",
+   "explication": "« Le ministère public et toutes les parties ont quinze jours francs à compter du prononcé de la décision attaquée pour se pourvoir en cassation » (article 604). Le demandeur doit en principe consigner 25.000 francs (article 617).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "« Le ministère public et toutes les parties ont quinze jours francs à compter du prononcé de la décision attaquée pour se pourvoir en cassation », article 604. Le demandeur doit en principe consigner 25000 francs, article 617."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "« Le ministère public et toutes les parties ont quinze jours francs à compter du prononcé de la décision attaquée pour se pourvoir en cassation » (article 604). Le demandeur doit en principe consigner 25.000 francs (article 617)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

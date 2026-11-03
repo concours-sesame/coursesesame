@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-094",
+ "titre": "Le QCM du jour n° 94",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 94",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 7
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Comment l'article 77 définit-il le crime ou le délit flagrant ?",
+   "options": [
+    "L'infraction commise en présence d'un magistrat",
+    "L'infraction qui est en train de se commettre ou qui vient de se commettre",
+    "Toute infraction commise de nuit",
+    "L'infraction avouée par son auteur"
+   ],
+   "pause": 5,
+   "dit": [
+    "Comment l'article 77 définit-il le crime ou le délit flagrant ?",
+    "A : L'infraction commise en présence d'un magistrat.",
+    "B : L'infraction qui est en train de se commettre ou qui vient de se commettre.",
+    "C : Toute infraction commise de nuit.",
+    "D : L'infraction avouée par son auteur.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Comment l'article 77 définit-il le crime ou le délit flagrant ?",
+    "A : L'infraction commise en présence d'un magistrat.",
+    "B : L'infraction qui est en train de se commettre ou qui vient de se commettre.",
+    "C : Toute infraction commise de nuit.",
+    "D : L'infraction avouée par son auteur.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "L'infraction qui est en train de se commettre ou qui vient de se commettre",
+   "explication": "Est flagrant le crime ou le délit qui est en train de se commettre ou qui vient de se commettre. Il l'est aussi lorsque, dans un temps très voisin de l'action, la personne est poursuivie par la clameur publique ou trouvée en possession d'objets ou de traces laissant penser qu'elle a participé à l'infraction (article 77).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Est flagrant le crime ou le délit qui est en train de se commettre ou qui vient de se commettre. Il l'est aussi lorsque, dans un temps très voisin de l'action, la personne est poursuivie par la clameur publique ou trouvée en possession d'objets ou de traces laissant penser qu'elle a participé à l'infraction, article 77."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Est flagrant le crime ou le délit qui est en train de se commettre ou qui vient de se commettre. Il l'est aussi lorsque, dans un temps très voisin de l'action, la personne est poursuivie par la clameur publique ou trouvée en possession d'objets ou de traces laissant penser qu'elle a participé à l'infraction (article 77)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

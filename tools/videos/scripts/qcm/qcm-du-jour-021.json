@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-021",
+ "titre": "Le QCM du jour n° 21",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 21",
+ "source": {
+  "matiere": "organisation-judiciaire",
+  "question": 1
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Organisation judiciaire",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *organisation judiciaire*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *organisation judiciaire*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le Conseil constitutionnel est-il la juridiction suprême d'un ordre de juridictions ?",
+   "options": [
+    "Oui, de l'ordre judiciaire",
+    "Oui, de l'ordre administratif",
+    "Non, il se situe en dehors de cette architecture",
+    "Oui, de tous les ordres à la fois"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le Conseil constitutionnel est-il la juridiction suprême d'un ordre de juridictions ?",
+    "A : Oui, de l'ordre judiciaire.",
+    "B : Oui, de l'ordre administratif.",
+    "C : Non, il se situe en dehors de cette architecture.",
+    "D : Oui, de tous les ordres à la fois.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le Conseil constitutionnel est-il la juridiction suprême d'un ordre de juridictions ?",
+    "A : Oui, de l'ordre judiciaire.",
+    "B : Oui, de l'ordre administratif.",
+    "C : Non, il se situe en dehors de cette architecture.",
+    "D : Oui, de tous les ordres à la fois.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Non, il se situe en dehors de cette architecture",
+   "explication": "Juge de la constitutionnalité des lois et du contentieux électoral, le Conseil constitutionnel n'est pas une juridiction suprême d'un ordre de juridictions.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Juge de la constitutionnalité des lois et du contentieux électoral, le Conseil constitutionnel n'est pas une juridiction suprême d'un ordre de juridictions."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Juge de la constitutionnalité des lois et du contentieux électoral, le Conseil constitutionnel n'est pas une juridiction suprême d'un ordre de juridictions."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

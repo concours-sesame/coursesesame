@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-026",
+ "titre": "Le QCM du jour n° 26",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 26",
+ "source": {
+  "matiere": "droit-de-la-famille",
+  "question": 2
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit de la famille et des personnes",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit de la famille et des personnes*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit de la famille et des personnes*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Selon la loi relative à la filiation (article 2), l'enfant né moins de combien de jours après la dissolution du mariage a pour père le mari de sa mère ?",
+   "options": [
+    "Cent quatre-vingts jours",
+    "Un an",
+    "Trois cents jours",
+    "Deux ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "Selon la loi relative à la filiation, article 2,, l'enfant né moins de combien de jours après la dissolution du mariage a pour père le mari de sa mère ?",
+    "A : Cent quatre-vingts jours.",
+    "B : Un an.",
+    "C : Trois cents jours.",
+    "D : Deux ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Selon la loi relative à la filiation (article 2), l'enfant né moins de combien de jours après la dissolution du mariage a pour père le mari de sa mère ?",
+    "A : Cent quatre-vingts jours.",
+    "B : Un an.",
+    "C : Trois cents jours.",
+    "D : Deux ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Trois cents jours",
+   "explication": "« L'enfant conçu pendant le mariage ou né moins de trois cents jours après la dissolution du mariage, a pour père le mari de sa mère » (article 2).",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "« L'enfant conçu pendant le mariage ou né moins de trois cents jours après la dissolution du mariage, a pour père le mari de sa mère », article 2."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "« L'enfant conçu pendant le mariage ou né moins de trois cents jours après la dissolution du mariage, a pour père le mari de sa mère » (article 2)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

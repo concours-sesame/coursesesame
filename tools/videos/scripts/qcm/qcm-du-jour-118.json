@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-118",
+ "titre": "Le QCM du jour n° 118",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 118",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 9
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "La comparution sur reconnaissance préalable de culpabilité (CRPC) est ouverte pour :",
+   "options": [
+    "Tous les crimes",
+    "Les délits punis de cinq ans d'emprisonnement au plus, lorsque le prévenu reconnaît les faits",
+    "Les infractions commises par des mineurs",
+    "Les délits de presse seulement"
+   ],
+   "pause": 5,
+   "dit": [
+    "La comparution sur reconnaissance préalable de culpabilité, C R P C, est ouverte pour :",
+    "A : Tous les crimes.",
+    "B : Les délits punis de cinq ans d'emprisonnement au plus, lorsque le prévenu reconnaît les faits.",
+    "C : Les infractions commises par des mineurs.",
+    "D : Les délits de presse seulement.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "La comparution sur reconnaissance préalable de culpabilité (CRPC) est ouverte pour :",
+    "A : Tous les crimes.",
+    "B : Les délits punis de cinq ans d'emprisonnement au plus, lorsque le prévenu reconnaît les faits.",
+    "C : Les infractions commises par des mineurs.",
+    "D : Les délits de presse seulement.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Les délits punis de cinq ans d'emprisonnement au plus, lorsque le prévenu reconnaît les faits",
+   "explication": "Le procureur de la République peut y recourir, d'office ou à la demande du prévenu, pour un délit passible de cinq ans d'emprisonnement au plus (article 521, rédaction de 2022). Elle est exclue notamment lorsqu'un mineur est poursuivi, pour les délits de presse et les agressions sexuelles (article 530).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Le procureur de la République peut y recourir, d'office ou à la demande du prévenu, pour un délit passible de cinq ans d'emprisonnement au plus, article 521, rédaction de 2022. Elle est exclue notamment lorsqu'un mineur est poursuivi, pour les délits de presse et les agressions sexuelles, article 530."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Le procureur de la République peut y recourir, d'office ou à la demande du prévenu, pour un délit passible de cinq ans d'emprisonnement au plus (article 521, rédaction de 2022). Elle est exclue notamment lorsqu'un mineur est poursuivi, pour les délits de presse et les agressions sexuelles (article 530)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

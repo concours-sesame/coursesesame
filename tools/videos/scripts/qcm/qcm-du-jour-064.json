@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-064",
+ "titre": "Le QCM du jour n° 64",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 64",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 5
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Dans le Code pénal de 2019, la contrainte irrésistible (article 109) est :",
+   "options": [
+    "Un fait justificatif qui supprime l'infraction",
+    "Une excuse absolutoire : l'infraction subsiste, mais l'auteur est dispensé de peine",
+    "Une circonstance atténuante laissée à l'appréciation du juge",
+    "Une circonstance aggravante"
+   ],
+   "pause": 5,
+   "dit": [
+    "Dans le Code pénal de 2019, la contrainte irrésistible, article 109, est :",
+    "A : Un fait justificatif qui supprime l'infraction.",
+    "B : Une excuse absolutoire : l'infraction subsiste, mais l'auteur est dispensé de peine.",
+    "C : Une circonstance atténuante laissée à l'appréciation du juge.",
+    "D : Une circonstance aggravante.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Dans le Code pénal de 2019, la contrainte irrésistible (article 109) est :",
+    "A : Un fait justificatif qui supprime l'infraction.",
+    "B : Une excuse absolutoire : l'infraction subsiste, mais l'auteur est dispensé de peine.",
+    "C : Une circonstance atténuante laissée à l'appréciation du juge.",
+    "D : Une circonstance aggravante.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Une excuse absolutoire : l'infraction subsiste, mais l'auteur est dispensé de peine",
+   "explication": "La personne qui agit sous l'empire d'une contrainte irrésistible « bénéficie de l'excuse absolutoire prévue par l'article 11 » (article 109). Or l'excuse laisse subsister l'infraction et entraîne dispense de peine (article 11).",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "La personne qui agit sous l'empire d'une contrainte irrésistible « bénéficie de l'excuse absolutoire prévue par l'article 11 », article 109. Or l'excuse laisse subsister l'infraction et entraîne dispense de peine, article 11."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "La personne qui agit sous l'empire d'une contrainte irrésistible « bénéficie de l'excuse absolutoire prévue par l'article 11 » (article 109). Or l'excuse laisse subsister l'infraction et entraîne dispense de peine (article 11)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

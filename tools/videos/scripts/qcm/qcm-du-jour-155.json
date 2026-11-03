@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-155",
+ "titre": "Le QCM du jour n° 155",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 155",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 16
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Un prévenu a déjà été condamné à une simple amende pour un délit. Peut-il bénéficier du sursis (article 130 du Code pénal) ?",
+   "options": [
+    "Non : toute condamnation antérieure l'exclut",
+    "Oui, mais seulement pour l'amende",
+    "Oui : seule une condamnation antérieure à l'emprisonnement pour crime ou délit fait obstacle",
+    "Non, sauf décision du procureur"
+   ],
+   "pause": 5,
+   "dit": [
+    "Un prévenu a déjà été condamné à une simple amende pour un délit. Peut-il bénéficier du sursis, article 130 du Code pénal, ?",
+    "A : Non : toute condamnation antérieure l'exclut.",
+    "B : Oui, mais seulement pour l'amende.",
+    "C : Oui : seule une condamnation antérieure à l'emprisonnement pour crime ou délit fait obstacle.",
+    "D : Non, sauf décision du procureur.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Un prévenu a déjà été condamné à une simple amende pour un délit. Peut-il bénéficier du sursis (article 130 du Code pénal) ?",
+    "A : Non : toute condamnation antérieure l'exclut.",
+    "B : Oui, mais seulement pour l'amende.",
+    "C : Oui : seule une condamnation antérieure à l'emprisonnement pour crime ou délit fait obstacle.",
+    "D : Non, sauf décision du procureur.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 2,
+   "texte": "Oui : seule une condamnation antérieure à l'emprisonnement pour crime ou délit fait obstacle",
+   "explication": "Le sursis est exclu si le condamné avait déjà fait l'objet « d'une condamnation à l'emprisonnement pour crime ou délit devenue définitive et non effacée » (article 130). Une condamnation antérieure à l'amende ne l'empêche pas.",
+   "dit": [
+    "Bonne réponse : *C*.",
+    "Le sursis est exclu si le condamné avait déjà fait l'objet « d'une condamnation à l'emprisonnement pour crime ou délit devenue définitive et non effacée », article 130. Une condamnation antérieure à l'amende ne l'empêche pas."
+   ],
+   "st": [
+    "Bonne réponse : *C*.",
+    "Le sursis est exclu si le condamné avait déjà fait l'objet « d'une condamnation à l'emprisonnement pour crime ou délit devenue définitive et non effacée » (article 130). Une condamnation antérieure à l'amende ne l'empêche pas."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

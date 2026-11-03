@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-154",
+ "titre": "Le QCM du jour n° 154",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 154",
+ "source": {
+  "matiere": "droit-ohada",
+  "question": 15
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit des affaires OHADA",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit des affaires ohada*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit des affaires ohada*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Lors de la vente d'un fonds de commerce, pendant combien de temps le prix est-il conservé par le notaire ou la banque en qualité de séquestre (AUDCG, article 157) ?",
+   "options": [
+    "Trente jours à compter de la parution de la vente dans un journal d'annonces légales",
+    "Huit jours après la signature",
+    "Trois mois après l'immatriculation de l'acquéreur",
+    "Jusqu'à la fin de l'année"
+   ],
+   "pause": 5,
+   "dit": [
+    "Lors de la vente d'un fonds de commerce, pendant combien de temps le prix est-il conservé par le notaire ou la banque en qualité de séquestre, Acte uniforme sur le droit commercial général, article 157, ?",
+    "A : Trente jours à compter de la parution de la vente dans un journal d'annonces légales.",
+    "B : Huit jours après la signature.",
+    "C : Trois mois après l'immatriculation de l'acquéreur.",
+    "D : Jusqu'à la fin de l'année.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Lors de la vente d'un fonds de commerce, pendant combien de temps le prix est-il conservé par le notaire ou la banque en qualité de séquestre (AUDCG, article 157) ?",
+    "A : Trente jours à compter de la parution de la vente dans un journal d'annonces légales.",
+    "B : Huit jours après la signature.",
+    "C : Trois mois après l'immatriculation de l'acquéreur.",
+    "D : Jusqu'à la fin de l'année.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Trente jours à compter de la parution de la vente dans un journal d'annonces légales",
+   "explication": "Le séquestre conserve les fonds « pendant un délai de trente jours, ce délai commençant à courir au jour de la parution dans un journal habilité » (article 157). Ce délai permet aux créanciers du vendeur de former opposition.",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "Le séquestre conserve les fonds « pendant un délai de trente jours, ce délai commençant à courir au jour de la parution dans un journal habilité », article 157. Ce délai permet aux créanciers du vendeur de former opposition."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "Le séquestre conserve les fonds « pendant un délai de trente jours, ce délai commençant à courir au jour de la parution dans un journal habilité » (article 157). Ce délai permet aux créanciers du vendeur de former opposition."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

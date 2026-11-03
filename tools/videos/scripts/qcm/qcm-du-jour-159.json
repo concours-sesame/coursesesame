@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-159",
+ "titre": "Le QCM du jour n° 159",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 159",
+ "source": {
+  "matiere": "droit-penal-general",
+  "question": 17
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Droit pénal général",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *droit pénal général*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *droit pénal général*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Par quel délai se prescrivent les peines criminelles (article 133 du Code pénal) ?",
+   "options": [
+    "Dix ans",
+    "Vingt ans",
+    "Trente ans",
+    "Cinq ans"
+   ],
+   "pause": 5,
+   "dit": [
+    "Par quel délai se prescrivent les peines criminelles, article 133 du Code pénal, ?",
+    "A : Dix ans.",
+    "B : Vingt ans.",
+    "C : Trente ans.",
+    "D : Cinq ans.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Par quel délai se prescrivent les peines criminelles (article 133 du Code pénal) ?",
+    "A : Dix ans.",
+    "B : Vingt ans.",
+    "C : Trente ans.",
+    "D : Cinq ans.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Vingt ans",
+   "explication": "Les peines se prescrivent par vingt ans pour les peines criminelles, cinq ans pour les peines correctionnelles et deux ans pour les peines contraventionnelles (article 133). Ne pas confondre avec la prescription de l'action publique : dix ans, trois ans et un an.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "Les peines se prescrivent par vingt ans pour les peines criminelles, cinq ans pour les peines correctionnelles et deux ans pour les peines contraventionnelles, article 133. Ne pas confondre avec la prescription de l'action publique : dix ans, trois ans et un an."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "Les peines se prescrivent par vingt ans pour les peines criminelles, cinq ans pour les peines correctionnelles et deux ans pour les peines contraventionnelles (article 133). Ne pas confondre avec la prescription de l'action publique : dix ans, trois ans et un an."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

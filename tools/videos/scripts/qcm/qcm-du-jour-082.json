@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-082",
+ "titre": "Le QCM du jour n° 82",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 82",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 6
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Quelles infractions l'article 12 déclare-t-il imprescriptibles ?",
+   "options": [
+    "Tous les crimes punis de l'emprisonnement à vie",
+    "Les crimes contre l'humanité, le génocide, les crimes de guerre et le crime d'agression",
+    "Les crimes commis contre des mineurs",
+    "Les détournements de deniers publics"
+   ],
+   "pause": 5,
+   "dit": [
+    "Quelles infractions l'article 12 déclare-t-il imprescriptibles ?",
+    "A : Tous les crimes punis de l'emprisonnement à vie.",
+    "B : Les crimes contre l'humanité, le génocide, les crimes de guerre et le crime d'agression.",
+    "C : Les crimes commis contre des mineurs.",
+    "D : Les détournements de deniers publics.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Quelles infractions l'article 12 déclare-t-il imprescriptibles ?",
+    "A : Tous les crimes punis de l'emprisonnement à vie.",
+    "B : Les crimes contre l'humanité, le génocide, les crimes de guerre et le crime d'agression.",
+    "C : Les crimes commis contre des mineurs.",
+    "D : Les détournements de deniers publics.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 1,
+   "texte": "Les crimes contre l'humanité, le génocide, les crimes de guerre et le crime d'agression",
+   "explication": "L'article 12 rend imprescriptibles les crimes contre l'humanité, le génocide, les crimes de guerre et le crime d'agression.",
+   "dit": [
+    "Bonne réponse : *B*.",
+    "L'article 12 rend imprescriptibles les crimes contre l'humanité, le génocide, les crimes de guerre et le crime d'agression."
+   ],
+   "st": [
+    "Bonne réponse : *B*.",
+    "L'article 12 rend imprescriptibles les crimes contre l'humanité, le génocide, les crimes de guerre et le crime d'agression."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}

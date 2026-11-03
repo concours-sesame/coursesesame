@@ -1,0 +1,78 @@
+{
+ "fichier": "qcm-du-jour-161",
+ "titre": "Le QCM du jour n° 161",
+ "serie": "LE QCM DU JOUR",
+ "rubrique": "Question n° 161",
+ "source": {
+  "matiere": "procedure-penale",
+  "question": 17
+ },
+ "scenes": [
+  {
+   "type": "intro",
+   "titre": "Procédure pénale",
+   "dit": [
+    "Le Q C M du jour.",
+    "En *procédure pénale*."
+   ],
+   "st": [
+    "Le QCM du jour.",
+    "En *procédure pénale*."
+   ]
+  },
+  {
+   "type": "qcm",
+   "titre": "La question",
+   "question": "Le contrôle judiciaire (article 154 du Code de procédure pénale) peut être ordonné lorsque l'inculpé encourt :",
+   "options": [
+    "Une peine d'emprisonnement, quelle qu'en soit la durée",
+    "Une peine d'au moins deux ans",
+    "Une peine d'au moins cinq ans",
+    "Une peine criminelle seulement"
+   ],
+   "pause": 5,
+   "dit": [
+    "Le contrôle judiciaire, article 154 du Code de procédure pénale, peut être ordonné lorsque l'inculpé encourt :",
+    "A : Une peine d'emprisonnement, quelle qu'en soit la durée.",
+    "B : Une peine d'au moins deux ans.",
+    "C : Une peine d'au moins cinq ans.",
+    "D : Une peine criminelle seulement.",
+    "À vous de jouer !"
+   ],
+   "st": [
+    "Le contrôle judiciaire (article 154 du Code de procédure pénale) peut être ordonné lorsque l'inculpé encourt :",
+    "A : Une peine d'emprisonnement, quelle qu'en soit la durée.",
+    "B : Une peine d'au moins deux ans.",
+    "C : Une peine d'au moins cinq ans.",
+    "D : Une peine criminelle seulement.",
+    "À vous de jouer !"
+   ]
+  },
+  {
+   "type": "reponse",
+   "titre": "La réponse",
+   "bonne": 0,
+   "texte": "Une peine d'emprisonnement, quelle qu'en soit la durée",
+   "explication": "Le contrôle judiciaire peut être ordonné « dans le cas où l'inculpé encourt une peine d'emprisonnement » (article 154). Le seuil de deux ans est celui de la détention préventive (article 162).",
+   "dit": [
+    "Bonne réponse : *A*.",
+    "Le contrôle judiciaire peut être ordonné « dans le cas où l'inculpé encourt une peine d'emprisonnement », article 154. Le seuil de deux ans est celui de la détention préventive, article 162."
+   ],
+   "st": [
+    "Bonne réponse : *A*.",
+    "Le contrôle judiciaire peut être ordonné « dans le cas où l'inculpé encourt une peine d'emprisonnement » (article 154). Le seuil de deux ans est celui de la détention préventive (article 162)."
+   ]
+  },
+  {
+   "type": "outro",
+   "dit": [
+    "Tous nos Q C M sont gratuits sur cours sésame point com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ],
+   "st": [
+    "Tous nos QCM sont gratuits sur coursesesame.com.",
+    "Les Cours Sésame et SAJ, votre réussite est notre mission."
+   ]
+  }
+ ]
+}
