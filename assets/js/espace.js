@@ -2078,6 +2078,42 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
   const installerHTML = () => `<div class="ea-installer"><p><b>Installez l'application Sésame et SAJ</b> : votre espace s'ouvre d'un geste depuis l'écran d'accueil, comme une application.</p>
       <button class="btn btn-gold btn-sm" type="button" data-install>Installer</button>
       <p class="ea-installer-ios">Sur iPhone : dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ».</p></div>`;
+  // Notifications sur le téléphone (Web Push) : une notification à la sortie de chaque vidéo du jour. L'abonnement du
+  // navigateur est rangé dans push_abonnements ; la fonction notifications envoie à 19 h. Absent si le navigateur ne
+  // sait pas recevoir de notifications (sur iPhone : seulement depuis l'application installée sur l'écran d'accueil).
+  const pushPossible = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window && window.isSecureContext;
+  const notifHTML = () => pushPossible() && Notification.permission !== "denied" ? `<div class="ea-installer ea-notif" id="eaNotif"><p><b>Notifications</b> : soyez prévenu sur ce téléphone à la sortie de chaque vidéo du jour, à 19 h.</p>
+      <button class="btn btn-navy btn-sm" type="button" data-notif="activer">Activer les notifications</button></div>` : "";
+  const base64Octets = t => { const p = "=".repeat((4 - t.length % 4) % 4), b = atob((t + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+  async function majNotif() {
+    const z = $("#eaNotif");
+    if (!z || !pushPossible()) return;
+    try {
+      const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription();
+      if (sub && Notification.permission === "granted") z.innerHTML = `<p><b>Notifications activées</b> sur cet appareil : vous êtes prévenu à la sortie de chaque vidéo du jour.</p><button class="btn btn-ghost btn-sm" type="button" data-notif="couper">Désactiver</button>`;
+    } catch (e) { /* sans service worker */ }
+  }
+  async function basculerNotif(action) {
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      if (action === "couper") {
+        const sub = await reg.pushManager.getSubscription();
+        if (sub) { await client.from("push_abonnements").delete().eq("endpoint", sub.endpoint); await sub.unsubscribe(); }
+        toast("Notifications désactivées sur cet appareil.");
+        const z = $("#eaNotif"); if (z) z.outerHTML = notifHTML();
+        return;
+      }
+      if (await Notification.requestPermission() !== "granted") { toast("Notifications refusées : vous pouvez les autoriser dans les réglages du navigateur."); return; }
+      const { data: cle, error } = await client.rpc("push_cle_publique");
+      if (error || !cle) throw error || new Error("clé absente");
+      const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: base64Octets(cle) });
+      const j = sub.toJSON();
+      const { error: e2 } = await client.from("push_abonnements").insert({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth });
+      if (e2 && e2.code !== "23505") throw e2;
+      toast("Notifications activées.");
+      majNotif();
+    } catch (e) { toast("Activation impossible sur ce navigateur pour le moment."); }
+  }
   // Compteur (mon_parrainage) : amis inscrits avec le code, amis abonnés (récompensés), jours gagnés
   let parrainage = null;
   const lienParrain = code => `${new URL(ROOT + "espace-abonnes/", location.href).href}?parrain=${code}#inscription`;
@@ -2137,8 +2173,9 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
       favoris = crochetFavoris;
       qcmFiche = n => toutesQuestions().filter(x => x.q.fiche === n);
       noterFiche = (x, juste) => { if (x) enregistrerReponse(x, juste); };
-      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + jourHTML() + repriseHTML() + installerHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
+      racine.innerHTML = compteHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + jourHTML() + repriseHTML() + installerHTML() + notifHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
       brancherCompte();
+      majNotif();
     } else {
       memoLecture = null; favoris = null; qcmFiche = null; noterFiche = null;
       racine.innerHTML = compteHTML() + await annoncesHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
@@ -2293,6 +2330,8 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
 
   // Bibliothèque : filtres et ouverture des contenus (un seul écouteur pour toute la page)
   racine.addEventListener("click", async e => {
+    const nb = e.target.closest("[data-notif]");
+    if (nb) { basculerNotif(nb.dataset.notif); return; }
     const mc = e.target.closest("[data-ma-copie]");
     if (mc) {
       // Fenêtre ouverte tout de suite (sinon bloquée sur téléphone), adresse signée ensuite

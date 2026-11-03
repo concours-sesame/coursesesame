@@ -2058,6 +2058,22 @@ self.addEventListener("fetch", e => {
     }).catch(() => caches.match(r, { ignoreSearch: true }).then(m2 => m2 || Response.error()))));
   }
 });
+// Notifications (fonction notifications, sortie de la vidéo du jour) : affichage, puis ouverture de l'espace abonnés
+self.addEventListener("push", e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = {}; }
+  e.waitUntil(self.registration.showNotification(d.titre || "Les Cours Sésame et SAJ", {
+    body: d.corps || "", icon: "/assets/img/icone-192.png", badge: "/assets/img/favicon-32.png", lang: "fr", data: { url: d.url || "/espace-abonnes/" }
+  }));
+});
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || "/espace-abonnes/";
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(liste => {
+    for (const c of liste) if (new URL(c.url).pathname === url && "focus" in c) return c.focus();
+    return self.clients.openWindow(url);
+  }));
+});
 `);
 }
 
