@@ -1,0 +1,25 @@
+{
+ "fichier": "notion-rehabilitation",
+ "titre": "La réhabilitation",
+ "rubrique": "Procédure pénale",
+ "scenes": [
+  {"type": "intro", "titre": "La réhabilitation", "dit": ["Une notion, une minute.", "La *réhabilitation*."]},
+  {"type": "question", "titre": "Condamné hier, candidat aujourd'hui.", "texte": "Sa condamnation peut-elle disparaître ?",
+   "dit": ["Il a été condamné il y a des années.", "Sa condamnation peut-elle *disparaître* ?", "Oui, par la réhabilitation."]},
+  {"type": "article", "titre": "Article 766 du Code de procédure pénale",
+   "citation": "La réhabilitation est soit acquise de plein droit, soit accordée par arrêt de la Chambre d'instruction.",
+   "dit": ["Selon l'article *766* du Code de procédure pénale, la réhabilitation est soit acquise de plein droit, soit accordée par arrêt de la *chambre d'instruction*."]},
+  {"type": "blocs", "titre": "Deux voies", "items": [
+    {"t": "De plein droit", "d": "Après un délai sans nouvelle condamnation à la prison : cinq ans pour une amende (article 767).", "cue": 1},
+    {"t": "Par la chambre d'instruction", "d": "Sur demande, après trois ans pour une peine correctionnelle, frais et dommages-intérêts payés.", "cue": 2}],
+   "dit": ["Deux voies.", "De *plein droit*, après un délai sans nouvelle condamnation à la prison : par exemple cinq ans pour une amende.", "Ou sur demande, devant la *chambre d'instruction* : après trois ans pour une peine correctionnelle, à condition d'avoir payé les frais, l'amende et les dommages-intérêts."]},
+  {"type": "blocs", "titre": "L'effet", "items": [
+    {"t": "Article 782", "d": "La réhabilitation produit les effets de l'amnistie.", "cue": 0, "fort": true}],
+   "dit": ["L'effet : selon l'article *782*, la réhabilitation produit les effets de l'amnistie. La condamnation ne figure plus sur les bulletins numéros deux et trois."],
+   "st": ["L'effet : selon l'article *782*, la réhabilitation produit les effets de l'amnistie. La condamnation ne figure plus sur les bulletins n° 2 et n° 3."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Se tromper de juridiction", "d": "La réhabilitation judiciaire est accordée par la chambre d'instruction.", "cue": 0}],
+   "dit": ["Le piège : se tromper de juridiction.", "C'est la *chambre d'instruction* qui accorde la réhabilitation judiciaire."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

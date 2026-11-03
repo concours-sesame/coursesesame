@@ -1,0 +1,26 @@
+{
+ "fichier": "notion-faux-et-usage-de-faux",
+ "titre": "Le faux et l'usage de faux",
+ "rubrique": "Droit pénal",
+ "scenes": [
+  {"type": "intro", "titre": "Le faux et l'usage de faux", "dit": ["Une notion, une minute.", "Le faux et l'*usage de faux*."]},
+  {"type": "question", "titre": "Il n'a rien fabriqué. Il a seulement présenté le document.", "texte": "Est-il punissable ?",
+   "dit": ["Il n'a pas fabriqué le faux document : il l'a seulement présenté.", "Est-il *punissable* ?", "Oui, s'il savait."]},
+  {"type": "article", "titre": "Article 479 du Code pénal",
+   "citation": "Est puni d'un emprisonnement d'un à cinq ans et d'une amende de 300.000 à 3.000.000 de francs quiconque, de l'une des manières exprimées aux articles 307 et 308 commet ou tente de commettre un faux en écriture privée, de commerce ou de banque.",
+   "dit": ["Selon l'article *479* du Code pénal, est puni d'un à cinq ans d'emprisonnement quiconque commet, ou tente de commettre, un faux en écriture privée, de commerce ou de banque, de l'une des manières prévues par la loi."]},
+  {"type": "blocs", "titre": "Trois éléments", "items": [
+    {"t": "Un écrit", "d": "Acte authentique, contrat, facture, chèque…", "cue": 1},
+    {"t": "Une altération de la vérité", "d": "Par un procédé prévu par la loi : fausse signature, ajout après coup…", "cue": 2},
+    {"t": "L'intention frauduleuse", "d": "Savoir que l'on altère la vérité.", "cue": 3}],
+   "dit": ["Trois éléments.", "Un *écrit* : acte authentique, contrat, facture ou chèque.", "Une *altération de la vérité*, par un procédé prévu par la loi, comme une fausse signature.", "Et l'*intention* frauduleuse."]},
+  {"type": "cas", "titre": "Un exemple", "items": [
+    {"ok": false, "t": "Faux", "d": "Kessiélé imite la signature de son employeur sur une reconnaissance de dette.", "cue": 1},
+    {"ok": false, "t": "Usage de faux", "d": "Son ami, qui le sait, présente le document au juge.", "cue": 2}],
+   "dit": ["Un exemple.", "Kessiélé imite la signature de son employeur sur une reconnaissance de dette : c'est un *faux*.", "Son ami, qui le sait, la présente au juge pour être payé : c'est un *usage de faux*, puni même s'il n'a rien fabriqué."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Le faux certificat", "d": "Une fausse attestation relève de l'article 481, pas de l'article 479.", "cue": 0}],
+   "dit": ["Le piège : traiter une fausse attestation comme un faux en écriture privée.", "Elle relève de l'article *481*, pas de l'article 479."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}

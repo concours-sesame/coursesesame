@@ -1,0 +1,25 @@
+{
+ "fichier": "notion-adoption",
+ "titre": "L'adoption simple et plénière",
+ "rubrique": "Droit de la famille",
+ "scenes": [
+  {"type": "intro", "titre": "L'adoption simple et l'adoption plénière", "dit": ["Une notion, une minute.", "L'adoption *simple* et l'adoption *plénière*."]},
+  {"type": "question", "titre": "Adopté, il garde ou il perd sa famille d'origine ?", "texte": "Tout dépend de l'adoption.",
+   "dit": ["Un enfant adopté garde-t-il sa *famille d'origine* ?", "Tout dépend de l'adoption."]},
+  {"type": "article", "titre": "Loi relative à l'adoption, article 1er",
+   "citation": "L'adoption ne peut avoir lieu que par décision de justice, s'il y a de justes motifs et si elle présente un intérêt certain pour l'adopté",
+   "dit": ["Selon l'article premier de la loi relative à l'adoption, l'adoption ne peut avoir lieu que par *décision de justice*, s'il y a de justes motifs et si elle présente un intérêt certain pour l'adopté."]},
+  {"type": "blocs", "titre": "L'adoptant", "items": [
+    {"t": "Plus de trente ans", "d": "Ou deux époux mariés depuis plus de cinq ans, dont l'un a plus de trente ans (article 3).", "cue": 1},
+    {"t": "Quinze ans d'écart", "d": "Réduits à dix ans pour l'enfant du conjoint.", "cue": 2}],
+   "dit": ["Du côté de l'adoptant.", "Il faut avoir plus de *trente ans*, ou être deux époux mariés depuis plus de cinq ans, dont l'un a plus de trente ans.", "Et il faut *quinze ans* d'écart avec l'adopté, dix ans pour l'enfant du conjoint."]},
+  {"type": "cas", "titre": "Deux adoptions", "items": [
+    {"ok": true, "t": "Adoption simple", "d": "À tout âge. L'adopté reste membre de sa famille d'origine et y garde ses droits.", "cue": 1},
+    {"ok": false, "t": "Adoption plénière", "d": "Enfant de moins de quinze ans. La nouvelle filiation remplace l'ancienne, et c'est irrévocable.", "cue": 2}],
+   "dit": ["Deux adoptions.", "L'adoption *simple*, à tout âge : l'adopté reste membre de sa famille d'origine et y conserve ses droits.", "L'adoption *plénière*, pour l'enfant de moins de quinze ans : la nouvelle filiation se substitue à l'ancienne, et elle est irrévocable."]},
+  {"type": "piege", "titre": "Le piège", "items": [
+    {"t": "Révoquer une adoption plénière", "d": "Elle est irrévocable (article 28). Seule l'adoption simple peut l'être, pour motifs graves.", "cue": 0}],
+   "dit": ["Le piège : vouloir révoquer une adoption plénière.", "Elle est *irrévocable* ; seule l'adoption simple peut être révoquée, pour motifs graves."]},
+  {"type": "outro", "dit": ["Les Cours Sésame et SAJ.", "Votre réussite est notre mission."]}
+ ]
+}
