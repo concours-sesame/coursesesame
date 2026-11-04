@@ -1522,6 +1522,8 @@ a.ea-outil-carte{text-decoration:none}
 .ea-vip>p{color:#3f4a5e;margin-bottom:.8rem}
 .ea-tarifs-vip{align-items:center}
 .ea-carte-marques .ea-vip-marque{margin-right:.35rem}
+.ea-vvip-marque{display:inline-flex;align-items:center;margin-right:.35rem;padding:.05rem .45rem;border-radius:4px;background:var(--gold);color:var(--navy);font-size:.72rem;font-weight:800;letter-spacing:.04em;line-height:1.5}
+.abo-livre-txt .book-vvip{display:inline-block;margin-top:.4rem}
 .chip.chip-vip{border-color:var(--gold)}
 .chip.chip-vip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--gold)}
 .ea-tarifs .ea-vip-marque{padding:.05rem .45rem;background:var(--navy);font-size:.72rem}

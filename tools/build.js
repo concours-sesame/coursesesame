@@ -1611,7 +1611,7 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
       <p class="lead">Avec l'abonnement VIP, ${vipDes}${VIP_MOIS ? ` ou ${VIP_MOIS.prix} FCFA le mois` : ""}, vous lisez la version intégrale de ces ouvrages dans l'espace VIP, avec nos vidéos réservées. Au catalogue, ils représentent ensemble ${fmt(valeur)} FCFA. S'y ajoutent des ouvrages réservés aux abonnés VIP et tout l'abonnement normal : sujets corrigés, fiches de révision, QCM chronométrés. <a href="#espace-app">Voir la liste complète</a>.</p>
     </div>
     <ul class="abo-livres">${LIVRES_ABONNEMENT.map(({ o, cats }, i) => `
-      <li class="abo-livre reveal reveal-d${i % 4}"><a href="${R.ouvrageURL(o)}">${R.coverHTML(o)}<span class="abo-livre-txt"><b>${o.titre}</b><small>${cats.map(nomCourt).join(", ")}</small></span></a></li>`).join("")}
+      <li class="abo-livre reveal reveal-d${i % 4}"><a href="${R.ouvrageURL(o)}">${R.coverHTML(o)}<span class="abo-livre-txt"><b>${o.titre}</b>${o.vvip ? `<span class="book-vvip">Ouvrage VVIP</span>` : ""}<small>${cats.map(nomCourt).join(", ")}</small></span></a></li>`).join("")}
     </ul>
     <p class="abo-note">L'abonnement normal donne accès à tous les autres contenus, mais pas à l'espace VIP. Les ouvrages se lisent en ligne, sur un appareil à la fois, pendant la durée de l'abonnement. Pour garder un ouvrage, commandez-le dans <a href="${prefix}ouvrages/">notre catalogue</a>.</p>
   </div>

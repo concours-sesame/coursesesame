@@ -1068,6 +1068,8 @@
   const verrouDocVip = c => !!c.vip && !etat.vip;
   const verrouille = c => verrouOuvrage(c) || verrouVideo(c) || verrouDocVip(c);
   const estVip = c => !!c.vip || rubrique(c) === "ouvrages" || videoVip(c);
+  // Ouvrage VVIP (titre « …, ouvrage VVIP ») : badge doré en plus de la marque VIP
+  const estVvip = c => rubrique(c) === "ouvrages" && /\bVVIP\b/.test(c.titre || "");
   const noteVerrou = () => "Espace VIP";
   const msgFormule = () => `Bonjour Les Cours Sésame & SAJ,\n\nJe souhaite passer à l'abonnement VIP (ouvrages complets et vidéos réservées).\n👤 ${etat.profil.prenom} ${etat.profil.nom}\n📧 ${etat.email}\n📞 ${etat.profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
   // Bibliothèque centrée sur le concours de l'abonné : par défaut, les contenus de son concours et les contenus
@@ -1121,7 +1123,7 @@
         ${mots.length ? `<p class="ea-cherche-bilan" role="status">${liste.length ? `${liste.length} résultat${liste.length > 1 ? "s" : ""} dans toute la bibliothèque, tous concours confondus.` : "Aucun contenu ne correspond à cette recherche."}${["textes", "jurisprudence"].some(r => contenus.some(c => rubrique(c) === r)) ? ` Pour chercher dans le texte même des lois et des décisions, ouvrez la rubrique Textes officiels ou Jurisprudence.` : ""}</p>`
           : ["textes", "jurisprudence"].includes(filtre) ? rechercheTextesHTML() : ""}
         <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}">
-            <span class="ea-carte-marques">${estVip(c) ? `<span class="ea-vip-marque">VIP</span>` : ""}${enAvantPremiere(c) ? `<span class="ea-avant">Avant-première VIP</span>` : ""}<span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
+            <span class="ea-carte-marques">${estVip(c) ? `<span class="ea-vip-marque">VIP</span>` : ""}${estVvip(c) ? `<span class="ea-vvip-marque">Ouvrage VVIP</span>` : ""}${enAvantPremiere(c) ? `<span class="ea-avant">Avant-première VIP</span>` : ""}<span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
             <small>${[c.matiere ? esc(c.matiere) : "", (c.concours || []).map(nomConcours).join(", "), dateFr(c.publie_le)].filter(Boolean).join(" · ")}</small>
