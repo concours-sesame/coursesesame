@@ -194,6 +194,38 @@ async function envoyer(service: Service, ligne: Ligne): Promise<Ligne> {
   }
 }
 
+// Brouillon arrivé dans la boîte de réception TikTok de l'éditeur (mode « brouillon », avant l'audit de l'application) :
+// e-mail aux administrateurs avec la légende à coller, pour publier la vidéo en public depuis l'application TikTok
+async function prevenirBrouillon(service: Service, ligne: Ligne) {
+  const cle = Deno.env.get("BREVO_API_KEY");
+  if (!cle) return;
+  const { data: dest } = await service.rpc("echeances_destinataires");
+  const esc = (t: unknown) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
+  const etapes = ["Ouvrez l'application TikTok, puis vos notifications (ou votre boîte de réception) : la vidéo y attend en brouillon.",
+    "Touchez-la, puis « Suivant ».", "Collez la légende ci-dessous à la place du texte proposé.", "Choisissez « Tout le monde », puis « Publier »."];
+  const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Vidéo TikTok du jour</title></head>
+<body style="margin:0;background:#f8f4ec;font-family:Arial,Helvetica,sans-serif;color:#18202f">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f4ec"><tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:8px;overflow:hidden">
+<tr><td style="background:#0f2a5c;padding:18px 24px;color:#ffffff;font-size:20px;font-weight:700">Les Cours Sésame et SAJ<div style="font-size:13px;font-weight:400;color:#e8a62b;margin-top:4px">La vidéo TikTok du jour</div></td></tr>
+<tr><td style="padding:24px;font-size:16px;line-height:1.55">
+<p>La vidéo du jour, <b>${esc(ligne.titre)}</b>, est arrivée dans votre TikTok, en brouillon. Pour la publier :</p>
+<ol style="padding-left:20px">${etapes.map((e) => `<li style="margin:4px 0">${esc(e)}</li>`).join("")}</ol>
+<p><b>Légende à coller :</b></p>
+<div style="white-space:pre-wrap;padding:14px;border:1px solid #e1e5ee;border-left:4px solid #e8a62b;background:#fbf8f1;font-size:15px">${esc(ligne.legende)}</div>
+<p style="font-size:13px;color:#5b6475;margin-top:18px">Dès que TikTok aura validé l'application (audit), les vidéos se publieront seules, sans cette étape.</p>
+</td></tr></table></td></tr></table></body></html>`;
+  const texte = [`La vidéo du jour, ${ligne.titre}, est arrivée dans votre TikTok, en brouillon.`, "", ...etapes.map((e, i) => `${i + 1}. ${e}`), "", "Légende à coller :", "", String(ligne.legende ?? "")].join("\n");
+  for (const d of (dest ?? []) as { email: string; prenom: string }[]) {
+    await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: { "api-key": cle, "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ sender: { name: "Les Cours Sésame et SAJ", email: "infos@coursesesame.com" }, to: [{ email: d.email, name: d.prenom || "Administrateur" }],
+        subject: `TikTok : la vidéo du jour attend votre publication (${ligne.titre})`, htmlContent: html, textContent: texte, tags: ["tiktok-brouillon"] }),
+    }).catch(() => {});
+  }
+}
+
 // Suivi chez TikTok d'une publication envoyée
 async function suivre(service: Service, ligne: Ligne): Promise<Ligne> {
   if (!ligne.publish_id) return ligne;
@@ -205,6 +237,7 @@ async function suivre(service: Service, ligne: Ligne): Promise<Ligne> {
     maj = { statut: "publiee", publiee_le: new Date().toISOString(), post_id: ids.length ? String(ids[0]) : null };
   } else if (s.status === "SEND_TO_USER_INBOX") {
     maj = { statut: "brouillon_envoye", publiee_le: new Date().toISOString() };
+    await prevenirBrouillon(service, ligne);
   } else if (s.status === "FAILED") {
     maj = { statut: "erreur", erreur: `TikTok : ${s.fail_reason ?? "échec du traitement"}` };
   } else if (Date.now() - new Date(ligne.prevue_le).getTime() > 6 * 3600 * 1000) {
