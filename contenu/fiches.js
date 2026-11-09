@@ -4230,7 +4230,7 @@ module.exports = [
    "greffe",
    "ena"
   ],
-  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 53, 55, 58, 62, 76, 78 à 80, 82.",
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 53, 55, 58, 60 à 62, 76, 78 à 80, 82.",
   "essentiel": [
    "Membre de l'Exécutif, le vice-Président est choisi par le Président en accord avec le Parlement ; il prête serment devant le Conseil constitutionnel, reçoit les pouvoirs que le Président lui délègue et lui succède en cas de vacance jusqu'au terme du mandat."
   ],
@@ -4295,6 +4295,280 @@ module.exports = [
    "Les deux chambres",
    "Le statut des parlementaires",
    "Le fonctionnement",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 151,
+  "slug": "151-le-domaine-de-la-loi-le-domaine-du-reglement-et-les-lois-organiques",
+  "titre": "Le domaine de la loi, le domaine du règlement et les lois organiques",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 101 à 103, 108.",
+  "essentiel": [
+   "La Constitution énumère les matières réservées à la loi, soit pour en fixer les règles, soit pour en déterminer les principes fondamentaux ; tout le reste relève du règlement, et les lois organiques, qui complètent l'organisation des institutions, suivent une procédure renforcée."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le domaine de la loi (article 101, rédaction de 2020)",
+   "Le domaine du règlement",
+   "Les lois organiques (article 102)",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 152,
+  "slug": "152-les-ordonnances-la-declaration-de-guerre-et-l-etat-de-siege",
+  "titre": "Les ordonnances, la déclaration de guerre et l'état de siège",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 73, 101, 104 à 106, 112.",
+  "essentiel": [
+   "Le Président peut être habilité par la loi à légiférer par ordonnance pour un temps limité, et le Parlement garde la main sur la guerre et sur la prolongation de l'état de siège."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les ordonnances (article 106)",
+   "La guerre et l'état de siège",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 153,
+  "slug": "153-la-procedure-legislative",
+  "titre": "La procédure législative",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 74, 107 à 110, 113.",
+  "essentiel": [
+   "Le projet ou la proposition de loi est déposé devant l'une des chambres, examiné successivement par les deux en vue d'un texte identique ; en cas de désaccord, une commission mixte paritaire peut être réunie et l'Assemblée nationale a le dernier mot, avant un contrôle possible du Conseil constitutionnel et la promulgation."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "L'initiative et le dépôt",
+   "Le droit d'amendement et ses limites",
+   "La navette et la résolution des désaccords (article 110)",
+   "Avant la promulgation",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 154,
+  "slug": "154-les-lois-de-finances",
+  "titre": "Les lois de finances",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 101, 107, 110 à 112, 118.",
+  "essentiel": [
+   "Le Parlement vote le budget de l'État en équilibre dans des délais stricts ; s'il ne se prononce pas à temps, le Président peut mettre le budget en vigueur par ordonnance, et le Parlement contrôle ensuite son exécution par la loi de règlement avec l'assistance de la Cour des comptes."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "Les principes",
+   "Le calendrier (article 112)",
+   "Le contrôle de l'exécution (article 118)",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 155,
+  "slug": "155-les-relations-entre-l-executif-et-le-parlement-communication-et-controle",
+  "titre": "Les relations entre l'Exécutif et le Parlement : communication et contrôle",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 93, 114 à 118.",
+  "essentiel": [
+   "Le Président communique avec le Parlement par des messages sans débat, et le Parlement contrôle l'action du Gouvernement et évalue les politiques publiques par les questions, les commissions d'enquête et les missions d'évaluation, sans pouvoir renverser le Gouvernement."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "La communication",
+   "Le contrôle",
+   "Ce que la Constitution ne prévoit pas",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 156,
+  "slug": "156-les-traites-et-accords-internationaux",
+  "titre": "Les traités et accords internationaux",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 119 à 125, 134.",
+  "essentiel": [
+   "Le Président négocie et ratifie les traités ; les plus importants exigent une loi d'autorisation ; un traité contraire à la Constitution ne peut être ratifié qu'après révision ; régulièrement ratifiés et publiés, les traités ont une autorité supérieure aux lois, sous réserve de réciprocité."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Le texte",
+   "La négociation et la ratification",
+   "Le contrôle de constitutionnalité",
+   "L'autorité des traités",
+   "L'intégration africaine",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 157,
+  "slug": "157-le-conseil-economique-social-environnemental-et-culturel-et-le-mediateur-de-la-republique",
+  "titre": "Le Conseil économique, social, environnemental et culturel et le Médiateur de la République",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 163 à 169.",
+  "essentiel": [
+   "Deux institutions consultatives ou de conciliation complètent l'architecture constitutionnelle : le Conseil économique, social, environnemental et culturel, qui donne des avis sur les textes, et le Médiateur de la République, autorité administrative indépendante qui intercède entre l'Administration et les administrés."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le Conseil économique, social, environnemental et culturel",
+   "Le Médiateur de la République",
+   "Tableau de synthèse",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 158,
+  "slug": "158-les-collectivites-territoriales-et-la-chefferie-traditionnelle",
+  "titre": "Les collectivités territoriales et la chefferie traditionnelle",
+  "matiere": "Droit constitutionnel",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Constitution du 8 novembre 2016 (loi n° 2016-886), telle que modifiée par la loi constitutionnelle n° 2020-348 du 19 mars 2020 et la loi n° 2023-693 du 25 juillet 2023, articles 87, 101, 110, 170 à 176.",
+  "essentiel": [
+   "La Constitution consacre la libre administration des régions et des communes sous le contrôle du préfet, avec des ressources propres et la compensation des transferts de compétences, et reconnaît la chefferie traditionnelle à travers la Chambre nationale des Rois et Chefs traditionnels."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Les collectivités territoriales",
+   "Les ressources",
+   "La représentation nationale des collectivités",
+   "La chefferie traditionnelle",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 159,
+  "slug": "159-l-administration-de-la-succession-et-la-succession-vacante",
+  "titre": "L'administration de la succession et la succession vacante",
+  "matiere": "Droit de la famille",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Loi n° 2019-573 du 26 juin 2019 relative aux successions, articles 37 à 39, 66 à 81.",
+  "essentiel": [
+   "Tant que la succession n'est pas partagée, elle est gérée par un administrateur choisi par les héritiers ou désigné par le juge ; lorsque personne ne la réclame pendant cinq ans, elle est réputée vacante et confiée à un curateur nommé par le tribunal, l'administration des Domaines recueillant au besoin les biens au nom de l'État."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "L'administration de la succession",
+   "La succession vacante",
+   "Les droits de l'État",
+   "Exemples",
+   "Les pièges des correcteurs",
+   "À l'écrit",
+   "Testez-vous"
+  ],
+  "questions": 4
+ },
+ {
+  "numero": 160,
+  "slug": "160-le-salaire-differe-les-droits-d-usage-du-sol-et-le-partage-d-ascendant",
+  "titre": "Le salaire différé, les droits d'usage du sol et le partage d'ascendant",
+  "matiere": "Droit de la famille",
+  "concours": [
+   "infj",
+   "greffe",
+   "ena"
+  ],
+  "sources": "Loi n° 2019-573 du 26 juin 2019 relative aux successions, articles 104 à 107, 129 à 134.",
+  "essentiel": [
+   "La loi sur les successions protège l'héritier qui a travaillé sans salaire dans l'entreprise familiale par un salaire différé, organise la transmission des droits d'usage du sol et permet aux parents de partager eux-mêmes leurs biens entre leurs descendants, de leur vivant ou par testament."
+  ],
+  "plan": [
+   "L'essentiel en une phrase",
+   "Les textes",
+   "Le salaire différé (article 107)",
+   "Les droits d'usage du sol (articles 104 à 106)",
+   "Le partage d'ascendant (articles 129 à 133)",
+   "Les coépouses (article 134)",
    "Exemples",
    "Les pièges des correcteurs",
    "À l'écrit",
