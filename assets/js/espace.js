@@ -736,7 +736,7 @@
     if (v.error) throw v.error;
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
-    const [p, a, adm, ouv, vid, sus, dem, vip] = await Promise.all([
+    const [p, a, adm, ouv, vid, sus, dem, vip, ess] = await Promise.all([
       client.from("profils").select("prenom, nom, telephone, concours, date_concours, emails_nouveautes, code_parrain").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
@@ -744,7 +744,8 @@
       client.rpc("acces_videos"),
       client.rpc("ma_suspension"),
       client.from("demandes_activation").select("id, formule, vip, montant, moyen, reference, statut, motif, cree_le").eq("user_id", uid).order("cree_le", { ascending: false }).limit(1),
-      client.rpc("acces_vip")
+      client.rpc("acces_vip"),
+      client.rpc("mon_essai")
     ]);
     if (p.error || a.error) throw p.error || a.error;
     const profil = p.data || { prenom: "", nom: "", telephone: "" };
@@ -754,6 +755,8 @@
       session, uid, email: session.user.email,
       profil,
       abo: (a.data && a.data[0]) || { actif: false, fin: null, deja_abonne: false },
+      // Essai gratuit : peut-il être ouvert, est-il en cours, est-il passé (fonction mon_essai de la base)
+      essai: (!ess.error && ess.data && ess.data[0]) || { disponible: false, en_cours: false, termine: false, jours: 1 },
       // Date de début de la suspension en cours (accès coupé, jours restants gardés)
       suspendu: (!sus.error && sus.data) || null,
       // Dernière demande d'activation envoyée depuis l'espace (en attente, validée ou refusée)
@@ -835,7 +838,7 @@
         <div class="field full"><label for="iParrain">Code de parrainage (facultatif)</label><input id="iParrain" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" value="${esc(codeParrainRecu())}">${codeParrainRecu() ? `<small class="ea-aide">Vous venez de la part d'un ami : son code est déjà indiqué, vous n'avez rien à faire.</small>` : ""}</div>
         <label class="ea-accord full"><input type="checkbox" id="iAccord" required><span>J'accepte que ces informations servent à gérer mon abonnement, comme l'expliquent les <a href="${ROOT}mentions-legales/#espace-abonnes" target="_blank">mentions légales</a>.</span></label>
         <p class="ea-msg" role="alert"></p>
-        <button class="btn btn-navy" type="submit">Créer mon compte</button>
+        <button class="btn btn-navy" type="submit">${typeof ESSAI_GRATUIT !== "undefined" && ESSAI_GRATUIT.actif ? "Créer mon compte et essayer gratuitement" : "Créer mon compte"}</button>
       </form>
     </div>`;
   }
@@ -985,6 +988,14 @@
   function statutHTML() {
     const { profil, abo, email } = etat;
     const msg = (debut) => `Bonjour Les Cours Sésame & SAJ,\n\n${debut}\n👤 ${profil.prenom} ${profil.nom}\n📧 ${email}\n📞 ${profil.telephone}\n\nRéférence de mon paiement Mobile Money : `;
+    const essai = etat.essai || {};
+    if (abo.actif && essai.en_cours) {
+      return `<div class="ea-statut ea-statut-ok">
+          <div><span class="eyebrow">Essai gratuit</span>
+          <h3>Votre essai gratuit est ouvert jusqu'au ${dateFr(abo.fin)} au soir.</h3>
+          <p>Vous lisez les sujets corrigés, les fiches de révision, les QCM, les textes officiels et la jurisprudence. L'espace VIP, les corrigés des concours blancs et le téléchargement de pages sont réservés aux abonnés.</p></div>
+        </div>${tarifsAbo().length ? `<div class="ea-statut ea-statut-attente ea-renouvellement"><span class="eyebrow">Continuer après l'essai</span>${paiementHTML(true)}</div>` : ""}`;
+    }
     if (abo.actif) {
       const j = joursJusqua(abo.fin);
       return `<div class="ea-statut ea-statut-ok">
@@ -1005,9 +1016,17 @@
         </div>`;
     }
     const tarifs = typeof TARIFS_ABONNEMENT !== "undefined" ? TARIFS_ABONNEMENT : [];
-    return `<div class="ea-statut ea-statut-attente">
-        <span class="eyebrow">${abo.deja_abonne ? "Abonnement terminé" : "Activation en attente"}</span>
-        <h3>${abo.deja_abonne ? `Votre abonnement a pris fin le ${dateFr(abo.fin)}.` : `Bienvenue, ${esc(profil.prenom)}. Votre compte est prêt.`}</h3>
+    const dureeEssai = essai.jours > 1 ? `${essai.jours} jours` : "24 heures";
+    const offreEssai = essai.disponible ? `<div class="ea-statut ea-statut-ok ea-essai">
+          <div><span class="eyebrow">Essai gratuit</span>
+          <h3>Essayez l'espace abonnés pendant ${dureeEssai}, sans payer.</h3>
+          <p>Sujets corrigés, fiches de révision, QCM, textes officiels et jurisprudence s'ouvrent tout de suite. L'espace VIP et les corrigés des concours blancs restent réservés aux abonnés.</p>
+          <p class="ea-msg" id="eaEssaiMsg" role="alert"></p></div>
+          <button class="btn btn-gold" type="button" id="eaEssai">Commencer l'essai gratuit</button>
+        </div>` : "";
+    return `${offreEssai}<div class="ea-statut ea-statut-attente">
+        <span class="eyebrow">${essai.termine ? "Essai terminé" : abo.deja_abonne ? "Abonnement terminé" : essai.disponible ? "Ou abonnez-vous tout de suite" : "Activation en attente"}</span>
+        <h3>${essai.termine ? `Votre essai gratuit a pris fin le ${dateFr(abo.fin)}. Pour continuer, choisissez une formule.` : abo.deja_abonne ? `Votre abonnement a pris fin le ${dateFr(abo.fin)}.` : `Bienvenue, ${esc(profil.prenom)}. Votre compte est prêt.`}</h3>
         ${tarifs.length ? `<p class="ea-tarifs">${tarifs.map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>
         ${tarifsVip().length ? `<p class="ea-tarifs ea-tarifs-vip"><span class="ea-vip-marque">VIP</span>${tarifsVip().filter(t => ["vip-j1", "vip-j7", "vip-m1", "vip-m12"].includes(t.cle)).map(t => `<span><b>${esc(t.prix)} FCFA</b> ${esc(t.duree)}</span>`).join("")}</p>` : ""}
         <p class="ea-aide">Toutes les formules donnent accès aux sujets corrigés, aux fiches de révision, aux QCM, aux textes officiels et à la jurisprudence. Les formules VIP ouvrent aussi l'espace VIP : nos ouvrages complets et nos vidéos réservées.</p>` : ""}
@@ -2211,6 +2230,20 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
     }
     racine.removeAttribute("aria-busy");
   }
+
+  racine.addEventListener("click", async e => {
+    const b = e.target.closest("#eaEssai");
+    if (!b || b.disabled) return;
+    b.disabled = true;
+    const msg = $("#eaEssaiMsg");
+    const { error } = await client.rpc("demarrer_essai");
+    if (error) {
+      b.disabled = false;
+      if (msg) msg.textContent = error.message && !/fetch|network/i.test(error.message) ? error.message : "Connexion impossible. Vérifiez votre accès à Internet, puis réessayez.";
+      return;
+    }
+    afficher();
+  });
 
   function brancherFormulaires() {
     $$(".ea-onglets [data-onglet]", racine).forEach(b => b.addEventListener("click", () => {
