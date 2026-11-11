@@ -117,6 +117,7 @@ node tools/build.js
 | 121 à 130 | Sûretés (AUS) : notion et agent des sûretés, garantie autonome, droit de rétention, réserve de propriété, propriété cédée en garantie, nantissement de créance et de compte, nantissement du fonds de commerce, privilèges, ordre de distribution, hypothèque judiciaire conservatoire | 332 à 341 |
 | 131 à 140 | Procédures collectives (AUPC) : organes, période suspecte, production et vérification des créances, salariés, bailleur, coobligés et conjoint, revendications, contrats en cours, concordat de redressement, liquidation des biens, comblement du passif et extension, faillite personnelle et réhabilitation | 342 à 351 |
 | 141 à 150 | Banqueroute (AUPC) ; Constitution : droits civils et politiques, droits économiques et sociaux, devoirs, État et souveraineté, Président (élection, pouvoirs), vice-Président, Gouvernement, Parlement | 352 à 361 |
+| 151 à 160 | Constitution : domaine de la loi et lois organiques, ordonnances et état de siège, procédure législative, lois de finances, communication et contrôle, traités, Conseil économique et Médiateur, collectivités territoriales et chefferie ; successions : administration et succession vacante, salaire différé et partage d'ascendant | 555 à 564 |
 
 Les fiches 2, 13, 14 et 16 ont été republiées en version 2 (`fiche-NNNN-v2.pdf`) après correction de l'espace des
 milliers dans `rendu.py` : « 3.000.000 » s'affichait « 3 000.000 ».
@@ -124,6 +125,10 @@ milliers dans `rendu.py` : « 3.000.000 » s'affichait « 3 000.000 ».
 La fiche 41 a été republiée en version 2 (`fiche-0041-v2.pdf`, source dans `textes/sources-fiche-0041-v2.pdf`) : elle
 présentait l'article 181 issu de la révision de 2020 comme en vigueur, alors que la loi n° 2023-693 du 25 juillet 2023
 (article 2) a abrogé les articles 179 à 182.
+
+La fiche 148 a été republiée en version 2 (`fiche-0148-v2.pdf`, source dans `textes/sources-fiches-0151-0160.pdf`) :
+l'article 79 issu de la révision de 2020 se poursuit sur la page suivante du Journal officiel et applique au
+vice-Président les articles 60 (déclaration de patrimoine) et 61 (incompatibilités), ce que la version 1 omettait.
 
 ## Banque de plans (espace VIP)
 
