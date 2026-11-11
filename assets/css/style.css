@@ -1,7 +1,7 @@
 /* Les Cours Sésame et SAJ
    Charte : bleu marine et or. Direction « Minuit » : l'accueil, l'en-tête et le pied de page sur la nuit marine,
-   les pages de lecture sur papier clair ; l'or est le seul signal. Titres en Mona Sans élargie, texte en Mona Sans,
-   lecture longue et nom de la marque en Source Serif 4. Polices hébergées sur le site (licence SIL OFL : assets/fonts/). */
+   les pages de lecture sur papier clair ; l'or est le seul signal. Titres, lecture longue et nom de la marque en
+   Source Serif 4, texte courant et boutons en Mona Sans (direction « Édition », en fin de fichier). Polices hébergées sur le site (licence SIL OFL : assets/fonts/). */
 
 @font-face{font-family:"Mona Sans";font-style:normal;font-weight:200 900;font-stretch:75% 125%;font-display:swap;src:url(../fonts/mona-sans-latin-wdth-normal.woff2) format("woff2-variations"),url(../fonts/mona-sans-latin-wdth-normal.woff2) format("woff2")}
 
@@ -9,10 +9,6 @@
 @font-face{font-family:"Source Serif 4";font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/source-serif-4-latin-600-normal.woff2) format("woff2")}
 @font-face{font-family:"Source Serif 4";font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/source-serif-4-latin-700-normal.woff2) format("woff2")}
 @font-face{font-family:"Source Serif 4";font-style:italic;font-weight:400;font-display:swap;src:url(../fonts/source-serif-4-latin-400-italic.woff2) format("woff2")}
-@font-face{font-family:"Source Sans 3";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/source-sans-3-latin-400-normal.woff2) format("woff2")}
-@font-face{font-family:"Source Sans 3";font-style:italic;font-weight:400;font-display:swap;src:url(../fonts/source-sans-3-latin-400-italic.woff2) format("woff2")}
-@font-face{font-family:"Source Sans 3";font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/source-sans-3-latin-600-normal.woff2) format("woff2")}
-@font-face{font-family:"Source Sans 3";font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/source-sans-3-latin-700-normal.woff2) format("woff2")}
 
 :root{
   --navy:#0f2a5c;
@@ -437,7 +433,7 @@ a.concours-card{text-decoration:none}
 .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2.2rem;padding-bottom:36px;border-bottom:1px solid var(--navy-line)}
 .footer .brand-name{color:#fff}
 .footer .brand-tag{color:rgba(255,255,255,.6)}
-.footer h4{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.8rem}
+.footer :is(h3,h4){font-size:1rem;font-weight:700;color:#fff;margin-bottom:.8rem}
 .footer ul{list-style:none;display:grid;gap:.45rem}
 .footer a{text-decoration:none}
 .footer a:hover{color:#fff;text-decoration:underline}
@@ -1579,7 +1575,7 @@ a.ea-outil-carte{text-decoration:none}
 /* Pied de page */
 .footer{background:var(--nuit);color:var(--brume);border-top:1px solid var(--nuit-filet)}
 .footer-grid{border-bottom-color:var(--nuit-filet)}
-.footer h4{font-weight:600;color:var(--clair)}
+.footer :is(h3,h4){font-weight:600;color:var(--clair)}
 .footer a:hover{color:var(--clair)}
 
 /* ---------- L'accueil sur la nuit ----------
@@ -2018,3 +2014,184 @@ a.ea-jour-carte{text-decoration:none;color:inherit}
 .ea-dates-form input{padding:.6rem .7rem;border:1px solid var(--line);border-radius:var(--r-sm);font:inherit}
 @media (max-width:600px){.ea-dates-liste li{grid-template-columns:1fr auto}.ea-date-quoi{grid-column:1/-1}}
 .ea-dates-liste li .btn{justify-self:end;align-self:center}
+
+/* =====================================================================================================
+   Direction « Édition » (novembre 2026) : une seule voix pour les titres, celle du nom de la maison, des
+   ouvrages et des vidéos (Source Serif 4) ; un accueil resserré, les avis juste sous le haut de page ; des
+   listes qui s'ouvrent par rubrique et par tranches ; des couvertures composées pour se lire en vignette.
+   La charte ne change pas : bleu marine et or, l'or comme seul signal.
+   ===================================================================================================== */
+:root{--display:"Source Serif 4",Georgia,"Times New Roman",serif}
+
+/* Titres : empattements, graisse franche, plus de coupe élargie */
+.h-section,.sub-h1,.hero h1,.annonce-blancs h2,.product-title,.contact h2,.h-sub,.sujet-h1,.essai-q,.mobile-menu nav a{font-stretch:normal}
+.h-section,.sub-h1,.hero h1,.annonce-blancs h2,.product-title,.contact h2{font-weight:600;letter-spacing:-.012em;line-height:1.1}
+.accueil .hero h1{font-weight:600;font-size:clamp(2.3rem,4.5vw,3.9rem);line-height:1.06;letter-spacing:-.015em}
+.hero-sub :is(.sub-h1,.product-title,.sujet-h1){font-weight:600}
+.sub-h1{max-width:24ch}
+.h-sub{font-weight:600;letter-spacing:-.008em}
+.cc-name,.book-title,.v-card b,.v-feature-text h3,.paper-side h3,.cs-step h3,.cs-result h3,.group-title,.drawer-head h3,.modal-main h3,.ep-card b{font-weight:600;letter-spacing:-.004em}
+.essai-q{font-weight:400;letter-spacing:0;line-height:1.25}
+.essai-opt::before{font-stretch:normal;font-weight:600}
+.mobile-menu nav a{font-weight:400;letter-spacing:0}
+/* Chiffres : ceux de la police des titres, alignés */
+.accueil .hero-stats b,.accueil .annonce-series b,.accueil .formule b,.accueil .about-facts dd,.prix-geant b{font-stretch:normal;font-weight:400;letter-spacing:-.01em;font-variant-numeric:lining-nums tabular-nums}
+.prix-geant b{font-weight:400;letter-spacing:-.02em}
+.accueil .espace-band b{font-stretch:normal;font-weight:600}
+
+/* ---------- Accueil resserré ---------- */
+/* Les avis, juste sous le haut de page */
+.avis-section{padding:clamp(28px,4vw,48px) 0}
+.accueil main .avis-section{background:var(--nuit-2);border-top:1px solid var(--nuit-filet);border-bottom:1px solid var(--nuit-filet)}
+.avis-tete{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.3rem 2rem;margin-bottom:.9rem}
+.avis-tete .h-sub{margin:0;font-size:clamp(1.35rem,2.2vw,1.7rem)}
+.avis-tete .reussite-lien{margin:0}
+.accueil .avis-tete .reussite-lien a{color:var(--clair);text-decoration-color:var(--gold)}
+.avis-section .about-reussite{margin:0 0 1.2rem}
+.avis-section .review{border-top-color:var(--nuit-filet-2)}
+.avis-section .review blockquote{font-size:1.05rem}
+/* Les chiffres de la maison, à côté du texte « Qui sommes-nous » */
+.about-grid>.about-facts{margin-top:0;align-self:center}
+.accueil .about-facts dd{font-size:clamp(1.8rem,3vw,2.4rem)}
+.accueil #apropos{background:var(--nuit-2)}
+/* Le conseiller, sous les ouvrages : sans photo, la carte du test à côté du texte */
+.accueil .conseiller-section{padding-top:0;border-top:0!important}
+.accueil .conseiller-grid{align-items:center;padding:clamp(22px,3vw,40px);border-radius:var(--r);background:var(--nuit-2)}
+.accueil .conseiller-grid .h-section{font-size:clamp(1.6rem,3vw,2.3rem)}
+.accueil .cs-card{background:var(--nuit);min-height:0}
+/* Les concours blancs : une bande sous le choix du concours */
+.accueil .annonce-accueil{border-top:1px solid var(--nuit-filet)}
+/* Rythme : un peu moins d'air entre les sections de l'accueil */
+.accueil main .section{padding:clamp(48px,6.5vw,84px) 0}
+.accueil main .avis-section{padding:clamp(28px,4vw,48px) 0}
+.accueil .faq-item summary{font-size:1.05rem}
+
+/* ---------- Listes longues ---------- */
+.rubriques{gap:8px;margin:0 0 clamp(22px,3vw,32px)}
+.rubriques .pill{display:inline-flex;align-items:center;gap:.45rem;min-height:42px;padding:.4rem .95rem;background:#fff;border:1.5px solid var(--line);font-size:.96rem;text-decoration:none;transition:border-color .2s var(--ease),background-color .2s var(--ease),color .2s var(--ease)}
+.rubriques .pill small{font-size:.88rem;font-weight:400;color:var(--muted)}
+.rubriques .pill:hover{border-color:var(--navy)}
+.rubriques .pill.actif{background:var(--navy);border-color:var(--navy);color:#fff}
+.rubriques .pill.actif small{color:rgba(255,255,255,.78)}
+.rubrique .group-title{margin-top:0}
+.rubrique+.rubrique{margin-top:clamp(40px,5vw,56px)}
+.rubrique[hidden]+.rubrique{margin-top:0}
+.repli-suite{margin-top:clamp(18px,2.5vw,26px);text-align:center}
+.repli-suite .btn{min-width:min(100%,280px)}
+.accueil main .repli-suite .btn{background:transparent;color:var(--clair);border-color:var(--nuit-filet-2)}
+.accueil main .repli-suite .btn:hover{background:var(--nuit-3);border-color:var(--clair-2)}
+
+/* Cartes : le texte courant à la taille de lecture, l'état du corrigé lisible d'un coup d'œil */
+.ep-card span:not(.ep-card-tag):not(.ep-card-go){font-size:1rem;line-height:1.5;color:#39445a}
+.ep-card-tag{font-size:.92rem}
+.ep-card b{font-size:1.22rem}
+.ep-card-go.go-libre{color:var(--navy)}
+.ep-card-go.go-libre::before{content:"";flex:none;width:.5rem;height:.5rem;border-radius:50%;background:var(--gold)}
+.ep-card-go.go-reserve{font-weight:600;color:var(--muted)}
+
+/* ---------- Couvertures composées ---------- */
+.cover-made{container-type:inline-size;align-items:stretch;justify-content:space-between;gap:0;padding:7% 8% 6% 10%;border-radius:3px;background:var(--cream);text-align:left}
+.cover-made::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3.2%;min-width:5px;background:var(--gold)}
+.cover-made .cover-top{gap:.45em;font-size:.72rem;font-size:clamp(.6rem,3.4cqi,.8rem);font-weight:600;line-height:1.1;color:var(--navy)}
+.cover-made .cover-top .mark{width:2.1em;height:2.1em}
+.cover-made .cover-band{align-self:stretch;align-items:flex-start;justify-content:center;min-height:0;padding:0;border:0;background:none;color:var(--navy);text-align:left}
+.cover-made .cover-series{font-size:.8rem;font-size:clamp(.68rem,3.9cqi,.92rem);font-weight:600;letter-spacing:0;text-transform:none;color:var(--gold-ink)}
+.cover-made .cover-title{margin-top:.18em;font-family:var(--serif);font-weight:700;font-size:1.25rem;font-size:clamp(1rem,8.2cqi,1.9rem);line-height:1.1;letter-spacing:-.01em;text-transform:none;-webkit-line-clamp:3;hyphens:manual}
+.cover-made .cover-foot{font-size:.72rem;font-size:clamp(.6rem,3.3cqi,.8rem);font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted)}
+.cover-marine{background:var(--navy);border-color:var(--navy)}
+.cover-marine .cover-top,.cover-marine .cover-band{color:#fff}
+.cover-marine .cover-series{color:var(--gold)}
+.cover-marine .cover-foot{color:rgba(255,255,255,.72)}
+.cover-marine .mark,.cover-or .mark{--m-n:#fff;--m-w:var(--navy)}
+.cover-or{background:var(--nuit);border-color:var(--gold)}
+.cover-or::before{width:100%;inset:auto 0 0 0;height:5px;min-width:0}
+.cover-or::after{content:"";position:absolute;inset:4.5%;border:1px solid rgba(232,166,43,.55);border-radius:2px;pointer-events:none}
+.cover-or .cover-top,.cover-or .cover-band{color:#fff}
+.cover-or .cover-series,.cover-or .cover-title{color:var(--gold-2)}
+.cover-or .cover-foot{color:rgba(255,255,255,.72)}
+.accueil .cover-made{border:1px solid var(--nuit-filet-2)}
+.accueil .cover-papier{border-color:transparent}
+/* La carte d'un ouvrage : le concours est sur la couverture, les mentions sur une ligne */
+.books .book-concours{display:none}
+.book-title{font-size:1.14rem;margin-top:0}
+.book-meta{padding-top:14px}
+
+/* ---------- Espace abonnés : les deux abonnements côte à côte ---------- */
+.offres{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.4vw,28px);align-items:start}
+.offre{padding:clamp(22px,3vw,34px);border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.offre h3{font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,2.6vw,1.9rem);line-height:1.15;color:var(--navy);margin-bottom:.9rem}
+.offre-inclus{list-style:none;display:grid;gap:.5rem;margin-bottom:1.4rem}
+.offre-inclus li{position:relative;padding-left:1.6rem;color:var(--ink)}
+.offre-inclus li::before{content:"";position:absolute;left:.15rem;top:.48em;width:.7rem;height:.38rem;border-left:2px solid var(--gold-ink);border-bottom:2px solid var(--gold-ink);rotate:-45deg}
+.offre-prix{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(16px,2.4vw,28px);border-top:1px solid var(--line)}
+.offre-prix li{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;padding:.6rem 0;border-bottom:1px solid var(--line)}
+.offre-prix span{color:var(--muted)}
+.offre-prix b{font-family:var(--display);font-weight:600;font-size:1.2rem;font-variant-numeric:lining-nums tabular-nums;white-space:nowrap;color:var(--navy)}
+.offre-prix small{font-family:var(--sans);font-size:.8rem;font-weight:500;color:var(--muted)}
+.offre-vip{background:var(--nuit);border-color:var(--nuit);color:var(--clair-2);box-shadow:inset 0 4px 0 var(--gold)}
+.offre-vip h3,.offre-vip .offre-prix b{color:#fff}
+.offre-vip .offre-inclus li{color:var(--clair)}
+.offre-vip .offre-inclus li::before{border-color:var(--gold)}
+.offre-vip .offre-prix,.offre-vip .offre-prix li{border-color:var(--nuit-filet)}
+.offre-vip .offre-prix span,.offre-vip .offre-prix small{color:var(--brume)}
+
+/* ---------- Concours blancs : le programme des séries ---------- */
+.cb-programme{display:grid;border-top:2px solid var(--navy)}
+.cb-programme div{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr);gap:.3rem 2rem;padding:1rem 0;border-bottom:1px solid var(--line)}
+.cb-programme dt{font-family:var(--display);font-weight:600;font-size:1.2rem;line-height:1.25;color:var(--navy)}
+.cb-programme dd{color:#39445a;max-width:72ch}
+
+/* ---------- Téléphone ---------- */
+@media (max-width:760px){
+  .avis-section .reviews{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:84%;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gutter);margin-inline:calc(var(--gutter) * -1);padding:0 var(--gutter) 6px;scrollbar-width:none}
+  .avis-section .reviews::-webkit-scrollbar{display:none}
+  .avis-section .review{scroll-snap-align:start;padding:1rem 1.1rem;border:1px solid var(--nuit-filet-2);border-radius:var(--r);background:var(--nuit)}
+  .offres{grid-template-columns:1fr}
+  .cb-programme div{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  /* Seule la barre du menu reste collée : le bandeau de remise défile avec la page (app.js, syncTopHeight) */
+  .site-top{top:calc(var(--promo-h,0px) * -1)}
+  .accueil .concours-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .accueil .concours-card{min-height:0;padding:1rem 1rem .9rem}
+  .accueil .concours-card:last-child:nth-child(odd){grid-column:1/-1}
+  .accueil .cc-name{font-size:1.2rem}
+  .accueil .cc-sub{font-size:.9rem}
+  .accueil .cc-go{padding-top:.5rem}
+  .accueil .hero-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rubriques{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;margin-inline:calc(var(--gutter) * -1);padding:0 var(--gutter) 6px;scrollbar-width:none}
+  .rubriques::-webkit-scrollbar{display:none}
+  .rubriques .pill{flex:none}
+  .accueil .conseiller-grid{padding:18px 16px}
+  .offre-prix{grid-template-columns:1fr}
+}
+
+/* Édition, réglages : couvertures plus lisibles, prix dans la police des titres, accueil plus court sur téléphone */
+.cover-made .cover-title{font-size:1.45rem;font-size:clamp(1.1rem,12cqi,2.5rem);line-height:1.06}
+.cover-made{padding:6.5% 7% 5.5% 9.5%}
+.cover-made .cover-series{font-size:.85rem;font-size:clamp(.72rem,4.5cqi,1rem)}
+.cover-made .cover-top{font-size:clamp(.6rem,3.6cqi,.84rem)}
+.cover-made .cover-foot{font-size:clamp(.6rem,3.6cqi,.84rem)}
+.price,.offre-prix b{font-family:var(--display);font-variant-numeric:lining-nums tabular-nums}
+.price{font-weight:600;font-size:1.28rem}
+.price small{font-family:var(--sans)}
+.accueil .annonce-accueil{background:var(--nuit)}
+.v-card .v-desc{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+@media (max-width:760px){
+  .accueil .catalogue-tete .hero-pages{display:none}
+  .accueil .corrige:not(.open){max-height:300px}
+  .accueil .paper-side .enonce{display:none}
+  .accueil .about-grid>.about-facts{grid-template-columns:1fr 1fr;gap:0 16px}
+  .accueil .about-text p:not(.mission):nth-of-type(n+2){display:none}
+  .accueil .faq-contact .contact-list{display:none}
+  .accueil .hero-home{padding-bottom:36px}
+  .accueil main .section{padding:40px 0}
+  .accueil .v-card .v-desc{-webkit-line-clamp:3}
+  .accueil .v-feature-text p{display:none}
+}
+
+/* Lisibilité : le vert WhatsApp porte du texte blanc, il est foncé jusqu'au contraste de 4,5 ; sur la nuit,
+   le pictogramme seul garde un vert clair */
+:root{--wa:#16803f;--wa-2:#126b34;--wa-clair:#35c46f}
+.header-actions .btn-navy svg,.accueil main .btn-wa svg,.hero-sub .btn-ghost svg[fill="currentColor"]{color:var(--wa-clair)}
+.accueil .paper .btn-wa svg{color:#fff}

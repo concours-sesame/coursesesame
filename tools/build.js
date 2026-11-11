@@ -115,8 +115,7 @@ function concoursCard(c, i, prefix) {
 }
 
 // Accueil : quelques ouvrages dont l'extrait gratuit se lit en ligne, le catalogue entier étant sur ouvrages/
-const ACCUEIL_EXTRAITS = ["annales-magistrature.pdf", "annales-anciens-sujets-infj-2027.pdf", "guide-methodologique-magistrature-2027.pdf", "resume-droit-civil.pdf",
-  "sesame-droit-penal.pdf", "50-cas-pratiques-corriges.pdf", "annales-sog.pdf", "resume-droits-enfant.pdf"];
+const ACCUEIL_EXTRAITS = ["annales-magistrature.pdf", "guide-methodologique-magistrature-2027.pdf", "resume-droit-civil.pdf", "sesame-droit-penal.pdf"];
 function selectionHTML() {
   const sel = ACCUEIL_EXTRAITS.map(e => { const o = OUVRAGES.find(x => x.extrait === e); if (!o) throw new Error("accueil : extrait introuvable : " + e); return o; });
   return `<div class="books">${sel.map(o => R.bookHTML(horsConcours(livreDe(o)), OUVRAGES.indexOf(o), false)).join("")}</div>`;
@@ -189,7 +188,7 @@ function prixJourHTML() {
 }
 
 function faqHTML() {
-  return FAQ.map((f, i) => `<details class="faq-item"${i === 0 ? " open" : ""}><summary>${f.q}<i></i></summary><p>${f.a}</p></details>`).join("");
+  return FAQ.map(f => `<details class="faq-item"><summary>${f.q}<i></i></summary><p>${f.a}</p></details>`).join("");
 }
 
 function sujetHTML(s) {
@@ -353,8 +352,8 @@ ${headApp(prefix)}
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preload" href="${prefix}assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="${prefix}assets/fonts/source-serif-4-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${prefix}assets/fonts/mona-sans-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${prefix}assets/fonts/source-serif-4-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${prefix}assets/css/style.css">${stats ? "\n" + STATS + `\n<script defer src="${prefix}assets/js/visite.js"></script>` : ""}
 ${ld.map(jsonld).join("\n")}
 </head>
@@ -449,7 +448,7 @@ function sujetCard(x, prefix, i) {
         <b>${x.titre}</b>
         <span>${x.resume}</span>
         <small class="sujet-card-foot">${courts(x.concours)}${x.session ? `<em>sujet tombé au concours</em>` : ""}</small>
-        <span class="ep-card-go">${x.reserve ? `${svg("i-lock")}Corrigé réservé aux abonnés` : "Lire le corrigé"}</span>
+        <span class="ep-card-go ${x.reserve ? "go-reserve" : "go-libre"}">${x.reserve ? `${svg("i-lock")}Corrigé réservé aux abonnés` : "Lire le corrigé, en accès libre"}</span>
       </a>`;
 }
 
@@ -652,7 +651,7 @@ ${autresSujets.length ? `<section class="section${sujet ? " section-top-0" : ""}
       <div><span class="eyebrow">En accès libre</span><h2 class="h-section">D'autres sujets <em>corrigés</em></h2></div>
       <p class="lead">${plural(sujetsDuConcours(c.id).length, "sujet corrigé")} pour le concours ${c.court}, à lire gratuitement en entier.</p>
     </div>
-    <div class="ep-cards">${autresSujets.slice(0, 6).map((x, i) => sujetCard(x, prefix, i)).join("")}</div>
+    <div class="ep-cards" data-repli="6" data-repli-mobile="3" data-repli-nom="sujets">${autresSujets.slice(0, 6).map((x, i) => sujetCard(x, prefix, i)).join("")}</div>
     <div class="apercu-cta reveal"><a class="btn btn-ghost" href="${prefix}sujets/#${c.id}">Tous les sujets corrigés ${c.court}${arrow}</a></div>
   </div>
 </section>` : ""}
@@ -892,7 +891,8 @@ ${contactCTA(prefix)}`;
 
 <section class="section" id="liste">
   <div class="wrap">
-    ${groups.map(([nom, ls]) => `<h2 class="group-title">${nom}<small>${plural(ls.length, "ouvrage")}</small></h2><div class="books">${ls.map(card).join("")}</div>`).join("\n    ")}
+    <nav class="pills rubriques" aria-label="Collections" data-rubriques>${groups.map(([nom, ls]) => `<a class="pill" href="#${slugify(nom.split(" :")[0])}">${nom.split(" :")[0]} <small>${ls.length}</small></a>`).join("")}<a class="pill" href="#toutes">Tous <small>${LIVRES.length}</small></a></nav>
+    ${groups.map(([nom, ls]) => `<div class="rubrique" id="${slugify(nom.split(" :")[0])}" data-rubrique><h2 class="group-title">${nom}<small>${plural(ls.length, "ouvrage")}</small></h2><div class="books" data-repli="8" data-repli-mobile="4" data-repli-nom="ouvrages">${ls.map(card).join("")}</div></div>`).join("\n    ")}
   </div>
 </section>
 
@@ -1143,7 +1143,7 @@ ${contactCTA(prefix)}`;
 
 <section class="section" id="liste">
   <div class="wrap">
-    <div class="ep-cards"><a class="ep-card reveal" href="${prefix}qcm-du-jour/"><span class="ep-card-tag">Chaque jour à 19 h</span><b>Le QCM du jour</b><span>Une nouvelle question de concours chaque jour, la même que dans notre vidéo TikTok, corrigée et expliquée.</span><span class="ep-card-go">Répondre</span></a>${THEMES.map((t, i) => qcmCard(t, prefix, i)).join("")}${qcmCard(methode, prefix, THEMES.length, `${prefix}methodes/#qcm`)}</div>
+    <div class="ep-cards" data-repli="8" data-repli-mobile="5" data-repli-nom="QCM"><a class="ep-card reveal" href="${prefix}qcm-du-jour/"><span class="ep-card-tag">Chaque jour à 19 h</span><b>Le QCM du jour</b><span>Une nouvelle question de concours chaque jour, la même que dans notre vidéo TikTok, corrigée et expliquée.</span><span class="ep-card-go">Répondre</span></a>${THEMES.map((t, i) => qcmCard(t, prefix, i)).join("")}${qcmCard(methode, prefix, THEMES.length, `${prefix}methodes/#qcm`)}</div>
   </div>
 </section>
 
@@ -1276,9 +1276,9 @@ ${voisines.length ? `<section class="section section-cream">
   <div class="wrap">
     <p class="desinscription" id="desinscription" role="status" hidden>Désinscription en cours…</p>
     ${offerteBand(prefix)}
-    <nav class="pills fiches-matieres" aria-label="Matières">${MATIERES.map(m => `<a class="pill" href="#${slugify(m)}">${esc(m)} <small>${FICHES.filter(f => f.matiere === m).length}</small></a>`).join("")}</nav>
-    ${MATIERES.map(m => `<h2 class="group-title" id="${slugify(m)}">${esc(m)}<small>${plural(FICHES.filter(f => f.matiere === m).length, "fiche")}</small></h2>
-    <div class="ep-cards">${FICHES.filter(f => f.matiere === m).map((f, i) => ficheCard(f, prefix, i)).join("")}</div>`).join("\n    ")}
+    <nav class="pills rubriques fiches-matieres" aria-label="Matières" data-rubriques>${MATIERES.map(m => `<a class="pill" href="#${slugify(m)}">${esc(m)} <small>${FICHES.filter(f => f.matiere === m).length}</small></a>`).join("")}<a class="pill" href="#toutes">Toutes <small>${FICHES.length}</small></a></nav>
+    ${MATIERES.map(m => `<div class="rubrique" id="${slugify(m)}" data-rubrique><h2 class="group-title">${esc(m)}<small>${plural(FICHES.filter(f => f.matiere === m).length, "fiche")}</small></h2>
+    <div class="ep-cards" data-repli="8" data-repli-mobile="5" data-repli-nom="fiches">${FICHES.filter(f => f.matiere === m).map((f, i) => ficheCard(f, prefix, i)).join("")}</div></div>`).join("\n    ")}
   </div>
 </section>`;
   write("fiches/index.html", page({
@@ -1610,18 +1610,41 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
       <div><span class="eyebrow">${R.ABO_MENTION}</span><h2 class="h-section">${LIVRES_ABONNEMENT.length} ouvrages du catalogue à lire en ligne</h2></div>
       <p class="lead">Avec l'abonnement VIP, ${vipDes}${VIP_MOIS ? ` ou ${VIP_MOIS.prix} FCFA le mois` : ""}, vous lisez la version intégrale de ces ouvrages dans l'espace VIP, avec nos vidéos réservées. Au catalogue, ils représentent ensemble ${fmt(valeur)} FCFA. S'y ajoutent des ouvrages réservés aux abonnés VIP et tout l'abonnement normal : sujets corrigés, fiches de révision, QCM chronométrés. <a href="#espace-app">Voir la liste complète</a>.</p>
     </div>
-    <ul class="abo-livres">${LIVRES_ABONNEMENT.map(({ o, cats }, i) => `
+    <ul class="abo-livres" data-repli="10" data-repli-mobile="4" data-repli-nom="ouvrages">${LIVRES_ABONNEMENT.map(({ o, cats }, i) => `
       <li class="abo-livre reveal reveal-d${i % 4}"><a href="${R.ouvrageURL(o)}">${R.coverHTML(o)}<span class="abo-livre-txt"><b>${o.titre}</b>${o.vvip ? `<span class="book-vvip">Ouvrage VVIP</span>` : ""}<small>${cats.map(nomCourt).join(", ")}</small></span></a></li>`).join("")}
     </ul>
     <p class="abo-note">L'abonnement normal donne accès à tous les autres contenus, mais pas à l'espace VIP. Les ouvrages se lisent en ligne, sur un appareil à la fois, pendant la durée de l'abonnement. Pour garder un ouvrage, commandez-le dans <a href="${prefix}ouvrages/">notre catalogue</a>.</p>
+  </div>
+</section>` : "";
+  // Les deux abonnements côte à côte, avec leurs huit durées (TARIFS_ABONNEMENT et TARIFS_VIP de data.js)
+  const grille = liste => `<ul class="offre-prix">${liste.map(t => `<li><span>${t.duree}</span><b>${t.prix} <small>FCFA</small></b></li>`).join("")}</ul>`;
+  const formules = tarifs.length ? `<section class="section section-cream" id="formules">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section">Les formules</h2>
+      <p class="lead">Deux abonnements, huit durées. La durée court à partir de l'activation de votre accès, et une prolongation s'ajoute à la fin de l'abonnement en cours.</p>
+    </div>
+    <div class="offres">
+      <article class="offre">
+        <h3>Abonnement</h3>
+        <ul class="offre-inclus"><li>Les sujets corrigés en entier</li><li>Les fiches de révision</li><li>Les QCM chronométrés et la révision du jour</li><li>Les textes officiels et la jurisprudence</li><li>Les corrigés des concours blancs, à partir d'une semaine</li></ul>
+        ${grille(tarifs)}
+      </article>${TARIFS_VIP.length ? `
+      <article class="offre offre-vip">
+        <h3>Abonnement VIP</h3>
+        <ul class="offre-inclus"><li>Tout l'abonnement</li><li>Les ouvrages complets, à lire en ligne</li><li>Les vidéos et les documents réservés au VIP</li><li>Une copie corrigée et notée sur 20 chaque mois</li></ul>
+        ${grille(TARIFS_VIP)}
+      </article>` : ""}
+    </div>
+    <p class="section-suite"><a class="btn btn-navy" href="#inscription">Créer mon compte</a></p>
   </div>
 </section>` : "";
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Espace abonnés", ""]],
     h1: `L'espace abonnés`,
     lead: `Sujets corrigés, fiches de révision, QCM chronométrés, révision du jour et simulateur de grand oral et, dans l'espace VIP, nos ouvrages complets et nos vidéos réservées. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.`,
-    ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${LIVRES_ABONNEMENT.length ? `<a href="#inclus" class="btn btn-ghost">L'espace VIP</a>` : ""}`,
-    facts: [...tarifs.filter(t => ["j1", "j7", "m1", "m12"].includes(t.cle)).map(t => `${t.duree} : <b>${t.prix} FCFA</b>`), ...(VIP_JOUR && VIP_MOIS ? [`VIP : <b>${VIP_JOUR.prix} FCFA</b> le jour, <b>${VIP_MOIS.prix} FCFA</b> le mois`] : [])]
+    ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${tarifs.length ? `<a href="#formules" class="btn btn-ghost">Voir les formules</a>` : ""}`,
+    facts: [...tarifs.filter(t => t.cle === "j1").map(t => `Abonnement dès <b>${t.prix} FCFA</b> la journée`), ...(VIP_JOUR ? [`VIP dès <b>${VIP_JOUR.prix} FCFA</b> la journée`] : []), "Paiement par Mobile Money"]
   })}
 
 <section class="section espace-section" id="espace-app">
@@ -1632,6 +1655,8 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
     </div>
   </div>
 </section>
+
+${formules}
 
 <section class="section">
   <div class="wrap">
@@ -1681,8 +1706,8 @@ ${contactCTA(prefix)}`;
   const url = SITE + "concours-blancs/";
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Concours blancs", ""]],
-    h1: `Concours blancs de la <em>magistrature</em>, du <em>Greffe</em>, du <em>pénitentiaire</em>, de l'<em>EPPJEJ</em> et de l'<em>ENA</em>`,
-    lead: "Des séries complètes et inédites, aux conditions des concours directs de l'INFJ et de l'ENA. Magistrature : dix séries, la présélection en 2 heures puis les cinq épreuves écrites en 4 heures. Greffe : cinq séries par cycle (administrateurs, attachés, secrétaires des greffes et parquets), avec le sujet d'ordre général, les épreuves juridiques et l'informatique. Administration pénitentiaire : cinq séries par cycle (administrateurs, attachés, agents d'encadrement), avec le droit pénal, le droit pénitentiaire et l'étude de texte. EPPJEJ : cinq séries par cycle, avec le sujet d'ordre général, les droits de l'enfant, l'organisation judiciaire ou administrative, le statut de la fonction publique et l'informatique. ENA : cinq séries par cycle, avec la présélection en vrai ou faux, puis, au cycle supérieur, la note de synthèse (5 heures, sur un dossier d'articles illustrés), le sujet d'ordre général, les problèmes économiques et sociaux (3 heures) et le droit administratif ; au cycle moyen supérieur, le sujet d'ordre général, les problèmes économiques et sociaux (3 heures), le droit constitutionnel et le résumé de texte suivi d'une discussion ; au cycle moyen, le sujet d'ordre général et la connaissance du monde contemporain, en QCM de culture générale. Chacun compose gratuitement ; le corrigé de chaque épreuve est réservé aux abonnés.",
+    h1: `70 concours blancs, gratuits et chronométrés`,
+    lead: "Des séries complètes et inédites, aux conditions des concours directs de l'INFJ et de l'ENA, pour la magistrature, le Greffe, l'administration pénitentiaire, l'EPPJEJ et l'ENA. Vous composez gratuitement ; le corrigé de chaque épreuve est réservé aux abonnés.",
     ctas: `<a href="#blancs-app" class="btn btn-gold">Choisir une épreuve${arrow}</a><a href="${prefix}espace-abonnes/#inscription" class="btn btn-ghost">S'abonner pour les corrigés</a>`,
     facts: ["<b>70</b> séries", "<b>315</b> épreuves", "Magistrature, Greffe, pénitentiaire, EPPJEJ, ENA", "Corrigés et grilles sur 20"]
   })}
@@ -1708,6 +1733,20 @@ ${contactCTA(prefix)}`;
       <noscript><p class="ea-erreur">Les concours blancs ont besoin de JavaScript : activez-le dans votre navigateur.</p></noscript>
     </div>
     <p class="abo-note">Votre progression et votre copie restent dans ce navigateur, sur cet appareil.</p>
+  </div>
+</section>
+
+<section class="section section-cream" id="programme">
+  <div class="wrap">
+    <div class="section-head"><h2 class="h-section">Le programme des séries</h2>
+      <p class="lead">Chaque série reprend les épreuves et les durées du concours direct.</p></div>
+    <dl class="cb-programme">
+      <div><dt>Magistrature</dt><dd>Dix séries : la présélection en 2 heures, puis les cinq épreuves écrites en 4 heures.</dd></div>
+      <div><dt>Greffe</dt><dd>Cinq séries par cycle (administrateurs, attachés, secrétaires des greffes et parquets), avec le sujet d'ordre général, les épreuves juridiques et l'informatique.</dd></div>
+      <div><dt>Administration pénitentiaire</dt><dd>Cinq séries par cycle (administrateurs, attachés, agents d'encadrement), avec le droit pénal, le droit pénitentiaire et l'étude de texte.</dd></div>
+      <div><dt>EPPJEJ</dt><dd>Cinq séries par cycle, avec le sujet d'ordre général, les droits de l'enfant, l'organisation judiciaire ou administrative, le statut de la fonction publique et l'informatique.</dd></div>
+      <div><dt>ENA</dt><dd>Cinq séries par cycle, avec la présélection en vrai ou faux. Au cycle supérieur, la note de synthèse (5 heures, sur un dossier d'articles illustrés), le sujet d'ordre général, les problèmes économiques et sociaux (3 heures) et le droit administratif. Au cycle moyen supérieur, le sujet d'ordre général, les problèmes économiques et sociaux (3 heures), le droit constitutionnel et le résumé de texte suivi d'une discussion. Au cycle moyen, le sujet d'ordre général et la connaissance du monde contemporain, en QCM de culture générale.</dd></div>
+    </dl>
   </div>
 </section>
 
@@ -1791,7 +1830,7 @@ const VIDEOS_TIKTOK = ${JSON.stringify([
     <p>En dehors de l'espace abonnés et des formulaires de la fiche offerte, du test de niveau et de la lettre d'information, présentés plus bas, ce site ne comporte ni compte client ni formulaire enregistré sur un serveur.</p>
     <p>Votre panier est conservé uniquement dans votre navigateur, sur votre appareil, pour que vous le retrouviez à votre prochaine visite. Nous n'y avons pas accès. Pour le supprimer, videz-le ou effacez les données du site dans votre navigateur.</p>
     <p>Quand vous commandez, les informations que vous saisissez (prénom, nom, téléphone, ville, message) sont placées dans un message WhatsApp que vous envoyez vous-même. Nous ne les utilisons que pour traiter votre commande et vous livrer.</p>
-    <p>Le site n'utilise aucun cookie. Les polices de caractères sont hébergées sur le site lui-même. Quelques photographies sont affichées depuis les serveurs d'Unsplash, qui reçoivent à cette occasion l'adresse IP du visiteur, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
+    <p>Le site n'utilise aucun cookie. Les polices de caractères sont hébergées sur le site lui-même. Aucune image n'est chargée depuis un autre site, et l'hébergeur GitHub enregistre l'adresse IP des visiteurs pour la sécurité de son service.</p>
     <p>Conformément à la loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel, vous disposez d'un droit d'accès, de rectification, d'opposition et de suppression des données qui vous concernent. Pour l'exercer, écrivez-nous sur WhatsApp.</p>
 
     <h2 id="mesure-audience">Mesure d'audience</h2>
@@ -1834,13 +1873,7 @@ const VIDEOS_TIKTOK = ${JSON.stringify([
     <p>Pour TikTok, la connexion est faite une seule fois par l'éditeur, avec son propre compte. Nous ne recevons de TikTok que ce qui sert à publier sur ce compte : son identifiant, son nom affiché et les jetons d'accès qui autorisent la publication. Ils sont conservés chez Supabase en Europe, ne sont jamais affichés sur le site et sont effacés si la connexion est retirée, ce que l'éditeur peut faire à tout moment depuis les réglages de TikTok. Aucune donnée des visiteurs du site ni des autres utilisateurs de TikTok n'est collectée par ce moyen, et rien n'est vendu ni transmis à des tiers.</p>
 
     <h2 id="credits">Crédits</h2>
-    <p>Les photographies suivantes sont publiées sous la <a href="https://unsplash.com/license" target="_blank" rel="noopener">licence Unsplash</a>, qui en permet l'usage libre :</p>
-    <ul>
-      <li>Le Plateau, à Abidjan, vu de la lagune Ébrié : <a href="https://unsplash.com/photos/e514SZzfpfM" target="_blank" rel="noopener">djebi abraham philippe</a> ;</li>
-      <li>Étudiante prenant des notes : <a href="https://unsplash.com/photos/xl-x9IB6wxc" target="_blank" rel="noopener">Kojo Kwarteng</a> ;</li>
-      <li>Correction au stylo rouge : <a href="https://unsplash.com/photos/333oj7zFsdg" target="_blank" rel="noopener">lilartsy</a>.</li>
-    </ul>
-    <p>Les polices Source Serif 4 et Source Sans 3 sont distribuées sous la licence SIL Open Font License 1.1.</p>
+    <p>Les polices Source Serif 4 et Mona Sans sont distribuées sous la licence SIL Open Font License 1.1.</p>
 
     <p class="legal-date">Mise à jour en octobre 2026.</p>
   </div>
@@ -2016,7 +2049,7 @@ write("index.html", cleanHTML(index));
     title: ["Hors connexion"], description: "Vous êtes hors connexion : les pages déjà visitées restent lisibles.", ld: []
   }));
   const fichiers = ["assets/css/style.css", "assets/js/data.js", "assets/js/render.js", "assets/js/app.js", "assets/js/hors-ligne.js",
-    "assets/img/favicon.svg", "assets/img/icone-192.png", ...fs.readdirSync(path.join(DIR, "assets/fonts")).filter(f => f.endsWith(".woff2")).map(f => "assets/fonts/" + f)];
+    "assets/img/favicon.svg", "assets/img/icone-192.png", ...fs.readdirSync(path.join(DIR, "assets/fonts")).filter(f => f.endsWith(".woff2") && !f.startsWith("source-sans")).map(f => "assets/fonts/" + f)];
   const version = require("crypto").createHash("sha1").update(fichiers.map(f => f + empreinte(f)).join() + QJ_VERSION).digest("hex").slice(0, 10);
   const avance = ["/", "/hors-ligne/", ...fichiers.map(f => "/" + f + (/\.(css|js)$/.test(f) ? "?v=" + empreinte(f) : ""))];
   write("sw.js", `/* Service worker des Cours Sésame et SAJ, écrit par tools/build.js : ne pas modifier à la main.

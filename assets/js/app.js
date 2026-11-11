@@ -61,6 +61,7 @@
     saveCart();
     updateCart();
     renderBooks();
+    initReplis();
     syncAddButtons();
     if (modalIdx !== null) syncModalBtn();
   }
@@ -368,7 +369,7 @@
     $("#sTabs").innerHTML = SUJETS.map((s, i) => `<button class="s-tab" role="tab" aria-selected="${i === 0}" data-i="${i}">${s.concours}</button>`).join("");
     const show = i => {
       const s = SUJETS[i];
-      $("#sPanel").innerHTML = `<article class="paper" role="tabpanel">
+      $("#sPanel").innerHTML = `<div class="paper" role="tabpanel">
         <div class="paper-side"><span class="tag">${s.concours}</span><h3>${s.titre}</h3><div class="meta">${s.meta.replace(/ · /g, ", ")}</div>
           <div class="enonce"><b>Sujet</b><p>${s.enonce}</p></div></div>
         <div class="paper-main">
@@ -376,7 +377,7 @@
           <div class="corrige-cta"><p><b>La suite du corrigé est réservée aux abonnés.</b> Lisez-le en entier, avec tous nos corrigés, dans l'espace abonnés, dès 500 FCFA la journée. Nos ouvrages complets se lisent dans l'espace VIP.</p><a class="btn btn-gold btn-sm" href="espace-abonnes/">${svg("i-lock", 'fill="none" stroke="currentColor" stroke-width="2.2"')}Accéder à l'espace abonnés</a></div>` : `<div class="corrige">${s.corrige}</div>
           <div class="corrige-more"><button class="btn btn-ghost btn-sm more-btn">Lire tout le corrigé</button></div>
           <div class="corrige-cta"><p>Ce corrigé est un extrait de nos ouvrages. Obtenez la version complète avec tous les sujets.</p><button class="btn btn-wa btn-sm" data-wa-order>${svg("i-wa", 'fill="currentColor"')}Commander l'ouvrage complet</button></div>`}
-        </div></article>`;
+        </div></div>`;
       wireCorrige($("#sPanel"));
       $$("#sTabs .s-tab").forEach(b => b.setAttribute("aria-selected", +b.dataset.i === i));
     };
@@ -598,16 +599,93 @@
   function initSujetsFiltre() {
     const box = $("#sujetsFiltre");
     if (!box) return;
-    const set = f => {
-      $$(".chip", box).forEach(b => b.setAttribute("aria-pressed", b.dataset.f === f));
-      $$(".sujets-grid .sujet-card").forEach(a => { a.hidden = f !== "tous" && !a.dataset.concours.split(" ").includes(f); });
+    const cartes = $$(".sujets-grid .sujet-card");
+    const PAS = 8;
+    let filtre = "tous", limite = PAS;
+    const suite = document.createElement("p");
+    suite.className = "repli-suite";
+    suite.innerHTML = `<button class="btn btn-ghost" type="button"></button>`;
+    $(".sujets-grid").after(suite);
+    const peindre = () => {
+      $$(".chip", box).forEach(b => b.setAttribute("aria-pressed", b.dataset.f === filtre));
+      const bons = cartes.filter(a => filtre === "tous" || a.dataset.concours.split(" ").includes(filtre));
+      cartes.forEach(a => { a.hidden = !bons.includes(a) || bons.indexOf(a) >= limite; });
+      const reste = bons.length - limite;
+      suite.hidden = reste <= 0;
+      if (reste > 0) $("button", suite).textContent = `Voir ${reste > 1 ? "les " + reste + " autres sujets" : "le dernier sujet"}`;
     };
+    $("button", suite).addEventListener("click", () => { limite = Infinity; peindre(); });
     $$(".chip", box).forEach(b => b.addEventListener("click", () => {
-      set(b.dataset.f);
-      history.replaceState(null, "", b.dataset.f === "tous" ? location.pathname : "#" + b.dataset.f);
+      filtre = b.dataset.f; limite = PAS; peindre();
+      history.replaceState(null, "", filtre === "tous" ? location.pathname : "#" + filtre);
     }));
     const h = location.hash.slice(1);
-    if (CONCOURS.some(c => c.id === h)) set(h);
+    if (CONCOURS.some(c => c.id === h)) filtre = h;
+    peindre();
+  }
+
+  /* ---------- Listes longues : affichage par tranches et par rubrique ---------- */
+  // [data-repli="N"] : seuls les N premiers éléments s'affichent, un bouton découvre les autres.
+  // Sans JavaScript, toute la liste reste visible.
+  function initReplis() {
+    $$("[data-repli]").forEach(liste => {
+      // data-repli-mobile : tranche plus courte sur téléphone, où les cartes s'empilent
+      const n = parseInt(matchMedia("(max-width:640px)").matches && liste.dataset.repliMobile || liste.dataset.repli, 10);
+      const items = [...liste.children];
+      // Une liste déjà traitée, ou réaffichée après que le visiteur l'a dépliée (panier modifié), reste telle quelle
+      if (liste.dataset.repliFait || liste.closest("[data-replis-ouverts]")) return;
+      liste.dataset.repliFait = "1";
+      if (!n || items.length <= n + 2) return;
+      const ancre = location.hash.slice(1);
+      if (ancre && items.some(el => el.id === ancre || el.querySelector("#" + CSS.escape(ancre)))) return;
+      const caches = items.slice(n);
+      caches.forEach(el => { el.hidden = true; });
+      const suite = document.createElement("p");
+      suite.className = "repli-suite";
+      suite.innerHTML = `<button class="btn btn-ghost" type="button">Voir les ${caches.length} autres ${liste.dataset.repliNom || "éléments"}</button>`;
+      liste.after(suite);
+      $("button", suite).addEventListener("click", () => {
+        caches.forEach(el => { el.hidden = false; });
+        suite.hidden = true;
+        const hote = liste.closest("#books");
+        if (hote) hote.dataset.replisOuverts = "1";
+        const premier = caches[0].matches("a,button,summary") ? caches[0] : caches[0].querySelector("a,button,summary");
+        if (premier) premier.focus({ preventScroll: true });
+      });
+    });
+  }
+  // [data-rubriques] : une rubrique à la fois (les liens .pill servent d'onglets), « Toutes » les montre ensemble.
+  function initRubriques() {
+    const nav = $("[data-rubriques]");
+    if (!nav) return;
+    const liens = $$("a.pill", nav);
+    const groupes = $$("[data-rubrique]");
+    if (!groupes.length) return;
+    const montrer = id => {
+      const tout = id === "toutes";
+      groupes.forEach(g => { g.hidden = !tout && g.id !== id; });
+      liens.forEach(a => {
+        const actif = a.hash === "#" + id;
+        a.classList.toggle("actif", actif);
+        if (actif) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+      });
+    };
+    liens.forEach(a => a.addEventListener("click", e => {
+      e.preventDefault();
+      const id = a.hash.slice(1);
+      montrer(id);
+      history.replaceState(null, "", id === groupes[0].id ? location.pathname + location.search : "#" + id);
+    }));
+    // L'adresse peut désigner une rubrique (fiches/#droit-ohada), à l'arrivée comme en cours de visite
+    const selonAdresse = () => {
+      const h = location.hash.slice(1);
+      const cible = h && document.getElementById(h);
+      const groupe = cible && cible.closest("[data-rubrique]");
+      montrer(h === "toutes" ? "toutes" : groupe ? groupe.id : groupes[0].id);
+      if (groupe && cible !== groupe) cible.scrollIntoView();
+    };
+    selonAdresse();
+    window.addEventListener("hashchange", selonAdresse);
   }
 
   /* ---------- Toast ---------- */
@@ -632,7 +710,11 @@
   $$("#mobileMenu a").forEach(a => a.addEventListener("click", () => setMenu(false)));
 
   function syncTopHeight() {
-    const h = $("#siteTop").offsetHeight;
+    // Sur téléphone, seule la barre du menu reste collée en haut : le bandeau de remise défile avec la page
+    const promo = $("#promo");
+    const promoH = promo && !promo.hidden && matchMedia("(max-width:640px)").matches ? promo.offsetHeight : 0;
+    const h = $("#siteTop").offsetHeight - promoH;
+    document.documentElement.style.setProperty("--promo-h", promoH + "px");
     document.documentElement.style.setProperty("--top-h", h + "px");
     document.documentElement.style.scrollPaddingTop = h + 16 + "px";
   }
@@ -679,7 +761,7 @@
       const b = document.createElement("button");
       b.type = "button";
       b.className = "v-play";
-      b.setAttribute("aria-label", "Lire la vidéo : " + (v.getAttribute("aria-label") || ""));
+      b.setAttribute("aria-label", "Regarder la vidéo : " + (v.getAttribute("aria-label") || ""));
       b.innerHTML = '<span class="v-play-pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Regarder</span></span>';
       frame.appendChild(b);
       b.addEventListener("click", () => {
@@ -770,6 +852,8 @@
   initEssai();
   initReussites();
   initSujetsFiltre();
+  initRubriques();
+  initReplis();
   initVideos();
   updateCart();
   syncAddButtons();
