@@ -36,6 +36,8 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
    `ffmpeg -i source.mp4 -vf scale=720:-2 -c:v libx264 -preset slow -crf 29 -maxrate 850k -bufsize 1700k -pix_fmt yuv420p -c:a aac -b:a 80k -movflags +faststart assets/video/<nom>.mp4`
 2. Tirez son affiche (une image de la vidéo, 540 pixels de large, 720 pour une vidéo carrée) :
    `ffmpeg -ss 5 -i source.mp4 -frames:v 1 -vf scale=540:-2 -q:v 4 assets/img/videos/<nom>.jpg`
+   Si l'image de la vidéo ne suit pas le modèle des affiches (nuit marine, emblème, surtitre or, titre), ajoutez
+   plutôt la vidéo à la liste de `tools/videos/affiches.mjs`, qui compose l'affiche : `node tools/videos/affiches.mjs`.
 3. Ajoutez sa fiche dans `VIDEOS` (`assets/js/data.js`) : titre, présentation, durée, format
    (`"vertical"` ou `"carre"`) et, au choix, le concours, l'ouvrage, le sujet corrigé ou la fiche méthode
    auxquels elle se rattache.
@@ -81,4 +83,13 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
   virgule (« Le Guide Méthodologique Magistrature, Édition 2027 »).
 - `assets/js/render.js` : affichage des couvertures, fiches et packs (navigateur et générateur).
 - `assets/js/app.js` : panier, filtres, test « Quel ouvrage pour moi ? », QCM, partage.
-- `assets/css/style.css` : apparence (charte : bleu marine et or en aplats).
+- `assets/css/style.css` : apparence (charte : bleu marine et or en aplats). Les titres sont en Source Serif 4,
+  la police du nom de la maison, le texte courant en Mona Sans (direction « Édition », en fin de fichier).
+- Couvertures : dans les listes, chaque ouvrage a une couverture composée (collection, titre, concours), en trois
+  habillages, papier, marine et or pour les ouvrages VVIP (`coverHTML` de `render.js`). La vraie première page
+  s'affiche sur la page de l'ouvrage et dans sa fenêtre.
+- Listes longues : `data-repli="8"` sur une liste n'affiche que les huit premiers éléments, avec un bouton pour la
+  suite (`data-repli-mobile` pour le téléphone). `data-rubriques` sur une barre de liens `.pill` et `data-rubrique`
+  sur chaque groupe affichent une rubrique à la fois (fiches par matière, ouvrages par collection). Sans
+  JavaScript, tout reste visible.
+- Aucune image n'est chargée depuis un autre site : toute photographie ajoutée doit être déposée dans `assets/img/`.

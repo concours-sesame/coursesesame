@@ -25,9 +25,9 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Les Cours Sésame et SAJ : Formation juridique, concours et excellence">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/source-serif-4-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css?v=2184cfad03">
+<link rel="preload" href="assets/fonts/mona-sans-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/source-serif-4-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/style.css?v=9a54f335f7">
 <!-- build:stats --><script data-goatcounter="https://coursesesame.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script><script defer src="assets/js/visite.js?v=b5a9f56a90"></script><!-- /build:stats -->
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"EducationalOrganization","name":"Les Cours Sésame et SAJ","url":"https://coursesesame.com/","telephone":"+2250160860537","address":{"@type":"PostalAddress","addressLocality":"Abidjan","addressCountry":"CI"},"slogan":"Votre réussite est notre mission"}
@@ -90,19 +90,19 @@
   </div>
   <header class="header" id="header">
     <div class="wrap header-inner">
-      <a href="#top" class="brand" aria-label="Les Cours Sésame et SAJ, accueil">
+      <a href="#top" class="brand">
         <svg class="mark" aria-hidden="true"><use href="#logo"/></svg>
         <span class="brand-text"><span class="brand-name">Les Cours Sésame et SAJ</span><span class="brand-rule"></span><span class="brand-tag">Concours &amp; excellence</span></span>
       </a>
       <nav class="nav" aria-label="Navigation principale">
         <a href="#concours">Concours</a>
-        <a href="#catalogue">Catalogue</a>
-        <a href="#conseiller">Conseil</a>
-        <a href="methodes/">Méthodes</a>
+        <a href="ouvrages/">Ouvrages</a>
+        <a href="espace-abonnes/">Abonnement</a>
+        <a href="fiches/">Fiches</a>
         <a href="sujets/">Corrigés</a>
         <a href="concours-blancs/">Concours blancs</a>
-        <a href="#videos" class="nav-opt">Vidéos</a>
-        <a href="#faq" class="nav-opt">FAQ</a>
+        <a href="methodes/" class="nav-opt">Méthodes</a>
+        <a href="videos/" class="nav-opt">Vidéos</a>
       </nav>
       <div class="header-actions">
         <a class="icon-btn icon-espace" href="espace-abonnes/" aria-label="Espace abonnés" title="Espace abonnés"><svg><use href="#i-user"/></svg></a>
@@ -121,16 +121,16 @@
   </div>
   <nav>
     <a href="#concours">Concours</a>
-    <a href="#catalogue">Catalogue</a>
-    <a href="#conseiller">Quel ouvrage pour moi ?</a>
-    <a href="methodes/">Méthodes &amp; QCM</a>
-    <a href="sujets/">Sujets corrigés</a>
+    <a href="ouvrages/">Ouvrages</a>
+    <a href="espace-abonnes/">Abonnement</a>
     <a href="fiches/">Fiches de révision</a>
+    <a href="sujets/">Sujets corrigés</a>
     <a href="concours-blancs/">Concours blancs</a>
-    <a href="#videos">Vidéos</a>
-    <a href="#avis">Avis</a>
-    <a href="#faq">FAQ</a>
-    <a href="espace-abonnes/">Espace abonnés</a>
+    <a href="qcm/">QCM gratuits</a>
+    <a href="methodes/">Méthodes</a>
+    <a href="videos/">Vidéos</a>
+    <a href="#conseiller">Quel ouvrage pour moi ?</a>
+    <a href="#faq">Questions fréquentes</a>
   </nav>
   <a class="btn btn-wa btn-block" href="https://wa.me/2250160860537" target="_blank" rel="noopener"><svg fill="currentColor"><use href="#i-wa"/></svg>Écrire sur WhatsApp</a>
 </div>
@@ -178,21 +178,18 @@
   </div>
 </section>
 
-<!-- ANNONCE : CONCOURS BLANCS -->
-<section class="annonce-blancs annonce-accueil" aria-labelledby="annonceBlancs">
-  <div class="wrap annonce-blancs-inner">
-    <div>
-      <h2 id="annonceBlancs">70 concours blancs, en accès libre</h2>
-      <p class="annonce-blancs-txt">Magistrature, Greffe, administration pénitentiaire, EPPJEJ et ENA : des séries chronométrées, sur des sujets inédits, pour mesurer votre vrai niveau avant le concours. Corrigés réservés aux abonnés.</p>
-      <a class="btn btn-gold annonce-blancs-btn" href="concours-blancs/">Je passe un concours blanc</a>
+<!-- AVIS -->
+<section class="section avis-section" id="avis" aria-labelledby="avisTitre">
+  <div class="wrap">
+    <div class="avis-tete">
+      <h2 class="h-sub" id="avisTitre">L'avis de nos élèves</h2>
+      <p class="reussite-lien">Vous avez réussi votre concours ? <a href="temoignage/">Racontez-le en quelques lignes</a>.</p>
     </div>
-    <ul class="annonce-series" aria-label="Séries par concours">
-      <li><b>10</b><span>séries Magistrature</span></li>
-      <li><b>15</b><span>séries Greffe</span></li>
-      <li><b>15</b><span>séries Pénitentiaire</span></li>
-      <li><b>15</b><span>séries EPPJEJ</span></li>
-      <li><b>15</b><span>séries ENA</span><small>cycles supérieur, moyen supérieur et moyen</small></li>
-    </ul>
+    <div class="about-reussite" id="reussite" hidden>
+      <h3 class="h-sub">Ils ont réussi</h3>
+      <div class="reviews reviews-admis" id="admis"></div>
+    </div>
+    <div class="reviews" id="reviews"></div>
   </div>
 </section>
 
@@ -233,6 +230,24 @@
   </div>
 </section>
 
+<!-- ANNONCE : CONCOURS BLANCS -->
+<section class="annonce-blancs annonce-accueil" aria-labelledby="annonceBlancs">
+  <div class="wrap annonce-blancs-inner">
+    <div>
+      <h2 id="annonceBlancs">70 concours blancs, en accès libre</h2>
+      <p class="annonce-blancs-txt">Magistrature, Greffe, administration pénitentiaire, EPPJEJ et ENA : des séries chronométrées, sur des sujets inédits, pour mesurer votre vrai niveau avant le concours. Corrigés réservés aux abonnés.</p>
+      <a class="btn btn-gold annonce-blancs-btn" href="concours-blancs/">Je passe un concours blanc</a>
+    </div>
+    <ul class="annonce-series" aria-label="Séries par concours">
+      <li><b>10</b><span>séries Magistrature</span></li>
+      <li><b>15</b><span>séries Greffe</span></li>
+      <li><b>15</b><span>séries Pénitentiaire</span></li>
+      <li><b>15</b><span>séries EPPJEJ</span></li>
+      <li><b>15</b><span>séries ENA</span><small>cycles supérieur, moyen supérieur et moyen</small></li>
+    </ul>
+  </div>
+</section>
+
 <!-- ABONNEMENT -->
 <section class="section on-dark abonnement-section" id="abonnement">
   <div class="wrap">
@@ -263,21 +278,6 @@
   </div>
 </section>
 
-<!-- CONSEILLER -->
-<section class="section conseiller-section" id="conseiller">
-  <div class="wrap conseiller-grid">
-    <div>
-      <h2 class="h-section">Vous ne savez pas quels ouvrages prendre ?</h2>
-      <p class="lead">Répondez à quelques questions : votre concours, l'étape que vous préparez, la matière à renforcer et le temps qu'il vous reste. Nous vous proposons une sélection, à mettre au panier en une fois.</p>
-      <figure class="conseiller-photo">
-        <img src="https://images.unsplash.com/photo-1620829813947-ef4246827355?auto=format&amp;fit=crop&amp;crop=faces&amp;w=900&amp;h=675&amp;q=70" srcset="https://images.unsplash.com/photo-1620829813947-ef4246827355?auto=format&amp;fit=crop&amp;crop=faces&amp;w=600&amp;h=450&amp;q=70 600w, https://images.unsplash.com/photo-1620829813947-ef4246827355?auto=format&amp;fit=crop&amp;crop=faces&amp;w=1000&amp;h=750&amp;q=70 1000w" sizes="(max-width:960px) 92vw, 460px" width="900" height="675" alt="Une étudiante prend des notes pendant une séance de révision" loading="lazy" decoding="async">
-        <figcaption class="photo-credit">Photo : <a href="https://unsplash.com/photos/xl-x9IB6wxc" target="_blank" rel="noopener">Kojo Kwarteng, Unsplash</a></figcaption>
-      </figure>
-    </div>
-    <div class="cs-card"><div id="csBox"></div></div>
-  </div>
-</section>
-
 <!-- OUVRAGES : sélection, le catalogue entier est sur ouvrages/ -->
 <section class="section" id="catalogue">
   <div class="wrap">
@@ -296,7 +296,11 @@
     </figure>
     </div>
     <div id="selection"><!-- build:books --><div class="books"><article class="book">
-      <button class="book-cover-btn" data-open="5" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés Magistrature"><div class="cover cover-page"><img src="assets/img/pages/annales-magistrature-600.jpg" srcset="assets/img/pages/annales-magistrature-600.jpg 424w, assets/img/pages/annales-magistrature.jpg 678w" sizes="(max-width:640px) 46vw, 300px" width="424" height="600" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés Magistrature" loading="lazy" decoding="async"></div></button>
+      <button class="book-cover-btn" data-open="5" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés Magistrature"><div class="cover cover-made cover-marine">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Annales corrigées</span><span class="cover-title">Magistrature</span></div>
+      <div class="cover-foot">Magistrature</div>
+    </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-magistrature/">Les Annales des Anciens Sujets Corrigés Magistrature</a></h3>
@@ -307,18 +311,11 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="23" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg" srcset="assets/img/pages/annales-anciens-sujets-infj-2027-600.jpg 600w, assets/img/pages/annales-anciens-sujets-infj-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">Greffe, Pénitentiaire, EPPJEJ</span>
-        <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-infj/">Les Annales des Anciens Sujets Corrigés INFJ, Édition 2027</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'espace VIP</a>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="23"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="7" aria-label="Voir le détail : Le Guide Méthodologique Magistrature, Édition 2027"><div class="cover cover-page"><img src="assets/img/pages/guide-methodologique-magistrature-2027-600.jpg" srcset="assets/img/pages/guide-methodologique-magistrature-2027-600.jpg 600w, assets/img/pages/guide-methodologique-magistrature-2027.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Guide Méthodologique Magistrature, Édition 2027" loading="lazy" decoding="async"></div></button>
+      <button class="book-cover-btn" data-open="7" aria-label="Voir le détail : Le Guide Méthodologique Magistrature, Édition 2027"><div class="cover cover-made cover-papier">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Guide méthodologique</span><span class="cover-title">Magistrature</span></div>
+      <div class="cover-foot">Magistrature</div>
+    </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-guide-methodologique-magistrature/">Le Guide Méthodologique Magistrature, Édition 2027</a></h3>
@@ -329,7 +326,11 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="8" aria-label="Voir le détail : Le Résumé de Droit Civil au Concours de la Magistrature"><div class="cover cover-page"><img src="assets/img/pages/resume-droit-civil-600.jpg" srcset="assets/img/pages/resume-droit-civil-600.jpg 600w, assets/img/pages/resume-droit-civil.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé de Droit Civil au Concours de la Magistrature" loading="lazy" decoding="async"></div></button>
+      <button class="book-cover-btn" data-open="8" aria-label="Voir le détail : Le Résumé de Droit Civil au Concours de la Magistrature"><div class="cover cover-made cover-papier">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Résumé</span><span class="cover-title">Droit Civil</span></div>
+      <div class="cover-foot">Magistrature</div>
+    </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-resume-de-droit-civil-au-concours-de-la-magistrature/">Le Résumé de Droit Civil au Concours de la Magistrature</a></h3>
@@ -340,7 +341,11 @@
         </div>
       </div>
     </article><article class="book">
-      <button class="book-cover-btn" data-open="10" aria-label="Voir le détail : Le Sésame de Droit Pénal au Concours de la Magistrature"><div class="cover cover-page"><img src="assets/img/pages/sesame-droit-penal-600.jpg" srcset="assets/img/pages/sesame-droit-penal-600.jpg 600w, assets/img/pages/sesame-droit-penal.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Sésame de Droit Pénal au Concours de la Magistrature" loading="lazy" decoding="async"></div></button>
+      <button class="book-cover-btn" data-open="10" aria-label="Voir le détail : Le Sésame de Droit Pénal au Concours de la Magistrature"><div class="cover cover-made cover-papier">
+      <div class="cover-top"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span class="cb">Les Cours Sésame et SAJ</span></div>
+      <div class="cover-band"><span class="cover-series">Le Sésame</span><span class="cover-title">Droit Pénal</span></div>
+      <div class="cover-foot">Magistrature</div>
+    </div></button>
       <div class="book-meta">
         <span class="book-concours">INFJ Magistrature</span>
         <h3 class="book-title"><a href="ouvrages/le-sesame-de-droit-penal-au-concours-de-la-magistrature/">Le Sésame de Droit Pénal au Concours de la Magistrature</a></h3>
@@ -350,57 +355,29 @@
           <button class="add-btn" data-add="10"><svg ><use href="#i-plus"/></svg>Panier</button>
         </div>
       </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="14" aria-label="Voir le détail : Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026"><div class="cover cover-page"><img src="assets/img/pages/50-cas-pratiques-corriges-600.jpg" srcset="assets/img/pages/50-cas-pratiques-corriges-600.jpg 600w, assets/img/pages/50-cas-pratiques-corriges.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/les-50-cas-pratiques-corriges-de-la-magistrature/">Les 50 Cas Pratiques Corrigés de la Magistrature, Édition 2026</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'espace VIP</a>
-        <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="14"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="6" aria-label="Voir le détail : Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/annales-sog-600.jpg" srcset="assets/img/pages/annales-sog-600.jpg 600w, assets/img/pages/annales-sog.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">INFJ Magistrature</span>
-        <h3 class="book-title"><a href="ouvrages/les-annales-des-anciens-sujets-corriges-de-sog-aux-concours-administratifs/">Les Annales des Anciens Sujets Corrigés de SOG aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Écrit, niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span><a class="book-abo" href="espace-abonnes/#inclus">Inclus dans l'espace VIP</a>
-        <div class="book-buy">
-          <span class="price">15 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="6"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
-    </article><article class="book">
-      <button class="book-cover-btn" data-open="27" aria-label="Voir le détail : Le Résumé des Droits de l'Enfant aux Concours Administratifs"><div class="cover cover-page"><img src="assets/img/pages/resume-droits-enfant-600.jpg" srcset="assets/img/pages/resume-droits-enfant-600.jpg 600w, assets/img/pages/resume-droits-enfant.jpg 960w" sizes="(max-width:640px) 46vw, 300px" width="600" height="424" alt="Première page de l'ouvrage Le Résumé des Droits de l'Enfant aux Concours Administratifs" loading="lazy" decoding="async"></div></button>
-      <div class="book-meta">
-        <span class="book-concours">Greffe, Pénitentiaire, EPPJEJ</span>
-        <h3 class="book-title"><a href="ouvrages/le-resume-des-droits-de-l-enfant-aux-concours-administratifs/">Le Résumé des Droits de l'Enfant aux Concours Administratifs</a></h3>
-        <span class="book-niveau">Niveaux CS / CMS / CM</span><span class="book-extrait">Extrait gratuit à lire</span>
-        <div class="book-buy">
-          <span class="price">10 000<small>FCFA</small></span>
-          <button class="add-btn" data-add="27"><svg ><use href="#i-plus"/></svg>Panier</button>
-        </div>
-      </div>
     </article></div><!-- /build:books --></div>
     <p class="section-suite"><a class="btn btn-navy" href="ouvrages/"><span>Voir tout le catalogue (<span data-count-from="ouvrages">35</span> ouvrages)</span></a></p>
+  </div>
+</section>
+
+<!-- CONSEILLER -->
+<section class="section conseiller-section" id="conseiller">
+  <div class="wrap conseiller-grid">
+    <div>
+      <h2 class="h-section">Vous ne savez pas quels ouvrages prendre ?</h2>
+      <p class="lead">Répondez à quelques questions : votre concours, l'étape que vous préparez, la matière à renforcer et le temps qu'il vous reste. Nous vous proposons une sélection, à mettre au panier en une fois.</p>
+    </div>
+    <div class="cs-card"><div id="csBox"></div></div>
   </div>
 </section>
 
 <!-- SUJETS CORRIGÉS -->
 <section class="section sujets" id="sujets">
   <div class="wrap">
-    <div class="section-photo">
-      <div class="section-head">
+    <div class="section-head">
         <h2 class="h-section">Sujets corrigés</h2>
         <p class="lead">Un sujet par concours, corrigé comme dans nos ouvrages, pour juger de la qualité de nos corrections. D'autres sujets, dont des sujets réellement tombés aux concours, sont en accès libre.</p>
       </div>
-      <figure>
-        <img src="https://images.unsplash.com/photo-1550592704-6c76defa9985?auto=format&amp;fit=crop&amp;w=720&amp;h=480&amp;q=70" srcset="https://images.unsplash.com/photo-1550592704-6c76defa9985?auto=format&amp;fit=crop&amp;w=480&amp;h=320&amp;q=70 480w, https://images.unsplash.com/photo-1550592704-6c76defa9985?auto=format&amp;fit=crop&amp;w=900&amp;h=600&amp;q=70 900w" sizes="(max-width:960px) 92vw, 360px" width="720" height="480" alt="Une main écrit au stylo rouge dans un cahier" loading="lazy" decoding="async">
-        <figcaption class="photo-credit">Photo : <a href="https://unsplash.com/photos/333oj7zFsdg" target="_blank" rel="noopener">lilartsy, Unsplash</a></figcaption>
-      </figure>
-    </div>
     <div class="s-tabs" id="sTabs" role="tablist" aria-label="Concours"></div>
     <div id="sPanel"></div>
     <div class="apercu-cta"><a class="btn btn-navy" href="sujets/">Tous les sujets corrigés</a></div>
@@ -538,34 +515,13 @@
         <p>Notre équipe pédagogique rassemble des magistrats, des greffiers, des administrateurs civils et des enseignants universitaires, tous passés par les concours qu'ils préparent aujourd'hui. Chaque ouvrage est rédigé avec une exigence simple : offrir le niveau de qualité que nous aurions voulu avoir entre les mains le jour de notre propre concours.</p>
         <p class="mission">Notre mission : rendre une préparation juridique de qualité accessible à tous, à des tarifs abordables, pour que chaque candidat ivoirien puisse concourir à armes égales.</p>
         <p>Nos ouvrages suivent le droit ivoirien en vigueur. Ils sont révisés chaque année pour tenir compte des dernières réformes et des sujets récents des concours.</p>
-        <dl class="about-facts">
+      </div>
+      <dl class="about-facts">
           <div><dt>Candidats accompagnés</dt><dd>Plus de 500</dd></div>
           <div><dt>Ouvrages au catalogue</dt><dd data-count-from="ouvrages">35</dd></div>
           <div><dt>Concours préparés</dt><dd data-count-from="concours">5</dd></div>
           <div><dt>Formateurs</dt><dd>Plus de 10</dd></div>
         </dl>
-      </div>
-      <figure class="about-photo">
-        <img src="https://images.unsplash.com/photo-1648770664367-54d43741edf1?auto=format&amp;fit=crop&amp;w=1000&amp;h=750&amp;q=70" srcset="https://images.unsplash.com/photo-1648770664367-54d43741edf1?auto=format&amp;fit=crop&amp;w=600&amp;h=450&amp;q=70 600w, https://images.unsplash.com/photo-1648770664367-54d43741edf1?auto=format&amp;fit=crop&amp;w=1200&amp;h=900&amp;q=70 1200w" sizes="(max-width:960px) 92vw, 520px" width="1000" height="750" alt="Le Plateau, à Abidjan, vu de la lagune Ébrié" loading="lazy" decoding="async">
-        <figcaption class="photo-credit">Le Plateau, à Abidjan, vu de la lagune Ébrié. Photo : <a href="https://unsplash.com/photos/e514SZzfpfM" target="_blank" rel="noopener">djebi abraham philippe, Unsplash</a></figcaption>
-      </figure>
-    </div>
-    <div class="about-reussite" id="reussite" hidden>
-      <h3 class="h-sub">Ils ont réussi</h3>
-      <div class="reviews reviews-admis" id="admis"></div>
-    </div>
-    <div class="about-avis" id="avis">
-      <h3 class="h-sub">L'avis de nos élèves</h3>
-      <div class="reviews" id="reviews"></div>
-      <p class="reussite-lien">Vous avez réussi votre concours ? <a href="temoignage/">Racontez-le en quelques lignes</a>.</p>
-    </div>
-    <div class="promises">
-      <div class="promise"><h4>Ouvrages à jour</h4><p>Textes et jurisprudence du droit ivoirien en vigueur.</p></div>
-      <div class="promise"><h4>Paiement par Mobile Money</h4><p>Orange Money, MTN MoMo, Wave et Moov Money, ou en espèces à la livraison à Abidjan.</p></div>
-      <div class="promise"><h4>Livraison dans toute la Côte d'Ivoire</h4><p>À Abidjan sous 24 à 48 h, dans les autres villes sous 3 à 5 jours ouvrables.</p></div>
-      <div class="promise"><h4>Rédigés par des lauréats</h4><p>Anciens admis aux concours de l'INFJ, de l'ENA et du Barreau de Côte d'Ivoire.</p></div>
-      <div class="promise"><h4>Conseil sur WhatsApp</h4><p>Nous vous aidons à choisir les ouvrages adaptés à votre concours et à votre niveau.</p></div>
-      <div class="promise"><h4>-10 % dès 3 ouvrages</h4><p>La remise est calculée automatiquement dans votre panier.</p></div>
     </div>
   </div>
 </section>
@@ -593,7 +549,7 @@
         </ul>
       </div>
     </div>
-    <div id="faqList"><!-- build:faq --><details class="faq-item" open><summary>Comment passer une commande ?<i></i></summary><p>Vous pouvez ajouter vos ouvrages au panier puis envoyer votre commande via WhatsApp, ou cliquer directement sur le bouton WhatsApp de chaque ouvrage. Notre équipe vous confirmera la disponibilité et les modalités de livraison.</p></details><details class="faq-item"><summary>Quels sont les modes de paiement acceptés ?<i></i></summary><p>Nous acceptons les paiements par Mobile Money (Orange Money, MTN MoMo, Wave et Moov Money) et en espèces à la livraison pour Abidjan. Pour les autres villes, le paiement se fait avant expédition.</p></details><details class="faq-item"><summary>Livrez-vous en dehors d'Abidjan ?<i></i></summary><p>Oui, nous livrons dans toute la Côte d'Ivoire. Pour Abidjan, la livraison se fait sous 24 à 48 heures. Pour les autres villes, comptez 3 à 5 jours ouvrables via transporteur.</p></details><details class="faq-item"><summary>Les ouvrages sont-ils à jour pour la session 2027 ?<i></i></summary><p>L'édition de chaque ouvrage figure dans son titre. Le Guide méthodologique Magistrature et les Annales des anciens sujets corrigés INFJ sont en édition 2027. Les 50 Cas pratiques corrigés de la magistrature, les Fiches d'arrêts de droit administratif et le Guide méthodologique INFJ sont en édition 2026. Pour savoir si un ouvrage intègre un texte récent, écrivez-nous sur WhatsApp avant de commander : nous vous répondons précisément.</p></details><details class="faq-item"><summary>Proposez-vous une remise pour les commandes groupées ?<i></i></summary><p>Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10 % sur le total de votre commande.</p></details><details class="faq-item"><summary>Puis-je consulter un extrait avant d'acheter ?<i></i></summary><p>Oui. La plupart des ouvrages proposent un extrait gratuit à télécharger en PDF : ouvrez la fiche de l'ouvrage et cliquez sur « Lire un extrait gratuit ». Pour les autres, écrivez-nous sur WhatsApp et nous vous enverrons un aperçu.</p></details><details class="faq-item"><summary>Qu'est-ce que l'espace abonnés ?<i></i></summary><p>C'est un espace privé du site, réservé aux abonnés. Vous y lisez nos sujets corrigés en entier, nos fiches de révision, nos QCM chronométrés avec correction détaillée, nos textes officiels et notre jurisprudence. L'espace VIP y ajoute nos ouvrages complets et nos vidéos réservées. Les contenus se lisent en ligne, sur téléphone comme sur ordinateur, et sont réservés à votre usage personnel.</p></details><details class="faq-item"><summary>Combien coûte l'abonnement ?<i></i></summary><p>500 FCFA pour un jour, 2 000 FCFA pour une semaine, 3 500 FCFA pour deux semaines, 5 000 FCFA pour un mois, 9 000 FCFA pour deux mois, 12 500 FCFA pour trois mois, 22 500 FCFA pour six mois et 40 000 FCFA pour douze mois. L'abonnement VIP, qui ajoute les ouvrages complets et les vidéos réservées, coûte le triple : de 1 500 FCFA pour un jour à 120 000 FCFA pour douze mois.</p></details><details class="faq-item"><summary>Comment activer mon abonnement ?<i></i></summary><p>Créez votre compte sur la page Espace abonnés, puis réglez la formule choisie par Orange Money, MTN MoMo, Wave ou Moov Money. Saisissez ensuite la référence du paiement dans votre espace, ou envoyez-la-nous sur WhatsApp. Nous activons votre accès dès la vérification du paiement, pour toute la durée de votre formule.</p></details><details class="faq-item"><summary>Qu'est-ce que l'espace VIP ?<i></i></summary><p>C'est la partie de l'espace abonnés qui réunit nos ouvrages complets, nos vidéos réservées et nos documents VIP, avec chaque mois la correction d'une copie, notée sur 20 par un correcteur. Il est ouvert aux abonnés VIP, quelle que soit la durée choisie, au triple du prix de l'abonnement normal. L'abonnement normal donne accès à tout le reste : sujets corrigés, fiches de révision, QCM, textes officiels, jurisprudence et, à partir d'une semaine, corrigés des concours blancs. Vous pouvez passer au VIP à tout moment depuis votre espace ou sur WhatsApp.</p></details><details class="faq-item"><summary>Quels ouvrages sont compris dans l'espace VIP ?<i></i></summary><p>Dans le catalogue, chaque ouvrage compris porte la mention « Inclus dans l'espace VIP » : annales corrigées, résumés de cours, guide méthodologique, fiches d'arrêts, recueils de dissertations, de cas pratiques et d'articles commentés. S'y ajoutent des ouvrages réservés aux abonnés, comme le Résumé de droit constitutionnel. La liste complète figure sur la page Espace abonnés.</p></details><details class="faq-item"><summary>Puis-je utiliser mon compte sur plusieurs appareils ?<i></i></summary><p>Un compte s'utilise sur un seul appareil à la fois. Si vous vous connectez sur un autre téléphone ou un autre ordinateur, le premier est déconnecté. Vous pouvez donc changer d'appareil, mais un compte ne se partage pas.</p></details><details class="faq-item"><summary>J'ai oublié mon mot de passe. Que faire ?<i></i></summary><p>Sur la page Espace abonnés, touchez « Mot de passe oublié ? » sous le formulaire de connexion et indiquez l'adresse e-mail de votre compte. Vous recevez un lien pour choisir un nouveau mot de passe. Si l'e-mail n'arrive pas, regardez dans les courriers indésirables, ou écrivez-nous sur WhatsApp : nous vous donnons un mot de passe provisoire.</p></details><details class="faq-item"><summary>Comment fonctionne le parrainage ?<i></i></summary><p>Chaque abonné a un code de parrainage et un lien à partager, affichés dans son espace. Quand un ami crée son compte avec ce code, puis règle son premier abonnement, 7 jours d'accès vous sont offerts, ajoutés à la suite de votre abonnement. Il n'y a pas de limite : quatre amis abonnés, c'est près d'un mois gratuit.</p></details><details class="faq-item"><summary>Puis-je installer le site sur mon téléphone ?<i></i></summary><p>Oui. Sur Android, ouvrez le site dans Chrome, touchez le menu en haut à droite, puis « Ajouter à l'écran d'accueil » ou « Installer l'application ». Sur iPhone, ouvrez-le dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ». Le site s'ouvre alors d'un geste, comme une application, avec notre logo. Les pages publiques déjà ouvertes (fiches, sujets corrigés, QCM, méthodes) restent lisibles sans connexion ; l'espace abonnés, lui, demande une connexion.</p></details><!-- /build:faq --></div>
+    <div id="faqList" data-repli="6" data-repli-nom="questions"><!-- build:faq --><details class="faq-item"><summary>Comment passer une commande ?<i></i></summary><p>Vous pouvez ajouter vos ouvrages au panier puis envoyer votre commande via WhatsApp, ou cliquer directement sur le bouton WhatsApp de chaque ouvrage. Notre équipe vous confirmera la disponibilité et les modalités de livraison.</p></details><details class="faq-item"><summary>Quels sont les modes de paiement acceptés ?<i></i></summary><p>Nous acceptons les paiements par Mobile Money (Orange Money, MTN MoMo, Wave et Moov Money) et en espèces à la livraison pour Abidjan. Pour les autres villes, le paiement se fait avant expédition.</p></details><details class="faq-item"><summary>Livrez-vous en dehors d'Abidjan ?<i></i></summary><p>Oui, nous livrons dans toute la Côte d'Ivoire. Pour Abidjan, la livraison se fait sous 24 à 48 heures. Pour les autres villes, comptez 3 à 5 jours ouvrables via transporteur.</p></details><details class="faq-item"><summary>Les ouvrages sont-ils à jour pour la session 2027 ?<i></i></summary><p>L'édition de chaque ouvrage figure dans son titre. Le Guide méthodologique Magistrature et les Annales des anciens sujets corrigés INFJ sont en édition 2027. Les 50 Cas pratiques corrigés de la magistrature, les Fiches d'arrêts de droit administratif et le Guide méthodologique INFJ sont en édition 2026. Pour savoir si un ouvrage intègre un texte récent, écrivez-nous sur WhatsApp avant de commander : nous vous répondons précisément.</p></details><details class="faq-item"><summary>Proposez-vous une remise pour les commandes groupées ?<i></i></summary><p>Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10 % sur le total de votre commande.</p></details><details class="faq-item"><summary>Puis-je consulter un extrait avant d'acheter ?<i></i></summary><p>Oui. La plupart des ouvrages proposent un extrait gratuit à télécharger en PDF : ouvrez la fiche de l'ouvrage et cliquez sur « Lire un extrait gratuit ». Pour les autres, écrivez-nous sur WhatsApp et nous vous enverrons un aperçu.</p></details><details class="faq-item"><summary>Qu'est-ce que l'espace abonnés ?<i></i></summary><p>C'est un espace privé du site, réservé aux abonnés. Vous y lisez nos sujets corrigés en entier, nos fiches de révision, nos QCM chronométrés avec correction détaillée, nos textes officiels et notre jurisprudence. L'espace VIP y ajoute nos ouvrages complets et nos vidéos réservées. Les contenus se lisent en ligne, sur téléphone comme sur ordinateur, et sont réservés à votre usage personnel.</p></details><details class="faq-item"><summary>Combien coûte l'abonnement ?<i></i></summary><p>500 FCFA pour un jour, 2 000 FCFA pour une semaine, 3 500 FCFA pour deux semaines, 5 000 FCFA pour un mois, 9 000 FCFA pour deux mois, 12 500 FCFA pour trois mois, 22 500 FCFA pour six mois et 40 000 FCFA pour douze mois. L'abonnement VIP, qui ajoute les ouvrages complets et les vidéos réservées, coûte le triple : de 1 500 FCFA pour un jour à 120 000 FCFA pour douze mois.</p></details><details class="faq-item"><summary>Comment activer mon abonnement ?<i></i></summary><p>Créez votre compte sur la page Espace abonnés, puis réglez la formule choisie par Orange Money, MTN MoMo, Wave ou Moov Money. Saisissez ensuite la référence du paiement dans votre espace, ou envoyez-la-nous sur WhatsApp. Nous activons votre accès dès la vérification du paiement, pour toute la durée de votre formule.</p></details><details class="faq-item"><summary>Qu'est-ce que l'espace VIP ?<i></i></summary><p>C'est la partie de l'espace abonnés qui réunit nos ouvrages complets, nos vidéos réservées et nos documents VIP, avec chaque mois la correction d'une copie, notée sur 20 par un correcteur. Il est ouvert aux abonnés VIP, quelle que soit la durée choisie, au triple du prix de l'abonnement normal. L'abonnement normal donne accès à tout le reste : sujets corrigés, fiches de révision, QCM, textes officiels, jurisprudence et, à partir d'une semaine, corrigés des concours blancs. Vous pouvez passer au VIP à tout moment depuis votre espace ou sur WhatsApp.</p></details><details class="faq-item"><summary>Quels ouvrages sont compris dans l'espace VIP ?<i></i></summary><p>Dans le catalogue, chaque ouvrage compris porte la mention « Inclus dans l'espace VIP » : annales corrigées, résumés de cours, guide méthodologique, fiches d'arrêts, recueils de dissertations, de cas pratiques et d'articles commentés. S'y ajoutent des ouvrages réservés aux abonnés, comme le Résumé de droit constitutionnel. La liste complète figure sur la page Espace abonnés.</p></details><details class="faq-item"><summary>Puis-je utiliser mon compte sur plusieurs appareils ?<i></i></summary><p>Un compte s'utilise sur un seul appareil à la fois. Si vous vous connectez sur un autre téléphone ou un autre ordinateur, le premier est déconnecté. Vous pouvez donc changer d'appareil, mais un compte ne se partage pas.</p></details><details class="faq-item"><summary>J'ai oublié mon mot de passe. Que faire ?<i></i></summary><p>Sur la page Espace abonnés, touchez « Mot de passe oublié ? » sous le formulaire de connexion et indiquez l'adresse e-mail de votre compte. Vous recevez un lien pour choisir un nouveau mot de passe. Si l'e-mail n'arrive pas, regardez dans les courriers indésirables, ou écrivez-nous sur WhatsApp : nous vous donnons un mot de passe provisoire.</p></details><details class="faq-item"><summary>Comment fonctionne le parrainage ?<i></i></summary><p>Chaque abonné a un code de parrainage et un lien à partager, affichés dans son espace. Quand un ami crée son compte avec ce code, puis règle son premier abonnement, 7 jours d'accès vous sont offerts, ajoutés à la suite de votre abonnement. Il n'y a pas de limite : quatre amis abonnés, c'est près d'un mois gratuit.</p></details><details class="faq-item"><summary>Puis-je installer le site sur mon téléphone ?<i></i></summary><p>Oui. Sur Android, ouvrez le site dans Chrome, touchez le menu en haut à droite, puis « Ajouter à l'écran d'accueil » ou « Installer l'application ». Sur iPhone, ouvrez-le dans Safari, touchez le bouton de partage, puis « Sur l'écran d'accueil ». Le site s'ouvre alors d'un geste, comme une application, avec notre logo. Les pages publiques déjà ouvertes (fiches, sujets corrigés, QCM, méthodes) restent lisibles sans connexion ; l'espace abonnés, lui, demande une connexion.</p></details><!-- /build:faq --></div>
   </div>
 </section>
 
@@ -609,15 +565,15 @@
         <p class="footer-about">Votre réussite est notre mission. Ouvrages de préparation aux concours administratifs et juridiques de Côte d'Ivoire.</p>
       </div>
       <div>
-        <h4>Les concours</h4>
+        <h3>Les concours</h3>
         <ul><li><a href="concours/magistrature/">Magistrature</a></li><li><a href="concours/greffe/">Greffe</a></li><li><a href="concours/penitentiaire/">Pénitentiaire</a></li><li><a href="concours/eppjej/">EPPJEJ</a></li><li><a href="concours/ena/">ENA</a></li></ul>
       </div>
       <div>
-        <h4>Le site</h4>
+        <h3>Le site</h3>
         <ul><li><a href="ouvrages/">Tous les ouvrages</a></li><li><a href="#conseiller">Quel ouvrage pour moi ?</a></li><li><a href="sujets/">Sujets corrigés</a></li><li><a href="methodes/">Méthodes des épreuves</a></li><li><a href="fiches/">Fiches de révision</a></li><li><a href="qcm/">QCM gratuits</a></li><li><a href="qcm-du-jour/">Le QCM du jour</a></li><li><a href="lexique/">Lexique juridique</a></li><li><a href="test-de-niveau/">Test de niveau</a></li><li><a href="calendrier-des-concours/">Calendrier des concours</a></li><li><a href="videos/">Nos vidéos</a></li><li><a href="espace-abonnes/">Espace abonnés</a></li><li><a href="#faq">FAQ</a></li><li><a href="conditions-de-vente/">Conditions de vente</a></li><li><a href="mentions-legales/">Mentions légales</a></li></ul>
       </div>
       <div>
-        <h4>Nous joindre</h4>
+        <h3>Nous joindre</h3>
         <ul><li><a href="https://wa.me/2250160860537" target="_blank" rel="noopener">WhatsApp : <span class="nowrap">+225 01 60 86 05 37</span></a></li><li><a href="https://wa.me/2250506600332" target="_blank" rel="noopener">WhatsApp : <span class="nowrap">+225 05 06 60 03 32</span></a></li><li>Abidjan, Côte d'Ivoire</li><li>Livraison dans toute la Côte d'Ivoire</li></ul>
       </div>
     </div>
@@ -680,8 +636,8 @@
 
 <!-- /partial:footer -->
 <script src="assets/js/data.js?v=ee504a5fb4"></script>
-<script src="assets/js/render.js?v=7c9d189d8d"></script>
+<script src="assets/js/render.js?v=734444b753"></script>
 <script src="assets/js/espace-config.js?v=20e1255c8a"></script>
-<script src="assets/js/app.js?v=feee0f09aa"></script>
+<script src="assets/js/app.js?v=159b6a7da4"></script>
 </body>
 </html>

@@ -55,3 +55,8 @@ Stockage : chaque vidéo du jour est copiée dans `exclusif/videos/<fichier>.mp4
 l'espace abonnés la lit. La fonction `tiktok` lit d'abord cette copie privée pour une source `tiktok/<dossier>/<fichier>.mp4`.
 Une fois la copie faite, le fichier public peut être effacé pour économiser le stockage (offre gratuite de 1 Go) :
 action `effacer` de `tiktok-depot`, qui n'efface une vidéo publique que si sa copie privée de même taille existe.
+
+Affiches : celle d'une vidéo « Une notion, une minute » est une image de la vidéo. Pour les autres vidéos du site
+(présentation, ouvrage, « Un article, une minute », annales décryptées), `node tools/videos/affiches.mjs` compose
+l'affiche sur le même modèle, avec les polices du dossier `fonts/`. L'identité visuelle exclut la balance, Thémis,
+le marteau et l'écusson : aucune affiche ne doit en montrer.

@@ -66,19 +66,22 @@
   // Pages au format portrait (les autres sont à l'italienne)
   const PORTRAIT = ["annales-magistrature", "resume-informatique-2027"];
 
-  // big : affichage en grand (fiche ou page de l'ouvrage)
+  // Couverture composée, lisible en vignette : collection, titre en grand, concours. Trois habillages dans la charte :
+  // papier (résumés, manuels, guides), marine (annales et recueils de sujets corrigés), or (ouvrages VVIP).
+  const coverHabillage = o => o.vvip ? "or" : /Annales|Cas Pratiques|Dissertations|Fiches/i.test(o.titre) ? "marine" : "papier";
+  // big : affichage en grand (fiche ou page de l'ouvrage), où l'on montre la vraie première page quand elle existe
   function coverHTML(o, big) {
     const p = pageImage(o);
-    if (p) {
+    if (p && big) {
       const [w, h] = PORTRAIT.includes(p) ? [424, 600] : [600, 424];
       const src = `${root}assets/img/pages/${p}`;
-      return `<div class="cover cover-page"><img src="${src}-600.jpg" srcset="${src}-600.jpg ${w}w, ${src}.jpg ${Math.round(960 * w / 600)}w" sizes="${big ? "(max-width:960px) 92vw, 460px" : "(max-width:640px) 46vw, 300px"}" width="${w}" height="${h}" alt="Première page de l'ouvrage ${attr(o.titre)}" loading="lazy" decoding="async"></div>`;
+      return `<div class="cover cover-page"><img src="${src}-600.jpg" srcset="${src}-600.jpg ${w}w, ${src}.jpg ${Math.round(960 * w / 600)}w" sizes="(max-width:960px) 92vw, 460px" width="${w}" height="${h}" alt="Première page de l'ouvrage ${attr(o.titre)}" loading="lazy" decoding="async"></div>`;
     }
     const c = coverParts(o.titre);
-    return `<div class="cover cover-made">
-      <div class="cover-top">${svg("logo", 'class="mark" aria-hidden="true"')}<span class="cb">Les Cours<br>Sésame et SAJ</span></div>
-      <div class="cover-band">${c.serie ? `<span class="cover-series">${c.serie}</span>` : ""}<span class="cover-title">${c.sujet}</span></div>
-      <div class="cover-foot">${o.concours.replace(/^INFJ\s+/, "")}</div>
+    return `<div class="cover cover-made cover-${coverHabillage(o)}">
+      <div class="cover-top">${svg("logo", 'class="mark" aria-hidden="true"')}<span class="cb">Les Cours Sésame et SAJ</span></div>
+      <div class="cover-band">${c.serie ? `<span class="cover-series">${c.serie.replace(/ · /g, ", ")}</span>` : ""}<span class="cover-title">${c.sujet}</span></div>
+      <div class="cover-foot">${(o.concoursListe || o.concours).replace(/INFJ\s+/g, "").replace(/ · /g, ", ")}</div>
     </div>`;
   }
 
@@ -122,11 +125,11 @@
     const phases = [...new Set(items.map(o => o.phase).filter(Boolean))];
     const cat = items[0] && items[0].categorie;
     if (!phases.length) {
-      return (withPacks ? packHTML(cat, "", items, all) : "") + `<div class="books">${items.map(book).join("")}</div>`;
+      return (withPacks ? packHTML(cat, "", items, all) : "") + `<div class="books" data-repli="8" data-repli-mobile="4" data-repli-nom="ouvrages">${items.map(book).join("")}</div>`;
     }
     let html = phases.map(ph => {
       const sub = items.filter(o => o.phase === ph);
-      return `<h4 class="phase-title">${ph}<small>${plural(sub.length, "ouvrage")}</small></h4>${withPacks ? packHTML(cat, ph, sub, all) : ""}<div class="books">${sub.map(book).join("")}</div>`;
+      return `<h4 class="phase-title">${ph}<small>${plural(sub.length, "ouvrage")}</small></h4>${withPacks ? packHTML(cat, ph, sub, all) : ""}<div class="books" data-repli="8" data-repli-mobile="4" data-repli-nom="ouvrages">${sub.map(book).join("")}</div>`;
     }).join("");
     const rest = items.filter(o => !o.phase);
     if (rest.length) html += `<div class="books">${rest.map(book).join("")}</div>`;
