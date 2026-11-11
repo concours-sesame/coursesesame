@@ -44,7 +44,7 @@ const write = (f, s) => { fs.mkdirSync(path.dirname(path.join(DIR, f)), { recurs
 /* ---------- Données ---------- */
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,WA2,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM,VIDEOS,VIDEOS_ABONNES,TARIFS_ABONNEMENT,TARIFS_VIP};", ctx);
+vm.runInContext(read("assets/js/data.js") + "\n;globalThis.D={WA,WA2,OUVRAGES,TEMOIGNAGES,FAQ,METHODO,EPREUVES,SUJETS,QCM,VIDEOS,VIDEOS_ABONNES,TARIFS_ABONNEMENT,TARIFS_VIP,ESSAI_GRATUIT:typeof ESSAI_GRATUIT!=='undefined'?ESSAI_GRATUIT:null};", ctx);
 vm.runInContext(read("assets/js/render.js"), ctx);
 const { WA, OUVRAGES, FAQ, METHODO, EPREUVES, SUJETS, VIDEOS, VIDEOS_ABONNES } = ctx.D;
 const R = ctx.SESAME;
@@ -57,6 +57,8 @@ const byCat = id => OUVRAGES.filter(o => o.categorie === id);
 const TARIFS_VIP = ctx.D.TARIFS_VIP || [];
 const VIP_JOUR = TARIFS_VIP.find(t => t.cle === "vip-j1");
 const VIP_MOIS = TARIFS_VIP.find(t => t.cle === "vip-m1");
+// Essai gratuit de l'espace abonnés (ESSAI_GRATUIT dans data.js) : annoncé sur l'accueil et sur la page de l'espace
+const ESSAI = ctx.D.ESSAI_GRATUIT && ctx.D.ESSAI_GRATUIT.actif ? ctx.D.ESSAI_GRATUIT : null;
 const vipDes = VIP_JOUR ? `dès ${VIP_JOUR.prix} FCFA la journée` : "sur abonnement VIP";
 const LIVRES_ABONNEMENT = (() => {
   const livres = new Map();
@@ -132,7 +134,7 @@ function abonnementHTML() {
         ${carte(j1, "1 jour", "Sujets corrigés, fiches de révision, QCM, textes et jurisprudence")}
         ${carte(m1, "1 mois", "Tout cela pendant un mois, avec les corrigés des concours blancs")}
         ${carte(vj1, "VIP, 1 jour", "Tout l'abonnement, plus l'espace VIP : ouvrages complets, vidéos et documents VIP", " formule-vip")}
-        ${carte(vm1, "VIP, 1 mois", "Tout l'espace VIP pendant un mois, et une copie corrigée et notée sur 20", " formule-mise")}
+        ${carte(vm1, "VIP, 1 mois", `${LIVRES_ABONNEMENT.length ? `${LIVRES_ABONNEMENT.length} ouvrages complets, soit ${fmt(LIVRES_ABONNEMENT.reduce((t, l) => t + l.prix, 0))} FCFA au catalogue, ` : "Tout l'espace VIP pendant un mois, "}et une copie corrigée et notée sur 20`, " formule-mise")}
       </ul>
     `;
 }
@@ -555,11 +557,11 @@ function videosJourHTML(prefix) {
     <script defer src="${prefix}assets/js/videos-du-jour.js"></script>`;
 }
 // Lettre d'information sans compte (assets/js/lettre.js, fonction fiche-offerte, action « lettre »)
-function lettreHTML(prefix) {
+function lettreHTML(prefix, { titre = "Recevez nos <em>conseils</em>", lead = "Méthode, dates des concours, nouveaux sujets corrigés et nouvelles vidéos : quelques e-mails utiles, sans excès, sans créer de compte." } = {}) {
   return `<section class="section section-cream lettre" id="lettre">
   <div class="wrap lettre-wrap">
-    <div><span class="eyebrow">Lettre d'information gratuite</span><h2 class="h-section">Recevez nos <em>conseils</em></h2>
-      <p class="lead">Méthode, dates des concours, nouveaux sujets corrigés et nouvelles vidéos : quelques e-mails utiles, sans excès, sans créer de compte.</p></div>
+    <div><span class="eyebrow">Lettre d'information gratuite</span><h2 class="h-section">${titre}</h2>
+      <p class="lead">${lead}</p></div>
     <form class="lettre-form" data-lettre novalidate>
       <div class="field"><label for="lettrePrenom">Prénom</label><input id="lettrePrenom" name="prenom" required maxlength="60" autocomplete="given-name"></div>
       <div class="field"><label for="lettreEmail">E-mail</label><input id="lettreEmail" name="email" type="email" required maxlength="254" autocomplete="email"></div>
@@ -662,6 +664,8 @@ ${autresSujets.length ? `<section class="section${sujet ? " section-top-0" : ""}
     <div class="concours-grid">${CONCOURS.filter(x => x !== c).map((x, i) => concoursCard(x, i, prefix)).join("")}</div>
   </div>
 </section>
+
+${lettreHTML(prefix)}
 
 ${contactCTA(prefix)}`;
 
@@ -848,6 +852,8 @@ ${suggestions.length ? `<section class="section${l.items.length > 1 ? "" : " sec
   </div>
 </section>` : ""}
 
+${lettreHTML(prefix, { titre: "Pas encore décidé ?", lead: "Recevez nos conseils de méthode, les dates des concours et nos nouveaux sujets corrigés par e-mail, sans excès et sans créer de compte." })}
+
 ${contactCTA(prefix)}`;
 
   const fin = o.papier ? ` ${o.prix} FCFA en version numérique, ${o.papier} FCFA en version papier${o.extrait ? ", extrait gratuit" : ""}.`
@@ -977,6 +983,8 @@ ${suite.length ? `<section class="section section-cream">
     <div class="ep-cards">${suite.map((y, i) => sujetCard(y, prefix, i)).join("")}</div>
   </div>
 </section>` : ""}
+
+${lettreHTML(prefix, { titre: "Recevez les prochains sujets corrigés", lead: "Chaque nouveau sujet corrigé, les sujets tombés aux concours et nos conseils de méthode, par e-mail, sans excès et sans créer de compte." })}
 
 ${contactCTA(prefix)}`;
 
@@ -1622,7 +1630,7 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
   <div class="wrap">
     <div class="section-head">
       <h2 class="h-section">Les formules</h2>
-      <p class="lead">Deux abonnements, huit durées. La durée court à partir de l'activation de votre accès, et une prolongation s'ajoute à la fin de l'abonnement en cours.</p>
+      <p class="lead">Deux abonnements, huit durées. La durée court à partir de l'activation de votre accès, et une prolongation s'ajoute à la fin de l'abonnement en cours.${ESSAI ? ` Tout nouvel inscrit peut d'abord essayer l'abonnement gratuitement pendant ${ESSAI.duree}.` : ""}</p>
     </div>
     <div class="offres">
       <article class="offre">
@@ -1632,19 +1640,20 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
       </article>${TARIFS_VIP.length ? `
       <article class="offre offre-vip">
         <h3>Abonnement VIP</h3>
+        ${LIVRES_ABONNEMENT.length ? `<p class="offre-valeur"><b>${LIVRES_ABONNEMENT.length} ouvrages complets</b> à lire en ligne, soit ${fmt(valeur)} FCFA au catalogue${VIP_MOIS ? `, pour ${VIP_MOIS.prix} FCFA le mois` : ""}.</p>` : ""}
         <ul class="offre-inclus"><li>Tout l'abonnement</li><li>Les ouvrages complets, à lire en ligne</li><li>Les vidéos et les documents réservés au VIP</li><li>Une copie corrigée et notée sur 20 chaque mois</li></ul>
         ${grille(TARIFS_VIP)}
       </article>` : ""}
     </div>
-    <p class="section-suite"><a class="btn btn-navy" href="#inscription">Créer mon compte</a></p>
+    <p class="section-suite"><a class="btn btn-navy" href="#inscription">${ESSAI ? "Créer mon compte et essayer gratuitement" : "Créer mon compte"}</a></p>
   </div>
 </section>` : "";
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Espace abonnés", ""]],
     h1: `L'espace abonnés`,
     lead: `Sujets corrigés, fiches de révision, QCM chronométrés, révision du jour et simulateur de grand oral et, dans l'espace VIP, nos ouvrages complets et nos vidéos réservées. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.`,
-    ctas: `<a href="#inscription" class="btn btn-gold">Créer mon compte${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${tarifs.length ? `<a href="#formules" class="btn btn-ghost">Voir les formules</a>` : ""}`,
-    facts: [...tarifs.filter(t => t.cle === "j1").map(t => `Abonnement dès <b>${t.prix} FCFA</b> la journée`), ...(VIP_JOUR ? [`VIP dès <b>${VIP_JOUR.prix} FCFA</b> la journée`] : []), "Paiement par Mobile Money"]
+    ctas: `<a href="#inscription" class="btn btn-gold">${ESSAI ? "Essayer gratuitement" : "Créer mon compte"}${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${tarifs.length ? `<a href="#formules" class="btn btn-ghost">Voir les formules</a>` : ""}`,
+    facts: [...(ESSAI ? [`<b>Essai gratuit</b> de ${ESSAI.duree}`] : []), ...tarifs.filter(t => t.cle === "j1").map(t => `Abonnement dès <b>${t.prix} FCFA</b> la journée`), ...(VIP_JOUR ? [`VIP dès <b>${VIP_JOUR.prix} FCFA</b> la journée`] : []), "Paiement par Mobile Money"]
   })}
 
 <section class="section espace-section" id="espace-app">
@@ -1682,7 +1691,7 @@ ${vitrine}
       <p class="lead">Le paiement se fait comme pour nos ouvrages : par Mobile Money, avec une confirmation sur WhatsApp.</p>
     </div>
     <ol class="espace-etapes">
-      <li class="espace-etape"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.</span></li>
+      <li class="espace-etape"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.${ESSAI ? ` Vous pouvez alors essayer l'abonnement gratuitement pendant ${ESSAI.duree}.` : ""}</span></li>
       <li class="espace-etape"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis saisissez la référence du paiement dans votre espace ou envoyez-la-nous sur WhatsApp.${tarifs.length ? "" : " Nous vous indiquons le tarif."}</span></li>
       <li class="espace-etape"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement. Les ouvrages complets et les vidéos réservées se lisent avec l'abonnement VIP. Un compte s'utilise sur un appareil à la fois : une connexion sur un autre appareil déconnecte le précédent.</span></li>
     </ol>
@@ -1838,6 +1847,7 @@ const VIDEOS_TIKTOK = ${JSON.stringify([
     <p>Il ne produit que des statistiques globales : pages consultées, site d'où vient le visiteur, navigateur, système, taille d'écran, langue et pays. Le pays est déduit de l'adresse IP, qui n'est pas conservée. Aucun visiteur ne peut être identifié ni suivi d'un site à l'autre.</p>
     <p>Ces statistiques sont hébergées en Europe, en Finlande et en Allemagne, et ne sont communiquées à personne.</p>
     <p>Nous tenons aussi notre propre relevé des pages vues, pour suivre la fréquentation en temps réel. À votre première visite, le site tire au hasard un identifiant anonyme et le garde dans votre navigateur, sans cookie. À chaque page, il enregistre dans notre base cet identifiant, l'adresse de la page, le site d'où vous venez et le type d'appareil (téléphone, tablette ou ordinateur). Votre adresse IP n'est pas conservée et rien ne permet de connaître votre identité. Si vous êtes connecté à votre compte abonné, la page vue est rattachée à votre compte.</p>
+    <p>Le site note de la même façon, avec ce seul identifiant anonyme, les clics sur les boutons qui mènent à une commande ou à un compte (bouton WhatsApp, ajout au panier, création de compte, essai gratuit) et la page où ils ont lieu, pour savoir quelles pages sont utiles.</p>
     <p>Ces relevés sont conservés 180 jours dans la base de l'espace abonnés, présentée plus bas, et ne sont consultables que par l'administrateur. Ils ne sont communiqués à personne. Pour effacer l'identifiant anonyme, effacez les données du site dans votre navigateur. La page d'administration de l'espace abonnés n'est pas mesurée.</p>
 
     <h2 id="espace-abonnes">Espace abonnés</h2>
@@ -1926,7 +1936,10 @@ ${contactCTA(prefix)}`;
     ${tarifs.length ? `<div class="table-wrap"><table class="tarifs"><thead><tr><th scope="col">Durée</th><th scope="col">Abonnement</th><th scope="col">Abonnement VIP</th></tr></thead><tbody>${tarifs.map(t => { const v = TARIFS_VIP.find(x => x.cle === "vip-" + t.cle); return `<tr><td>${t.duree}</td><td>${t.prix} FCFA</td><td>${v ? v.prix + " FCFA" : "non proposé"}</td></tr>`; }).join("")}</tbody></table></div>` : ""}
     <p>La durée de la formule court à partir de l'activation, et non du paiement : un accès activé plus tard ne vous fait perdre aucun jour. Une prolongation s'ajoute à la fin de l'abonnement en cours. L'abonnement donne accès aux sujets corrigés, aux fiches de révision, aux QCM, aux textes officiels, à la jurisprudence et, à partir d'une semaine, aux corrigés des concours blancs. L'abonnement VIP donne accès, en plus, à l'espace VIP : les ouvrages complets, les vidéos réservées et les documents réservés au VIP, quelle que soit sa durée, ainsi qu'à la correction d'une copie par mois civil, notée sur 20 par un correcteur. Certains nouveaux contenus, signalés « Avant-première VIP », s'ouvrent aux abonnés VIP dès leur mise en ligne et aux autres abonnés sept jours plus tard. Les abonnements enregistrés avant l'ouverture de l'espace VIP, le 28 octobre 2026, gardent jusqu'à leur terme l'accès qu'ils donnaient alors (ouvrages complets pour les formules d'un mois et plus, vidéos pour les formules d'une semaine et plus).</p>
 
-    <h2 id="non-active">Abonnement payé mais pas encore activé</h2>
+${ESSAI ? `    <h2 id="essai">Essai gratuit</h2>
+    <p>Toute personne qui crée un compte peut ouvrir, une seule fois, un essai gratuit de l'abonnement, depuis son espace. L'essai dure ${ESSAI.duree} au moins : il se termine le lendemain de son ouverture, à minuit. Il donne accès aux sujets corrigés, aux fiches de révision, aux QCM, aux textes officiels et à la jurisprudence. Il ne comprend ni l'espace VIP, ni les corrigés des concours blancs, ni le téléchargement de pages. Il ne demande aucun paiement et n'entraîne aucun abonnement : à son terme, l'accès se ferme de lui-même. Un seul essai est accordé par personne et par numéro de téléphone. Nous pouvons cesser de proposer l'essai à tout moment, sans effet sur les essais en cours.</p>
+
+` : ""}    <h2 id="non-active">Abonnement payé mais pas encore activé</h2>
     <p>L'activation se fait à la main, dès que nous avons reçu votre paiement et sa référence. Si votre accès n'est pas encore ouvert, relancez-nous sur WhatsApp avec la référence du paiement. Si l'abonnement ne peut pas être activé, par exemple parce que le paiement n'a pas abouti chez l'opérateur, la somme reçue vous est remboursée.</p>
 
     <h2 id="usage">Usage de l'espace abonnés</h2>
@@ -2012,6 +2025,9 @@ index = inject(index, "books", selectionHTML());
 index = inject(index, "abonnement", abonnementHTML());
 index = inject(index, "essai", essaiHTML());
 index = inject(index, "prixjour", prixJourHTML());
+index = inject(index, "essai-abo", ESSAI ? `<p class="essai-annonce"><b>Essai gratuit de ${ESSAI.duree}.</b> Créez votre compte et ouvrez l'abonnement sans payer, une fois.</p>` : "");
+index = inject(index, "essai-cta", `<a class="btn btn-gold" href="espace-abonnes/#inscription">${ESSAI ? "Essayer gratuitement" : "Créer mon compte"}</a>`);
+index = inject(index, "essai-hero", ESSAI ? `Ou lisez tout en ligne : <a href="espace-abonnes/#inscription">essai gratuit de ${ESSAI.duree}</a>, puis abonnement dès ${(ctx.D.TARIFS_ABONNEMENT.find(x => x.cle === "j1") || {}).prix} FCFA la journée.` : `Ou lisez tout en ligne : <a href="#abonnement">abonnement dès ${(ctx.D.TARIFS_ABONNEMENT.find(x => x.cle === "j1") || {}).prix} FCFA la journée</a>.`);
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
   h2: `Nos vidéos`, ici: "accueil", jour: true,

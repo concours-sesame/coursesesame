@@ -168,3 +168,24 @@ La mise en pause est évitée par la tâche GitHub `.github/workflows/eveil-espa
 base chaque matin (onglet Actions du dépôt, « Éveil de l'espace abonnés »). GitHub suspend les tâches planifiées
 d'un dépôt resté 60 jours sans modification : il suffit alors de la réactiver dans l'onglet Actions. Si le projet
 est tout de même en pause, le relancer depuis le tableau de bord Supabase (Restore project).
+
+## Essai gratuit et mesure des clics (migration `20261111120000_essai_gratuit_et_clics.sql`)
+
+**Essai gratuit.** Tout nouvel inscrit peut ouvrir lui-même, une fois, un essai de l'abonnement normal depuis son
+espace (bouton « Commencer l'essai gratuit », fonction `demarrer_essai`). L'essai est une ligne de `abonnements` de
+montant 0 et de moyen « Essai gratuit », du jour même au lendemain : toutes les règles d'accès s'appliquent sans
+changement. Il n'ouvre ni l'espace VIP, ni les ouvrages complets, ni les corrigés des concours blancs, ni le
+téléchargement de pages (`telechargement_limites_de` renvoie 0). Un essai par compte (index unique) et par numéro de
+téléphone (`norm_telephone`). Il ne déclenche ni la récompense de parrainage, ni l'e-mail de bienvenue, ni la
+validation d'une demande d'activation en attente ; la relance des inscrits jamais abonnés continue après l'essai.
+
+Réglages : table `essai_reglages` (une ligne). Pour fermer l'essai :
+`update essai_reglages set actif = false;` puis, dans `assets/js/data.js`, `ESSAI_GRATUIT` avec `"actif":false`, et
+`node tools/build.js` pour retirer l'annonce du site. `jours` règle la durée (1 par défaut, 7 au plus).
+
+Suivre les essais : `select * from abonnements where moyen = 'Essai gratuit' order by cree_le desc;`
+
+**Clics.** `assets/js/visite.js` enregistre, avec l'identifiant anonyme des visites, les clics qui mènent à une
+commande ou à un compte : `whatsapp`, `panier`, `compte`, `essai`, `formules`, `extrait` (fonction `enregistrer_clic`,
+table `clics`, 180 jours, aucun droit direct). Exemple, les pages qui déclenchent le plus de clics WhatsApp :
+`select page, count(*) from clics where action = 'whatsapp' and quand > now() - interval '30 days' group by 1 order by 2 desc;`

@@ -2195,3 +2195,15 @@ a.ea-jour-carte{text-decoration:none;color:inherit}
 :root{--wa:#16803f;--wa-2:#126b34;--wa-clair:#35c46f}
 .header-actions .btn-navy svg,.accueil main .btn-wa svg,.hero-sub .btn-ghost svg[fill="currentColor"]{color:var(--wa-clair)}
 .accueil .paper .btn-wa svg{color:#fff}
+
+/* Espace abonnés : essai gratuit */
+.ea-essai{align-items:center}
+.ea-essai .btn{flex:none}
+.ea-statut-ok .ea-msg{color:var(--gold-2);margin-top:.6rem}
+
+/* Essai gratuit et valeur du VIP, sur l'accueil et la page de l'espace abonnés */
+.essai-annonce{margin:0 0 1.2rem;padding:.75rem 1rem;border-left:3px solid var(--gold);border-radius:var(--r-sm);background:var(--cream);color:var(--ink)}
+.accueil .essai-annonce{background:var(--nuit);color:var(--clair-2)}
+.accueil .essai-annonce b{color:var(--clair)}
+.offre-valeur{margin:0 0 1rem;padding:.7rem .9rem;border:1px solid var(--gold);border-radius:var(--r-sm);color:var(--clair)}
+.offre-valeur b{color:var(--gold-2)}

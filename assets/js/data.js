@@ -37,6 +37,10 @@ const TARIFS_VIP=[
 {"cle":"vip-m12","prix":"120 000","duree":"12 mois"}
 ];
 
+/* Essai gratuit de l'espace abonnés, annoncé sur le site quand "actif" vaut true. L'essai lui-même est tenu par la
+   base (table essai_reglages : actif, jours) : pour l'arrêter, passer les deux à false, puis node tools/build.js. */
+const ESSAI_GRATUIT={"actif":true,"duree":"24 heures"};
+
 /* Numéros Mobile Money affichés dans l'espace abonnés, au moment du paiement de l'abonnement (laisser vide pour
    indiquer « le numéro de paiement vous est donné sur WhatsApp »).
    Exemple : [{"moyen":"Orange Money","numero":"07 00 00 00 00"},{"moyen":"Wave","numero":"01 00 00 00 00"}] */
@@ -124,6 +128,7 @@ const FAQ=[
 {"q":"Proposez-vous une remise pour les commandes groupées ?","a":"Oui ! Pour toute commande de 3 ouvrages ou plus, vous bénéficiez automatiquement d'une remise de 10 % sur le total de votre commande."},
 {"q":"Puis-je consulter un extrait avant d'acheter ?","a":"Oui. La plupart des ouvrages proposent un extrait gratuit à télécharger en PDF : ouvrez la fiche de l'ouvrage et cliquez sur « Lire un extrait gratuit ». Pour les autres, écrivez-nous sur WhatsApp et nous vous enverrons un aperçu."},
 {"q": "Qu'est-ce que l'espace abonnés ?", "a": "C'est un espace privé du site, réservé aux abonnés. Vous y lisez nos sujets corrigés en entier, nos fiches de révision, nos QCM chronométrés avec correction détaillée, nos textes officiels et notre jurisprudence. L'espace VIP y ajoute nos ouvrages complets et nos vidéos réservées. Les contenus se lisent en ligne, sur téléphone comme sur ordinateur, et sont réservés à votre usage personnel."},
+{"q": "Puis-je essayer l'espace abonnés avant de payer ?", "a": "Oui. Créez votre compte, puis ouvrez l'essai gratuit depuis votre espace : pendant 24 heures, vous lisez les sujets corrigés, les fiches de révision, les QCM, les textes officiels et la jurisprudence, sans payer. L'espace VIP et les corrigés des concours blancs restent réservés aux abonnés. L'essai est accordé une fois par personne."},
 {"q": "Combien coûte l'abonnement ?", "a": "500 FCFA pour un jour, 2 000 FCFA pour une semaine, 3 500 FCFA pour deux semaines, 5 000 FCFA pour un mois, 9 000 FCFA pour deux mois, 12 500 FCFA pour trois mois, 22 500 FCFA pour six mois et 40 000 FCFA pour douze mois. L'abonnement VIP, qui ajoute les ouvrages complets et les vidéos réservées, coûte le triple : de 1 500 FCFA pour un jour à 120 000 FCFA pour douze mois."},
 {"q": "Comment activer mon abonnement ?", "a": "Créez votre compte sur la page Espace abonnés, puis réglez la formule choisie par Orange Money, MTN MoMo, Wave ou Moov Money. Saisissez ensuite la référence du paiement dans votre espace, ou envoyez-la-nous sur WhatsApp. Nous activons votre accès dès la vérification du paiement, pour toute la durée de votre formule."},
 {"q": "Qu'est-ce que l'espace VIP ?", "a": "C'est la partie de l'espace abonnés qui réunit nos ouvrages complets, nos vidéos réservées et nos documents VIP, avec chaque mois la correction d'une copie, notée sur 20 par un correcteur. Il est ouvert aux abonnés VIP, quelle que soit la durée choisie, au triple du prix de l'abonnement normal. L'abonnement normal donne accès à tout le reste : sujets corrigés, fiches de révision, QCM, textes officiels, jurisprudence et, à partir d'une semaine, corrigés des concours blancs. Vous pouvez passer au VIP à tout moment depuis votre espace ou sur WhatsApp."},

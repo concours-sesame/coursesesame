@@ -31,6 +31,30 @@
     } catch (e) { /* session illisible : visite anonyme */ }
     var corps = JSON.stringify({ p_visiteur: id, p_page: location.pathname + location.hash.replace(/^#(epreuve|connexion|inscription).*/, ""), p_provenance: prov, p_appareil: appareil });
     var envoyer = function (h) { return fetch(URL_ + "/rest/v1/rpc/enregistrer_visite", { method: "POST", headers: h, body: corps, keepalive: true }); };
+    // Clics qui mènent à une commande ou à un compte : le bouton et la page, avec le même identifiant anonyme
+    // (table clics, 180 jours). « whatsapp » : tout lien ou bouton WhatsApp ; « panier » : ajout d'un ouvrage ;
+    // « compte » : lien vers la création de compte ; « essai » : ouverture de l'essai gratuit ; « formules ».
+    var action = function (el) {
+      if (el.closest("#eaEssai")) return "essai";
+      if (el.closest('a[href*="wa.me"], [data-wa-order], #orderBtn, .drawer .btn-wa')) return "whatsapp";
+      if (el.closest(".add-btn, [data-pack], [data-add]")) return "panier";
+      var a = el.closest("a[href]");
+      if (!a) return "";
+      var h = a.getAttribute("href");
+      if (/espace-abonnes\/?(#inscription)?$/.test(h) && !/espace-abonnes\/$/.test(location.pathname)) return "compte";
+      if (/#inscription$/.test(h)) return "compte";
+      if (/#formules$/.test(h)) return "formules";
+      if (/\.pdf$/.test(h)) return "extrait";
+      return "";
+    };
+    document.addEventListener("click", function (e) {
+      try {
+        var nom = e.target && e.target.closest ? action(e.target) : "";
+        if (!nom) return;
+        fetch(URL_ + "/rest/v1/rpc/enregistrer_clic", { method: "POST", headers: { "apikey": CLE, "Content-Type": "application/json" },
+          body: JSON.stringify({ p_visiteur: id, p_page: location.pathname, p_action: nom }), keepalive: true }).catch(function () {});
+      } catch (err) { /* jamais d'erreur visible */ }
+    }, true);
     envoyer(entetes).then(function (r) {
       // Jeton refusé (session expirée côté serveur) : la visite est enregistrée comme anonyme
       if (r.status === 401 && entetes.Authorization) { delete entetes.Authorization; envoyer(entetes); }

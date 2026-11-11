@@ -92,4 +92,6 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
   suite (`data-repli-mobile` pour le téléphone). `data-rubriques` sur une barre de liens `.pill` et `data-rubrique`
   sur chaque groupe affichent une rubrique à la fois (fiches par matière, ouvrages par collection). Sans
   JavaScript, tout reste visible.
+- Essai gratuit de l'espace abonnés : annoncé sur le site quand `ESSAI_GRATUIT` (`assets/js/data.js`) est actif ;
+  l'essai lui-même est tenu par la base (voir `supabase/README.md`).
 - Aucune image n'est chargée depuis un autre site : toute photographie ajoutée doit être déposée dans `assets/img/`.
