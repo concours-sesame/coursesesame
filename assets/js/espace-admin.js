@@ -37,6 +37,7 @@
   let telechargements = [], pagesLues = [], limitesTele = null, rechercheT = "";
   let visites = [], visitesJours = [], provenances = [], retombeesFb = [], prospects = [], temoignages = [], calendrier = [], filtreV = "tous", minuterieVisites = null; // onglet Visites (site public)
   let emailsReglages = null, emailsEnvoyes = [], etatBrevo = null;
+  let essai = null; // essai gratuit : réglage et compteurs (fonction admin_essai de la base)
   let entonnoir = null, periodeVentes = 30, chargementVentes = false; // onglet Ventes (admin_entonnoir, chargé à l'ouverture)
   let deuxEtapes = true; // validation en deux étapes activée pour ce compte
   let facteurs = []; // applications d'authentification validées (téléphone, clés de secours)
@@ -235,6 +236,7 @@
     visites = vi.data || []; visitesJours = vj.data || [];
     provenances = pv.data || []; retombeesFb = fr.data || []; prospects = pr.data || [];
     // Témoignages d'admis (page temoignage/) : à vérifier puis publier sur l'accueil
+    try { const es = await client.rpc("admin_essai"); essai = (es.data || [])[0] || null; } catch (e) { essai = null; }
     try { const cal = await client.from("calendrier_concours").select("*").order("debut", { ascending: false }).limit(300); calendrier = cal.data || []; } catch (e) { calendrier = []; }
     try { const tg = await client.from("temoignages_admis").select("*").order("cree_le", { ascending: false }).limit(200); temoignages = tg.data || []; } catch (e) { temoignages = []; }
     demandes = da.data || [];
@@ -865,9 +867,26 @@
     el.innerHTML = `<span class="ad-pastille${enDirect ? " ad-pastille-ok" : ""}" aria-hidden="true"></span>${enDirect ? "En direct : la liste se met à jour dès qu'un abonnement change." : "Actualisation automatique toutes les 30 secondes."}${derniereMaj ? ` Mise à jour à ${heure(derniereMaj)}.` : ""}${majEnAttente ? ` <button class="btn btn-gold btn-sm" type="button" data-action="actualiser">Nouveautés : afficher</button>` : ""}`;
   }
 
+  // Essai gratuit de l'espace abonnés : l'administrateur y met fin, ou le propose de nouveau, d'un bouton
+  function blocEssai() {
+    if (!essai) return "";
+    const n = Number(essai.en_cours) || 0;
+    return `<section class="ad-bloc ad-essai">
+        <h3>Essai gratuit <span class="ad-badge ${essai.actif ? "ad-actif" : "ad-attente"}">${essai.actif ? "Proposé aux nouveaux inscrits" : "Arrêté"}</span></h3>
+        <div class="ad-stats"><div><b>${Number(essai.ouverts) || 0}</b><span>Essais ouverts</span></div><div><b>${n}</b><span>En cours</span></div><div><b>${Number(essai.devenus_abonnes) || 0}</b><span>Devenus abonnés payants</span></div></div>
+        <div class="ad-outils-ligne">
+          <button class="btn ${essai.actif ? "btn-ghost ad-danger" : "btn-navy"} btn-sm" type="button" data-action="essai-basculer">${essai.actif ? "Mettre fin à l'essai gratuit" : "Proposer de nouveau l'essai gratuit"}</button>
+          ${n ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="essai-terminer">Arrêter ${n > 1 ? `les ${n} essais en cours` : "l'essai en cours"}</button>` : ""}
+        </div>
+        <p class="ad-note">${essai.actif
+          ? `Tout nouvel inscrit peut ouvrir une fois ${essai.jours > 1 ? `${essai.jours} jours` : "24 heures"} d'abonnement sans payer : ni espace VIP, ni corrigés des concours blancs, ni téléchargement. Y mettre fin retire aussi l'annonce de l'essai du site, en dix minutes au plus. Les essais déjà ouverts vont à leur terme, sauf si vous les arrêtez.`
+          : "L'essai gratuit n'est plus proposé et son annonce est retirée du site. Les comptes qui l'ont déjà utilisé ne pourront pas le rouvrir."}
+          Les essais apparaissent dans la liste ci-dessous comme un abonnement de 0 FCFA, moyen « Essai gratuit ».</p>
+      </section>`;
+  }
   function panneauAbonnes() {
     const liste = listeFiltree();
-    return `<div class="ad-outils-ligne">
+    return `${blocEssai()}<div class="ad-outils-ligne">
         <button class="btn btn-ghost btn-sm" type="button" data-action="copier-numeros">Copier les numéros (${liste.length})</button>
         <button class="btn btn-ghost btn-sm" type="button" data-action="exporter" data-quoi="abonnes">Exporter les abonnés (Excel)</button>
         ${filtre === "anciens" && liste.length ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="supprimer-anciens">Supprimer ces ${liste.length} comptes</button>` : ""}
@@ -1421,6 +1440,7 @@
 
   /* ---------- Journal ---------- */
   const LIBELLES_JOURNAL = {
+    essai_ouvert: "Essai gratuit proposé", essai_ferme: "Essai gratuit arrêté",
     abonnement_active: "Abonnement activé", abonnement_supprime: "Abonnement supprimé", acces_coupe: "Accès coupé", abonnement_modifie: "Abonnement modifié",
     abonnement_suspendu: "Abonnement suspendu", abonnement_reactive: "Abonnement réactivé", contenu_ajoute: "Contenu ajouté", contenu_supprime: "Contenu supprimé",
     contenu_publie: "Contenu publié", contenu_retire: "Contenu retiré", contenu_modifie: "Contenu modifié", commande_ajoutee: "Commande enregistrée",
@@ -1861,6 +1881,20 @@
     if (act && act.startsWith("tiktok-")) { await actionTiktok(act, b); return; }
     if (act === "sortir") { debrancherDirect(); await client.auth.signOut(); connexion(); return; }
     if (act === "masquer-retour") { retourAFaire = ""; redessiner(); return; }
+    if (act === "essai-basculer" || act === "essai-terminer") {
+      const fermer = act === "essai-basculer" && essai.actif, terminer = act === "essai-terminer";
+      const n = Number(essai.en_cours) || 0;
+      const question = terminer ? `Arrêter ${n > 1 ? `les ${n} essais gratuits en cours` : "l'essai gratuit en cours"} ? L'accès de ${n > 1 ? "ces inscrits" : "cet inscrit"} se ferme tout de suite.`
+        : fermer ? "Mettre fin à l'essai gratuit ? Les nouveaux inscrits ne pourront plus l'ouvrir et son annonce sera retirée du site. Les essais déjà ouverts iront à leur terme."
+        : "Proposer de nouveau l'essai gratuit aux nouveaux inscrits ? Son annonce reviendra sur le site.";
+      if (!confirm(question)) return;
+      const { data, error } = await client.rpc("admin_regler_essai", { p_actif: terminer ? essai.actif : !essai.actif, p_terminer: terminer });
+      if (error) return toast(messageErreur(error));
+      // L'annonce du site suit le réglage : ce navigateur relit l'état tout de suite
+      try { localStorage.removeItem("sesame-essai"); } catch (e) { /* stockage indisponible */ }
+      await recharger(terminer ? `${Number(data) || 0} essai${Number(data) > 1 ? "s" : ""} arrêté${Number(data) > 1 ? "s" : ""}.` : fermer ? "L'essai gratuit est arrêté." : "L'essai gratuit est de nouveau proposé.");
+      return;
+    }
     if (act === "emails-basculer") {
       const actif = !emailsReglages.actif;
       if (actif && !confirm("Ouvrir l'envoi des e-mails ? Les bienvenues, rappels et annonces partiront automatiquement.")) return;

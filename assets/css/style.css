@@ -2207,3 +2207,12 @@ a.ea-jour-carte{text-decoration:none;color:inherit}
 .accueil .essai-annonce b{color:var(--clair)}
 .offre-valeur{margin:0 0 1rem;padding:.7rem .9rem;border:1px solid var(--gold);border-radius:var(--r-sm);color:var(--clair)}
 .offre-valeur b{color:var(--gold-2)}
+
+/* Essai gratuit : chaque mention existe en deux versions ; assets/js/essai.js pose data-essai="non" sur <html>
+   quand l'administrateur a mis fin à l'essai, et la version sans essai prend la place de l'autre */
+[data-si-sans-essai]{display:none}
+[data-essai="non"] [data-si-essai]{display:none!important}
+[data-essai="non"] [data-si-sans-essai]{display:revert}
+[data-essai="non"] .hero-facts li:has(>[data-si-essai]){display:none}
+.ad-essai{padding:1rem 1.1rem;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);background:#fff}
+.ad-essai .ad-stats{margin:.2rem 0 .9rem}
