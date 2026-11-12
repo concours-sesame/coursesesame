@@ -77,6 +77,20 @@ const LIVRES_ABONNEMENT = (() => {
 const WA_URL = "https://wa.me/" + WA;
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const stripTags = s => String(s).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+// La maison, telle que les moteurs de recherche doivent la reconnaître : son nom complet, ses autres noms, son
+// pays et ses pages officielles. « Sésame » désigne aussi un concours français d'écoles de commerce : le pays et
+// les concours préparés lèvent la confusion.
+const FACEBOOK = "https://www.facebook.com/1075997775588079";
+const TIKTOK = "https://www.tiktok.com/@sesamesaj";
+const ORGANISATION = {
+  "@type": "Organization", "@id": SITE + "#maison", name: "Les Cours Sésame et SAJ",
+  alternateName: ["Cours Sésame et SAJ", "Cours Sésame", "Savoirs & Atouts Judiciaires"],
+  url: SITE, logo: SITE + "assets/img/icone-512.png",
+  description: "Éditeur d'ouvrages et espace de préparation en ligne aux concours de Côte d'Ivoire : magistrature, Greffe, administration pénitentiaire et EPPJEJ (INFJ), et ENA.",
+  address: { "@type": "PostalAddress", addressLocality: "Abidjan", addressCountry: "CI" },
+  areaServed: { "@type": "Country", name: "Côte d'Ivoire" },
+  sameAs: [FACEBOOK, TIKTOK]
+};
 const jsonld = obj => `<script type="application/ld+json">${JSON.stringify(obj)}</script>`;
 
 /* ---------- Outils sur index.html ---------- */
@@ -439,6 +453,8 @@ const SUJETS_PAGES = [];
   SUJETS_PAGES.forEach((x, i) => { if (SUJETS_PAGES.findIndex(y => y.adresse === x.adresse) !== i) throw new Error("deux sujets ont la même adresse : " + x.adresse); });
 }
 const sujetsDe = o => SUJETS_PAGES.filter(x => x.ouvrage && x.ouvrage.titre === o.titre);
+// « 1 sujet corrigé », « 16 sujets corrigés » : les deux mots s'accordent
+const sujetsCorriges = n => `${n} sujet${n > 1 ? "s" : ""} corrigé${n > 1 ? "s" : ""}`;
 const sujetsDuConcours = id => SUJETS_PAGES.filter(x => x.concours.includes(id));
 const courts = ids => ids.map(id => CONCOURS.find(c => c.id === id).court).join(", ");
 // « dissertation corrigée », « cas pratique corrigé »…
@@ -586,6 +602,21 @@ function espaceBand(prefix) {
 }
 
 /* ---------- Pages concours ---------- */
+// Nom de chaque concours tel qu'un candidat le cherche, avec le pays et l'institut
+const NOMS_RECHERCHE = {
+  infj: "Concours de la magistrature en Côte d'Ivoire (INFJ)", greffe: "Concours du Greffe en Côte d'Ivoire (INFJ)",
+  penitentiaire: "Concours pénitentiaire en Côte d'Ivoire (INFJ)", eppjej: "Concours EPPJEJ en Côte d'Ivoire (INFJ)",
+  ena: "Concours de l'ENA de Côte d'Ivoire"
+};
+// Séries de concours blancs en accès libre, et leur programme (mêmes textes que la page concours-blancs/)
+const SERIES_BLANCS = { infj: 10, greffe: 15, penitentiaire: 15, eppjej: 15, ena: 15 };
+const PROGRAMME_BLANCS = {
+  infj: "Nos concours blancs reprennent la présélection en 2 heures, puis les cinq épreuves écrites en 4 heures.",
+  greffe: "Nos concours blancs couvrent les trois cycles (administrateurs, attachés, secrétaires des greffes et parquets), avec le sujet d'ordre général, les épreuves juridiques et l'informatique.",
+  penitentiaire: "Nos concours blancs couvrent les trois cycles (administrateurs, attachés, agents d'encadrement), avec le droit pénal, le droit pénitentiaire et l'étude de texte.",
+  eppjej: "Nos concours blancs couvrent les trois cycles, avec le sujet d'ordre général, les droits de l'enfant, l'organisation judiciaire ou administrative, le statut de la fonction publique et l'informatique.",
+  ena: "Nos concours blancs couvrent les trois cycles, avec la présélection en vrai ou faux, la note de synthèse, le sujet d'ordre général, les problèmes économiques et sociaux et le droit administratif ou constitutionnel selon le cycle."
+};
 const urls = [SITE];
 for (const c of CONCOURS) {
   const prefix = "../../";
@@ -601,13 +632,25 @@ for (const c of CONCOURS) {
   // Vidéos du concours : la présentation d'abord, puis les vidéos propres au concours
   const vids = VIDS.filter(v => v.concours.includes(c.id));
   const nomCourt = c.id === "ena" ? "de l'ENA" : c.id === "infj" ? "de la Magistrature" : `${c.court}`;
-  const title = [`Concours ${nomCourt} 2027 : ouvrages, méthode et sujet corrigé`, `Concours ${nomCourt} 2027 : ouvrages et méthode`];
+  // Le pays et l'institut figurent dans le titre : ce sont les mots que tape un candidat ivoirien
+  const nomRecherche = NOMS_RECHERCHE[c.id];
+  const title = [`${nomRecherche} 2027 : épreuves et ouvrages`, `${nomRecherche} 2027`, nomRecherche];
   const series = [...new Set(items.map(o => R.coverParts(o.titre).serie).filter(Boolean))].map(s => s.toLowerCase());
-  const description = `${plural(items.length, "ouvrage")} pour le ${c.nom} : résumés, annales corrigées et méthode. Fiches méthode, sujets corrigés, commande sur WhatsApp.`;
+  const description = `${nomRecherche} : les épreuves, la méthode, ${sujetsCorriges(sujetsDuConcours(c.id).length)}, ${SERIES_BLANCS[c.id]} concours blancs gratuits et ${plural(items.length, "ouvrage")} de préparation.`;
+  // Questions que se pose un candidat : les réponses reprennent ce que le site publie déjà, rien d'autre
+  const tombes = sujetsDuConcours(c.id).filter(x => x.session).length;
+  const duConcours = { infj: "de la magistrature", greffe: "du Greffe", penitentiaire: "de l'administration pénitentiaire", eppjej: "de l'EPPJEJ", ena: "de l'ENA" }[c.id];
+  const questions = [
+    [`Quelles sont les épreuves du ${c.nom} ?`, `Les épreuves principales sont les suivantes : ${epreuves.join(", ")}. ${PROGRAMME_BLANCS[c.id]}`],
+    [`Comment s'entraîner gratuitement au concours ${duConcours} ?`, `Le site propose ${SERIES_BLANCS[c.id]} concours blancs gratuits et chronométrés pour ce concours, des QCM gratuits corrigés, un test de niveau sur 20 et l'essentiel de chaque fiche de révision en accès libre.`],
+    [`Où trouver des sujets corrigés du concours ${duConcours} ?`, `${sujetsCorriges(sujetsDuConcours(c.id).length)} pour ce concours ${sujetsDuConcours(c.id).length > 1 ? "sont publiés" : "est publié"} sur le site${tombes ? `, dont ${tombes} réellement tombé${tombes > 1 ? "s" : ""} au concours` : ""}. Une partie des corrigés se lit en entier sur le site, les autres dans l'espace abonnés.`],
+    [`Quels ouvrages pour préparer le concours ${duConcours} ?`, `${plural(items.length, "ouvrage")} de préparation, à partir de ${fmt(minPrix)} FCFA : résumés de cours, annales corrigées et guides de méthode, écrits pour le droit ivoirien. La commande se passe sur WhatsApp et la livraison se fait dans toute la Côte d'Ivoire.`],
+    [`Où trouver les conditions et les dates d'inscription ?`, `Les conditions et les dates d'inscription sont publiées par l'organisateur du concours, ${c.id === "ena" ? "l'École Nationale d'Administration" : "l'Institut National de Formation Judiciaire"}. Reportez-vous à ses communiqués officiels : nous ne les reproduisons pas ici.`]
+  ];
 
   const body = `${subHero({
-    crumbs: [["Accueil", prefix], ["Concours", prefix + "#concours"], [c.court, ""]],
-    h1: `Concours ${nomCourt}&nbsp;: ouvrages et méthode`,
+    crumbs: [["Accueil", prefix], ["Concours", prefix + "concours/"], [c.court, ""]],
+    h1: `${nomRecherche.replace(/ \(INFJ\)$/, "")}&nbsp;: épreuves, méthode et ouvrages`,
     lead: m ? m.conseil : "",
     ctas: `<a href="#ouvrages" class="btn btn-gold">Voir les ${items.length} ouvrages${arrow}</a><a href="${WA_URL}" target="_blank" rel="noopener" class="btn btn-ghost">${waIcon}Conseil personnalisé</a>`,
     facts: [`<b>${items.length}</b> ouvrages`, `<b>${epreuves.length}</b> épreuves principales`, `à partir de <b>${fmt(minPrix)} FCFA</b>`, `<b>-10 %</b> dès 3 ouvrages`]
@@ -654,12 +697,20 @@ ${autresSujets.length ? `<section class="section${sujet ? " section-top-0" : ""}
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">En accès libre</span><h2 class="h-section">D'autres sujets <em>corrigés</em></h2></div>
-      <p class="lead">${plural(sujetsDuConcours(c.id).length, "sujet corrigé")} pour le concours ${c.court}, à lire gratuitement en entier.</p>
+      <p class="lead">${sujetsCorriges(sujetsDuConcours(c.id).length)} pour le concours ${c.court}, à lire gratuitement en entier.</p>
     </div>
     <div class="ep-cards" data-repli="6" data-repli-mobile="3" data-repli-nom="sujets">${autresSujets.slice(0, 6).map((x, i) => sujetCard(x, prefix, i)).join("")}</div>
     <div class="apercu-cta reveal"><a class="btn btn-ghost" href="${prefix}sujets/#${c.id}">Tous les sujets corrigés ${c.court}${arrow}</a></div>
   </div>
 </section>` : ""}
+
+<section class="section section-cream" id="questions">
+  <div class="wrap faq-grid">
+    <div><h2 class="h-section">Questions fréquentes</h2>
+      <p class="lead">Sur le ${c.nom}.</p></div>
+    <div>${questions.map(([q, r]) => `<details class="faq-item"><summary>${q}<i></i></summary><p>${r}</p></details>`).join("")}</div>
+  </div>
+</section>
 
 <section class="section concours-section">
   <div class="wrap">
@@ -674,7 +725,51 @@ ${contactCTA(prefix)}`;
 
   write(`concours/${c.slug}/index.html`, page({
     prefix, title, description, url, body, bodyAttrs: ` data-cat="${c.id}"`,
-    ld: [breadcrumb([["Accueil", SITE], ["Concours " + c.court, url]]), productList(items), ...vids.map(videoLD)]
+    ld: [breadcrumb([["Accueil", SITE], ["Concours", SITE + "concours/"], [c.court, url]]), productList(items), ...vids.map(videoLD),
+      { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: questions.map(([q, r]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: r } })) }]
+  }));
+  urls.push(url);
+}
+
+/* ---------- Page « Concours » : les cinq concours préparés ---------- */
+{
+  const prefix = "../";
+  R.setRoot(prefix);
+  const url = SITE + "concours/";
+  const body = `${subHero({
+    crumbs: [["Accueil", prefix], ["Concours", ""]],
+    h1: `Les concours de l'INFJ et de l'ENA en Côte d'Ivoire`,
+    lead: `Magistrature, Greffe, administration pénitentiaire et EPPJEJ à l'Institut National de Formation Judiciaire, et École Nationale d'Administration : pour chaque concours, les épreuves, la méthode, des sujets corrigés, des concours blancs gratuits et nos ouvrages.`,
+    ctas: `<a href="#liste" class="btn btn-gold">Choisir mon concours${arrow}</a><a href="${prefix}concours-blancs/" class="btn btn-ghost">Passer un concours blanc</a>`,
+    facts: [`<b>${CONCOURS.length}</b> concours`, `<b>${Object.values(SERIES_BLANCS).reduce((a, b) => a + b, 0)}</b> concours blancs gratuits`, `<b>${SUJETS_PAGES.length}</b> sujets corrigés`, `<b>${LIVRES.length}</b> ouvrages`]
+  })}
+
+<section class="section" id="liste">
+  <div class="wrap">
+    <div class="concours-liste">${CONCOURS.map(c => {
+      const m = METHODO.find(x => x.concours === c.long) || METHODO.find(x => x.concours.includes(c.court));
+      const n = byCat(c.id).length;
+      return `<article class="concours-fiche">
+        <h2><a href="${prefix}concours/${c.slug}/">${NOMS_RECHERCHE[c.id]}</a></h2>
+        <p>${m ? m.conseil : ""}</p>
+        <p class="concours-fiche-epreuves"><b>Épreuves principales.</b> ${m ? m.epreuves : ""}.</p>
+        <p class="concours-fiche-liens"><a class="btn btn-navy btn-sm" href="${prefix}concours/${c.slug}/">Voir la page du concours</a><a href="${prefix}concours-blancs/">${SERIES_BLANCS[c.id]} concours blancs</a><a href="${prefix}sujets/#${c.id}">${sujetsCorriges(sujetsDuConcours(c.id).length)}</a><a href="${prefix}concours/${c.slug}/#ouvrages">${plural(n, "ouvrage")}</a></p>
+      </article>`;
+    }).join("")}</div>
+  </div>
+</section>
+
+${lettreHTML(prefix)}
+
+${contactCTA(prefix)}`;
+  write("concours/index.html", page({
+    prefix, url, body,
+    title: ["Concours INFJ et ENA en Côte d'Ivoire : épreuves et préparation", "Concours INFJ et ENA en Côte d'Ivoire"],
+    description: `Les concours de Côte d'Ivoire que nous préparons : magistrature, Greffe, pénitentiaire, EPPJEJ (INFJ) et ENA. Épreuves, méthode, sujets corrigés et concours blancs gratuits.`,
+    ld: [breadcrumb([["Accueil", SITE], ["Concours", url]]), {
+      "@context": "https://schema.org", "@type": "ItemList", name: "Concours préparés",
+      itemListElement: CONCOURS.map((c, i) => ({ "@type": "ListItem", position: i + 1, url: `${SITE}concours/${c.slug}/`, name: NOMS_RECHERCHE[c.id] }))
+    }]
   }));
   urls.push(url);
 }
@@ -2045,7 +2140,8 @@ index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
 index = index.replace(/(data-count-from="ouvrages">)[^<]*(<)/g, `$1${LIVRES.length}$2`).replace(/(data-count-from="concours">)[^<]*(<)/g, `$1${CONCOURS.length}$2`);
 index = inject(index, "stats", (ESSAI ? '<script defer src="assets/js/essai.js"></script>' : "") + STATS + '<script defer src="assets/js/visite.js"></script>');
 index = inject(index, "jsonld", "\n" + [
-  { "@context": "https://schema.org", "@type": "WebSite", name: "Les Cours Sésame et SAJ", url: SITE, inLanguage: "fr" },
+  { "@context": "https://schema.org", "@type": "WebSite", name: "Les Cours Sésame et SAJ", alternateName: ["Cours Sésame et SAJ", "coursesesame.com"], url: SITE, inLanguage: "fr", publisher: { "@id": SITE + "#maison" } },
+  { "@context": "https://schema.org", ...ORGANISATION },
   { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
   ...VIDS.map(videoLD)
 ].map(jsonld).join("\n") + "\n");

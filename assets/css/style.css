@@ -2216,3 +2216,13 @@ a.ea-jour-carte{text-decoration:none;color:inherit}
 [data-essai="non"] .hero-facts li:has(>[data-si-essai]){display:none}
 .ad-essai{padding:1rem 1.1rem;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);background:#fff}
 .ad-essai .ad-stats{margin:.2rem 0 .9rem}
+
+/* Page « Concours » : une fiche par concours */
+.concours-liste{display:grid;gap:clamp(18px,2.4vw,28px)}
+.concours-fiche{padding:clamp(20px,3vw,32px);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);background:#fff}
+.concours-fiche h2{font-family:var(--display);font-weight:600;font-size:clamp(1.35rem,2.4vw,1.75rem);line-height:1.2;margin-bottom:.6rem}
+.concours-fiche h2 a{color:var(--navy);text-decoration:none}
+.concours-fiche h2 a:hover{color:var(--gold-ink)}
+.concours-fiche p{color:#39445a;max-width:78ch;margin-bottom:.7rem}
+.concours-fiche-liens{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.2rem;margin:1rem 0 0!important;max-width:none!important}
+.concours-fiche-liens a:not(.btn){font-weight:600;color:var(--navy);text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:3px}

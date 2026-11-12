@@ -92,6 +92,10 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
   suite (`data-repli-mobile` pour le téléphone). `data-rubriques` sur une barre de liens `.pill` et `data-rubrique`
   sur chaque groupe affichent une rubrique à la fois (fiches par matière, ouvrages par collection). Sans
   JavaScript, tout reste visible.
+- Référencement : chaque page de concours porte le pays et l'institut dans son titre (`NOMS_RECHERCHE` dans
+  `tools/build.js`) et se termine par des questions fréquentes, tirées de ce que le site publie déjà. La page
+  `concours/` présente les cinq concours. L'accueil décrit la maison aux moteurs de recherche (`ORGANISATION` :
+  autres noms, pays, page Facebook et compte TikTok, à tenir à jour si ces adresses changent).
 - Essai gratuit de l'espace abonnés : annoncé sur le site quand `ESSAI_GRATUIT` (`assets/js/data.js`) est actif ;
   l'essai lui-même est tenu par la base (voir `supabase/README.md`).
 - Aucune image n'est chargée depuis un autre site : toute photographie ajoutée doit être déposée dans `assets/img/`.
