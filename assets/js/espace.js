@@ -838,7 +838,7 @@
         <div class="field full"><label for="iParrain">Code de parrainage (facultatif)</label><input id="iParrain" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" value="${esc(codeParrainRecu())}">${codeParrainRecu() ? `<small class="ea-aide">Vous venez de la part d'un ami : son code est déjà indiqué, vous n'avez rien à faire.</small>` : ""}</div>
         <label class="ea-accord full"><input type="checkbox" id="iAccord" required><span>J'accepte que ces informations servent à gérer mon abonnement, comme l'expliquent les <a href="${ROOT}mentions-legales/#espace-abonnes" target="_blank">mentions légales</a>.</span></label>
         <p class="ea-msg" role="alert"></p>
-        <button class="btn btn-navy" type="submit">${typeof ESSAI_GRATUIT !== "undefined" && ESSAI_GRATUIT.actif ? "Créer mon compte et essayer gratuitement" : "Créer mon compte"}</button>
+        <button class="btn btn-navy" type="submit">${typeof ESSAI_GRATUIT !== "undefined" && ESSAI_GRATUIT.actif ? `<span data-si-essai>Créer mon compte et essayer gratuitement</span><span data-si-sans-essai>Créer mon compte</span>` : "Créer mon compte"}</button>
       </form>
     </div>`;
   }

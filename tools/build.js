@@ -59,6 +59,9 @@ const VIP_JOUR = TARIFS_VIP.find(t => t.cle === "vip-j1");
 const VIP_MOIS = TARIFS_VIP.find(t => t.cle === "vip-m1");
 // Essai gratuit de l'espace abonnés (ESSAI_GRATUIT dans data.js) : annoncé sur l'accueil et sur la page de l'espace
 const ESSAI = ctx.D.ESSAI_GRATUIT && ctx.D.ESSAI_GRATUIT.actif ? ctx.D.ESSAI_GRATUIT : null;
+// L'administrateur peut arrêter l'essai sans régénérer le site : chaque mention existe en deux versions, et
+// assets/js/essai.js retire celle de l'essai quand la base dit qu'il n'est plus proposé (attribut data-essai="non").
+const deuxVersions = (avec, sans) => `<span data-si-essai>${avec}</span><span data-si-sans-essai>${sans}</span>`;
 const vipDes = VIP_JOUR ? `dès ${VIP_JOUR.prix} FCFA la journée` : "sur abonnement VIP";
 const LIVRES_ABONNEMENT = (() => {
   const livres = new Map();
@@ -190,7 +193,7 @@ function prixJourHTML() {
 }
 
 function faqHTML() {
-  return FAQ.map(f => `<details class="faq-item"><summary>${f.q}<i></i></summary><p>${f.a}</p></details>`).join("");
+  return FAQ.map(f => `<details class="faq-item"${/^Puis-je essayer l'espace abonnés/.test(f.q) ? " data-si-essai" : ""}><summary>${f.q}<i></i></summary><p>${f.a}</p></details>`).join("");
 }
 
 function sujetHTML(s) {
@@ -356,7 +359,7 @@ ${headApp(prefix)}
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="${prefix}assets/fonts/mona-sans-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="${prefix}assets/fonts/source-serif-4-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="${prefix}assets/css/style.css">${stats ? "\n" + STATS + `\n<script defer src="${prefix}assets/js/visite.js"></script>` : ""}
+<link rel="stylesheet" href="${prefix}assets/css/style.css">${ESSAI ? `\n<script defer src="${prefix}assets/js/essai.js"></script>` : ""}${stats ? "\n" + STATS + `\n<script defer src="${prefix}assets/js/visite.js"></script>` : ""}
 ${ld.map(jsonld).join("\n")}
 </head>
 <body data-root="${prefix}"${bodyAttrs}>
@@ -1630,7 +1633,7 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
   <div class="wrap">
     <div class="section-head">
       <h2 class="h-section">Les formules</h2>
-      <p class="lead">Deux abonnements, huit durées. La durée court à partir de l'activation de votre accès, et une prolongation s'ajoute à la fin de l'abonnement en cours.${ESSAI ? ` Tout nouvel inscrit peut d'abord essayer l'abonnement gratuitement pendant ${ESSAI.duree}.` : ""}</p>
+      <p class="lead">Deux abonnements, huit durées. La durée court à partir de l'activation de votre accès, et une prolongation s'ajoute à la fin de l'abonnement en cours.${ESSAI ? `<span data-si-essai> Tout nouvel inscrit peut d'abord essayer l'abonnement gratuitement pendant ${ESSAI.duree}.</span>` : ""}</p>
     </div>
     <div class="offres">
       <article class="offre">
@@ -1645,15 +1648,15 @@ const SCRIPTS_ESPACE = ["assets/vendor/supabase-2.117.0.js", "assets/js/espace-c
         ${grille(TARIFS_VIP)}
       </article>` : ""}
     </div>
-    <p class="section-suite"><a class="btn btn-navy" href="#inscription">${ESSAI ? "Créer mon compte et essayer gratuitement" : "Créer mon compte"}</a></p>
+    <p class="section-suite"><a class="btn btn-navy" href="#inscription">${ESSAI ? deuxVersions("Créer mon compte et essayer gratuitement", "Créer mon compte") : "Créer mon compte"}</a></p>
   </div>
 </section>` : "";
   const body = `${subHero({
     crumbs: [["Accueil", prefix], ["Espace abonnés", ""]],
     h1: `L'espace abonnés`,
     lead: `Sujets corrigés, fiches de révision, QCM chronométrés, révision du jour et simulateur de grand oral et, dans l'espace VIP, nos ouvrages complets et nos vidéos réservées. Créez votre compte, réglez par Mobile Money, et votre accès s'ouvre pour la durée de votre abonnement.`,
-    ctas: `<a href="#inscription" class="btn btn-gold">${ESSAI ? "Essayer gratuitement" : "Créer mon compte"}${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${tarifs.length ? `<a href="#formules" class="btn btn-ghost">Voir les formules</a>` : ""}`,
-    facts: [...(ESSAI ? [`<b>Essai gratuit</b> de ${ESSAI.duree}`] : []), ...tarifs.filter(t => t.cle === "j1").map(t => `Abonnement dès <b>${t.prix} FCFA</b> la journée`), ...(VIP_JOUR ? [`VIP dès <b>${VIP_JOUR.prix} FCFA</b> la journée`] : []), "Paiement par Mobile Money"]
+    ctas: `<a href="#inscription" class="btn btn-gold">${ESSAI ? deuxVersions("Essayer gratuitement", "Créer mon compte") : "Créer mon compte"}${arrow}</a><a href="#connexion" class="btn btn-ghost">Se connecter</a>${tarifs.length ? `<a href="#formules" class="btn btn-ghost">Voir les formules</a>` : ""}`,
+    facts: [...(ESSAI ? [`<span data-si-essai><b>Essai gratuit</b> de ${ESSAI.duree}</span>`] : []), ...tarifs.filter(t => t.cle === "j1").map(t => `Abonnement dès <b>${t.prix} FCFA</b> la journée`), ...(VIP_JOUR ? [`VIP dès <b>${VIP_JOUR.prix} FCFA</b> la journée`] : []), "Paiement par Mobile Money"]
   })}
 
 <section class="section espace-section" id="espace-app">
@@ -1691,7 +1694,7 @@ ${vitrine}
       <p class="lead">Le paiement se fait comme pour nos ouvrages : par Mobile Money, avec une confirmation sur WhatsApp.</p>
     </div>
     <ol class="espace-etapes">
-      <li class="espace-etape"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.${ESSAI ? ` Vous pouvez alors essayer l'abonnement gratuitement pendant ${ESSAI.duree}.` : ""}</span></li>
+      <li class="espace-etape"><b>Créez votre compte</b><span>En une minute, avec votre adresse e-mail et votre numéro WhatsApp.${ESSAI ? `<span data-si-essai> Vous pouvez alors essayer l'abonnement gratuitement pendant ${ESSAI.duree}.</span>` : ""}</span></li>
       <li class="espace-etape"><b>Réglez par Mobile Money</b><span>Orange Money, MTN MoMo, Wave ou Moov Money, puis saisissez la référence du paiement dans votre espace ou envoyez-la-nous sur WhatsApp.${tarifs.length ? "" : " Nous vous indiquons le tarif."}</span></li>
       <li class="espace-etape"><b>Accédez aux contenus</b><span>Votre accès s'ouvre dès réception du paiement, pour toute la durée de votre abonnement. Les ouvrages complets et les vidéos réservées se lisent avec l'abonnement VIP. Un compte s'utilise sur un appareil à la fois : une connexion sur un autre appareil déconnecte le précédent.</span></li>
     </ol>
@@ -2025,9 +2028,13 @@ index = inject(index, "books", selectionHTML());
 index = inject(index, "abonnement", abonnementHTML());
 index = inject(index, "essai", essaiHTML());
 index = inject(index, "prixjour", prixJourHTML());
-index = inject(index, "essai-abo", ESSAI ? `<p class="essai-annonce"><b>Essai gratuit de ${ESSAI.duree}.</b> Créez votre compte et ouvrez l'abonnement sans payer, une fois.</p>` : "");
-index = inject(index, "essai-cta", `<a class="btn btn-gold" href="espace-abonnes/#inscription">${ESSAI ? "Essayer gratuitement" : "Créer mon compte"}</a>`);
-index = inject(index, "essai-hero", ESSAI ? `Ou lisez tout en ligne : <a href="espace-abonnes/#inscription">essai gratuit de ${ESSAI.duree}</a>, puis abonnement dès ${(ctx.D.TARIFS_ABONNEMENT.find(x => x.cle === "j1") || {}).prix} FCFA la journée.` : `Ou lisez tout en ligne : <a href="#abonnement">abonnement dès ${(ctx.D.TARIFS_ABONNEMENT.find(x => x.cle === "j1") || {}).prix} FCFA la journée</a>.`);
+index = inject(index, "essai-abo", ESSAI ? `<p class="essai-annonce" data-si-essai><b>Essai gratuit de ${ESSAI.duree}.</b> Créez votre compte et ouvrez l'abonnement sans payer, une fois.</p>` : "");
+index = inject(index, "essai-cta", `<a class="btn btn-gold" href="espace-abonnes/#inscription">${ESSAI ? deuxVersions("Essayer gratuitement", "Créer mon compte") : "Créer mon compte"}</a>`);
+{
+  const prixJour = (ctx.D.TARIFS_ABONNEMENT.find(x => x.cle === "j1") || {}).prix;
+  const sans = `Ou lisez tout en ligne : <a href="#abonnement">abonnement dès ${prixJour} FCFA la journée</a>.`;
+  index = inject(index, "essai-hero", ESSAI ? deuxVersions(`Ou lisez tout en ligne : <a href="espace-abonnes/#inscription">essai gratuit de ${ESSAI.duree}</a>, puis abonnement dès ${prixJour} FCFA la journée.`, sans) : sans);
+}
 index = inject(index, "faq", faqHTML());
 index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
   h2: `Nos vidéos`, ici: "accueil", jour: true,
@@ -2036,7 +2043,7 @@ index = inject(index, "videos", "\n" + videosSection(VIDS, "", {
 }) + lettreHTML("") + "\n");
 // Chiffres clés écrits en dur : ils s'affichent même avant l'animation (ou sans JavaScript)
 index = index.replace(/(data-count-from="ouvrages">)[^<]*(<)/g, `$1${LIVRES.length}$2`).replace(/(data-count-from="concours">)[^<]*(<)/g, `$1${CONCOURS.length}$2`);
-index = inject(index, "stats", STATS + '<script defer src="assets/js/visite.js"></script>');
+index = inject(index, "stats", (ESSAI ? '<script defer src="assets/js/essai.js"></script>' : "") + STATS + '<script defer src="assets/js/visite.js"></script>');
 index = inject(index, "jsonld", "\n" + [
   { "@context": "https://schema.org", "@type": "WebSite", name: "Les Cours Sésame et SAJ", url: SITE, inLanguage: "fr" },
   { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },

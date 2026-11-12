@@ -37,8 +37,9 @@ const TARIFS_VIP=[
 {"cle":"vip-m12","prix":"120 000","duree":"12 mois"}
 ];
 
-/* Essai gratuit de l'espace abonnés, annoncé sur le site quand "actif" vaut true. L'essai lui-même est tenu par la
-   base (table essai_reglages : actif, jours) : pour l'arrêter, passer les deux à false, puis node tools/build.js. */
+/* Essai gratuit de l'espace abonnés. L'administrateur y met fin ou le propose de nouveau depuis l'administration
+   (onglet Abonnés) : l'annonce du site suit ce réglage toute seule. "actif":false ne sert qu'à retirer toute
+   mention de l'essai des pages générées (puis node tools/build.js). */
 const ESSAI_GRATUIT={"actif":true,"duree":"24 heures"};
 
 /* Numéros Mobile Money affichés dans l'espace abonnés, au moment du paiement de l'abonnement (laisser vide pour

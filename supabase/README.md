@@ -179,9 +179,14 @@ téléchargement de pages (`telechargement_limites_de` renvoie 0). Un essai par 
 téléphone (`norm_telephone`). Il ne déclenche ni la récompense de parrainage, ni l'e-mail de bienvenue, ni la
 validation d'une demande d'activation en attente ; la relance des inscrits jamais abonnés continue après l'essai.
 
-Réglages : table `essai_reglages` (une ligne). Pour fermer l'essai :
-`update essai_reglages set actif = false;` puis, dans `assets/js/data.js`, `ESSAI_GRATUIT` avec `"actif":false`, et
-`node tools/build.js` pour retirer l'annonce du site. `jours` règle la durée (1 par défaut, 7 au plus).
+Réglages : table `essai_reglages` (une ligne). L'administrateur met fin à l'essai, ou le propose de nouveau, depuis
+l'administration, onglet Abonnés, bloc « Essai gratuit » (fonction `admin_regler_essai`, migration
+`20261112090000_essai_gratuit_administration.sql`). Le même bloc arrête les essais en cours et affiche les essais
+ouverts, en cours et devenus abonnés payants (`admin_essai`). L'annonce du site suit ce réglage sans régénérer les
+pages : chaque mention existe en deux versions (`data-si-essai`, `data-si-sans-essai`) et `assets/js/essai.js` lit
+`essai_ouvert()` (réponse gardée dix minutes par navigateur). `ESSAI_GRATUIT` dans `assets/js/data.js` ne sert qu'à
+retirer toute mention de l'essai des pages générées. `jours` règle la durée (1 par défaut, 7 au plus) ; le site
+annonce « 24 heures », à corriger dans `ESSAI_GRATUIT.duree` si la durée change.
 
 Suivre les essais : `select * from abonnements where moyen = 'Essai gratuit' order by cree_le desc;`
 
