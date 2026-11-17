@@ -736,7 +736,7 @@
     if (v.error) throw v.error;
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
-    const [p, a, adm, ouv, vid, sus, dem, vip, ess] = await Promise.all([
+    const [p, a, adm, ouv, vid, sus, dem, vip, ess, pCop, pOuv] = await Promise.all([
       client.from("profils").select("prenom, nom, telephone, concours, date_concours, emails_nouveautes, code_parrain").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
@@ -745,7 +745,10 @@
       client.rpc("ma_suspension"),
       client.from("demandes_activation").select("id, formule, vip, montant, moyen, reference, statut, motif, cree_le").eq("user_id", uid).order("cree_le", { ascending: false }).limit(1),
       client.rpc("acces_vip"),
-      client.rpc("mon_essai")
+      client.rpc("mon_essai"),
+      // Accès particuliers ouverts par l'administrateur à un abonné en formule normale (table acces_particuliers)
+      client.rpc("acces_particulier", { p_droit: "copies" }),
+      client.rpc("acces_particulier", { p_droit: "ouvrages" })
     ]);
     if (p.error || a.error) throw p.error || a.error;
     const profil = p.data || { prenom: "", nom: "", telephone: "" };
@@ -766,7 +769,11 @@
       ouvrages: !!adm.data || ouv.data === true,
       videos: !!adm.data || vid.data === true,
       // Période VIP en cours (sans elle, un abonné peut encore lire ouvrages et vidéos au titre de l'ancien régime)
-      vip: !!adm.data || vip.data === true
+      vip: !!adm.data || vip.data === true,
+      // Copie corrigée du mois : VIP, ou accès particulier
+      copies: !!adm.data || vip.data === true || pCop.data === true,
+      // Ouvrages complets sauf Codes commentés et Annales, par accès particulier
+      ouvragesPart: pOuv.data === true
     };
   }
 
@@ -916,7 +923,7 @@
   let mesCopies = [];
   const moisCourant = d => new Date(d).toLocaleDateString("fr-FR", { month: "numeric", year: "numeric", timeZone: "Africa/Abidjan" });
   function copiesHTML() {
-    if (!etat.vip) return "";
+    if (!etat.copies) return "";
     const ceMois = mesCopies.find(x => moisCourant(x.cree_le) === moisCourant(Date.now()));
     const nomEp = k => (EPREUVES_COPIE.find(e => e[0] === k) || [k, k])[1];
     return `<section class="ea-copie" id="eaCopie">
@@ -966,7 +973,7 @@
     const z = $("#eaCopie", racine); if (z) z.outerHTML = copiesHTML();
   }
   async function chargerCopies() {
-    if (!etat.vip) { mesCopies = []; return; }
+    if (!etat.copies) { mesCopies = []; return; }
     const { data } = await client.from("copies_vip").select("*").eq("user_id", etat.uid).order("cree_le", { ascending: false });
     mesCopies = data || [];
   }
@@ -1002,7 +1009,7 @@
           <div><span class="eyebrow">Abonnement actif</span>
           <h3>Votre accès est ouvert jusqu'au ${dateFr(abo.fin)}.</h3>
           ${j <= JOURS_RENOUVELLEMENT ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
-          ${etat.vip ? `<p><b>Espace VIP ouvert</b> : ouvrages complets et vidéos réservées compris.</p>` : etat.ouvrages ? `<p>Votre abonnement, pris avant l'ouverture de l'espace VIP, comprend les ouvrages complets jusqu'à son terme. Pour les garder ensuite, choisissez une formule VIP.</p>` : `<p>Votre abonnement donne accès à tous les contenus, sauf l'espace VIP (ouvrages complets et vidéos réservées).</p>`}</div>
+          ${etat.vip ? `<p><b>Espace VIP ouvert</b> : ouvrages complets et vidéos réservées compris.</p>` : etat.ouvrages ? `<p>Votre abonnement, pris avant l'ouverture de l'espace VIP, comprend les ouvrages complets jusqu'à son terme. Pour les garder ensuite, choisissez une formule VIP.</p>` : etat.ouvragesPart || etat.copies ? `<p><b>Accès offert par Les Cours Sésame et SAJ</b> : ${[etat.ouvragesPart ? "les ouvrages complets, sauf les Codes commentés et les Annales" : "", etat.copies ? "la copie corrigée et notée du mois" : ""].filter(Boolean).join(", et ")}. Les autres avantages de l'espace VIP restent réservés aux formules VIP.</p>` : `<p>Votre abonnement donne accès à tous les contenus, sauf l'espace VIP (ouvrages complets et vidéos réservées).</p>`}</div>
           ${j <= JOURS_RENOUVELLEMENT ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler sur WhatsApp</a>` : ""}
         </div>${j <= JOURS_RENOUVELLEMENT && tarifsAbo().length ? `<div class="ea-statut ea-statut-attente ea-renouvellement"><span class="eyebrow">Renouveler en ligne</span>${paiementHTML(true)}</div>` : ""}`;
     }
@@ -1079,7 +1086,10 @@
   const rubrique = c => /^\s*Texte officiel/i.test(c.matiere || "") ? "textes" : /^\s*Jurisprudence/i.test(c.matiere || "") ? "jurisprudence" : /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Fiches/i.test(c.matiere || "") ? "fiches" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : /^Plans?\b/i.test(c.matiere || "") ? "plans" : c.type === "video" ? "videos" : "autres";
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   // Espace VIP : ouvrages complets et vidéos. Affichés avec un cadenas sans accès (abonnement normal)
-  const verrouOuvrage = c => !etat.ouvrages && rubrique(c) === "ouvrages";
+  // Ouvrages que l'accès particulier n'ouvre pas : Codes commentés (ouvrages VVIP) et Annales (même règle que la base,
+  // fonction ouvrage_reserve_vip)
+  const reserveVip = c => /\bVVIP\b/.test(c.titre || "") || /\bannales\b/i.test(c.titre || "") || /\bannales\b/i.test(c.matiere || "");
+  const verrouOuvrage = c => !etat.ouvrages && rubrique(c) === "ouvrages" && !(etat.ouvragesPart && !reserveVip(c));
   // Vidéos du jour (video_ouverte) : ouvertes à tout abonné en cours, VIP ou non
   const videoVip = c => c.type === "video" && !c.video_ouverte;
   const verrouVideo = c => !etat.videos && videoVip(c);
