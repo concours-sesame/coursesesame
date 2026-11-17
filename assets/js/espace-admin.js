@@ -74,12 +74,12 @@
   const joursSansPassage = a => { const t = dernierPassage(a); return t ? Math.floor((Date.now() - new Date(t)) / 864e5) : 0; };
   const inactif = a => a.actif && !a.suspendu_depuis && joursSansPassage(a) >= JOURS_INACTIF;
   // Jours restants (aujourd'hui compris) ; pendant une suspension, jours gardés en réserve
-  // Accès offert (sans VIP) : copie du mois et ouvrages, sauf Codes commentés et Annales (table acces_particuliers)
+  // Accès offert (sans VIP) : copie du mois et ouvrages, sauf ceux réservés au VIP (table acces_particuliers)
   let accesOfferts = new Map();
   const accesOffert = a => { const x = accesOfferts.get(a.user_id); return x && (!x.jusqu_au || x.jusqu_au >= auj()) ? x : null; };
   const boutonOffert = a => estVipAbonne(a) ? "" : accesOffert(a)
-    ? `<button class="btn btn-ghost btn-sm" type="button" data-action="acces-offert" title="Copie du mois et ouvrages, sauf Codes commentés et Annales${accesOffert(a).jusqu_au ? `, jusqu'au ${dateFr(accesOffert(a).jusqu_au)}` : ""}">Retirer l'accès offert</button>`
-    : a.actif ? `<button class="btn btn-ghost btn-sm" type="button" data-action="acces-offert" title="Copie du mois et ouvrages, sauf Codes commentés et Annales, sans passer en VIP">Offrir copie et ouvrages</button>` : "";
+    ? `<button class="btn btn-ghost btn-sm" type="button" data-action="acces-offert" title="Copie du mois et ouvrages, sauf ceux réservés au VIP${accesOffert(a).jusqu_au ? `, jusqu'au ${dateFr(accesOffert(a).jusqu_au)}` : ""}">Retirer l'accès offert</button>`
+    : a.actif ? `<button class="btn btn-ghost btn-sm" type="button" data-action="acces-offert" title="Copie du mois et ouvrages, sauf ceux réservés au VIP, sans passer en VIP">Offrir copie et ouvrages</button>` : "";
   const joursRestants = a => !a.fin ? 0 : Math.max(0, (a.suspendu_depuis ? Math.round((new Date(a.fin + "T00:00:00Z") - new Date(a.suspendu_depuis + "T00:00:00Z")) / 864e5) : joursJusqua(a.fin)) + 1);
   const pluriel = (n, mot) => `${n} ${mot}${n > 1 ? "s" : ""}`;
   function statut(a) {
@@ -835,7 +835,7 @@
     const ligne = a => {
       const s = statut(a), p = periodeCourante(a), n = joursRestants(a);
       return `<tr data-uid="${esc(a.user_id)}">
-          <td><b>${esc(a.prenom)} ${esc(a.nom)}</b>${estVipAbonne(a) ? ` <span class="ea-vip-marque">VIP</span>` : accesOffert(a) ? ` <span class="ea-vip-marque" title="Copie du mois et ouvrages, sauf Codes commentés et Annales">Accès offert</span>` : ""}${enLigne(a) ? ` <span class="ad-point" title="En ligne">En ligne</span>` : ""}<small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a></small></td>
+          <td><b>${esc(a.prenom)} ${esc(a.nom)}</b>${estVipAbonne(a) ? ` <span class="ea-vip-marque">VIP</span>` : accesOffert(a) ? ` <span class="ea-vip-marque" title="Copie du mois et ouvrages, sauf ceux réservés au VIP">Accès offert</span>` : ""}${enLigne(a) ? ` <span class="ad-point" title="En ligne">En ligne</span>` : ""}<small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a></small></td>
           <td>${p ? `du ${dateFr(p.debut)}<br>au ${dateFr(p.fin)}` : ""}${a.fin && p && a.fin !== p.fin ? `<small>prolongé jusqu'au ${dateFr(a.fin)}</small>` : ""}</td>
           <td><b>${pluriel(n, "jour")}</b>${a.suspendu_depuis ? "<small>en réserve</small>" : ""}</td>
           <td><span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span></td>
@@ -2100,12 +2100,12 @@
         const fin = a.fin;
         if (!confirm(x
           ? `Retirer l'accès offert à ${a.prenom} ${a.nom} ?\n\nLa copie du mois et les ouvrages se ferment tout de suite ; le reste de l'abonnement continue.`
-          : `Offrir à ${a.prenom} ${a.nom}, sans le passer en VIP :\n- la copie corrigée et notée du mois ;\n- les ouvrages complets, sauf les Codes commentés et les Annales.\n\nJusqu'à la fin de son abonnement en cours, le ${dateFr(fin)}.`)) return;
+          : `Offrir à ${a.prenom} ${a.nom}, sans le passer en VIP :\n- la copie corrigée et notée du mois ;\n- les ouvrages complets, sauf ceux réservés au VIP (Codes commentés, Annales, 1200 dissertations, 2000 articles commentés, Guide méthodologique magistrature).\n\nJusqu'à la fin de son abonnement en cours, le ${dateFr(fin)}.`)) return;
         b.disabled = true;
         const { error } = await client.rpc("admin_acces_particulier", { p_user: a.user_id, p_copies: !x, p_ouvrages: !x, p_jusqu_au: x ? null : fin, p_note: null });
         b.disabled = false;
         if (error) return toast(messageErreur(error));
-        recharger(x ? "Accès offert retiré." : "Accès offert : copie du mois et ouvrages, sauf Codes commentés et Annales.");
+        recharger(x ? "Accès offert retiré." : "Accès offert : copie du mois et ouvrages, sauf ceux réservés au VIP.");
         return;
       }
       if (act === "reactiver") {

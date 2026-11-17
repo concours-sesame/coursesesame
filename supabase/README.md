@@ -197,7 +197,7 @@ table `clics`, 180 jours, aucun droit direct). Exemple, les pages qui déclenche
 
 ## Accès offert sans VIP (migration `20261117120000_acces_particuliers.sql`)
 
-- Table `acces_particuliers` : pour un abonné en formule normale, `copies` ouvre la copie corrigée du mois et `ouvrages` ouvre les ouvrages complets, sauf les Codes commentés (titre « …, ouvrage VVIP ») et les Annales (fonction `ouvrage_reserve_vip`).
+- Table `acces_particuliers` : pour un abonné en formule normale, `copies` ouvre la copie corrigée du mois et `ouvrages` ouvre les ouvrages complets, sauf les ouvrages réservés au VIP (fonction `ouvrage_reserve_vip`) : les Codes commentés (titre « …, ouvrage VVIP »), les Annales, Le concours de la magistrature en 1200 dissertations corrigées, Le concours de la magistrature en 2000 articles commentés et le Guide méthodologique magistrature (migration `20261117150000_ouvrages_vip_seul.sql`).
 - L'accès ne vaut que pendant un abonnement en cours et jusqu'à `jusqu_au` (sans date : sans limite).
 - Contrôles : `fichier_autorise`, `deposer_copie_vip` et la règle de stockage « exclusif : copies VIP, dépôt ».
 - Administration : bouton « Offrir copie et ouvrages » sur la fiche de l'abonné (fonction `admin_acces_particulier`), jusqu'à la fin de l'abonnement en cours.

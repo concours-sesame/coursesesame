@@ -775,7 +775,7 @@
       vip: !!adm.data || vip.data === true,
       // Copie corrigée du mois : VIP, ou accès particulier
       copies: !!adm.data || vip.data === true || pCop.data === true,
-      // Ouvrages complets sauf Codes commentés et Annales, par accès particulier
+      // Ouvrages complets, sauf ceux réservés au VIP (reserveVip), par accès particulier
       ouvragesPart: pOuv.data === true
     };
   }
@@ -1012,7 +1012,7 @@
           <div><span class="eyebrow">Abonnement actif</span>
           <h3>Votre accès est ouvert jusqu'au ${dateFr(abo.fin)}.</h3>
           ${j <= JOURS_RENOUVELLEMENT ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
-          ${etat.vip ? `<p><b>Espace VIP ouvert</b> : ouvrages complets et vidéos réservées compris.</p>` : etat.ouvrages ? `<p>Votre abonnement, pris avant l'ouverture de l'espace VIP, comprend les ouvrages complets jusqu'à son terme. Pour les garder ensuite, choisissez une formule VIP.</p>` : etat.ouvragesPart || etat.copies ? `<p><b>Accès offert par Les Cours Sésame et SAJ</b> : ${[etat.ouvragesPart ? "les ouvrages complets, sauf les Codes commentés et les Annales" : "", etat.copies ? "la copie corrigée et notée du mois" : ""].filter(Boolean).join(", et ")}. Les autres avantages de l'espace VIP restent réservés aux formules VIP.</p>` : `<p>Votre abonnement donne accès à tous les contenus, sauf l'espace VIP (ouvrages complets et vidéos réservées).</p>`}</div>
+          ${etat.vip ? `<p><b>Espace VIP ouvert</b> : ouvrages complets et vidéos réservées compris.</p>` : etat.ouvrages ? `<p>Votre abonnement, pris avant l'ouverture de l'espace VIP, comprend les ouvrages complets jusqu'à son terme. Pour les garder ensuite, choisissez une formule VIP.</p>` : etat.ouvragesPart || etat.copies ? `<p><b>Accès offert par Les Cours Sésame et SAJ</b> : ${[etat.ouvragesPart ? "les ouvrages complets, sauf ceux réservés à l'espace VIP" : "", etat.copies ? "la copie corrigée et notée du mois" : ""].filter(Boolean).join(", et ")}. Les autres avantages de l'espace VIP restent réservés aux formules VIP.</p>` : `<p>Votre abonnement donne accès à tous les contenus, sauf l'espace VIP (ouvrages complets et vidéos réservées).</p>`}</div>
           ${j <= JOURS_RENOUVELLEMENT ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler sur WhatsApp</a>` : ""}
         </div>${j <= JOURS_RENOUVELLEMENT && tarifsAbo().length ? `<div class="ea-statut ea-statut-attente ea-renouvellement"><span class="eyebrow">Renouveler en ligne</span>${paiementHTML(true)}</div>` : ""}`;
     }
@@ -1089,9 +1089,10 @@
   const rubrique = c => /^\s*Texte officiel/i.test(c.matiere || "") ? "textes" : /^\s*Jurisprudence/i.test(c.matiere || "") ? "jurisprudence" : /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Fiches/i.test(c.matiere || "") ? "fiches" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : /^Plans?\b/i.test(c.matiere || "") ? "plans" : c.type === "video" ? "videos" : "autres";
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   // Espace VIP : ouvrages complets et vidéos. Affichés avec un cadenas sans accès (abonnement normal)
-  // Ouvrages que l'accès particulier n'ouvre pas : Codes commentés (ouvrages VVIP) et Annales (même règle que la base,
-  // fonction ouvrage_reserve_vip)
-  const reserveVip = c => /\bVVIP\b/.test(c.titre || "") || /\bannales\b/i.test(c.titre || "") || /\bannales\b/i.test(c.matiere || "");
+  // Ouvrages que l'accès particulier n'ouvre pas, réservés au VIP : Codes commentés (ouvrages VVIP), Annales, 1200 dissertations
+  // corrigées, 2000 articles commentés, Guide méthodologique magistrature (même règle que la base, fonction ouvrage_reserve_vip)
+  const reserveVip = c => /\bVVIP\b/.test(c.titre || "") || /\bannales\b/i.test(c.titre || "") || /\bannales\b/i.test(c.matiere || "")
+    || /1200 dissertations corrigées|2000 articles commentés|^Guide méthodologique magistrature/i.test(c.titre || "");
   const verrouOuvrage = c => !etat.ouvrages && rubrique(c) === "ouvrages" && !(etat.ouvragesPart && !reserveVip(c));
   // Vidéos du jour (video_ouverte) : ouvertes à tout abonné en cours, VIP ou non
   const videoVip = c => c.type === "video" && !c.video_ouverte;
