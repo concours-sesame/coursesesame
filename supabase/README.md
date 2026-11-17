@@ -194,3 +194,15 @@ Suivre les essais : `select * from abonnements where moyen = 'Essai gratuit' ord
 commande ou à un compte : `whatsapp`, `panier`, `compte`, `essai`, `formules`, `extrait` (fonction `enregistrer_clic`,
 table `clics`, 180 jours, aucun droit direct). Exemple, les pages qui déclenchent le plus de clics WhatsApp :
 `select page, count(*) from clics where action = 'whatsapp' and quand > now() - interval '30 days' group by 1 order by 2 desc;`
+
+## Accès offert sans VIP (migration `20261117120000_acces_particuliers.sql`)
+
+- Table `acces_particuliers` : pour un abonné en formule normale, `copies` ouvre la copie corrigée du mois et `ouvrages` ouvre les ouvrages complets, sauf les Codes commentés (titre « …, ouvrage VVIP ») et les Annales (fonction `ouvrage_reserve_vip`).
+- L'accès ne vaut que pendant un abonnement en cours et jusqu'à `jusqu_au` (sans date : sans limite).
+- Contrôles : `fichier_autorise`, `deposer_copie_vip` et la règle de stockage « exclusif : copies VIP, dépôt ».
+- Administration : bouton « Offrir copie et ouvrages » sur la fiche de l'abonné (fonction `admin_acces_particulier`), jusqu'à la fin de l'abonnement en cours.
+
+## Annonce des nouveautés le jeudi (migration `20261117130000_nouveautes_le_jeudi.sql`)
+
+- L'e-mail des nouveautés part le jeudi à partir de 9 h et regroupe les mises en ligne depuis la dernière annonce ; le récapitulatif part le lundi.
+- La relance d'inactivité garde sa règle : elle ne part que les jours sans aucune nouveauté depuis la dernière annonce.
