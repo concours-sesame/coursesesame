@@ -74,6 +74,12 @@
   const joursSansPassage = a => { const t = dernierPassage(a); return t ? Math.floor((Date.now() - new Date(t)) / 864e5) : 0; };
   const inactif = a => a.actif && !a.suspendu_depuis && joursSansPassage(a) >= JOURS_INACTIF;
   // Jours restants (aujourd'hui compris) ; pendant une suspension, jours gardés en réserve
+  // Accès offert (sans VIP) : copie du mois et ouvrages, sauf Codes commentés et Annales (table acces_particuliers)
+  let accesOfferts = new Map();
+  const accesOffert = a => { const x = accesOfferts.get(a.user_id); return x && (!x.jusqu_au || x.jusqu_au >= auj()) ? x : null; };
+  const boutonOffert = a => estVipAbonne(a) ? "" : accesOffert(a)
+    ? `<button class="btn btn-ghost btn-sm" type="button" data-action="acces-offert" title="Copie du mois et ouvrages, sauf Codes commentés et Annales${accesOffert(a).jusqu_au ? `, jusqu'au ${dateFr(accesOffert(a).jusqu_au)}` : ""}">Retirer l'accès offert</button>`
+    : a.actif ? `<button class="btn btn-ghost btn-sm" type="button" data-action="acces-offert" title="Copie du mois et ouvrages, sauf Codes commentés et Annales, sans passer en VIP">Offrir copie et ouvrages</button>` : "";
   const joursRestants = a => !a.fin ? 0 : Math.max(0, (a.suspendu_depuis ? Math.round((new Date(a.fin + "T00:00:00Z") - new Date(a.suspendu_depuis + "T00:00:00Z")) / 864e5) : joursJusqua(a.fin)) + 1);
   const pluriel = (n, mot) => `${n} ${mot}${n > 1 ? "s" : ""}`;
   function statut(a) {
@@ -223,6 +229,7 @@
     const err = a.error || p.error || c.error;
     if (err) throw err;
     abonnes = a.data; contenus = c.data;
+    try { const r = await client.from("acces_particuliers").select("user_id, copies, ouvrages, jusqu_au"); accesOfferts = new Map((r.error ? [] : r.data).map(x => [x.user_id, x])); } catch (e) { accesOfferts = new Map(); }
     // Périodes VIP (admin_periodes_vip) : marque vip sur chaque paiement
     const vips = new Set((pvip.data || []).map(x => x.id));
     paiements = p.data.map(x => Object.assign(x, { vip: vips.has(x.id) }));
@@ -828,13 +835,13 @@
     const ligne = a => {
       const s = statut(a), p = periodeCourante(a), n = joursRestants(a);
       return `<tr data-uid="${esc(a.user_id)}">
-          <td><b>${esc(a.prenom)} ${esc(a.nom)}</b>${estVipAbonne(a) ? ` <span class="ea-vip-marque">VIP</span>` : ""}${enLigne(a) ? ` <span class="ad-point" title="En ligne">En ligne</span>` : ""}<small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a></small></td>
+          <td><b>${esc(a.prenom)} ${esc(a.nom)}</b>${estVipAbonne(a) ? ` <span class="ea-vip-marque">VIP</span>` : accesOffert(a) ? ` <span class="ea-vip-marque" title="Copie du mois et ouvrages, sauf Codes commentés et Annales">Accès offert</span>` : ""}${enLigne(a) ? ` <span class="ad-point" title="En ligne">En ligne</span>` : ""}<small><a href="https://wa.me/${numeroWa(a.telephone)}" target="_blank" rel="noopener">${esc(a.telephone)}</a></small></td>
           <td>${p ? `du ${dateFr(p.debut)}<br>au ${dateFr(p.fin)}` : ""}${a.fin && p && a.fin !== p.fin ? `<small>prolongé jusqu'au ${dateFr(a.fin)}</small>` : ""}</td>
           <td><b>${pluriel(n, "jour")}</b>${a.suspendu_depuis ? "<small>en réserve</small>" : ""}</td>
           <td><span class="ad-badge ad-${s.cle}">${esc(s.texte)}</span></td>
           <td>${a.vu_le ? ilYa(a.vu_le) : a.derniere_connexion ? ilYa(a.derniere_connexion) : "jamais"}</td>
           <td class="ad-td-actions">${estVipAbonne(a) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="retirer-vip">Retirer le VIP</button>`
-            : `<button class="btn btn-gold btn-sm" type="button" data-action="passer-vip">Ajouter à l'espace VIP</button>`}
+            : `<button class="btn btn-gold btn-sm" type="button" data-action="passer-vip">Ajouter à l'espace VIP</button>`}${boutonOffert(a)}
             ${a.suspendu_depuis
             ? `<button class="btn btn-navy btn-sm" type="button" data-action="reactiver">Réactiver</button>`
             : `<button class="btn btn-ghost btn-sm" type="button" data-action="suspendre">Suspendre</button>`}
@@ -918,6 +925,7 @@
             : `<button class="btn btn-navy btn-sm" type="button" data-action="activer">${demandeDe(a.user_id) ? "Vérifier la demande" : a.actif ? "Prolonger" : "Activer"}</button>`}
           ${estVipAbonne(a) ? `<button class="btn btn-ghost btn-sm" type="button" data-action="retirer-vip">Retirer le VIP</button>`
             : `<button class="btn btn-gold btn-sm" type="button" data-action="passer-vip" title="${aPeriodeOuverte(a) ? "Ses périodes en cours et à venir deviennent VIP" : "Ouvre l'activation avec la case VIP cochée"}">Ajouter à l'espace VIP</button>`}
+          ${boutonOffert(a)}
           ${demandeDe(a.user_id) ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="refuser-demande">Refuser la demande</button>` : ""}
           ${a.actif && !a.suspendu_depuis ? `<button class="btn btn-ghost btn-sm" type="button" data-action="suspendre">Suspendre</button><button class="btn btn-ghost btn-sm" type="button" data-action="couper">Couper l'accès</button>` : ""}
           ${enCours(a) ? `<button class="btn btn-ghost btn-sm ad-danger" type="button" data-action="supprimer">Supprimer l'abonnement</button>` : ""}
@@ -1728,7 +1736,7 @@
           <button class="btn ${emailsReglages.actif ? "btn-ghost" : "btn-navy"} btn-sm" type="button" data-action="emails-basculer">${emailsReglages.actif ? "Fermer l'envoi" : "Ouvrir l'envoi"}</button>
           <button class="btn btn-ghost btn-sm" type="button" data-action="emails-essai">M'envoyer un e-mail d'essai</button>
         </div>
-        <p class="ad-note">Expéditeur infos@coursesesame.com, par Brevo. Quatre e-mails partent seuls, au plus tard 15 minutes après l'événement. La bienvenue, au premier abonnement d'un compte. Le rappel, 7 jours puis 3 jours avant la fin d'un abonnement qui n'a pas été prolongé. La relance d'inactivité, entre 9 h et 20 h, à l'abonné en cours qui n'est pas passé dans l'espace depuis 5 jours (une fois par semaine au plus, jamais un jour d'annonce des nouveautés, ni dans les 3 derniers jours). L'annonce des nouveautés, chaque jour à partir de 9 h s'il y a eu des mises en ligne, aux abonnés en cours qui ne l'ont pas refusée. Chaque annonce contient un lien de désinscription ; l'abonné peut aussi changer son choix dans « Mon compte ».</p>
+        <p class="ad-note">Expéditeur infos@coursesesame.com, par Brevo. Quatre e-mails partent seuls, au plus tard 15 minutes après l'événement. La bienvenue, au premier abonnement d'un compte. Le rappel, 7 jours puis 3 jours avant la fin d'un abonnement qui n'a pas été prolongé. La relance d'inactivité, entre 9 h et 20 h, à l'abonné en cours qui n'est pas passé dans l'espace depuis 5 jours (une fois par semaine au plus, jamais un jour d'annonce des nouveautés, ni dans les 3 derniers jours). L'annonce des nouveautés, le jeudi à partir de 9 h, qui regroupe les mises en ligne de la semaine, aux abonnés en cours qui ne l'ont pas refusée. Chaque annonce contient un lien de désinscription ; l'abonné peut aussi changer son choix dans « Mon compte ».</p>
       </section>
       <div class="ad-stats"><div><b>${compte("bienvenue")}</b><span>Bienvenues, 30 jours</span></div><div><b>${compte("rappel_fin")}</b><span>Rappels, 30 jours</span></div><div><b>${compte("inactif")}</b><span>Relances, 30 jours</span></div>
         <div><b>${compte("nouveautes")}</b><span>Annonces, 30 jours</span></div><div><b>${erreurs}</b><span>Erreurs, 30 jours</span></div></div>
@@ -2085,6 +2093,19 @@
         if (fenWa) fenWa.location.href = lienWa(numeroWa(a.telephone), messageVip(a));
         retour(`<div class="ad-retour"><p>${esc(a.prenom)} ${esc(a.nom)} ${ajout ? "<b>est passé en VIP</b>. L'e-mail « Votre espace VIP est ouvert » lui part automatiquement dans les 15 minutes ; WhatsApp s'est ouvert avec le message prêt, il ne reste qu'à l'envoyer" : "<b>n'est plus VIP</b>"}.</p><a class="btn btn-wa btn-sm" href="${lienWa(numeroWa(a.telephone), ajout ? messageVip(a) : messageFinVip(a))}" target="_blank" rel="noopener">${icone("i-wa")}Prévenir ${esc(a.prenom)} sur WhatsApp</a></div>`);
         recharger(ajout ? "Abonné passé en VIP." : "VIP retiré.");
+        return;
+      }
+      if (act === "acces-offert") {
+        const x = accesOffert(a);
+        const fin = a.fin;
+        if (!confirm(x
+          ? `Retirer l'accès offert à ${a.prenom} ${a.nom} ?\n\nLa copie du mois et les ouvrages se ferment tout de suite ; le reste de l'abonnement continue.`
+          : `Offrir à ${a.prenom} ${a.nom}, sans le passer en VIP :\n- la copie corrigée et notée du mois ;\n- les ouvrages complets, sauf les Codes commentés et les Annales.\n\nJusqu'à la fin de son abonnement en cours, le ${dateFr(fin)}.`)) return;
+        b.disabled = true;
+        const { error } = await client.rpc("admin_acces_particulier", { p_user: a.user_id, p_copies: !x, p_ouvrages: !x, p_jusqu_au: x ? null : fin, p_note: null });
+        b.disabled = false;
+        if (error) return toast(messageErreur(error));
+        recharger(x ? "Accès offert retiré." : "Accès offert : copie du mois et ouvrages, sauf Codes commentés et Annales.");
         return;
       }
       if (act === "reactiver") {

@@ -29,7 +29,10 @@
   const numeroWa = tel => { let d = String(tel || "").replace(/\D/g, ""); if (d.length === 10) d = "225" + d; return d; };
   const lienWa = (num, msg) => `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
   // Un QCM est enregistré comme un contenu « texte » dont le texte est un objet JSON { "qcm": { "duree": minutes, "questions": [...] } }
-  const lireQcm = c => { if (c.type !== "texte" || !/^\s*\{/.test(c.texte || "")) return null; try { const o = JSON.parse(c.texte); return o && o.qcm && Array.isArray(o.qcm.questions) ? o.qcm : null; } catch (e) { return null; } };
+  // Le JSON d'un QCM n'est lu qu'une fois par contenu (cache), car la bibliothèque et la révision du jour l'interrogent souvent
+  const cacheQcm = new WeakMap();
+  const lireQcmBrut = c => { if (c.type !== "texte" || !/^\s*\{/.test(c.texte || "")) return null; try { const o = JSON.parse(c.texte); return o && o.qcm && Array.isArray(o.qcm.questions) ? o.qcm : null; } catch (e) { return null; } };
+  const lireQcm = c => { if (!c || typeof c !== "object") return null; const k = cacheQcm.get(c); if (k && k.texte === c.texte) return k.qcm; const qcm = lireQcmBrut(c); cacheQcm.set(c, { texte: c.texte, qcm }); return qcm; };
   const typeAffiche = c => lireQcm(c) ? { nom: "QCM", pluriel: "QCM", action: "S'entraîner" } : (TYPES[c.type] || TYPES.texte);
   const TYPES = {
     video: { nom: "Vidéo", pluriel: "Vidéos", action: "Regarder" },
@@ -736,7 +739,7 @@
     if (v.error) throw v.error;
     if (v.data === false) { await ecarterAppareil(); return { session: null }; }
     const uid = session.user.id;
-    const [p, a, adm, ouv, vid, sus, dem, vip, ess] = await Promise.all([
+    const [p, a, adm, ouv, vid, sus, dem, vip, ess, pCop, pOuv] = await Promise.all([
       client.from("profils").select("prenom, nom, telephone, concours, date_concours, emails_nouveautes, code_parrain").eq("id", uid).maybeSingle(),
       client.rpc("mon_abonnement"),
       client.from("admins").select("user_id").eq("user_id", uid).maybeSingle(),
@@ -745,7 +748,10 @@
       client.rpc("ma_suspension"),
       client.from("demandes_activation").select("id, formule, vip, montant, moyen, reference, statut, motif, cree_le").eq("user_id", uid).order("cree_le", { ascending: false }).limit(1),
       client.rpc("acces_vip"),
-      client.rpc("mon_essai")
+      client.rpc("mon_essai"),
+      // Accès particuliers ouverts par l'administrateur à un abonné en formule normale (table acces_particuliers)
+      client.rpc("acces_particulier", { p_droit: "copies" }),
+      client.rpc("acces_particulier", { p_droit: "ouvrages" })
     ]);
     if (p.error || a.error) throw p.error || a.error;
     const profil = p.data || { prenom: "", nom: "", telephone: "" };
@@ -766,7 +772,11 @@
       ouvrages: !!adm.data || ouv.data === true,
       videos: !!adm.data || vid.data === true,
       // Période VIP en cours (sans elle, un abonné peut encore lire ouvrages et vidéos au titre de l'ancien régime)
-      vip: !!adm.data || vip.data === true
+      vip: !!adm.data || vip.data === true,
+      // Copie corrigée du mois : VIP, ou accès particulier
+      copies: !!adm.data || vip.data === true || pCop.data === true,
+      // Ouvrages complets sauf Codes commentés et Annales, par accès particulier
+      ouvragesPart: pOuv.data === true
     };
   }
 
@@ -916,7 +926,7 @@
   let mesCopies = [];
   const moisCourant = d => new Date(d).toLocaleDateString("fr-FR", { month: "numeric", year: "numeric", timeZone: "Africa/Abidjan" });
   function copiesHTML() {
-    if (!etat.vip) return "";
+    if (!etat.copies) return "";
     const ceMois = mesCopies.find(x => moisCourant(x.cree_le) === moisCourant(Date.now()));
     const nomEp = k => (EPREUVES_COPIE.find(e => e[0] === k) || [k, k])[1];
     return `<section class="ea-copie" id="eaCopie">
@@ -966,7 +976,7 @@
     const z = $("#eaCopie", racine); if (z) z.outerHTML = copiesHTML();
   }
   async function chargerCopies() {
-    if (!etat.vip) { mesCopies = []; return; }
+    if (!etat.copies) { mesCopies = []; return; }
     const { data } = await client.from("copies_vip").select("*").eq("user_id", etat.uid).order("cree_le", { ascending: false });
     mesCopies = data || [];
   }
@@ -1002,7 +1012,7 @@
           <div><span class="eyebrow">Abonnement actif</span>
           <h3>Votre accès est ouvert jusqu'au ${dateFr(abo.fin)}.</h3>
           ${j <= JOURS_RENOUVELLEMENT ? `<p>${j <= 0 ? "C'est le dernier jour." : `Plus que ${j} jour${j > 1 ? "s" : ""}.`} Pensez à renouveler votre abonnement pour garder l'accès.</p>` : ""}
-          ${etat.vip ? `<p><b>Espace VIP ouvert</b> : ouvrages complets et vidéos réservées compris.</p>` : etat.ouvrages ? `<p>Votre abonnement, pris avant l'ouverture de l'espace VIP, comprend les ouvrages complets jusqu'à son terme. Pour les garder ensuite, choisissez une formule VIP.</p>` : `<p>Votre abonnement donne accès à tous les contenus, sauf l'espace VIP (ouvrages complets et vidéos réservées).</p>`}</div>
+          ${etat.vip ? `<p><b>Espace VIP ouvert</b> : ouvrages complets et vidéos réservées compris.</p>` : etat.ouvrages ? `<p>Votre abonnement, pris avant l'ouverture de l'espace VIP, comprend les ouvrages complets jusqu'à son terme. Pour les garder ensuite, choisissez une formule VIP.</p>` : etat.ouvragesPart || etat.copies ? `<p><b>Accès offert par Les Cours Sésame et SAJ</b> : ${[etat.ouvragesPart ? "les ouvrages complets, sauf les Codes commentés et les Annales" : "", etat.copies ? "la copie corrigée et notée du mois" : ""].filter(Boolean).join(", et ")}. Les autres avantages de l'espace VIP restent réservés aux formules VIP.</p>` : `<p>Votre abonnement donne accès à tous les contenus, sauf l'espace VIP (ouvrages complets et vidéos réservées).</p>`}</div>
           ${j <= JOURS_RENOUVELLEMENT ? `<a class="btn btn-wa" href="${lienWa(WA_NUM, msg("Je souhaite renouveler mon abonnement à l'espace abonnés."))}" target="_blank" rel="noopener">${icone("i-wa")}Renouveler sur WhatsApp</a>` : ""}
         </div>${j <= JOURS_RENOUVELLEMENT && tarifsAbo().length ? `<div class="ea-statut ea-statut-attente ea-renouvellement"><span class="eyebrow">Renouveler en ligne</span>${paiementHTML(true)}</div>` : ""}`;
     }
@@ -1039,18 +1049,18 @@
       </div>`;
   }
 
-  function compteHTML() {
+  function compteHTML(dansOnglet) {
     const { profil, email, admin } = etat;
-    return `<div class="ea-compte">
+    return `<div class="ea-compte${dansOnglet ? " ea-compte-onglet" : ""}">
         <span>Connecté : <b>${esc(profil.prenom)} ${esc(profil.nom)}</b> · ${esc(email)}</span>
         <div class="ea-compte-actions">
           ${admin ? `<a class="btn btn-gold btn-sm" href="${ROOT}espace-abonnes/admin/">Administration</a>` : ""}
           <button class="btn btn-ghost btn-sm" type="button" id="eaInstaller"${invitationInstall ? "" : " hidden"}>Installer l'application</button>
-          <button class="btn btn-ghost btn-sm" type="button" id="eaMonCompte" aria-expanded="false" aria-controls="eaPanneau">Mon compte</button>
+          <button class="btn btn-ghost btn-sm" type="button" id="eaMonCompte" aria-expanded="${dansOnglet ? "true" : "false"}" aria-controls="eaPanneau"${dansOnglet ? " hidden" : ""}>Mon compte</button>
           <button class="btn btn-ghost btn-sm" type="button" id="eaSortir">Se déconnecter</button>
         </div>
       </div>
-      <div class="ea-panneau" id="eaPanneau" hidden>
+      <div class="ea-panneau" id="eaPanneau"${dansOnglet ? "" : " hidden"}>
         <form class="form ea-form" id="eaConcoursForm" novalidate>
           <div class="field full"><label for="mConcours">Concours préparé</label><select id="mConcours">${profil.concours ? "" : `<option value="">Choisir…</option>`}${[...CONC.map(c => [c.id, c.court]), ["autre", "Autre concours"]].map(([v, l]) => `<option value="${v}"${profil.concours === v ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></div>
           <p class="ea-msg" role="alert"></p>
@@ -1067,7 +1077,7 @@
           <button class="btn btn-ghost btn-sm" type="submit">Changer le mot de passe</button>
         </form>
         <form class="form ea-form" id="eaEmails" novalidate>
-          <label class="ea-accord full"><input type="checkbox" name="nouveautes"${profil.emails_nouveautes === false ? "" : " checked"}><span>Recevoir par e-mail l'annonce des nouveaux contenus (un e-mail par jour au plus, seulement s'il y a des nouveautés) et un rappel si vous ne passez pas pendant quelques jours (une fois par semaine au plus)</span></label>
+          <label class="ea-accord full"><input type="checkbox" name="nouveautes"${profil.emails_nouveautes === false ? "" : " checked"}><span>Recevoir par e-mail l'annonce des nouveaux contenus (un e-mail le jeudi, seulement s'il y a des nouveautés dans la semaine) et un rappel si vous ne passez pas pendant quelques jours (une fois par semaine au plus)</span></label>
           <p class="ea-msg" role="alert"></p>
         </form>
       </div>`;
@@ -1079,7 +1089,10 @@
   const rubrique = c => /^\s*Texte officiel/i.test(c.matiere || "") ? "textes" : /^\s*Jurisprudence/i.test(c.matiere || "") ? "jurisprudence" : /^Ouvrage/i.test(c.matiere || "") ? "ouvrages" : lireQcm(c) ? "qcm" : /^Fiches/i.test(c.matiere || "") ? "fiches" : /^Corrigé/i.test(c.matiere || "") ? "corriges" : /^Plans?\b/i.test(c.matiere || "") ? "plans" : c.type === "video" ? "videos" : "autres";
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   // Espace VIP : ouvrages complets et vidéos. Affichés avec un cadenas sans accès (abonnement normal)
-  const verrouOuvrage = c => !etat.ouvrages && rubrique(c) === "ouvrages";
+  // Ouvrages que l'accès particulier n'ouvre pas : Codes commentés (ouvrages VVIP) et Annales (même règle que la base,
+  // fonction ouvrage_reserve_vip)
+  const reserveVip = c => /\bVVIP\b/.test(c.titre || "") || /\bannales\b/i.test(c.titre || "") || /\bannales\b/i.test(c.matiere || "");
+  const verrouOuvrage = c => !etat.ouvrages && rubrique(c) === "ouvrages" && !(etat.ouvragesPart && !reserveVip(c));
   // Vidéos du jour (video_ouverte) : ouvertes à tout abonné en cours, VIP ou non
   const videoVip = c => c.type === "video" && !c.video_ouverte;
   const verrouVideo = c => !etat.videos && videoVip(c);
@@ -1118,6 +1131,9 @@
       const b = $(".ea-biblio", racine); if (b) b.outerHTML = bibliothequeHTML();
     }
   };
+  // Bibliothèque affichée par tranches de 24 fiches (bouton « Afficher plus »), remise à 24 à chaque filtre ou recherche
+  const TRANCHE = 24;
+  let nbAffiches = TRANCHE;
   function bibliothequeHTML() {
     if (!contenus.length) return `<div class="ea-biblio"><p class="ea-vide">Les premiers contenus exclusifs arrivent très bientôt. Revenez nous voir.</p></div>`;
     const moi = porteeActive() === "moi", base = moi ? contenus.filter(pourMoi) : contenus;
@@ -1141,13 +1157,14 @@
         </div>
         ${mots.length ? `<p class="ea-cherche-bilan" role="status">${liste.length ? `${liste.length} résultat${liste.length > 1 ? "s" : ""} dans toute la bibliothèque, tous concours confondus.` : "Aucun contenu ne correspond à cette recherche."}${["textes", "jurisprudence"].some(r => contenus.some(c => rubrique(c) === r)) ? ` Pour chercher dans le texte même des lois et des décisions, ouvrez la rubrique Textes officiels ou Jurisprudence.` : ""}</p>`
           : ["textes", "jurisprudence"].includes(filtre) ? rechercheTextesHTML() : ""}
-        <div class="ea-grille">${liste.map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}">
+        <div class="ea-grille">${liste.slice(0, nbAffiches).map(c => `<button class="ea-carte${verrouille(c) ? " ea-carte-verrou" : ""}" type="button" data-id="${c.id}">
             <span class="ea-carte-marques">${estVip(c) ? `<span class="ea-vip-marque">VIP</span>` : ""}${estVvip(c) ? `<span class="ea-vvip-marque">Ouvrage VVIP</span>` : ""}${enAvantPremiere(c) ? `<span class="ea-avant">Avant-première VIP</span>` : ""}<span class="ea-type ea-type-${c.type}">${typeAffiche(c).nom}</span>${estNouveau(c) ? `<span class="ea-nouveau">Nouveau</span>` : ""}${favs.has(c.id) ? `<span class="ea-fav" aria-label="Favori">★</span>` : ""}</span>
             <b>${esc(c.titre)}</b>
             ${c.description ? `<span class="ea-carte-desc">${esc(c.description)}</span>` : ""}
             <small>${[c.matiere ? esc(c.matiere) : "", (c.concours || []).map(nomConcours).join(", "), dateFr(c.publie_le)].filter(Boolean).join(" · ")}</small>
             <span class="ea-carte-go">${verrouille(c) ? icone("i-lock") + noteVerrou(c) : typeAffiche(c).action + icone("i-arrow")}</span>
           </button>`).join("")}</div>
+        ${liste.length > nbAffiches ? `<p class="ea-plus"><button class="btn btn-ghost" type="button" data-plus>Afficher ${Math.min(TRANCHE, liste.length - nbAffiches)} de plus</button><small>${nbAffiches} sur ${liste.length}</small></p>` : ""}
       </div>`;
   }
   // « Reprendre ma lecture » : dernier document ou fiche ouvert sur cet appareil, à la dernière page lue
@@ -2079,7 +2096,7 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
   function outilsHTML() {
     const aFaire = seance(null).length, oral = oralQuestions.length, c = sujetSemaine(), j = joursAvant(), s = stats || { serie: 0 };
     const carte = (id, titre, texte, pied) => `<button class="ea-outil-carte" type="button" data-outil="${id}"><b>${titre}</b><span>${texte}</span><small>${pied}</small></button>`;
-    return demarrageHTML() + `<div class="ea-outils" id="eaOutils">
+    return `<div class="ea-outils" id="eaOutils">
         ${carteBlanc()}
         ${carteEpreuvesBlanches()}
         ${toutesQuestions().length ? carte("revision", "Révision du jour", aFaire ? `${aFaire} question${aFaire > 1 ? "s" : ""} de QCM à travailler aujourd'hui.` : "Tout est à jour pour aujourd'hui.", "Méthode des boîtes, quelques minutes par jour") : ""}
@@ -2099,7 +2116,7 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
   function demarrageHTML() {
     if (!etat.abo.actif || !stats || demarrageMasque()) return "";
     const etapes = [
-      [Number(stats.contenus_lus) > 0, "Ouvrir un document de votre bibliothèque", "Un ouvrage, un sujet corrigé ou un texte officiel, plus bas sur cette page.", `<button class="btn btn-ghost btn-sm" type="button" data-demarrage="biblio">Voir la bibliothèque</button>`],
+      [Number(stats.contenus_lus) > 0, "Ouvrir un document de votre bibliothèque", "Un ouvrage, un sujet corrigé ou un texte officiel, dans l'onglet Bibliothèque.", `<button class="btn btn-ghost btn-sm" type="button" data-demarrage="biblio">Voir la bibliothèque</button>`],
       [Number(stats.qcm_bonnes) + Number(stats.qcm_erreurs) > 0, "Faire votre première révision du jour", "Quelques questions de QCM, qui reviendront ensuite au bon moment.", toutesQuestions().length ? `<button class="btn btn-ghost btn-sm" type="button" data-outil="revision">Commencer</button>` : ""],
       [!!(etat.profil && etat.profil.date_concours), "Indiquer la date de votre concours", "Votre tableau de bord affiche alors le compte à rebours et un planning.", `<button class="btn btn-ghost btn-sm" type="button" data-outil="tableau">Indiquer la date</button>`]
     ];
@@ -2180,11 +2197,70 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
     try { const r = await client.rpc("mes_statistiques"); if (!r.error) stats = r.data; } catch (e) { /* hors ligne */ }
     const jb = $("#eaJour");
     if (jb) jb.outerHTML = jourHTML();
-    const b = $("#eaOutils"), d = $("#eaDemarrage");
-    if (d) d.remove();
+    const b = $("#eaOutils"), d = $("#eaDemarrageZone");
+    if (d) d.innerHTML = demarrageHTML();
     if (b) b.outerHTML = outilsHTML();
   }
   const ouvrirOutil = id => ouvrirContenu({ outil: OUTILS[id][1], titre: OUTILS[id][0], type: "texte" }, marqueLecteur());
+
+  /* ---------- Espace connecté : quatre onglets ---------- */
+  // Aujourd'hui (programme du jour, reprise, premiers pas), Bibliothèque, Outils (révision, concours blancs, copie du mois),
+  // Mon compte (abonnement, VIP, parrainage, réglages). Menu fixé en bas de l'écran sur téléphone, en haut sur ordinateur.
+  // L'onglet ouvert est gardé le temps de la visite ; l'adresse #bibliotheque, #outils ou #compte ouvre l'onglet voulu.
+  const ICONES_VUE = {
+    jour: '<path d="M12 3v2M12 19v2M5 12H3M21 12h-2M6.3 6.3 4.9 4.9M19.1 19.1l-1.4-1.4M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/><circle cx="12" cy="12" r="4"/>',
+    bibliotheque: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M10 4h4.5A1.5 1.5 0 0 1 16 5.5V20h-6"/><path d="m16 6 3.2-.9a1 1 0 0 1 1.2.7l.6 2.1-4.9 1.4"/>',
+    outils: '<path d="M9 11 4 6l2-2 5 5"/><path d="m14 4 6 6-9.5 9.5H4.5v-6z"/>',
+    compte: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'
+  };
+  const VUES = [["jour", "Aujourd'hui"], ["bibliotheque", "Bibliothèque"], ["outils", "Outils"], ["compte", "Mon compte"]];
+  const CLE_VUE = "ea-vue";
+  let vue = null;
+  const vueValide = v => VUES.some(x => x[0] === v);
+  function vueInitiale() {
+    const h = location.hash.slice(1);
+    if (vueValide(h)) return h;
+    if (h === "eaVip") return "compte";
+    if (vue) return vue;
+    try { const v = sessionStorage.getItem(CLE_VUE); if (vueValide(v)) return v; } catch (e) { /* stockage indisponible */ }
+    return "jour";
+  }
+  const navHTML = () => `<nav class="ea-nav" aria-label="Rubriques de l'espace abonnés">${VUES.map(([id, nom]) => `<button type="button" data-vers-vue="${id}"${vue === id ? ' aria-current="page"' : ""}><svg viewBox="0 0 24 24" aria-hidden="true">${ICONES_VUE[id]}</svg><span>${nom}</span></button>`).join("")}</nav>`;
+  function montrerVue(v, defiler) {
+    if (!vueValide(v)) v = "jour";
+    vue = v;
+    try { sessionStorage.setItem(CLE_VUE, v); } catch (e) { /* stockage indisponible */ }
+    $$(".ea-vue", racine).forEach(z => { z.hidden = z.dataset.vue !== v; });
+    $$(".ea-nav [data-vers-vue]", racine).forEach(b => { if (b.dataset.versVue === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+    if (defiler) racine.scrollIntoView({ block: "start" });
+  }
+  // En-tête de l'espace connecté : prénom, état de l'abonnement en une ligne
+  function enteteHTML() {
+    const { profil, abo, admin } = etat, essai = etat.essai || {};
+    const j = abo.actif ? joursJusqua(abo.fin) : null;
+    const ligne = !abo.actif ? (admin ? "Vous voyez l'espace tel que vos abonnés le voient." : "")
+      : essai.en_cours ? `Essai gratuit ouvert jusqu'au ${dateFr(abo.fin)} au soir`
+      : `Accès ouvert jusqu'au ${dateFr(abo.fin)}${j <= JOURS_RENOUVELLEMENT ? `, ${j <= 0 ? "dernier jour" : `plus que ${j} jour${j > 1 ? "s" : ""}`}` : ""}`;
+    return `<header class="ea-tete">
+        <div><span class="eyebrow">${admin && !abo.actif ? "Administrateur" : "Espace abonnés"}</span>
+        <h2>Bonjour${profil.prenom ? " " + esc(profil.prenom) : ""}</h2>
+        ${ligne ? `<p>${ligne}${etat.vip ? ` <span class="ea-vip-marque">VIP</span>` : ""}</p>` : ""}</div>
+        ${admin ? `<a class="btn btn-gold btn-sm" href="${ROOT}espace-abonnes/admin/">Administration</a>` : ""}
+      </header>`;
+  }
+  // Encart VIP de l'onglet Aujourd'hui (abonné en formule normale) : ce que le VIP ajoute, renvoi vers l'onglet Mon compte
+  function vipEncartHTML() {
+    if (!etat.abo.actif || etat.vip || (etat.essai || {}).en_cours || !tarifsVip().length) return "";
+    const o = contenus.filter(c => rubrique(c) === "ouvrages" && verrouille(c)).length;
+    const v = contenus.filter(c => c.type === "video" && !c.video_ouverte).length;
+    return `<button class="ea-vip-encart" type="button" data-vers-vue="compte" data-vers-ancre="eaVip">
+        <span class="ea-vip-marque">VIP</span>
+        <b>${o ? `${o} ouvrage${o > 1 ? "s" : ""} complet${o > 1 ? "s" : ""}` : "Les ouvrages complets"}${v ? `, ${v} vidéos réservées` : ""}${etat.copies ? "" : " et la copie corrigée du mois"}</b>
+        <span>Découvrir l'espace VIP${icone("i-arrow")}</span>
+      </button>`;
+  }
+  // Statut détaillé : dans l'onglet Aujourd'hui quand il demande un geste (renouvellement proche, essai), sinon dans Mon compte
+  const statutUrgent = () => etat.abo.actif && ((etat.essai || {}).en_cours || joursJusqua(etat.abo.fin) <= JOURS_RENOUVELLEMENT);
 
   async function afficher(onglet) {
     racine.setAttribute("aria-busy", "true");
@@ -2201,6 +2277,7 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
       await formulaireCode(racine);
       return afficher();
     }
+    document.body.classList.toggle("ea-connecte", false);
     if (!etat.session) {
       memoLecture = null; favoris = null; vuAvant = null; qcmFiche = null; noterFiche = null;
       racine.innerHTML = `<div class="ea-accueil">${formulairesHTML(onglet || (!avisAppareil && location.hash === "#inscription" ? "inscription" : "connexion"))}${await apercuHTML()}</div>`;
@@ -2220,9 +2297,19 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
       favoris = crochetFavoris;
       qcmFiche = n => toutesQuestions().filter(x => x.q.fiche === n);
       noterFiche = (x, juste) => { if (x) enregistrerReponse(x, juste); };
-      racine.innerHTML = compteHTML() + await datesHTML() + await annoncesHTML() + (etat.abo.actif ? statutHTML() + vipHTML() + copiesHTML() : `<div class="ea-statut ea-statut-ok"><div><span class="eyebrow">Administrateur</span><h3>Vous voyez l'espace tel que vos abonnés le voient.</h3></div></div>`) + jourHTML() + repriseHTML() + installerHTML() + notifHTML() + parrainageHTML() + outilsHTML() + agentHTML() + bibliothequeHTML();
+      vue = vueInitiale();
+      document.body.classList.add("ea-connecte");
+      const urgent = statutUrgent(), statut = etat.abo.actif ? statutHTML() : "";
+      const zone = (id, html) => `<div class="ea-vue" data-vue="${id}"${vue === id ? "" : " hidden"}>${html}</div>`;
+      racine.innerHTML = enteteHTML() + navHTML()
+        + zone("jour", await datesHTML() + await annoncesHTML() + (urgent ? statut : "") + jourHTML() + repriseHTML()
+          + `<div id="eaDemarrageZone">${demarrageHTML()}</div>` + notifHTML() + vipEncartHTML())
+        + zone("bibliotheque", bibliothequeHTML())
+        + zone("outils", copiesHTML() + outilsHTML() + agentHTML())
+        + zone("compte", (urgent ? "" : statut) + vipHTML() + parrainageHTML() + installerHTML() + compteHTML(true));
       brancherCompte();
       majNotif();
+      if (location.hash === "#eaVip") { const v = $("#eaVip"); if (v) v.scrollIntoView({ block: "start" }); }
     } else {
       memoLecture = null; favoris = null; qcmFiche = null; noterFiche = null;
       racine.innerHTML = compteHTML() + await annoncesHTML() + `<div class="ea-accueil ea-accueil-inscrit">${statutHTML()}${await apercuHTML()}</div>`;
@@ -2379,7 +2466,7 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
   // Recherche dans la bibliothèque
   racine.addEventListener("input", e => {
     if (e.target.id !== "eaCherche") return;
-    recherche = e.target.value;
+    recherche = e.target.value; nbAffiches = TRANCHE;
     const b = $(".ea-biblio", racine);
     if (!b) return;
     const pos = e.target.selectionStart;
@@ -2417,9 +2504,22 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
       if (w) { w.opener = null; w.location = data.signedUrl; } else location.href = data.signedUrl;
       return;
     }
+    const vv = e.target.closest("[data-vers-vue]");
+    if (vv) {
+      montrerVue(vv.dataset.versVue, !vv.dataset.versAncre);
+      const a = vv.dataset.versAncre && $("#" + vv.dataset.versAncre);
+      if (a) a.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (e.target.closest("[data-plus]") && $(".ea-biblio", racine)) {
+      const avant = nbAffiches; nbAffiches += TRANCHE;
+      $(".ea-biblio", racine).outerHTML = bibliothequeHTML();
+      const cartes = $$(".ea-grille .ea-carte", racine); if (cartes[avant]) cartes[avant].focus({ preventScroll: true });
+      return;
+    }
     const po = e.target.closest("[data-portee]");
     if (po && $(".ea-biblio", racine)) {
-      portee = po.dataset.portee; filtre = "tous"; recherche = "";
+      portee = po.dataset.portee; filtre = "tous"; recherche = ""; nbAffiches = TRANCHE;
       $(".ea-biblio", racine).outerHTML = bibliothequeHTML();
       return;
     }
@@ -2446,7 +2546,7 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
     }
     const ch = e.target.closest("[data-filtre]");
     if (ch && $(".ea-biblio", racine)) {
-      filtre = ch.dataset.filtre; recherche = "";
+      filtre = ch.dataset.filtre; recherche = ""; nbAffiches = TRANCHE;
       $(".ea-biblio", racine).outerHTML = bibliothequeHTML();
       return;
     }
@@ -2459,7 +2559,7 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
     const dem = e.target.closest("[data-demarrage]");
     if (dem) {
       if (dem.dataset.demarrage === "masquer") { try { localStorage.setItem(CLE_DEMARRAGE, "1"); } catch (x) { /* stockage indisponible */ } const d = $("#eaDemarrage"); if (d) d.remove(); }
-      else { const b = $(".ea-biblio", racine); if (b) b.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      else montrerVue("bibliotheque", true);
       return;
     }
     const copie = e.target.closest("[data-copier-lien]");
@@ -2472,7 +2572,7 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
     }
     if (e.target.closest("[data-vip-teaser]")) {
       const v = $("#eaVip");
-      if (v) v.scrollIntoView({ behavior: "smooth", block: "start" }); else toast("Les cartes d'articles sont réservées à l'espace VIP.");
+      if (v) { montrerVue("compte"); v.scrollIntoView({ behavior: "smooth", block: "start" }); } else toast("Les cartes d'articles sont réservées à l'espace VIP.");
       return;
     }
     const outil = e.target.closest("[data-outil]");
@@ -2496,7 +2596,15 @@ ul{font-size:16px;line-height:1.9;margin:8px 0 0 0;padding-left:22px}.pied{margi
     if (b && b.getAttribute("aria-selected") !== "true") b.click();
     racine.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  window.addEventListener("hashchange", () => { versFormulaire(); ouvrirDepuisLien(); });
+  window.addEventListener("hashchange", () => {
+    versFormulaire(); ouvrirDepuisLien();
+    // Onglet demandé par l'adresse (#bibliotheque, #outils, #compte) ou renvoi vers l'offre VIP (#eaVip)
+    const h = location.hash.slice(1);
+    if (etat.session && $(".ea-nav", racine) && (vueValide(h) || h === "eaVip")) {
+      montrerVue(h === "eaVip" ? "compte" : h, h !== "eaVip");
+      const v = h === "eaVip" && $("#eaVip"); if (v) v.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
   // Contrôle de l'appareil toutes les minutes et au retour sur la page
   surRefus = controlerAppareil;
   setInterval(controlerAppareil, 60000);
