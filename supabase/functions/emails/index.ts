@@ -2,8 +2,8 @@
 //   { action: "planif" }          appel de la tâche planifiée (en-tête x-planif, vérifié par la base) : bienvenue,
 //                                 invitation à renouveler (10 jours avant la fin), rappels de fin d'abonnement
 //                                 (7 et 3 jours avant), relance d'inactivité,
-//                                 annonce quotidienne des nouveautés, récapitulatif du lundi, passage en VIP
-//                                 (emails_file_vip), relance des inscrits jamais abonnés (2 et 10 jours après
+//                                 annonce des nouveautés le jeudi, récapitulatif du lundi, passage en VIP
+//                                 (emails_file_vip), accès offert sans VIP (emails_file_offert), relance des inscrits jamais abonnés (2 et 10 jours après
 //                                 l'inscription, emails_file_relances), alertes à l'administrateur (nouvelle demande
 //                                 d'activation, nouveau compte), et suivi des contacts qui ont accepté les conseils et
 //                                 offres (fiche offerte, test de niveau : 1, 3 et 7 jours après, emails_file_prospects)
@@ -100,9 +100,9 @@ async function planif(service: SupabaseClient) {
   const { data: r } = await service.from("emails_reglages").select("actif").maybeSingle();
   if (!r?.actif) return { actif: false };
   if (!Deno.env.get("BREVO_API_KEY")) return { actif: true, cle: false };
-  const [{ data: fileBase, error }, { data: fileVip }, { data: fileRelances }] = await Promise.all([service.rpc("emails_file"), service.rpc("emails_file_vip"), service.rpc("emails_file_relances")]);
+  const [{ data: fileBase, error }, { data: fileVip }, { data: fileRelances }, { data: fileOffert }] = await Promise.all([service.rpc("emails_file"), service.rpc("emails_file_vip"), service.rpc("emails_file_relances"), service.rpc("emails_file_offert")]);
   if (error) return { erreur: error.message };
-  const file = [...(fileBase ?? []), ...(fileVip ?? []), ...(fileRelances ?? [])];
+  const file = [...(fileBase ?? []), ...(fileVip ?? []), ...(fileRelances ?? []), ...(fileOffert ?? [])];
   let envoyes = 0, erreurs = 0, annonce = false;
   for (const l of (file ?? []) as Ligne[]) {
     if (envoyes + erreurs >= ENVOIS_MAX) break;
@@ -122,6 +122,7 @@ async function planif(service: SupabaseClient) {
       : l.type === "campagne" ? campagne(l.prenom, l.donnees)
       : l.type === "hebdo" ? hebdo(l.prenom, l.donnees)
       : l.type === "passage_vip" ? passageVip(l.prenom, l.donnees)
+      : l.type === "acces_offert" ? accesOffert(l.prenom, l.donnees)
       : l.type === "relance_inscrit" ? relanceInscrit(l.prenom, l.donnees)
       : l.type === "alerte_demande" ? alerteDemande(l.donnees)
       : l.type === "alerte_compte" ? alerteCompte(l.donnees)
@@ -236,6 +237,24 @@ ${bouton("Ouvrir mon espace VIP", `${SITE}/espace-abonnes/`)}
 <p>Le reste de votre abonnement ne change pas : sujets corrigés, fiches de révision, QCM, textes et jurisprudence.</p>
 <p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
   const texte = `Bonjour ${prenom},\n\nVotre abonnement passe en VIP${fin ? ` : l'espace VIP vous est ouvert jusqu'au ${fin} inclus` : ""}. Merci de votre confiance.\n\nVous y trouverez\n${points.map((x) => "- " + x).join("\n")}\n\nOuvrir mon espace VIP ${SITE}/espace-abonnes/\n\nLe reste de votre abonnement ne change pas : sujets corrigés, fiches de révision, QCM, textes et jurisprudence.\n\nBonne préparation,\nL'équipe des Cours Sésame et SAJ\n\nPour nous écrire, utilisez WhatsApp au ${WHATSAPP}.`;
+  return { sujet, html: gabarit(sujet, corps, piedService), texte };
+}
+
+// Accès offert sans VIP (bouton « Offrir copie et ouvrages » de l'administration, table acces_particuliers)
+function accesOffert(prenom: string, d: Record<string, unknown>) {
+  const sujet = "Un accès offert dans votre espace abonnés";
+  const fin = d.jusqu_au ? dateFr(d.jusqu_au) : "";
+  const titres = (d.titres ?? []) as string[];
+  const copies = d.copies === true, ouvrages = d.ouvrages === true && titres.length > 0;
+  const corps = `<p>Bonjour ${esc(prenom)},</p>
+<p>Les Cours Sésame et SAJ vous ouvrent, sans supplément${fin ? ` et jusqu'au <b>${fin}</b> inclus` : ""}, une partie de l'espace VIP. Votre abonnement, lui, ne change pas.</p>
+${copies ? `<p><b>La copie corrigée du mois.</b> Composez un sujet dans les conditions de l'épreuve, puis déposez votre copie dans votre espace, onglet « Outils », encadré « Votre copie corrigée du mois ». Vous pouvez la taper, ou la photographier page par page. Un correcteur la corrige et la note sur 20. Une copie par mois.</p>` : ""}
+${ouvrages ? `<p><b>${titres.length} ouvrages complets à lire en ligne</b>, dans l'onglet « Bibliothèque », rubrique « Ouvrages complets ».</p><ul>${titres.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
+<p>Les autres ouvrages, dont les Codes commentés et les Annales, restent réservés à l'espace VIP.</p>` : ""}
+${bouton("Ouvrir mon espace abonnés", `${SITE}/espace-abonnes/`)}
+<p>Votre espace se range désormais en quatre onglets : Aujourd'hui, Bibliothèque, Outils et Mon compte. Sur téléphone, le menu se trouve en bas de l'écran.</p>
+<p>Bonne préparation,<br>L'équipe des Cours Sésame et SAJ</p>`;
+  const texte = `Bonjour ${prenom},\n\nLes Cours Sésame et SAJ vous ouvrent, sans supplément${fin ? ` et jusqu'au ${fin} inclus` : ""}, une partie de l'espace VIP. Votre abonnement, lui, ne change pas.\n\n${copies ? "La copie corrigée du mois. Composez un sujet dans les conditions de l'épreuve, puis déposez votre copie dans votre espace, onglet « Outils », encadré « Votre copie corrigée du mois ». Vous pouvez la taper, ou la photographier page par page. Un correcteur la corrige et la note sur 20. Une copie par mois.\n\n" : ""}${ouvrages ? `${titres.length} ouvrages complets à lire en ligne, dans l'onglet « Bibliothèque », rubrique « Ouvrages complets ».\n${titres.map((t) => "- " + t).join("\n")}\n\nLes autres ouvrages, dont les Codes commentés et les Annales, restent réservés à l'espace VIP.\n\n` : ""}Ouvrir mon espace abonnés ${SITE}/espace-abonnes/\n\nVotre espace se range désormais en quatre onglets : Aujourd'hui, Bibliothèque, Outils et Mon compte. Sur téléphone, le menu se trouve en bas de l'écran.\n\nBonne préparation,\nL'équipe des Cours Sésame et SAJ\n\nPour nous écrire, utilisez WhatsApp au ${WHATSAPP}.`;
   return { sujet, html: gabarit(sujet, corps, piedService), texte };
 }
 
