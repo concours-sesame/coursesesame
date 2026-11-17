@@ -206,3 +206,4 @@ table `clics`, 180 jours, aucun droit direct). Exemple, les pages qui déclenche
 
 - L'e-mail des nouveautés part le jeudi à partir de 9 h et regroupe les mises en ligne depuis la dernière annonce ; le récapitulatif part le lundi.
 - La relance d'inactivité garde sa règle : elle ne part que les jours sans aucune nouveauté depuis la dernière annonce.
+- E-mail « Un accès offert dans votre espace abonnés » (type `acces_offert`, fonction `emails_file_offert`, migration `20261117160000_email_acces_offert.sql`) : il part dans les 15 minutes qui suivent l'ouverture d'un accès offert, avec la liste des ouvrages ouverts.
