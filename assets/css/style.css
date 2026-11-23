@@ -2257,3 +2257,52 @@ body.ea-connecte .espace-section{padding-top:clamp(18px,3vw,32px)}
   body.ea-connecte .cart-bar.show{bottom:calc(78px + env(safe-area-inset-bottom))}
   body.ea-connecte .cart-bar:not(.show){visibility:hidden}
 }
+
+/* ---------- Finitions visuelles (novembre 2026) ---------- */
+
+/* Corrigés : la page d'un livre. Texte en Source Serif 4, ligne d'environ 70 signes, lettrine au premier paragraphe ;
+   encadrés et tableaux restent dans la police du texte courant */
+.sujet-main{max-width:42rem}
+@media (min-width:961px){.sujet-layout{grid-template-columns:minmax(0,42rem) 300px;justify-content:space-between}}
+.copie{font-family:var(--serif);font-size:1.125rem;line-height:1.72;color:#1e2636;font-optical-sizing:auto}
+.copie p{hyphenate-limit-chars:6 3 3}
+.copie>p:first-child:not([class])::first-letter{float:left;font-family:var(--serif);font-size:3.3em;font-weight:600;line-height:.82;color:var(--navy);margin:.08em .09em 0 -.02em}
+.copie :is(.encadre,table),.copie h4.sur{font-family:var(--sans)}
+.copie .encadre{font-size:1rem}
+@media (max-width:640px){.copie{font-size:1.0625rem;line-height:1.68}}
+
+/* Couverture de l'encart « Tiré de l'ouvrage » : jamais soulignée */
+.aside-cover{text-decoration:none}
+
+/* Fiche d'un ouvrage : un peu d'air entre les concours et le titre */
+.hero .product-title{margin-top:.75rem}
+
+/* Bandeau des pages intérieures : l'emblème de la maison, porte ouverte et étoile, en aplats ton sur ton */
+@media (min-width:1100px){
+  .hero-sub:not(.hero-product)>.wrap{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23e8a62b' d='M30 3C31.2 11 33 12.8 41 14 33 15.2 31.2 17 30 25 28.8 17 27 15.2 19 14 27 12.8 28.8 11 30 3Z'/%3E%3Cpath fill='%23112857' d='M12 84V50C12 35 24 26 40 26H45V34H41C30 34 21.5 41 21.5 51V84Z'/%3E%3Cpath fill='%23163469' d='M45 26 57 30V87L45 84Z'/%3E%3Cpath fill='%23112857' d='M57 30 73 27V88L57 87Z'/%3E%3Cpath fill='%23112857' d='M77 25H82V88H77Z'/%3E%3Cpath fill='%23163469' d='M4 95C30 82 70 82 96 95 70 88.5 30 88.5 4 95Z'/%3E%3C/svg%3E") no-repeat right var(--gutter) top .4rem/190px auto}
+}
+
+/* Calendrier des concours : tant qu'aucune date n'est publiée, une carte par concours */
+.calendrier-attente{max-width:70ch;margin:0;color:var(--muted)}
+.calendrier-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.cal-carte{display:flex;flex-direction:column;gap:.3rem;padding:1.15rem 1.15rem 1.2rem;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.cal-famille{font-size:.76rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-ink)}
+.cal-carte h2{font-family:var(--display);font-size:1.3rem;font-weight:600;line-height:1.2;color:var(--navy);margin:0}
+@media (min-width:1000px){.cal-carte h2{min-height:2.4em}}
+.cal-etat{display:flex;align-items:center;gap:.5rem;margin:.25rem 0 1rem;font-size:.92rem;color:var(--muted)}
+.cal-point{flex:none;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 3px rgba(232,166,43,.22)}
+.cal-actions{margin-top:auto;display:flex;flex-wrap:wrap;align-items:center;gap:.55rem .9rem}
+.cal-actions .btn svg{width:18px;height:18px}
+.cal-lien{font-size:.92rem;font-weight:600;color:var(--navy);text-underline-offset:3px}
+
+/* Lexique : deux colonnes sur grand écran, pour des lignes de lecture plus courtes et une page deux fois moins longue */
+@media (min-width:1000px){.lex-liste{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(32px,4vw,56px)}}
+.lex-entree dt small{white-space:nowrap}
+
+/* En-tête de 1061 à 1239 px (portables, affichage agrandi à 125 %) : le bouton WhatsApp ne garde que son icône et la
+   navigation se resserre, pour que rien ne soit coupé à droite ; le nom reste lu par les lecteurs d'écran */
+@media (min-width:1061px) and (max-width:1239px){
+  .nav a{padding:.5rem .5rem;font-size:.95rem}
+  .header-actions .btn-navy{font-size:0;gap:0;width:44px;min-height:44px;padding:0}
+  .header-actions .btn-navy svg{width:20px;height:20px}
+}
