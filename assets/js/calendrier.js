@@ -9,15 +9,27 @@
   const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const date = d => new Date(d + "T12:00:00Z").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
   const auj = new Date().toISOString().slice(0, 10);
+  const lienWa = nom => `https://wa.me/${zone.dataset.wa}?text=${encodeURIComponent("Bonjour Les Cours Sésame et SAJ, je souhaite être prévenu(e) dès l'ouverture des inscriptions au concours suivant : " + nom)}`;
   const vide = msg => {
-    const wa = zone.dataset.wa, texte = encodeURIComponent("Bonjour Les Cours Sésame et SAJ, je souhaite être prévenu(e) dès l'ouverture des inscriptions au concours suivant : ");
-    zone.innerHTML = `<div class="calendrier-vide"><p>${msg}</p><a class="btn btn-wa" href="https://wa.me/${wa}?text=${texte}" target="_blank" rel="noopener">Être prévenu sur WhatsApp</a></div>`;
+    zone.innerHTML = `<div class="calendrier-vide"><p>${msg}</p><a class="btn btn-wa" href="${lienWa("")}" target="_blank" rel="noopener">Être prévenu sur WhatsApp</a></div>`;
+  };
+  // Aucune date publiée : une carte par concours préparé, avec l'alerte WhatsApp propre à ce concours
+  const CARTES = [["INFJ", "Magistrature", "magistrature"], ["INFJ", "Greffe", "greffe"], ["INFJ", "Administration pénitentiaire", "penitentiaire"], ["INFJ", "EPPJEJ", "eppjej"], ["ENA", "École nationale d'administration", "ena"]];
+  const iconeWa = document.getElementById("i-wa") ? `<svg fill="currentColor" aria-hidden="true"><use href="#i-wa"/></svg>` : "";
+  const attente = () => {
+    zone.innerHTML = `<p class="calendrier-attente">Les dates de la prochaine session n'ont pas encore été publiées officiellement. Nous les ajoutons ici dès la parution de chaque communiqué.</p>
+      <div class="calendrier-grille">${CARTES.map(([famille, nom, page]) => `<article class="cal-carte">
+        <span class="cal-famille">${famille}</span>
+        <h2>${nom}</h2>
+        <p class="cal-etat"><span class="cal-point" aria-hidden="true"></span>Dates à paraître</p>
+        <div class="cal-actions"><a class="btn btn-wa btn-sm" href="${lienWa(nom)}" target="_blank" rel="noopener">${iconeWa}Être prévenu</a><a class="cal-lien" href="../concours/${page}/">Préparer ce concours</a></div>
+      </article>`).join("")}</div>`;
   };
   fetch(ESPACE_CONFIG.url + "/rest/v1/rpc/calendrier_publie", {
     method: "POST", headers: { apikey: ESPACE_CONFIG.cle, "Content-Type": "application/json" }, body: "{}"
   }).then(r => r.ok ? r.json() : Promise.reject()).then(lignes => {
     if (!Array.isArray(lignes) || !lignes.length) {
-      vide("Les dates de la prochaine session n'ont pas encore été publiées officiellement. Nous les ajoutons ici dès la parution du communiqué : demandez à être prévenu sur WhatsApp.");
+      attente();
       return;
     }
     const groupes = new Map();
