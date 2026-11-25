@@ -49,8 +49,9 @@ l'édition : elle ne change pas quand l'ouvrage passe d'une édition à la suiva
 - Page publique : `espace-abonnes/` (connexion, inscription, contenus exclusifs).
 - Administration : `espace-abonnes/admin/` (activer les abonnements, relancer, publier les contenus).
 - Téléchargements de l'administrateur : contenus d'origine sans filigrane (un par un, tout en .zip, ou les seules fiches de
-  révision en .zip) ; concours blancs avec leurs corrigés en Word (une épreuve, une série ou tout en .zip), aux couleurs
-  de la charte, fabriqués dans le navigateur par `assets/js/word.js` (logo : `assets/img/logo-documents.png`).
+  révision en .zip) ; concours blancs avec leurs corrigés en Word ou en PDF (une épreuve, une série ou tout en .zip), aux
+  couleurs de la charte, fabriqués dans le navigateur par `assets/js/word.js` et `assets/js/pdf-doc.js` (logo :
+  `assets/img/logo-documents.png` ; pour le PDF, pdf-lib, fontkit et les polices de `assets/vendor/polices-pdf/`).
 - Tarifs affichés : `TARIFS_ABONNEMENT` dans `assets/js/data.js`.
 - Base, règles d'accès et fonctions : dossier `supabase/` (voir `supabase/README.md`).
 - Les contenus exclusifs ne sont jamais placés dans ce dépôt : on les dépose depuis l'administration.

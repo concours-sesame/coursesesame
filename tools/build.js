@@ -1798,7 +1798,7 @@ const VIDEOS_TIKTOK = ${JSON.stringify([
 `);
   write("espace-abonnes/admin/index.html", page({
     prefix, url: SITE + "espace-abonnes/admin/", body, robots: "noindex, nofollow", stats: false,
-    scripts: [...SCRIPTS_ESPACE, "assets/js/videos-tiktok.js", "assets/js/word.js", "assets/js/espace-admin.js"],
+    scripts: [...SCRIPTS_ESPACE, "assets/js/videos-tiktok.js", "assets/js/word.js", "assets/js/pdf-doc.js", "assets/js/espace-admin.js"],
     title: "Administration de l'espace abonnés",
     description: "Administration de l'espace abonnés des Cours Sésame et SAJ.",
     ld: []
