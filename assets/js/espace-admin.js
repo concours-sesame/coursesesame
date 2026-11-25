@@ -115,8 +115,8 @@
     ["bientot", "Fin sous 7 jours", a => statut(a).cle === "bientot"], ["inactif", "Inactifs", a => inactif(a)], ["suspendu", "Suspendus", a => !!a.suspendu_depuis],
     ["expire", "Terminés", a => statut(a).cle === "expire"], ["anciens", "Jamais activés, +30 jours", a => jamaisActive(a)]];
   const estOuvrage = c => /^ouvrage/i.test(c.matiere || "");
-  const FILTRES_C = [["tous", "Tous", () => true], ["ouvrages", "Ouvrages complets", estOuvrage],
-    ["pdf", "Autres PDF", c => c.type === "pdf" && !estOuvrage(c)], ["texte", "Fiches et QCM", c => c.type === "texte"],
+  const FILTRES_C = [["tous", "Tous", () => true], ["ouvrages", "Ouvrages complets", estOuvrage], ["fiches", "Fiches de révision", c => /^fiches/i.test(c.matiere || "")],
+    ["pdf", "Autres PDF", c => c.type === "pdf" && !estOuvrage(c) && !/^fiches/i.test(c.matiere || "")], ["texte", "Textes et QCM", c => c.type === "texte"],
     ["video", "Vidéos", c => c.type === "video"], ["brouillons", "Brouillons et programmés", c => !c.publie || programme(c)]];
   // Recherche sans accents ni majuscules ; tous les mots tapés doivent se retrouver (titre, matière, présentation, concours)
   const sansAccents = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -337,9 +337,9 @@
   /* ---------- Téléchargement des originaux (administrateur) ---------- */
   // Les fichiers du compartiment privé sont les originaux, sans filigrane : le nom de l'abonné n'est ajouté qu'à
   // l'affichage. La base n'en ouvre la lecture qu'à l'administrateur validé par le code (est_admin) et, pour les
-  // seuls contenus publiés de leur formule, aux abonnés. Les fiches et QCM (texte) sont enregistrés en .txt.
+  // seuls contenus publiés de leur formule, aux abonnés. Les fiches et QCM (texte) sont enregistrés en Word (.docx).
   const nettoyerNom = t => String(t || "contenu").normalize("NFC").replace(/[\\/:*?"<>|\u0000-\u001f]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120) || "contenu";
-  const extension = c => c.fichier ? (c.fichier.split(".").pop() || "pdf").toLowerCase() : "txt";
+  const extension = c => c.fichier ? (c.fichier.split(".").pop() || "pdf").toLowerCase() : "docx";
   const nomDeFichier = c => `${nettoyerNom(c.titre)}.${extension(c)}`;
   const telechargeable = c => !!c.fichier || c.type === "texte";
   // QCM rendu lisible (questions, propositions, bonne réponse, explication et référence)
@@ -356,8 +356,41 @@
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 60000);
   };
+  // Fichiers Word aux couleurs de la charte (assets/js/word.js) : logo de l'en-tête lu une fois, illustrations
+  // des sujets lues sur le site. Cas pratique et commentaire en A4 paysage, le reste en A4 portrait.
+  let logoWord = null;
+  async function imageDuSite(chemin) {
+    const rep = await fetch(ROOT + chemin);
+    if (!rep.ok) throw new Error("HTTP " + rep.status);
+    const blob = await rep.blob();
+    const bmp = await createImageBitmap(blob);
+    const im = { octets: new Uint8Array(await blob.arrayBuffer()), largeur: bmp.width, hauteur: bmp.height, ext: /\.png$/i.test(chemin) ? "png" : "jpeg" };
+    if (bmp.close) bmp.close();
+    return im;
+  }
+  // Même document en Word ou en PDF (assets/js/pdf-doc.js, qui charge pdf-lib et les polices à la première demande)
+  const FORMATS = { word: { ext: "docx", nom: "Word" }, pdf: { ext: "pdf", nom: "PDF" } };
+  const typeDe = format => format === "pdf" ? "application/pdf" : Word.TYPE;
+  async function fichierDoc(o, format) {
+    const outil = format === "pdf" ? window.PdfDoc : window.Word;
+    if (!outil) throw new Error(`L'outil ${format === "pdf" ? "PDF" : "Word"} n'est pas chargé. Rechargez la page.`);
+    if (logoWord === null) { try { logoWord = await imageDuSite("assets/img/logo-documents.png"); } catch (e) { logoWord = false; } }
+    const d = Object.assign({ logo: logoWord || null, image: imageDuSite }, o);
+    return format === "pdf" ? PdfDoc.pdf(d, { racine: ROOT }) : Word.docx(d);
+  }
+  const fichierWord = o => fichierDoc(o, "word");
+  const enPaysage = t => /cas.pratique|commentaire/i.test(t || "");
+  // Fiche ou QCM en texte : le titre en tête du fichier, la matière en sous-titre et dans l'en-tête
+  function wordContenu(c) {
+    const corps = lireQcm(c) ? texteDe(c).split("\n").slice(1).join("\n") : c.texte || "";
+    const matiere = (c.matiere || "").split("·").pop().trim();
+    return fichierWord({ titre: c.titre, sousTitre: c.matiere || "", entete: matiere || undefined, paysage: enPaysage(c.titre), sections: [{ texte: corps }] });
+  }
   async function telechargerContenu(c, bouton) {
-    if (!c.fichier) { enregistrer(new Blob([texteDe(c)], { type: "text/plain;charset=utf-8" }), nomDeFichier(c)); return; }
+    if (!c.fichier) {
+      try { enregistrer(new Blob([await wordContenu(c)], { type: Word.TYPE }), nomDeFichier(c)); } catch (e) { toast(e && e.message ? e.message : messageErreur(e)); }
+      return;
+    }
     bouton.disabled = true;
     const { data, error } = await client.storage.from("exclusif").createSignedUrl(c.fichier, 120, { download: nomDeFichier(c) });
     bouton.disabled = false;
@@ -445,10 +478,15 @@
   }
   // Rangement dans l'archive : un dossier par famille (Ouvrage, Corrigé, Fiches, QCM…), d'après la matière
   const dossierDe = c => nettoyerNom((c.matiere || "").split("·")[0].trim() || (TYPES[c.type] || {}).nom || "Autres");
-  async function telechargerTout(bouton) {
-    const liste = contenus.filter(telechargeable);
+  // Tous les contenus, ou les seules fiches de révision (bouton « fiches »)
+  const estFiche = c => /^fiches/i.test(c.matiere || "");
+  async function telechargerTout(bouton, quoi) {
+    const fiches = quoi === "fiches";
+    const liste = contenus.filter(telechargeable).filter(c => !fiches || estFiche(c));
     if (!liste.length) { toast("Aucun fichier à télécharger."); return; }
-    if (!confirm(`Télécharger les ${liste.length} contenus en un seul fichier .zip ?\n\nIl s'agit des fichiers d'origine, sans filigrane. Gardez l'archive pour vous : elle contient vos ouvrages complets.`)) return;
+    if (!confirm(fiches
+      ? `Télécharger les ${liste.length} fiches de révision en un seul fichier .zip ?\n\nFichiers d'origine, sans filigrane, rangés par matière. Gardez l'archive pour vous.`
+      : `Télécharger les ${liste.length} contenus en un seul fichier .zip ?\n\nIl s'agit des fichiers d'origine, sans filigrane. Gardez l'archive pour vous : elle contient vos ouvrages complets.`)) return;
     const libelle = bouton.textContent;
     bouton.disabled = true;
     telechargement = true;
@@ -466,9 +504,10 @@
             const rep = await fetch(data.signedUrl);
             if (!rep.ok) throw new Error("HTTP " + rep.status);
             octets = new Uint8Array(await rep.arrayBuffer());
-          } else octets = new TextEncoder().encode(texteDe(c));
-          let nom = `${dossierDe(c)}/${nomDeFichier(c)}`, k = 2;
-          while (pris.has(nom.toLowerCase())) nom = `${dossierDe(c)}/${nettoyerNom(c.titre)} (${k++}).${extension(c)}`;
+          } else octets = await wordContenu(c);
+          const dossier = fiches ? nettoyerNom((c.matiere || "").split("·").slice(1).join(" ").trim() || "Fiches") : dossierDe(c);
+          let nom = `${dossier}/${nomDeFichier(c)}`, k = 2;
+          while (pris.has(nom.toLowerCase())) nom = `${dossier}/${nettoyerNom(c.titre)} (${k++}).${extension(c)}`;
           pris.add(nom.toLowerCase());
           fichiers.push({ nom, octets });
         } catch (e) { echecs.push(c.titre); }
@@ -479,11 +518,12 @@
     majLibelle();
     await Promise.all([suivant(), suivant(), suivant()]);
     majLibelle();
-    if (fichiers.length) enregistrer(archiveZip(fichiers), `Contenus exclusifs Cours Sesame ${auj()}.zip`);
+    if (fichiers.length) enregistrer(archiveZip(fichiers), `${fiches ? "Fiches de revision" : "Contenus exclusifs"} Cours Sesame ${auj()}.zip`);
     telechargement = false;
     bouton.textContent = libelle;
     bouton.disabled = false;
-    toast(echecs.length ? `${fichiers.length} contenus téléchargés. Échec pour ${echecs.length} : ${echecs.slice(0, 3).join(", ")}${echecs.length > 3 ? "…" : ""}` : `${fichiers.length} contenus téléchargés.`);
+    const quoiT = fiches ? "fiches téléchargées" : "contenus téléchargés";
+    toast(echecs.length ? `${fichiers.length} ${quoiT}. Échec pour ${echecs.length} : ${echecs.slice(0, 3).join(", ")}${echecs.length > 3 ? "…" : ""}` : `${fichiers.length} ${quoiT}.`);
   }
 
   /* ---------- Agent de révision : texte des contenus pour la recherche ---------- */
@@ -968,10 +1008,11 @@
 
   function panneauContenus() {
     const coches = CONC.map(c => `<label><input type="checkbox" name="concours" value="${c.id}"> ${esc(c.court)}</label>`).join("");
-    const nbTele = contenus.filter(telechargeable).length;
+    const nbTele = contenus.filter(telechargeable).length, nbFiches = contenus.filter(c => telechargeable(c) && estFiche(c)).length;
     return `${nbTele ? `<div class="ad-telecharger">
         <button class="btn btn-navy btn-sm" type="button" data-action="tout-telecharger">Télécharger tous les contenus (.zip)</button>
-        <small>${nbTele} contenus, fichiers d'origine sans filigrane. Réservé à l'administrateur.</small>
+        ${nbFiches ? `<button class="btn btn-ghost btn-sm" type="button" data-action="fiches-telecharger">Télécharger les ${nbFiches} fiches de révision (.zip)</button>` : ""}
+        <small>${nbTele} contenus, fichiers d'origine sans filigrane (fiches et QCM en texte au format Word). Réservé à l'administrateur.</small>
       </div>` : ""}
       <details class="ad-ajout"${contenus.length ? "" : " open"}>
         <summary>Ajouter un contenu exclusif</summary>
@@ -1270,7 +1311,7 @@
     const maintenant = Date.now();
     const etatB = b => { const d = new Date(b.debut), f = d.getTime() + b.duree_minutes * 60000; return !b.publie ? "Brouillon" : maintenant < d ? "Publiée, à venir" : maintenant <= f ? "En cours" : "Terminée"; };
     const liste = blancs.length ? `<ul class="ad-facteurs">${blancs.map(b => `<li><span><b>${esc(b.titre)}</b><small>${etatB(b)} · ${EXERCICES_AGENT[b.exercice] || b.exercice}${b.matiere ? ", " + esc(b.matiere) : ""} · ${dateHeure(b.debut)}, ${b.duree_minutes} min · ${pluriel(b.copies, "copie")}, ${b.rendues} rendue${b.rendues > 1 ? "s" : ""}, ${b.notes} notée${b.notes > 1 ? "s" : ""}${b.moyenne != null ? `, moyenne ${String(b.moyenne).replace(".", ",")}/20` : ""}</small></span>
-        <span>${!b.publie || new Date(b.debut) > maintenant ? `<button class="btn btn-ghost btn-sm" type="button" data-action="blanc-basculer" data-bid="${b.id}">${b.publie ? "Retirer" : "Publier"}</button>` : ""}</span></li>`).join("")}</ul>` : `<p class="ea-vide">Aucun concours blanc pour le moment.</p>`;
+        <span><button class="btn btn-ghost btn-sm" type="button" data-action="blanc-doc" data-format="word" data-bid="${b.id}" title="Sujet et corrigé en un fichier Word">Word</button><button class="btn btn-ghost btn-sm" type="button" data-action="blanc-doc" data-format="pdf" data-bid="${b.id}" title="Sujet et corrigé en un fichier PDF">PDF</button>${!b.publie || new Date(b.debut) > maintenant ? `<button class="btn btn-ghost btn-sm" type="button" data-action="blanc-basculer" data-bid="${b.id}">${b.publie ? "Retirer" : "Publier"}</button>` : ""}</span></li>`).join("")}</ul>` : `<p class="ea-vide">Aucun concours blanc pour le moment.</p>`;
     return `${blocEpreuvesBlanches()}<section class="ad-bloc"><h3>Concours blancs à date fixe <span class="n">${blancs.length}</span></h3>
         <p class="ad-note">Les abonnés en cours voient l'épreuve publiée dès sa publication, mais le sujet n'apparaît qu'à l'heure du début. La copie s'enregistre seule et part à la fin (5 minutes de tolérance). Ensuite, chacun la fait corriger et noter par l'agent de révision (abonnement VIP) ; le classement est anonyme. Prévenez les abonnés par une annonce.</p>
         ${liste}
@@ -1301,13 +1342,20 @@
     const publiees = epreuvesB.filter(e => e.publie).length;
     return `<section class="ad-bloc"><h3>Concours blancs en accès libre <span class="n">${epreuvesB.length}</span></h3>
         <p class="ad-note">Magistrature : la présélection (2 heures) et les cinq épreuves écrites (4 heures chacune). Greffe et pénitentiaire : les épreuves d'admissibilité de chaque cycle. Tout visiteur compose sur la page <a href="${ROOT}concours-blancs/" target="_blank" rel="noopener">Concours blancs</a> ; le corrigé est réservé aux abonnés des formules d'une semaine et plus. ${publiees} épreuve${publiees > 1 ? "s" : ""} publiée${publiees > 1 ? "s" : ""} sur ${epreuvesB.length}.</p>
+        ${epreuvesB.length ? `<div class="ad-telecharger">
+          <button class="btn btn-navy btn-sm" type="button" data-action="eb-tout" data-format="word">Tous les concours blancs et corrigés en Word (.zip)</button>
+          <button class="btn btn-navy btn-sm" type="button" data-action="eb-tout" data-format="pdf">Tous les concours blancs et corrigés en PDF (.zip)</button>
+          <small>Un fichier par épreuve, le sujet puis le corrigé, rangé par concours et par série. Brouillons compris. Réservé à l'administrateur.</small>
+        </div>` : ""}
         ${series.length ? series.map(k => {
           const [conc, n] = k.split("|"), liste = epreuvesB.filter(e => e.concours === conc && String(e.serie) === n);
           const toutes = liste.every(e => e.publie);
           return `<details class="ad-ajout"><summary>${esc(NOMS_BLANCS[conc] || nomConcours(conc))}, série ${n} · ${liste.filter(e => e.publie).length}/${liste.length} publiées</summary>
             <ul class="ad-facteurs">${liste.map(e => `<li><span><b>${esc(e.titre || NOMS_EPREUVES[e.epreuve])}</b><small>${esc(e.nature)} · ${e.duree_minutes} min · ${e.publie ? "publiée" : "brouillon"}</small></span>
-              <span><button class="btn btn-ghost btn-sm" type="button" data-action="eb-voir" data-quoi="sujet" data-ebid="${e.id}">Sujet</button><button class="btn btn-ghost btn-sm" type="button" data-action="eb-voir" data-quoi="corrige" data-ebid="${e.id}">Corrigé</button></span></li>`).join("")}</ul>
-            <p><button class="btn btn-navy btn-sm" type="button" data-action="eb-serie" data-conc="${esc(conc)}" data-serie="${n}" data-publie="${toutes ? "0" : "1"}">${toutes ? "Retirer la série" : "Publier la série"}</button></p></details>`;
+              <span><button class="btn btn-ghost btn-sm" type="button" data-action="eb-voir" data-quoi="sujet" data-ebid="${e.id}">Sujet</button><button class="btn btn-ghost btn-sm" type="button" data-action="eb-voir" data-quoi="corrige" data-ebid="${e.id}">Corrigé</button><button class="btn btn-ghost btn-sm" type="button" data-action="eb-doc" data-format="word" data-ebid="${e.id}" title="Sujet et corrigé en un fichier Word">Word</button><button class="btn btn-ghost btn-sm" type="button" data-action="eb-doc" data-format="pdf" data-ebid="${e.id}" title="Sujet et corrigé en un fichier PDF">PDF</button></span></li>`).join("")}</ul>
+            <p><button class="btn btn-navy btn-sm" type="button" data-action="eb-serie" data-conc="${esc(conc)}" data-serie="${n}" data-publie="${toutes ? "0" : "1"}">${toutes ? "Retirer la série" : "Publier la série"}</button>
+              <button class="btn btn-ghost btn-sm" type="button" data-action="eb-serie-doc" data-format="word" data-conc="${esc(conc)}" data-serie="${n}">Série en Word (.zip)</button>
+              <button class="btn btn-ghost btn-sm" type="button" data-action="eb-serie-doc" data-format="pdf" data-conc="${esc(conc)}" data-serie="${n}">Série en PDF (.zip)</button></p></details>`;
         }).join("") : `<p class="ea-vide">Aucune épreuve pour le moment.</p>`}
       </section>`;
   }
@@ -1326,6 +1374,94 @@
     const { data, error } = await client.from("epreuves_blanches").select(quoi).eq("id", id).maybeSingle();
     if (error || !data) { toast(error ? messageErreur(error) : "Épreuve introuvable."); return; }
     ouvrirContenu({ type: "texte", titre: `${NOMS_BLANCS[e.concours] || e.concours}, série ${e.serie}, ${e.titre || NOMS_EPREUVES[e.epreuve]}, ${quoi === "sujet" ? "sujet" : "corrigé"}`, texte: texteEpreuve(e, quoi, data[quoi]) }, "Administration");
+  }
+
+  /* ---------- Téléchargement des concours blancs en Word ou en PDF (administrateur) ---------- */
+  // Un fichier par épreuve : le sujet, puis le corrigé sur une nouvelle page. Les sujets et corrigés sont lus dans
+  // la base au moment du clic (la liste chargée avec la page ne les contient pas).
+  const nomEpreuveB = e => e.titre || NOMS_EPREUVES[e.epreuve] || e.epreuve;
+  const nomBlanc = c => NOMS_BLANCS[c] || nomConcours(c) || c;
+  const dureeB = m => m % 60 ? `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")}` : `${m / 60} heure${m > 60 ? "s" : ""}`;
+  const SANS_CORRIGE = "Le corrigé de cette épreuve n'est pas encore enregistré.";
+  function docEpreuve(e, d, format) {
+    return fichierDoc({
+      titre: `Concours blanc n° ${e.serie}, ${nomEpreuveB(e)}`,
+      sousTitre: [nomBlanc(e.concours), e.nature, dureeB(e.duree_minutes)].filter(Boolean).join(" · "),
+      entete: nomEpreuveB(e),
+      paysage: enPaysage(e.nature),
+      sections: [{ titre: "Sujet", texte: texteEpreuve(e, "sujet", d.sujet || "") },
+        { titre: "Corrigé", texte: d.corrige ? texteEpreuve(e, "corrige", d.corrige) : SANS_CORRIGE, nouvellePage: true }]
+    }, format);
+  }
+  const fichierEpreuveB = (e, format) => `${String(e.ordre || 0).padStart(2, "0")} ${nettoyerNom(nomEpreuveB(e))}.${FORMATS[format].ext}`;
+  async function textesEpreuves(filtre) {
+    const { data, error } = await filtre(client.from("epreuves_blanches").select("id, sujet, corrige"));
+    if (error) throw error;
+    return new Map((data || []).map(d => [d.id, d]));
+  }
+  async function telechargerEpreuveB(id, bouton, format) {
+    const e = epreuvesB.find(x => x.id === id);
+    if (!e) return;
+    bouton.disabled = true;
+    try {
+      const d = (await textesEpreuves(q => q.eq("id", id))).get(id);
+      if (!d) throw new Error("Épreuve introuvable.");
+      enregistrer(new Blob([await docEpreuve(e, d, format)], { type: typeDe(format) }), `${nettoyerNom(`${nomBlanc(e.concours)}, série ${e.serie}, ${nomEpreuveB(e)}`)}.${FORMATS[format].ext}`);
+    } catch (err) { toast(err && err.message ? err.message : messageErreur(err)); }
+    bouton.disabled = false;
+  }
+  // Une série, ou tout : archive .zip, un dossier par concours et par série quand il y en a plusieurs
+  async function telechargerEpreuvesB(bouton, format, conc, serie) {
+    const liste = epreuvesB.filter(e => !conc || (e.concours === conc && e.serie === serie));
+    if (!liste.length) { toast("Aucune épreuve à télécharger."); return; }
+    if (!conc && !confirm(`Télécharger les ${liste.length} épreuves des concours blancs, avec leurs corrigés, en ${FORMATS[format].nom}, dans un seul fichier .zip ?
+
+Comptez une à trois minutes et gardez la page ouverte. L'archive contient tous vos corrigés : gardez-la pour vous.`)) return;
+    const libelle = bouton.textContent;
+    bouton.disabled = true;
+    telechargement = true;
+    const fichiers = [], echecs = [];
+    try {
+      const concours = [...new Set(liste.map(e => e.concours))];
+      let fait = 0;
+      for (const c of concours) {
+        const textes = await textesEpreuves(q => conc ? q.eq("concours", c).eq("serie", serie) : q.eq("concours", c));
+        for (const e of liste.filter(x => x.concours === c)) {
+          bouton.textContent = `Préparation… ${++fait} / ${liste.length}`;
+          try {
+            const d = textes.get(e.id);
+            if (!d) throw new Error("introuvable");
+            const dossier = conc ? "" : `${nettoyerNom(nomBlanc(c))}/Série ${e.serie}/`;
+            fichiers.push({ nom: dossier + fichierEpreuveB(e, format), octets: await docEpreuve(e, d, format) });
+          } catch (err) { echecs.push(`${nomBlanc(c)}, série ${e.serie}, ${nomEpreuveB(e)}`); }
+        }
+      }
+      if (fichiers.length) enregistrer(archiveZip(fichiers), conc ? `${nettoyerNom(`Concours blanc ${nomBlanc(conc)} serie ${serie} ${FORMATS[format].nom}`)}.zip` : `Concours blancs et corriges ${FORMATS[format].nom} Cours Sesame ${auj()}.zip`);
+      toast(echecs.length ? `${fichiers.length} épreuves téléchargées. Échec pour ${echecs.length} : ${echecs.slice(0, 3).join(", ")}${echecs.length > 3 ? "…" : ""}` : `${fichiers.length} épreuve${fichiers.length > 1 ? "s" : ""} téléchargée${fichiers.length > 1 ? "s" : ""}.`);
+    } catch (err) { toast(err && err.message ? err.message : messageErreur(err)); }
+    telechargement = false;
+    bouton.textContent = libelle;
+    bouton.disabled = false;
+  }
+  // Concours blanc à date fixe : le sujet, puis le corrigé-type rattaché (contenu en texte), s'il y en a un
+  async function telechargerBlancFixe(id, bouton, format) {
+    const b = blancs.find(x => x.id === id);
+    if (!b) return;
+    bouton.disabled = true;
+    try {
+      const r = await client.from("concours_blancs").select("corrige_id").eq("id", id).maybeSingle();
+      if (r.error) throw r.error;
+      const c = r.data && r.data.corrige_id ? contenus.find(x => x.id === r.data.corrige_id) : null;
+      const corrige = !c ? SANS_CORRIGE : c.fichier ? `Le corrigé de cette épreuve est un fichier PDF, « ${c.titre} » : téléchargez-le depuis l'onglet Contenus.` : c.texte || SANS_CORRIGE;
+      const exercice = EXERCICES_AGENT[b.exercice] || b.exercice;
+      const o = await fichierDoc({
+        titre: b.titre, sousTitre: [exercice, b.matiere, dureeB(b.duree_minutes)].filter(Boolean).join(" · "),
+        entete: [b.matiere, exercice].filter(Boolean).join(" · "), paysage: enPaysage(b.exercice),
+        sections: [{ titre: "Sujet", texte: b.sujet || "" }, { titre: "Corrigé", texte: corrige, nouvellePage: true }]
+      }, format);
+      enregistrer(new Blob([o], { type: typeDe(format) }), `${nettoyerNom(b.titre)}.${FORMATS[format].ext}`);
+    } catch (err) { toast(err && err.message ? err.message : messageErreur(err)); }
+    bouton.disabled = false;
   }
 
   function panneauStats() {
@@ -1947,6 +2083,7 @@
     if (act === "actualiser-visites") { const o = onglet; onglet = "visites"; await rafraichirVisites(); onglet = o; toast("Visites actualisées"); return; }
     if (act === "mfa") { activerDeuxEtapes(b); return; }
     if (act === "tout-telecharger") { telechargerTout(b); return; }
+    if (act === "fiches-telecharger") { telechargerTout(b, "fiches"); return; }
     if (act === "indexer") { indexerContenus(b); return; }
     if (act === "agent-voir") { voirEchange(Number(b.dataset.eid)); return; }
     if (act === "exporter") { exporter(b.dataset.quoi); return; }
@@ -1954,6 +2091,11 @@
     if (act === "supprimer-anciens") { supprimerAnciens(b); return; }
     if (act === "cmd-ligne") { $("#adCmdLignes").insertAdjacentHTML("beforeend", ligneCmdHTML()); return; }
     if (act === "eb-voir") { voirEpreuveBlanche(Number(b.dataset.ebid), b.dataset.quoi === "sujet" ? "sujet" : "corrige"); return; }
+    const format = b.dataset.format === "pdf" ? "pdf" : "word";
+    if (act === "eb-doc") { telechargerEpreuveB(Number(b.dataset.ebid), b, format); return; }
+    if (act === "eb-serie-doc") { telechargerEpreuvesB(b, format, b.dataset.conc, Number(b.dataset.serie)); return; }
+    if (act === "eb-tout") { telechargerEpreuvesB(b, format); return; }
+    if (act === "blanc-doc") { telechargerBlancFixe(Number(b.dataset.bid), b, format); return; }
     if (act === "eb-serie") {
       const publier = b.dataset.publie === "1";
       if (publier && !confirm(`Publier la série ${b.dataset.serie} ? Tous les visiteurs pourront composer ; les abonnés des formules d'une semaine et plus liront les corrigés.`)) return;
