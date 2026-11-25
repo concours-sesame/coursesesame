@@ -350,9 +350,13 @@
     return `${c.titre}\n${qcm.duree ? `Durée conseillée, ${qcm.duree} minutes\n` : ""}\n` + qcm.questions.map((q, i) =>
       `${i + 1}. ${q.q}\n${(q.options || []).map((o, j) => `   ${L[j]}. ${o}`).join("\n")}\n   Bonne réponse, ${L[q.bonne] || "?"}\n${q.explication ? `   Explication. ${q.explication}\n` : ""}${q.reference ? `   Référence. ${q.reference}\n` : ""}`).join("\n");
   }
+  // Nom du fichier sans accents ni signes hors ASCII : certains navigateurs remplacent sinon le nom par « download »
+  // (le contenu des fichiers, et les noms rangés dans une archive .zip, gardent leurs accents)
+  const nomAscii = n => String(n).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/œ/g, "oe").replace(/Œ/g, "OE")
+    .replace(/æ/g, "ae").replace(/n°\s*/gi, "n ").replace(/[^\x20-\x7e]+/g, " ").replace(/\s+/g, " ").replace(/ \./g, ".").trim() || "fichier";
   const enregistrer = (blob, nom) => {
     const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = nom;
+    a.href = URL.createObjectURL(blob); a.download = nomAscii(nom);
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 60000);
   };
@@ -1342,7 +1346,9 @@
     const publiees = epreuvesB.filter(e => e.publie).length;
     return `<section class="ad-bloc"><h3>Concours blancs en accès libre <span class="n">${epreuvesB.length}</span></h3>
         <p class="ad-note">Magistrature : la présélection (2 heures) et les cinq épreuves écrites (4 heures chacune). Greffe et pénitentiaire : les épreuves d'admissibilité de chaque cycle. Tout visiteur compose sur la page <a href="${ROOT}concours-blancs/" target="_blank" rel="noopener">Concours blancs</a> ; le corrigé est réservé aux abonnés des formules d'une semaine et plus. ${publiees} épreuve${publiees > 1 ? "s" : ""} publiée${publiees > 1 ? "s" : ""} sur ${epreuvesB.length}.</p>
-        ${epreuvesB.length ? `<div class="ad-telecharger">
+        ${epreuvesB.length ? `${choixEpreuveHTML()}
+        <p class="ad-note">Vous pouvez aussi ouvrir une série ci-dessous (ligne « + ») : chaque épreuve y a ses boutons Word et PDF.</p>
+        <div class="ad-telecharger">
           <button class="btn btn-navy btn-sm" type="button" data-action="eb-tout" data-format="word">Tous les concours blancs et corrigés en Word (.zip)</button>
           <button class="btn btn-navy btn-sm" type="button" data-action="eb-tout" data-format="pdf">Tous les concours blancs et corrigés en PDF (.zip)</button>
           <small>Un fichier par épreuve, le sujet puis le corrigé, rangé par concours et par série. Brouillons compris. Réservé à l'administrateur.</small>
@@ -1359,6 +1365,29 @@
         }).join("") : `<p class="ea-vide">Aucune épreuve pour le moment.</p>`}
       </section>`;
   }
+  // Téléchargement d'une seule épreuve : concours, série, épreuve et format choisis dans des listes. Le choix est
+  // gardé dans choixEb pour survivre à l'actualisation automatique de la page.
+  const choixEb = { conc: "", serie: "", id: "", format: "pdf" };
+  function choixEpreuveHTML() {
+    const rang = c => { const i = Object.keys(NOMS_BLANCS).indexOf(c); return i < 0 ? 99 : i; };
+    const concours = [...new Set(epreuvesB.map(e => e.concours))].sort((a, b) => rang(a) - rang(b));
+    if (!concours.includes(choixEb.conc)) choixEb.conc = concours[0];
+    const series = [...new Set(epreuvesB.filter(e => e.concours === choixEb.conc).map(e => e.serie))].sort((a, b) => a - b);
+    if (!series.includes(Number(choixEb.serie))) choixEb.serie = series[0];
+    const eps = epreuvesB.filter(e => e.concours === choixEb.conc && e.serie === Number(choixEb.serie)).sort((a, b) => a.ordre - b.ordre);
+    if (!eps.some(e => e.id === Number(choixEb.id))) choixEb.id = eps.length ? eps[0].id : "";
+    const opt = (v, l, sel) => `<option value="${esc(String(v))}"${sel ? " selected" : ""}>${esc(l)}</option>`;
+    return `<form class="form ad-form" data-form="eb-choix" novalidate>
+        <h4 class="full">Télécharger une seule épreuve, avec son corrigé</h4>
+        <div class="field"><label for="ebConc">Concours</label><select id="ebConc" data-ebchoix="conc">${concours.map(c => opt(c, nomBlanc(c), c === choixEb.conc)).join("")}</select></div>
+        <div class="field"><label for="ebSerie">Série</label><select id="ebSerie" data-ebchoix="serie">${series.map(n => opt(n, `Série ${n}`, n === Number(choixEb.serie))).join("")}</select></div>
+        <div class="field"><label for="ebEpreuve">Épreuve</label><select id="ebEpreuve" data-ebchoix="id">${eps.map(e => opt(e.id, `${nomEpreuveB(e)}${e.publie ? "" : " (brouillon)"}`, e.id === Number(choixEb.id))).join("")}</select></div>
+        <div class="field"><label for="ebFormat">Format</label><select id="ebFormat" data-ebchoix="format">${opt("pdf", "PDF", choixEb.format === "pdf")}${opt("word", "Word", choixEb.format === "word")}</select></div>
+        <p class="ea-msg full" role="alert"></p>
+        <p class="full"><button class="btn btn-gold" type="submit">Télécharger cette épreuve</button></p>
+      </form>`;
+  }
+
   // Présélection, informatique et QCM : le sujet et le corrigé sont des objets JSON ; on les présente en texte lisible
   function texteEpreuve(e, quoi, t) {
     if (!["preselection", "informatique", "cmc"].includes(e.epreuve)) return t;
@@ -2336,6 +2365,12 @@ Comptez une à trois minutes et gardez la page ouverte. L'archive contient tous 
     }
   });
   racine.addEventListener("change", async e => {
+    if (e.target.dataset.ebchoix) {
+      choixEb[e.target.dataset.ebchoix] = e.target.value;
+      const f = e.target.closest("form");
+      if (f) f.outerHTML = choixEpreuveHTML();
+      return;
+    }
     if (e.target.dataset.kstatut) {
       const k = commandes.find(x => String(x.id) === e.target.dataset.kstatut);
       if (!k) return;
@@ -2364,6 +2399,7 @@ Comptez une à trois minutes et gardez la page ouverte. L'archive contient tous 
     msg.textContent = "";
 
     if (f.dataset.form === "tiktok") { await soumettreTiktok(f, msg, bouton); return; }
+    if (f.dataset.form === "eb-choix") { await telechargerEpreuveB(Number(choixEb.id), bouton, choixEb.format === "word" ? "word" : "pdf"); return; }
     if (f.dataset.form === "mfa") {
       const code = v("code").replace(/\D/g, "");
       if (code.length !== 6) { msg.textContent = "Le code compte 6 chiffres."; return; }
