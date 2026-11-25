@@ -1384,7 +1384,7 @@
         <div class="field"><label for="ebEpreuve">Épreuve</label><select id="ebEpreuve" data-ebchoix="id">${eps.map(e => opt(e.id, `${nomEpreuveB(e)}${e.publie ? "" : " (brouillon)"}`, e.id === Number(choixEb.id))).join("")}</select></div>
         <div class="field"><label for="ebFormat">Format</label><select id="ebFormat" data-ebchoix="format">${opt("pdf", "PDF", choixEb.format === "pdf")}${opt("word", "Word", choixEb.format === "word")}</select></div>
         <p class="ea-msg full" role="alert"></p>
-        <p class="full"><button class="btn btn-gold" type="submit">Télécharger cette épreuve</button></p>
+        <p class="full"><button class="btn btn-ghost" type="button" data-action="eb-choix-voir" data-quoi="sujet">Voir le sujet</button> <button class="btn btn-ghost" type="button" data-action="eb-choix-voir" data-quoi="corrige">Voir le corrigé</button> <button class="btn btn-gold" type="submit">Télécharger cette épreuve</button></p>
       </form>`;
   }
 
@@ -2121,6 +2121,7 @@ Comptez une à trois minutes et gardez la page ouverte. L'archive contient tous 
     if (act === "cmd-ligne") { $("#adCmdLignes").insertAdjacentHTML("beforeend", ligneCmdHTML()); return; }
     if (act === "eb-voir") { voirEpreuveBlanche(Number(b.dataset.ebid), b.dataset.quoi === "sujet" ? "sujet" : "corrige"); return; }
     const format = b.dataset.format === "pdf" ? "pdf" : "word";
+    if (act === "eb-choix-voir") { voirEpreuveBlanche(Number(choixEb.id), b.dataset.quoi === "corrige" ? "corrige" : "sujet"); return; }
     if (act === "eb-doc") { telechargerEpreuveB(Number(b.dataset.ebid), b, format); return; }
     if (act === "eb-serie-doc") { telechargerEpreuvesB(b, format, b.dataset.conc, Number(b.dataset.serie)); return; }
     if (act === "eb-tout") { telechargerEpreuvesB(b, format); return; }
