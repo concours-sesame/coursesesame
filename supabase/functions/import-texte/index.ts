@@ -18,7 +18,7 @@
 // epreuves_blanches (une épreuve existante est remplacée, sa publication est conservée) puis efface le fichier.
 // Texte des textes officiels et décisions, préparé hors du navigateur (extraction et reconnaissance de caractères) :
 // POST { action: "lecture", contenu_id } renvoie une adresse de lecture de dix minutes pour le PDF d'un contenu
-// « Texte officiel » ou « Jurisprudence » ; POST { action: "passages", nom } lit le fichier JSON déposé à textes/<nom>.pdf
+// « Texte officiel », « Jurisprudence » ou « Ouvrage » (relecture et extrait gratuit d'un ouvrage) ; POST { action: "passages", nom } lit le fichier JSON déposé à textes/<nom>.pdf
 // (tableau de { contenu_id, pages: [texte de chaque page] }), remplace les passages de ces seuls contenus puis efface
 // le fichier. La fréquence des mots (passages_lexiques) se recalcule ensuite en SQL.
 import { createClient } from "npm:@supabase/supabase-js@2.117.0";
@@ -102,7 +102,8 @@ Deno.serve(async (req) => {
   const estTexte = (m: unknown) => /^(texte officiel|jurisprudence)/i.test(String(m ?? ""));
   if (d.action === "lecture") {
     const { data: c } = await service.from("contenus").select("fichier, matiere").eq("id", Number(d.contenu_id)).maybeSingle();
-    if (!c?.fichier || !estTexte(c.matiere)) return json({ error: "Contenu introuvable ou non autorisé" }, 404);
+    const lisible = estTexte(c?.matiere) || /^ouvrage/i.test(String(c?.matiere ?? ""));
+    if (!c?.fichier || !lisible) return json({ error: "Contenu introuvable ou non autorisé" }, 404);
     const { data, error } = await service.storage.from("exclusif").createSignedUrl(c.fichier, 600);
     return error ? json({ error: `Stockage ${error.message}` }, 409) : json({ url: data.signedUrl });
   }
