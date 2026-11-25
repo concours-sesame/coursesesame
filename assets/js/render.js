@@ -43,6 +43,7 @@
     const t = titre.replace(EDITION, "").replace(/ aux? Concours (?:Administratifs|de la Magistrature)$/i, "");
     const rules = [
       [/^Le Petit Manuel (?:de |d'|des )(.+)$/i, "Le Petit Manuel"],
+      [/^Les QCM de la Présélection (.+)$/i, "Les QCM de la Présélection"],
       [/^Le Résumé (?:de |d'|des )(.+)$/i, "Le Résumé"],
       [/^Le Concours de la Magistrature en (.+)$/i, "Magistrature"],
       [/^(\d+ Fiches de Cours) pour Réussir l'Écrit de la Magistrature$/i, "Écrit de la magistrature"],
@@ -64,7 +65,7 @@
   // Première page réelle de l'ouvrage (rendue depuis son extrait gratuit) : assets/img/pages/<extrait>.jpg
   const pageImage = o => o.extrait ? o.extrait.replace(/\.pdf$/, "") : "";
   // Pages au format portrait (les autres sont à l'italienne)
-  const PORTRAIT = ["annales-magistrature", "resume-informatique-2027", "resume-fonction-publique-2027", "resume-droit-penitentiaire-2027", "annales-infj-oj-opeaj-droit-administratif"];
+  const PORTRAIT = ["annales-magistrature", "resume-informatique-2027", "resume-fonction-publique-2027", "resume-droit-penitentiaire-2027", "annales-infj-oj-opeaj-droit-administratif", "qcm-preselection-magistrature-2027"];
 
   // Couverture composée, lisible en vignette : collection, titre en grand, concours. Trois habillages dans la charte :
   // papier (résumés, manuels, guides), marine (annales et recueils de sujets corrigés), or (ouvrages VVIP).
