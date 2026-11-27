@@ -65,7 +65,7 @@
   // Première page réelle de l'ouvrage (rendue depuis son extrait gratuit) : assets/img/pages/<extrait>.jpg
   const pageImage = o => o.extrait ? o.extrait.replace(/\.pdf$/, "") : "";
   // Pages au format portrait (les autres sont à l'italienne)
-  const PORTRAIT = ["annales-magistrature", "resume-informatique-2027", "resume-fonction-publique-2027", "resume-droit-penitentiaire-2027", "annales-infj-oj-opeaj-droit-administratif", "qcm-preselection-magistrature-2027", "qcm-preselection-ena-2027"];
+  const PORTRAIT = ["annales-magistrature", "resume-informatique-2027", "resume-fonction-publique-2027", "resume-droit-penitentiaire-2027", "annales-infj-oj-opeaj-droit-administratif", "qcm-preselection-magistrature-2027", "qcm-preselection-ena-2027", "guide-droit-penitentiaire-2027"];
 
   // Couverture composée, lisible en vignette : collection, titre en grand, concours. Trois habillages dans la charte :
   // papier (résumés, manuels, guides), marine (annales et recueils de sujets corrigés), or (ouvrages VVIP).
